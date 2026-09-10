@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>faruq® — visual archive</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
+      background: #2b3342;
+      color: #f0f0ee;
+      font-family: "Archivo", sans-serif;
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    a {
+      color: #f3f2f2;
+      text-underline-offset: 3px;
+    }
+
+    a:hover {
+      color: #ffffff;
+    }
+
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 100vh;
+      overflow: hidden;
+      background: #2b3342;
+    }
+
+    .bg-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transform: translateZ(0);
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .portrait-clean {
+      z-index: 0;
+    }
+
+    .portrait-gold-base {
+      z-index: 1;
+      opacity: 0.1;
+      pointer-events: none;
+    }
+
+    .portrait-gold-reveal {
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease-out;
+      will-change: opacity, mask-position, -webkit-mask-position;
+
+      -webkit-mask-image:
+        radial-gradient(
+          closest-side,
+          #000 62%,
+          transparent 100%
+        );
+
+      mask-image:
+        radial-gradient(
+          closest-side,
+          #000 62%,
+          transparent 100%
+        );
+
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+
+      -webkit-mask-size: 110px 140px;
+      mask-size: 110px 140px;
+
+      -webkit-mask-position: -300px -300px;
+      mask-position: -300px -300px;
+    }
+
+    .scrim {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(20, 24, 32, 0.55) 0%,
+          rgba(20, 24, 32, 0.12) 45%,
+          rgba(20, 24, 32, 0.6) 100%
+        );
+    }
+
+    .content {
+      position: relative;
+      z-index: 3;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 44px 64px 40px;
+      pointer-events: none;
+    }
+
+    .top-bar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: baseline;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .top-left {
+      display: flex;
+      gap: 28px;
+      justify-self: start;
+    }
+
+    .year-pill {
+      justify-self: center;
+      border: 1.5px solid #f0f0ee;
+      border-radius: 999px;
+      padding: 4px 20px;
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .top-right {
+      display: flex;
+      gap: 14px;
+      justify-self: end;
+    }
+
+    .headline {
+      margin-top: 40px;
+      font-size: clamp(52px, 7.4vw, 104px);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 0.98;
+      text-transform: lowercase;
+    }
+
+    .headline-line {
+      display: block;
+    }
+
+    .motion-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .plus-circle {
+      width: 0.8em;
+      height: 0.8em;
+      min-width: 0.8em;
+      border: 1.5px solid #f0f0ee;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.45em;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .bottom-row {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 48px;
+    }
+
+    .bottom-left {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.45;
+      white-space: nowrap;
+    }
+
+    .bottom-right {
+      width: min(100%, 560px);
+    }
+
+    .description {
+      margin: 0;
+      font-size: 15.5px;
+      line-height: 1.6;
+      word-spacing: 0.15em;
+      text-align: justify;
+    }
+
+    .bottom-meta {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+    }
+
+    @media (max-width: 850px) {
+      .content {
+        padding: 28px 24px 26px;
+      }
+
+      .top-bar {
+        grid-template-columns: 1fr auto;
+        row-gap: 18px;
+      }
+
+      .year-pill {
+        justify-self: end;
+      }
+
+      .top-right {
+        grid-column: 1 / -1;
+        justify-self: start;
+      }
+
+      .headline {
+        margin-top: 36px;
+        font-size: clamp(48px, 13vw, 82px);
+      }
+
+      .bottom-row {
+        gap: 28px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .bottom-right {
+        max-width: 100%;
+      }
+
+      .description {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .content {
+        padding: 22px 18px 22px;
+      }
+
+      .top-bar {
+        font-size: 13px;
+      }
+
+      .top-left {
+        gap: 16px;
+      }
+
+      .year-pill {
+        font-size: 12px;
+        padding: 4px 13px;
+      }
+
+      .top-right {
+        gap: 8px;
+        font-size: 12px;
+      }
+
+      .headline {
+        margin-top: 32px;
+        font-size: clamp(44px, 15vw, 72px);
+      }
+
+      .motion-line {
+        gap: 14px;
+      }
+
+      .bottom-left {
+        font-size: 15px;
+      }
+
+      .description {
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .bottom-meta {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="hero" id="hero">
+
+    <img
+      class="bg-layer portrait-clean"
+      src="https://cdn.sceneai.art/Bg%20images/ddfc017a-6d87-42c8-b9d6-c068c2854910.png"
+      alt=""
+      draggable="false"
+    >
+
+    <img
+      class="bg-layer portrait-gold-base"
+      src="https://cdn.sceneai.art/Bg%20images/27a6b99b-8093-439e-be9c-1c96311e8fb8.png"
+      alt=""
+      draggable="false"
+    >
+
+    <img
+      class="bg-layer portrait-gold-reveal"
+      id="goldReveal"
+      src="https://cdn.sceneai.art/Bg%20images/27a6b99b-8093-439e-be9c-1c96311e8fb8.png"
+      alt=""
+      draggable="false"
+    >
+
+    <div class="scrim"></div>
+
+    <div class="content">
+
+      <header class="top-bar">
+
+        <div class="top-left">
+          <span>faruq®</span>
+          <span>visual archive</span>
+        </div>
+
+        <div class="year-pill">
+          ©2026
+        </div>
+
+        <div class="top-right">
+          <span>(</span>
+          <span>long exposure</span>
+          <span>/</span>
+          <span>low light</span>
+          <span>)</span>
+        </div>
+
+      </header>
+
+      <div class="headline">
+
+        <span class="headline-line">
+          stories in light
+        </span>
+
+        <span class="headline-line motion-line">
+          <span class="plus-circle">+</span>
+          <span>motion</span>
+        </span>
+
+      </div>
+
+      <div class="bottom-row">
+
+        <div class="bottom-left">
+          night work only
+        </div>
+
+        <div class="bottom-right">
+
+          <p class="description">
+            slow shutters, moving light. i make short visual stories after dark —
+            where motion becomes the subject and light does the drawing. no studio,
+            no staging: just time, left open long enough to leave a trace.
+          </p>
+
+          <div class="bottom-meta">
+            <span>selected work — vol.01</span>
+            <span>( scroll ↓ )</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <script>
+    const hero = document.getElementById("hero");
+    const reveal = document.getElementById("goldReveal");
+
+    const precisePointer = window.matchMedia(
+      "(hover: hover) and (pointer: fine)"
+    );
+
+    if (precisePointer.matches) {
+      let targetX = 0;
+      let targetY = 0;
+
+      let currentX = 0;
+      let currentY = 0;
+
+      let initialized = false;
+      let running = false;
+
+      const lerpFactor = 0.22;
+      const threshold = 0.3;
+
+      function updateMask() {
+        const dx = targetX - currentX;
+        const dy = targetY - currentY;
+
+        currentX += dx * lerpFactor;
+        currentY += dy * lerpFactor;
+
+        const maskX = currentX - 55;
+        const maskY = currentY - 70;
+
+        reveal.style.webkitMaskPosition =
+          `${maskX}px ${maskY}px`;
+
+        reveal.style.maskPosition =
+          `${maskX}px ${maskY}px`;
+
+        if (
+          Math.abs(dx) > threshold ||
+          Math.abs(dy) > threshold
+        ) {
+          requestAnimationFrame(updateMask);
+        } else {
+          currentX = targetX;
+          currentY = targetY;
+
+          reveal.style.webkitMaskPosition =
+            `${currentX - 55}px ${currentY - 70}px`;
+
+          reveal.style.maskPosition =
+            `${currentX - 55}px ${currentY - 70}px`;
+
+          running = false;
+        }
+      }
+
+      hero.addEventListener("mousemove", (event) => {
+        const rect = hero.getBoundingClientRect();
+
+        targetX = event.clientX - rect.left;
+        targetY = event.clientY - rect.top;
+
+        if (!initialized) {
+          currentX = targetX;
+          currentY = targetY;
+
+          reveal.style.webkitMaskPosition =
+            `${currentX - 55}px ${currentY - 70}px`;
+
+          reveal.style.maskPosition =
+            `${currentX - 55}px ${currentY - 70}px`;
+
+          initialized = true;
+        }
+
+        reveal.style.opacity = "1";
+
+        if (!running) {
+          running = true;
+          requestAnimationFrame(updateMask);
+        }
+      });
+
+      hero.addEventListener("mouseleave", () => {
+        reveal.style.opacity = "0";
+      });
+
+      hero.addEventListener("mouseenter", () => {
+        initialized = false;
+      });
+    }
+  </script>
+
+</body>
+</html>
