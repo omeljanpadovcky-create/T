@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07101f">
-<title>MYSHKA Casino Lab</title>
+<title>MYSHKA Automation Lab</title>
 <style>
 :root{
   --bg:#050a12;--panel:#0b1627;--panel2:#101f35;--line:#20395f;--line2:#31517f;
@@ -252,6 +252,9 @@ input,select{width:100%;border:1px solid #2c4a75;background:#0d1b2f;color:#fff;b
 .auto-empty{display:none;padding:28px;text-align:center;color:#7f95b6;border:1px dashed #29476f;border-radius:14px}
 .auto-global-note{margin-top:12px;padding:12px;border-radius:14px;background:#091522;border:1px solid #20395d}
 .auto-global-note textarea{width:100%;min-height:110px;background:#07111e;color:white;border:1px solid #29476f;border-radius:10px;padding:10px;resize:vertical}
+
+.auto-analysis{display:none;margin-top:12px;padding:14px;border-radius:14px;background:#071321;border:1px solid #2b4b78}
+.auto-analysis.show{display:block}.auto-analysis h3{margin:0 0 8px;font-size:16px}.auto-analysis p{margin:6px 0;color:#a9bad2;font-size:11px;line-height:1.55}.auto-analysis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.auto-analysis-stat{padding:9px;border-radius:10px;background:#0b1a2d;border:1px solid #203b61}.auto-analysis-stat small{display:block;color:#7f95b6;font-size:9px}.auto-analysis-stat b{display:block;margin-top:3px;font-size:14px}.auto-analysis ol{margin:8px 0 0;padding-left:20px;color:#d9e5f5;font-size:11px;line-height:1.6}.auto-analysis-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}@media(max-width:650px){.auto-analysis-grid{grid-template-columns:1fr}}
 @media(max-width:1100px){
   .auto-toolbar{grid-template-columns:1fr 160px 150px}
   .auto-toolbar .auto-btn:last-child{grid-column:1/-1}
@@ -275,14 +278,14 @@ input,select{width:100%;border:1px solid #2c4a75;background:#0d1b2f;color:#fff;b
   <header class="header glass">
     <div class="brand">
       <div class="logo">🐭</div>
-      <div><h1><span>MYSHKA</span> Casino Lab</h1><p>ігри + trading system • боти • математика • тільки віртуальні кредити</p></div>
+      <div><h1><span>MYSHKA</span> Automation Lab</h1><p>автоматизації • AI-перевірка • trading lab • симуляції</p></div>
     </div>
     <div class="badge">⚗ SIMULATION ONLY</div>
     <div class="wallet"><small>Спільний баланс</small><strong id="balance">10 000</strong></div>
   </header>
 
   <section class="games">
-    <button class="game-tab active" data-game="roulette"><b>🎯</b><span>Рулетка</span></button>
+    <button class="game-tab" data-game="roulette"><b>🎯</b><span>Рулетка</span></button>
     <button class="game-tab" data-game="slots"><b>🎰</b><span>Слоти</span></button>
     <button class="game-tab" data-game="blackjack"><b>🃏</b><span>Blackjack</span></button>
     <button class="game-tab" data-game="dice"><b>🎲</b><span>Dice</span></button>
@@ -291,13 +294,13 @@ input,select{width:100%;border:1px solid #2c4a75;background:#0d1b2f;color:#fff;b
     <button class="game-tab" data-game="plinko"><b>🔵</b><span>Plinko</span></button>
     <button class="game-tab" data-game="baccarat"><b>♠</b><span>Baccarat</span></button>
     <button class="game-tab" data-game="trading"><b>📈</b><span>Trading Lab</span></button>
-    <button class="game-tab" data-game="automation"><b>⚙️</b><span>Автоматизація</span></button>
+    <button class="game-tab active" data-game="automation"><b>⚙️</b><span>Моя автоматизація</span></button>
   </section>
 
   <div class="layout">
     <section class="stage glass">
 
-      <div class="game active" id="game-roulette">
+      <div class="game" id="game-roulette">
         <div class="stage-title"><h2>🎯 Рулетка</h2><span>European 0–36</span></div>
         <div class="roulette-area">
           <div class="pointer"></div>
@@ -635,12 +638,12 @@ input,select{width:100%;border:1px solid #2c4a75;background:#0d1b2f;color:#fff;b
         <div class="trade-log" id="tradeLog"></div>
       </div>
 
-      <div class="game" id="game-automation">
-        <div class="stage-title"><h2>⚙️ Нотатник автоматизації</h2><span>мої ідеї на майбутнє</span></div>
+      <div class="game active" id="game-automation">
+        <div class="stage-title"><h2>⚙️ Моя автоматизація</h2><span>створюй, імпортуй та перевіряй JSON</span></div>
 
         <div class="auto-note-wrap">
           <div class="auto-hero">
-            <h2>MYSHKA Automation Notebook</h2>
+            <h2>MYSHKA — Моя автоматизація</h2>
             <p>
               Тут зібрані напрямки, які можна автоматизувати: контент, відео, сайти, бізнес, e-commerce,
               програми, локальний ПК, AI-агенти, дані, сервери, файли, повідомлення, моніторинг та багато іншого.
@@ -657,17 +660,18 @@ input,select{width:100%;border:1px solid #2c4a75;background:#0d1b2f;color:#fff;b
                 <option value="done">✅ Готово</option>
                 <option value="skip">⏸ Відкласти</option>
               </select>
-              <button class="auto-btn gold" id="autoExport">⇩ Export JSON</button>
-              <button class="auto-btn primary" id="autoImportBtn">⇧ Import JSON</button>
-              <input id="autoImportFile" type="file" accept=".json,application/json" hidden>
+              <button type="button" class="auto-btn gold" id="autoExport" onclick="downloadAutomationExample()">⇩ Приклад автоматизації</button>
+              <button type="button" class="auto-btn primary" id="autoImportBtn" onclick="document.getElementById('autoImportFile').click()">🤖 Перевірити автоматизацію</button>
+              <input id="autoImportFile" type="file" accept=".json,application/json" style="display:none" onchange="analyzeAutomationFile(this)">
             </div>
+            <div class="auto-analysis" id="autoAnalysis"></div>
 
             <div class="auto-map">
-              <div class="auto-step"><span>1️⃣</span><b>Trigger</b><small>Подія, час, кнопка, новий файл, email, webhook, зміна даних.</small></div>
-              <div class="auto-step"><span>2️⃣</span><b>Workflow</b><small>Послідовність дій: отримати → обробити → перевірити → виконати.</small></div>
-              <div class="auto-step"><span>3️⃣</span><b>AI / Logic</b><small>Класифікація, генерація, аналіз, рішення, правила та фільтри.</small></div>
-              <div class="auto-step"><span>4️⃣</span><b>Action</b><small>Створити, надіслати, оновити, зберегти, запустити, повідомити.</small></div>
-              <div class="auto-step"><span>5️⃣</span><b>Monitor</b><small>Логи, статус, retry, alert, history, dashboard та backup.</small></div>
+              <div class="auto-step"><span>1️⃣</span><b>Тригер</b><small>Подія, час, кнопка, новий файл, email, webhook, зміна даних.</small></div>
+              <div class="auto-step"><span>2️⃣</span><b>Сценарій</b><small>Послідовність дій: отримати → обробити → перевірити → виконати.</small></div>
+              <div class="auto-step"><span>3️⃣</span><b>AI / Логіка</b><small>Класифікація, генерація, аналіз, рішення, правила та фільтри.</small></div>
+              <div class="auto-step"><span>4️⃣</span><b>Дія</b><small>Створити, надіслати, оновити, зберегти, запустити, повідомити.</small></div>
+              <div class="auto-step"><span>5️⃣</span><b>Моніторинг</b><small>Логи, статус, retry, alert, history, dashboard та backup.</small></div>
             </div>
           </div>
 
@@ -1398,22 +1402,86 @@ if($('autoGlobalSave'))$('autoGlobalSave').onclick=()=>{
   autoSave();const b=$('autoGlobalSave'),old=b.textContent;b.textContent='✓ Збережено';setTimeout(()=>b.textContent=old,900);
 };
 
-if($('autoExport'))$('autoExport').onclick=()=>{
-  const blob=new Blob([JSON.stringify(autoCollect(),null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='myshka-automation-notebook.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500);
-};
+function downloadAutomationExample(){
+  const example={
+    name:'Приклад автоматизації MYSHKA',
+    description:'Демонстраційний сценарій: отримати дані → перевірити → AI-аналіз → дія → повідомлення',
+    nodes:[
+      {id:'trigger',type:'webhook',name:'Тригер',config:{method:'POST'}},
+      {id:'validate',type:'logic',name:'Перевірка даних',config:{required:['message']}},
+      {id:'ai',type:'ai',name:'AI аналіз',config:{task:'Проаналізувати вхідні дані'}},
+      {id:'action',type:'action',name:'Виконати дію',config:{mode:'demo'}},
+      {id:'notify',type:'telegram',name:'Повідомлення',config:{text:'Автоматизацію виконано'}}
+    ],
+    connections:[['trigger','validate'],['validate','ai'],['ai','action'],['action','notify']]
+  };
+  showAutomationExplanation(example,'pryklad-avtomatyzatsii.json',true);
+  const json=JSON.stringify(example,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const url=window.URL.createObjectURL(blob);
+  const link=document.createElement('a');
+  link.href=url;
+  link.download='pryklad-avtomatyzatsii.json';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
 
-if($('autoImportBtn'))$('autoImportBtn').onclick=()=>$('autoImportFile').click();
-if($('autoImportFile'))$('autoImportFile').onchange=async e=>{
-  const f=e.target.files?.[0];if(!f)return;
-  try{
-    const data=JSON.parse(await f.text());
-    localStorage.setItem(AUTO_STORE,JSON.stringify(data));
-    autoLoad();
-    alert('Automation Notebook імпортовано');
-  }catch(err){alert('Не вдалося прочитати JSON')}
-  e.target.value='';
-};
+function automationTypeLabel(type){
+  const map={webhook:'Webhook / тригер',trigger:'Тригер',logic:'Логіка',ai:'AI',action:'Дія',telegram:'Telegram',httpRequest:'HTTP/API',http:'HTTP/API',code:'Код',function:'Код',schedule:'Розклад',manualTrigger:'Ручний запуск'};
+  return map[type]||type||'Невідомий тип';
+}
+
+function showAutomationExplanation(data,fileName,isExample=false){
+  const box=$('autoAnalysis'); if(!box) return;
+  const nodes=Array.isArray(data?.nodes)?data.nodes:[];
+  let connections=[];
+  if(Array.isArray(data?.connections)) connections=data.connections;
+  else if(data?.connections && typeof data.connections==='object') connections=Object.keys(data.connections);
+  const names=nodes.slice(0,8).map((n,i)=>n.name||n.label||n.id||('Крок '+(i+1)));
+  const types=[...new Set(nodes.map(n=>automationTypeLabel(n.type)).filter(Boolean))].slice(0,7);
+  const issues=[];
+  if(!nodes.length) issues.push('Не знайдено масиву nodes — це може бути інший формат JSON або неповний експорт.');
+  if(nodes.length && !connections.length) issues.push('Не знайдено зв’язків між вузлами. Перевір connections.');
+  const raw=JSON.stringify(data);
+  if(/api[_-]?key|token|password|secret/i.test(raw)) issues.push('У JSON є поля, схожі на ключі/токени/паролі. Перед передачею AI краще прибрати секретні значення.');
+  if(!issues.length) issues.push('На базовому рівні структура читається. Глибокі логічні помилки краще перевірити через AI-аналіз.');
+  box.classList.add('show');
+  box.innerHTML=`<h3>${isExample?'📘 Пояснення прикладу':'🤖 Розбір автоматизації'}</h3>
+    <p><b>Файл:</b> ${escapeHtml(fileName||'automation.json')}</p>
+    <p>${isExample?'Це демонстраційний workflow: тригер отримує подію, дані перевіряються, AI їх аналізує, виконується дія і надсилається повідомлення.':'JSON успішно прочитано. Нижче — коротке пояснення структури перед глибоким AI-аналізом.'}</p>
+    <div class="auto-analysis-grid"><div class="auto-analysis-stat"><small>Вузлів</small><b>${nodes.length}</b></div><div class="auto-analysis-stat"><small>Зв’язків / груп</small><b>${connections.length}</b></div><div class="auto-analysis-stat"><small>Типів</small><b>${types.length}</b></div></div>
+    ${names.length?`<p><b>Як працює:</b> ${names.map(escapeHtml).join(' → ')}</p>`:''}
+    ${types.length?`<p><b>Що використовується:</b> ${types.map(escapeHtml).join(', ')}</p>`:''}
+    <p><b>Що перевірити:</b></p><ol>${issues.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ol>
+    ${isExample?'':`<div class="auto-analysis-actions"><button class="auto-btn primary" id="autoDeepAI">🧠 Відкрити повний AI-аналіз</button></div>`}`;
+  if(!isExample){
+    const btn=$('autoDeepAI'); if(btn) btn.onclick=()=>openAutomationAI(data);
+  }
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+
+function openAutomationAI(data){
+  const raw=JSON.stringify(data,null,2);
+  const prompt='Проаналізуй цю автоматизацію. Спочатку простою українською поясни, що вона робить і як проходить по кроках. Потім знайди помилки у вузлах, зв’язках, умовах, змінних, API, обробці помилок і безпеці. Для кожної проблеми напиши: де проблема, чому це проблема і як конкретно виправити. Наприкінці дай список покращень. Не показуй секретні ключі, якщо вони є.\n\nJSON:\n'+raw;
+  const go=()=>window.open('https://chatgpt.com/?q='+encodeURIComponent(prompt),'_blank');
+  if(navigator.clipboard?.writeText) navigator.clipboard.writeText(prompt).then(go).catch(go); else go();
+}
+
+function analyzeAutomationFile(input){
+  const file=input.files && input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(){
+    try{ const data=JSON.parse(String(reader.result||'')); showAutomationExplanation(data,file.name,false); }
+    catch(err){ alert('Файл не є коректним JSON. Вибери JSON-експорт автоматизації.'); }
+    input.value='';
+  };
+  reader.onerror=function(){alert('Не вдалося прочитати файл.');input.value='';};
+  reader.readAsText(file);
+}
 
 setTimeout(autoLoad,60);
 
