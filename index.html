@@ -662,6 +662,7 @@ input,select{width:100%;border:1px solid #2c4a75;background:#0d1b2f;color:#fff;b
               </select>
               <button type="button" class="auto-btn gold" id="autoExport" onclick="downloadAutomationExample()">⇩ Приклад автоматизації</button>
               <button type="button" class="auto-btn primary" id="autoImportBtn" onclick="document.getElementById('autoImportFile').click()">🤖 Перевірити автоматизацію</button>
+              <button type="button" class="auto-btn" id="autoTipsBtn" onclick="showAutomationTips()">💡 Поради для автоматизації</button>
               <input id="autoImportFile" type="file" accept=".json,application/json" style="display:none" onchange="analyzeAutomationFile(this)">
             </div>
             <div class="auto-analysis" id="autoAnalysis"></div>
@@ -1469,6 +1470,29 @@ function openAutomationAI(data){
   const prompt='Проаналізуй цю автоматизацію. Спочатку простою українською поясни, що вона робить і як проходить по кроках. Потім знайди помилки у вузлах, зв’язках, умовах, змінних, API, обробці помилок і безпеці. Для кожної проблеми напиши: де проблема, чому це проблема і як конкретно виправити. Наприкінці дай список покращень. Не показуй секретні ключі, якщо вони є.\n\nJSON:\n'+raw;
   const go=()=>window.open('https://chatgpt.com/?q='+encodeURIComponent(prompt),'_blank');
   if(navigator.clipboard?.writeText) navigator.clipboard.writeText(prompt).then(go).catch(go); else go();
+}
+
+function showAutomationTips(){
+  const box=document.getElementById('autoAnalysis');
+  if(!box) return;
+  box.style.display='block';
+  box.innerHTML=`
+    <div style="padding:16px;border-radius:16px;background:linear-gradient(180deg,#0e1c30,#091421);border:1px solid #31517f;margin-top:12px">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+        <div><div style="font-size:20px;font-weight:900">💡 Поради для автоматизації</div><div style="color:#8fa3c1;font-size:11px;margin-top:4px">Короткий чекліст перед запуском workflow</div></div>
+        <button class="auto-btn" type="button" onclick="document.getElementById('autoAnalysis').style.display='none'">✕ Закрити</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:9px;margin-top:12px">
+        <div class="auto-step"><span>1️⃣</span><b>Почни з тригера</b><small>Чітко визнач, що запускає сценарій: webhook, час, новий файл, повідомлення або інша подія.</small></div>
+        <div class="auto-step"><span>2️⃣</span><b>Перевіряй дані</b><small>Перед важливою дією перевіряй обов’язкові поля, формат даних і порожні значення.</small></div>
+        <div class="auto-step"><span>3️⃣</span><b>Обробляй помилки</b><small>Додай retry, альтернативну гілку та повідомлення, якщо API або окремий вузол не відповів.</small></div>
+        <div class="auto-step"><span>4️⃣</span><b>Не зберігай ключі в коді</b><small>API-ключі й токени тримай у credentials або змінних середовища, а не всередині JSON.</small></div>
+        <div class="auto-step"><span>5️⃣</span><b>Додай журнал</b><small>Записуй статус, час, результат і текст помилки — так набагато легше знайти проблему.</small></div>
+        <div class="auto-step"><span>6️⃣</span><b>Спочатку тест</b><small>Небезпечні або платні дії спочатку запускай у тестовому режимі на невеликій кількості даних.</small></div>
+      </div>
+      <div class="auto-example" style="margin-top:10px"><b>Хороша схема:</b> Тригер → перевірка даних → основна логіка / AI → перевірка результату → дія → лог → повідомлення про успіх або помилку.</div>
+    </div>`;
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 function analyzeAutomationFile(input){
