@@ -233,6 +233,22 @@ input,select{width:100%;border:1px solid #2c4a75;background:#0d1b2f;color:#fff;b
 @media(max-width:800px){.trainer-top{grid-template-columns:1fr 1fr}.trainer-top>div:first-child{grid-column:1/-1}.trainer-score-grid{grid-template-columns:1fr 1fr}.trainer-market-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.trainer-top{grid-template-columns:1fr}.trainer-market-grid{grid-template-columns:1fr 1fr}.trainer-choices{grid-template-columns:1fr}.trainer-answer-grid{grid-template-columns:1fr}.trainer-team{grid-template-columns:1fr}.trainer-stat b{font-size:17px}}
 
+
+/* === PER-GAME WIN/LOSS STATS === */
+.game-stat-card{margin-top:14px;padding:13px;border-radius:16px;background:linear-gradient(180deg,#0d1b2e,#08131f);border:1px solid #29466f}
+.game-stat-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.game-stat-head h3{margin:0;font-size:15px}.game-stat-head small{color:#8197b7;font-size:9px}
+.game-stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.game-stat-box{padding:9px;border-radius:10px;background:#091522;border:1px solid #1e3659}
+.game-stat-box small{display:block;color:#7f95b6;font-size:9px}.game-stat-box b{display:block;margin-top:3px;font-size:15px}
+.game-stat-chart{margin-top:10px;height:210px;border-radius:12px;background:#07111e;border:1px solid #1c3455;overflow:hidden;position:relative}
+.game-stat-chart canvas{width:100%;height:100%;display:block}
+.game-stat-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:7px;color:#8398b8;font-size:9px}
+.game-stat-legend span::before{content:'';display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;background:currentColor}
+.game-stat-reset{border:1px solid #355582;background:#10223b;color:#dce8fb;border-radius:8px;padding:6px 9px;font-size:9px;font-weight:800}
+.game-stat-empty{position:absolute;inset:0;display:grid;place-items:center;color:#7188aa;font-size:11px;pointer-events:none}
+@media(max-width:700px){.game-stat-grid{grid-template-columns:repeat(2,1fr)}.game-stat-chart{height:180px}}
+
 /* === AUTOMATION NOTEBOOK === */
 .auto-note-wrap{display:grid;gap:12px}
 .auto-hero{
@@ -1221,6 +1237,7 @@ function canBet(b){if(b>state.balance){toast('Недостатньо вірту�
 function record(game,text,pnl){
   state.balance+=pnl;state.rounds++;if(pnl>0)state.wins++;
   state.history.unshift({game,text,pnl,balance:state.balance});
+  gameStatsRecord(game,pnl,text);
   renderStats();
 }
 function renderStats(){
@@ -1232,10 +1249,113 @@ function renderStats(){
 }
 function toast(t){console.log(t)}
 
+
+/* ===== MYSHKA_GAME_STATS_V1 ===== */
+const GAME_STATS_STORE='myshka_game_stats_v1';
+const GAME_LABELS={
+  roulette:'Рулетка',slots:'Слоти',blackjack:'Blackjack',dice:'Dice',coin:'Coin',
+  crash:'Crash',plinko:'Plinko',baccarat:'Baccarat',trading:'Trading'
+};
+let gameStats={};
+
+function loadGameStats(){
+  try{gameStats=JSON.parse(localStorage.getItem(GAME_STATS_STORE)||'{}')||{}}catch(e){gameStats={}}
+}
+function saveGameStats(){
+  try{localStorage.setItem(GAME_STATS_STORE,JSON.stringify(gameStats))}catch(e){}
+}
+function gameStatBucket(name){
+  if(!gameStats[name])gameStats[name]={wins:0,losses:0,draws:0,pnl:0,history:[]};
+  return gameStats[name];
+}
+function gameStatsRecord(game,pnl,text){
+  const g=gameStatBucket(game);
+  if(pnl>0)g.wins++; else if(pnl<0)g.losses++; else g.draws++;
+  g.pnl+=Number(pnl)||0;
+  g.history.push({pnl:Number(pnl)||0,text:String(text||''),ts:Date.now()});
+  if(g.history.length>120)g.history=g.history.slice(-120);
+  saveGameStats();
+  renderGameStatsByName(game);
+}
+function gameStatsReset(game){
+  gameStats[game]={wins:0,losses:0,draws:0,pnl:0,history:[]};
+  saveGameStats();renderGameStatsByName(game);
+}
+function injectGameStats(){
+  Object.keys(GAME_LABELS).forEach(key=>{
+    const host=$('game-'+key);if(!host||host.querySelector('[data-game-stat="'+key+'"]'))return;
+    const card=document.createElement('div');
+    card.className='game-stat-card';card.dataset.gameStat=key;
+    card.innerHTML=
+      '<div class="game-stat-head"><div><h3>📊 Статистика · '+GAME_LABELS[key]+'</h3><small>виграші / програші / P&L по раундах</small></div>'+
+      '<button class="game-stat-reset" type="button">Скинути статистику</button></div>'+
+      '<div class="game-stat-grid">'+
+      '<div class="game-stat-box"><small>Виграші</small><b data-s="wins">0</b></div>'+
+      '<div class="game-stat-box"><small>Програші</small><b data-s="losses">0</b></div>'+
+      '<div class="game-stat-box"><small>Нічиї</small><b data-s="draws">0</b></div>'+
+      '<div class="game-stat-box"><small>Win rate</small><b data-s="rate">0%</b></div>'+
+      '<div class="game-stat-box"><small>P/L</small><b data-s="pnl">0</b></div>'+
+      '</div>'+
+      '<div class="game-stat-chart"><canvas></canvas><div class="game-stat-empty">Ще немає завершених раундів</div></div>'+
+      '<div class="game-stat-legend"><span style="color:#2bdd8d">плюсовий раунд</span><span style="color:#ff4e61">мінусовий раунд</span><span style="color:#7da0ff">накопичений P/L</span></div>';
+    card.querySelector('.game-stat-reset').onclick=()=>gameStatsReset(GAME_LABELS[key]);
+    host.appendChild(card);
+  });
+}
+function renderGameStatsByName(game){
+  const key=Object.keys(GAME_LABELS).find(k=>GAME_LABELS[k]===game);if(!key)return;
+  const card=document.querySelector('[data-game-stat="'+key+'"]');if(!card)return;
+  const g=gameStatBucket(game),decided=g.wins+g.losses,rate=decided?g.wins/decided*100:0;
+  card.querySelector('[data-s="wins"]').textContent=g.wins;
+  card.querySelector('[data-s="losses"]').textContent=g.losses;
+  card.querySelector('[data-s="draws"]').textContent=g.draws;
+  card.querySelector('[data-s="rate"]').textContent=rate.toFixed(1)+'%';
+  const pnlEl=card.querySelector('[data-s="pnl"]');pnlEl.textContent=(g.pnl>=0?'+':'')+g.pnl.toFixed(2);pnlEl.className=g.pnl>=0?'pos':'neg';
+  const empty=card.querySelector('.game-stat-empty');empty.style.display=g.history.length?'none':'grid';
+  drawGameStatsChart(card.querySelector('canvas'),g.history);
+}
+function renderAllGameStats(){Object.values(GAME_LABELS).forEach(renderGameStatsByName)}
+function drawGameStatsChart(canvas,history){
+  if(!canvas||!history.length)return;
+  const w=canvas.clientWidth,h=canvas.clientHeight;if(w<10||h<10)return;
+  const d=window.devicePixelRatio||1;canvas.width=Math.round(w*d);canvas.height=Math.round(h*d);
+  const x=canvas.getContext('2d');x.setTransform(d,0,0,d,0,0);x.clearRect(0,0,w,h);
+  const arr=history.slice(-40),pad={l:34,r:12,t:14,b:25},gw=w-pad.l-pad.r,gh=h-pad.t-pad.b;
+  let cum=0;const cumulative=arr.map(v=>cum+=v.pnl);
+  const vals=arr.map(v=>v.pnl).concat(cumulative).concat([0]);
+  const max=Math.max(...vals),min=Math.min(...vals),span=(max-min)||1;
+  const y=v=>pad.t+(max-v)/span*gh;
+  const zero=y(0);
+
+  x.strokeStyle='#18314f';x.lineWidth=1;
+  for(let i=0;i<=4;i++){const yy=pad.t+i*gh/4;x.beginPath();x.moveTo(pad.l,yy);x.lineTo(w-pad.r,yy);x.stroke()}
+  x.strokeStyle='#34506f';x.beginPath();x.moveTo(pad.l,zero);x.lineTo(w-pad.r,zero);x.stroke();
+
+  const step=gw/arr.length,bw=Math.max(2,step*.55);
+  arr.forEach((r,i)=>{
+    const px=pad.l+i*step+step/2,py=y(r.pnl);
+    x.fillStyle=r.pnl>=0?'#2bdd8d':'#ff4e61';
+    x.fillRect(px-bw/2,Math.min(zero,py),bw,Math.max(2,Math.abs(zero-py)));
+  });
+
+  x.beginPath();cumulative.forEach((v,i)=>{
+    const px=pad.l+i*step+step/2,py=y(v);i?x.lineTo(px,py):x.moveTo(px,py)
+  });
+  x.strokeStyle='#7da0ff';x.lineWidth=2;x.stroke();
+
+  x.fillStyle='#7f95b6';x.font='9px system-ui';
+  x.fillText(max.toFixed(1),3,pad.t+4);x.fillText(min.toFixed(1),3,h-pad.b);
+  x.fillText('останні '+arr.length+' раундів',pad.l,h-7);
+}
+loadGameStats();
+setTimeout(()=>{injectGameStats();renderAllGameStats()},80);
+window.addEventListener('resize',()=>setTimeout(renderAllGameStats,50));
+
 /* tabs */
 document.querySelectorAll('.game-tab').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.game-tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');
   document.querySelectorAll('.game').forEach(x=>x.classList.remove('active'));$('game-'+b.dataset.game).classList.add('active');
+  const label=GAME_LABELS[b.dataset.game];if(label)setTimeout(()=>renderGameStatsByName(label),30);
 });
 
 /* Roulette */
@@ -1293,10 +1413,10 @@ $('crStart').onclick=()=>{
   if(crashRunning)return;crStake=betVal('crBet');if(!canBet(crStake))return;state.balance-=crStake;renderStats();crashRunning=true;crCashed=false;crMult=1;crPoint=1.05+Math.pow(Math.random(),2)*8;
   $('crashStatus').textContent='Летимо...';$('crashLine').style.width='0';
   crTimer=setInterval(()=>{crMult+=.04+crMult*.008;$('crashMult').textContent=crMult.toFixed(2)+'x';$('crashLine').style.width=Math.min(92,(crMult/Math.max(crPoint,2))*85)+'%';$('crashLine').style.transform=`rotate(${-Math.min(42,crMult*4)}deg)`;
-    if(crMult>=crPoint){clearInterval(crTimer);crashRunning=false;$('crashMult').textContent='CRASH '+crPoint.toFixed(2)+'x';$('crashStatus').textContent='Розбилось';if(!crCashed){state.rounds++;state.history.unshift({game:'Crash',text:'Crash '+crPoint.toFixed(2)+'x',pnl:-crStake,balance:state.balance});renderStats()}}
+    if(crMult>=crPoint){clearInterval(crTimer);crashRunning=false;$('crashMult').textContent='CRASH '+crPoint.toFixed(2)+'x';$('crashStatus').textContent='Розбилось';if(!crCashed){state.rounds++;state.history.unshift({game:'Crash',text:'Crash '+crPoint.toFixed(2)+'x',pnl:-crStake,balance:state.balance});gameStatsRecord('Crash',-crStake,'Crash '+crPoint.toFixed(2)+'x');renderStats()}}
   },70)
 };
-$('crCash').onclick=()=>{if(!crashRunning||crCashed)return;crCashed=true;const win=Math.round(crStake*crMult);state.balance+=win;state.rounds++;state.wins++;state.history.unshift({game:'Crash',text:'Cash '+crMult.toFixed(2)+'x',pnl:win-crStake,balance:state.balance});renderStats();$('crashStatus').textContent='Забрано '+crMult.toFixed(2)+'x'};
+$('crCash').onclick=()=>{if(!crashRunning||crCashed)return;crCashed=true;const win=Math.round(crStake*crMult);state.balance+=win;state.rounds++;state.wins++;state.history.unshift({game:'Crash',text:'Cash '+crMult.toFixed(2)+'x',pnl:win-crStake,balance:state.balance});gameStatsRecord('Crash',win-crStake,'Cash '+crMult.toFixed(2)+'x');renderStats();$('crashStatus').textContent='Забрано '+crMult.toFixed(2)+'x'};
 
 /* Plinko */
 const mults=[5,2,1.2,.6,.3,.6,1.2,2,5],board=$('plinkoBoard'),ball=$('plinkoBall'),buckets=$('plinkoBuckets');
