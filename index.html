@@ -42,6 +42,17 @@ button{cursor:pointer}
 .pair-btn.active{border-color:#5f81ff;background:#17376d;color:#fff;box-shadow:0 0 20px rgba(79,124,255,.18)}
 .select{background:#0b1829;border:1px solid #29466f;color:#fff;border-radius:11px;padding:9px 10px}
 .main{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(310px,.58fr);gap:12px}
+.bridge{margin:0 0 12px;padding:12px;border-radius:16px}
+.bridge-top{display:grid;grid-template-columns:minmax(240px,1fr) minmax(180px,.45fr) auto;gap:8px;align-items:end}
+.bridge label{display:block;color:#8ba0bf;font-size:9px;margin-bottom:5px}
+.bridge input{width:100%;background:#071522;border:1px solid #29476f;color:#fff;border-radius:10px;padding:10px}
+.bridge-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-top:9px}
+.bridge-node{padding:9px;border-radius:10px;background:#071522;border:1px solid #1d3659}
+.bridge-node small{display:block;color:#758cac;font-size:8px}.bridge-node b{display:block;margin-top:3px;font-size:10px}
+.bridge-node.ok{border-color:#217451;background:#082219}.bridge-node.bad{border-color:#7f303c;background:#260d13}.bridge-node.warn{border-color:#7a6427;background:#231d0b}
+@media(max-width:900px){.bridge-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:680px){.bridge-top{grid-template-columns:1fr}.bridge-grid{grid-template-columns:1fr 1fr}}
+
 .card{border-radius:18px;padding:13px}
 .chart-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:9px}
 .chart-head h2{margin:0;font-size:17px}.chart-head small{color:var(--muted)}
@@ -107,6 +118,23 @@ button{cursor:pointer}
     <select class="select" id="autoMode"><option value="on">Auto scan: ON</option><option value="off">Auto scan: OFF</option></select>
     <button class="btn" id="resetBtn">Скинути paper-статистику</button>
   </div>
+
+  <section class="bridge glass" id="bridgePanel">
+    <div class="bridge-top">
+      <div><label>ASTRA Bridge URL</label><input id="bridgeUrl" value="http://localhost:8088" placeholder="http://localhost:8088 або https://твій-tunnel"></div>
+      <div><label>MYSHKA token (якщо увімкнений)</label><input id="bridgeToken" type="password" placeholder="X-MYSHKA-TOKEN"></div>
+      <button class="btn green" id="bridgeConnect">🔌 Підключити ASTRA</button>
+    </div>
+    <div class="bridge-grid">
+      <div class="bridge-node warn" id="iAstra"><small>ASTRA API</small><b>CHECK…</b></div>
+      <div class="bridge-node warn" id="iOllama"><small>Ollama / Qwen</small><b>CHECK…</b></div>
+      <div class="bridge-node warn" id="iBybit"><small>Bybit account</small><b>CHECK…</b></div>
+      <div class="bridge-node warn" id="iFreqtrade"><small>Freqtrade</small><b>CHECK…</b></div>
+      <div class="bridge-node warn" id="iN8n"><small>n8n</small><b>CHECK…</b></div>
+      <div class="bridge-node warn" id="iTelegram"><small>Telegram</small><b>CHECK…</b></div>
+    </div>
+    <div class="sub" id="bridgeMsg" style="margin-top:8px">Якщо bridge недоступний, сайт лишається на LIVE Bybit + локальній PAPER логіці.</div>
+  </section>
 
   <div class="main">
     <section class="card glass">
@@ -194,10 +222,10 @@ button{cursor:pointer}
   </section>
 
   <div class="note">
-    <b>Що тут реальне:</b> ціна, 80 закритих 1m свічок, bid/ask і spread беруться з публічного Bybit V5.
-    Сигнал, EDGE, JEV, Guard, cooldown, position sizing і learner повторюють логіку пакета MYSHKA/ASTRA v6.
-    <b>Що не реальне:</b> ордери не відправляються на біржу — GitHub Pages не повинен зберігати торгові API-ключі.
-    Тут PAPER EXECUTION з горизонтом 5 хвилин, щоб перевіряти механіку без грошей.
+    <b>Режим ASTRA Bridge:</b> якщо сервер на 8088 доступний, рішення йдуть через справжні Python-модулі MYSHKA/ASTRA:
+    Bybit → TECH → EDGE → JEV/Ollama → Astra Guard → PAPER ENTER → 5m REVIEW → SQLite learner.
+    Telegram та n8n отримують події через сервер, а Bybit private context допускається тільки READ-ONLY.
+    <b>Freqtrade тут не отримує live-order команд:</b> лишаємо його окремою execution authority для dry-run/майбутнього live після валідації.
   </div>
 </div>
 
@@ -212,17 +240,20 @@ const CFG={
 };
 const STORE='myshka_astra_live_lab_v1';
 const $=id=>document.getElementById(id);
-let APP={selected:CFG.pairs[0],markets:{},decisions:{},kill:false,cooldowns:{},positions:{},trades:[],equity:1000,startEquity:1000,logs:[],scanning:false};
+// MYSHKA_BRIDGE_UI_V1
+let APP={selected:CFG.pairs[0],markets:{},decisions:{},kill:false,cooldowns:{},positions:{},trades:[],equity:1000,startEquity:1000,logs:[],scanning:false,
+  bridgeUrl:'http://localhost:8088',bridgeToken:'',backendReady:false,backendStats:null};
 
 function loadState(){
   try{
     const x=JSON.parse(localStorage.getItem(STORE)||'{}');
     APP.kill=!!x.kill;APP.cooldowns=x.cooldowns||{};APP.positions=x.positions||{};APP.trades=x.trades||[];
     APP.equity=Number(x.equity)||1000;APP.startEquity=Number(x.startEquity)||1000;APP.logs=x.logs||[];
+    APP.bridgeUrl=x.bridgeUrl||'http://localhost:8088';APP.bridgeToken=x.bridgeToken||'';
   }catch(e){}
 }
 function saveState(){
-  try{localStorage.setItem(STORE,JSON.stringify({kill:APP.kill,cooldowns:APP.cooldowns,positions:APP.positions,trades:APP.trades,equity:APP.equity,startEquity:APP.startEquity,logs:APP.logs.slice(0,100)}))}catch(e){}
+  try{localStorage.setItem(STORE,JSON.stringify({kill:APP.kill,cooldowns:APP.cooldowns,positions:APP.positions,trades:APP.trades,equity:APP.equity,startEquity:APP.startEquity,logs:APP.logs.slice(0,100),bridgeUrl:APP.bridgeUrl,bridgeToken:APP.bridgeToken}))}catch(e){}
 }
 function pairSymbol(pair){return pair.split('/')[0]+'USDT'}
 function fmtPrice(v){if(!Number.isFinite(v))return '—';return v>=1000?v.toLocaleString('uk-UA',{maximumFractionDigits:1}):v.toLocaleString('uk-UA',{maximumFractionDigits:4})}
@@ -337,12 +368,88 @@ function settlePositions(){
     const p=APP.positions[pair],m=APP.markets[pair];if(!m||now-p.openedAt<CFG.horizonMs)continue;
     const raw=(m.lastPrice-p.entry)/p.entry*100,gross=p.side==='LONG'?raw:-raw,net=gross-p.costs,hit=gross>0,pnlAmount=APP.equity*(p.notionalPct/100)*(net/100);
     APP.equity+=pnlAmount;
-    APP.trades.push({pair:p.pair,side:p.side,regime:p.regime,horizonMs:p.horizonMs,grossPct:gross,netPct:net,directionHit:hit,pnlAmount,expectedEdge:p.expectedEdge,openedAt:p.openedAt,closedAt:now});
+    const trade={pair:p.pair,side:p.side,regime:p.regime,horizonMs:p.horizonMs,grossPct:gross,netPct:net,directionHit:hit,pnlAmount,expectedEdge:p.expectedEdge,openedAt:p.openedAt,closedAt:now};
+    APP.trades.push(trade);
     delete APP.positions[pair];
     addLog('CLOSE',pair,p.side+' gross '+gross.toFixed(3)+'% · net '+net.toFixed(3)+'%',net.toFixed(3)+'%');
+    sendReviewToBridge(trade);
   }
   saveState();renderStats();renderPosition()
 }
+
+function bridgeHeaders(json=false){
+  const h={};if(json)h['Content-Type']='application/json';if(APP.bridgeToken)h['X-MYSHKA-TOKEN']=APP.bridgeToken;return h
+}
+async function bridgeFetch(path,opts={}){
+  const base=(APP.bridgeUrl||'').replace(/\/$/,'');if(!base)throw new Error('Bridge URL порожній');
+  const r=await fetch(base+path,{cache:'no-store',...opts,headers:{...(opts.headers||{}),...bridgeHeaders(!!opts.body)}});
+  if(!r.ok)throw new Error('ASTRA HTTP '+r.status);return await r.json()
+}
+function integrationNode(id,status,detail=''){
+  const e=$(id),ok=status==='ok'||status==='configured',warn=status==='disabled'||status==='unconfigured';
+  e.className='bridge-node '+(ok?'ok':warn?'warn':'bad');e.querySelector('b').textContent=(status||'unknown').toUpperCase()+(detail?' · '+detail:'')
+}
+async function connectBridge(){
+  APP.bridgeUrl=$('bridgeUrl').value.trim()||'http://localhost:8088';APP.bridgeToken=$('bridgeToken').value.trim();saveState();
+  $('bridgeConnect').textContent='… Перевірка';
+  try{
+    const h=await bridgeFetch('/health');
+    APP.backendReady=h.status==='ok';
+    integrationNode('iAstra',h.status,h.service||'');
+    const ints=await bridgeFetch('/integrations');
+    const ol=ints.ollama||{},ba=ints.bybit_account||{},ft=ints.freqtrade||{},nn=ints.n8n||{},tg=ints.telegram||{};
+    integrationNode('iOllama',ol.status,ol.model_present===false?'model missing':'');
+    integrationNode('iBybit',ba.status,ba.readOnly===1||ba.read_only===1?'READ ONLY':'');
+    integrationNode('iFreqtrade',ft.status);
+    integrationNode('iN8n',nn.status);
+    integrationNode('iTelegram',tg.status);
+    $('bridgeMsg').textContent='✅ Серверна ASTRA активна. /scan тепер проходить через EDGE → JEV/Ollama → Guard; REVIEW іде в learner.';
+    $('marketBadge').textContent='● ASTRA BRIDGE';$('marketBadge').className='badge live';
+    try{
+      const st=await bridgeFetch('/stats?limit=120');APP.backendStats=st;
+      if(st.trades&&st.trades.length){
+        APP.trades=st.trades.slice().reverse().map(t=>({pair:t.pair,side:t.side,regime:t.regime,horizonMs:t.horizon_sec*1000,grossPct:t.gross_return_pct,netPct:t.net_return_pct,directionHit:!!t.direction_hit,pnlAmount:0,expectedEdge:t.expected_edge_pct,openedAt:(t.entered_at||0)*1000,closedAt:(t.entered_at||0)*1000+t.horizon_sec*1000}));
+        renderStats();
+      }
+    }catch(e){}
+  }catch(e){
+    APP.backendReady=false;
+    integrationNode('iAstra','error');
+    ['iOllama','iBybit','iFreqtrade','iN8n','iTelegram'].forEach(id=>integrationNode(id,'unconfigured'));
+    $('bridgeMsg').textContent='⚠ ASTRA bridge недоступний: '+e.message+'. Працює fallback: LIVE Bybit + локальний PAPER.';
+  }finally{$('bridgeConnect').textContent='🔌 Підключити ASTRA'}
+}
+function adaptServerResult(r){
+  const m=r.market||{},raw=(m.candles||[]),candles=raw.map(c=>({o:+c.open,h:+c.high,l:+c.low,c:+c.close,v:+c.volume}));
+  const sig0=r.signal||{},closes=candles.map(x=>x.c),ef=closes.length?emaSeries(closes,CFG.emaFast):[],es=closes.length?emaSeries(closes,CFG.emaSlow):[];
+  const sig={direction:sig0.direction||'WAIT',reason:sig0.reason||'',structure:sig0.structure||'RANGE',emaFast:+sig0.ema_fast||ef.at(-1)||0,emaSlow:+sig0.ema_slow||es.at(-1)||0,rsi:+sig0.rsi||0,volumeRatio:+sig0.volume_ratio||0,emaFastSeries:ef,emaSlowSeries:es};
+  const e0=r.edge;const edge=e0?{expectedMovePct:+e0.expected_move_pct||0,totalCostPct:+e0.total_cost_pct||0,netEdgePct:+e0.net_edge_pct||0,passed:!!e0.passed,basis:e0.basis||'server',nSamples:+e0.n_samples||0}:null;
+  const j0=r.jev||{};const jev={verdict:j0.verdict||((r.action==='ENTER')?'APPROVE':'WAIT'),direction:j0.direction||sig.direction,confidence:+j0.confidence||0,reason:j0.reason||r.reason||'',aiUsed:!!j0.ai_used,aiNote:j0.ai_note||''};
+  const z=r.size;const size=z?{notionalPct:+z.notional_pct_equity||0,confidenceScalar:+z.confidence_scalar||0}:null;
+  const guard={passed:r.action==='ENTER',reasons:r.guard_reasons||[]};
+  let reason=r.reason||jev.reason||sig.reason;if(r.reason==='jev')reason=jev.reason;if(r.reason==='astra_guard')reason='Astra Guard: '+guard.reasons.join('; ');
+  const market={pair:r.pair,symbol:m.symbol||pairSymbol(r.pair),candles,bid:+m.bid,ask:+m.ask,lastPrice:+m.last_price,spreadPct:+m.spread_pct,atrPct:+m.atr_pct,atrMedian:+m.atr_pct_median,updatedAt:Date.now()};
+  return{market,decision:{sig,edge,jev,size,guard,action:r.action||'WAIT',reason,server:true}}
+}
+async function scanBackend(){
+  const pw=pnlWindows(),openPositions=Object.values(APP.positions).map(p=>({pair:p.pair,notional_pct_equity:p.notionalPct||0,leverage:1}));
+  const body={equity:APP.equity,realized_pnl_today_pct:pw.dayPct,realized_pnl_this_week_pct:pw.weekPct,open_positions:openPositions,kill_switch_engaged:APP.kill,horizon_sec:300};
+  const j=await bridgeFetch('/scan',{method:'POST',body:JSON.stringify(body)});
+  if(j.status!=='ok')throw new Error(j.error||'ASTRA scan error');
+  let ok=0;
+  for(const r of (j.results||[])){const a=adaptServerResult(r);if(!a.market.candles.length)continue;APP.markets[r.pair]=a.market;APP.decisions[r.pair]=a.decision;ok++}
+  if(!ok)throw new Error('ASTRA повернула 0 market results');
+  $('marketBadge').textContent='● ASTRA + Bybit';$('marketBadge').className='badge live';
+  return ok
+}
+async function sendReviewToBridge(t){
+  if(!APP.backendReady)return;
+  try{
+    await bridgeFetch('/review',{method:'POST',body:JSON.stringify({pair:t.pair,side:t.side,regime:t.regime,horizon_sec:Math.round(t.horizonMs/1000),direction_hit:t.directionHit,gross_return_pct:t.grossPct,net_return_pct:t.netPct,mfe_pct:0,mae_pct:0,expected_edge_pct:t.expectedEdge||0,realized_edge_pct:t.netPct-(t.expectedEdge||0),entered_at:t.openedAt/1000})});
+    addLog('LEARN',t.pair,'REVIEW записано в серверний learner',t.netPct.toFixed(3)+'%');
+  }catch(e){addLog('ERROR',t.pair,'review → '+e.message)}
+}
+
 async function fetchJSON(url){
   const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();if(j.retCode!==0)throw new Error(j.retMsg||'Bybit error');return j
 }
@@ -362,6 +469,13 @@ async function fetchMarket(pair){
 async function scanAll(){
   if(APP.scanning)return;APP.scanning=true;$('scanBtn').textContent='… Scan';
   try{
+    if(APP.backendReady){
+      await scanBackend();
+      settlePositions();
+      for(const pair of CFG.pairs){const m=APP.markets[pair],d=APP.decisions[pair];if(m&&d)maybeEnter(m,d)}
+      renderSelected();renderStats();renderPosition();
+      return;
+    }
     const res=await Promise.allSettled(CFG.pairs.map(fetchMarket));let ok=0;
     res.forEach((r,i)=>{const pair=CFG.pairs[i];if(r.status==='fulfilled'){APP.markets[pair]=r.value;APP.decisions[pair]=evaluateMarket(r.value);ok++}else addLog('ERROR',pair,r.reason&&r.reason.message?r.reason.message:String(r.reason))});
     if(ok){
@@ -430,12 +544,12 @@ function drawStatsChart(){
 function renderLog(){
   $('logList').innerHTML=APP.logs.slice(0,50).map(e=>'<div class="logrow"><span class="muted">'+new Date(e.ts).toLocaleTimeString('uk-UA')+'</span><b>'+e.type+'</b><span>'+e.pair.replace('/USDT:USDT','')+'</span><span>'+e.text+'</span><b class="'+((parseFloat(e.val)||0)>=0?'long':'short')+'">'+e.val+'</b></div>').join('')||'<div class="muted">Ще немає записів.</div>'
 }
-function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();for(const p of CFG.pairs){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected()}
+function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){scanAll()}else{for(const p of CFG.pairs){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected()}}
 document.querySelectorAll('[data-pair]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-pair]').forEach(x=>x.classList.remove('active'));b.classList.add('active');APP.selected=b.dataset.pair;renderSelected();renderPosition()});
 $('scanBtn').onclick=scanAll;$('killBtn').onclick=()=>setKill(!APP.kill);
 $('resetBtn').onclick=()=>{if(!confirm('Скинути всі paper-угоди, learner і equity?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
 window.addEventListener('resize',()=>{renderSelected();renderStats()});
-loadState();setKill(APP.kill);renderStats();renderLog();renderPosition();scanAll();
+loadState();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(scanAll);
 setInterval(()=>{if($('autoMode').value==='on')scanAll();else settlePositions();renderPosition()},CFG.scanMs);
 setInterval(renderPosition,1000);
 </script>
