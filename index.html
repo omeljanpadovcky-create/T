@@ -51,6 +51,17 @@ button{cursor:pointer}
 .bridge-node small{display:block;color:#758cac;font-size:8px}.bridge-node b{display:block;margin-top:3px;font-size:10px}
 .bridge-node.ok{border-color:#217451;background:#082219}.bridge-node.bad{border-color:#7f303c;background:#260d13}.bridge-node.warn{border-color:#7a6427;background:#231d0b}
 @media(max-width:900px){.bridge-grid{grid-template-columns:repeat(3,1fr)}}
+.phone-control{margin:0 0 12px;padding:12px;border-radius:16px}
+.phone-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:9px}
+.phone-head h2{margin:0;font-size:17px}.phone-head p{margin:3px 0 0;color:#8399ba;font-size:9px}
+.phone-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.phone-actions button{min-height:46px}
+.phone-status{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:9px}
+.phone-box{padding:9px;border-radius:10px;background:#071522;border:1px solid #1d3659}
+.phone-box small{display:block;color:#758cac;font-size:8px}.phone-box b{display:block;margin-top:3px;font-size:11px}
+.phone-help{margin-top:8px;padding:9px;border-radius:10px;background:#081522;border:1px solid #1d3658;color:#8da2c1;font-size:9px;line-height:1.55}
+@media(max-width:850px){.phone-actions{grid-template-columns:repeat(2,1fr)}.phone-status{grid-template-columns:repeat(2,1fr)}}
+
 @media(max-width:680px){.bridge-top{grid-template-columns:1fr}.bridge-grid{grid-template-columns:1fr 1fr}}
 
 .card{border-radius:18px;padding:13px}
@@ -134,6 +145,34 @@ button{cursor:pointer}
       <div class="bridge-node warn" id="iTelegram"><small>Telegram</small><b>CHECK…</b></div>
     </div>
     <div class="sub" id="bridgeMsg" style="margin-top:8px">Якщо bridge недоступний, сайт лишається на LIVE Bybit + локальній PAPER логіці.</div>
+  </section>
+
+  <section class="phone-control glass">
+    <div class="phone-head">
+      <div><h2>📱 Phone Control Center</h2><p>Керування серверною ASTRA з телефону. Працює через Bridge або через Telegram-команди.</p></div>
+      <button class="btn" id="phoneRefresh">↻ Оновити статус</button>
+    </div>
+    <div class="phone-actions">
+      <button class="btn gold" id="phoneScan">🔎 Scan зараз</button>
+      <button class="btn" id="phonePause">⏸ Pause entries</button>
+      <button class="btn red" id="phoneKill">🛡 Kill switch OFF</button>
+      <button class="btn green" id="phoneAuto">⚡ Auto scan ON</button>
+      <button class="btn" id="phoneOllama">🦙 Ollama ON</button>
+      <button class="btn" id="phoneN8n">⚙ n8n events ON</button>
+      <button class="btn" id="phoneNotify">✈ Telegram alerts ON</button>
+      <button class="btn" id="phoneEngineReset">↺ Reset paper engine</button>
+    </div>
+    <div class="phone-status">
+      <div class="phone-box"><small>ENGINE</small><b id="pcEngine">—</b></div>
+      <div class="phone-box"><small>PAPER EQUITY</small><b id="pcEquity">—</b></div>
+      <div class="phone-box"><small>POSITIONS</small><b id="pcPositions">—</b></div>
+      <div class="phone-box"><small>LAST SCAN</small><b id="pcLastScan">—</b></div>
+      <div class="phone-box"><small>TELEGRAM CONTROL</small><b id="pcTelegram">—</b></div>
+    </div>
+    <div class="phone-help">
+      У Telegram можна керувати без відкритого сайту: <b>/status /scan /pause /resume /kill /unkill /auto_on /auto_off /ollama_on /ollama_off /n8n_on /n8n_off</b>.
+      Для веб-керування з мобільного Bridge URL має бути доступний телефону по HTTPS.
+    </div>
   </section>
 
   <div class="main">
@@ -389,6 +428,68 @@ function integrationNode(id,status,detail=''){
   const e=$(id),ok=status==='ok'||status==='configured',warn=status==='disabled'||status==='unconfigured';
   e.className='bridge-node '+(ok?'ok':warn?'warn':'bad');e.querySelector('b').textContent=(status||'unknown').toUpperCase()+(detail?' · '+detail:'')
 }
+
+function syncEnginePositions(engine){
+  if(!engine)return;
+  APP.equity=Number(engine.paper_equity)||APP.equity;
+  APP.positions={};
+  for(const p of (engine.positions||[])){
+    APP.positions[p.pair]={pair:p.pair,side:p.side,entry:+p.entry,openedAt:(+p.opened_at||0)*1000,horizonMs:(+p.horizon_sec||300)*1000,costs:+p.costs_pct||0,notionalPct:+p.notional_pct_equity||0};
+  }
+  renderPosition();
+}
+function paintPhoneControl(status){
+  if(!status)return;
+  const rt=status.runtime||{},en=status.engine||{};
+  APP.serverRuntime=rt;APP.kill=!!rt.kill_switch;
+  $('killBtn').textContent='🛡 Kill switch: '+(APP.kill?'ON':'OFF');$('killBtn').className='btn '+(APP.kill?'red':'');
+  $('autoMode').value=rt.auto_scan===false?'off':'on';
+  $('phonePause').textContent=rt.paused?'▶ Resume entries':'⏸ Pause entries';
+  $('phonePause').className='btn '+(rt.paused?'green':'');
+  $('phoneKill').textContent='🛡 Kill switch '+(rt.kill_switch?'ON':'OFF');$('phoneKill').className='btn '+(rt.kill_switch?'red':'');
+  $('phoneAuto').textContent='⚡ Auto scan '+(rt.auto_scan?'ON':'OFF');$('phoneAuto').className='btn '+(rt.auto_scan?'green':'');
+  $('phoneOllama').textContent='🦙 Ollama '+(rt.ollama_enabled?'ON':'OFF');
+  $('phoneN8n').textContent='⚙ n8n events '+(rt.n8n_events_enabled?'ON':'OFF');
+  $('phoneNotify').textContent='✈ Telegram alerts '+(rt.telegram_notifications_enabled?'ON':'OFF');
+  $('pcEngine').textContent=en.running?'RUNNING':'STOPPED';
+  $('pcEquity').textContent=Number(en.paper_equity||0).toFixed(2);
+  $('pcPositions').textContent=(en.positions||[]).length?en.positions.map(p=>p.pair.split('/')[0]+' '+p.side+' '+p.settle_in_sec+'s').join(' • '):'0';
+  $('pcLastScan').textContent=en.last_scan_at?new Date(en.last_scan_at*1000).toLocaleTimeString('uk-UA'):'—';
+  $('pcTelegram').textContent=en.telegram_control_running?'ACTIVE':'OFF';
+  syncEnginePositions(en);
+}
+function loadServerTrades(st){
+  if(!st||!st.trades)return;
+  APP.backendStats=st;
+  APP.trades=st.trades.slice().reverse().map(t=>({pair:t.pair,side:t.side,regime:t.regime,horizonMs:t.horizon_sec*1000,grossPct:t.gross_return_pct,netPct:t.net_return_pct,directionHit:!!t.direction_hit,pnlAmount:0,expectedEdge:t.expected_edge_pct,openedAt:(t.entered_at||0)*1000,closedAt:(t.entered_at||0)*1000+t.horizon_sec*1000}));
+  renderStats();
+}
+function applyServerResults(results){
+  let ok=0;
+  for(const r of (results||[])){const a=adaptServerResult(r);if(!a.market.candles.length)continue;APP.markets[r.pair]=a.market;APP.decisions[r.pair]=a.decision;ok++}
+  if(ok){$('marketBadge').textContent='● ASTRA PHONE';$('marketBadge').className='badge live';renderSelected()}
+  return ok
+}
+async function refreshPhoneControl(){
+  if(!APP.backendReady)return;
+  try{
+    const st=await bridgeFetch('/control/status');paintPhoneControl(st);
+    const latest=await bridgeFetch('/control/latest');applyServerResults(latest.results||[]);if(latest.engine)paintPhoneControl({runtime:latest.engine.runtime,engine:latest.engine});
+    const trades=await bridgeFetch('/stats?limit=120');loadServerTrades(trades);
+  }catch(e){
+    APP.backendReady=false;$('bridgeMsg').textContent='⚠ Phone Control lost: '+e.message;
+  }
+}
+async function setServerControl(name,value){
+  if(!APP.backendReady)return;
+  const r=await bridgeFetch('/control/set',{method:'POST',body:JSON.stringify({name,value})});paintPhoneControl({runtime:r.runtime,engine:r.engine});return r
+}
+async function phoneScanNow(){
+  if(!APP.backendReady)return scanAll();
+  $('phoneScan').textContent='… Scan';
+  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st)}
+  finally{$('phoneScan').textContent='🔎 Scan зараз'}
+}
 async function connectBridge(){
   APP.bridgeUrl=$('bridgeUrl').value.trim()||'http://localhost:8088';APP.bridgeToken=$('bridgeToken').value.trim();saveState();
   $('bridgeConnect').textContent='… Перевірка';
@@ -403,15 +504,9 @@ async function connectBridge(){
     integrationNode('iFreqtrade',ft.status);
     integrationNode('iN8n',nn.status);
     integrationNode('iTelegram',tg.status);
-    $('bridgeMsg').textContent='✅ Серверна ASTRA активна. /scan тепер проходить через EDGE → JEV/Ollama → Guard; REVIEW іде в learner.';
+    $('bridgeMsg').textContent='✅ Серверна ASTRA активна. Phone Engine працює на ПК самостійно; телефон тільки керує і дивиться.';
     $('marketBadge').textContent='● ASTRA BRIDGE';$('marketBadge').className='badge live';
-    try{
-      const st=await bridgeFetch('/stats?limit=120');APP.backendStats=st;
-      if(st.trades&&st.trades.length){
-        APP.trades=st.trades.slice().reverse().map(t=>({pair:t.pair,side:t.side,regime:t.regime,horizonMs:t.horizon_sec*1000,grossPct:t.gross_return_pct,netPct:t.net_return_pct,directionHit:!!t.direction_hit,pnlAmount:0,expectedEdge:t.expected_edge_pct,openedAt:(t.entered_at||0)*1000,closedAt:(t.entered_at||0)*1000+t.horizon_sec*1000}));
-        renderStats();
-      }
-    }catch(e){}
+    await refreshPhoneControl();
   }catch(e){
     APP.backendReady=false;
     integrationNode('iAstra','error');
@@ -432,14 +527,11 @@ function adaptServerResult(r){
   return{market,decision:{sig,edge,jev,size,guard,action:r.action||'WAIT',reason,server:true}}
 }
 async function scanBackend(){
-  const pw=pnlWindows(),openPositions=Object.values(APP.positions).map(p=>({pair:p.pair,notional_pct_equity:p.notionalPct||0,leverage:1}));
-  const body={equity:APP.equity,realized_pnl_today_pct:pw.dayPct,realized_pnl_this_week_pct:pw.weekPct,open_positions:openPositions,kill_switch_engaged:APP.kill,horizon_sec:300};
-  const j=await bridgeFetch('/scan',{method:'POST',body:JSON.stringify(body)});
-  if(j.status!=='ok')throw new Error(j.error||'ASTRA scan error');
-  let ok=0;
-  for(const r of (j.results||[])){const a=adaptServerResult(r);if(!a.market.candles.length)continue;APP.markets[r.pair]=a.market;APP.decisions[r.pair]=a.decision;ok++}
+  const j=await bridgeFetch('/control/scan-now',{method:'POST'});
+  if(j.status!=='ok')throw new Error(j.error||'ASTRA phone engine scan error');
+  const ok=applyServerResults(j.results||[]);
+  if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});
   if(!ok)throw new Error('ASTRA повернула 0 market results');
-  $('marketBadge').textContent='● ASTRA + Bybit';$('marketBadge').className='badge live';
   return ok
 }
 async function sendReviewToBridge(t){
@@ -471,8 +563,7 @@ async function scanAll(){
   try{
     if(APP.backendReady){
       await scanBackend();
-      settlePositions();
-      for(const pair of CFG.pairs){const m=APP.markets[pair],d=APP.decisions[pair];if(m&&d)maybeEnter(m,d)}
+      const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);
       renderSelected();renderStats();renderPosition();
       return;
     }
@@ -544,13 +635,22 @@ function drawStatsChart(){
 function renderLog(){
   $('logList').innerHTML=APP.logs.slice(0,50).map(e=>'<div class="logrow"><span class="muted">'+new Date(e.ts).toLocaleTimeString('uk-UA')+'</span><b>'+e.type+'</b><span>'+e.pair.replace('/USDT:USDT','')+'</span><span>'+e.text+'</span><b class="'+((parseFloat(e.val)||0)>=0?'long':'short')+'">'+e.val+'</b></div>').join('')||'<div class="muted">Ще немає записів.</div>'
 }
-function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){scanAll()}else{for(const p of CFG.pairs){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected()}}
+async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of CFG.pairs){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected()}}
 document.querySelectorAll('[data-pair]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-pair]').forEach(x=>x.classList.remove('active'));b.classList.add('active');APP.selected=b.dataset.pair;renderSelected();renderPosition()});
-$('scanBtn').onclick=scanAll;$('killBtn').onclick=()=>setKill(!APP.kill);
-$('resetBtn').onclick=()=>{if(!confirm('Скинути всі paper-угоди, learner і equity?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
+$('scanBtn').onclick=()=>APP.backendReady?phoneScanNow():scanAll();$('killBtn').onclick=()=>setKill(!APP.kill);
+$('phoneRefresh').onclick=refreshPhoneControl;$('phoneScan').onclick=phoneScanNow;
+$('phonePause').onclick=()=>setServerControl('paused',!(APP.serverRuntime&&APP.serverRuntime.paused)).then(refreshPhoneControl);
+$('phoneKill').onclick=()=>setServerControl('kill_switch',!(APP.serverRuntime&&APP.serverRuntime.kill_switch)).then(refreshPhoneControl);
+$('phoneAuto').onclick=()=>setServerControl('auto_scan',!(APP.serverRuntime&&APP.serverRuntime.auto_scan)).then(refreshPhoneControl);
+$('phoneOllama').onclick=()=>setServerControl('ollama_enabled',!(APP.serverRuntime&&APP.serverRuntime.ollama_enabled)).then(refreshPhoneControl);
+$('phoneN8n').onclick=()=>setServerControl('n8n_events_enabled',!(APP.serverRuntime&&APP.serverRuntime.n8n_events_enabled)).then(refreshPhoneControl);
+$('phoneNotify').onclick=()=>setServerControl('telegram_notifications_enabled',!(APP.serverRuntime&&APP.serverRuntime.telegram_notifications_enabled)).then(refreshPhoneControl);
+$('phoneEngineReset').onclick=async()=>{if(!APP.backendReady||!confirm('Скинути paper equity та відкриті PAPER позиції? Learner лишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl()};
+$('autoMode').onchange=()=>{if(APP.backendReady)setServerControl('auto_scan',$('autoMode').value==='on').then(refreshPhoneControl)};
+$('resetBtn').onclick=async()=>{if(APP.backendReady){if(!confirm('Скинути paper engine? Learner історія залишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl();return}if(!confirm('Скинути локальні paper-угоди?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
 window.addEventListener('resize',()=>{renderSelected();renderStats()});
-loadState();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(scanAll);
-setInterval(()=>{if($('autoMode').value==='on')scanAll();else settlePositions();renderPosition()},CFG.scanMs);
+loadState();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(!APP.backendReady)scanAll();else refreshPhoneControl()});
+setInterval(()=>{if(APP.backendReady)refreshPhoneControl();else if($('autoMode').value==='on')scanAll();else{settlePositions();renderPosition()}},CFG.scanMs);
 setInterval(renderPosition,1000);
 </script>
 </body>
