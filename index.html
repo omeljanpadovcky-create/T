@@ -194,6 +194,45 @@ input,select{width:100%;border:1px solid #2c4a75;background:#0d1b2f;color:#fff;b
 @media(max-width:650px){.trade-chart{height:300px}.pipeline{grid-template-columns:1fr 1fr}.math-grid{grid-template-columns:1fr}.trade-log .lr{grid-template-columns:50px 60px 1fr}.trade-log .lr span:last-child{display:none}}
 
 
+
+/* === TRADE MYSHKA TRAINER === */
+.trainer-wrap{display:grid;gap:12px}
+.trainer-top{display:grid;grid-template-columns:minmax(0,1fr) 210px 145px;gap:9px;align-items:end;padding:13px;border-radius:16px;background:linear-gradient(180deg,#0e1c30,#091421);border:1px solid #24436d}
+.trainer-top h3{margin:0 0 5px;font-size:17px}.trainer-top p{margin:0;color:#8fa3c1;font-size:10px;line-height:1.5}
+.trainer-score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.trainer-stat{padding:11px;border-radius:12px;background:#091522;border:1px solid #20395d}
+.trainer-stat small{display:block;color:#8197b7;font-size:9px;text-transform:uppercase;letter-spacing:.08em}
+.trainer-stat b{display:block;margin-top:4px;font-size:20px}
+.trainer-card{padding:14px;border-radius:18px;background:linear-gradient(180deg,#0b1829,#07121f);border:1px solid #29466f}
+.trainer-progress{height:7px;border-radius:999px;background:#07101c;border:1px solid #1e3557;overflow:hidden;margin-bottom:13px}
+.trainer-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4f7cff,#7b4cff,#2bdd8d);transition:width .25s}
+.trainer-case-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.trainer-case-head b{font-size:17px}.trainer-case-head span{color:#8da4c5;font-size:10px}
+.trainer-market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.trainer-metric{padding:10px;border-radius:12px;background:#091522;border:1px solid #1d3658}
+.trainer-metric small{display:block;color:#7e94b5;font-size:9px}.trainer-metric b{display:block;margin-top:4px;font-size:13px}
+.trainer-edge{margin-top:9px;padding:10px;border-radius:12px;background:#0a1626;border:1px solid #223d63;font-size:11px;line-height:1.5;color:#cdd9ea}
+.trainer-choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:11px}
+.trainer-choice{border:1px solid #31517f;background:#102039;color:#e9f1ff;border-radius:12px;padding:13px;font-weight:950}
+.trainer-choice.long:hover{border-color:#2bdd8d}.trainer-choice.wait:hover{border-color:#ffc94f}.trainer-choice.short:hover{border-color:#ff4e61}
+.trainer-choice:disabled{opacity:.56;cursor:default}
+.trainer-theory-q{font-size:18px;font-weight:850;line-height:1.4;margin:4px 0 13px}
+.trainer-answer-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.trainer-answer{border:1px solid #31517f;background:#0e1c31;color:#e8f0ff;border-radius:12px;padding:12px;text-align:left}
+.trainer-answer:disabled{opacity:.64;cursor:default}
+.trainer-feedback{display:none;margin-top:12px;padding:12px;border-radius:13px;border:1px solid #29466f;background:#081522;font-size:11px;line-height:1.55}
+.trainer-feedback.show{display:block}.trainer-feedback.good{border-color:#23865e;background:#09261c}.trainer-feedback.bad{border-color:#943846;background:#291018}
+.trainer-feedback h4{margin:0 0 6px;font-size:14px}.trainer-feedback p{margin:4px 0;color:#c6d4e8}
+.trainer-team{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.trainer-team div{padding:8px;border-radius:9px;background:#07111e;border:1px solid #20395d}
+.trainer-team small{display:block;color:#7790b3;font-size:8px}.trainer-team b{display:block;margin-top:3px;font-size:11px}
+.trainer-bottom{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.trainer-bottom .muted{font-size:10px}
+.trainer-note{padding:11px;border-radius:13px;background:#0a1523;border:1px solid #1e385c;color:#8ea3c1;font-size:10px;line-height:1.55}
+.trainer-summary{text-align:center;padding:24px 12px}.trainer-summary b{display:block;font-size:42px;color:#ffd16f}.trainer-summary p{color:#91a5c3}
+@media(max-width:800px){.trainer-top{grid-template-columns:1fr 1fr}.trainer-top>div:first-child{grid-column:1/-1}.trainer-score-grid{grid-template-columns:1fr 1fr}.trainer-market-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.trainer-top{grid-template-columns:1fr}.trainer-market-grid{grid-template-columns:1fr 1fr}.trainer-choices{grid-template-columns:1fr}.trainer-answer-grid{grid-template-columns:1fr}.trainer-team{grid-template-columns:1fr}.trainer-stat b{font-size:17px}}
+
 /* === AUTOMATION NOTEBOOK === */
 .auto-note-wrap{display:grid;gap:12px}
 .auto-hero{
@@ -294,6 +333,7 @@ input,select{width:100%;border:1px solid #2c4a75;background:#0d1b2f;color:#fff;b
     <button class="game-tab" data-game="plinko"><b>🔵</b><span>Plinko</span></button>
     <button class="game-tab" data-game="baccarat"><b>♠</b><span>Baccarat</span></button>
     <button class="game-tab" data-game="trading"><b>📈</b><span>Trading Lab</span></button>
+    <button class="game-tab" data-game="trainer"><b>🎓</b><span>Trade Тренажер</span></button>
     <button class="game-tab active" data-game="automation"><b>⚙️</b><span>Моя автоматизація</span></button>
   </section>
 
@@ -635,7 +675,72 @@ input,select{width:100%;border:1px solid #2c4a75;background:#0d1b2f;color:#fff;b
           <div class="pipe-node"><span>💚</span><b>/health</b><small>Astra Guard health endpoint.</small><em>● OK</em></div>
         </div>
 
+
         <div class="trade-log" id="tradeLog"></div>
+      </div>
+
+      <div class="game" id="game-trainer">
+        <div class="stage-title"><h2>🎓 Trade Мишка — Тренажер</h2><span>тільки симуляція • без реальних ордерів</span></div>
+
+        <div class="trainer-wrap">
+          <div class="trainer-top">
+            <div>
+              <h3>Лев проти Trade Мишки</h3>
+              <p>Проходь короткі тести по нашій логіці: EMA, RSI, структура, volume, EDGE, costs, WAIT і risk-control. Після відповіді побачиш рішення Мишки та пояснення.</p>
+            </div>
+            <div class="field"><label>Режим</label><select id="trainerMode"><option value="market">📈 Ринкові ситуації</option><option value="theory">🧠 Теорія системи</option></select></div>
+            <button class="btn purple" id="trainerNewSet">↻ Нові 10 тестів</button>
+          </div>
+
+          <div class="trainer-score-grid">
+            <div class="trainer-stat"><small>Рахунок</small><b id="trainerScore">0 / 0</b></div>
+            <div class="trainer-stat"><small>Серія</small><b id="trainerStreak">0 🔥</b></div>
+            <div class="trainer-stat"><small>Найкраще</small><b id="trainerBest">0%</b></div>
+            <div class="trainer-stat"><small>Прогрес</small><b id="trainerCount">1 / 10</b></div>
+          </div>
+
+          <div class="trainer-card">
+            <div class="trainer-progress"><i id="trainerProgress"></i></div>
+
+            <div id="trainerMarketBox">
+              <div class="trainer-case-head"><b id="trainerPair">BTC/USDT:USDT</b><span id="trainerCaseLabel">Ситуація #1 • 1m • horizon 30m</span></div>
+              <div class="trainer-market-grid">
+                <div class="trainer-metric"><small>EMA</small><b id="trainerEma">—</b></div>
+                <div class="trainer-metric"><small>Structure</small><b id="trainerStructure">—</b></div>
+                <div class="trainer-metric"><small>RSI 14</small><b id="trainerRsi">—</b></div>
+                <div class="trainer-metric"><small>Volume ratio</small><b id="trainerVol">—</b></div>
+                <div class="trainer-metric"><small>Expected move</small><b id="trainerMove">—</b></div>
+                <div class="trainer-metric"><small>Costs</small><b id="trainerCosts">—</b></div>
+              </div>
+              <div class="trainer-edge" id="trainerEdgeInfo">EDGE = expected move − modeled costs. Safety margin для тренування: 0.03%.</div>
+              <div class="trainer-choices">
+                <button class="trainer-choice long" data-trainer-side="LONG">▲ LONG</button>
+                <button class="trainer-choice wait" data-trainer-side="WAIT">● WAIT</button>
+                <button class="trainer-choice short" data-trainer-side="SHORT">▼ SHORT</button>
+              </div>
+            </div>
+
+            <div id="trainerTheoryBox" hidden>
+              <div class="trainer-case-head"><b>🧠 Теорія Trade Мишки</b><span id="trainerTheoryLabel">Питання #1</span></div>
+              <div class="trainer-theory-q" id="trainerQuestion">—</div>
+              <div class="trainer-answer-grid" id="trainerAnswers"></div>
+            </div>
+
+            <div class="trainer-feedback" id="trainerFeedback"></div>
+
+            <div class="trainer-bottom">
+              <span class="muted" id="trainerHint">Обери рішення. Відповідь не впливає на спільний баланс.</span>
+              <button class="btn gold" id="trainerNext" disabled>Наступний тест →</button>
+            </div>
+          </div>
+
+          <div class="trainer-note">
+            <b>Правила симулятора:</b> LONG: EMA Fast &gt; EMA Slow + Structure UP + RSI 52–72 + Volume ≥ 0.60.
+            SHORT: EMA Fast &lt; EMA Slow + Structure DOWN + RSI 28–48 + Volume ≥ 0.60.
+            Після технічного сигналу EDGE має перекрити modeled costs ще мінімум на 0.03%. Інакше — WAIT.
+            Це навчальний режим, він не надсилає ордери на Bybit.
+          </div>
+        </div>
       </div>
 
       <div class="game active" id="game-automation">
@@ -1345,6 +1450,156 @@ $('tradingBot').onclick=()=>{
   tLog('BOT',T.bot?'STARTED':'STOPPED',0)
 };
 tSeed();tSignal();setTimeout(tDraw,50);setInterval(tStep,900);
+
+
+
+/* ===== MYSHKA_TRAINER_V1 ===== */
+const TRAINER_STORE='myshka_trade_trainer_v1';
+const TRAINER_TOTAL=10;
+let TR={mode:'market',items:[],i:0,correct:0,answered:0,streak:0,best:0,locked:false};
+
+const TRAINER_MARKET_TEMPLATES=[
+  {pair:'BTC/USDT:USDT',ema:'Fast > Slow',structure:'UP',rsi:61,vol:.91,move:.31,costs:.19,why:'Є повний LONG-набір і чистий EDGE після витрат достатній.'},
+  {pair:'ETH/USDT:USDT',ema:'Fast < Slow',structure:'DOWN',rsi:39,vol:.84,move:.29,costs:.18,why:'Є повний SHORT-набір і EDGE перекриває витрати та запас.'},
+  {pair:'SOL/USDT:USDT',ema:'Fast > Slow',structure:'UP',rsi:75,vol:1.08,move:.38,costs:.19,why:'RSI вище LONG-зони 52–72, тому технічний вхід відхиляється.'},
+  {pair:'BTC/USDT:USDT',ema:'Fast < Slow',structure:'DOWN',rsi:42,vol:.43,move:.41,costs:.18,why:'Volume ratio нижче 0.60. Навіть красивий напрям не проходить volume gate.'},
+  {pair:'ETH/USDT:USDT',ema:'Fast > Slow',structure:'DOWN',rsi:58,vol:.95,move:.35,costs:.19,why:'EMA натякає LONG, але Structure = DOWN. Структурний фільтр не дозволяє LONG.'},
+  {pair:'SOL/USDT:USDT',ema:'Fast < Slow',structure:'DOWN',rsi:35,vol:.72,move:.20,costs:.19,why:'SHORT технічно є, але EDGE лише 0.01% — менше safety margin 0.03%, тому WAIT.'},
+  {pair:'BTC/USDT:USDT',ema:'Fast > Slow',structure:'UP',rsi:53,vol:.63,move:.25,costs:.18,why:'Умови LONG проходять, а чистий EDGE 0.07% перевищує safety margin.'},
+  {pair:'ETH/USDT:USDT',ema:'Fast < Slow',structure:'DOWN',rsi:47,vol:.61,move:.24,costs:.18,why:'SHORT проходить по RSI, structure і volume; EDGE 0.06% достатній.'},
+  {pair:'SOL/USDT:USDT',ema:'Fast > Slow',structure:'UP',rsi:50,vol:.88,move:.33,costs:.18,why:'RSI 50 нижче LONG-зони. Правильна дисципліна — WAIT.'},
+  {pair:'BTC/USDT:USDT',ema:'Fast < Slow',structure:'UP',rsi:40,vol:.92,move:.36,costs:.18,why:'Для SHORT структура повинна бути DOWN. Тут вона UP, тому WAIT.'},
+  {pair:'ETH/USDT:USDT',ema:'Fast > Slow',structure:'UP',rsi:68,vol:1.24,move:.22,costs:.18,why:'Технічний LONG є, але EDGE 0.04% все ще проходить мінімальний запас 0.03%.'},
+  {pair:'SOL/USDT:USDT',ema:'Fast < Slow',structure:'DOWN',rsi:27,vol:1.02,move:.32,costs:.19,why:'RSI 27 нижче SHORT-зони 28–48, тому сигнал відхиляється.'},
+  {pair:'BTC/USDT:USDT',ema:'Fast > Slow',structure:'UP',rsi:64,vol:.59,move:.44,costs:.18,why:'Volume ratio 0.59 — буквально нижче порога 0.60. Це WAIT.'},
+  {pair:'ETH/USDT:USDT',ema:'Fast < Slow',structure:'DOWN',rsi:31,vol:.77,move:.34,costs:.20,why:'Повний SHORT-набір, а чистий EDGE 0.14% проходить safety margin.'}
+];
+
+const TRAINER_THEORY=[
+  {q:'Який RSI-діапазон використовується для LONG у нашій базовій логіці?',a:['52–72','28–48','40–60','70–90'],ok:0,why:'Для LONG ми допускаємо RSI від 52 до 72 включно.'},
+  {q:'Який RSI-діапазон використовується для SHORT?',a:['52–72','28–48','10–30','45–65'],ok:1,why:'SHORT-зона у базовій логіці — RSI 28–48.'},
+  {q:'Який мінімальний Volume Ratio має пройти технічний gate?',a:['0.30','0.50','0.60','1.50'],ok:2,why:'Порогове значення Volume Ratio — 0.60.'},
+  {q:'Що повинно бути зі структурою ринку для LONG?',a:['DOWN','UP','Будь-яка','Тільки FLAT'],ok:1,why:'LONG дозволяється тільки коли Structure = UP.'},
+  {q:'Що робимо, якщо напрям правильний, але EDGE не перекриває costs + safety margin?',a:['Все одно LONG/SHORT','WAIT','Збільшуємо позицію','Вимикаємо Guard'],ok:1,why:'Недостатній чистий EDGE означає WAIT, навіть якщо напрям потім виявиться правильним.'},
+  {q:'Для чого Astra Guard у нашій схемі?',a:['Малює свічки','Дає жорсткий risk-control/veto','Шукає меми','Збільшує leverage'],ok:1,why:'Guard — останній жорсткий шар безпеки: veto, lock, dedupe та контроль режиму.'},
+  {q:'Скільки 1m свічок ми використовуємо у базовому технічному аналізі?',a:['20','40','80','500'],ok:2,why:'У поточній базовій схемі candleLimit = 80.'},
+  {q:'Який primary horizon ми вибрали для learner у поточній версії?',a:['2 хв','5 хв','10 хв','30 хв'],ok:3,why:'Primary horizon learner — 30 хвилин, а коротші горизонти можуть лишатися додатковими review.'},
+  {q:'Чому правильний напрям ціни ще не гарантує прибуткову угоду?',a:['Через fees, spread і slippage','Бо EMA завжди помиляється','Бо RSI не працює','Бо LONG заборонений'],ok:0,why:'Рух може бути меншим за сукупні витрати, тому gross плюс не обов’язково дає net плюс.'},
+  {q:'Що означає WAIT у Trade Мишці?',a:['Помилка системи','Немає достатньої переваги для входу','Автоматичний SHORT','Закриття Docker'],ok:1,why:'WAIT — нормальне рішення: система не бачить достатньо якісної та економічно виправданої угоди.'}
+];
+
+function trainerLoadBest(){
+  try{const x=JSON.parse(localStorage.getItem(TRAINER_STORE)||'{}');TR.best=Number(x.best)||0}catch(e){TR.best=0}
+}
+function trainerSaveBest(){
+  try{localStorage.setItem(TRAINER_STORE,JSON.stringify({best:TR.best,updatedAt:new Date().toISOString()}))}catch(e){}
+}
+function trainerShuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}return a}
+function trainerMarketAnswer(s){
+  const longOK=s.ema==='Fast > Slow'&&s.structure==='UP'&&s.rsi>=52&&s.rsi<=72&&s.vol>=.60;
+  const shortOK=s.ema==='Fast < Slow'&&s.structure==='DOWN'&&s.rsi>=28&&s.rsi<=48&&s.vol>=.60;
+  const edge=s.move-s.costs;
+  if(edge<.03)return 'WAIT';
+  if(longOK)return 'LONG';
+  if(shortOK)return 'SHORT';
+  return 'WAIT';
+}
+function trainerBuild(){
+  TR.mode=$('trainerMode')?$('trainerMode').value:'market';
+  TR.items=trainerShuffle(TR.mode==='market'?TRAINER_MARKET_TEMPLATES:TRAINER_THEORY).slice(0,TRAINER_TOTAL);
+  TR.i=0;TR.correct=0;TR.answered=0;TR.streak=0;TR.locked=false;
+  if($('trainerFeedback')){$('trainerFeedback').className='trainer-feedback';$('trainerFeedback').innerHTML=''}
+  if($('trainerNext'))$('trainerNext').disabled=true;
+  trainerRender();
+}
+function trainerRenderStats(){
+  $('trainerScore').textContent=TR.correct+' / '+TR.answered;
+  $('trainerStreak').textContent=TR.streak+' 🔥';
+  $('trainerBest').textContent=TR.best+'%';
+  $('trainerCount').textContent=Math.min(TR.i+1,TRAINER_TOTAL)+' / '+TRAINER_TOTAL;
+  $('trainerProgress').style.width=(TR.answered/TRAINER_TOTAL*100)+'%';
+}
+function trainerRender(){
+  trainerRenderStats();
+  TR.locked=false;
+  $('trainerNext').disabled=true;
+  $('trainerFeedback').className='trainer-feedback';
+  $('trainerFeedback').innerHTML='';
+  $('trainerHint').textContent='Обери рішення. Відповідь не впливає на спільний баланс.';
+  const isMarket=TR.mode==='market';
+  $('trainerMarketBox').hidden=!isMarket;$('trainerTheoryBox').hidden=isMarket;
+  if(TR.i>=TR.items.length){trainerFinish();return}
+  const item=TR.items[TR.i];
+  if(isMarket){
+    $('trainerPair').textContent=item.pair;
+    $('trainerCaseLabel').textContent='Ситуація #'+(TR.i+1)+' • 1m • horizon 30m';
+    $('trainerEma').textContent=item.ema;
+    $('trainerStructure').textContent=item.structure;
+    $('trainerRsi').textContent=item.rsi.toFixed(1);
+    $('trainerVol').textContent=item.vol.toFixed(2)+'x';
+    $('trainerMove').textContent=item.move.toFixed(2)+'%';
+    $('trainerCosts').textContent=item.costs.toFixed(2)+'%';
+    const edge=item.move-item.costs;
+    $('trainerEdgeInfo').textContent='Modeled EDGE: '+edge.toFixed(2)+'% • safety margin: 0.03%. Обери, що робити зараз.';
+    document.querySelectorAll('[data-trainer-side]').forEach(function(b){b.disabled=false});
+  }else{
+    $('trainerTheoryLabel').textContent='Питання #'+(TR.i+1);
+    $('trainerQuestion').textContent=item.q;
+    const box=$('trainerAnswers');box.innerHTML='';
+    item.a.forEach(function(label,idx){
+      const b=document.createElement('button');b.className='trainer-answer';b.textContent=label;b.dataset.idx=idx;
+      b.onclick=function(){trainerAnswerTheory(idx)};box.appendChild(b);
+    });
+  }
+}
+function trainerFeedback(ok,title,explain,user,correct){
+  const box=$('trainerFeedback');box.className='trainer-feedback show '+(ok?'good':'bad');
+  box.innerHTML='<h4>'+(ok?'✅ ':'❌ ')+title+'</h4><p>'+explain+'</p>'+
+    '<div class="trainer-team"><div><small>Твій вибір</small><b>'+user+'</b></div><div><small>Trade Мишка</small><b>'+correct+'</b></div><div><small>JEV / Guard</small><b>'+(correct==='WAIT'?'DROP / NO TRADE':'PASS / ALLOW')+'</b></div></div>';
+}
+function trainerRegister(ok){
+  TR.answered++;if(ok){TR.correct++;TR.streak++}else TR.streak=0;
+  trainerRenderStats();TR.locked=true;$('trainerNext').disabled=false;
+  $('trainerHint').textContent=ok?'Добре. Дивись пояснення і йди далі.':'Розбери причину — саме для цього тренажер.';
+}
+function trainerAnswerMarket(side){
+  if(TR.locked)return;
+  const item=TR.items[TR.i],correct=trainerMarketAnswer(item),ok=side===correct,edge=item.move-item.costs;
+  document.querySelectorAll('[data-trainer-side]').forEach(function(b){b.disabled=true});
+  trainerRegister(ok);
+  trainerFeedback(ok,ok?'Рішення збігається з системою':'Мишка вибрала б інакше',
+    item.why+' Чистий EDGE: '+edge.toFixed(2)+'%.',side,correct);
+}
+function trainerAnswerTheory(idx){
+  if(TR.locked)return;
+  const item=TR.items[TR.i],ok=idx===item.ok;
+  document.querySelectorAll('.trainer-answer').forEach(function(b){b.disabled=true});
+  trainerRegister(ok);
+  const user=item.a[idx],correct=item.a[item.ok];
+  const box=$('trainerFeedback');box.className='trainer-feedback show '+(ok?'good':'bad');
+  box.innerHTML='<h4>'+(ok?'✅ Правильно':'❌ Треба інакше')+'</h4><p>'+item.why+'</p>'+
+    '<div class="trainer-team"><div><small>Твоя відповідь</small><b>'+user+'</b></div><div><small>Правильно</small><b>'+correct+'</b></div><div><small>Режим</small><b>THEORY</b></div></div>';
+}
+function trainerNext(){
+  if(!TR.locked)return;TR.i++;trainerRender();
+}
+function trainerFinish(){
+  const pct=Math.round(TR.correct/TRAINER_TOTAL*100);
+  if(pct>TR.best){TR.best=pct;trainerSaveBest()}
+  trainerRenderStats();
+  $('trainerMarketBox').hidden=true;$('trainerTheoryBox').hidden=true;
+  $('trainerFeedback').className='trainer-feedback show '+(pct>=70?'good':'bad');
+  let rank=pct>=90?'🦁 Лев-аналітик':pct>=70?'🧠 JEV-ready':pct>=50?'🐭 Учень Мишки':'📚 Треба ще один раунд';
+  $('trainerFeedback').innerHTML='<div class="trainer-summary"><small>СЕРІЮ ЗАВЕРШЕНО</small><b>'+pct+'%</b><h3>'+rank+'</h3><p>'+TR.correct+' правильних із '+TRAINER_TOTAL+'. Найкращий результат: '+TR.best+'%.</p></div>';
+  $('trainerHint').textContent='Натисни «Нові 10 тестів», щоб пройти ще одну серію.';
+  $('trainerNext').disabled=true;
+  $('trainerCount').textContent=TRAINER_TOTAL+' / '+TRAINER_TOTAL;$('trainerProgress').style.width='100%';
+}
+document.querySelectorAll('[data-trainer-side]').forEach(function(b){b.addEventListener('click',function(){trainerAnswerMarket(b.dataset.trainerSide)})});
+if($('trainerNext'))$('trainerNext').onclick=trainerNext;
+if($('trainerNewSet'))$('trainerNewSet').onclick=trainerBuild;
+if($('trainerMode'))$('trainerMode').onchange=trainerBuild;
+trainerLoadBest();trainerBuild();
 
 
 /* ===== AUTOMATION NOTEBOOK ===== */
