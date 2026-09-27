@@ -3,329 +3,84 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07101f">
-<title>MYSHKA Automation Lab</title>
+<meta name="theme-color" content="#06101d">
+<title>MYSHKA / ASTRA — Live Trading Lab</title>
 <style>
 :root{
-  --bg:#050a12;--panel:#0b1627;--panel2:#101f35;--line:#20395f;--line2:#31517f;
-  --text:#f7f9ff;--muted:#8fa3c1;--gold:#ffc94f;--gold2:#f59d23;--blue:#4f7cff;
-  --violet:#7b4cff;--green:#2bdd8d;--red:#ff4e61;--shadow:0 22px 60px rgba(0,0,0,.42)
+  --bg:#040812;--panel:#091525;--panel2:#0d1c31;--line:#203b61;--line2:#31517f;
+  --text:#f6f9ff;--muted:#8399ba;--green:#2bdd8d;--red:#ff5264;--gold:#ffc94f;
+  --blue:#6f95ff;--violet:#8b69ff;--shadow:0 20px 55px rgba(0,0,0,.42)
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
 body{
-  margin:0;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;
+  margin:0;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh;
   background:
-    radial-gradient(900px 500px at 10% -10%,rgba(72,96,255,.18),transparent 60%),
-    radial-gradient(850px 560px at 95% 10%,rgba(122,76,255,.13),transparent 60%),
-    linear-gradient(180deg,#050b15,#060b12 50%,#04080f);
-  min-height:100vh
+    radial-gradient(900px 520px at 5% -10%,rgba(79,124,255,.18),transparent 60%),
+    radial-gradient(800px 500px at 100% 10%,rgba(123,76,255,.14),transparent 60%),
+    linear-gradient(180deg,#050b15,#050911 60%,#03070d)
 }
-button,input,select{font:inherit}
+button,select,input{font:inherit}
 button{cursor:pointer}
-.app{max-width:1500px;margin:auto;padding:12px 14px 30px}
-.glass{
-  background:linear-gradient(180deg,rgba(16,29,52,.94),rgba(7,16,29,.94));
-  border:1px solid var(--line);box-shadow:var(--shadow),inset 0 1px rgba(255,255,255,.03)
+.app{max-width:1460px;margin:auto;padding:12px 12px 40px}
+.glass{background:linear-gradient(180deg,rgba(14,27,47,.96),rgba(7,16,29,.96));border:1px solid var(--line);box-shadow:var(--shadow)}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;border-radius:18px;position:sticky;top:8px;z-index:20;backdrop-filter:blur(15px)}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:28px;background:radial-gradient(circle at 40% 30%,#fff5cf,#e9a83b 48%,#3a2510 82%);border:1px solid #ffd16f}
+.brand h1{margin:0;font-size:21px}.brand h1 span{color:#ffd471}.brand p{margin:2px 0 0;color:var(--muted);font-size:10px}
+.head-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.badge{padding:7px 10px;border-radius:999px;font-size:10px;font-weight:900;border:1px solid #355582;background:#0b1b31;color:#cfe0ff}
+.badge.live{border-color:#21885f;color:#4ce7a1;background:#08251a}
+.badge.err{border-color:#8d3441;color:#ff8794;background:#2a0d14}
+.btn{border:0;border-radius:11px;padding:10px 12px;font-weight:900;color:white;background:#102039;border:1px solid #304d78}
+.btn.primary{background:linear-gradient(180deg,#745cff,#4e2bd7);border:0}
+.btn.green{background:linear-gradient(180deg,#3ce69a,#159d61);color:#06160f;border:0}
+.btn.red{background:linear-gradient(180deg,#ff6170,#bd263e);border:0}
+.btn.gold{background:linear-gradient(180deg,#ffd66e,#efa52b);color:#17131a;border:0}
+.controls{display:grid;grid-template-columns:1fr auto auto auto;gap:8px;margin:12px 0}
+.pairs{display:flex;gap:7px;flex-wrap:wrap}
+.pair-btn{padding:10px 12px;border-radius:11px;border:1px solid #29466f;background:#0a1728;color:#b7c9e4;font-weight:850}
+.pair-btn.active{border-color:#5f81ff;background:#17376d;color:#fff;box-shadow:0 0 20px rgba(79,124,255,.18)}
+.select{background:#0b1829;border:1px solid #29466f;color:#fff;border-radius:11px;padding:9px 10px}
+.main{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(310px,.58fr);gap:12px}
+.card{border-radius:18px;padding:13px}
+.chart-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:9px}
+.chart-head h2{margin:0;font-size:17px}.chart-head small{color:var(--muted)}
+.price{font-size:28px;font-weight:950}.sub{font-size:10px;color:var(--muted)}
+.chart{height:460px;border-radius:14px;background:#06111e;border:1px solid #1d3659;position:relative;overflow:hidden}
+.chart canvas{width:100%;height:100%;display:block}
+.chart-overlay{position:absolute;left:9px;top:8px;z-index:2;padding:7px 8px;border-radius:9px;background:#06111ed9;border:1px solid #20395f;color:#afc1d9;font-size:9px;line-height:1.5}
+.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-top:9px}
+.metric{padding:9px;border-radius:11px;background:#081522;border:1px solid #1d3658}
+.metric small{display:block;color:#7e94b5;font-size:8px;text-transform:uppercase;letter-spacing:.05em}.metric b{display:block;margin-top:3px;font-size:12px}
+.signal{padding:15px;border-radius:16px;background:#07131f;border:1px solid #243f65;text-align:center}
+.signal small{color:#8398b8}.signal strong{display:block;font-size:45px;margin:4px 0}.long{color:var(--green)}.short{color:var(--red)}.wait{color:var(--gold)}
+.pipeline{display:grid;gap:8px;margin-top:10px}
+.pipe{padding:10px;border-radius:12px;background:#091522;border:1px solid #20395d}
+.pipe-head{display:flex;justify-content:space-between;gap:8px;align-items:center}.pipe-head b{font-size:11px}.pipe-status{font-size:9px;font-weight:950;padding:4px 7px;border-radius:999px;background:#12233a;color:#9fb5d3}
+.pipe-status.pass{background:#09281c;color:#4ce7a1}.pipe-status.drop{background:#2a0e15;color:#ff7786}.pipe-status.mid{background:#2a220b;color:#ffd76e}
+.pipe p{margin:6px 0 0;color:#8ca1c0;font-size:9px;line-height:1.5}
+.edge-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px}
+.edge-grid div{padding:7px;border-radius:8px;background:#07111e;border:1px solid #18304e}.edge-grid small{display:block;color:#7288aa;font-size:8px}.edge-grid b{font-size:10px}
+.position{margin-top:10px;padding:11px;border-radius:13px;background:#0a1728;border:1px solid #29466f}
+.position h3{margin:0 0 8px;font-size:13px}.prow{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px solid #18304e;font-size:10px}.prow:last-child{border:0}
+.stats-wrap{margin-top:12px}
+.stats-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:9px;flex-wrap:wrap}.stats-title h2{margin:0;font-size:17px}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+.stat{padding:10px;border-radius:12px;background:#091522;border:1px solid #20395d}.stat small{display:block;color:#7e94b5;font-size:8px}.stat b{display:block;margin-top:4px;font-size:18px}
+.stats-chart{height:260px;margin-top:9px;border-radius:13px;background:#06111e;border:1px solid #1d3659;overflow:hidden;position:relative}.stats-chart canvas{width:100%;height:100%;display:block}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:7px;color:#7f95b6;font-size:9px}.dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px}
+.log{margin-top:12px;border-radius:16px;padding:12px}.log h2{font-size:15px;margin:0 0 8px}.log-list{max-height:300px;overflow:auto}
+.logrow{display:grid;grid-template-columns:70px 80px 100px 1fr auto;gap:7px;padding:8px 4px;border-bottom:1px solid #162d49;font-size:9px}.logrow:last-child{border:0}.muted{color:var(--muted)}
+.note{margin-top:12px;padding:12px;border-radius:14px;background:#091522;border:1px solid #20395d;color:#8da2c1;font-size:10px;line-height:1.55}
+.note b{color:#dce8fb}
+@media(max-width:1100px){.main{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,1fr)}.stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:680px){
+  .app{padding:8px}.header{position:relative;top:auto;flex-wrap:wrap}.head-right{width:100%}
+  .controls{grid-template-columns:1fr 1fr}.pairs{grid-column:1/-1}.chart{height:340px}
+  .metrics{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}
+  .logrow{grid-template-columns:58px 62px 82px 1fr}.logrow span:last-child{display:none}
+  .price{font-size:23px}.signal strong{font-size:38px}
 }
-.header{
-  display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 14px;border-radius:18px;
-  position:sticky;top:8px;z-index:30;backdrop-filter:blur(16px)
-}
-.brand{display:flex;gap:11px;align-items:center}
-.logo{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:29px;
-  background:radial-gradient(circle at 50% 35%,#fff0bd,#efad3e 45%,#3a2510 80%);border:1px solid #ffd16f}
-.brand h1{font-size:23px;margin:0}.brand h1 span{color:#ffd471}.brand p{margin:2px 0 0;color:var(--muted);font-size:11px}
-.badge{padding:8px 10px;border-radius:999px;border:1px solid #855d1f;color:#ffd26b;background:#2c1c08;font-size:11px;font-weight:800}
-.wallet{
-  min-width:170px;padding:9px 12px;border-radius:13px;background:#0a1728;border:1px solid #29466f
-}
-.wallet small{color:var(--muted);display:block}.wallet strong{font-size:21px}
-.games{
-  display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:9px;margin:12px 0
-}
-.game-tab{
-  border:1px solid #263f65;background:#0b1728;color:#b7c7dd;border-radius:14px;padding:11px 8px;
-  text-align:center;min-height:70px;transition:.2s
-}
-.game-tab:hover,.game-tab.active{transform:translateY(-1px);color:#fff;border-color:#4e73e6;
-  background:linear-gradient(180deg,#17346f,#102448);box-shadow:0 0 22px rgba(76,112,255,.18)}
-.game-tab b{display:block;font-size:20px;margin-bottom:4px}.game-tab span{font-size:11px}
-.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(300px,.65fr);gap:12px}
-.stage{border-radius:20px;padding:16px;min-height:670px;overflow:hidden;position:relative}
-.stage-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.stage-title h2{margin:0;font-size:19px}.stage-title span{font-size:11px;color:var(--muted)}
-.game{display:none}.game.active{display:block}
-.control-card{border-radius:18px;padding:14px}
-.controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.field{background:#091524;border:1px solid #223b61;border-radius:12px;padding:10px}
-.field label{display:block;color:#95a9c5;font-size:11px;margin-bottom:6px}
-input,select{width:100%;border:1px solid #2c4a75;background:#0d1b2f;color:#fff;border-radius:10px;padding:10px;outline:none}
-.btn{border:0;border-radius:12px;padding:12px 14px;font-weight:900}
-.gold{background:linear-gradient(180deg,#ffd66e,#efa52b);color:#16131a;box-shadow:0 8px 25px rgba(255,181,49,.18)}
-.purple{background:linear-gradient(180deg,#765cff,#4b2ad6);color:white}
-.green{background:linear-gradient(180deg,#3ce69a,#159d61);color:#06160f}
-.redbtn{background:linear-gradient(180deg,#ff6170,#bd263e);color:white}
-.dark{background:#102039;color:#dce8fb;border:1px solid #304d78}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
-.sidebar{display:grid;gap:12px;align-content:start}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.stat{border-radius:15px;padding:12px}.stat small{display:block;color:var(--muted);font-size:11px}.stat strong{display:block;font-size:21px;margin-top:3px}
-.history{border-radius:16px;padding:12px}.history-list{max-height:380px;overflow:auto}
-.hrow{display:grid;grid-template-columns:34px 1fr auto;gap:8px;padding:9px 4px;border-bottom:1px solid #172b46;font-size:12px}
-.hrow:last-child{border:0}.pos{color:#42e49a}.neg{color:#ff6475}.muted{color:var(--muted)}
-.note{border-radius:16px;padding:12px;color:#92a5c0;font-size:11px;line-height:1.5}
-
-/* Roulette */
-.roulette-area{display:grid;place-items:center;padding:6px}
-.pointer{width:0;height:0;border-left:19px solid transparent;border-right:19px solid transparent;border-top:36px solid #ffd45d;
-  filter:drop-shadow(0 0 10px #ffad35);margin-bottom:-12px;z-index:5}
-.wheel-wrap{width:min(500px,88vw);aspect-ratio:1;border-radius:50%;padding:11px;background:linear-gradient(135deg,#ffe79c,#8a5318 22%,#ffd06b 44%,#6d3d0e 67%,#ffc650);
-  box-shadow:0 0 0 4px #6d4518,0 0 48px rgba(255,171,52,.23),0 24px 60px #0008;position:relative}
-.wheel{width:100%;height:100%;border-radius:50%;position:relative;overflow:hidden;transition:transform 1.2s cubic-bezier(.15,.82,.16,1);
-  background:conic-gradient(#16a463 0 9.73deg,#d63e47 9.73deg 19.46deg,#151a23 19.46deg 29.19deg,#d63e47 29.19deg 38.92deg,#151a23 38.92deg 48.65deg,#d63e47 48.65deg 58.38deg,#151a23 58.38deg 68.11deg,#d63e47 68.11deg 77.84deg,#151a23 77.84deg 87.57deg,#d63e47 87.57deg 97.30deg,#151a23 97.30deg 107.03deg,#d63e47 107.03deg 116.76deg,#151a23 116.76deg 126.49deg,#d63e47 126.49deg 136.22deg,#151a23 136.22deg 145.95deg,#d63e47 145.95deg 155.68deg,#151a23 155.68deg 165.41deg,#d63e47 165.41deg 175.14deg,#151a23 175.14deg 184.87deg,#d63e47 184.87deg 194.60deg,#151a23 194.60deg 204.33deg,#d63e47 204.33deg 214.06deg,#151a23 214.06deg 223.79deg,#d63e47 223.79deg 233.52deg,#151a23 233.52deg 243.25deg,#d63e47 243.25deg 252.98deg,#151a23 252.98deg 262.71deg,#d63e47 262.71deg 272.44deg,#151a23 272.44deg 282.17deg,#d63e47 282.17deg 291.90deg,#151a23 291.90deg 301.63deg,#d63e47 301.63deg 311.36deg,#151a23 311.36deg 321.09deg,#d63e47 321.09deg 330.82deg,#151a23 330.82deg 340.55deg,#d63e47 340.55deg 350.28deg,#151a23 350.28deg 360deg)}
-.rnum{position:absolute;font-weight:900;font-size:12px;color:#fff0d4;text-shadow:0 2px 3px #000}
-.hub{position:absolute;inset:31%;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#fff0bd 0 12%,#dfa838 13% 15%,#0a1830 16% 70%,#d3a244 71% 74%,#07111f 75%);border:4px solid #deb04a;font-size:56px}
-.resultbox{text-align:center;margin:14px auto 0;max-width:500px;padding:13px;border-radius:15px;background:#100f16;border:1px solid #6f4f25}
-.resultbox small{color:#dcb867;font-weight:800}.resultbox b{display:block;font-size:45px}.resultbox span{font-size:14px;font-weight:900;letter-spacing:.15em}
-.choice3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.choice3 button{padding:10px;border-radius:10px;border:1px solid #304b75;background:#0d1c31;color:#d4e0ef}
-.choice3 button.active[data-rside=red]{background:#c6293b;color:#fff}.choice3 button.active[data-rside=black]{background:#232a36;color:#fff}.choice3 button.active[data-rside=green]{background:#108353;color:#fff}
-
-/* Slots */
-.slot-machine{max-width:680px;margin:35px auto 20px;padding:22px;border-radius:24px;background:linear-gradient(180deg,#20150d,#0b0f18);border:2px solid #a56b22;box-shadow:0 0 45px rgba(255,173,49,.14)}
-.reels{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;background:#070b11;padding:13px;border-radius:18px;border:1px solid #46301a}
-.reel{height:160px;border-radius:14px;background:linear-gradient(#fff7da,#eacb7b);display:grid;place-items:center;font-size:76px;box-shadow:inset 0 0 20px #6d4c1d66;color:#111}
-
-/* Blackjack */
-.table{max-width:760px;margin:20px auto;padding:22px;border-radius:30px;background:radial-gradient(circle at 50% 30%,#176542,#0c3c29 68%,#08271c);border:8px solid #5d3f1f;box-shadow:inset 0 0 50px #0008}
-.hand{min-height:125px;padding:10px;text-align:center}.hand-title{font-size:12px;color:#c4d8cb;margin-bottom:8px}
-.cards{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.card{width:72px;height:100px;background:#fff;border-radius:9px;color:#111;display:grid;place-items:center;font-size:26px;font-weight:900;box-shadow:0 8px 16px #0005}
-.score{font-weight:900;font-size:18px;margin-top:8px}
-
-/* Dice */
-.dicebox{display:grid;place-items:center;padding:55px 10px}.dice{width:180px;height:180px;border-radius:30px;background:linear-gradient(145deg,#fafcff,#cbd5e6);color:#121722;display:grid;place-items:center;font-size:90px;box-shadow:0 22px 50px #0007}
-.big-result{text-align:center;font-size:46px;font-weight:950;margin:18px 0}
-
-/* Coin */
-.coinstage{display:grid;place-items:center;padding:55px 10px}.coinflip{width:190px;height:190px;border-radius:50%;display:grid;place-items:center;font-size:72px;font-weight:950;background:radial-gradient(circle at 35% 30%,#fff1aa,#e8ad34 55%,#9c6519);border:8px solid #f6ce6a;box-shadow:0 24px 55px #0008;transition:transform .65s}
-.coinflip.spin{transform:rotateY(1080deg)}
-
-/* Crash */
-.crashbox{height:330px;border-radius:18px;background:linear-gradient(180deg,#071322,#0a0d14);border:1px solid #203a5f;position:relative;overflow:hidden}
-.crashgrid{position:absolute;inset:0;background-image:linear-gradient(#16305255 1px,transparent 1px),linear-gradient(90deg,#16305255 1px,transparent 1px);background-size:42px 42px}
-.crashline{position:absolute;left:30px;bottom:30px;height:4px;width:0;background:linear-gradient(90deg,#4f7cff,#ff5f83);transform-origin:left center;box-shadow:0 0 16px #5e7fff}
-.mult{position:absolute;inset:0;display:grid;place-items:center;font-size:64px;font-weight:950}
-.crashstatus{text-align:center;margin-top:10px;color:#9db0c8}
-
-/* Plinko */
-.plinko{max-width:650px;margin:15px auto;padding:18px;border-radius:20px;background:#071321;border:1px solid #213d63}
-.board{height:380px;position:relative;background:linear-gradient(#09182a,#06101c);border-radius:16px;overflow:hidden}
-.peg{position:absolute;width:7px;height:7px;border-radius:50%;background:#7da0ff;box-shadow:0 0 8px #5077ff}
-.ball{position:absolute;width:20px;height:20px;border-radius:50%;background:#ffd85e;box-shadow:0 0 16px #ffc84d;left:50%;top:10px;transition:all .8s cubic-bezier(.2,.7,.2,1)}
-.buckets{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin-top:6px}.bucket{padding:8px 2px;text-align:center;border-radius:8px;background:#13233a;font-size:10px}
-
-/* Baccarat */
-.baccarat-table{max-width:760px;margin:25px auto;padding:22px;border-radius:28px;background:radial-gradient(circle at 50% 20%,#164d70,#0a2940 68%,#061926);border:7px solid #4d361d}
-.bcols{display:grid;grid-template-columns:1fr 1fr;gap:12px}.bside{padding:14px;border-radius:16px;background:#0b2134;text-align:center}.bside h3{margin:0 0 10px}
-.bcards{display:flex;justify-content:center;gap:8px;min-height:105px}
-.bscore{font-size:28px;font-weight:950;margin-top:8px}
-
-@media(max-width:1100px){
-  .games{grid-template-columns:repeat(4,1fr)}.layout{grid-template-columns:1fr}.stage{min-height:auto}.sidebar{grid-template-columns:1fr 1fr}.note{grid-column:1/-1}
-}
-@media(max-width:650px){
-  .app{padding:8px}.header{position:relative;top:auto;flex-wrap:wrap}.wallet{width:100%}.badge{display:none}
-  .games{grid-template-columns:repeat(2,1fr)}.game-tab{min-height:62px}
-  .stage{padding:11px;border-radius:16px}.controls-grid{grid-template-columns:1fr}.actions{grid-template-columns:1fr}
-  .sidebar{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}
-  .wheel-wrap{width:min(92vw,480px)}.hub{font-size:44px}
-  .reel{height:110px;font-size:52px}.table{padding:12px}.card{width:55px;height:80px;font-size:20px}
-  .dice{width:140px;height:140px;font-size:68px}.coinflip{width:150px;height:150px;font-size:58px}
-}
-
-/* === BOT CONTROLS === */
-.botbox{
-  margin-top:10px;padding:10px;border-radius:12px;
-  background:linear-gradient(180deg,#0d1a2c,#091321);
-  border:1px solid #29466d
-}
-.botrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end}
-.botbox label{display:block;color:#91a5c3;font-size:11px;margin-bottom:6px}
-.bot-status{margin-top:8px;font-size:11px;color:#86a0c0}
-.bot-running{color:#42e49a!important;font-weight:800}
-@media(max-width:650px){.botrow{grid-template-columns:1fr}}
-
-
-/* === TRADING LAB === */
-.trade-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,.6fr);gap:10px}
-.trade-card{padding:12px;border-radius:16px;background:#081321;border:1px solid #213b60}
-.trade-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.trade-head b{font-size:14px}.trade-head small{color:#8399ba}
-.trade-chart{height:360px;border-radius:13px;overflow:hidden;background:#07111e;border:1px solid #1c3455;position:relative}
-.trade-chart canvas{width:100%;height:100%}
-.trade-overlay{position:absolute;left:9px;top:8px;padding:7px 8px;border-radius:8px;background:#07111ecc;border:1px solid #203b61;color:#9fb1cb;font-size:10px;z-index:2}
-.trade-price{position:absolute;right:9px;top:8px;padding:7px 8px;border-radius:8px;background:#102746;border:1px solid #2c4b77;font-weight:900;z-index:2}
-.trade-signal{text-align:center;padding:12px;border-radius:13px;background:#07131f;border:1px solid #223d63}
-.trade-signal small{color:#879bb9}.trade-signal strong{display:block;font-size:38px;margin:5px 0}
-.trade-signal .buy{color:#2ddd91}.trade-signal .sell{color:#ff5264}.trade-signal .wait{color:#ffc94f}
-.trade-metrics{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
-.trade-metric{padding:9px;border-radius:10px;background:#091522;border:1px solid #1c3455}
-.trade-metric small{display:block;color:#7f95b6;font-size:10px}.trade-metric b{display:block;margin-top:3px;font-size:12px}
-.pipeline{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-top:10px}
-.pipe-node{padding:9px;border-radius:11px;background:#0a1625;border:1px solid #213b60;min-height:92px}
-.pipe-node b{display:block;font-size:11px;margin:4px 0}.pipe-node small{color:#8196b5;font-size:9px;line-height:1.4}.pipe-node em{display:block;margin-top:6px;font-style:normal;font-size:9px;color:#42e49a;font-weight:800}
-.trade-pos{margin-top:8px;padding:9px;border-radius:10px;background:#091522;border:1px solid #1e3659;font-size:11px}
-.trade-pos .r{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #142943}.trade-pos .r:last-child{border:0}
-.trade-log{margin-top:8px;max-height:160px;overflow:auto;border:1px solid #193150;border-radius:10px}
-.trade-log .lr{display:grid;grid-template-columns:58px 70px 1fr auto;gap:6px;padding:7px;border-bottom:1px solid #142943;font-size:10px}
-.trade-log .lr:last-child{border:0}
-
-/* === MATH / STRATEGY === */
-.math-section{margin-top:12px;padding:14px;border-radius:18px}
-.math-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;flex-wrap:wrap}
-.math-title h2{margin:0;font-size:17px}.math-title span{color:#8297b7;font-size:10px}
-.math-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.mathbox{padding:11px;border-radius:12px;background:#091522;border:1px solid #20395d}
-.mathbox h4{margin:0 0 7px;font-size:12px}.mathbox p{margin:5px 0;color:#8fa3c1;font-size:10px;line-height:1.5}
-.formula{padding:8px;margin:7px 0;border-radius:9px;background:#07111d;border:1px solid #1c3455;color:#d9e5ff;font-family:ui-monospace,monospace;font-size:10px;overflow:auto}
-.mathrow{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid #152b47;font-size:10px}.mathrow:last-child{border:0}.mathrow span{color:#8197b7}.mathrow b{text-align:right}
-@media(max-width:1100px){.trade-grid{grid-template-columns:1fr}.pipeline{grid-template-columns:repeat(3,1fr)}.math-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:650px){.trade-chart{height:300px}.pipeline{grid-template-columns:1fr 1fr}.math-grid{grid-template-columns:1fr}.trade-log .lr{grid-template-columns:50px 60px 1fr}.trade-log .lr span:last-child{display:none}}
-
-
-
-/* === TRADE MYSHKA TRAINER === */
-.trainer-wrap{display:grid;gap:12px}
-.trainer-top{display:grid;grid-template-columns:minmax(0,1fr) 210px 145px;gap:9px;align-items:end;padding:13px;border-radius:16px;background:linear-gradient(180deg,#0e1c30,#091421);border:1px solid #24436d}
-.trainer-top h3{margin:0 0 5px;font-size:17px}.trainer-top p{margin:0;color:#8fa3c1;font-size:10px;line-height:1.5}
-.trainer-score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.trainer-stat{padding:11px;border-radius:12px;background:#091522;border:1px solid #20395d}
-.trainer-stat small{display:block;color:#8197b7;font-size:9px;text-transform:uppercase;letter-spacing:.08em}
-.trainer-stat b{display:block;margin-top:4px;font-size:20px}
-.trainer-card{padding:14px;border-radius:18px;background:linear-gradient(180deg,#0b1829,#07121f);border:1px solid #29466f}
-.trainer-progress{height:7px;border-radius:999px;background:#07101c;border:1px solid #1e3557;overflow:hidden;margin-bottom:13px}
-.trainer-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4f7cff,#7b4cff,#2bdd8d);transition:width .25s}
-.trainer-case-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
-.trainer-case-head b{font-size:17px}.trainer-case-head span{color:#8da4c5;font-size:10px}
-.trainer-market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.trainer-metric{padding:10px;border-radius:12px;background:#091522;border:1px solid #1d3658}
-.trainer-metric small{display:block;color:#7e94b5;font-size:9px}.trainer-metric b{display:block;margin-top:4px;font-size:13px}
-.trainer-edge{margin-top:9px;padding:10px;border-radius:12px;background:#0a1626;border:1px solid #223d63;font-size:11px;line-height:1.5;color:#cdd9ea}
-.trainer-choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:11px}
-.trainer-choice{border:1px solid #31517f;background:#102039;color:#e9f1ff;border-radius:12px;padding:13px;font-weight:950}
-.trainer-choice.long:hover{border-color:#2bdd8d}.trainer-choice.wait:hover{border-color:#ffc94f}.trainer-choice.short:hover{border-color:#ff4e61}
-.trainer-choice:disabled{opacity:.56;cursor:default}
-.trainer-theory-q{font-size:18px;font-weight:850;line-height:1.4;margin:4px 0 13px}
-.trainer-answer-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.trainer-answer{border:1px solid #31517f;background:#0e1c31;color:#e8f0ff;border-radius:12px;padding:12px;text-align:left}
-.trainer-answer:disabled{opacity:.64;cursor:default}
-.trainer-feedback{display:none;margin-top:12px;padding:12px;border-radius:13px;border:1px solid #29466f;background:#081522;font-size:11px;line-height:1.55}
-.trainer-feedback.show{display:block}.trainer-feedback.good{border-color:#23865e;background:#09261c}.trainer-feedback.bad{border-color:#943846;background:#291018}
-.trainer-feedback h4{margin:0 0 6px;font-size:14px}.trainer-feedback p{margin:4px 0;color:#c6d4e8}
-.trainer-team{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
-.trainer-team div{padding:8px;border-radius:9px;background:#07111e;border:1px solid #20395d}
-.trainer-team small{display:block;color:#7790b3;font-size:8px}.trainer-team b{display:block;margin-top:3px;font-size:11px}
-.trainer-bottom{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
-.trainer-bottom .muted{font-size:10px}
-.trainer-note{padding:11px;border-radius:13px;background:#0a1523;border:1px solid #1e385c;color:#8ea3c1;font-size:10px;line-height:1.55}
-.trainer-summary{text-align:center;padding:24px 12px}.trainer-summary b{display:block;font-size:42px;color:#ffd16f}.trainer-summary p{color:#91a5c3}
-@media(max-width:800px){.trainer-top{grid-template-columns:1fr 1fr}.trainer-top>div:first-child{grid-column:1/-1}.trainer-score-grid{grid-template-columns:1fr 1fr}.trainer-market-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:520px){.trainer-top{grid-template-columns:1fr}.trainer-market-grid{grid-template-columns:1fr 1fr}.trainer-choices{grid-template-columns:1fr}.trainer-answer-grid{grid-template-columns:1fr}.trainer-team{grid-template-columns:1fr}.trainer-stat b{font-size:17px}}
-
-
-/* === PER-GAME WIN/LOSS STATS === */
-.game-stat-card{margin-top:14px;padding:13px;border-radius:16px;background:linear-gradient(180deg,#0d1b2e,#08131f);border:1px solid #29466f}
-.game-stat-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-.game-stat-head h3{margin:0;font-size:15px}.game-stat-head small{color:#8197b7;font-size:9px}
-.game-stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
-.game-stat-box{padding:9px;border-radius:10px;background:#091522;border:1px solid #1e3659}
-.game-stat-box small{display:block;color:#7f95b6;font-size:9px}.game-stat-box b{display:block;margin-top:3px;font-size:15px}
-.game-stat-chart{margin-top:10px;height:210px;border-radius:12px;background:#07111e;border:1px solid #1c3455;overflow:hidden;position:relative}
-.game-stat-chart canvas{width:100%;height:100%;display:block}
-.game-stat-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:7px;color:#8398b8;font-size:9px}
-.game-stat-legend span::before{content:'';display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;background:currentColor}
-.game-stat-reset{border:1px solid #355582;background:#10223b;color:#dce8fb;border-radius:8px;padding:6px 9px;font-size:9px;font-weight:800}
-.game-stat-empty{position:absolute;inset:0;display:grid;place-items:center;color:#7188aa;font-size:11px;pointer-events:none}
-@media(max-width:700px){.game-stat-grid{grid-template-columns:repeat(2,1fr)}.game-stat-chart{height:180px}}
-
-/* === AUTOMATION NOTEBOOK === */
-.auto-note-wrap{display:grid;gap:12px}
-.auto-hero{
-  padding:16px;border-radius:18px;
-  background:
-    radial-gradient(700px 260px at 10% 0%,rgba(79,124,255,.18),transparent 60%),
-    linear-gradient(180deg,#101d31,#081321);
-  border:1px solid #27446d
-}
-.auto-hero h2{margin:0 0 6px;font-size:22px}
-.auto-hero p{margin:0;color:#93a7c5;font-size:12px;line-height:1.55}
-.auto-toolbar{
-  display:grid;grid-template-columns:1fr 180px 160px 160px;gap:8px;margin-top:12px
-}
-.auto-search,.auto-filter{
-  width:100%;background:#091522;border:1px solid #2a476f;color:#fff;border-radius:10px;padding:10px 11px
-}
-.auto-btn{
-  border:1px solid #355582;background:#10223b;color:#e8f0ff;border-radius:10px;padding:10px 12px;font-weight:800;cursor:pointer
-}
-.auto-btn.primary{background:linear-gradient(180deg,#6f59ff,#4d2cd7);border:0}
-.auto-btn.gold{background:linear-gradient(180deg,#ffd66d,#eba02a);border:0;color:#17131a}
-.auto-map{
-  display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px
-}
-.auto-step{
-  padding:10px;border-radius:12px;background:#091522;border:1px solid #20395d;min-height:92px
-}
-.auto-step b{display:block;font-size:12px;margin:4px 0}.auto-step small{color:#8398b8;font-size:10px;line-height:1.4}
-.auto-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.auto-card{
-  border-radius:16px;padding:13px;background:linear-gradient(180deg,#0e1c30,#091421);
-  border:1px solid #213c62
-}
-.auto-card-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.auto-card-title{display:flex;gap:9px;align-items:flex-start}.auto-icon{font-size:24px}
-.auto-card h3{margin:0;font-size:15px}.auto-card .desc{margin:4px 0 0;color:#8fa3c1;font-size:10px;line-height:1.45}
-.auto-status{
-  min-width:105px;background:#0a1728;color:#dce8fa;border:1px solid #2b4872;border-radius:9px;padding:7px 8px;font-size:10px
-}
-.auto-list{margin:10px 0 0;padding-left:17px;color:#cdd9ea;font-size:10px;line-height:1.55}
-.auto-list li{margin:3px 0}.auto-example{
-  margin-top:9px;padding:9px;border-radius:10px;background:#07111d;border:1px solid #193353;color:#9fb1cb;font-size:10px;line-height:1.5
-}
-.auto-tools{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
-.auto-chip{padding:5px 7px;border-radius:999px;background:#10223b;border:1px solid #294970;color:#a9bdd9;font-size:9px}
-.auto-notes{margin-top:9px}
-.auto-notes label{display:block;color:#92a6c4;font-size:10px;margin-bottom:5px}
-.auto-notes textarea{
-  width:100%;min-height:76px;resize:vertical;background:#07111e;border:1px solid #29476f;color:#eef5ff;
-  border-radius:10px;padding:9px;font:inherit;font-size:10px;line-height:1.45
-}
-.auto-save{display:flex;justify-content:space-between;align-items:center;margin-top:7px;gap:8px}
-.auto-save small{color:#7188aa;font-size:9px}
-.auto-counter{padding:10px 12px;border-radius:12px;background:#091522;border:1px solid #20395d;color:#98acca;font-size:11px}
-.auto-empty{display:none;padding:28px;text-align:center;color:#7f95b6;border:1px dashed #29476f;border-radius:14px}
-.auto-global-note{margin-top:12px;padding:12px;border-radius:14px;background:#091522;border:1px solid #20395d}
-.auto-global-note textarea{width:100%;min-height:110px;background:#07111e;color:white;border:1px solid #29476f;border-radius:10px;padding:10px;resize:vertical}
-
-.auto-analysis{display:none;margin-top:12px;padding:14px;border-radius:14px;background:#071321;border:1px solid #2b4b78}
-.auto-analysis.show{display:block}.auto-analysis h3{margin:0 0 8px;font-size:16px}.auto-analysis p{margin:6px 0;color:#a9bad2;font-size:11px;line-height:1.55}.auto-analysis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.auto-analysis-stat{padding:9px;border-radius:10px;background:#0b1a2d;border:1px solid #203b61}.auto-analysis-stat small{display:block;color:#7f95b6;font-size:9px}.auto-analysis-stat b{display:block;margin-top:3px;font-size:14px}.auto-analysis ol{margin:8px 0 0;padding-left:20px;color:#d9e5f5;font-size:11px;line-height:1.6}.auto-analysis-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}@media(max-width:650px){.auto-analysis-grid{grid-template-columns:1fr}}
-@media(max-width:1100px){
-  .auto-toolbar{grid-template-columns:1fr 160px 150px}
-  .auto-toolbar .auto-btn:last-child{grid-column:1/-1}
-  .auto-map{grid-template-columns:repeat(3,1fr)}
-}
-@media(max-width:720px){
-  .auto-toolbar{grid-template-columns:1fr 1fr}
-  .auto-toolbar .auto-search{grid-column:1/-1}
-  .auto-cards{grid-template-columns:1fr}
-  .auto-map{grid-template-columns:1fr 1fr}
-}
-@media(max-width:420px){
-  .auto-toolbar{grid-template-columns:1fr}
-  .auto-map{grid-template-columns:1fr}
-}
-
 </style>
 </head>
 <body>
@@ -333,1558 +88,356 @@ input,select{width:100%;border:1px solid #2c4a75;background:#0d1b2f;color:#fff;b
   <header class="header glass">
     <div class="brand">
       <div class="logo">🐭</div>
-      <div><h1><span>MYSHKA</span> Automation Lab</h1><p>автоматизації • AI-перевірка • trading lab • симуляції</p></div>
+      <div><h1><span>MYSHKA / ASTRA</span> Trading Lab</h1><p>LIVE Bybit market data • реальна логіка ASTRA • PAPER EXECUTION</p></div>
     </div>
-    <div class="badge">⚗ SIMULATION ONLY</div>
-    <div class="wallet"><small>Спільний баланс</small><strong id="balance">10 000</strong></div>
+    <div class="head-right">
+      <span class="badge" id="marketBadge">● Підключення…</span>
+      <span class="badge">1m · 80 candles · scan 15s</span>
+      <button class="btn red" id="killBtn">🛡 Kill switch: OFF</button>
+    </div>
   </header>
 
-  <section class="games">
-    <button class="game-tab" data-game="roulette"><b>🎯</b><span>Рулетка</span></button>
-    <button class="game-tab" data-game="slots"><b>🎰</b><span>Слоти</span></button>
-    <button class="game-tab" data-game="blackjack"><b>🃏</b><span>Blackjack</span></button>
-    <button class="game-tab" data-game="dice"><b>🎲</b><span>Dice</span></button>
-    <button class="game-tab" data-game="coin"><b>🪙</b><span>Coin Flip</span></button>
-    <button class="game-tab" data-game="crash"><b>🚀</b><span>Crash</span></button>
-    <button class="game-tab" data-game="plinko"><b>🔵</b><span>Plinko</span></button>
-    <button class="game-tab" data-game="baccarat"><b>♠</b><span>Baccarat</span></button>
-    <button class="game-tab" data-game="trading"><b>📈</b><span>Trading Lab</span></button>
-    <button class="game-tab" data-game="trainer"><b>🎓</b><span>Trade Тренажер</span></button>
-    <button class="game-tab active" data-game="automation"><b>⚙️</b><span>Моя автоматизація</span></button>
-  </section>
-
-  <div class="layout">
-    <section class="stage glass">
-
-      <div class="game" id="game-roulette">
-        <div class="stage-title"><h2>🎯 Рулетка</h2><span>European 0–36</span></div>
-        <div class="roulette-area">
-          <div class="pointer"></div>
-          <div class="wheel-wrap"><div class="wheel" id="wheel"></div><div class="hub">🐭</div></div>
-        </div>
-        <div class="resultbox"><small>ОСТАННІЙ РЕЗУЛЬТАТ</small><b id="rouletteResult">—</b><span id="rouletteColor">ГОТОВО</span></div>
-        <div class="control-card">
-          <div class="controls-grid">
-            <div class="field"><label>Ставка</label><input id="rBet" type="number" min="1" value="50"></div>
-            <div class="field"><label>Сторона</label>
-              <div class="choice3">
-                <button class="active" data-rside="red">Червоне</button>
-                <button data-rside="black">Чорне</button>
-                <button data-rside="green">0</button>
-              </div>
-            </div>
-          </div>
-          <div class="actions"><button class="btn gold" id="rSpin">▶ Крутити</button><button class="btn dark" onclick="resetGame('roulette')">↻ Reset гри</button></div>
-    <div class="botbox">
-      <div class="botrow">
-        <div>
-          <label>🤖 Auto-бот</label>
-          <button class="btn purple" id="rouletteBot" style="width:100%">▶ Запустити бота</button>
-        </div>
-        <div>
-          <label>Швидкість</label>
-          <select id="rouletteSpeed">
-            <option value="1500">1.5 сек</option>
-            <option value="800" selected>0.8 сек</option>
-            <option value="350">0.35 сек</option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="bot-status" id="rouletteBotStatus">Бот зупинений</div>
+  <div class="controls">
+    <div class="pairs">
+      <button class="pair-btn active" data-pair="BTC/USDT:USDT">BTC/USDT</button>
+      <button class="pair-btn" data-pair="ETH/USDT:USDT">ETH/USDT</button>
+      <button class="pair-btn" data-pair="SOL/USDT:USDT">SOL/USDT</button>
     </div>
-        </div>
+    <button class="btn primary" id="scanBtn">↻ Scan зараз</button>
+    <select class="select" id="autoMode"><option value="on">Auto scan: ON</option><option value="off">Auto scan: OFF</option></select>
+    <button class="btn" id="resetBtn">Скинути paper-статистику</button>
+  </div>
+
+  <div class="main">
+    <section class="card glass">
+      <div class="chart-head">
+        <div><h2 id="pairTitle">BTC/USDT:USDT</h2><small>Bybit linear perpetual • закриті 1m свічки</small></div>
+        <div style="text-align:right"><div class="price" id="lastPrice">—</div><div class="sub" id="bidAsk">bid — • ask —</div></div>
       </div>
-
-      <div class="game" id="game-slots">
-        <div class="stage-title"><h2>🎰 Слоти</h2><span>3 reels</span></div>
-        <div class="slot-machine">
-          <div class="reels"><div class="reel" id="reel1">🍒</div><div class="reel" id="reel2">⭐</div><div class="reel" id="reel3">7️⃣</div></div>
-          <div class="big-result" id="slotMsg">Готово</div>
-          <div class="controls-grid"><div class="field"><label>Ставка</label><input id="sBet" type="number" min="1" value="50"></div><div class="field"><label>Виплата</label><select disabled><option>3 однакові = x8 • 2 однакові = x2</option></select></div></div>
-          <button class="btn gold" id="slotSpin" style="width:100%;margin-top:10px">🎰 SPIN</button>
-    <div class="botbox">
-      <div class="botrow">
-        <div>
-          <label>🤖 Auto-бот</label>
-          <button class="btn purple" id="slotsBot" style="width:100%">▶ Запустити бота</button>
-        </div>
-        <div>
-          <label>Швидкість</label>
-          <select id="slotsSpeed">
-            <option value="1500">1.5 сек</option>
-            <option value="800" selected>0.8 сек</option>
-            <option value="350">0.35 сек</option>
-          </select>
-        </div>
+      <div class="chart">
+        <div class="chart-overlay" id="chartOverlay">EMA9 — · EMA21 —<br>RSI14 — · Volume —</div>
+        <canvas id="chartCanvas"></canvas>
       </div>
-      
-      <div class="bot-status" id="slotsBotStatus">Бот зупинений</div>
-    </div>
-        </div>
+      <div class="metrics">
+        <div class="metric"><small>Structure</small><b id="mStructure">—</b></div>
+        <div class="metric"><small>RSI 14</small><b id="mRsi">—</b></div>
+        <div class="metric"><small>Volume ratio</small><b id="mVol">—</b></div>
+        <div class="metric"><small>Spread</small><b id="mSpread">—</b></div>
+        <div class="metric"><small>ATR%</small><b id="mAtr">—</b></div>
+        <div class="metric"><small>ATR median</small><b id="mAtrMed">—</b></div>
       </div>
-
-      <div class="game" id="game-blackjack">
-        <div class="stage-title"><h2>🃏 Blackjack</h2><span>Dealer stands on 17</span></div>
-        <div class="table">
-          <div class="hand"><div class="hand-title">ДИЛЕР</div><div class="cards" id="dealerCards"></div><div class="score" id="dealerScore">0</div></div>
-          <hr style="border-color:#ffffff18">
-          <div class="hand"><div class="hand-title">ГРАВЕЦЬ</div><div class="cards" id="playerCards"></div><div class="score" id="playerScore">0</div></div>
-        </div>
-        <div class="control-card">
-          <div class="field"><label>Ставка</label><input id="bjBet" type="number" min="1" value="50"></div>
-          <div class="actions"><button class="btn gold" id="bjDeal">Deal</button><button class="btn purple" id="bjHit">Hit</button><button class="btn green" id="bjStand">Stand</button><button class="btn dark" onclick="resetBlackjack()">Reset</button></div>
-          <div class="big-result" id="bjMsg" style="font-size:28px">Нова роздача</div>
-    <div class="botbox">
-      <div class="botrow">
-        <div>
-          <label>🤖 Auto-бот</label>
-          <button class="btn purple" id="blackjackBot" style="width:100%">▶ Запустити бота</button>
-        </div>
-        <div>
-          <label>Швидкість</label>
-          <select id="blackjackSpeed">
-            <option value="1500">1.5 сек</option>
-            <option value="800" selected>0.8 сек</option>
-            <option value="350">0.35 сек</option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="field" style="margin-top:8px"><label>Логіка бота</label>
-        <select id="bjBotMode"><option value="basic">Hit до 17, потім Stand</option></select>
-      </div>
-      <div class="bot-status" id="blackjackBotStatus">Бот зупинений</div>
-    </div>
-        </div>
-      </div>
-
-      <div class="game" id="game-dice">
-        <div class="stage-title"><h2>🎲 Dice</h2><span>Over / Under</span></div>
-        <div class="dicebox"><div class="dice" id="diceFace">⚅</div><div class="big-result" id="diceResult">—</div></div>
-        <div class="control-card">
-          <div class="controls-grid">
-            <div class="field"><label>Ставка</label><input id="dBet" type="number" min="1" value="50"></div>
-            <div class="field"><label>Прогноз</label><select id="dChoice"><option value="over">4–6</option><option value="under">1–3</option></select></div>
-          </div>
-          <button class="btn gold" id="diceRoll" style="width:100%;margin-top:10px">🎲 Кинути</button>
-    <div class="botbox">
-      <div class="botrow">
-        <div>
-          <label>🤖 Auto-бот</label>
-          <button class="btn purple" id="diceBot" style="width:100%">▶ Запустити бота</button>
-        </div>
-        <div>
-          <label>Швидкість</label>
-          <select id="diceSpeed">
-            <option value="1500">1.5 сек</option>
-            <option value="800" selected>0.8 сек</option>
-            <option value="350">0.35 сек</option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="bot-status" id="diceBotStatus">Бот зупинений</div>
-    </div>
-        </div>
-      </div>
-
-      <div class="game" id="game-coin">
-        <div class="stage-title"><h2>🪙 Coin Flip</h2><span>Heads / Tails</span></div>
-        <div class="coinstage"><div class="coinflip" id="coinFace">🐭</div><div class="big-result" id="coinResult">—</div></div>
-        <div class="control-card">
-          <div class="controls-grid">
-            <div class="field"><label>Ставка</label><input id="cBet" type="number" min="1" value="50"></div>
-            <div class="field"><label>Сторона</label><select id="cChoice"><option value="heads">🐭 Heads</option><option value="tails">👑 Tails</option></select></div>
-          </div>
-          <button class="btn gold" id="coinFlip" style="width:100%;margin-top:10px">🪙 Підкинути</button>
-    <div class="botbox">
-      <div class="botrow">
-        <div>
-          <label>🤖 Auto-бот</label>
-          <button class="btn purple" id="coinBot" style="width:100%">▶ Запустити бота</button>
-        </div>
-        <div>
-          <label>Швидкість</label>
-          <select id="coinSpeed">
-            <option value="1500">1.5 сек</option>
-            <option value="800" selected>0.8 сек</option>
-            <option value="350">0.35 сек</option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="bot-status" id="coinBotStatus">Бот зупинений</div>
-    </div>
-        </div>
-      </div>
-
-      <div class="game" id="game-crash">
-        <div class="stage-title"><h2>🚀 Crash</h2><span>Віртуальний multiplier</span></div>
-        <div class="crashbox"><div class="crashgrid"></div><div class="crashline" id="crashLine"></div><div class="mult" id="crashMult">1.00x</div></div>
-        <div class="crashstatus" id="crashStatus">Готово до раунду</div>
-        <div class="control-card">
-          <div class="field"><label>Ставка</label><input id="crBet" type="number" min="1" value="50"></div>
-          <div class="actions"><button class="btn gold" id="crStart">🚀 Старт</button><button class="btn green" id="crCash">💸 Забрати</button></div>
-    <div class="botbox">
-      <div class="botrow">
-        <div>
-          <label>🤖 Auto-бот</label>
-          <button class="btn purple" id="crashBot" style="width:100%">▶ Запустити бота</button>
-        </div>
-        <div>
-          <label>Швидкість</label>
-          <select id="crashSpeed">
-            <option value="1500">1.5 сек</option>
-            <option value="800" selected>0.8 сек</option>
-            <option value="350">0.35 сек</option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="field" style="margin-top:8px"><label>Авто-cashout</label>
-        <input id="crTarget" type="number" min="1.05" step="0.05" value="1.80">
-      </div>
-      <div class="bot-status" id="crashBotStatus">Бот зупинений</div>
-    </div>
-        </div>
-      </div>
-
-      <div class="game" id="game-plinko">
-        <div class="stage-title"><h2>🔵 Plinko</h2><span>9 buckets</span></div>
-        <div class="plinko">
-          <div class="board" id="plinkoBoard"><div class="ball" id="plinkoBall"></div></div>
-          <div class="buckets" id="plinkoBuckets"></div>
-        </div>
-        <div class="control-card">
-          <div class="field"><label>Ставка</label><input id="pBet" type="number" min="1" value="50"></div>
-          <button class="btn gold" id="pDrop" style="width:100%;margin-top:10px">🔵 Drop</button>
-          <div class="big-result" id="pMsg" style="font-size:28px">—</div>
-    <div class="botbox">
-      <div class="botrow">
-        <div>
-          <label>🤖 Auto-бот</label>
-          <button class="btn purple" id="plinkoBot" style="width:100%">▶ Запустити бота</button>
-        </div>
-        <div>
-          <label>Швидкість</label>
-          <select id="plinkoSpeed">
-            <option value="1500">1.5 сек</option>
-            <option value="800" selected>0.8 сек</option>
-            <option value="350">0.35 сек</option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="bot-status" id="plinkoBotStatus">Бот зупинений</div>
-    </div>
-        </div>
-      </div>
-
-      <div class="game" id="game-baccarat">
-        <div class="stage-title"><h2>♠ Baccarat</h2><span>Player / Banker / Tie</span></div>
-        <div class="baccarat-table">
-          <div class="bcols">
-            <div class="bside"><h3>PLAYER</h3><div class="bcards" id="bPlayerCards"></div><div class="bscore" id="bPlayerScore">0</div></div>
-            <div class="bside"><h3>BANKER</h3><div class="bcards" id="bBankCards"></div><div class="bscore" id="bBankScore">0</div></div>
-          </div>
-        </div>
-        <div class="control-card">
-          <div class="controls-grid">
-            <div class="field"><label>Ставка</label><input id="bBet" type="number" min="1" value="50"></div>
-            <div class="field"><label>Ставимо на</label><select id="bChoice"><option value="player">Player</option><option value="banker">Banker</option><option value="tie">Tie</option></select></div>
-          </div>
-          <button class="btn gold" id="bDeal" style="width:100%;margin-top:10px">♠ Deal</button>
-          <div class="big-result" id="bMsg" style="font-size:28px">—</div>
-    <div class="botbox">
-      <div class="botrow">
-        <div>
-          <label>🤖 Auto-бот</label>
-          <button class="btn purple" id="baccaratBot" style="width:100%">▶ Запустити бота</button>
-        </div>
-        <div>
-          <label>Швидкість</label>
-          <select id="baccaratSpeed">
-            <option value="1500">1.5 сек</option>
-            <option value="800" selected>0.8 сек</option>
-            <option value="350">0.35 сек</option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="bot-status" id="baccaratBotStatus">Бот зупинений</div>
-    </div>
-        </div>
-      </div>
-
-      <div class="game" id="game-trading">
-        <div class="stage-title"><h2>📈 MYSHKA Trading Lab</h2><span>Bybit → Freqtrade → n8n → AI → Astra Guard</span></div>
-
-        <div class="trade-grid">
-          <div class="trade-card">
-            <div class="trade-head">
-              <div><b>BTC/USDT:USDT</b><small> • 1m candles • demo market</small></div>
-              <div><small>Scan: 15s • DRY-RUN</small></div>
-            </div>
-            <div class="trade-chart">
-              <div class="trade-overlay">EMA9 <span id="tE9">—</span> • EMA21 <span id="tE21">—</span><br>RSI14 <span id="tRsi">—</span> • Volume <span id="tVol">—</span></div>
-              <div class="trade-price" id="tPrice">—</div>
-              <canvas id="tradeCanvas"></canvas>
-            </div>
-          </div>
-
-          <div class="trade-card">
-            <div class="trade-signal">
-              <small>AI FINAL · Risk + Learn</small>
-              <strong id="tSignal" class="wait">WAIT</strong>
-              <div class="muted" id="tWhy">Чекаємо збіг умов</div>
-            </div>
-
-            <div class="trade-metrics">
-              <div class="trade-metric"><small>Structure</small><b id="tStructure">—</b></div>
-              <div class="trade-metric"><small>RSI</small><b id="tmRsi">—</b></div>
-              <div class="trade-metric"><small>Volume ratio</small><b id="tmVol">—</b></div>
-              <div class="trade-metric"><small>Expected move</small><b id="tmMove">—</b></div>
-              <div class="trade-metric"><small>Modeled costs</small><b>0.170% + spread</b></div>
-              <div class="trade-metric"><small>EDGE gate</small><b id="tEdge">DROP</b></div>
-            </div>
-
-            <div class="trade-pos" id="tPosition"><div class="muted" style="text-align:center">Немає відкритої позиції</div></div>
-
-            <div class="actions">
-              <button class="btn green" id="tLong">▲ LONG</button>
-              <button class="btn redbtn" id="tShort">▼ SHORT</button>
-              <button class="btn dark" id="tClose">✕ Close</button>
-              <button class="btn purple" id="tradingBot">🤖 Запустити бота</button>
-            </div>
-
-            <div class="botbox">
-              <div class="botrow">
-                <div class="field"><label>Віртуальний розмір позиції</label><input id="tStake" type="number" min="1" value="250"></div>
-                <div class="field"><label>Demo speed</label><select id="tradingSpeed"><option value="1600">1.6 сек</option><option value="900" selected>0.9 сек</option><option value="450">0.45 сек</option></select></div>
-              </div>
-              <div class="bot-status" id="tradingBotStatus">Бот зупинений</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="pipeline">
-          <div class="pipe-node"><span>⏱</span><b>n8n · 15s</b><small>SCAN TASKS BTC / ETH / SOL.</small><em>● ACTIVE</em></div>
-          <div class="pipe-node"><span>📡</span><b>Bybit</b><small>Candles, current price and spread.</small><em>● MARKET</em></div>
-          <div class="pipe-node"><span>⚙</span><b>Freqtrade</b><small>1m • 80 candles • dry-run.</small><em>● READY</em></div>
-          <div class="pipe-node"><span>🧠</span><b>FAST TECH</b><small>EMA9 + EMA21 + RSI14 + structure + volume.</small><em>● SIGNAL</em></div>
-          <div class="pipe-node"><span>𝕏</span><b>APInex X</b><small>News/social context with fallback.</small><em>● OPTIONAL</em></div>
-          <div class="pipe-node"><span>🦙</span><b>Ollama</b><small>Local qwen3:4b AI Gate.</small><em>● LOCAL</em></div>
-
-          <div class="pipe-node"><span>⚖</span><b>JEV / Risk</b><small>Final logical/risk filter.</small><em>● PASS/DROP</em></div>
-          <div class="pipe-node"><span>🛡</span><b>Astra Guard</b><small>SQLite lock, dedupe and dry-run verification.</small><em>● :8099</em></div>
-          <div class="pipe-node"><span>📐</span><b>EDGE</b><small>Expected move must beat modeled costs.</small><em>● STRICT</em></div>
-          <div class="pipe-node"><span>🔒</span><b>LOCK + SIZE</b><small>Atomic signal key and position sizing.</small><em>● DEDUPE</em></div>
-          <div class="pipe-node"><span>🚀</span><b>EXEC</b><small>Freqtrade forceentry only after PASS.</small><em>● AUTO</em></div>
-          <div class="pipe-node"><span>✈</span><b>Telegram</b><small>Signal, trade and review messages.</small><em>● NOTIFY</em></div>
-
-          <div class="pipe-node"><span>2m</span><b>Review 2m</b><small>HIT/MISS + Net WIN/LOSS.</small><em>● QUEUE</em></div>
-          <div class="pipe-node"><span>5m</span><b>Review 5m</b><small>Main edge horizon.</small><em>● LEARN</em></div>
-          <div class="pipe-node"><span>10m</span><b>Review 10m</b><small>MFE/MAE sampled over time.</small><em>● REVIEW</em></div>
-          <div class="pipe-node"><span>📚</span><b>Learner</b><small>Stats by regime, side, pair and horizon.</small><em>● LEARNING</em></div>
-          <div class="pipe-node"><span>📊</span><b>/stats</b><small>Net edge, MFE/MAE and grouped metrics.</small><em>● READY</em></div>
-          <div class="pipe-node"><span>💚</span><b>/health</b><small>Astra Guard health endpoint.</small><em>● OK</em></div>
-        </div>
-
-
-        <div class="trade-log" id="tradeLog"></div>
-      </div>
-
-      <div class="game" id="game-trainer">
-        <div class="stage-title"><h2>🎓 Trade Мишка — Тренажер</h2><span>тільки симуляція • без реальних ордерів</span></div>
-
-        <div class="trainer-wrap">
-          <div class="trainer-top">
-            <div>
-              <h3>Лев проти Trade Мишки</h3>
-              <p>Проходь короткі тести по нашій логіці: EMA, RSI, структура, volume, EDGE, costs, WAIT і risk-control. Після відповіді побачиш рішення Мишки та пояснення.</p>
-            </div>
-            <div class="field"><label>Режим</label><select id="trainerMode"><option value="market">📈 Ринкові ситуації</option><option value="theory">🧠 Теорія системи</option></select></div>
-            <button class="btn purple" id="trainerNewSet">↻ Нові 10 тестів</button>
-          </div>
-
-          <div class="trainer-score-grid">
-            <div class="trainer-stat"><small>Рахунок</small><b id="trainerScore">0 / 0</b></div>
-            <div class="trainer-stat"><small>Серія</small><b id="trainerStreak">0 🔥</b></div>
-            <div class="trainer-stat"><small>Найкраще</small><b id="trainerBest">0%</b></div>
-            <div class="trainer-stat"><small>Прогрес</small><b id="trainerCount">1 / 10</b></div>
-          </div>
-
-          <div class="trainer-card">
-            <div class="trainer-progress"><i id="trainerProgress"></i></div>
-
-            <div id="trainerMarketBox">
-              <div class="trainer-case-head"><b id="trainerPair">BTC/USDT:USDT</b><span id="trainerCaseLabel">Ситуація #1 • 1m • horizon 30m</span></div>
-              <div class="trainer-market-grid">
-                <div class="trainer-metric"><small>EMA</small><b id="trainerEma">—</b></div>
-                <div class="trainer-metric"><small>Structure</small><b id="trainerStructure">—</b></div>
-                <div class="trainer-metric"><small>RSI 14</small><b id="trainerRsi">—</b></div>
-                <div class="trainer-metric"><small>Volume ratio</small><b id="trainerVol">—</b></div>
-                <div class="trainer-metric"><small>Expected move</small><b id="trainerMove">—</b></div>
-                <div class="trainer-metric"><small>Costs</small><b id="trainerCosts">—</b></div>
-              </div>
-              <div class="trainer-edge" id="trainerEdgeInfo">EDGE = expected move − modeled costs. Safety margin для тренування: 0.03%.</div>
-              <div class="trainer-choices">
-                <button class="trainer-choice long" data-trainer-side="LONG">▲ LONG</button>
-                <button class="trainer-choice wait" data-trainer-side="WAIT">● WAIT</button>
-                <button class="trainer-choice short" data-trainer-side="SHORT">▼ SHORT</button>
-              </div>
-            </div>
-
-            <div id="trainerTheoryBox" hidden>
-              <div class="trainer-case-head"><b>🧠 Теорія Trade Мишки</b><span id="trainerTheoryLabel">Питання #1</span></div>
-              <div class="trainer-theory-q" id="trainerQuestion">—</div>
-              <div class="trainer-answer-grid" id="trainerAnswers"></div>
-            </div>
-
-            <div class="trainer-feedback" id="trainerFeedback"></div>
-
-            <div class="trainer-bottom">
-              <span class="muted" id="trainerHint">Обери рішення. Відповідь не впливає на спільний баланс.</span>
-              <button class="btn gold" id="trainerNext" disabled>Наступний тест →</button>
-            </div>
-          </div>
-
-          <div class="trainer-note">
-            <b>Правила симулятора:</b> LONG: EMA Fast &gt; EMA Slow + Structure UP + RSI 52–72 + Volume ≥ 0.60.
-            SHORT: EMA Fast &lt; EMA Slow + Structure DOWN + RSI 28–48 + Volume ≥ 0.60.
-            Після технічного сигналу EDGE має перекрити modeled costs ще мінімум на 0.03%. Інакше — WAIT.
-            Це навчальний режим, він не надсилає ордери на Bybit.
-          </div>
-        </div>
-      </div>
-
-      <div class="game active" id="game-automation">
-        <div class="stage-title"><h2>⚙️ Моя автоматизація</h2><span>створюй, імпортуй та перевіряй JSON</span></div>
-
-        <div class="auto-note-wrap">
-          <div class="auto-hero">
-            <h2>MYSHKA — Моя автоматизація</h2>
-            <p>
-              Тут зібрані напрямки, які можна автоматизувати: контент, відео, сайти, бізнес, e-commerce,
-              програми, локальний ПК, AI-агенти, дані, сервери, файли, повідомлення, моніторинг та багато іншого.
-              Це не список “треба робити все”, а твоя карта ідей на майбутнє.
-            </p>
-
-            <div class="auto-toolbar">
-              <input class="auto-search" id="autoSearch" placeholder="🔎 Пошук: YouTube, Shopify, Docker, CRM, Telegram...">
-              <select class="auto-filter" id="autoStatusFilter">
-                <option value="all">Усі статуси</option>
-                <option value="idea">💡 Ідея</option>
-                <option value="want">⭐ Хочу зробити</option>
-                <option value="building">🛠 В роботі</option>
-                <option value="done">✅ Готово</option>
-                <option value="skip">⏸ Відкласти</option>
-              </select>
-              <button type="button" class="auto-btn gold" id="autoExport" onclick="downloadAutomationExample()">⇩ Приклад автоматизації</button>
-              <button type="button" class="auto-btn primary" id="autoImportBtn" onclick="document.getElementById('autoImportFile').click()">🤖 Перевірити автоматизацію</button>
-              <button type="button" class="auto-btn" id="autoTipsBtn" onclick="showAutomationTips()">💡 Поради для автоматизації</button>
-              <input id="autoImportFile" type="file" accept=".json,application/json" style="display:none" onchange="analyzeAutomationFile(this)">
-            </div>
-            <div class="auto-analysis" id="autoAnalysis"></div>
-
-            <div class="auto-map">
-              <div class="auto-step"><span>1️⃣</span><b>Тригер</b><small>Подія, час, кнопка, новий файл, email, webhook, зміна даних.</small></div>
-              <div class="auto-step"><span>2️⃣</span><b>Сценарій</b><small>Послідовність дій: отримати → обробити → перевірити → виконати.</small></div>
-              <div class="auto-step"><span>3️⃣</span><b>AI / Логіка</b><small>Класифікація, генерація, аналіз, рішення, правила та фільтри.</small></div>
-              <div class="auto-step"><span>4️⃣</span><b>Дія</b><small>Створити, надіслати, оновити, зберегти, запустити, повідомити.</small></div>
-              <div class="auto-step"><span>5️⃣</span><b>Моніторинг</b><small>Логи, статус, retry, alert, history, dashboard та backup.</small></div>
-            </div>
-          </div>
-
-          <div class="auto-counter" id="autoCounter">0 напрямків</div>
-
-          <div class="auto-cards" id="autoCards">
-
-            <article class="auto-card" data-key="video" data-search="відео youtube tiktok reels shorts монтаж субтитри контент">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🎬</div><div><h3>Відео та контент</h3><div class="desc">Автоматизація створення, монтажу, публікації та повторного використання відео.</div></div></div>
-                <select class="auto-status" data-status="video"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>З довгого відео автоматично робити Shorts / Reels / TikTok.</li>
-                <li>Автоматичні субтитри, таймкоди, заголовки, опис, хештеги.</li>
-                <li>Batch-рендер кількох форматів 16:9 / 9:16 / 1:1.</li>
-                <li>Auto-upload за розкладом та повторна публікація.</li>
-                <li>AI сценарій → озвучка → відеоряд → монтаж → превʼю → пост.</li>
-                <li>Збір статистики переглядів та пошук найкращих тем.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> новий ролик → транскрипція → AI знаходить 5 сильних моментів → робить 5 short clips → субтитри → планує публікації.</div>
-              <div class="auto-tools"><span class="auto-chip">FFmpeg</span><span class="auto-chip">n8n</span><span class="auto-chip">Whisper</span><span class="auto-chip">YouTube API</span><span class="auto-chip">AI</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="video" placeholder="Напр.: хочу автонарізку 200 роликів для Lapi..."></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="video">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="web" data-search="сайт сайти web github pages cloudflare deploy hosting forms seo">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🌐</div><div><h3>Сайти та Web</h3><div class="desc">Деплой, форми, контент, оновлення, аналітика, SEO та технічний моніторинг.</div></div></div>
-                <select class="auto-status" data-status="web"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Git push → автоматичний deploy на GitHub Pages / Cloudflare / Vercel.</li>
-                <li>Форма на сайті → CRM / Telegram / Email / Google Sheets.</li>
-                <li>Автооновлення контенту з CMS або таблиці.</li>
-                <li>Моніторинг uptime, SSL, помилок та Core Web Vitals.</li>
-                <li>Генерація sitemap, meta, schema та контентних сторінок.</li>
-                <li>A/B тестування блоків та автоматичний збір conversion data.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> новий lead з форми → перевірка → CRM → Telegram → email клієнту → задача менеджеру.</div>
-              <div class="auto-tools"><span class="auto-chip">GitHub Actions</span><span class="auto-chip">Cloudflare</span><span class="auto-chip">n8n</span><span class="auto-chip">Webhooks</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="web" placeholder="Майбутні автоматизації сайтів..."></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="web">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="business" data-search="бізнес crm клієнти продажі ліди рахунки договори follow up менеджмент">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🏢</div><div><h3>Бізнес та CRM</h3><div class="desc">Ліди, клієнти, продажі, follow-up, документи, статуси та внутрішні процеси.</div></div></div>
-                <select class="auto-status" data-status="business"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Новий lead → enrichment → score → CRM → відповідальний менеджер.</li>
-                <li>Автоматичний follow-up, якщо клієнт не відповів N днів.</li>
-                <li>Deal won → рахунок → onboarding → папка → проєкт → задачі.</li>
-                <li>Щоденний/тижневий management digest.</li>
-                <li>Автогенерація proposal, brief, invoice draft, report.</li>
-                <li>Контроль дедлайнів, SLA, задач без відповіді.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> клієнт погодив Shopify-проєкт → створити проєкт → чекліст → папку → повідомити команду → поставити дедлайни.</div>
-              <div class="auto-tools"><span class="auto-chip">CRM</span><span class="auto-chip">n8n</span><span class="auto-chip">Slack</span><span class="auto-chip">Gmail</span><span class="auto-chip">Notion</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="business"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="business">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="ecommerce" data-search="shopify ecommerce магазин товари замовлення dsers клієнти abandoned cart reviews">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🛒</div><div><h3>E-commerce / Shopify</h3><div class="desc">Товари, замовлення, fulfilment, клієнти, відгуки, реклама та аналітика.</div></div></div>
-                <select class="auto-status" data-status="ecommerce"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Новий товар → опис → SEO → переклад → images → publish.</li>
-                <li>Order → fulfilment → tracking → customer notification.</li>
-                <li>Abandoned cart → серія нагадувань.</li>
-                <li>Після доставки → request review / UGC.</li>
-                <li>Low stock / supplier issue → alert.</li>
-                <li>Щоденний sales / CAC / conversion report.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> DSers товар → AI опис → Shopify draft → перевірка → publish → пост у соцмережі.</div>
-              <div class="auto-tools"><span class="auto-chip">Shopify</span><span class="auto-chip">DSers</span><span class="auto-chip">n8n</span><span class="auto-chip">Meta</span><span class="auto-chip">Sheets</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="ecommerce" placeholder="Lapi / майбутні магазини..."></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="ecommerce">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="social" data-search="соцмережі instagram threads tiktok telegram linkedin x twitter posts comments dm">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">📱</div><div><h3>Соцмережі та публікації</h3><div class="desc">Контент-план, кроспостинг, відповіді, аналітика, UGC та моніторинг згадок.</div></div></div>
-                <select class="auto-status" data-status="social"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Один master-post → адаптація під Threads / Telegram / LinkedIn / X.</li>
-                <li>Контент-календар та auto-schedule.</li>
-                <li>Збір коментарів, згадок, питань і sentiment.</li>
-                <li>DM → категоризація → відповідь / CRM lead.</li>
-                <li>Тренди → список ідей для контенту.</li>
-                <li>Щотижнева аналітика: reach, CTR, saves, follows.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> новий пост → 4 адаптовані версії → queue → publish → через 24h зібрати метрики.</div>
-              <div class="auto-tools"><span class="auto-chip">Meta API</span><span class="auto-chip">Telegram</span><span class="auto-chip">n8n</span><span class="auto-chip">AI</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="social"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="social">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="agents" data-search="ai агенти agent team ollama openai jev multi-agent research planner reviewer">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🤖</div><div><h3>AI-агенти та команди агентів</h3><div class="desc">Planner, researcher, reviewer, executor, critic та спеціалізовані локальні агенти.</div></div></div>
-                <select class="auto-status" data-status="agents"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Planner розбиває задачу на кроки.</li>
-                <li>Research agent збирає інформацію.</li>
-                <li>Worker виконує конкретні задачі.</li>
-                <li>Reviewer перевіряє результат.</li>
-                <li>Guard / rules engine блокує небезпечні або некоректні дії.</li>
-                <li>Memory / history зберігає контекст виконань.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> “запусти новий товар” → Research → Copywriter → Designer → Shopify Worker → QA Reviewer → Publish.</div>
-              <div class="auto-tools"><span class="auto-chip">Ollama</span><span class="auto-chip">OpenAI</span><span class="auto-chip">n8n</span><span class="auto-chip">Python</span><span class="auto-chip">Vector DB</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="agents" placeholder="Команди агентів, які хочу зробити..."></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="agents">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="local" data-search="локальний pc windows computer desktop powershell bat python files folders startup local">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🖥️</div><div><h3>Локальний ПК / Windows</h3><div class="desc">Файли, папки, програми, запуск по розкладу, локальні моделі та системні задачі.</div></div></div>
-                <select class="auto-status" data-status="local"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Автозапуск Docker / n8n / Ollama після старту ПК.</li>
-                <li>Watcher папки: новий файл → обробити → перейменувати → перемістити.</li>
-                <li>Backup потрібних папок.</li>
-                <li>Batch image/video processing.</li>
-                <li>PowerShell/Python scripts за розкладом.</li>
-                <li>Локальний dashboard стану сервісів.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> файл зʼявився в Downloads → визначити тип → перейменувати → розкласти по папках → записати в лог.</div>
-              <div class="auto-tools"><span class="auto-chip">PowerShell</span><span class="auto-chip">Python</span><span class="auto-chip">Task Scheduler</span><span class="auto-chip">Docker</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="local"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="local">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="programs" data-search="програми software api інтеграція webhook desktop apps automation browser">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🧩</div><div><h3>Програми та інтеграції</h3><div class="desc">Звʼязування різних застосунків через API, webhook, CLI або automation bridge.</div></div></div>
-                <select class="auto-status" data-status="programs"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>App A → API → App B без ручного копіювання.</li>
-                <li>Webhook-driven workflows.</li>
-                <li>CLI-команди з dashboard кнопок.</li>
-                <li>Синхронізація статусів між кількома програмами.</li>
-                <li>Browser automation для систем без API.</li>
-                <li>Нормалізація форматів даних між сервісами.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> новий запис у формі → API CRM → webhook → Slack → task manager.</div>
-              <div class="auto-tools"><span class="auto-chip">REST</span><span class="auto-chip">GraphQL</span><span class="auto-chip">Webhooks</span><span class="auto-chip">CLI</span><span class="auto-chip">Browser Automation</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="programs"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="programs">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="files" data-search="файли документи pdf docx excel spreadsheet drive rename folders archive ocr">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">📁</div><div><h3>Файли та документи</h3><div class="desc">Сортування, перейменування, витяг даних, конвертація, архіви та звіти.</div></div></div>
-                <select class="auto-status" data-status="files"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Auto rename за шаблоном.</li>
-                <li>PDF / DOCX / XLSX → витяг ключових даних.</li>
-                <li>Створення звіту з набору файлів.</li>
-                <li>Архівація старих файлів.</li>
-                <li>Автоматичне створення папок для нових проєктів.</li>
-                <li>Sync локальної папки з cloud storage.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> invoice PDF → витягнути суму/дату → назвати файл → записати в таблицю → перемістити в /Invoices/2026.</div>
-              <div class="auto-tools"><span class="auto-chip">Python</span><span class="auto-chip">Drive</span><span class="auto-chip">PDF tools</span><span class="auto-chip">n8n</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="files"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="files">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="data" data-search="дані analytics dashboards database sql sheets csv reports kpi scraping">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">📊</div><div><h3>Дані та аналітика</h3><div class="desc">Збір, очищення, агрегація, dashboard, KPI, anomaly detection та reports.</div></div></div>
-                <select class="auto-status" data-status="data"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Кілька джерел → одна база / dashboard.</li>
-                <li>Щоденне оновлення KPI.</li>
-                <li>Пошук аномалій та alert.</li>
-                <li>Автоматичні графіки та звіти.</li>
-                <li>ETL: extract → transform → load.</li>
-                <li>Data quality checks та дедуплікація.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> Shopify + Ads + Analytics → daily warehouse → dashboard → Telegram summary.</div>
-              <div class="auto-tools"><span class="auto-chip">SQL</span><span class="auto-chip">Python</span><span class="auto-chip">Sheets</span><span class="auto-chip">Postgres</span><span class="auto-chip">BI</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="data"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="data">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="messages" data-search="email gmail telegram slack discord messages inbox notifications autoresponder">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">✉️</div><div><h3>Email, чати та сповіщення</h3><div class="desc">Inbox triage, alerts, autoresponse drafts, digests та маршрутизація повідомлень.</div></div></div>
-                <select class="auto-status" data-status="messages"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Email → категорія → важливість → папка / label.</li>
-                <li>Важливе повідомлення → Telegram/Slack alert.</li>
-                <li>Чернетка відповіді через AI.</li>
-                <li>Daily inbox digest.</li>
-                <li>Повідомлення з різних каналів → один центр.</li>
-                <li>Нагадування, якщо не було відповіді.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> новий Upwork email → визначити проєкт → короткий summary → Telegram → додати у список opportunities.</div>
-              <div class="auto-tools"><span class="auto-chip">Gmail</span><span class="auto-chip">Telegram</span><span class="auto-chip">Slack</span><span class="auto-chip">n8n</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="messages"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="messages">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="schedule" data-search="розклад calendar reminders cron scheduler recurring routine daily weekly">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🗓️</div><div><h3>Розклад, нагадування та рутини</h3><div class="desc">Cron, recurring jobs, календарні тригери, daily/weekly routines.</div></div></div>
-                <select class="auto-status" data-status="schedule"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Щоденні / щотижневі звіти.</li>
-                <li>Автозапуск скриптів у заданий час.</li>
-                <li>Підготовка до зустрічі до її початку.</li>
-                <li>Нагадування про дедлайн / оплату / follow-up.</li>
-                <li>Планове очищення, backup, sync.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> щопʼятниці 18:00 → зібрати результати тижня → створити summary → Telegram.</div>
-              <div class="auto-tools"><span class="auto-chip">Cron</span><span class="auto-chip">Calendar</span><span class="auto-chip">Task Scheduler</span><span class="auto-chip">Automations</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="schedule"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="schedule">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="monitoring" data-search="моніторинг alerts uptime health errors logs status guard monitor watchdog">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🚨</div><div><h3>Моніторинг та alerts</h3><div class="desc">Health checks, uptime, помилки, зміни стану, watchdog та автоматичне відновлення.</div></div></div>
-                <select class="auto-status" data-status="monitoring"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>/health checks сервісів.</li>
-                <li>Сайт down → alert.</li>
-                <li>Docker container stopped → restart / notify.</li>
-                <li>Error log → AI summary → issue.</li>
-                <li>Зміна ціни / статусу / файлу / API response → trigger.</li>
-                <li>No data for N minutes → warning.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> Astra Guard /health != OK → restart attempt → Telegram alert → запис у журнал.</div>
-              <div class="auto-tools"><span class="auto-chip">Healthchecks</span><span class="auto-chip">Docker</span><span class="auto-chip">Telegram</span><span class="auto-chip">n8n</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="monitoring"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="monitoring">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="dev" data-search="github code coding dev ci cd testing pull request issue deploy lint release">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">💻</div><div><h3>Розробка / GitHub / CI-CD</h3><div class="desc">Тести, build, deploy, release, issues, pull requests та code quality.</div></div></div>
-                <select class="auto-status" data-status="dev"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Push → lint → tests → build → deploy.</li>
-                <li>PR → AI review → checks → summary.</li>
-                <li>Error → GitHub issue.</li>
-                <li>Release notes з commits.</li>
-                <li>Dependency updates та security checks.</li>
-                <li>Backup build artifacts.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> push нового index.html → test → GitHub Pages deploy → status message.</div>
-              <div class="auto-tools"><span class="auto-chip">GitHub Actions</span><span class="auto-chip">Tests</span><span class="auto-chip">Docker</span><span class="auto-chip">AI Review</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="dev"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="dev">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="servers" data-search="сервер docker self hosted vps nginx cloud server ollama n8n postgres backup">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🖧</div><div><h3>Сервери / Docker / Self-hosted</h3><div class="desc">Контейнери, локальні сервіси, VPS, backup, restart, logs та deployment.</div></div></div>
-                <select class="auto-status" data-status="servers"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Docker Compose stack startup.</li>
-                <li>Auto restart unhealthy container.</li>
-                <li>Scheduled database backup.</li>
-                <li>Rotate logs.</li>
-                <li>Update images після тесту.</li>
-                <li>Dashboard CPU / RAM / disk / service state.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> n8n + Ollama + Freqtrade + Guard → health dashboard → backup → alert при падінні.</div>
-              <div class="auto-tools"><span class="auto-chip">Docker Compose</span><span class="auto-chip">VPS</span><span class="auto-chip">Nginx</span><span class="auto-chip">Postgres</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="servers"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="servers">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="design" data-search="design figma photoshop images image generation mockups graphics batch resize assets">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🎨</div><div><h3>Дизайн та графіка</h3><div class="desc">Batch assets, resize, product visuals, mockups, design systems та генерація варіантів.</div></div></div>
-                <select class="auto-status" data-status="design"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Один product image → десятки рекламних форматів.</li>
-                <li>Auto resize / compress / rename assets.</li>
-                <li>Генерація варіантів банерів.</li>
-                <li>Design tokens → компоненти.</li>
-                <li>Mockup generation.</li>
-                <li>Автоматична перевірка потрібних розмірів.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> новий продукт Lapi → 1 hero image → 9:16 / 1:1 / 4:5 → captions → ready-to-post pack.</div>
-              <div class="auto-tools"><span class="auto-chip">Figma</span><span class="auto-chip">Image AI</span><span class="auto-chip">Photoshop Actions</span><span class="auto-chip">Python</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="design"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="design">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="research" data-search="research пошук web scraping competitors market trends articles rss news">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🔎</div><div><h3>Research / моніторинг інформації</h3><div class="desc">Новини, конкуренти, ціни, вакансії, тренди, RSS та регулярні дослідження.</div></div></div>
-                <select class="auto-status" data-status="research"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Нові матеріали по ключових словах → digest.</li>
-                <li>Моніторинг конкурентів.</li>
-                <li>Зміна ціни / продукту / вакансії → alert.</li>
-                <li>RSS → dedupe → summarize → store.</li>
-                <li>Щотижневий market research report.</li>
-                <li>Збір джерел у knowledge base.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> нові Upwork Shopify jobs → score fit → shortlist → Telegram з поясненням, що підкреслити у proposal.</div>
-              <div class="auto-tools"><span class="auto-chip">Web Search</span><span class="auto-chip">RSS</span><span class="auto-chip">Scrapers</span><span class="auto-chip">AI</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="research"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="research">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="personal" data-search="особисте productivity tasks notes habits life personal dashboard finance home">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🧠</div><div><h3>Особиста продуктивність</h3><div class="desc">Нотатки, задачі, рутини, personal dashboard та автоматичне впорядкування інформації.</div></div></div>
-                <select class="auto-status" data-status="personal"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Швидка нотатка → автоматична категорія.</li>
-                <li>Задача з повідомлення → task list.</li>
-                <li>Weekly review особистих проєктів.</li>
-                <li>Idea inbox → сортування за темами.</li>
-                <li>Personal knowledge base.</li>
-                <li>Нагадування про незавершені речі.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> кинув ідею в Telegram → AI визначив категорію → додав у “Automation Notebook” → поставив статус “Ідея”.</div>
-              <div class="auto-tools"><span class="auto-chip">Telegram</span><span class="auto-chip">Notes</span><span class="auto-chip">AI</span><span class="auto-chip">n8n</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="personal"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="personal">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="backup" data-search="backup security secrets passwords recovery versioning snapshots archive">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🛡️</div><div><h3>Backup, безпека та відновлення</h3><div class="desc">Резервні копії, versioning, secrets hygiene, recovery та контроль доступів.</div></div></div>
-                <select class="auto-status" data-status="backup"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Scheduled encrypted backup.</li>
-                <li>Versioned configs перед зміною.</li>
-                <li>Secrets не зберігати в коді.</li>
-                <li>Expired token / certificate alerts.</li>
-                <li>Recovery test.</li>
-                <li>Audit log змін.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> перед оновленням n8n → backup volume/config → update → health check → rollback якщо failed.</div>
-              <div class="auto-tools"><span class="auto-chip">Backups</span><span class="auto-chip">Secrets</span><span class="auto-chip">Git</span><span class="auto-chip">Docker Volumes</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="backup"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="backup">Зберегти</button></div></div>
-            </article>
-
-            <article class="auto-card" data-key="iot" data-search="iot smart home local network devices sensors esp home assistant mqtt">
-              <div class="auto-card-head">
-                <div class="auto-card-title"><div class="auto-icon">🏠</div><div><h3>IoT / локальна мережа / Smart Home</h3><div class="desc">Датчики, пристрої, локальні сервери, MQTT, Home Assistant та фізичні тригери.</div></div></div>
-                <select class="auto-status" data-status="iot"><option value="idea">💡 Ідея</option><option value="want">⭐ Хочу</option><option value="building">🛠 В роботі</option><option value="done">✅ Готово</option><option value="skip">⏸ Відкласти</option></select>
-              </div>
-              <ul class="auto-list">
-                <li>Sensor → rule → action.</li>
-                <li>Presence / time / temperature triggers.</li>
-                <li>Local dashboard devices.</li>
-                <li>MQTT events → n8n / Home Assistant.</li>
-                <li>Alerts при offline device.</li>
-                <li>Energy / environment logging.</li>
-              </ul>
-              <div class="auto-example"><b>Приклад:</b> температура > threshold → вентилятор → Telegram alert → log у dashboard.</div>
-              <div class="auto-tools"><span class="auto-chip">Home Assistant</span><span class="auto-chip">MQTT</span><span class="auto-chip">ESP</span><span class="auto-chip">n8n</span></div>
-              <div class="auto-notes"><label>Мої нотатки</label><textarea data-note="iot"></textarea><div class="auto-save"><small>Зберігається в браузері</small><button class="auto-btn" data-save="iot">Зберегти</button></div></div>
-            </article>
-
-          </div>
-
-          <div class="auto-empty" id="autoEmpty">Нічого не знайдено. Спробуй інший запит.</div>
-
-          <div class="auto-global-note">
-            <div class="auto-card-head">
-              <div><h3 style="margin:0">📝 Загальний список “зробити колись”</h3><div class="desc">Сюди можна кидати будь-які сирі ідеї без категорії.</div></div>
-              <button class="auto-btn" id="autoGlobalSave">Зберегти</button>
-            </div>
-            <textarea id="autoGlobalNote" placeholder="Наприклад:
-- локальний AI-асистент для всього ПК
-- автоматична студія відео
-- dashboard усіх моїх сервісів
-- агент, який сам розкладає нові ідеї по категоріях"></textarea>
-          </div>
-        </div>
-      </div>
-
     </section>
 
-    <aside class="sidebar">
-      <div class="stats">
-        <div class="stat glass"><small>Баланс</small><strong id="sBalance">10 000</strong></div>
-        <div class="stat glass"><small>Ігор</small><strong id="rounds">0</strong></div>
-        <div class="stat glass"><small>Win rate</small><strong id="winRate">0%</strong></div>
-        <div class="stat glass"><small>P/L</small><strong id="profit">0</strong></div>
+    <aside class="card glass">
+      <div class="signal">
+        <small>FINAL ACTION</small>
+        <strong id="finalAction" class="wait">WAIT</strong>
+        <div class="muted" id="finalReason">Чекаємо live market scan</div>
       </div>
-      <div class="history glass"><div class="stage-title"><h2 style="font-size:16px">Останні результати</h2><span id="hCount">0</span></div><div class="history-list" id="history"></div></div>
-      <div class="note glass">
-        ⚗ <b>MYSHKA Casino Lab</b> — симулятор. Усі кредити віртуальні. Сайт не підключений до казино, платежів або реальних ставок.
-        Математична перевага в багатьох іграх лишається на боці казино навіть при автоматизації.
+
+      <div class="pipeline">
+        <div class="pipe">
+          <div class="pipe-head"><b>1 · TECH</b><span class="pipe-status mid" id="techStatus">WAIT</span></div>
+          <p id="techText">EMA9/21 + structure + RSI + volume.</p>
+        </div>
+        <div class="pipe">
+          <div class="pipe-head"><b>2 · EDGE</b><span class="pipe-status mid" id="edgeStatus">—</span></div>
+          <div class="edge-grid">
+            <div><small>Expected move</small><b id="eMove">—</b></div>
+            <div><small>Total costs</small><b id="eCosts">—</b></div>
+            <div><small>Net edge</small><b id="eNet">—</b></div>
+            <div><small>Learner</small><b id="eBasis">—</b></div>
+          </div>
+          <p>Fee + live spread + volatility-scaled slippage + safety margin.</p>
+        </div>
+        <div class="pipe">
+          <div class="pipe-head"><b>3 · JEV</b><span class="pipe-status mid" id="jevStatus">—</span></div>
+          <p id="jevText">Детермінований координатор. WAIT не може бути перетворений AI у trade.</p>
+        </div>
+        <div class="pipe">
+          <div class="pipe-head"><b>4 · ASTRA GUARD</b><span class="pipe-status mid" id="guardStatus">—</span></div>
+          <p id="guardText">Daily -2% • weekly -5% • leverage ≤3x • exposure ≤15% • spread ≤0.08%.</p>
+        </div>
+      </div>
+
+      <div class="position" id="positionBox">
+        <h3>📍 Paper position</h3>
+        <div class="muted" style="font-size:10px">Немає відкритої позиції.</div>
       </div>
     </aside>
   </div>
+
+  <section class="card glass stats-wrap">
+    <div class="stats-title">
+      <div><h2>📊 Статистика Trade Мишки</h2><div class="sub">тільки закриті paper-угоди на LIVE Bybit даних</div></div>
+      <div class="sub" id="learnerStatus">Learner: cold start</div>
+    </div>
+    <div class="stats">
+      <div class="stat"><small>NET WIN</small><b class="long" id="sWins">0</b></div>
+      <div class="stat"><small>NET LOSS</small><b class="short" id="sLosses">0</b></div>
+      <div class="stat"><small>Win rate</small><b id="sWinRate">0%</b></div>
+      <div class="stat"><small>Direction HIT</small><b id="sHitRate">0%</b></div>
+      <div class="stat"><small>Cumulative NET</small><b id="sNet">0.000%</b></div>
+      <div class="stat"><small>Paper equity</small><b id="sEquity">1000.00</b></div>
+    </div>
+    <div class="stats-chart"><canvas id="statsCanvas"></canvas></div>
+    <div class="legend">
+      <span><i class="dot" style="background:#2bdd8d"></i>NET WIN</span>
+      <span><i class="dot" style="background:#ff5264"></i>NET LOSS</span>
+      <span><i class="dot" style="background:#7da0ff"></i>накопичений NET %</span>
+    </div>
+  </section>
+
+  <section class="log glass">
+    <h2>Останні рішення та угоди</h2>
+    <div class="log-list" id="logList"></div>
+  </section>
+
+  <div class="note">
+    <b>Що тут реальне:</b> ціна, 80 закритих 1m свічок, bid/ask і spread беруться з публічного Bybit V5.
+    Сигнал, EDGE, JEV, Guard, cooldown, position sizing і learner повторюють логіку пакета MYSHKA/ASTRA v6.
+    <b>Що не реальне:</b> ордери не відправляються на біржу — GitHub Pages не повинен зберігати торгові API-ключі.
+    Тут PAPER EXECUTION з горизонтом 5 хвилин, щоб перевіряти механіку без грошей.
+  </div>
 </div>
 
-<section class="math-section glass">
-  <div class="math-title"><h2>📚 Детальна математика всіх ігор + MYSHKA Trading</h2><span>формули, house edge, payout та стратегія</span></div>
-  <div class="math-grid">
-    <div class="mathbox"><h4>🎯 Рулетка</h4><p>Європейська рулетка має 37 секторів: 0–36. На red/black виграшних секторів 18.</p><div class="formula">P(win)=18/37=48.65%</div><div class="formula">EV = 18/37×(+1) + 19/37×(-1) = -2.70%</div><p>Тобто Flat, Martingale та інші системи не прибирають математичну перевагу казино.</p></div>
-    <div class="mathbox"><h4>🎰 Слоти</h4><p>У нашій симуляції 6 символів і 3 reels.</p><div class="formula">P(3 однакові)=6 / 6³ = 1/36 ≈ 2.78%</div><div class="formula">P(хоча б 2 однакові) залежить від paytable</div><p>Очікування визначається сумою probability × payout для всіх комбінацій.</p></div>
-    <div class="mathbox"><h4>🃏 Blackjack</h4><p>Бот використовує спрощену логіку: Hit до 17, потім Stand.</p><div class="formula">HandValue = Σ card values, Ace = 11 → 1 якщо bust</div><p>Реальна basic strategy залежить від карти дилера, soft/hard hand, double/split. Тут це лабораторна спрощена модель.</p></div>
-    <div class="mathbox"><h4>🎲 Dice</h4><p>Ставка 1–3 або 4–6 має рівно 3 виграшні результати з 6.</p><div class="formula">P(win)=3/6=50%</div><div class="formula">EV при payout 1:1 = 0%</div><p>У цій симуляції це чесна модель без house edge.</p></div>
-    <div class="mathbox"><h4>🪙 Coin Flip</h4><p>Heads/Tails — симетрична подія.</p><div class="formula">P(heads)=P(tails)=0.5</div><div class="formula">EV = 0.5×1 + 0.5×(-1)=0</div><p>Auto-бот не створює перевагу; лише автоматизує серію підкидань.</p></div>
-    <div class="mathbox"><h4>🚀 Crash</h4><p>Бот має auto-cashout target. Результат залежить від crash point.</p><div class="formula">Profit = Stake × (CashoutMultiplier − 1)</div><p>Якщо crash стається до target, втрачається ставка. У реальних crash-іграх distribution задає оператор; наша версія — лише симуляція.</p></div>
-    <div class="mathbox"><h4>🔵 Plinko</h4><p>Математика — probability потрапляння в bucket × його multiplier.</p><div class="formula">EV = Σ P(bucketᵢ) × multiplierᵢ − 1</div><p>У справжньому Plinko P(bucket) визначається біноміальним розподілом, якщо кожен bounce 50/50.</p></div>
-    <div class="mathbox"><h4>♠ Baccarat</h4><p>Player, Banker і Tie мають різні виплати.</p><div class="formula">Score = (Σ card values) mod 10</div><p>У симуляції Banker win виплачує близько 0.95× ставки, Player 1×, Tie 8×.</p></div>
-    <div class="mathbox"><h4>🤖 Casino Bots</h4><p>Auto-боти не передбачають RNG. Вони лише виконують правила автоматично.</p><div class="formula">Long-run result ≈ NumberOfBets × AverageEV</div><p>При негативному EV збільшення кількості ставок збільшує очікуваний абсолютний програш.</p></div>
-
-    <div class="mathbox"><h4>📈 LONG rule</h4><div class="formula">EMA9 &gt; EMA21 AND structure=UP AND 52≤RSI≤72 AND volumeRatio≥0.6</div><p>Тільки після цього кандидат іде в наступні AI/Risk/EDGE gates.</p></div>
-    <div class="mathbox"><h4>📉 SHORT rule</h4><div class="formula">EMA9 &lt; EMA21 AND structure=DOWN AND 28≤RSI≤48 AND volumeRatio≥0.6</div><p>Інакше технічний сигнал = WAIT.</p></div>
-    <div class="mathbox"><h4>EMA</h4><div class="formula">EMAₜ = Priceₜ×k + EMAₜ₋₁×(1−k)</div><div class="formula">k=2/(period+1)</div><p>У системі fast=9, slow=21.</p></div>
-    <div class="mathbox"><h4>RSI14</h4><div class="formula">RS = AvgGain₁₄ / AvgLoss₁₄</div><div class="formula">RSI=100−100/(1+RS)</div><p>RSI не використовується самостійно — лише в комбінації з EMA, structure та volume.</p></div>
-    <div class="mathbox"><h4>Volume Ratio</h4><div class="formula">volumeRatio = CurrentVolume / ReferenceVolume</div><div class="mathrow"><span>Minimum</span><b>0.60</b></div><p>Слабкий volume → DROP.</p></div>
-    <div class="mathbox"><h4>Modeled Costs</h4><div class="formula">Costs = Fee + Slippage + Spread + SafetyMargin</div><div class="mathrow"><span>Fee</span><b>0.120%</b></div><div class="mathrow"><span>Slippage</span><b>0.020%</b></div><div class="mathrow"><span>Safety</span><b>0.030%</b></div><p>Базово ≈0.170% + поточний spread.</p></div>
-    <div class="mathbox"><h4>EDGE gate</h4><div class="formula">ExpectedMove% &gt; Costs%</div><div class="formula">NetEdge = ExpectedMove − Costs</div><p>Навіть правильний напрямок DROP, якщо рух недостатній для покриття витрат.</p></div>
-    <div class="mathbox"><h4>ATR bootstrap</h4><div class="formula">ExpectedMove ≈ ATR14% × √Horizon × 0.5</div><div class="mathrow"><span>Main horizon</span><b>5m</b></div><div class="mathrow"><span>Min samples</span><b>30</b></div><p>До накопичення достатньої статистики learner використовує консервативну ATR-оцінку.</p></div>
-    <div class="mathbox"><h4>Learner</h4><div class="formula">LCB = mean(signedGrossReturn) − 1.96×SE</div><div class="formula">ExpectedMove = min(heuristic, LCB)</div><p>Якщо avg net edge ≤ 0 → DROP.</p></div>
-    <div class="mathbox"><h4>Gross / Net</h4><div class="formula">LONG gross=(Exit−Entry)/Entry×100</div><div class="formula">SHORT gross=(Entry−Exit)/Entry×100</div><div class="formula">Net = Gross − ModeledCosts</div></div>
-    <div class="mathbox"><h4>HIT ≠ NET WIN</h4><p>Напрямок може бути правильний, але рух менший за fees.</p><div class="formula">+0.05% gross − 0.17% costs = −0.12% NET LOSS</div></div>
-    <div class="mathbox"><h4>Review 2/5/10m</h4><p>Для кожного сигналу зберігаються Direction HIT/MISS/TIE та Net WIN/LOSS/NO_EDGE.</p><div class="formula">MFE = max favorable return • MAE = max adverse return</div></div>
-    <div class="mathbox"><h4>Dedupe</h4><div class="formula">signalKey = SHA256(pair | candleOpenUTCms | direction)</div><p>SQLite UNIQUE + atomic lock не дозволяє одному сигналу відкрити кілька угод.</p></div>
-    <div class="mathbox"><h4>Position sizing</h4><div class="formula">RiskAmount = Balance × RiskPerTrade</div><div class="formula">PositionSize ≈ RiskAmount / StopDistance%</div><p>Перед EXEC розмір проходить Risk + Guard.</p></div>
-    <div class="mathbox"><h4>Trading EV</h4><div class="formula">EV = P(win)×AvgWin − P(loss)×AvgLoss − Costs</div><p>Win rate сам по собі не визначає прибутковість.</p></div>
-    <div class="mathbox"><h4>Повний pipeline</h4><div class="formula">SCAN → TECH → STRUCTURE → X/NEWS → OLLAMA → JEV/RISK → EDGE → LOCK → SIZE → EXEC → TELEGRAM → REVIEW → LEARNER</div><p>Жоден окремий індикатор або AI не відкриває угоду сам.</p></div>
-  </div>
-</section>
-
 <script>
+const CFG={
+  pairs:['BTC/USDT:USDT','ETH/USDT:USDT','SOL/USDT:USDT'],
+  emaFast:9,emaSlow:21,rsiPeriod:14,volumeLookback:20,structureLookback:20,candleLimit:80,
+  rsiLong:[52,72],rsiShort:[28,48],volumeMin:.6,scanMs:15000,cooldownMs:240000,horizonMs:300000,
+  takerRoundTrip:.11,baseSlippage:.03,slippageVolScalar:.15,safetyBase:.03,safetyVolScalar:.10,
+  minSamplesSoft:30,minSamplesFull:100,expectedQuantile:.25,
+  maxDailyLoss:2,maxWeeklyLoss:5,maxLeverage:3,maxExposure:15,maxSpread:.08,riskPerTrade:.5
+};
+const STORE='myshka_astra_live_lab_v1';
 const $=id=>document.getElementById(id);
-const fmt=n=>Math.round(n).toLocaleString('uk-UA');
-let state={balance:10000,start:10000,rounds:0,wins:0,history:[]};
-function betVal(id){return Math.max(1,Math.floor(+$ (id).value||1))}
-function canBet(b){if(b>state.balance){toast('Недостатньо віртуальних кредитів');return false}return true}
-function record(game,text,pnl){
-  state.balance+=pnl;state.rounds++;if(pnl>0)state.wins++;
-  state.history.unshift({game,text,pnl,balance:state.balance});
-  gameStatsRecord(game,pnl,text);
-  renderStats();
+let APP={selected:CFG.pairs[0],markets:{},decisions:{},kill:false,cooldowns:{},positions:{},trades:[],equity:1000,startEquity:1000,logs:[],scanning:false};
+
+function loadState(){
+  try{
+    const x=JSON.parse(localStorage.getItem(STORE)||'{}');
+    APP.kill=!!x.kill;APP.cooldowns=x.cooldowns||{};APP.positions=x.positions||{};APP.trades=x.trades||[];
+    APP.equity=Number(x.equity)||1000;APP.startEquity=Number(x.startEquity)||1000;APP.logs=x.logs||[];
+  }catch(e){}
+}
+function saveState(){
+  try{localStorage.setItem(STORE,JSON.stringify({kill:APP.kill,cooldowns:APP.cooldowns,positions:APP.positions,trades:APP.trades,equity:APP.equity,startEquity:APP.startEquity,logs:APP.logs.slice(0,100)}))}catch(e){}
+}
+function pairSymbol(pair){return pair.split('/')[0]+'USDT'}
+function fmtPrice(v){if(!Number.isFinite(v))return '—';return v>=1000?v.toLocaleString('uk-UA',{maximumFractionDigits:1}):v.toLocaleString('uk-UA',{maximumFractionDigits:4})}
+function pct(v,d=3){return Number.isFinite(v)?v.toFixed(d)+'%':'—'}
+function median(a){if(!a.length)return 0;const x=a.slice().sort((p,q)=>p-q),m=Math.floor(x.length/2);return x.length%2?x[m]:(x[m-1]+x[m])/2}
+function quantile(a,q){if(!a.length)return 0;const x=a.slice().sort((p,q)=>p-q),p=(x.length-1)*q,b=Math.floor(p),r=p-b;return x[b+1]===undefined?x[b]:x[b]+r*(x[b+1]-x[b])}
+function emaSeries(vals,p){const k=2/(p+1);let e=vals[0],out=[];for(const v of vals){e=v*k+e*(1-k);out.push(e)}return out}
+function rsi(vals,p=14){
+  if(vals.length<p+1)return 50;let gains=[],losses=[];
+  for(let i=1;i<vals.length;i++){const d=vals[i]-vals[i-1];gains.push(Math.max(d,0));losses.push(Math.max(-d,0))}
+  let ag=gains.slice(0,p).reduce((a,b)=>a+b,0)/p,al=losses.slice(0,p).reduce((a,b)=>a+b,0)/p;
+  for(let i=p;i<gains.length;i++){ag=(ag*(p-1)+gains[i])/p;al=(al*(p-1)+losses[i])/p}
+  if(al===0)return 100;const rs=ag/al;return 100-100/(1+rs)
+}
+function structure(candles){
+  const w=candles.slice(-CFG.structureLookback);if(w.length<4)return 'RANGE';const mid=Math.floor(w.length/2),a=w.slice(0,mid),b=w.slice(mid);
+  const ah=Math.max(...a.map(x=>x.h)),al=Math.min(...a.map(x=>x.l)),bh=Math.max(...b.map(x=>x.h)),bl=Math.min(...b.map(x=>x.l));
+  if(bh>ah&&bl>al)return 'UP';if(bh<ah&&bl<al)return 'DOWN';return 'RANGE'
+}
+function atrStats(candles,p=14){
+  const tr=[];for(let i=0;i<candles.length;i++){const c=candles[i],prev=i?candles[i-1].c:c.c;tr.push(Math.max(c.h-c.l,Math.abs(c.h-prev),Math.abs(c.l-prev)))}
+  const atrPct=[];for(let i=p-1;i<tr.length;i++){let s=0;for(let j=i-p+1;j<=i;j++)s+=tr[j];atrPct.push((s/p)/candles[i].c*100)}
+  const cur=atrPct.at(-1)||0,med=median(atrPct.slice(-30));return{cur,med:med||cur}
+}
+function analyze(candles){
+  const closes=candles.map(x=>x.c),ef=emaSeries(closes,CFG.emaFast),es=emaSeries(closes,CFG.emaSlow);
+  const fast=ef.at(-1),slow=es.at(-1),R=rsi(closes,CFG.rsiPeriod),S=structure(candles);
+  const vols=candles.slice(-CFG.volumeLookback).map(x=>x.v),avg=vols.reduce((a,b)=>a+b,0)/Math.max(1,vols.length),vr=candles.at(-1).v/Math.max(avg,1e-12);
+  let direction='WAIT',reason='conditions not met';
+  if(fast>slow&&S==='UP'&&R>=CFG.rsiLong[0]&&R<=CFG.rsiLong[1]&&vr>=CFG.volumeMin){direction='LONG';reason='all LONG conditions met'}
+  else if(fast<slow&&S==='DOWN'&&R>=CFG.rsiShort[0]&&R<=CFG.rsiShort[1]&&vr>=CFG.volumeMin){direction='SHORT';reason='all SHORT conditions met'}
+  return{direction,reason,structure:S,emaFast:fast,emaSlow:slow,rsi:R,volumeRatio:vr,emaFastSeries:ef,emaSlowSeries:es}
+}
+function learnerSamples(pair,side,regime){
+  const bucket=APP.trades.filter(t=>t.pair===pair&&t.side===side&&t.regime===regime&&t.horizonMs===CFG.horizonMs).map(t=>Math.abs(t.grossPct));
+  const pooled=APP.trades.filter(t=>t.horizonMs===CFG.horizonMs).map(t=>Math.abs(t.grossPct));
+  return{bucket,pooled}
+}
+function edgeCheck(market,sig){
+  if(sig.direction==='WAIT')return null;
+  const {bucket,pooled}=learnerSamples(market.pair,sig.direction,sig.structure),n=bucket.length;
+  let expected,basis;
+  if(n<CFG.minSamplesSoft){expected=market.atrPct*.5;basis='bootstrap_atr'}
+  else{
+    const bq=quantile(bucket,.25);
+    if(n>=CFG.minSamplesFull){expected=bq;basis='bucket'}
+    else{const pq=pooled.length>=CFG.minSamplesSoft?quantile(pooled,.25):market.atrPct*.5,w=(n-CFG.minSamplesSoft)/(CFG.minSamplesFull-CFG.minSamplesSoft);expected=w*bq+(1-w)*pq;basis='shrunk_bucket'}
+  }
+  const vr=market.atrMedian>0?market.atrPct/market.atrMedian:1;
+  const slippage=CFG.baseSlippage*Math.max(1,vr)*(1+CFG.slippageVolScalar*Math.max(0,vr-1));
+  const safety=CFG.safetyBase+CFG.safetyVolScalar*Math.max(0,vr-1);
+  const costs=CFG.takerRoundTrip+market.spreadPct+slippage+safety,net=expected-costs;
+  return{expectedMovePct:expected,totalCostPct:costs,netEdgePct:net,passed:net>0,basis,nSamples:n}
+}
+function jevDecision(sig,edge){
+  if(APP.kill)return{verdict:'REJECT',direction:'WAIT',confidence:1,reason:'manual kill switch engaged'};
+  if(sig.direction==='WAIT')return{verdict:'WAIT',direction:'WAIT',confidence:1,reason:'technical layer has no trade candidate'};
+  if(!edge||!edge.passed)return{verdict:'REJECT',direction:'WAIT',confidence:1,reason:'candidate has no positive edge after estimated costs'};
+  let score=.5+.1+.15;score+=Math.min(Math.max(sig.volumeRatio-CFG.volumeMin,0)*.08,.1);score+=Math.min(Math.max(edge.netEdgePct,0)*.5,.1);
+  return{verdict:'APPROVE',direction:sig.direction,confidence:Math.min(score,.95),reason:'technical + edge checks approved by local JEV coordinator'}
+}
+function pnlWindows(){
+  const now=Date.now(),day=86400000,week=7*day;
+  const amountDay=APP.trades.filter(t=>now-t.closedAt<day).reduce((a,t)=>a+t.pnlAmount,0);
+  const amountWeek=APP.trades.filter(t=>now-t.closedAt<week).reduce((a,t)=>a+t.pnlAmount,0);
+  return{dayPct:amountDay/APP.startEquity*100,weekPct:amountWeek/APP.startEquity*100}
+}
+function sizePosition(edge){
+  let conf=.35;if(edge.basis==='shrunk_bucket'){const p=(edge.nSamples-CFG.minSamplesSoft)/(CFG.minSamplesFull-CFG.minSamplesSoft);conf=.35+.65*Math.max(0,Math.min(1,p))}else if(edge.basis==='bucket')conf=1;
+  const edgeScalar=Math.min(1,Math.max(.1,edge.netEdgePct/(edge.totalCostPct+1e-9)));
+  return{notionalPct:Math.min(CFG.riskPerTrade*conf*edgeScalar,CFG.maxExposure),confidenceScalar:conf}
+}
+function guardDecision(market,size){
+  const reasons=[],p=pnlWindows();
+  if(APP.kill)reasons.push('manual kill switch');
+  if(p.dayPct<=-CFG.maxDailyLoss)reasons.push('daily loss limit '+p.dayPct.toFixed(2)+'%');
+  if(p.weekPct<=-CFG.maxWeeklyLoss)reasons.push('weekly loss limit '+p.weekPct.toFixed(2)+'%');
+  const currentExposure=Object.values(APP.positions).reduce((a,x)=>a+(x.notionalPct||0),0),projected=currentExposure+size.notionalPct;
+  if(projected>CFG.maxExposure)reasons.push('portfolio exposure '+projected.toFixed(2)+'% > '+CFG.maxExposure+'%');
+  if(market.spreadPct>CFG.maxSpread)reasons.push('spread '+market.spreadPct.toFixed(3)+'% > '+CFG.maxSpread+'%');
+  return{passed:reasons.length===0,reasons}
+}
+function cooldownPassed(pair,side){
+  const k=pair+'|'+side,last=APP.cooldowns[k]||0;return Date.now()-last>=CFG.cooldownMs
+}
+function evaluateMarket(market){
+  const sig=analyze(market.candles),edge=edgeCheck(market,sig),jev=jevDecision(sig,edge);let size=null,guard={passed:false,reasons:[]},action='WAIT',reason=jev.reason;
+  if(jev.verdict==='APPROVE'){
+    if(!cooldownPassed(market.pair,sig.direction)){action='DROP';reason='4m signal cooldown active'}
+    else if(APP.positions[market.pair]){action='WAIT';reason='paper position already open for this pair'}
+    else{
+      size=sizePosition(edge);guard=guardDecision(market,size);
+      if(guard.passed){action='ENTER';reason='TECH + EDGE + JEV + GUARD passed'}
+      else{action='DROP';reason='Astra Guard veto: '+guard.reasons.join('; ')}
+    }
+  }else action=jev.verdict==='REJECT'?'DROP':'WAIT';
+  return{sig,edge,jev,size,guard,action,reason}
+}
+function addLog(type,pair,text,val=''){
+  APP.logs.unshift({ts:Date.now(),type,pair,text,val});APP.logs=APP.logs.slice(0,100);saveState();renderLog()
+}
+function maybeEnter(market,d){
+  if(d.action!=='ENTER'||APP.positions[market.pair])return;
+  const p={pair:market.pair,side:d.sig.direction,regime:d.sig.structure,entry:market.lastPrice,openedAt:Date.now(),horizonMs:CFG.horizonMs,
+    expectedEdge:d.edge.netEdgePct,costs:d.edge.totalCostPct,notionalPct:d.size.notionalPct,entrySpread:market.spreadPct};
+  APP.positions[market.pair]=p;APP.cooldowns[market.pair+'|'+p.side]=Date.now();
+  addLog('ENTER',market.pair,p.side+' @ '+fmtPrice(p.entry),'edge '+p.expectedEdge.toFixed(3)+'%');saveState()
+}
+function settlePositions(){
+  const now=Date.now();
+  for(const pair of Object.keys(APP.positions)){
+    const p=APP.positions[pair],m=APP.markets[pair];if(!m||now-p.openedAt<CFG.horizonMs)continue;
+    const raw=(m.lastPrice-p.entry)/p.entry*100,gross=p.side==='LONG'?raw:-raw,net=gross-p.costs,hit=gross>0,pnlAmount=APP.equity*(p.notionalPct/100)*(net/100);
+    APP.equity+=pnlAmount;
+    APP.trades.push({pair:p.pair,side:p.side,regime:p.regime,horizonMs:p.horizonMs,grossPct:gross,netPct:net,directionHit:hit,pnlAmount,expectedEdge:p.expectedEdge,openedAt:p.openedAt,closedAt:now});
+    delete APP.positions[pair];
+    addLog('CLOSE',pair,p.side+' gross '+gross.toFixed(3)+'% · net '+net.toFixed(3)+'%',net.toFixed(3)+'%');
+  }
+  saveState();renderStats();renderPosition()
+}
+async function fetchJSON(url){
+  const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();if(j.retCode!==0)throw new Error(j.retMsg||'Bybit error');return j
+}
+async function fetchMarket(pair){
+  const symbol=pairSymbol(pair),base='https://api.bybit.com';
+  const [kr,tr]=await Promise.all([
+    fetchJSON(base+'/v5/market/kline?category=linear&symbol='+symbol+'&interval=1&limit='+(CFG.candleLimit+1)),
+    fetchJSON(base+'/v5/market/tickers?category=linear&symbol='+symbol)
+  ]);
+  let rows=(kr.result&&kr.result.list||[]).slice().reverse();rows=rows.slice(0,-1).slice(-CFG.candleLimit);
+  if(rows.length<CFG.candleLimit)throw new Error(symbol+': only '+rows.length+' candles');
+  const candles=rows.map(r=>({o:+r[1],h:+r[2],l:+r[3],c:+r[4],v:+r[5]}));
+  const t=(tr.result&&tr.result.list||[])[0];if(!t)throw new Error(symbol+': ticker empty');
+  const bid=+t.bid1Price,ask=+t.ask1Price,last=+t.lastPrice||candles.at(-1).c,mid=(bid+ask)/2,spread=(ask-bid)/mid*100,atr=atrStats(candles);
+  return{pair,symbol,candles,bid,ask,lastPrice:last,spreadPct:spread,atrPct:atr.cur,atrMedian:atr.med,updatedAt:Date.now()}
+}
+async function scanAll(){
+  if(APP.scanning)return;APP.scanning=true;$('scanBtn').textContent='… Scan';
+  try{
+    const res=await Promise.allSettled(CFG.pairs.map(fetchMarket));let ok=0;
+    res.forEach((r,i)=>{const pair=CFG.pairs[i];if(r.status==='fulfilled'){APP.markets[pair]=r.value;APP.decisions[pair]=evaluateMarket(r.value);ok++}else addLog('ERROR',pair,r.reason&&r.reason.message?r.reason.message:String(r.reason))});
+    if(ok){
+      $('marketBadge').textContent='● LIVE Bybit';$('marketBadge').className='badge live';
+      settlePositions();
+      for(const pair of CFG.pairs){const m=APP.markets[pair],d=APP.decisions[pair];if(m&&d)maybeEnter(m,d)}
+      renderSelected();renderStats();renderPosition();
+    }else throw new Error('Bybit data unavailable');
+  }catch(e){
+    $('marketBadge').textContent='● ERROR';$('marketBadge').className='badge err';addLog('ERROR','SYSTEM',e.message||String(e));
+  }finally{APP.scanning=false;$('scanBtn').textContent='↻ Scan зараз'}
+}
+function renderSelected(){
+  const m=APP.markets[APP.selected],d=APP.decisions[APP.selected];$('pairTitle').textContent=APP.selected;if(!m||!d)return;
+  $('lastPrice').textContent=fmtPrice(m.lastPrice);$('bidAsk').textContent='bid '+fmtPrice(m.bid)+' • ask '+fmtPrice(m.ask)+' • '+new Date(m.updatedAt).toLocaleTimeString('uk-UA');
+  $('mStructure').textContent=d.sig.structure;$('mRsi').textContent=d.sig.rsi.toFixed(1);$('mVol').textContent=d.sig.volumeRatio.toFixed(2)+'x';$('mSpread').textContent=pct(m.spreadPct,4);$('mAtr').textContent=pct(m.atrPct,3);$('mAtrMed').textContent=pct(m.atrMedian,3);
+  $('chartOverlay').innerHTML='EMA9 '+fmtPrice(d.sig.emaFast)+' · EMA21 '+fmtPrice(d.sig.emaSlow)+'<br>RSI14 '+d.sig.rsi.toFixed(1)+' · Volume '+d.sig.volumeRatio.toFixed(2)+'x';
+  const fa=$('finalAction');fa.textContent=d.action+(d.action==='ENTER'?' '+d.sig.direction:'');fa.className=d.action==='ENTER'?(d.sig.direction==='LONG'?'long':'short'):d.action==='DROP'?'short':'wait';$('finalReason').textContent=d.reason;
+  status('techStatus',d.sig.direction,d.sig.direction==='WAIT'?'mid':'pass');$('techText').textContent=d.sig.reason+' • EMA '+(d.sig.emaFast>d.sig.emaSlow?'FAST>SLOW':'FAST<SLOW')+' • '+d.sig.structure;
+  if(d.edge){
+    status('edgeStatus',d.edge.passed?'PASS':'DROP',d.edge.passed?'pass':'drop');$('eMove').textContent=pct(d.edge.expectedMovePct);$('eCosts').textContent=pct(d.edge.totalCostPct);$('eNet').textContent=pct(d.edge.netEdgePct);$('eBasis').textContent=d.edge.basis+' · n='+d.edge.nSamples;
+  }else{status('edgeStatus','—','mid');$('eMove').textContent=$('eCosts').textContent=$('eNet').textContent=$('eBasis').textContent='—'}
+  status('jevStatus',d.jev.verdict,d.jev.verdict==='APPROVE'?'pass':d.jev.verdict==='REJECT'?'drop':'mid');$('jevText').textContent=d.jev.reason+' • confidence '+Math.round(d.jev.confidence*100)+'%';
+  if(d.size){
+    status('guardStatus',d.guard.passed?'PASS':'VETO',d.guard.passed?'pass':'drop');$('guardText').textContent=d.guard.passed?'Risk controls passed • size '+d.size.notionalPct.toFixed(3)+'% equity':d.guard.reasons.join(' • ');
+  }else{status('guardStatus','—','mid');$('guardText').textContent='Guard запускається тільки після APPROVE + positive EDGE.'}
+  drawMarketChart(m,d)
+}
+function status(id,text,cls){const e=$(id);e.textContent=text;e.className='pipe-status '+cls}
+function drawMarketChart(m,d){
+  const c=$('chartCanvas'),x=c.getContext('2d'),w=c.clientWidth,h=c.clientHeight,dp=devicePixelRatio||1;c.width=w*dp;c.height=h*dp;x.setTransform(dp,0,0,dp,0,0);x.clearRect(0,0,w,h);
+  const a=m.candles,L=48,R=12,T=18,B=24,gw=w-L-R,gh=h-T-B,hi=Math.max(...a.map(v=>v.h)),lo=Math.min(...a.map(v=>v.l)),span=hi-lo||1,y=v=>T+(hi-v)/span*gh,step=gw/a.length,bw=Math.max(2,step*.6);
+  x.strokeStyle='#163052';x.lineWidth=1;for(let i=0;i<=5;i++){const yy=T+i*gh/5;x.beginPath();x.moveTo(L,yy);x.lineTo(w-R,yy);x.stroke()}
+  a.forEach((v,i)=>{const px=L+i*step+step/2,col=v.c>=v.o?'#2bdd8d':'#ff5264';x.strokeStyle=col;x.beginPath();x.moveTo(px,y(v.h));x.lineTo(px,y(v.l));x.stroke();x.fillStyle=col;x.fillRect(px-bw/2,Math.min(y(v.o),y(v.c)),bw,Math.max(2,Math.abs(y(v.c)-y(v.o))))});
+  for(const [ser,col] of [[d.sig.emaFastSeries,'#6f95ff'],[d.sig.emaSlowSeries,'#a276ff']]){x.beginPath();ser.forEach((v,i)=>{const px=L+i*step+step/2;i?x.lineTo(px,y(v)):x.moveTo(px,y(v))});x.strokeStyle=col;x.lineWidth=1.8;x.stroke()}
+  x.fillStyle='#7890b3';x.font='9px system-ui';x.fillText(fmtPrice(hi),3,T+5);x.fillText(fmtPrice(lo),3,h-B)
+}
+function renderPosition(){
+  const p=APP.positions[APP.selected],m=APP.markets[APP.selected],box=$('positionBox');
+  if(!p){box.innerHTML='<h3>📍 Paper position</h3><div class="muted" style="font-size:10px">Немає відкритої позиції.</div>';return}
+  const left=Math.max(0,p.horizonMs-(Date.now()-p.openedAt)),raw=m?(m.lastPrice-p.entry)/p.entry*100:0,gross=p.side==='LONG'?raw:-raw,net=gross-p.costs;
+  box.innerHTML='<h3>📍 Paper position · '+p.side+'</h3>'+
+    '<div class="prow"><span>Entry</span><b>'+fmtPrice(p.entry)+'</b></div>'+
+    '<div class="prow"><span>Current</span><b>'+fmtPrice(m?m.lastPrice:p.entry)+'</b></div>'+
+    '<div class="prow"><span>Live gross</span><b class="'+(gross>=0?'long':'short')+'">'+pct(gross)+'</b></div>'+
+    '<div class="prow"><span>Est. net</span><b class="'+(net>=0?'long':'short')+'">'+pct(net)+'</b></div>'+
+    '<div class="prow"><span>Size</span><b>'+p.notionalPct.toFixed(3)+'% equity</b></div>'+
+    '<div class="prow"><span>Settle</span><b>'+Math.ceil(left/1000)+'s</b></div>'
 }
 function renderStats(){
-  $('balance').textContent=fmt(state.balance);$('sBalance').textContent=fmt(state.balance);$('rounds').textContent=state.rounds;
-  $('winRate').textContent=state.rounds?((state.wins/state.rounds)*100).toFixed(1)+'%':'0%';
-  const p=state.balance-state.start;$('profit').textContent=(p>=0?'+':'')+fmt(p);$('profit').className=p>=0?'pos':'neg';
-  $('hCount').textContent=state.history.length;
-  $('history').innerHTML=state.history.slice(0,40).map((r,i)=>`<div class="hrow"><span class="muted">#${state.rounds-i}</span><span>${r.game}: ${r.text}</span><b class="${r.pnl>=0?'pos':'neg'}">${r.pnl>=0?'+':''}${fmt(r.pnl)}</b></div>`).join('')||'<div class="hrow"><span></span><span class="muted">Ще немає ігор</span><span></span></div>';
+  const t=APP.trades,w=t.filter(x=>x.netPct>0).length,l=t.filter(x=>x.netPct<0).length,hit=t.filter(x=>x.directionHit).length,net=t.reduce((a,x)=>a+x.netPct,0);
+  $('sWins').textContent=w;$('sLosses').textContent=l;$('sWinRate').textContent=(w+l?w/(w+l)*100:0).toFixed(1)+'%';$('sHitRate').textContent=(t.length?hit/t.length*100:0).toFixed(1)+'%';$('sNet').textContent=(net>=0?'+':'')+net.toFixed(3)+'%';$('sNet').className=net>=0?'long':'short';$('sEquity').textContent=APP.equity.toFixed(2);
+  const maxBucket=Math.max(0,...CFG.pairs.flatMap(pair=>['LONG','SHORT'].flatMap(side=>['UP','DOWN','RANGE'].map(reg=>learnerSamples(pair,side,reg).bucket.length))));
+  $('learnerStatus').textContent=maxBucket>=100?'Learner: full bucket confidence':maxBucket>=30?'Learner: shrinkage active':'Learner: cold start · max bucket n='+maxBucket;
+  drawStatsChart()
 }
-function toast(t){console.log(t)}
-
-
-/* ===== MYSHKA_GAME_STATS_V1 ===== */
-const GAME_STATS_STORE='myshka_game_stats_v1';
-const GAME_LABELS={
-  roulette:'Рулетка',slots:'Слоти',blackjack:'Blackjack',dice:'Dice',coin:'Coin',
-  crash:'Crash',plinko:'Plinko',baccarat:'Baccarat',trading:'Trading'
-};
-let gameStats={};
-
-function loadGameStats(){
-  try{gameStats=JSON.parse(localStorage.getItem(GAME_STATS_STORE)||'{}')||{}}catch(e){gameStats={}}
+function drawStatsChart(){
+  const c=$('statsCanvas'),x=c.getContext('2d'),w=c.clientWidth,h=c.clientHeight,dp=devicePixelRatio||1;c.width=w*dp;c.height=h*dp;x.setTransform(dp,0,0,dp,0,0);x.clearRect(0,0,w,h);
+  const a=APP.trades.slice(-40);if(!a.length){x.fillStyle='#7188aa';x.font='11px system-ui';x.fillText('Ще немає закритих paper-угод',20,30);return}
+  let cum=0,cs=a.map(v=>cum+=v.netPct),vals=a.map(v=>v.netPct).concat(cs,[0]),max=Math.max(...vals),min=Math.min(...vals),span=max-min||1,L=45,R=12,T=15,B=25,gw=w-L-R,gh=h-T-B,y=v=>T+(max-v)/span*gh,zero=y(0),step=gw/a.length,bw=Math.max(3,step*.55);
+  x.strokeStyle='#163052';for(let i=0;i<=4;i++){const yy=T+i*gh/4;x.beginPath();x.moveTo(L,yy);x.lineTo(w-R,yy);x.stroke()}
+  a.forEach((v,i)=>{const px=L+i*step+step/2,py=y(v.netPct);x.fillStyle=v.netPct>=0?'#2bdd8d':'#ff5264';x.fillRect(px-bw/2,Math.min(zero,py),bw,Math.max(2,Math.abs(zero-py)))});
+  x.beginPath();cs.forEach((v,i)=>{const px=L+i*step+step/2,py=y(v);i?x.lineTo(px,py):x.moveTo(px,py)});x.strokeStyle='#7da0ff';x.lineWidth=2;x.stroke();
+  x.fillStyle='#7890b3';x.font='9px system-ui';x.fillText(max.toFixed(3)+'%',3,T+5);x.fillText(min.toFixed(3)+'%',3,h-B)
 }
-function saveGameStats(){
-  try{localStorage.setItem(GAME_STATS_STORE,JSON.stringify(gameStats))}catch(e){}
+function renderLog(){
+  $('logList').innerHTML=APP.logs.slice(0,50).map(e=>'<div class="logrow"><span class="muted">'+new Date(e.ts).toLocaleTimeString('uk-UA')+'</span><b>'+e.type+'</b><span>'+e.pair.replace('/USDT:USDT','')+'</span><span>'+e.text+'</span><b class="'+((parseFloat(e.val)||0)>=0?'long':'short')+'">'+e.val+'</b></div>').join('')||'<div class="muted">Ще немає записів.</div>'
 }
-function gameStatBucket(name){
-  if(!gameStats[name])gameStats[name]={wins:0,losses:0,draws:0,pnl:0,history:[]};
-  return gameStats[name];
-}
-function gameStatsRecord(game,pnl,text){
-  const g=gameStatBucket(game);
-  if(pnl>0)g.wins++; else if(pnl<0)g.losses++; else g.draws++;
-  g.pnl+=Number(pnl)||0;
-  g.history.push({pnl:Number(pnl)||0,text:String(text||''),ts:Date.now()});
-  if(g.history.length>120)g.history=g.history.slice(-120);
-  saveGameStats();
-  renderGameStatsByName(game);
-}
-function gameStatsReset(game){
-  gameStats[game]={wins:0,losses:0,draws:0,pnl:0,history:[]};
-  saveGameStats();renderGameStatsByName(game);
-}
-function injectGameStats(){
-  Object.keys(GAME_LABELS).forEach(key=>{
-    const host=$('game-'+key);if(!host||host.querySelector('[data-game-stat="'+key+'"]'))return;
-    const card=document.createElement('div');
-    card.className='game-stat-card';card.dataset.gameStat=key;
-    card.innerHTML=
-      '<div class="game-stat-head"><div><h3>📊 Статистика · '+GAME_LABELS[key]+'</h3><small>виграші / програші / P&L по раундах</small></div>'+
-      '<button class="game-stat-reset" type="button">Скинути статистику</button></div>'+
-      '<div class="game-stat-grid">'+
-      '<div class="game-stat-box"><small>Виграші</small><b data-s="wins">0</b></div>'+
-      '<div class="game-stat-box"><small>Програші</small><b data-s="losses">0</b></div>'+
-      '<div class="game-stat-box"><small>Нічиї</small><b data-s="draws">0</b></div>'+
-      '<div class="game-stat-box"><small>Win rate</small><b data-s="rate">0%</b></div>'+
-      '<div class="game-stat-box"><small>P/L</small><b data-s="pnl">0</b></div>'+
-      '</div>'+
-      '<div class="game-stat-chart"><canvas></canvas><div class="game-stat-empty">Ще немає завершених раундів</div></div>'+
-      '<div class="game-stat-legend"><span style="color:#2bdd8d">плюсовий раунд</span><span style="color:#ff4e61">мінусовий раунд</span><span style="color:#7da0ff">накопичений P/L</span></div>';
-    card.querySelector('.game-stat-reset').onclick=()=>gameStatsReset(GAME_LABELS[key]);
-    host.appendChild(card);
-  });
-}
-function renderGameStatsByName(game){
-  const key=Object.keys(GAME_LABELS).find(k=>GAME_LABELS[k]===game);if(!key)return;
-  const card=document.querySelector('[data-game-stat="'+key+'"]');if(!card)return;
-  const g=gameStatBucket(game),decided=g.wins+g.losses,rate=decided?g.wins/decided*100:0;
-  card.querySelector('[data-s="wins"]').textContent=g.wins;
-  card.querySelector('[data-s="losses"]').textContent=g.losses;
-  card.querySelector('[data-s="draws"]').textContent=g.draws;
-  card.querySelector('[data-s="rate"]').textContent=rate.toFixed(1)+'%';
-  const pnlEl=card.querySelector('[data-s="pnl"]');pnlEl.textContent=(g.pnl>=0?'+':'')+g.pnl.toFixed(2);pnlEl.className=g.pnl>=0?'pos':'neg';
-  const empty=card.querySelector('.game-stat-empty');empty.style.display=g.history.length?'none':'grid';
-  drawGameStatsChart(card.querySelector('canvas'),g.history);
-}
-function renderAllGameStats(){Object.values(GAME_LABELS).forEach(renderGameStatsByName)}
-function drawGameStatsChart(canvas,history){
-  if(!canvas||!history.length)return;
-  const w=canvas.clientWidth,h=canvas.clientHeight;if(w<10||h<10)return;
-  const d=window.devicePixelRatio||1;canvas.width=Math.round(w*d);canvas.height=Math.round(h*d);
-  const x=canvas.getContext('2d');x.setTransform(d,0,0,d,0,0);x.clearRect(0,0,w,h);
-  const arr=history.slice(-40),pad={l:34,r:12,t:14,b:25},gw=w-pad.l-pad.r,gh=h-pad.t-pad.b;
-  let cum=0;const cumulative=arr.map(v=>cum+=v.pnl);
-  const vals=arr.map(v=>v.pnl).concat(cumulative).concat([0]);
-  const max=Math.max(...vals),min=Math.min(...vals),span=(max-min)||1;
-  const y=v=>pad.t+(max-v)/span*gh;
-  const zero=y(0);
-
-  x.strokeStyle='#18314f';x.lineWidth=1;
-  for(let i=0;i<=4;i++){const yy=pad.t+i*gh/4;x.beginPath();x.moveTo(pad.l,yy);x.lineTo(w-pad.r,yy);x.stroke()}
-  x.strokeStyle='#34506f';x.beginPath();x.moveTo(pad.l,zero);x.lineTo(w-pad.r,zero);x.stroke();
-
-  const step=gw/arr.length,bw=Math.max(2,step*.55);
-  arr.forEach((r,i)=>{
-    const px=pad.l+i*step+step/2,py=y(r.pnl);
-    x.fillStyle=r.pnl>=0?'#2bdd8d':'#ff4e61';
-    x.fillRect(px-bw/2,Math.min(zero,py),bw,Math.max(2,Math.abs(zero-py)));
-  });
-
-  x.beginPath();cumulative.forEach((v,i)=>{
-    const px=pad.l+i*step+step/2,py=y(v);i?x.lineTo(px,py):x.moveTo(px,py)
-  });
-  x.strokeStyle='#7da0ff';x.lineWidth=2;x.stroke();
-
-  x.fillStyle='#7f95b6';x.font='9px system-ui';
-  x.fillText(max.toFixed(1),3,pad.t+4);x.fillText(min.toFixed(1),3,h-pad.b);
-  x.fillText('останні '+arr.length+' раундів',pad.l,h-7);
-}
-loadGameStats();
-setTimeout(()=>{injectGameStats();renderAllGameStats()},80);
-window.addEventListener('resize',()=>setTimeout(renderAllGameStats,50));
-
-/* tabs */
-document.querySelectorAll('.game-tab').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('.game-tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');
-  document.querySelectorAll('.game').forEach(x=>x.classList.remove('active'));$('game-'+b.dataset.game).classList.add('active');
-  const label=GAME_LABELS[b.dataset.game];if(label)setTimeout(()=>renderGameStatsByName(label),30);
-});
-
-/* Roulette */
-const order=[0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
-const reds=new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
-const wheel=$('wheel');
-order.forEach((n,i)=>{const e=document.createElement('div');e.className='rnum';e.textContent=n;const a=(i+.5)*360/37,rad=(a-90)*Math.PI/180;e.style.left=(50+42*Math.cos(rad))+'%';e.style.top=(50+42*Math.sin(rad))+'%';e.style.transform=`translate(-50%,-50%) rotate(${a}deg)`;wheel.appendChild(e)});
-let rside='red',angle=0;
-document.querySelectorAll('[data-rside]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-rside]').forEach(x=>x.classList.remove('active'));b.classList.add('active');rside=b.dataset.rside});
-$('rSpin').onclick=()=>{
-  const bet=betVal('rBet');if(!canBet(bet))return;const idx=Math.floor(Math.random()*37),n=order[idx],c=n===0?'green':reds.has(n)?'red':'black';
-  const win=rside===c,pnl=win?(rside==='green'?bet*35:bet):-bet;angle+=1080+(360-(idx*360/37));wheel.style.transform=`rotate(${angle}deg)`;
-  $('rouletteResult').textContent=n;$('rouletteColor').textContent=c==='red'?'ЧЕРВОНЕ':c==='green'?'ЗЕЛЕНЕ':'ЧОРНЕ';record('Рулетка',`${n} ${c}`,pnl)
-};
-
-/* Slots */
-const syms=['🍒','🍋','⭐','🔔','7️⃣','💎'];
-$('slotSpin').onclick=()=>{
-  const bet=betVal('sBet');if(!canBet(bet))return;const a=[0,1,2].map(()=>syms[Math.floor(Math.random()*syms.length)]);
-  $('reel1').textContent=a[0];$('reel2').textContent=a[1];$('reel3').textContent=a[2];
-  let pnl=-bet,msg='LOSS';if(a[0]===a[1]&&a[1]===a[2]){pnl=bet*8;msg='JACKPOT x8'}else if(a[0]===a[1]||a[1]===a[2]||a[0]===a[2]){pnl=bet*2;msg='WIN x2'}
-  $('slotMsg').textContent=msg;record('Слоти',a.join(' '),pnl)
-};
-
-/* Blackjack */
-let deck=[],player=[],dealer=[],bjBet=0,bjActive=false;
-function newDeck(){const ranks=['A','2','3','4','5','6','7','8','9','10','J','Q','K'],suits=['♠','♥','♦','♣'];deck=[];for(const s of suits)for(const r of ranks)deck.push({r,s});deck.sort(()=>Math.random()-.5)}
-function cv(c){if(c.r==='A')return 11;if(['K','Q','J'].includes(c.r))return 10;return +c.r}
-function score(h){let v=h.reduce((a,c)=>a+cv(c),0),aces=h.filter(c=>c.r==='A').length;while(v>21&&aces--){v-=10}return v}
-function draw(){return deck.pop()}
-function showHand(id,h){$(id).innerHTML=h.map(c=>`<div class="card">${c.r}<small>${c.s}</small></div>`).join('')}
-function renderBJ(){showHand('dealerCards',dealer);showHand('playerCards',player);$('dealerScore').textContent=score(dealer);$('playerScore').textContent=score(player)}
-function resetBlackjack(){player=[];dealer=[];bjActive=false;renderBJ();$('bjMsg').textContent='Нова роздача'}
-$('bjDeal').onclick=()=>{
-  bjBet=betVal('bjBet');if(!canBet(bjBet))return;newDeck();player=[draw(),draw()];dealer=[draw(),draw()];bjActive=true;renderBJ();$('bjMsg').textContent='Hit або Stand';
-  if(score(player)===21){finishBJ()}
-};
-$('bjHit').onclick=()=>{if(!bjActive)return;player.push(draw());renderBJ();if(score(player)>=21)finishBJ()};
-$('bjStand').onclick=()=>{if(!bjActive)return;finishBJ()};
-function finishBJ(){
-  if(!bjActive)return;while(score(player)<=21&&score(dealer)<17)dealer.push(draw());renderBJ();let ps=score(player),ds=score(dealer),pnl=0,msg='';
-  if(ps>21){pnl=-bjBet;msg='BUST'}else if(ds>21||ps>ds){pnl=ps===21&&player.length===2?Math.round(bjBet*1.5):bjBet;msg='WIN'}else if(ps<ds){pnl=-bjBet;msg='LOSS'}else{pnl=0;msg='PUSH'}
-  bjActive=false;$('bjMsg').textContent=msg;record('Blackjack',`${ps}:${ds} ${msg}`,pnl)
-}
-
-/* Dice */
-$('diceRoll').onclick=()=>{const bet=betVal('dBet');if(!canBet(bet))return;const n=1+Math.floor(Math.random()*6),choice=$('dChoice').value,win=(choice==='over'?n>=4:n<=3),pnl=win?bet:-bet;$('diceFace').textContent=['⚀','⚁','⚂','⚃','⚄','⚅'][n-1];$('diceResult').textContent=n+' • '+(win?'WIN':'LOSS');record('Dice',`${n}`,pnl)};
-
-/* Coin */
-$('coinFlip').onclick=()=>{const bet=betVal('cBet');if(!canBet(bet))return;const v=Math.random()<.5?'heads':'tails',win=v===$('cChoice').value,pnl=win?bet:-bet;const f=$('coinFace');f.classList.remove('spin');void f.offsetWidth;f.classList.add('spin');setTimeout(()=>f.textContent=v==='heads'?'🐭':'👑',250);$('coinResult').textContent=(v==='heads'?'HEADS':'TAILS')+' • '+(win?'WIN':'LOSS');record('Coin',v,pnl)};
-
-/* Crash */
-let crTimer=null,crashRunning=false,crMult=1,crPoint=1,crStake=0,crCashed=false;
-$('crStart').onclick=()=>{
-  if(crashRunning)return;crStake=betVal('crBet');if(!canBet(crStake))return;state.balance-=crStake;renderStats();crashRunning=true;crCashed=false;crMult=1;crPoint=1.05+Math.pow(Math.random(),2)*8;
-  $('crashStatus').textContent='Летимо...';$('crashLine').style.width='0';
-  crTimer=setInterval(()=>{crMult+=.04+crMult*.008;$('crashMult').textContent=crMult.toFixed(2)+'x';$('crashLine').style.width=Math.min(92,(crMult/Math.max(crPoint,2))*85)+'%';$('crashLine').style.transform=`rotate(${-Math.min(42,crMult*4)}deg)`;
-    if(crMult>=crPoint){clearInterval(crTimer);crashRunning=false;$('crashMult').textContent='CRASH '+crPoint.toFixed(2)+'x';$('crashStatus').textContent='Розбилось';if(!crCashed){state.rounds++;state.history.unshift({game:'Crash',text:'Crash '+crPoint.toFixed(2)+'x',pnl:-crStake,balance:state.balance});gameStatsRecord('Crash',-crStake,'Crash '+crPoint.toFixed(2)+'x');renderStats()}}
-  },70)
-};
-$('crCash').onclick=()=>{if(!crashRunning||crCashed)return;crCashed=true;const win=Math.round(crStake*crMult);state.balance+=win;state.rounds++;state.wins++;state.history.unshift({game:'Crash',text:'Cash '+crMult.toFixed(2)+'x',pnl:win-crStake,balance:state.balance});gameStatsRecord('Crash',win-crStake,'Cash '+crMult.toFixed(2)+'x');renderStats();$('crashStatus').textContent='Забрано '+crMult.toFixed(2)+'x'};
-
-/* Plinko */
-const mults=[5,2,1.2,.6,.3,.6,1.2,2,5],board=$('plinkoBoard'),ball=$('plinkoBall'),buckets=$('plinkoBuckets');
-for(let r=0;r<8;r++){for(let c=0;c<=r;c++){const p=document.createElement('i');p.className='peg';p.style.left=(50+(c-r/2)*9)+'%';p.style.top=(55+r*38)+'px';board.appendChild(p)}}
-buckets.innerHTML=mults.map(x=>`<div class="bucket">${x}x</div>`).join('');
-$('pDrop').onclick=()=>{const bet=betVal('pBet');if(!canBet(bet))return;const idx=Math.floor(Math.random()*mults.length),m=mults[idx],pnl=Math.round(bet*m)-bet;ball.style.transition='none';ball.style.left='50%';ball.style.top='10px';setTimeout(()=>{ball.style.transition='all .8s cubic-bezier(.2,.7,.2,1)';ball.style.left=(5+idx*11.2)+'%';ball.style.top='345px'},20);$('pMsg').textContent=m+'x';setTimeout(()=>record('Plinko',m+'x',pnl),820)};
-
-/* Baccarat */
-function bCard(){return 1+Math.floor(Math.random()*13)}
-function bVal(n){return n>=10?0:n}
-function bShow(id,arr){$(id).innerHTML=arr.map(n=>`<div class="card">${n===1?'A':n===11?'J':n===12?'Q':n===13?'K':n}</div>`).join('')}
-$('bDeal').onclick=()=>{const bet=betVal('bBet');if(!canBet(bet))return;let p=[bCard(),bCard()],b=[bCard(),bCard()],ps=(bVal(p[0])+bVal(p[1]))%10,bs=(bVal(b[0])+bVal(b[1]))%10;if(ps<=5){p.push(bCard());ps=(ps+bVal(p[2]))%10}if(bs<=5){b.push(bCard());bs=(bs+bVal(b[2]))%10}bShow('bPlayerCards',p);bShow('bBankCards',b);$('bPlayerScore').textContent=ps;$('bBankScore').textContent=bs;let res=ps>bs?'player':bs>ps?'banker':'tie',choice=$('bChoice').value,pnl=-bet;if(choice===res){pnl=res==='tie'?bet*8:res==='banker'?Math.round(bet*.95):bet}$('bMsg').textContent=res.toUpperCase()+(choice===res?' • WIN':' • LOSS');record('Baccarat',`${ps}:${bs} ${res}`,pnl)};
-
-function resetGame(){/* per-game visual reset only */}
-
-/* ===== AUTO BOTS FOR ALL GAMES ===== */
-const bots={};
-function setBotUI(name,on){
-  const b=$(name+'Bot'),s=$(name+'BotStatus');
-  if(!b||!s)return;
-  b.textContent=on?'■ Зупинити бота':'▶ Запустити бота';
-  b.className='btn '+(on?'redbtn':'purple');
-  s.textContent=on?'Бот працює':'Бот зупинений';
-  s.className='bot-status '+(on?'bot-running':'');
-}
-function stopBot(name){
-  if(bots[name]){clearTimeout(bots[name]);bots[name]=null}
-  setBotUI(name,false);
-}
-function botLoop(name,fn){
-  if(bots[name]){stopBot(name);return}
-  setBotUI(name,true);
-  const tick=()=>{
-    if(!bots[name] && bots[name]!==0)return;
-    fn();
-    const speed=+$(name+'Speed').value||800;
-    bots[name]=setTimeout(tick,speed);
-  };
-  bots[name]=0;
-  tick();
-}
-function stopAllBots(){
-  Object.keys(bots).forEach(stopBot);
-}
-document.querySelectorAll('.game-tab').forEach(tab=>{
-  tab.addEventListener('click',()=>stopAllBots());
-});
-
-/* Roulette bot */
-$('rouletteBot').onclick=()=>botLoop('roulette',()=>{$('rSpin').click()});
-
-/* Slots bot */
-$('slotsBot').onclick=()=>botLoop('slots',()=>{$('slotSpin').click()});
-
-/* Blackjack bot */
-function blackjackBotRound(){
-  if(!bjActive){
-    $('bjDeal').click();
-    setTimeout(()=>{
-      if(!bjActive)return;
-      while(bjActive && score(player)<17){ player.push(draw()); renderBJ(); if(score(player)>=21){finishBJ();break} }
-      if(bjActive) finishBJ();
-    },120);
-  }
-}
-$('blackjackBot').onclick=()=>botLoop('blackjack',blackjackBotRound);
-
-/* Dice bot */
-$('diceBot').onclick=()=>botLoop('dice',()=>{$('diceRoll').click()});
-
-/* Coin bot */
-$('coinBot').onclick=()=>botLoop('coin',()=>{$('coinFlip').click()});
-
-/* Crash bot */
-let crashBotWatch=null;
-function crashBotRound(){
-  if(crashRunning)return;
-  $('crStart').click();
-  const target=Math.max(1.05,+$('crTarget').value||1.8);
-  clearInterval(crashBotWatch);
-  crashBotWatch=setInterval(()=>{
-    if(!crashRunning){clearInterval(crashBotWatch);return}
-    if(crMult>=target && !crCashed){$('crCash').click();clearInterval(crashBotWatch)}
-  },35);
-}
-$('crashBot').onclick=()=>botLoop('crash',crashBotRound);
-
-/* Plinko bot */
-$('plinkoBot').onclick=()=>botLoop('plinko',()=>{$('pDrop').click()});
-
-/* Baccarat bot */
-$('baccaratBot').onclick=()=>botLoop('baccarat',()=>{$('bDeal').click()});
-
-
-/* ===== TRADING LAB ===== */
-let T={candles:[],price:84400,ticks:0,pos:null,events:[],bot:false,entryTick:0};
-function tRandn(){let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
-function tSeed(){let p=84400;for(let i=0;i<90;i++){let o=p,c=o+Math.sin(i/10)*10+tRandn()*50,h=Math.max(o,c)+Math.random()*42,l=Math.min(o,c)-Math.random()*42,v=30+Math.random()*95;T.candles.push({o,h,l,c,v});p=c}T.price=p}
-function tEma(vals,p){const k=2/(p+1);let e=vals[0];for(let i=1;i<vals.length;i++)e=vals[i]*k+e*(1-k);return e}
-function tRsi(vals,p=14){if(vals.length<p+1)return 50;let g=0,l=0;for(let i=vals.length-p;i<vals.length;i++){let d=vals[i]-vals[i-1];d>=0?g+=d:l-=d}if(!l)return 100;let rs=(g/p)/(l/p);return 100-100/(1+rs)}
-function tInd(){let c=T.candles.map(x=>x.c),e9=tEma(c.slice(-50),9),e21=tEma(c.slice(-70),21),r=tRsi(c),last=T.candles.at(-1),prev=T.candles.at(-2),vr=last.v/Math.max(1,prev.v);return{e9,e21,r,vr}}
-function tSignal(){
-  const I=tInd();let sig='WAIT',why='Умови не збігаються';
-  if(I.e9>I.e21&&I.r>=52&&I.r<=72&&I.vr>=.6){sig='BUY';why='EMA9>EMA21 • UP • RSI LONG zone'}
-  else if(I.e9<I.e21&&I.r>=28&&I.r<=48&&I.vr>=.6){sig='SELL';why='EMA9<EMA21 • DOWN • RSI SHORT zone'}
-  const move=Math.abs(I.e9-I.e21)/T.price*100*4.2,edge=move-.18,pass=edge>0&&sig!=='WAIT';
-  $('tSignal').textContent=sig;$('tSignal').className=sig==='BUY'?'buy':sig==='SELL'?'sell':'wait';$('tWhy').textContent=why;
-  $('tStructure').textContent=I.e9>I.e21?'UP':'DOWN';$('tmRsi').textContent=I.r.toFixed(1);$('tmVol').textContent=I.vr.toFixed(2)+'x';$('tmMove').textContent=move.toFixed(3)+'%';
-  $('tEdge').textContent=pass?'PASS':'DROP';$('tEdge').style.color=pass?'#2ddd91':'#ff5264';
-  return{sig,pass}
-}
-function tDraw(){
-  const c=$('tradeCanvas');if(!c)return;const x=c.getContext('2d'),d=devicePixelRatio||1,w=c.clientWidth,h=c.clientHeight;c.width=w*d;c.height=h*d;x.setTransform(d,0,0,d,0,0);x.clearRect(0,0,w,h);
-  const arr=T.candles.slice(-70),hi=Math.max(...arr.map(a=>a.h)),lo=Math.min(...arr.map(a=>a.l)),span=hi-lo||1,L=44,R=16,Top=18,B=20,gw=w-L-R,gh=h-Top-B;
-  x.strokeStyle='#15304f';x.lineWidth=1;for(let i=1;i<6;i++){let y=Top+i*gh/6;x.beginPath();x.moveTo(L,y);x.lineTo(w-R,y);x.stroke()}
-  const cw=gw/arr.length,bw=Math.max(3,cw*.6);
-  arr.forEach((a,i)=>{let px=L+i*cw+cw/2,yo=Top+(hi-a.o)/span*gh,yc=Top+(hi-a.c)/span*gh,yh=Top+(hi-a.h)/span*gh,yl=Top+(hi-a.l)/span*gh,col=a.c>=a.o?'#2ddd91':'#ff5264';x.strokeStyle=col;x.beginPath();x.moveTo(px,yh);x.lineTo(px,yl);x.stroke();x.fillStyle=col;x.fillRect(px-bw/2,Math.min(yo,yc),bw,Math.max(2,Math.abs(yc-yo)))});
-  let closes=arr.map(a=>a.c);function ser(p){let out=[],e=closes[0],k=2/(p+1);for(const v of closes){e=v*k+e*(1-k);out.push(e)}return out}
-  for(const [s,col] of [[ser(9),'#4f7cff'],[ser(21),'#bd6dff']]){x.beginPath();s.forEach((v,i)=>{let px=L+i*cw+cw/2,py=Top+(hi-v)/span*gh;i?x.lineTo(px,py):x.moveTo(px,py)});x.strokeStyle=col;x.lineWidth=2;x.stroke()}
-  const I=tInd();$('tE9').textContent=I.e9.toFixed(1);$('tE21').textContent=I.e21.toFixed(1);$('tRsi').textContent=I.r.toFixed(1);$('tVol').textContent=I.vr.toFixed(2)+'x';$('tPrice').textContent=T.price.toFixed(1)
-}
-function tRenderPos(){
-  if(!T.pos){$('tPosition').innerHTML='<div class="muted" style="text-align:center">Немає відкритої позиції</div>';return}
-  const p=T.pos;
-  $('tPosition').innerHTML=`<div class="r"><span>Side</span><b>${p.side}</b></div><div class="r"><span>Entry</span><b>${p.entry.toFixed(1)}</b></div><div class="r"><span>Current</span><b>${T.price.toFixed(1)}</b></div><div class="r"><span>Stake</span><b>${fmt(p.stake)}</b></div><div class="r"><span>P/L</span><b class="${p.pnlPct>=0?'pos':'neg'}">${p.pnlPct>=0?'+':''}${p.pnlPct.toFixed(3)}%</b></div>`
-}
-function tLog(type,text,pnl=0){T.events.unshift({type,text,pnl,time:new Date().toLocaleTimeString('uk-UA',{hour:'2-digit',minute:'2-digit',second:'2-digit'})});$('tradeLog').innerHTML=T.events.slice(0,25).map(e=>`<div class="lr"><span class="muted">${e.time}</span><b>${e.type}</b><span>${e.text}</span><span class="${e.pnl>=0?'pos':'neg'}">${e.pnl>=0?'+':''}${e.pnl.toFixed(2)}</span></div>`).join('')}
-function tOpen(side,auto=false){
-  if(T.pos)return;let stake=Math.max(1,+$('tStake').value||250);if(!canBet(stake))return;
-  T.pos={side,entry:T.price,stake,pnlPct:0,auto};T.entryTick=T.ticks;tLog('EXEC',side+' @ '+T.price.toFixed(1),0);tRenderPos()
-}
-function tClose(auto=false){
-  if(!T.pos)return;let p=T.pos,gross=(T.price-p.entry)/p.entry*100*(p.side==='LONG'?1:-1),net=gross-.12,pnl=p.stake*net/100;
-  record('Trading',`${p.side} ${net.toFixed(3)}% net`,pnl);tLog('CLOSE',`${p.side} gross ${gross.toFixed(3)}% • net ${net.toFixed(3)}%`,pnl);T.pos=null;tRenderPos()
-}
-function tStep(){
-  let last=T.candles.at(-1),o=last.c,c=o+Math.sin(T.ticks/7)*10+tRandn()*48,h=Math.max(o,c)+Math.random()*38,l=Math.min(o,c)-Math.random()*38,v=30+Math.random()*95;
-  T.candles.push({o,h,l,c,v});if(T.candles.length>100)T.candles.shift();T.price=c;T.ticks++;
-  if(T.pos){T.pos.pnlPct=(T.price-T.pos.entry)/T.pos.entry*100*(T.pos.side==='LONG'?1:-1);tRenderPos()}
-  const g=tSignal();if(T.bot&&!T.pos&&g.pass)tOpen(g.sig==='BUY'?'LONG':'SHORT',true);
-  if(T.bot&&T.pos&&T.ticks-T.entryTick>=10)tClose(true);
-  tDraw()
-}
-$('tLong').onclick=()=>tOpen('LONG');$('tShort').onclick=()=>tOpen('SHORT');$('tClose').onclick=()=>tClose();
-$('tradingBot').onclick=()=>{
-  T.bot=!T.bot;
-  $('tradingBot').textContent=T.bot?'■ Зупинити бота':'🤖 Запустити бота';
-  $('tradingBot').className='btn '+(T.bot?'redbtn':'purple');
-  $('tradingBotStatus').textContent=T.bot?'Бот працює':'Бот зупинений';
-  $('tradingBotStatus').className='bot-status '+(T.bot?'bot-running':'');
-  tLog('BOT',T.bot?'STARTED':'STOPPED',0)
-};
-tSeed();tSignal();setTimeout(tDraw,50);setInterval(tStep,900);
-
-
-
-/* ===== MYSHKA_TRAINER_V1 ===== */
-const TRAINER_STORE='myshka_trade_trainer_v1';
-const TRAINER_TOTAL=10;
-let TR={mode:'market',items:[],i:0,correct:0,answered:0,streak:0,best:0,locked:false};
-
-const TRAINER_MARKET_TEMPLATES=[
-  {pair:'BTC/USDT:USDT',ema:'Fast > Slow',structure:'UP',rsi:61,vol:.91,move:.31,costs:.19,why:'Є повний LONG-набір і чистий EDGE після витрат достатній.'},
-  {pair:'ETH/USDT:USDT',ema:'Fast < Slow',structure:'DOWN',rsi:39,vol:.84,move:.29,costs:.18,why:'Є повний SHORT-набір і EDGE перекриває витрати та запас.'},
-  {pair:'SOL/USDT:USDT',ema:'Fast > Slow',structure:'UP',rsi:75,vol:1.08,move:.38,costs:.19,why:'RSI вище LONG-зони 52–72, тому технічний вхід відхиляється.'},
-  {pair:'BTC/USDT:USDT',ema:'Fast < Slow',structure:'DOWN',rsi:42,vol:.43,move:.41,costs:.18,why:'Volume ratio нижче 0.60. Навіть красивий напрям не проходить volume gate.'},
-  {pair:'ETH/USDT:USDT',ema:'Fast > Slow',structure:'DOWN',rsi:58,vol:.95,move:.35,costs:.19,why:'EMA натякає LONG, але Structure = DOWN. Структурний фільтр не дозволяє LONG.'},
-  {pair:'SOL/USDT:USDT',ema:'Fast < Slow',structure:'DOWN',rsi:35,vol:.72,move:.20,costs:.19,why:'SHORT технічно є, але EDGE лише 0.01% — менше safety margin 0.03%, тому WAIT.'},
-  {pair:'BTC/USDT:USDT',ema:'Fast > Slow',structure:'UP',rsi:53,vol:.63,move:.25,costs:.18,why:'Умови LONG проходять, а чистий EDGE 0.07% перевищує safety margin.'},
-  {pair:'ETH/USDT:USDT',ema:'Fast < Slow',structure:'DOWN',rsi:47,vol:.61,move:.24,costs:.18,why:'SHORT проходить по RSI, structure і volume; EDGE 0.06% достатній.'},
-  {pair:'SOL/USDT:USDT',ema:'Fast > Slow',structure:'UP',rsi:50,vol:.88,move:.33,costs:.18,why:'RSI 50 нижче LONG-зони. Правильна дисципліна — WAIT.'},
-  {pair:'BTC/USDT:USDT',ema:'Fast < Slow',structure:'UP',rsi:40,vol:.92,move:.36,costs:.18,why:'Для SHORT структура повинна бути DOWN. Тут вона UP, тому WAIT.'},
-  {pair:'ETH/USDT:USDT',ema:'Fast > Slow',structure:'UP',rsi:68,vol:1.24,move:.22,costs:.18,why:'Технічний LONG є, але EDGE 0.04% все ще проходить мінімальний запас 0.03%.'},
-  {pair:'SOL/USDT:USDT',ema:'Fast < Slow',structure:'DOWN',rsi:27,vol:1.02,move:.32,costs:.19,why:'RSI 27 нижче SHORT-зони 28–48, тому сигнал відхиляється.'},
-  {pair:'BTC/USDT:USDT',ema:'Fast > Slow',structure:'UP',rsi:64,vol:.59,move:.44,costs:.18,why:'Volume ratio 0.59 — буквально нижче порога 0.60. Це WAIT.'},
-  {pair:'ETH/USDT:USDT',ema:'Fast < Slow',structure:'DOWN',rsi:31,vol:.77,move:.34,costs:.20,why:'Повний SHORT-набір, а чистий EDGE 0.14% проходить safety margin.'}
-];
-
-const TRAINER_THEORY=[
-  {q:'Який RSI-діапазон використовується для LONG у нашій базовій логіці?',a:['52–72','28–48','40–60','70–90'],ok:0,why:'Для LONG ми допускаємо RSI від 52 до 72 включно.'},
-  {q:'Який RSI-діапазон використовується для SHORT?',a:['52–72','28–48','10–30','45–65'],ok:1,why:'SHORT-зона у базовій логіці — RSI 28–48.'},
-  {q:'Який мінімальний Volume Ratio має пройти технічний gate?',a:['0.30','0.50','0.60','1.50'],ok:2,why:'Порогове значення Volume Ratio — 0.60.'},
-  {q:'Що повинно бути зі структурою ринку для LONG?',a:['DOWN','UP','Будь-яка','Тільки FLAT'],ok:1,why:'LONG дозволяється тільки коли Structure = UP.'},
-  {q:'Що робимо, якщо напрям правильний, але EDGE не перекриває costs + safety margin?',a:['Все одно LONG/SHORT','WAIT','Збільшуємо позицію','Вимикаємо Guard'],ok:1,why:'Недостатній чистий EDGE означає WAIT, навіть якщо напрям потім виявиться правильним.'},
-  {q:'Для чого Astra Guard у нашій схемі?',a:['Малює свічки','Дає жорсткий risk-control/veto','Шукає меми','Збільшує leverage'],ok:1,why:'Guard — останній жорсткий шар безпеки: veto, lock, dedupe та контроль режиму.'},
-  {q:'Скільки 1m свічок ми використовуємо у базовому технічному аналізі?',a:['20','40','80','500'],ok:2,why:'У поточній базовій схемі candleLimit = 80.'},
-  {q:'Який primary horizon ми вибрали для learner у поточній версії?',a:['2 хв','5 хв','10 хв','30 хв'],ok:3,why:'Primary horizon learner — 30 хвилин, а коротші горизонти можуть лишатися додатковими review.'},
-  {q:'Чому правильний напрям ціни ще не гарантує прибуткову угоду?',a:['Через fees, spread і slippage','Бо EMA завжди помиляється','Бо RSI не працює','Бо LONG заборонений'],ok:0,why:'Рух може бути меншим за сукупні витрати, тому gross плюс не обов’язково дає net плюс.'},
-  {q:'Що означає WAIT у Trade Мишці?',a:['Помилка системи','Немає достатньої переваги для входу','Автоматичний SHORT','Закриття Docker'],ok:1,why:'WAIT — нормальне рішення: система не бачить достатньо якісної та економічно виправданої угоди.'}
-];
-
-function trainerLoadBest(){
-  try{const x=JSON.parse(localStorage.getItem(TRAINER_STORE)||'{}');TR.best=Number(x.best)||0}catch(e){TR.best=0}
-}
-function trainerSaveBest(){
-  try{localStorage.setItem(TRAINER_STORE,JSON.stringify({best:TR.best,updatedAt:new Date().toISOString()}))}catch(e){}
-}
-function trainerShuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}return a}
-function trainerMarketAnswer(s){
-  const longOK=s.ema==='Fast > Slow'&&s.structure==='UP'&&s.rsi>=52&&s.rsi<=72&&s.vol>=.60;
-  const shortOK=s.ema==='Fast < Slow'&&s.structure==='DOWN'&&s.rsi>=28&&s.rsi<=48&&s.vol>=.60;
-  const edge=s.move-s.costs;
-  if(edge<.03)return 'WAIT';
-  if(longOK)return 'LONG';
-  if(shortOK)return 'SHORT';
-  return 'WAIT';
-}
-function trainerBuild(){
-  TR.mode=$('trainerMode')?$('trainerMode').value:'market';
-  TR.items=trainerShuffle(TR.mode==='market'?TRAINER_MARKET_TEMPLATES:TRAINER_THEORY).slice(0,TRAINER_TOTAL);
-  TR.i=0;TR.correct=0;TR.answered=0;TR.streak=0;TR.locked=false;
-  if($('trainerFeedback')){$('trainerFeedback').className='trainer-feedback';$('trainerFeedback').innerHTML=''}
-  if($('trainerNext'))$('trainerNext').disabled=true;
-  trainerRender();
-}
-function trainerRenderStats(){
-  $('trainerScore').textContent=TR.correct+' / '+TR.answered;
-  $('trainerStreak').textContent=TR.streak+' 🔥';
-  $('trainerBest').textContent=TR.best+'%';
-  $('trainerCount').textContent=Math.min(TR.i+1,TRAINER_TOTAL)+' / '+TRAINER_TOTAL;
-  $('trainerProgress').style.width=(TR.answered/TRAINER_TOTAL*100)+'%';
-}
-function trainerRender(){
-  trainerRenderStats();
-  TR.locked=false;
-  $('trainerNext').disabled=true;
-  $('trainerFeedback').className='trainer-feedback';
-  $('trainerFeedback').innerHTML='';
-  $('trainerHint').textContent='Обери рішення. Відповідь не впливає на спільний баланс.';
-  const isMarket=TR.mode==='market';
-  $('trainerMarketBox').hidden=!isMarket;$('trainerTheoryBox').hidden=isMarket;
-  if(TR.i>=TR.items.length){trainerFinish();return}
-  const item=TR.items[TR.i];
-  if(isMarket){
-    $('trainerPair').textContent=item.pair;
-    $('trainerCaseLabel').textContent='Ситуація #'+(TR.i+1)+' • 1m • horizon 30m';
-    $('trainerEma').textContent=item.ema;
-    $('trainerStructure').textContent=item.structure;
-    $('trainerRsi').textContent=item.rsi.toFixed(1);
-    $('trainerVol').textContent=item.vol.toFixed(2)+'x';
-    $('trainerMove').textContent=item.move.toFixed(2)+'%';
-    $('trainerCosts').textContent=item.costs.toFixed(2)+'%';
-    const edge=item.move-item.costs;
-    $('trainerEdgeInfo').textContent='Modeled EDGE: '+edge.toFixed(2)+'% • safety margin: 0.03%. Обери, що робити зараз.';
-    document.querySelectorAll('[data-trainer-side]').forEach(function(b){b.disabled=false});
-  }else{
-    $('trainerTheoryLabel').textContent='Питання #'+(TR.i+1);
-    $('trainerQuestion').textContent=item.q;
-    const box=$('trainerAnswers');box.innerHTML='';
-    item.a.forEach(function(label,idx){
-      const b=document.createElement('button');b.className='trainer-answer';b.textContent=label;b.dataset.idx=idx;
-      b.onclick=function(){trainerAnswerTheory(idx)};box.appendChild(b);
-    });
-  }
-}
-function trainerFeedback(ok,title,explain,user,correct){
-  const box=$('trainerFeedback');box.className='trainer-feedback show '+(ok?'good':'bad');
-  box.innerHTML='<h4>'+(ok?'✅ ':'❌ ')+title+'</h4><p>'+explain+'</p>'+
-    '<div class="trainer-team"><div><small>Твій вибір</small><b>'+user+'</b></div><div><small>Trade Мишка</small><b>'+correct+'</b></div><div><small>JEV / Guard</small><b>'+(correct==='WAIT'?'DROP / NO TRADE':'PASS / ALLOW')+'</b></div></div>';
-}
-function trainerRegister(ok){
-  TR.answered++;if(ok){TR.correct++;TR.streak++}else TR.streak=0;
-  trainerRenderStats();TR.locked=true;$('trainerNext').disabled=false;
-  $('trainerHint').textContent=ok?'Добре. Дивись пояснення і йди далі.':'Розбери причину — саме для цього тренажер.';
-}
-function trainerAnswerMarket(side){
-  if(TR.locked)return;
-  const item=TR.items[TR.i],correct=trainerMarketAnswer(item),ok=side===correct,edge=item.move-item.costs;
-  document.querySelectorAll('[data-trainer-side]').forEach(function(b){b.disabled=true});
-  trainerRegister(ok);
-  trainerFeedback(ok,ok?'Рішення збігається з системою':'Мишка вибрала б інакше',
-    item.why+' Чистий EDGE: '+edge.toFixed(2)+'%.',side,correct);
-}
-function trainerAnswerTheory(idx){
-  if(TR.locked)return;
-  const item=TR.items[TR.i],ok=idx===item.ok;
-  document.querySelectorAll('.trainer-answer').forEach(function(b){b.disabled=true});
-  trainerRegister(ok);
-  const user=item.a[idx],correct=item.a[item.ok];
-  const box=$('trainerFeedback');box.className='trainer-feedback show '+(ok?'good':'bad');
-  box.innerHTML='<h4>'+(ok?'✅ Правильно':'❌ Треба інакше')+'</h4><p>'+item.why+'</p>'+
-    '<div class="trainer-team"><div><small>Твоя відповідь</small><b>'+user+'</b></div><div><small>Правильно</small><b>'+correct+'</b></div><div><small>Режим</small><b>THEORY</b></div></div>';
-}
-function trainerNext(){
-  if(!TR.locked)return;TR.i++;trainerRender();
-}
-function trainerFinish(){
-  const pct=Math.round(TR.correct/TRAINER_TOTAL*100);
-  if(pct>TR.best){TR.best=pct;trainerSaveBest()}
-  trainerRenderStats();
-  $('trainerMarketBox').hidden=true;$('trainerTheoryBox').hidden=true;
-  $('trainerFeedback').className='trainer-feedback show '+(pct>=70?'good':'bad');
-  let rank=pct>=90?'🦁 Лев-аналітик':pct>=70?'🧠 JEV-ready':pct>=50?'🐭 Учень Мишки':'📚 Треба ще один раунд';
-  $('trainerFeedback').innerHTML='<div class="trainer-summary"><small>СЕРІЮ ЗАВЕРШЕНО</small><b>'+pct+'%</b><h3>'+rank+'</h3><p>'+TR.correct+' правильних із '+TRAINER_TOTAL+'. Найкращий результат: '+TR.best+'%.</p></div>';
-  $('trainerHint').textContent='Натисни «Нові 10 тестів», щоб пройти ще одну серію.';
-  $('trainerNext').disabled=true;
-  $('trainerCount').textContent=TRAINER_TOTAL+' / '+TRAINER_TOTAL;$('trainerProgress').style.width='100%';
-}
-document.querySelectorAll('[data-trainer-side]').forEach(function(b){b.addEventListener('click',function(){trainerAnswerMarket(b.dataset.trainerSide)})});
-if($('trainerNext'))$('trainerNext').onclick=trainerNext;
-if($('trainerNewSet'))$('trainerNewSet').onclick=trainerBuild;
-if($('trainerMode'))$('trainerMode').onchange=trainerBuild;
-trainerLoadBest();trainerBuild();
-
-
-/* ===== AUTOMATION NOTEBOOK ===== */
-const AUTO_STORE='myshka_automation_notebook_v1';
-
-function autoLoad(){
-  let data={};
-  try{data=JSON.parse(localStorage.getItem(AUTO_STORE)||'{}')}catch(e){data={}}
-  document.querySelectorAll('[data-status]').forEach(el=>{
-    const k=el.dataset.status;
-    if(data.status&&data.status[k])el.value=data.status[k];
-  });
-  document.querySelectorAll('[data-note]').forEach(el=>{
-    const k=el.dataset.note;
-    if(data.notes&&typeof data.notes[k]==='string')el.value=data.notes[k];
-  });
-  if(typeof data.globalNote==='string')$('autoGlobalNote').value=data.globalNote;
-  autoFilter();
-}
-
-function autoCollect(){
-  const status={},notes={};
-  document.querySelectorAll('[data-status]').forEach(el=>status[el.dataset.status]=el.value);
-  document.querySelectorAll('[data-note]').forEach(el=>notes[el.dataset.note]=el.value);
-  return {version:1,updatedAt:new Date().toISOString(),status,notes,globalNote:$('autoGlobalNote').value};
-}
-
-function autoSave(){
-  localStorage.setItem(AUTO_STORE,JSON.stringify(autoCollect()));
-}
-
-function autoFilter(){
-  const q=($('autoSearch')?.value||'').trim().toLowerCase();
-  const sf=$('autoStatusFilter')?.value||'all';
-  let shown=0;
-  document.querySelectorAll('#autoCards .auto-card').forEach(card=>{
-    const text=(card.innerText+' '+(card.dataset.search||'')).toLowerCase();
-    const st=card.querySelector('[data-status]')?.value||'idea';
-    const visible=(!q||text.includes(q))&&(sf==='all'||st===sf);
-    card.style.display=visible?'block':'none';
-    if(visible)shown++;
-  });
-  if($('autoCounter'))$('autoCounter').textContent=shown+' напрямків показано';
-  if($('autoEmpty'))$('autoEmpty').style.display=shown?'none':'block';
-}
-
-if($('autoSearch'))$('autoSearch').addEventListener('input',autoFilter);
-if($('autoStatusFilter'))$('autoStatusFilter').addEventListener('change',autoFilter);
-
-document.querySelectorAll('[data-status]').forEach(el=>el.addEventListener('change',()=>{autoSave();autoFilter()}));
-document.querySelectorAll('[data-save]').forEach(btn=>btn.addEventListener('click',()=>{
-  autoSave();
-  const old=btn.textContent;btn.textContent='✓ Збережено';setTimeout(()=>btn.textContent=old,900);
-}));
-if($('autoGlobalSave'))$('autoGlobalSave').onclick=()=>{
-  autoSave();const b=$('autoGlobalSave'),old=b.textContent;b.textContent='✓ Збережено';setTimeout(()=>b.textContent=old,900);
-};
-
-function downloadAutomationExample(){
-  const example={
-    name:'Приклад автоматизації MYSHKA',
-    description:'Демонстраційний сценарій: отримати дані → перевірити → AI-аналіз → дія → повідомлення',
-    nodes:[
-      {id:'trigger',type:'webhook',name:'Тригер',config:{method:'POST'}},
-      {id:'validate',type:'logic',name:'Перевірка даних',config:{required:['message']}},
-      {id:'ai',type:'ai',name:'AI аналіз',config:{task:'Проаналізувати вхідні дані'}},
-      {id:'action',type:'action',name:'Виконати дію',config:{mode:'demo'}},
-      {id:'notify',type:'telegram',name:'Повідомлення',config:{text:'Автоматизацію виконано'}}
-    ],
-    connections:[['trigger','validate'],['validate','ai'],['ai','action'],['action','notify']]
-  };
-  showAutomationExplanation(example,'pryklad-avtomatyzatsii.json',true);
-  const json=JSON.stringify(example,null,2);
-  const blob=new Blob([json],{type:'application/json'});
-  const url=window.URL.createObjectURL(blob);
-  const link=document.createElement('a');
-  link.href=url;
-  link.download='pryklad-avtomatyzatsii.json';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  window.URL.revokeObjectURL(url);
-}
-
-function automationTypeLabel(type){
-  const map={webhook:'Webhook / тригер',trigger:'Тригер',logic:'Логіка',ai:'AI',action:'Дія',telegram:'Telegram',httpRequest:'HTTP/API',http:'HTTP/API',code:'Код',function:'Код',schedule:'Розклад',manualTrigger:'Ручний запуск'};
-  return map[type]||type||'Невідомий тип';
-}
-
-function showAutomationExplanation(data,fileName,isExample=false){
-  const box=$('autoAnalysis'); if(!box) return;
-  const nodes=Array.isArray(data?.nodes)?data.nodes:[];
-  let connections=[];
-  if(Array.isArray(data?.connections)) connections=data.connections;
-  else if(data?.connections && typeof data.connections==='object') connections=Object.keys(data.connections);
-  const names=nodes.slice(0,8).map((n,i)=>n.name||n.label||n.id||('Крок '+(i+1)));
-  const types=[...new Set(nodes.map(n=>automationTypeLabel(n.type)).filter(Boolean))].slice(0,7);
-  const issues=[];
-  if(!nodes.length) issues.push('Не знайдено масиву nodes — це може бути інший формат JSON або неповний експорт.');
-  if(nodes.length && !connections.length) issues.push('Не знайдено зв’язків між вузлами. Перевір connections.');
-  const raw=JSON.stringify(data);
-  if(/api[_-]?key|token|password|secret/i.test(raw)) issues.push('У JSON є поля, схожі на ключі/токени/паролі. Перед передачею AI краще прибрати секретні значення.');
-  if(!issues.length) issues.push('На базовому рівні структура читається. Глибокі логічні помилки краще перевірити через AI-аналіз.');
-  box.classList.add('show');
-  box.innerHTML=`<h3>${isExample?'📘 Пояснення прикладу':'🤖 Розбір автоматизації'}</h3>
-    <p><b>Файл:</b> ${escapeHtml(fileName||'automation.json')}</p>
-    <p>${isExample?'Це демонстраційний workflow: тригер отримує подію, дані перевіряються, AI їх аналізує, виконується дія і надсилається повідомлення.':'JSON успішно прочитано. Нижче — коротке пояснення структури перед глибоким AI-аналізом.'}</p>
-    <div class="auto-analysis-grid"><div class="auto-analysis-stat"><small>Вузлів</small><b>${nodes.length}</b></div><div class="auto-analysis-stat"><small>Зв’язків / груп</small><b>${connections.length}</b></div><div class="auto-analysis-stat"><small>Типів</small><b>${types.length}</b></div></div>
-    ${names.length?`<p><b>Як працює:</b> ${names.map(escapeHtml).join(' → ')}</p>`:''}
-    ${types.length?`<p><b>Що використовується:</b> ${types.map(escapeHtml).join(', ')}</p>`:''}
-    <p><b>Що перевірити:</b></p><ol>${issues.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ol>
-    ${isExample?'':`<div class="auto-analysis-actions"><button class="auto-btn primary" id="autoDeepAI">🧠 Відкрити повний AI-аналіз</button></div>`}`;
-  if(!isExample){
-    const btn=$('autoDeepAI'); if(btn) btn.onclick=()=>openAutomationAI(data);
-  }
-  box.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
-
-function openAutomationAI(data){
-  const raw=JSON.stringify(data,null,2);
-  const prompt='Проаналізуй цю автоматизацію. Спочатку простою українською поясни, що вона робить і як проходить по кроках. Потім знайди помилки у вузлах, зв’язках, умовах, змінних, API, обробці помилок і безпеці. Для кожної проблеми напиши: де проблема, чому це проблема і як конкретно виправити. Наприкінці дай список покращень. Не показуй секретні ключі, якщо вони є.\n\nJSON:\n'+raw;
-  const go=()=>window.open('https://chatgpt.com/?q='+encodeURIComponent(prompt),'_blank');
-  if(navigator.clipboard?.writeText) navigator.clipboard.writeText(prompt).then(go).catch(go); else go();
-}
-
-function showAutomationTips(){
-  const box=document.getElementById('autoAnalysis');
-  if(!box) return;
-  box.style.display='block';
-  box.innerHTML=`
-    <div style="padding:16px;border-radius:16px;background:linear-gradient(180deg,#0e1c30,#091421);border:1px solid #31517f;margin-top:12px">
-      <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
-        <div><div style="font-size:20px;font-weight:900">💡 Поради для автоматизації</div><div style="color:#8fa3c1;font-size:11px;margin-top:4px">Короткий чекліст перед запуском workflow</div></div>
-        <button class="auto-btn" type="button" onclick="document.getElementById('autoAnalysis').style.display='none'">✕ Закрити</button>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:9px;margin-top:12px">
-        <div class="auto-step"><span>1️⃣</span><b>Почни з тригера</b><small>Чітко визнач, що запускає сценарій: webhook, час, новий файл, повідомлення або інша подія.</small></div>
-        <div class="auto-step"><span>2️⃣</span><b>Перевіряй дані</b><small>Перед важливою дією перевіряй обов’язкові поля, формат даних і порожні значення.</small></div>
-        <div class="auto-step"><span>3️⃣</span><b>Обробляй помилки</b><small>Додай retry, альтернативну гілку та повідомлення, якщо API або окремий вузол не відповів.</small></div>
-        <div class="auto-step"><span>4️⃣</span><b>Не зберігай ключі в коді</b><small>API-ключі й токени тримай у credentials або змінних середовища, а не всередині JSON.</small></div>
-        <div class="auto-step"><span>5️⃣</span><b>Додай журнал</b><small>Записуй статус, час, результат і текст помилки — так набагато легше знайти проблему.</small></div>
-        <div class="auto-step"><span>6️⃣</span><b>Спочатку тест</b><small>Небезпечні або платні дії спочатку запускай у тестовому режимі на невеликій кількості даних.</small></div>
-      </div>
-      <div class="auto-example" style="margin-top:10px"><b>Хороша схема:</b> Тригер → перевірка даних → основна логіка / AI → перевірка результату → дія → лог → повідомлення про успіх або помилку.</div>
-    </div>`;
-  box.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function analyzeAutomationFile(input){
-  const file=input.files && input.files[0]; if(!file) return;
-  const reader=new FileReader();
-  reader.onload=function(){
-    try{ const data=JSON.parse(String(reader.result||'')); showAutomationExplanation(data,file.name,false); }
-    catch(err){ alert('Файл не є коректним JSON. Вибери JSON-експорт автоматизації.'); }
-    input.value='';
-  };
-  reader.onerror=function(){alert('Не вдалося прочитати файл.');input.value='';};
-  reader.readAsText(file);
-}
-
-setTimeout(autoLoad,60);
-
-renderStats();
+function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();for(const p of CFG.pairs){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected()}
+document.querySelectorAll('[data-pair]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-pair]').forEach(x=>x.classList.remove('active'));b.classList.add('active');APP.selected=b.dataset.pair;renderSelected();renderPosition()});
+$('scanBtn').onclick=scanAll;$('killBtn').onclick=()=>setKill(!APP.kill);
+$('resetBtn').onclick=()=>{if(!confirm('Скинути всі paper-угоди, learner і equity?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
+window.addEventListener('resize',()=>{renderSelected();renderStats()});
+loadState();setKill(APP.kill);renderStats();renderLog();renderPosition();scanAll();
+setInterval(()=>{if($('autoMode').value==='on')scanAll();else settlePositions();renderPosition()},CFG.scanMs);
+setInterval(renderPosition,1000);
 </script>
 </body>
 </html>
