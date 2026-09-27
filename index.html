@@ -144,7 +144,7 @@ button{cursor:pointer}
       <div class="bridge-node warn" id="iN8n"><small>n8n</small><b>CHECK…</b></div>
       <div class="bridge-node warn" id="iTelegram"><small>Telegram</small><b>CHECK…</b></div>
     </div>
-    <div class="sub" id="bridgeMsg" style="margin-top:8px">Якщо bridge недоступний, сайт лишається на LIVE Bybit + локальній PAPER логіці.</div>
+    <div class="sub" id="bridgeMsg" style="margin-top:8px">На телефоні localhost НЕ працює. Запускай START_PHONE.bat — він сам дасть HTTPS-посилання і підключить цей сайт до ASTRA.</div>
   </section>
 
   <section class="phone-control glass">
@@ -282,6 +282,21 @@ const $=id=>document.getElementById(id);
 // MYSHKA_BRIDGE_UI_V1
 let APP={selected:CFG.pairs[0],markets:{},decisions:{},kill:false,cooldowns:{},positions:{},trades:[],equity:1000,startEquity:1000,logs:[],scanning:false,
   bridgeUrl:'http://localhost:8088',bridgeToken:'',backendReady:false,backendStats:null};
+
+// MYSHKA_PHONE_FRAGMENT_V1
+function applyPhoneLaunchFragment(){
+  try{
+    if(!location.hash||location.hash.length<2)return;
+    const q=new URLSearchParams(location.hash.slice(1));
+    const bridge=q.get('bridge'),token=q.get('token');
+    if(bridge)APP.bridgeUrl=bridge;
+    if(token)APP.bridgeToken=token;
+    if(bridge||token){
+      saveState();
+      history.replaceState(null,'',location.pathname+location.search);
+    }
+  }catch(e){}
+}
 
 function loadState(){
   try{
@@ -649,7 +664,7 @@ $('phoneEngineReset').onclick=async()=>{if(!APP.backendReady||!confirm('Скин
 $('autoMode').onchange=()=>{if(APP.backendReady)setServerControl('auto_scan',$('autoMode').value==='on').then(refreshPhoneControl)};
 $('resetBtn').onclick=async()=>{if(APP.backendReady){if(!confirm('Скинути paper engine? Learner історія залишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl();return}if(!confirm('Скинути локальні paper-угоди?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
 window.addEventListener('resize',()=>{renderSelected();renderStats()});
-loadState();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(!APP.backendReady)scanAll();else refreshPhoneControl()});
+loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(!APP.backendReady)scanAll();else refreshPhoneControl()});
 setInterval(()=>{if(APP.backendReady)refreshPhoneControl();else if($('autoMode').value==='on')scanAll();else{settlePositions();renderPosition()}},CFG.scanMs);
 setInterval(renderPosition,1000);
 </script>
