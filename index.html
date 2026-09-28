@@ -37,8 +37,13 @@ button{cursor:pointer}
 .btn.red{background:linear-gradient(180deg,#ff6170,#bd263e);border:0}
 .btn.gold{background:linear-gradient(180deg,#ffd66e,#efa52b);color:#17131a;border:0}
 .controls{display:grid;grid-template-columns:1fr auto auto auto;gap:8px;margin:12px 0}
-.pairs{display:flex;gap:7px;flex-wrap:wrap}
-.pair-btn{padding:10px 12px;border-radius:11px;border:1px solid #29466f;background:#0a1728;color:#b7c9e4;font-weight:850}
+.pairs{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.pair-btn{min-width:0;padding:10px 9px;border-radius:11px;border:1px solid #29466f;background:#0a1728;color:#b7c9e4;font-weight:850;display:flex;align-items:center;justify-content:space-between;gap:7px}
+.pair-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pair-btn small{font-size:8px;padding:3px 5px;border-radius:999px;background:#13253e;color:#91a8c8}
+.pair-btn.enter{border-color:#21885f;background:#09251a}.pair-btn.enter small{background:#0d3b29;color:#55e9a7}
+.pair-btn.drop{border-color:#71313d;background:#210d13}.pair-btn.drop small{background:#40141d;color:#ff8290}
+.pair-btn.wait small{background:#332a0c;color:#ffd76e}
 .pair-btn.active{border-color:#5f81ff;background:#17376d;color:#fff;box-shadow:0 0 20px rgba(79,124,255,.18)}
 .select{background:#0b1829;border:1px solid #29466f;color:#fff;border-radius:11px;padding:9px 10px}
 .main{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(310px,.58fr);gap:12px}
@@ -96,9 +101,10 @@ button{cursor:pointer}
 .note{margin-top:12px;padding:12px;border-radius:14px;background:#091522;border:1px solid #20395d;color:#8da2c1;font-size:10px;line-height:1.55}
 .note b{color:#dce8fb}
 @media(max-width:1100px){.main{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,1fr)}.stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:1050px){.pairs{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:680px){
   .app{padding:8px}.header{position:relative;top:auto;flex-wrap:wrap}.head-right{width:100%}
-  .controls{grid-template-columns:1fr 1fr}.pairs{grid-column:1/-1}.chart{height:340px}
+  .controls{grid-template-columns:1fr 1fr}.pairs{grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr))}.chart{height:340px}
   .metrics{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}
   .logrow{grid-template-columns:58px 62px 82px 1fr}.logrow span:last-child{display:none}
   .price{font-size:23px}.signal strong{font-size:38px}
@@ -120,11 +126,7 @@ button{cursor:pointer}
   </header>
 
   <div class="controls">
-    <div class="pairs">
-      <button class="pair-btn active" data-pair="BTC/USDT:USDT">BTC/USDT</button>
-      <button class="pair-btn" data-pair="ETH/USDT:USDT">ETH/USDT</button>
-      <button class="pair-btn" data-pair="SOL/USDT:USDT">SOL/USDT</button>
-    </div>
+    <div class="pairs" id="pairButtons"></div>
     <button class="btn primary" id="scanBtn">↻ Scan зараз</button>
     <select class="select" id="autoMode"><option value="on">Auto scan: ON</option><option value="off">Auto scan: OFF</option></select>
     <button class="btn" id="resetBtn">Скинути paper-статистику</button>
@@ -280,7 +282,7 @@ const CFG={
 const STORE='myshka_astra_live_lab_v1';
 const $=id=>document.getElementById(id);
 // MYSHKA_BRIDGE_UI_V1
-let APP={selected:CFG.pairs[0],markets:{},decisions:{},kill:false,cooldowns:{},positions:{},trades:[],equity:1000,startEquity:1000,logs:[],scanning:false,
+let APP={selected:CFG.pairs[0],markets:{},decisions:{},universePairs:CFG.pairs.slice(),kill:false,cooldowns:{},positions:{},trades:[],equity:1000,startEquity:1000,logs:[],scanning:false,
   bridgeUrl:'http://localhost:8088',bridgeToken:'',backendReady:false,backendStats:null};
 
 // MYSHKA_PHONE_FRAGMENT_V1
@@ -479,10 +481,39 @@ function loadServerTrades(st){
   APP.trades=st.trades.slice().reverse().map(t=>({pair:t.pair,side:t.side,regime:t.regime,horizonMs:t.horizon_sec*1000,grossPct:t.gross_return_pct,netPct:t.net_return_pct,directionHit:!!t.direction_hit,pnlAmount:0,expectedEdge:t.expected_edge_pct,openedAt:(t.entered_at||0)*1000,closedAt:(t.entered_at||0)*1000+t.horizon_sec*1000}));
   renderStats();
 }
+function renderPairButtons(){
+  const host=$('pairButtons');if(!host)return;
+  const pairs=(APP.universePairs&&APP.universePairs.length?APP.universePairs:Object.keys(APP.markets));
+  host.innerHTML='';
+  for(const pair of pairs){
+    const d=APP.decisions[pair],action=(d&&d.action)||'WAIT';
+    const b=document.createElement('button');
+    b.className='pair-btn '+action.toLowerCase()+(pair===APP.selected?' active':'');
+    b.dataset.pair=pair;
+    const name=pair.replace(':USDT','');
+    b.innerHTML='<span>'+name+'</span><small>'+action+'</small>';
+    b.onclick=()=>{
+      APP.selected=pair;
+      renderPairButtons();
+      renderSelected();
+      renderPosition();
+    };
+    host.appendChild(b);
+  }
+}
 function applyServerResults(results){
   let ok=0;
-  for(const r of (results||[])){const a=adaptServerResult(r);if(!a.market.candles.length)continue;APP.markets[r.pair]=a.market;APP.decisions[r.pair]=a.decision;ok++}
-  if(ok){$('marketBadge').textContent='● ASTRA PHONE';$('marketBadge').className='badge live';renderSelected()}
+  const ordered=[];
+  for(const r of (results||[])){
+    const a=adaptServerResult(r);if(!a.market.candles.length)continue;
+    APP.markets[r.pair]=a.market;APP.decisions[r.pair]=a.decision;ordered.push(r.pair);ok++;
+  }
+  if(ordered.length){
+    APP.universePairs=ordered;
+    if(!APP.universePairs.includes(APP.selected))APP.selected=APP.universePairs[0];
+    renderPairButtons();
+  }
+  if(ok){$('marketBadge').textContent='● ASTRA TOP-'+ok;$('marketBadge').className='badge live';renderSelected()}
   return ok
 }
 async function refreshPhoneControl(){
@@ -511,6 +542,11 @@ async function connectBridge(){
   try{
     const h=await bridgeFetch('/health');
     APP.backendReady=h.status==='ok';APP.training=h.training||null;
+    if(h.universe&&h.universe.last&&Array.isArray(h.universe.last.pairs)&&h.universe.last.pairs.length){
+      APP.universePairs=h.universe.last.pairs.slice();
+      if(!APP.universePairs.includes(APP.selected))APP.selected=APP.universePairs[0];
+      renderPairButtons();
+    }
     integrationNode('iAstra',h.status,h.service||'');
     const ints=await bridgeFetch('/integrations');
     const ol=ints.ollama||{},ba=ints.bybit_account||{},ft=ints.freqtrade||{},nn=ints.n8n||{},tg=ints.telegram||{};
@@ -519,9 +555,10 @@ async function connectBridge(){
     integrationNode('iFreqtrade',ft.status);
     integrationNode('iN8n',nn.status);
     integrationNode('iTelegram',tg.status);
+    const uni=(h.universe&&h.universe.dynamic)?(' • TOP-'+(h.universe.top_n||APP.universePairs.length)+' coins'):'';
     $('bridgeMsg').textContent=(APP.training&&APP.training.active)
-      ?'🧪 TRAINING '+APP.training.learner_n+'/'+APP.training.until_trades+' • TECH '+APP.training.tech_rule+' • EDGE/JEV/Guard обов’язкові • PAPER only'
-      :'✅ Серверна ASTRA активна. Strict TECH 4/4 • Phone Engine працює на ПК самостійно; телефон тільки керує і дивиться.';
+      ?'🧪 TRAINING '+APP.training.learner_n+'/'+APP.training.until_trades+' • TECH '+APP.training.tech_rule+uni+' • EDGE/JEV/Guard • PAPER only'
+      :'✅ Серверна ASTRA активна'+uni+'. Phone Engine працює на ПК самостійно; телефон тільки керує і дивиться.';
     $('marketBadge').textContent='● ASTRA BRIDGE';$('marketBadge').className='badge live';
     await refreshPhoneControl();
   }catch(e){
@@ -636,7 +673,8 @@ function renderPosition(){
 function renderStats(){
   const t=APP.trades,w=t.filter(x=>x.netPct>0).length,l=t.filter(x=>x.netPct<0).length,hit=t.filter(x=>x.directionHit).length,net=t.reduce((a,x)=>a+x.netPct,0);
   $('sWins').textContent=w;$('sLosses').textContent=l;$('sWinRate').textContent=(w+l?w/(w+l)*100:0).toFixed(1)+'%';$('sHitRate').textContent=(t.length?hit/t.length*100:0).toFixed(1)+'%';$('sNet').textContent=(net>=0?'+':'')+net.toFixed(3)+'%';$('sNet').className=net>=0?'long':'short';$('sEquity').textContent=APP.equity.toFixed(2);
-  const maxBucket=Math.max(0,...CFG.pairs.flatMap(pair=>['LONG','SHORT'].flatMap(side=>['UP','DOWN','RANGE'].map(reg=>learnerSamples(pair,side,reg).bucket.length))));
+  const learnerPairs=(APP.universePairs&&APP.universePairs.length)?APP.universePairs:CFG.pairs;
+  const maxBucket=Math.max(0,...learnerPairs.flatMap(pair=>['LONG','SHORT'].flatMap(side=>['UP','DOWN','RANGE'].map(reg=>learnerSamples(pair,side,reg).bucket.length))));
   $('learnerStatus').textContent=maxBucket>=100?'Learner: full bucket confidence':maxBucket>=30?'Learner: shrinkage active':'Learner: cold start · max bucket n='+maxBucket;
   drawStatsChart()
 }
@@ -652,8 +690,7 @@ function drawStatsChart(){
 function renderLog(){
   $('logList').innerHTML=APP.logs.slice(0,50).map(e=>'<div class="logrow"><span class="muted">'+new Date(e.ts).toLocaleTimeString('uk-UA')+'</span><b>'+e.type+'</b><span>'+e.pair.replace('/USDT:USDT','')+'</span><span>'+e.text+'</span><b class="'+((parseFloat(e.val)||0)>=0?'long':'short')+'">'+e.val+'</b></div>').join('')||'<div class="muted">Ще немає записів.</div>'
 }
-async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of CFG.pairs){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected()}}
-document.querySelectorAll('[data-pair]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-pair]').forEach(x=>x.classList.remove('active'));b.classList.add('active');APP.selected=b.dataset.pair;renderSelected();renderPosition()});
+async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of (APP.universePairs||CFG.pairs)){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected();renderPairButtons()}}
 $('scanBtn').onclick=()=>APP.backendReady?phoneScanNow():scanAll();$('killBtn').onclick=()=>setKill(!APP.kill);
 $('phoneRefresh').onclick=refreshPhoneControl;$('phoneScan').onclick=phoneScanNow;
 $('phonePause').onclick=()=>setServerControl('paused',!(APP.serverRuntime&&APP.serverRuntime.paused)).then(refreshPhoneControl);
@@ -666,7 +703,7 @@ $('phoneEngineReset').onclick=async()=>{if(!APP.backendReady||!confirm('Скин
 $('autoMode').onchange=()=>{if(APP.backendReady)setServerControl('auto_scan',$('autoMode').value==='on').then(refreshPhoneControl)};
 $('resetBtn').onclick=async()=>{if(APP.backendReady){if(!confirm('Скинути paper engine? Learner історія залишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl();return}if(!confirm('Скинути локальні paper-угоди?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
 window.addEventListener('resize',()=>{renderSelected();renderStats()});
-loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(!APP.backendReady)scanAll();else refreshPhoneControl()});
+loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;renderPairButtons();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(!APP.backendReady)scanAll();else refreshPhoneControl()});
 setInterval(()=>{if(APP.backendReady)refreshPhoneControl();else if($('autoMode').value==='on')scanAll();else{settlePositions();renderPosition()}},CFG.scanMs);
 setInterval(renderPosition,1000);
 </script>
