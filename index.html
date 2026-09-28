@@ -510,7 +510,7 @@ async function connectBridge(){
   $('bridgeConnect').textContent='… Перевірка';
   try{
     const h=await bridgeFetch('/health');
-    APP.backendReady=h.status==='ok';
+    APP.backendReady=h.status==='ok';APP.training=h.training||null;
     integrationNode('iAstra',h.status,h.service||'');
     const ints=await bridgeFetch('/integrations');
     const ol=ints.ollama||{},ba=ints.bybit_account||{},ft=ints.freqtrade||{},nn=ints.n8n||{},tg=ints.telegram||{};
@@ -519,7 +519,9 @@ async function connectBridge(){
     integrationNode('iFreqtrade',ft.status);
     integrationNode('iN8n',nn.status);
     integrationNode('iTelegram',tg.status);
-    $('bridgeMsg').textContent='✅ Серверна ASTRA активна. Phone Engine працює на ПК самостійно; телефон тільки керує і дивиться.';
+    $('bridgeMsg').textContent=(APP.training&&APP.training.active)
+      ?'🧪 TRAINING '+APP.training.learner_n+'/'+APP.training.until_trades+' • TECH '+APP.training.tech_rule+' • EDGE/JEV/Guard обов’язкові • PAPER only'
+      :'✅ Серверна ASTRA активна. Strict TECH 4/4 • Phone Engine працює на ПК самостійно; телефон тільки керує і дивиться.';
     $('marketBadge').textContent='● ASTRA BRIDGE';$('marketBadge').className='badge live';
     await refreshPhoneControl();
   }catch(e){
