@@ -61,10 +61,17 @@ if (-not $hasMarker) {
         ($indent + '    (sig.direction == "SHORT" and sig.ema_fast < sig.ema_slow and sig.structure == "DOWN" and 28.0 <= sig.rsi <= 48.0 and sig.volume_ratio >= 0.60)'),
         ($indent + ')'),
         ($indent + 'if strict_4of4 and edge is not None and edge.net_edge_pct <= 0.05:'),
+        ($indent + '    # MYSHKA_STRICT_EDGE_PAYLOAD_V2'),
+        ($indent + '    edge_payload = _clean(edge.as_dict())'),
+        ($indent + '    if not isinstance(edge_payload, dict):'),
+        ($indent + '        edge_payload = {}'),
+        ($indent + '    edge_payload["passed"] = False'),
+        ($indent + '    edge_payload["reason"] = "strict_edge_buffer"'),
+        ($indent + '    edge_payload["min_required_net_edge_pct"] = 0.05'),
         ($indent + '    training_meta["strict_edge_min_pct"] = 0.05'),
         ($indent + '    return {'),
         ($indent + '        "action": "DROP", "reason": "strict_edge_buffer", "pair": req.pair,'),
-        ($indent + '        "signal": _clean(sig.as_dict()), "edge": _clean(edge.as_dict()),'),
+        ($indent + '        "signal": _clean(sig.as_dict()), "edge": edge_payload,'),
         ($indent + '        "training": training_meta,'),
         ($indent + '    }')
     )
