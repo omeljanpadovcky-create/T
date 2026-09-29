@@ -66,9 +66,11 @@ Write-Host '[3/8] Validating downloaded Python files...'
 if($LASTEXITCODE -ne 0){ throw 'Downloaded Risk Intelligence files failed syntax check. Local ASTRA was not modified.' }
 Write-Host '[OK] Downloaded files syntax valid.' -ForegroundColor Green
 
-Write-Host '[4/8] Running isolated Risk Intelligence runtime self-test...'
-& python (Join-Path $tmp 'selftest_risk_intelligence.py')
-if($LASTEXITCODE -ne 0){ throw 'Risk Intelligence runtime self-test failed. Local ASTRA was not modified.' }
+Write-Host '[4/8] Running isolated Risk Intelligence runtime self-test against real Analytics V2 schema...'
+$selftestOutput = & python (Join-Path $tmp 'selftest_risk_intelligence.py') $app 2>&1
+$selftestExit = $LASTEXITCODE
+$selftestOutput | ForEach-Object { Write-Host $_ }
+if($selftestExit -ne 0){ throw 'Risk Intelligence runtime self-test failed. Local ASTRA was not modified.' }
 Write-Host '[OK] Runtime self-test passed.' -ForegroundColor Green
 
 Write-Host '[5/8] Installing SHADOW observer + API...'
