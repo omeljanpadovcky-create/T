@@ -6,7 +6,7 @@ Write-Host ' MYSHKA / ASTRA - RISK QUALITY CONTROL V2 ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 Write-Host ''
 
-$bundleCommit = 'a1e1a312b6ca1fc62b3b55e1dfa788adb1f3a181'
+$bundleCommit = 'edb9322b3776a8b54f30c6ca3432f6fa2052e6e2'
 $base = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit + '/astra_risk_intelligence_shadow'
 Write-Host ("Pinned bundle: " + $bundleCommit) -ForegroundColor DarkGray
 
