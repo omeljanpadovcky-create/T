@@ -1,6 +1,6 @@
 """Counterfactual Analytics SHADOW for MYSHKA / ASTRA.
 
-Observes rejected LONG/SHORT candidates (EDGE DROP and JEV REJECT) and checks
+Observes rejected LONG/SHORT candidates (EDGE DROP, JEV REJECT and EVIDENCE GATE DROP) and checks
 what would have happened after the normal 5 minute paper horizon. It never
 creates, approves, vetoes, sizes, or routes an order.
 
@@ -106,6 +106,9 @@ def _candidate_stage(result: dict) -> Optional[str]:
     verdict = str(jev.get("verdict") or "").upper()
     reason = str(result.get("reason") or "").lower()
     edge = result.get("edge") or {}
+
+    if "evidence_gate" in reason:
+        return "EVIDENCE_GATE_DROP"
 
     if verdict == "REJECT" or reason == "jev" or "jev" in reason:
         return "JEV_REJECT"
