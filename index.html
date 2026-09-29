@@ -271,11 +271,15 @@ button{cursor:pointer}
           <p>Fee + live spread + volatility-scaled slippage + safety margin. STRICT 4/4 додатково вимагає Net Edge &gt; +0.05%.</p>
         </div>
         <div class="pipe">
-          <div class="pipe-head"><b>3 · JEV</b><span class="pipe-status mid" id="jevStatus">—</span></div>
+          <div class="pipe-head"><b>3 · CONTEXT 24/7</b><span class="pipe-status mid" id="contextStatus">SHADOW</span></div>
+          <p id="contextText">Фоновий збирач: очікуємо snapshot 5–30 хв.</p>
+        </div>
+        <div class="pipe">
+          <div class="pipe-head"><b>4 · JEV</b><span class="pipe-status mid" id="jevStatus">—</span></div>
           <p id="jevText">Детермінований координатор. WAIT не може бути перетворений AI у trade.</p>
         </div>
         <div class="pipe">
-          <div class="pipe-head"><b>4 · ASTRA GUARD</b><span class="pipe-status mid" id="guardStatus">—</span></div>
+          <div class="pipe-head"><b>5 · ASTRA GUARD</b><span class="pipe-status mid" id="guardStatus">—</span></div>
           <p id="guardText">Daily -2% • weekly -5% • leverage ≤3x • exposure ≤15% • spread ≤0.08%.</p>
         </div>
       </div>
@@ -923,8 +927,9 @@ function adaptServerResult(r){
     if(!guard.reasons.includes(strictMsg))guard.reasons.unshift(strictMsg);
     reason=strictMsg;
   }
+  const context=r.context||null;
   const market={pair:r.pair,symbol:m.symbol||pairSymbol(r.pair),candles,bid:+m.bid,ask:+m.ask,lastPrice:+m.last_price,spreadPct:+m.spread_pct,atrPct:+m.atr_pct,atrMedian:+m.atr_pct_median,updatedAt:Date.now()};
-  return{market,decision:{sig,edge,jev,size,guard,action,reason,server:true}}
+  return{market,decision:{sig,edge,jev,size,guard,context,action,reason,server:true}}
 }
 async function scanBackend(){
   const j=await bridgeFetch('/control/scan-now',{method:'POST'});
@@ -1010,6 +1015,19 @@ function renderSelected(){
       $('finalReason').textContent='STRICT 4/4: server EDGE passed old >0 rule, but new safety buffer requires > +'+strictReq.toFixed(2)+'%. Server patch needed.';
     }
   }else{status('edgeStatus','—','mid');$('eMove').textContent=$('eCosts').textContent=$('eNet').textContent=$('eBasis').textContent='—'}
+  if(d.context){
+    const x=d.context,age=x.age_sec==null?'—':Math.round(Number(x.age_sec))+'s';
+    status('contextStatus','SHADOW','mid');
+    $('contextText').textContent='n='+Number(x.samples||0)+' · age '+age+
+      ' · Δ5m '+(x.price_change_5m_pct==null?'—':Number(x.price_change_5m_pct).toFixed(3)+'%')+
+      ' · Δ15m '+(x.price_change_15m_pct==null?'—':Number(x.price_change_15m_pct).toFixed(3)+'%')+
+      ' · OI15 '+(x.oi_change_15m_pct==null?'—':Number(x.oi_change_15m_pct).toFixed(3)+'%')+
+      ' · L/S '+(x.long_short_ratio==null?'—':Number(x.long_short_ratio).toFixed(2))+
+      ' · ext '+Number(x.external_event_count||0);
+  }else{
+    status('contextStatus',d.server?'WARMING':'LOCAL','mid');
+    $('contextText').textContent=d.server?'Collector ще не віддав snapshot.':'Context 24/7 доступний через ASTRA Bridge.';
+  }
   status('jevStatus',d.jev.verdict,d.jev.verdict==='APPROVE'?'pass':d.jev.verdict==='REJECT'?'drop':'mid');$('jevText').textContent=d.jev.reason+' • confidence '+Math.round(d.jev.confidence*100)+'%';
   if(d.size){
     status('guardStatus',d.guard.passed?'PASS':'VETO',d.guard.passed?'pass':'drop');$('guardText').textContent=d.guard.passed?'Risk controls passed • size '+d.size.notionalPct.toFixed(3)+'% equity':d.guard.reasons.join(' • ');
