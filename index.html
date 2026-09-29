@@ -941,7 +941,8 @@ function loadRiskIntelligenceReport(r){
   $('riClosed').textContent=Number(overall.n||0);
   $('riLossStreak').textContent=Number(latest.loss_streak||0);
   $('riLossStreak').className=Number(latest.loss_streak||0)>=3?'short':'long';
-  const pe=Number(latest.pair_edge_recommendation),re=Number(latest.regime_edge_recommendation);
+  const peRaw=latest.pair_edge_recommendation,reRaw=latest.regime_edge_recommendation;
+  const pe=peRaw==null?null:Number(peRaw),re=reRaw==null?null:Number(reRaw);
   $('riPairEdge').textContent=Number.isFinite(pe)?'>'+pe.toFixed(2)+'%':'—';
   $('riRegimeEdge').textContent=Number.isFinite(re)?'>'+re.toFixed(2)+'%':'—';
   $('riState').textContent='Risk Intelligence: '+String(r.sample_state||'COLD')+' · SHADOW';
@@ -1177,7 +1178,7 @@ function adaptServerResult(r){
   const m=r.market||{},raw=(m.candles||[]),candles=raw.map(c=>({o:+c.open,h:+c.high,l:+c.low,c:+c.close,v:+c.volume}));
   const sig0=r.signal||{},closes=candles.map(x=>x.c),ef=closes.length?emaSeries(closes,CFG.emaFast):[],es=closes.length?emaSeries(closes,CFG.emaSlow):[];
   const sig={direction:sig0.direction||'WAIT',reason:sig0.reason||'',structure:sig0.structure||'RANGE',emaFast:+sig0.ema_fast||ef.at(-1)||0,emaSlow:+sig0.ema_slow||es.at(-1)||0,rsi:+sig0.rsi||0,volumeRatio:+sig0.volume_ratio||0,emaFastSeries:ef,emaSlowSeries:es};
-  const e0=r.edge;const edge=e0?{expectedMovePct:+e0.expected_move_pct||0,totalCostPct:+e0.total_cost_pct||0,netEdgePct:+e0.net_edge_pct||0,passed:!!e0.passed,basis:e0.basis||'server',nSamples:+e0.n_samples||0,minRequiredNetEdge:0}:null;
+  const e0=r.edge;const edge=e0?{expectedMovePct:+e0.expected_move_pct||0,totalCostPct:+e0.total_cost_pct||0,netEdgePct:+e0.net_edge_pct||0,serverPassed:!!e0.passed,passed:!!e0.passed,basis:e0.basis||'server',nSamples:+e0.n_samples||0,minRequiredNetEdge:0}:null;
   const strictRule=techRuleScore(sig);
   let strictClientRejected=false;
   if(edge&&strictRule.strict){
@@ -1185,8 +1186,8 @@ function adaptServerResult(r){
     edge.clientStrictPass=edge.netEdgePct>CFG.strictMinNetEdge;
     if(!edge.clientStrictPass){
       edge.passed=false;
-      edge.strictBufferRejected=true;
-      strictClientRejected=true;
+      edge.strictBufferRejected=edge.serverPassed;
+      strictClientRejected=edge.serverPassed;
     }
   }
   const j0=r.jev||{};const jev={verdict:j0.verdict||((r.action==='ENTER')?'APPROVE':'WAIT'),direction:j0.direction||sig.direction,confidence:+j0.confidence||0,reason:j0.reason||r.reason||'',aiUsed:!!j0.ai_used,aiNote:j0.ai_note||''};
