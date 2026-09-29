@@ -54,18 +54,24 @@ $tmp = Join-Path $env:TEMP 'myshka_risk_intelligence_shadow'
 if(Test-Path $tmp){ Remove-Item $tmp -Recurse -Force }
 New-Item -ItemType Directory -Path $tmp -Force | Out-Null
 
-Write-Host '[1/7] Downloading Risk Intelligence engine...'
+Write-Host '[1/8] Downloading Risk Intelligence engine...'
 Invoke-WebRequest -UseBasicParsing -Uri ($base + '/risk_intelligence_shadow.py?v=' + $cacheBust) -OutFile (Join-Path $tmp 'risk_intelligence_shadow.py')
 
-Write-Host '[2/7] Downloading safe patcher...'
+Write-Host '[2/8] Downloading safe patcher + runtime self-test...'
 Invoke-WebRequest -UseBasicParsing -Uri ($base + '/patch_risk_intelligence_shadow.py?v=' + $cacheBust) -OutFile (Join-Path $tmp 'patch_risk_intelligence_shadow.py')
+Invoke-WebRequest -UseBasicParsing -Uri ($base + '/selftest_risk_intelligence.py?v=' + $cacheBust) -OutFile (Join-Path $tmp 'selftest_risk_intelligence.py')
 
-Write-Host '[3/7] Validating downloaded Python files...'
-& python -m py_compile (Join-Path $tmp 'risk_intelligence_shadow.py') (Join-Path $tmp 'patch_risk_intelligence_shadow.py')
+Write-Host '[3/8] Validating downloaded Python files...'
+& python -m py_compile (Join-Path $tmp 'risk_intelligence_shadow.py') (Join-Path $tmp 'patch_risk_intelligence_shadow.py') (Join-Path $tmp 'selftest_risk_intelligence.py')
 if($LASTEXITCODE -ne 0){ throw 'Downloaded Risk Intelligence files failed syntax check. Local ASTRA was not modified.' }
 Write-Host '[OK] Downloaded files syntax valid.' -ForegroundColor Green
 
-Write-Host '[4/7] Installing SHADOW observer + API...'
+Write-Host '[4/8] Running isolated Risk Intelligence runtime self-test...'
+& python (Join-Path $tmp 'selftest_risk_intelligence.py')
+if($LASTEXITCODE -ne 0){ throw 'Risk Intelligence runtime self-test failed. Local ASTRA was not modified.' }
+Write-Host '[OK] Runtime self-test passed.' -ForegroundColor Green
+
+Write-Host '[5/8] Installing SHADOW observer + API...'
 Copy-Item (Join-Path $tmp 'risk_intelligence_shadow.py') (Join-Path $app 'risk_intelligence_shadow.py') -Force
 try {
     & python (Join-Path $tmp 'patch_risk_intelligence_shadow.py') $app
@@ -93,14 +99,14 @@ try {
 }
 Write-Host '[OK] Final Python syntax valid.' -ForegroundColor Green
 
-Write-Host '[5/7] Rebuilding ASTRA...'
+Write-Host '[6/8] Rebuilding ASTRA...'
 Push-Location $app
 try {
     docker compose up -d --build --force-recreate astra
     if($LASTEXITCODE -ne 0){ throw "docker compose failed: $LASTEXITCODE" }
 } finally { Pop-Location }
 
-Write-Host '[6/7] Waiting for ASTRA health...'
+Write-Host '[7/8] Waiting for ASTRA health...'
 $health = $null
 for($i=0; $i -lt 45; $i++) {
     Start-Sleep -Seconds 2
@@ -114,7 +120,7 @@ if(-not $health -or $health.status -ne 'ok') {
     throw 'ASTRA did not become healthy.'
 }
 
-Write-Host '[7/7] Risk Intelligence health check...'
+Write-Host '[8/8] Risk Intelligence health check...'
 if(-not $health.risk_intelligence_shadow) {
     throw 'ASTRA is healthy but risk_intelligence_shadow is missing from /health.'
 }
