@@ -415,6 +415,55 @@ button{cursor:pointer}
     <div class="sub" id="cfVerdicts" style="margin-top:8px">
       SHADOW only · жодна відсічена угода реально не відкривається.
     </div>
+
+    <div style="height:1px;background:rgba(255,255,255,.08);margin:16px 0"></div>
+
+    <div class="stats-title">
+      <div>
+        <h2>🛡 RISK INTELLIGENCE · SHADOW</h2>
+        <div class="sub">Додаткові guards + adaptive EDGE + JEV post-mortem + A/B · поки тільки спостерігають</div>
+      </div>
+      <div class="sub" id="riState">Risk Intelligence: warming</div>
+    </div>
+
+    <div class="stats" style="grid-template-columns:repeat(6,1fr)">
+      <div class="stat"><small>Confidence</small><b id="riConfidence">—</b></div>
+      <div class="stat"><small>Active warnings</small><b id="riWarnings">0</b></div>
+      <div class="stat"><small>5m checked</small><b id="riClosed">0</b></div>
+      <div class="stat"><small>Loss streak</small><b id="riLossStreak">0</b></div>
+      <div class="stat"><small>Pair EDGE rec.</small><b id="riPairEdge">—</b></div>
+      <div class="stat"><small>Regime EDGE rec.</small><b id="riRegimeEdge">—</b></div>
+    </div>
+
+    <div class="mode-stats">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>🚦 Guard Board</h3><span>поточний shadow-кандидат</span></div>
+        <div class="check"><span>Context Veto 2.0</span><span id="riContext" class="warn">WARMING</span></div>
+        <div class="check"><span>Loss-streak guard</span><span id="riLoss" class="ok">CLEAR</span></div>
+        <div class="check"><span>Pair cooldown / blacklist</span><span id="riPair" class="ok">CLEAR</span></div>
+        <div class="check"><span>BTC market filter</span><span id="riBtc" class="ok">CLEAR</span></div>
+        <div class="check"><span>OI + Price divergence</span><span id="riOi" class="ok">CLEAR</span></div>
+        <div class="check"><span>Funding extreme</span><span id="riFunding" class="ok">CLEAR</span></div>
+        <div class="check"><span>Correlation crowding</span><span id="riCorrelation" class="ok">CLEAR</span></div>
+        <div class="check"><span>Volatility shock</span><span id="riVol" class="ok">CLEAR</span></div>
+        <div class="check"><span>Spread / cost history</span><span id="riSpread" class="ok">CLEAR</span></div>
+        <div class="check"><span>Adaptive pair/regime EDGE</span><span id="riAdaptive" class="warn">WARMING</span></div>
+      </div>
+
+      <div class="mode-card train">
+        <div class="mode-head"><h3>🧪 A/B + JEV post-mortem</h3><span>5m outcomes</span></div>
+        <div class="sub" style="margin:2px 0 6px">A/B EDGE thresholds</div>
+        <div id="riAB"><div class="muted">Чекаємо 5-хв shadow outcomes.</div></div>
+        <div class="sub" style="margin:10px 0 6px">JEV post-mortem</div>
+        <div id="riJev"><div class="muted">Чекаємо APPROVE / REJECT outcomes.</div></div>
+        <div class="sub" style="margin:10px 0 6px">Costs by pair</div>
+        <div id="riCosts"><div class="muted">Ще немає історії costs.</div></div>
+      </div>
+    </div>
+
+    <div class="sub" style="margin-top:8px">
+      SHADOW only: ці guards не блокують угоди. Активувати Context Veto / loss-streak / pair cooldown можна буде тільки після достатньої чистої вибірки.
+    </div>
   </section>
 
   <section class="card glass readiness" id="readinessPanel">
@@ -865,6 +914,71 @@ async function refreshCounterfactual(){
   }
 }
 
+function riSet(id,state,detail=''){
+  const el=$(id);if(!el)return;
+  const s=String(state||'WARMING').toUpperCase();
+  el.textContent=s+(detail?' · '+detail:'');
+  el.className=(s==='CLEAR'||s==='PASS')?'ok':(s==='WARN'||s==='ACTIVE'||s==='VETO')?'bad':'warn';
+}
+function riMetricRows(obj,labels){
+  const rows=[];
+  for(const [key,label] of labels){
+    const m=(obj||{})[key]||{},n=Number(m.n||0),avg=Number(m.avg_net_pct||0);
+    rows.push('<div class="check"><span>'+label+' · n='+n+'</span><span class="'+(avg>=0?'ok':'bad')+'">'+analyticsPct(avg)+'</span></div>');
+  }
+  return rows.join('');
+}
+function loadRiskIntelligenceReport(r){
+  if(!r||r.status!=='ok')return;
+  APP.riskIntelligenceReport=r;
+  const latest=r.latest||{},flags=Array.isArray(latest.flags)?latest.flags:[],policy=r.policy||{},overall=r.overall||{};
+  const has=x=>flags.includes(x);
+  const score=Number(latest.confidence_score);
+  $('riConfidence').textContent=Number.isFinite(score)?score.toFixed(0)+'/100':'—';
+  $('riConfidence').className=Number.isFinite(score)?(score>=70?'long':score<45?'short':'wait'):'';
+  $('riWarnings').textContent=flags.length;
+  $('riWarnings').className=flags.length?'short':'long';
+  $('riClosed').textContent=Number(overall.n||0);
+  $('riLossStreak').textContent=Number(latest.loss_streak||0);
+  $('riLossStreak').className=Number(latest.loss_streak||0)>=3?'short':'long';
+  const pe=Number(latest.pair_edge_recommendation),re=Number(latest.regime_edge_recommendation);
+  $('riPairEdge').textContent=Number.isFinite(pe)?'>'+pe.toFixed(2)+'%':'—';
+  $('riRegimeEdge').textContent=Number.isFinite(re)?'>'+re.toFixed(2)+'%':'—';
+  $('riState').textContent='Risk Intelligence: '+String(r.sample_state||'COLD')+' · SHADOW';
+
+  const chn=Number(latest.context_hist_n||0),need=Number(policy.context_min_n||30);
+  if(chn<need)riSet('riContext','WARMING','n='+chn+'/'+need);
+  else riSet('riContext',has('CONTEXT_VETO_CANDIDATE')?'WARN':'CLEAR','n='+chn);
+  riSet('riLoss',has('LOSS_STREAK_3PLUS')?'WARN':'CLEAR',Number(latest.loss_streak||0)+' losses');
+  riSet('riPair',has('PAIR_COOLDOWN')?'WARN':'CLEAR','n='+Number(latest.pair_hist_n||0));
+  riSet('riBtc',has('BTC_AGAINST')?'WARN':'CLEAR',latest.btc_15m_pct==null?'—':Number(latest.btc_15m_pct).toFixed(3)+'%');
+  riSet('riOi',has('OI_PRICE_DIVERGENCE')?'WARN':'CLEAR',latest.oi_15m_pct==null?'—':Number(latest.oi_15m_pct).toFixed(3)+'%');
+  riSet('riFunding',has('FUNDING_EXTREME')?'WARN':'CLEAR',latest.funding_rate_pct==null?'—':Number(latest.funding_rate_pct).toFixed(4)+'%');
+  riSet('riCorrelation',has('CORRELATION_CROWDING')?'WARN':'CLEAR',Number(latest.same_side_open||0)+' same-side');
+  const atr=Number(latest.atr_pct),med=Number(latest.atr_median_pct),vr=(Number.isFinite(atr)&&Number.isFinite(med)&&med>0)?atr/med:null;
+  riSet('riVol',has('VOLATILITY_SHOCK')?'WARN':'CLEAR',vr==null?'—':vr.toFixed(2)+'x');
+  riSet('riSpread',has('SPREAD_HIGH')?'WARN':'CLEAR',latest.spread_pct==null?'—':Number(latest.spread_pct).toFixed(4)+'%');
+  const adaptWarn=has('PAIR_EDGE_BELOW_HISTORY')||has('REGIME_EDGE_BELOW_HISTORY');
+  if(!Number.isFinite(pe)&&!Number.isFinite(re))riSet('riAdaptive','WARMING');
+  else riSet('riAdaptive',adaptWarn?'WARN':'CLEAR');
+
+  const ab=r.ab_edge||{};
+  $('riAB').innerHTML=riMetricRows(ab,[['0.05','>0.05%'],['0.10','>0.10%'],['0.15','>0.15%'],['0.20','>0.20%']]);
+  const jp=r.jev_postmortem||{};
+  $('riJev').innerHTML=riMetricRows(jp,[['APPROVE','APPROVE'],['REJECT','REJECT']]);
+  const costs=(r.cost_history||[]).slice(0,4);
+  $('riCosts').innerHTML=costs.length?costs.map(x=>'<div class="check"><span>'+String(x.pair||'')+' · n='+Number(x.n||0)+'</span><span>'+Number(x.avg_cost_pct||0).toFixed(3)+'% cost</span></div>').join(''):'<div class="muted">Ще немає історії costs.</div>';
+}
+async function refreshRiskIntelligence(){
+  if(!APP.backendReady)return;
+  try{
+    const r=await bridgeFetch('/risk-intelligence/report');
+    loadRiskIntelligenceReport(r);
+  }catch(e){
+    if($('riState'))$('riState').textContent='Risk Intelligence: backend patch required / warming';
+  }
+}
+
 function loadServerTrades(st){
   if(!st||!st.trades)return;
   APP.backendStats=st;
@@ -968,6 +1082,7 @@ async function refreshPhoneControl(){
     const trades=await bridgeFetch('/stats?limit=120');loadServerTrades(trades);
     await refreshAnalytics();
     await refreshCounterfactual();
+    await refreshRiskIntelligence();
   }catch(e){
     APP.backendReady=false;
     integrationNode('iAstra','bridge_offline');
@@ -984,7 +1099,7 @@ async function setServerControl(name,value){
 async function phoneScanNow(){
   if(!APP.backendReady)return scanAll();
   $('phoneScan').textContent='… Scan';
-  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshAnalytics();await refreshCounterfactual()}
+  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshAnalytics();await refreshCounterfactual();await refreshRiskIntelligence()}
   finally{$('phoneScan').textContent='🔎 Scan зараз'}
 }
 async function connectBridge(){
@@ -1368,7 +1483,7 @@ function renderLog(){
 async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of (APP.universePairs||CFG.pairs)){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected();renderPairButtons()}renderReadiness()}
 $('pairFilter').onchange=renderPairButtons;
 $('statsMode').onchange=drawStatsChart;
-$('analyticsRefresh').onclick=()=>{refreshAnalytics();refreshCounterfactual()};
+$('analyticsRefresh').onclick=()=>{refreshAnalytics();refreshCounterfactual();refreshRiskIntelligence()};
 $('scanBtn').onclick=()=>APP.backendReady?phoneScanNow():connectBridge();$('killBtn').onclick=()=>setKill(!APP.kill);$('runReadiness').onclick=async()=>{if(APP.backendReady)await refreshPhoneControl();else await connectBridge();renderReadiness()};
 $('phoneRefresh').onclick=refreshPhoneControl;$('phoneScan').onclick=phoneScanNow;
 $('phonePause').onclick=()=>setServerControl('paused',!(APP.serverRuntime&&APP.serverRuntime.paused)).then(refreshPhoneControl);
