@@ -55,8 +55,8 @@ def run():
     b = h.observe_results(good, {"universe_target":15,"candle_limit":80,"strict_min_net_edge_pct":0.05}, now=1015)
     assert b["config"]["version"] == "v1.0" and not b["config"]["new"], b
 
-    # Changed strict threshold gets a new config version.
-    c = h.observe_results(good, {"universe_target":15,"candle_limit":80,"strict_min_net_edge_pct":0.10}, now=1030)
+    # Changed scanner cadence gets a new config version.
+    c = h.observe_results(good, {"universe_target":15,"candle_limit":80,"strict_min_net_edge_pct":0.05,"scan_interval_sec":30}, now=1030)
     assert c["config"]["version"] == "v1.1", c
 
     # SAFE chaos simulations: duplicate pair, missing price, bad bid/ask,
