@@ -384,11 +384,6 @@ button{cursor:pointer}
     </div>
   </section>
 
-  <section class="log glass">
-    <h2>Останні рішення та угоди</h2>
-    <div class="log-list" id="logList"></div>
-  </section>
-
   <section class="card glass readiness" id="readinessPanel">
     <div class="ready-head">
       <div>
@@ -1286,7 +1281,9 @@ function drawStatsChart(){
   x.fillStyle='#7890b3';x.font='9px system-ui';x.fillText(mode+' · '+max.toFixed(3)+'%',3,T+5);x.fillText(min.toFixed(3)+'%',3,h-B)
 }
 function renderLog(){
-  $('logList').innerHTML=APP.logs.slice(0,50).map(e=>'<div class="logrow"><span class="muted">'+new Date(e.ts).toLocaleTimeString('uk-UA')+'</span><b>'+e.type+'</b><span>'+e.pair.replace('/USDT:USDT','')+'</span><span>'+e.text+'</span><b class="'+((parseFloat(e.val)||0)>=0?'long':'short')+'">'+e.val+'</b></div>').join('')||'<div class="muted">Ще немає записів.</div>'
+  const host=$('logList');
+  if(!host)return;
+  host.innerHTML=APP.logs.slice(0,50).map(e=>'<div class="logrow"><span class="muted">'+new Date(e.ts).toLocaleTimeString('uk-UA')+'</span><b>'+e.type+'</b><span>'+e.pair.replace('/USDT:USDT','')+'</span><span>'+e.text+'</span><b class="'+((parseFloat(e.val)||0)>=0?'long':'short')+'">'+e.val+'</b></div>').join('')||'<div class="muted">Ще немає записів.</div>'
 }
 async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of (APP.universePairs||CFG.pairs)){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected();renderPairButtons()}renderReadiness()}
 $('pairFilter').onchange=renderPairButtons;
