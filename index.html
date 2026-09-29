@@ -100,6 +100,26 @@ button{cursor:pointer}
 .logrow{display:grid;grid-template-columns:70px 80px 100px 1fr auto;gap:7px;padding:8px 4px;border-bottom:1px solid #162d49;font-size:9px}.logrow:last-child{border:0}.muted{color:var(--muted)}
 .note{margin-top:12px;padding:12px;border-radius:14px;background:#091522;border:1px solid #20395d;color:#8da2c1;font-size:10px;line-height:1.55}
 .note b{color:#dce8fb}
+.readiness{margin-top:12px}
+.ready-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.ready-head h2{margin:0;font-size:18px}.ready-head p{margin:3px 0 0;color:var(--muted);font-size:9px}
+.ready-pill{padding:7px 10px;border-radius:999px;font-size:10px;font-weight:950;border:1px solid #6f5a20;background:#2a220b;color:#ffd86a}
+.ready-pill.ok{border-color:#237553;background:#08251a;color:#4ce7a1}.ready-pill.bad{border-color:#853746;background:#2b0e15;color:#ff8290}
+.ready-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ready-card{padding:11px;border-radius:12px;background:#081522;border:1px solid #1d3658}
+.ready-card small{display:block;color:#7d93b3;font-size:8px;text-transform:uppercase}.ready-card b{display:block;margin-top:4px;font-size:17px}
+.ready-card .mini{margin-top:4px;color:#8299ba;font-size:8px}
+.check-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.check-col{padding:10px;border-radius:12px;background:#07131f;border:1px solid #1d3659}
+.check-col h3{margin:0 0 7px;font-size:11px}
+.check{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid #132944;font-size:9px;color:#b8c8df}
+.check:last-child{border:0}.check span:last-child{font-weight:900}
+.check .ok{color:#4ce7a1}.check .warn{color:#ffd76e}.check .bad{color:#ff8290}
+.scan-summary{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.scan-chip{padding:6px 8px;border-radius:999px;background:#0b1b31;border:1px solid #29466f;font-size:9px;color:#b8cae4}
+.scan-chip b{color:#fff}
+@media(max-width:950px){.ready-grid,.check-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.ready-grid,.check-grid{grid-template-columns:1fr}}
 @media(max-width:1100px){.main{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,1fr)}.stats{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:1050px){.pairs{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:680px){
@@ -120,7 +140,7 @@ button{cursor:pointer}
     </div>
     <div class="head-right">
       <span class="badge" id="marketBadge">● Підключення…</span>
-      <span class="badge">1m · 80 candles · scan 15s</span>
+      <span class="badge" id="universeBadge">15 markets · 1m · 80 candles · scan 15s</span>
       <button class="btn red" id="killBtn">🛡 Kill switch: OFF</button>
     </div>
   </header>
@@ -262,6 +282,63 @@ button{cursor:pointer}
     <div class="log-list" id="logList"></div>
   </section>
 
+  <section class="card glass readiness" id="readinessPanel">
+    <div class="ready-head">
+      <div>
+        <h2>🛡 Системна перевірка перед запуском</h2>
+        <p>Risk-control, execution, integrations і 15-market universe в одному місці.</p>
+      </div>
+      <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
+        <span class="ready-pill" id="readinessSummary">CHECK…</span>
+        <button class="btn" id="runReadiness">↻ Перевірити все</button>
+      </div>
+    </div>
+
+    <div class="ready-grid">
+      <div class="ready-card"><small>Kill switch</small><b id="rKill">—</b><div class="mini" id="rKillSub">control state</div></div>
+      <div class="ready-card"><small>Positions</small><b id="rPositions">0 / 4</b><div class="mini">open / allowed</div></div>
+      <div class="ready-card"><small>Critical checks</small><b id="rCritical">0 / 10</b><div class="mini">must-pass before live</div></div>
+      <div class="ready-card"><small>System score</small><b id="rScore">0 / 100</b><div class="mini">UI readiness score, not profit score</div></div>
+    </div>
+
+    <div class="scan-summary" id="scanSummary"></div>
+
+    <div class="check-grid">
+      <div class="check-col">
+        <h3>🛡 Risk Control</h3>
+        <div class="check"><span>Kill switch reachable</span><span id="ckKill" class="warn">CHECK</span></div>
+        <div class="check"><span>Daily loss limit</span><span id="ckDaily" class="ok">-2%</span></div>
+        <div class="check"><span>Weekly loss limit</span><span id="ckWeekly" class="ok">-5%</span></div>
+        <div class="check"><span>Exposure cap</span><span id="ckExposure" class="ok">15%</span></div>
+        <div class="check"><span>Spread guard</span><span id="ckSpread" class="ok">0.08%</span></div>
+      </div>
+      <div class="check-col">
+        <h3>📈 Trade Engine</h3>
+        <div class="check"><span>Universe</span><span id="ckUniverse" class="warn">0 / 15</span></div>
+        <div class="check"><span>EDGE gate</span><span id="ckEdge" class="warn">CHECK</span></div>
+        <div class="check"><span>JEV gate</span><span id="ckJev" class="warn">CHECK</span></div>
+        <div class="check"><span>ASTRA Guard</span><span id="ckGuard" class="warn">CHECK</span></div>
+        <div class="check"><span>Execution mode</span><span class="ok">PAPER</span></div>
+      </div>
+      <div class="check-col">
+        <h3>🔌 Integrations</h3>
+        <div class="check"><span>ASTRA Bridge</span><span id="ckAstra" class="warn">CHECK</span></div>
+        <div class="check"><span>Ollama / Qwen</span><span id="ckOllama" class="warn">CHECK</span></div>
+        <div class="check"><span>Bybit account</span><span id="ckBybit" class="warn">CHECK</span></div>
+        <div class="check"><span>Freqtrade</span><span id="ckFreqtrade" class="warn">CHECK</span></div>
+        <div class="check"><span>n8n + Telegram</span><span id="ckOps" class="warn">CHECK</span></div>
+      </div>
+      <div class="check-col">
+        <h3>🧠 Validation</h3>
+        <div class="check"><span>Learner soft threshold</span><span id="ckLearner" class="ok">30</span></div>
+        <div class="check"><span>Full confidence target</span><span class="ok">100</span></div>
+        <div class="check"><span>Dynamic costs</span><span class="ok">ON</span></div>
+        <div class="check"><span>Private execution</span><span class="ok">READ-ONLY / PAPER</span></div>
+        <div class="check"><span>Exchange reconciliation</span><span class="warn">NEXT</span></div>
+      </div>
+    </div>
+  </section>
+
   <div class="note">
     <b>Режим ASTRA Bridge:</b> якщо сервер на 8088 доступний, рішення йдуть через справжні Python-модулі MYSHKA/ASTRA:
     Bybit → TECH → EDGE → JEV/Ollama → Astra Guard → PAPER ENTER → 5m REVIEW → SQLite learner.
@@ -272,7 +349,11 @@ button{cursor:pointer}
 
 <script>
 const CFG={
-  pairs:['BTC/USDT:USDT','ETH/USDT:USDT','SOL/USDT:USDT'],
+  pairs:[
+    'BTC/USDT:USDT','ETH/USDT:USDT','SOL/USDT:USDT','ZEC/USDT:USDT','XRP/USDT:USDT',
+    'NEAR/USDT:USDT','QNT/USDT:USDT','HBAR/USDT:USDT','HYPE/USDT:USDT','SOXL/USDT:USDT',
+    'LINK/USDT:USDT','CL/USDT:USDT','PUMPFUN/USDT:USDT','SUI/USDT:USDT','XAU/USDT:USDT'
+  ],
   emaFast:9,emaSlow:21,rsiPeriod:14,volumeLookback:20,structureLookback:20,candleLimit:80,
   rsiLong:[52,72],rsiShort:[28,48],volumeMin:.6,scanMs:15000,cooldownMs:240000,horizonMs:300000,
   takerRoundTrip:.11,baseSlippage:.03,slippageVolScalar:.15,safetyBase:.03,safetyVolScalar:.10,
@@ -491,7 +572,10 @@ function renderPairButtons(){
     b.className='pair-btn '+action.toLowerCase()+(pair===APP.selected?' active':'');
     b.dataset.pair=pair;
     const name=pair.replace(':USDT','');
-    b.innerHTML='<span>'+name+'</span><small>'+action+'</small>';
+    const edgePass=!!(d&&d.edge&&d.edge.passed),jevVerdict=d&&d.jev?d.jev.verdict:'';
+    const mini=edgePass&&jevVerdict==='REJECT'?'EDGE✓ JEV✕':action;
+    b.innerHTML='<span>'+name+'</span><small>'+mini+'</small>';
+    if(d)b.title=name+' · TECH '+d.sig.direction+' · EDGE '+(d.edge?(d.edge.passed?'PASS':'DROP'):'—')+' · JEV '+(d.jev?d.jev.verdict:'—')+' · FINAL '+action;
     b.onclick=()=>{
       APP.selected=pair;
       renderPairButtons();
@@ -512,8 +596,9 @@ function applyServerResults(results){
     APP.universePairs=ordered;
     if(!APP.universePairs.includes(APP.selected))APP.selected=APP.universePairs[0];
     renderPairButtons();
+    renderReadiness();
   }
-  if(ok){$('marketBadge').textContent='● ASTRA TOP-'+ok;$('marketBadge').className='badge live';renderSelected()}
+  if(ok){$('marketBadge').textContent='● ASTRA TOP-'+ok;$('marketBadge').className='badge live';$('universeBadge').textContent=ok+' markets · 1m · 80 candles · scan 15s';renderSelected();renderReadiness()}
   return ok
 }
 async function refreshPhoneControl(){
@@ -566,7 +651,7 @@ async function connectBridge(){
     integrationNode('iAstra','error');
     ['iOllama','iBybit','iFreqtrade','iN8n','iTelegram'].forEach(id=>integrationNode(id,'unconfigured'));
     $('bridgeMsg').textContent='⚠ ASTRA bridge недоступний: '+e.message+'. Працює fallback: LIVE Bybit + локальний PAPER.';
-  }finally{$('bridgeConnect').textContent='🔌 Підключити ASTRA'}
+  }finally{$('bridgeConnect').textContent='🔌 Підключити ASTRA';renderReadiness()}
 }
 function adaptServerResult(r){
   const m=r.market||{},raw=(m.candles||[]),candles=raw.map(c=>({o:+c.open,h:+c.high,l:+c.low,c:+c.close,v:+c.volume}));
@@ -649,6 +734,83 @@ function renderSelected(){
   }else{status('guardStatus','—','mid');$('guardText').textContent='Guard запускається тільки після APPROVE + positive EDGE.'}
   drawMarketChart(m,d)
 }
+
+function integState(id){
+  const e=$(id);if(!e)return{ok:false,text:'—'};
+  const b=e.querySelector('b'),text=b?b.textContent.trim():'—';
+  return{ok:e.classList.contains('ok'),bad:e.classList.contains('bad'),text};
+}
+function setCheck(id,text,state){
+  const e=$(id);if(!e)return;e.textContent=text;e.className=state||'warn';
+}
+function renderReadiness(){
+  if(!$('readinessPanel'))return;
+  const runtime=APP.serverRuntime||{};
+  const killOn=typeof runtime.kill_switch==='boolean'?runtime.kill_switch:APP.kill;
+  const openPositions=Object.keys(APP.positions||{}).length;
+  const universe=(APP.universePairs&&APP.universePairs.length)?APP.universePairs:CFG.pairs;
+  const decisions=Object.values(APP.decisions||{});
+  const edgeSeen=decisions.some(d=>d&&d.edge);
+  const jevSeen=decisions.some(d=>d&&d.jev);
+  const guardSeen=decisions.some(d=>d&&d.guard);
+  const astra=integState('iAstra'),ollama=integState('iOllama'),bybit=integState('iBybit'),freq=integState('iFreqtrade'),n8n=integState('iN8n'),tg=integState('iTelegram');
+
+  $('rKill').textContent=killOn?'ON':'OFF';
+  $('rKill').className=killOn?'short':'long';
+  $('rKillSub').textContent=killOn?'entries blocked':'ready to evaluate entries';
+  $('rPositions').textContent=openPositions+' / 4';
+
+  setCheck('ckKill',APP.backendReady?'OK':'LOCAL',APP.backendReady?'ok':'warn');
+  setCheck('ckUniverse',universe.length+' / 15',universe.length>=15?'ok':'warn');
+  setCheck('ckEdge',edgeSeen?'ACTIVE':'WAIT DATA',edgeSeen?'ok':'warn');
+  setCheck('ckJev',jevSeen?'ACTIVE':'WAIT DATA',jevSeen?'ok':'warn');
+  setCheck('ckGuard',guardSeen?'ACTIVE':'WAIT DATA',guardSeen?'ok':'warn');
+  setCheck('ckAstra',astra.text,astra.ok?'ok':astra.bad?'bad':'warn');
+  setCheck('ckOllama',ollama.text,ollama.ok?'ok':ollama.bad?'bad':'warn');
+  setCheck('ckBybit',bybit.text,bybit.ok?'ok':bybit.bad?'bad':'warn');
+  setCheck('ckFreqtrade',freq.text,freq.ok?'ok':freq.bad?'bad':'warn');
+  const opsOk=n8n.ok&&tg.ok;
+  setCheck('ckOps',(n8n.text||'—')+' / '+(tg.text||'—'),opsOk?'ok':(n8n.bad||tg.bad)?'bad':'warn');
+
+  const checks=[
+    APP.backendReady,
+    universe.length>=15,
+    CFG.maxDailyLoss>0,
+    CFG.maxWeeklyLoss>0,
+    CFG.maxLeverage<=3,
+    CFG.maxExposure<=15,
+    CFG.maxSpread<=.08,
+    edgeSeen,
+    jevSeen,
+    guardSeen
+  ];
+  const passed=checks.filter(Boolean).length;
+  const score=Math.round(passed/checks.length*100);
+  $('rCritical').textContent=passed+' / '+checks.length;
+  $('rScore').textContent=score+' / 100';
+
+  const badIntegrations=[astra,bybit].filter(x=>x.bad).length;
+  const warnings=(universe.length<15?1:0)+(!APP.backendReady?1:0)+(!edgeSeen?1:0)+(!jevSeen?1:0)+(!guardSeen?1:0)+badIntegrations;
+  const summary=$('readinessSummary');
+  if(warnings===0){summary.textContent='✓ READY FOR PAPER';summary.className='ready-pill ok'}
+  else if(badIntegrations||!APP.backendReady){summary.textContent='⚠ '+warnings+' warnings';summary.className='ready-pill bad'}
+  else{summary.textContent='⚠ '+warnings+' warnings';summary.className='ready-pill'}
+
+  const counts={ENTER:0,DROP:0,WAIT:0,EDGE:0,JEVREJECT:0};
+  for(const d of decisions){
+    const a=d&&d.action||'WAIT';if(counts[a]!==undefined)counts[a]++;
+    if(d&&d.edge&&d.edge.passed)counts.EDGE++;
+    if(d&&d.jev&&d.jev.verdict==='REJECT')counts.JEVREJECT++;
+  }
+  $('scanSummary').innerHTML=
+    '<span class="scan-chip">Universe <b>'+universe.length+'</b></span>'+
+    '<span class="scan-chip">ENTER <b class="long">'+counts.ENTER+'</b></span>'+
+    '<span class="scan-chip">DROP <b class="short">'+counts.DROP+'</b></span>'+
+    '<span class="scan-chip">WAIT <b class="wait">'+counts.WAIT+'</b></span>'+
+    '<span class="scan-chip">EDGE PASS <b>'+counts.EDGE+'</b></span>'+
+    '<span class="scan-chip">JEV REJECT <b>'+counts.JEVREJECT+'</b></span>';
+}
+
 function status(id,text,cls){const e=$(id);e.textContent=text;e.className='pipe-status '+cls}
 function drawMarketChart(m,d){
   const c=$('chartCanvas'),x=c.getContext('2d'),w=c.clientWidth,h=c.clientHeight,dp=devicePixelRatio||1;c.width=w*dp;c.height=h*dp;x.setTransform(dp,0,0,dp,0,0);x.clearRect(0,0,w,h);
@@ -690,8 +852,8 @@ function drawStatsChart(){
 function renderLog(){
   $('logList').innerHTML=APP.logs.slice(0,50).map(e=>'<div class="logrow"><span class="muted">'+new Date(e.ts).toLocaleTimeString('uk-UA')+'</span><b>'+e.type+'</b><span>'+e.pair.replace('/USDT:USDT','')+'</span><span>'+e.text+'</span><b class="'+((parseFloat(e.val)||0)>=0?'long':'short')+'">'+e.val+'</b></div>').join('')||'<div class="muted">Ще немає записів.</div>'
 }
-async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of (APP.universePairs||CFG.pairs)){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected();renderPairButtons()}}
-$('scanBtn').onclick=()=>APP.backendReady?phoneScanNow():scanAll();$('killBtn').onclick=()=>setKill(!APP.kill);
+async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of (APP.universePairs||CFG.pairs)){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected();renderPairButtons()}renderReadiness()}
+$('scanBtn').onclick=()=>APP.backendReady?phoneScanNow():scanAll();$('killBtn').onclick=()=>setKill(!APP.kill);$('runReadiness').onclick=async()=>{if(APP.backendReady)await refreshPhoneControl();else await scanAll();renderReadiness()};
 $('phoneRefresh').onclick=refreshPhoneControl;$('phoneScan').onclick=phoneScanNow;
 $('phonePause').onclick=()=>setServerControl('paused',!(APP.serverRuntime&&APP.serverRuntime.paused)).then(refreshPhoneControl);
 $('phoneKill').onclick=()=>setServerControl('kill_switch',!(APP.serverRuntime&&APP.serverRuntime.kill_switch)).then(refreshPhoneControl);
@@ -703,7 +865,7 @@ $('phoneEngineReset').onclick=async()=>{if(!APP.backendReady||!confirm('Скин
 $('autoMode').onchange=()=>{if(APP.backendReady)setServerControl('auto_scan',$('autoMode').value==='on').then(refreshPhoneControl)};
 $('resetBtn').onclick=async()=>{if(APP.backendReady){if(!confirm('Скинути paper engine? Learner історія залишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl();return}if(!confirm('Скинути локальні paper-угоди?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
 window.addEventListener('resize',()=>{renderSelected();renderStats()});
-loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;renderPairButtons();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(!APP.backendReady)scanAll();else refreshPhoneControl()});
+loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(!APP.backendReady)scanAll();else refreshPhoneControl()});
 setInterval(()=>{if(APP.backendReady)refreshPhoneControl();else if($('autoMode').value==='on')scanAll();else{settlePositions();renderPosition()}},CFG.scanMs);
 setInterval(renderPosition,1000);
 </script>
