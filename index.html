@@ -901,16 +901,30 @@ function adaptServerResult(r){
   const sig={direction:sig0.direction||'WAIT',reason:sig0.reason||'',structure:sig0.structure||'RANGE',emaFast:+sig0.ema_fast||ef.at(-1)||0,emaSlow:+sig0.ema_slow||es.at(-1)||0,rsi:+sig0.rsi||0,volumeRatio:+sig0.volume_ratio||0,emaFastSeries:ef,emaSlowSeries:es};
   const e0=r.edge;const edge=e0?{expectedMovePct:+e0.expected_move_pct||0,totalCostPct:+e0.total_cost_pct||0,netEdgePct:+e0.net_edge_pct||0,passed:!!e0.passed,basis:e0.basis||'server',nSamples:+e0.n_samples||0,minRequiredNetEdge:0}:null;
   const strictRule=techRuleScore(sig);
+  let strictClientRejected=false;
   if(edge&&strictRule.strict){
     edge.minRequiredNetEdge=CFG.strictMinNetEdge;
     edge.clientStrictPass=edge.netEdgePct>CFG.strictMinNetEdge;
+    if(!edge.clientStrictPass){
+      edge.passed=false;
+      edge.strictBufferRejected=true;
+      strictClientRejected=true;
+    }
   }
   const j0=r.jev||{};const jev={verdict:j0.verdict||((r.action==='ENTER')?'APPROVE':'WAIT'),direction:j0.direction||sig.direction,confidence:+j0.confidence||0,reason:j0.reason||r.reason||'',aiUsed:!!j0.ai_used,aiNote:j0.ai_note||''};
   const z=r.size;const size=z?{notionalPct:+z.notional_pct_equity||0,confidenceScalar:+z.confidence_scalar||0}:null;
-  const guard={passed:r.action==='ENTER',reasons:r.guard_reasons||[]};
+  const guard={passed:r.action==='ENTER',reasons:(r.guard_reasons||[]).slice()};
+  let action=r.action||'WAIT';
   let reason=r.reason||jev.reason||sig.reason;if(r.reason==='jev')reason=jev.reason;if(r.reason==='astra_guard')reason='Astra Guard: '+guard.reasons.join('; ');
+  if(strictClientRejected){
+    action='DROP';
+    guard.passed=false;
+    const strictMsg='STRICT 4/4: Net Edge '+edge.netEdgePct.toFixed(3)+'% <= required +'+CFG.strictMinNetEdge.toFixed(2)+'%';
+    if(!guard.reasons.includes(strictMsg))guard.reasons.unshift(strictMsg);
+    reason=strictMsg;
+  }
   const market={pair:r.pair,symbol:m.symbol||pairSymbol(r.pair),candles,bid:+m.bid,ask:+m.ask,lastPrice:+m.last_price,spreadPct:+m.spread_pct,atrPct:+m.atr_pct,atrMedian:+m.atr_pct_median,updatedAt:Date.now()};
-  return{market,decision:{sig,edge,jev,size,guard,action:r.action||'WAIT',reason,server:true}}
+  return{market,decision:{sig,edge,jev,size,guard,action,reason,server:true}}
 }
 async function scanBackend(){
   const j=await bridgeFetch('/control/scan-now',{method:'POST'});
