@@ -398,8 +398,10 @@ def report(mode: str = "STRICT", min_segment_n: int = 3) -> dict:
         for s in segs:
             if int(s.get("n") or 0) >= min_n and s.get("label") != "unknown":
                 eligible.append({"dimension": dim, **s})
-    best = sorted(eligible, key=lambda x: (float(x.get("avg_net_pct") or 0), int(x.get("n") or 0)), reverse=True)[:5]
-    worst = sorted(eligible, key=lambda x: (float(x.get("avg_net_pct") or 0), -int(x.get("n") or 0)))[:5]
+    positive = [x for x in eligible if float(x.get("avg_net_pct") or 0) > 0]
+    negative = [x for x in eligible if float(x.get("avg_net_pct") or 0) < 0]
+    best = sorted(positive, key=lambda x: (float(x.get("avg_net_pct") or 0), int(x.get("n") or 0)), reverse=True)[:5]
+    worst = sorted(negative, key=lambda x: (float(x.get("avg_net_pct") or 0), -int(x.get("n") or 0)))[:5]
     context_n = sum(1 for r in rows if int(r.get("context_samples") or 0) > 0)
     overall = _metrics(rows)
     n = int(overall["n"])
