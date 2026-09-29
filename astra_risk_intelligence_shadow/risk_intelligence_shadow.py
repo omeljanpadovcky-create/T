@@ -24,6 +24,7 @@ normal ASTRA scan results.
 from __future__ import annotations
 
 from collections import defaultdict
+from contextlib import contextmanager
 from datetime import datetime, timezone
 import json
 import math
@@ -59,8 +60,26 @@ def _conn(path: str = DB_PATH) -> sqlite3.Connection:
     return con
 
 
+@contextmanager
+def _db(path: str = DB_PATH):
+    """SQLite context that always closes the OS file handle.
+
+    sqlite3.Connection.__exit__ commits/rolls back but does not close the
+    connection, which leaves temporary DB files locked on Windows.
+    """
+    con = _conn(path)
+    try:
+        yield con
+        con.commit()
+    except Exception:
+        con.rollback()
+        raise
+    finally:
+        con.close()
+
+
 def init() -> dict:
-    with _LOCK, _conn() as con:
+    with _LOCK, _db() as con:
         con.execute(
             """
             CREATE TABLE IF NOT EXISTS risk_candidates (
@@ -154,7 +173,7 @@ def _analytics_rows(where: str = "", params: tuple = ()) -> list[dict]:
         if where:
             sql += " AND " + where
         sql += " ORDER BY opened_at ASC"
-        with _conn(ANALYTICS_DB_PATH) as con:
+        with _db(ANALYTICS_DB_PATH) as con:
             return [dict(x) for x in con.execute(sql, params).fetchall()]
     except Exception:
         return []
@@ -164,7 +183,7 @@ def _open_analytics_rows() -> list[dict]:
     if not os.path.exists(ANALYTICS_DB_PATH):
         return []
     try:
-        with _conn(ANALYTICS_DB_PATH) as con:
+        with _db(ANALYTICS_DB_PATH) as con:
             return [dict(x) for x in con.execute("SELECT * FROM analytics_trades WHERE status='OPEN'").fetchall()]
     except Exception:
         return []
@@ -386,7 +405,7 @@ def _record_candidate(r: dict, now: float, history_rows: list[dict], open_rows: 
         f["confidence_score"], json.dumps(f["flags"], separators=(",",":")),
         json.dumps(f["ab"], separators=(",",":")),
     )
-    with _LOCK, _conn() as con:
+    with _LOCK, _db() as con:
         cur = con.execute(
             """
             INSERT OR IGNORE INTO risk_candidates(
@@ -407,7 +426,7 @@ def _record_candidate(r: dict, now: float, history_rows: list[dict], open_rows: 
 def _settle(results: list[dict], now: float) -> dict:
     by_pair = {str(r.get("pair") or ""): r for r in results if r.get("pair")}
     closed = skipped = 0
-    with _LOCK, _conn() as con:
+    with _LOCK, _db() as con:
         rows = con.execute("SELECT * FROM risk_candidates WHERE status='OPEN' AND target_at<=? ORDER BY target_at", (now,)).fetchall()
         for row in rows:
             delay = max(0.0, now - float(row["target_at"]))
@@ -456,7 +475,7 @@ def status() -> dict:
     try:
         if not os.path.exists(DB_PATH):
             init()
-        with _LOCK, _conn() as con:
+        with _LOCK, _db() as con:
             rows = con.execute("SELECT status,COUNT(*) n FROM risk_candidates GROUP BY status").fetchall()
         counts = {str(r["status"]):int(r["n"]) for r in rows}
         return {
@@ -470,7 +489,7 @@ def status() -> dict:
 
 def _closed_rows() -> list[dict]:
     init()
-    with _LOCK, _conn() as con:
+    with _LOCK, _db() as con:
         return [dict(x) for x in con.execute("SELECT * FROM risk_candidates WHERE status='CLOSED' ORDER BY opened_at").fetchall()]
 
 
@@ -534,7 +553,7 @@ def report() -> dict:
     rows = _closed_rows()
     overall = _metrics(rows)
     latest = None
-    with _LOCK, _conn() as con:
+    with _LOCK, _db() as con:
         rr = con.execute("SELECT * FROM risk_candidates ORDER BY opened_at DESC LIMIT 1").fetchone()
         if rr:
             latest = dict(rr)
