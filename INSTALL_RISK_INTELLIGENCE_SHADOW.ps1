@@ -67,10 +67,16 @@ if($LASTEXITCODE -ne 0){ throw 'Downloaded Risk Intelligence files failed syntax
 Write-Host '[OK] Downloaded files syntax valid.' -ForegroundColor Green
 
 Write-Host '[4/8] Running isolated Risk Intelligence runtime self-test against real Analytics V2 schema...'
-$selftestOutput = & python (Join-Path $tmp 'selftest_risk_intelligence.py') $app 2>&1
+$selftestLog = Join-Path $tmp 'selftest.log'
+$py = (Get-Command python).Source
+$cmdLine = ('"' + $py + '" "' + (Join-Path $tmp 'selftest_risk_intelligence.py') + '" "' + $app + '" > "' + $selftestLog + '" 2>&1')
+& $env:ComSpec /d /c $cmdLine
 $selftestExit = $LASTEXITCODE
-$selftestOutput | ForEach-Object { Write-Host $_ }
-if($selftestExit -ne 0){ throw 'Risk Intelligence runtime self-test failed. Local ASTRA was not modified.' }
+$selftestOutput = if(Test-Path $selftestLog){ Get-Content $selftestLog -Raw } else { '' }
+if($selftestOutput){ Write-Host $selftestOutput }
+if($selftestExit -ne 0){
+    throw ("Risk Intelligence runtime self-test failed. Local ASTRA was not modified.`n--- PYTHON SELFTEST ---`n" + $selftestOutput)
+}
 Write-Host '[OK] Runtime self-test passed.' -ForegroundColor Green
 
 Write-Host '[5/8] Installing SHADOW observer + API...'
