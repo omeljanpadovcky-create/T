@@ -130,13 +130,32 @@ if(-not $health -or $health.status -ne 'ok'){
 }
 
 Write-Host '[8/8] Verifying Quality + Replay endpoints...'
-try {
-    $quality = Invoke-RestMethod 'http://127.0.0.1:8088/risk-intelligence/quality' -TimeoutSec 8
-    $replay = Invoke-RestMethod 'http://127.0.0.1:8088/risk-intelligence/replay?limit=1' -TimeoutSec 8
-} catch {
-    throw 'ASTRA is healthy but Quality V2 endpoints did not answer. If MYSHKA token is required, open dashboard and verify there.'
+$headers = @{}
+$token = $env:MYSHKA_TOKEN
+if(-not $token){
+    $envFile = Join-Path $app '.env'
+    if(Test-Path $envFile){
+        $line = Get-Content $envFile | Where-Object { $_ -match '^MYSHKA_TOKEN=' } | Select-Object -First 1
+        if($line){ $token = ($line -replace '^MYSHKA_TOKEN=','').Trim().Trim('"').Trim("'") }
+    }
 }
-if($quality.status -ne 'ok' -or $replay.status -ne 'ok'){
+if($token){ $headers['X-MYSHKA-Token'] = $token }
+
+$quality = $null
+$replay = $null
+$protected = $false
+try {
+    $quality = Invoke-RestMethod 'http://127.0.0.1:8088/risk-intelligence/quality' -Headers $headers -TimeoutSec 8
+    $replay = Invoke-RestMethod 'http://127.0.0.1:8088/risk-intelligence/replay?limit=1' -Headers $headers -TimeoutSec 8
+} catch {
+    if($_.Exception.Response -and [int]$_.Exception.Response.StatusCode -in @(401,403)){
+        $protected = $true
+        Write-Host '[OK] Quality endpoints are present and token-protected; dashboard will use its configured token.' -ForegroundColor Green
+    } else {
+        throw 'ASTRA is healthy but Quality V2 endpoints did not answer.'
+    }
+}
+if(-not $protected -and ($quality.status -ne 'ok' -or $replay.status -ne 'ok')){
     throw 'Quality V2 endpoint verification returned non-ok status.'
 }
 
@@ -145,11 +164,15 @@ Write-Host '==============================================' -ForegroundColor Gre
 Write-Host ' READY - RISK QUALITY CONTROL V2 ' -ForegroundColor Green
 Write-Host '==============================================' -ForegroundColor Green
 Write-Host ("ASTRA health: " + $health.status)
-Write-Host ("State integrity: " + $quality.watchdog.ok_n + "/" + $quality.watchdog.total)
-Write-Host ("Guard matrix rows: " + $quality.guard_effectiveness.Count)
-Write-Host ("Confidence bins: " + $quality.confidence_calibration.Count)
-Write-Host ("Black Box snapshots: " + $quality.blackbox_count)
-Write-Host ("Drift state: " + $quality.drift.state)
+if($protected){
+    Write-Host 'Quality endpoints: OK · TOKEN PROTECTED'
+} else {
+    Write-Host ("State integrity: " + $quality.watchdog.ok_n + "/" + $quality.watchdog.total)
+    Write-Host ("Guard matrix rows: " + $quality.guard_effectiveness.Count)
+    Write-Host ("Confidence bins: " + $quality.confidence_calibration.Count)
+    Write-Host ("Black Box snapshots: " + $quality.blackbox_count)
+    Write-Host ("Drift state: " + $quality.drift.state)
+}
 Write-Host ''
 Write-Host 'Added:'
 Write-Host ' - Decision Replay / Black Box'
