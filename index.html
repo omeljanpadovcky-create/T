@@ -525,6 +525,7 @@ button{cursor:pointer}
       <div>
         <h2>🔧 FINAL HARDENING · DIAGNOSTIC</h2>
         <div class="sub">Exchange isolation/reconciliation · SQLite backup/restore · versioned config · data quality · safe chaos tests</div>
+        <div class="sub" id="hardCadence">AUTO: internal 5s · Bybit/Freqtrade read-only 60s</div>
       </div>
       <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
         <span class="sub" id="hardState">Hardening: warming</span>
@@ -655,7 +656,8 @@ const STORE='myshka_astra_live_lab_v1';
 const $=id=>document.getElementById(id);
 // MYSHKA_BRIDGE_UI_V1
 let APP={selected:CFG.pairs[0],markets:{},decisions:{},universePairs:CFG.pairs.slice(),kill:false,cooldowns:{},positions:{},trades:[],equity:1000,startEquity:1000,logs:[],entryTags:{},scanning:false,
-  bridgeUrl:'http://localhost:8088',bridgeToken:'',backendReady:false,backendStats:null};
+  bridgeUrl:'http://localhost:8088',bridgeToken:'',backendReady:false,backendStats:null,
+  hardeningBusy:false,hardeningLastInternal:0,hardeningLastExternal:0};
 
 // MYSHKA_PHONE_FRAGMENT_V1
 function applyPhoneLaunchFragment(){
@@ -1213,19 +1215,29 @@ function loadHardeningReport(r){
     '<div class="check"><span>STRICT min EDGE</span><span>+'+Number(snap.strict_min_net_edge_pct||0).toFixed(2)+'%</span></div>'
     :'<div class="muted">Ще немає config snapshot.</div>';
 }
-async function refreshHardening(manualReconcile=false){
-  if(!APP.backendReady)return;
+async function refreshHardening(externalReconcile=false){
+  if(!APP.backendReady||APP.hardeningBusy)return;
+  APP.hardeningBusy=true;
   try{
     let r;
-    if(manualReconcile){
+    if(externalReconcile){
       const ints=await bridgeFetch('/integrations');
       r=await bridgeFetch('/hardening/reconcile',{method:'POST',body:JSON.stringify({integrations:ints||{}})});
+      APP.hardeningLastExternal=Date.now();
     }else{
       r=await bridgeFetch('/hardening/status');
+      APP.hardeningLastInternal=Date.now();
     }
     loadHardeningReport(r);
+    const internalAge=APP.hardeningLastInternal?Math.max(0,Math.round((Date.now()-APP.hardeningLastInternal)/1000)):null;
+    const externalAge=APP.hardeningLastExternal?Math.max(0,Math.round((Date.now()-APP.hardeningLastExternal)/1000)):null;
+    if($('hardCadence'))$('hardCadence').textContent=
+      'AUTO: internal 5s'+(internalAge==null?'':' · last '+internalAge+'s ago')+
+      ' · Bybit/Freqtrade read-only 60s'+(externalAge==null?' · warming':' · last '+externalAge+'s ago');
   }catch(e){
     if($('hardState'))$('hardState').textContent='Hardening: backend patch required / warming';
+  }finally{
+    APP.hardeningBusy=false;
   }
 }
 
@@ -1754,6 +1766,10 @@ $('resetBtn').onclick=async()=>{if(APP.backendReady){if(!confirm('Скинути
 window.addEventListener('resize',()=>{renderSelected();renderStats()});
 loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(APP.backendReady){refreshPhoneControl();refreshRiskQuality();refreshDecisionReplay();refreshHardening(false)}});
 setInterval(()=>{if(APP.backendReady)refreshPhoneControl();else connectBridge()},CFG.scanMs);
+// Final Hardening cadence: internal state is local/read-only and cheap.
+setInterval(()=>{if(APP.backendReady)refreshHardening(false)},5000);
+// External integration reconciliation is intentionally slower to avoid private API pressure.
+setInterval(()=>{if(APP.backendReady)refreshHardening(true)},60000);
 setInterval(renderPosition,1000);
 </script>
 </body>
