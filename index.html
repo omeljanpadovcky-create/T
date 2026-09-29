@@ -354,7 +354,10 @@ button{cursor:pointer}
         <h2>🧠 DATA ANALYTICS · SHADOW</h2>
         <div class="sub">Нові чисті STRICT-угоди після встановлення · EDGE + TECH + Context 24/7 → фактичний NET</div>
       </div>
-      <div class="sub" id="analyticsState">Analytics: warming</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div class="sub" id="analyticsState">Analytics: warming</div>
+        <button class="btn" id="analyticsRefresh">↻ Оновити Analytics</button>
+      </div>
     </div>
 
     <div class="stats" style="grid-template-columns:repeat(5,1fr)">
@@ -1288,6 +1291,7 @@ function renderLog(){
 async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of (APP.universePairs||CFG.pairs)){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected();renderPairButtons()}renderReadiness()}
 $('pairFilter').onchange=renderPairButtons;
 $('statsMode').onchange=drawStatsChart;
+$('analyticsRefresh').onclick=refreshAnalytics;
 $('scanBtn').onclick=()=>APP.backendReady?phoneScanNow():connectBridge();$('killBtn').onclick=()=>setKill(!APP.kill);$('runReadiness').onclick=async()=>{if(APP.backendReady)await refreshPhoneControl();else await connectBridge();renderReadiness()};
 $('phoneRefresh').onclick=refreshPhoneControl;$('phoneScan').onclick=phoneScanNow;
 $('phonePause').onclick=()=>setServerControl('paused',!(APP.serverRuntime&&APP.serverRuntime.paused)).then(refreshPhoneControl);
