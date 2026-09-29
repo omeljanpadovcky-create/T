@@ -11,7 +11,7 @@ def replace_once(s: str, old: str, new: str, label: str) -> str:
     return s.replace(old, new, 1)
 
 
-def find_results_assignment_end_line(source: str) -> int:
+def find_results_assignment_span(source: str) -> tuple[int, int]:
     tree = ast.parse(source)
     fn = None
     for node in tree.body:
@@ -37,7 +37,7 @@ def find_results_assignment_end_line(source: str) -> int:
 
     # Prefer the earliest assignment; normal engine obtains the full universe once per step.
     node = sorted(candidates, key=lambda x: x.lineno)[0]
-    return int(getattr(node, "end_lineno", node.lineno))
+    return int(node.lineno), int(getattr(node, "end_lineno", node.lineno))
 
 
 def patch_api(path: Path) -> None:
@@ -96,9 +96,10 @@ def patch_api(path: Path) -> None:
     s = replace_once(s, analytics_recent_block, analytics_recent_block + cf_endpoints, "counterfactual endpoints")
 
     # AST-guided insertion immediately after the normal scan results are produced.
-    end_line = find_results_assignment_end_line(s)
+    start_line, end_line = find_results_assignment_span(s)
     lines = s.splitlines(keepends=True)
-    indent = "    "
+    source_line = lines[start_line - 1]
+    indent = source_line[: len(source_line) - len(source_line.lstrip(" \t"))]
     insertion = (
         f"{indent}# {MARKER}: observe rejected candidates using the same normal scan results\n"
         f"{indent}counterfactual_observe(results)\n"
