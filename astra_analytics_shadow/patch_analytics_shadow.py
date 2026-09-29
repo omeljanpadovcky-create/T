@@ -168,6 +168,7 @@ def patch_api(path: Path) -> None:
     analytics_cmd = stats_cmd + '                elif text == "/analytics": reply = _telegram_analytics_text()\n'
     s = replace_once(s, stats_cmd, analytics_cmd, "telegram analytics command")
 
+    compile(s, str(path), "exec")
     path.write_text(s, encoding="utf-8")
     print("[OK] api.py patched: Analytics SHADOW + API + Telegram /analytics")
 
