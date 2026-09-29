@@ -20,22 +20,23 @@ with tempfile.TemporaryDirectory() as td:
             pair TEXT, side TEXT, regime TEXT, mode TEXT,
             status TEXT, net_pct REAL, expected_edge_pct REAL,
             btc_15m_pct REAL, oi_15m_pct REAL, funding_rate_pct REAL,
-            long_short_ratio REAL
+            long_short_ratio REAL,
+            opened_at REAL
         )
         """
     )
     rows = [
-        ("QNT/USDT:USDT","LONG","UP","STRICT","CLOSED",-0.30,0.08,-0.20,-0.60,0.025,1.30),
-        ("QNT/USDT:USDT","LONG","UP","STRICT","CLOSED",-0.20,0.12,-0.15,-0.40,0.020,1.25),
-        ("QNT/USDT:USDT","LONG","UP","STRICT","CLOSED",-0.10,0.18,-0.10,-0.30,0.018,1.22),
-        ("QNT/USDT:USDT","LONG","UP","STRICT","CLOSED",-0.05,0.22,-0.05,-0.20,0.015,1.20),
-        ("QNT/USDT:USDT","LONG","UP","STRICT","CLOSED",-0.15,0.25,-0.12,-0.50,0.022,1.28),
+        ("QNT/USDT:USDT","LONG","UP","STRICT","CLOSED",-0.30,0.08,-0.20,-0.60,0.025,1.30,100.0),
+        ("QNT/USDT:USDT","LONG","UP","STRICT","CLOSED",-0.20,0.12,-0.15,-0.40,0.020,1.25,200.0),
+        ("QNT/USDT:USDT","LONG","UP","STRICT","CLOSED",-0.10,0.18,-0.10,-0.30,0.018,1.22,300.0),
+        ("QNT/USDT:USDT","LONG","UP","STRICT","CLOSED",-0.05,0.22,-0.05,-0.20,0.015,1.20,400.0),
+        ("QNT/USDT:USDT","LONG","UP","STRICT","CLOSED",-0.15,0.25,-0.12,-0.50,0.022,1.28,500.0),
     ]
     con.executemany(
         """INSERT INTO analytics_trades(
            pair,side,regime,mode,status,net_pct,expected_edge_pct,
-           btc_15m_pct,oi_15m_pct,funding_rate_pct,long_short_ratio
-        ) VALUES(?,?,?,?,?,?,?,?,?,?,?)""", rows
+           btc_15m_pct,oi_15m_pct,funding_rate_pct,long_short_ratio,opened_at
+        ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)""", rows
     )
     con.commit()
     con.close()
