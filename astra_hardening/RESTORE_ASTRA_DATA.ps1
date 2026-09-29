@@ -43,7 +43,15 @@ try {
 } catch {}
 if(-not $app){ throw 'ASTRA container/project not found.' }
 
+$emergencyBackup = Join-Path $app 'BACKUP_ASTRA_DATA.ps1'
+if(Test-Path $emergencyBackup){
+    Write-Host '[SAFE] Creating emergency backup of current state before restore...'
+    & powershell -ExecutionPolicy Bypass -File $emergencyBackup
+    if($LASTEXITCODE -ne 0){ throw 'Emergency pre-restore backup failed. Restore aborted.' }
+}
+
 Push-Location $app
+$restoreFailed = $false
 try {
     docker compose stop astra
     if($LASTEXITCODE -ne 0){ throw 'Could not stop ASTRA service.' }
@@ -68,6 +76,11 @@ try {
 
     docker compose up -d --force-recreate astra
     if($LASTEXITCODE -ne 0){ throw 'ASTRA restart failed after restore.' }
+} catch {
+    $restoreFailed = $true
+    Write-Warning ('Restore error: ' + $_.Exception.Message)
+    try { docker compose up -d astra | Out-Null } catch {}
+    throw
 } finally {
     Pop-Location
 }
