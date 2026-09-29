@@ -828,8 +828,12 @@ def _watchdog() -> dict:
 
 def quality_report() -> dict:
     rows = _closed_rows()
+    with _LOCK, _db() as con:
+        bb = con.execute("SELECT COUNT(*) n FROM decision_blackbox").fetchone()
+    blackbox_count = int(bb["n"] or 0) if bb else 0
     return {
         "status":"ok","mode":"SHADOW","shadow_only":True,
+        "blackbox_count":blackbox_count,
         "guard_effectiveness":_guard_effectiveness(rows),
         "confidence_calibration":_confidence_calibration(rows),
         "promotion_gate":_promotion_gate(rows),
