@@ -37,10 +37,16 @@ button{cursor:pointer}
 .btn.red{background:linear-gradient(180deg,#ff6170,#bd263e);border:0}
 .btn.gold{background:linear-gradient(180deg,#ffd66e,#efa52b);color:#17131a;border:0}
 .controls{display:grid;grid-template-columns:1fr auto auto auto;gap:8px;margin:12px 0}
+.market-toolbar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.market-toolbar .summary{display:flex;gap:6px;align-items:center;flex-wrap:wrap;color:#8fa5c6;font-size:9px}
+.market-toolbar .summary b{color:#fff}
 .pairs{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
-.pair-btn{min-width:0;padding:10px 9px;border-radius:11px;border:1px solid #29466f;background:#0a1728;color:#b7c9e4;font-weight:850;display:flex;align-items:center;justify-content:space-between;gap:7px}
+.pair-btn{min-width:0;padding:9px 9px;border-radius:11px;border:1px solid #29466f;background:#0a1728;color:#b7c9e4;font-weight:850;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 7px;text-align:left}
 .pair-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pair-btn small{font-size:8px;padding:3px 5px;border-radius:999px;background:#13253e;color:#91a8c8}
+.pair-btn small{font-size:8px;padding:3px 5px;border-radius:999px;background:#13253e;color:#91a8c8;align-self:start}
+.pair-btn em{grid-column:1/-1;font-style:normal;font-size:7.5px;color:#6f87a8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pair-btn.training{border-color:#7a6427;background:#211b0b}
+.pair-btn.training em{color:#ffd76e}
 .pair-btn.enter{border-color:#21885f;background:#09251a}.pair-btn.enter small{background:#0d3b29;color:#55e9a7}
 .pair-btn.drop{border-color:#71313d;background:#210d13}.pair-btn.drop small{background:#40141d;color:#ff8290}
 .pair-btn.wait small{background:#332a0c;color:#ffd76e}
@@ -122,6 +128,7 @@ button{cursor:pointer}
 @media(max-width:580px){.ready-grid,.check-grid{grid-template-columns:1fr}}
 @media(max-width:1100px){.main{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,1fr)}.stats{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:1050px){.pairs{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1450px){.pairs{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media(max-width:680px){
   .app{padding:8px}.header{position:relative;top:auto;flex-wrap:wrap}.head-right{width:100%}
   .controls{grid-template-columns:1fr 1fr}.pairs{grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr))}.chart{height:340px}
@@ -136,7 +143,7 @@ button{cursor:pointer}
   <header class="header glass">
     <div class="brand">
       <div class="logo">🐭</div>
-      <div><h1><span>MYSHKA / ASTRA</span> Trading Lab</h1><p>LIVE Bybit market data • реальна логіка ASTRA • PAPER EXECUTION</p></div>
+      <div><h1><span>MYSHKA / ASTRA</span> Trading Lab</h1><p>15-market LIVE Bybit universe • ASTRA TRAINING / PAPER EXECUTION</p></div>
     </div>
     <div class="head-right">
       <span class="badge" id="marketBadge">● Підключення…</span>
@@ -146,6 +153,17 @@ button{cursor:pointer}
   </header>
 
   <div class="controls">
+    <div class="market-toolbar">
+      <div class="summary" id="marketOverview"><span>Universe <b>15</b></span><span>•</span><span>Signals <b>—</b></span><span>•</span><span>EDGE PASS <b>—</b></span></div>
+      <select class="select" id="pairFilter" aria-label="Фільтр ринків">
+        <option value="all">Усі 15</option>
+        <option value="signal">LONG / SHORT</option>
+        <option value="edge">EDGE PASS</option>
+        <option value="enter">ENTER</option>
+        <option value="drop">DROP</option>
+        <option value="wait">WAIT</option>
+      </select>
+    </div>
     <div class="pairs" id="pairButtons"></div>
     <button class="btn primary" id="scanBtn">↻ Scan зараз</button>
     <select class="select" id="autoMode"><option value="on">Auto scan: ON</option><option value="off">Auto scan: OFF</option></select>
@@ -562,28 +580,64 @@ function loadServerTrades(st){
   APP.trades=st.trades.slice().reverse().map(t=>({pair:t.pair,side:t.side,regime:t.regime,horizonMs:t.horizon_sec*1000,grossPct:t.gross_return_pct,netPct:t.net_return_pct,directionHit:!!t.direction_hit,pnlAmount:0,expectedEdge:t.expected_edge_pct,openedAt:(t.entered_at||0)*1000,closedAt:(t.entered_at||0)*1000+t.horizon_sec*1000}));
   renderStats();
 }
+function techRuleScore(sig){
+  if(!sig||sig.direction==='WAIT')return{score:0,strict:false};
+  const isLong=sig.direction==='LONG';
+  const checks=isLong
+    ? [sig.emaFast>sig.emaSlow,sig.structure==='UP',sig.rsi>=CFG.rsiLong[0]&&sig.rsi<=CFG.rsiLong[1],sig.volumeRatio>=CFG.volumeMin]
+    : [sig.emaFast<sig.emaSlow,sig.structure==='DOWN',sig.rsi>=CFG.rsiShort[0]&&sig.rsi<=CFG.rsiShort[1],sig.volumeRatio>=CFG.volumeMin];
+  const score=checks.filter(Boolean).length;
+  return{score,strict:score===4};
+}
+function pairPriority(d){
+  if(!d)return 9;
+  if(d.action==='ENTER')return 0;
+  if(d.edge&&d.edge.passed)return 1;
+  if(d.sig&&d.sig.direction!=='WAIT')return 2;
+  if(d.action==='DROP')return 3;
+  return 4;
+}
+function updateMarketOverview(pairs){
+  const decisions=pairs.map(p=>APP.decisions[p]).filter(Boolean);
+  const candidates=decisions.filter(d=>d.sig&&d.sig.direction!=='WAIT').length;
+  const edge=decisions.filter(d=>d.edge&&d.edge.passed).length;
+  const enter=decisions.filter(d=>d.action==='ENTER').length;
+  const el=$('marketOverview');
+  if(el)el.innerHTML='<span>Universe <b>'+pairs.length+'</b></span><span>•</span><span>Signals <b>'+candidates+'</b></span><span>•</span><span>EDGE PASS <b>'+edge+'</b></span><span>•</span><span>ENTER <b class="long">'+enter+'</b></span>';
+}
 function renderPairButtons(){
   const host=$('pairButtons');if(!host)return;
-  const pairs=(APP.universePairs&&APP.universePairs.length?APP.universePairs:Object.keys(APP.markets));
+  const allPairs=(APP.universePairs&&APP.universePairs.length?APP.universePairs:Object.keys(APP.markets));
+  updateMarketOverview(allPairs);
+  const filter=$('pairFilter')?$('pairFilter').value:'all';
+  let pairs=allPairs.slice().sort((a,b)=>pairPriority(APP.decisions[a])-pairPriority(APP.decisions[b])||allPairs.indexOf(a)-allPairs.indexOf(b));
+  pairs=pairs.filter(pair=>{
+    const d=APP.decisions[pair];
+    if(filter==='all')return true;
+    if(filter==='signal')return !!(d&&d.sig&&d.sig.direction!=='WAIT');
+    if(filter==='edge')return !!(d&&d.edge&&d.edge.passed);
+    return !!(d&&d.action&&d.action.toLowerCase()===filter);
+  });
   host.innerHTML='';
   for(const pair of pairs){
     const d=APP.decisions[pair],action=(d&&d.action)||'WAIT';
     const b=document.createElement('button');
-    b.className='pair-btn '+action.toLowerCase()+(pair===APP.selected?' active':'');
+    const rule=d?techRuleScore(d.sig):{score:0,strict:false};
+    const relaxed=!!(APP.training&&APP.training.active&&d&&d.sig&&d.sig.direction!=='WAIT'&&!rule.strict);
+    b.className='pair-btn '+action.toLowerCase()+(pair===APP.selected?' active':'')+(relaxed?' training':'');
     b.dataset.pair=pair;
     const name=pair.replace(':USDT','');
     const edgePass=!!(d&&d.edge&&d.edge.passed),jevVerdict=d&&d.jev?d.jev.verdict:'';
     const mini=edgePass&&jevVerdict==='REJECT'?'EDGE✓ JEV✕':action;
-    b.innerHTML='<span>'+name+'</span><small>'+mini+'</small>';
-    if(d)b.title=name+' · TECH '+d.sig.direction+' · EDGE '+(d.edge?(d.edge.passed?'PASS':'DROP'):'—')+' · JEV '+(d.jev?d.jev.verdict:'—')+' · FINAL '+action;
-    b.onclick=()=>{
-      APP.selected=pair;
-      renderPairButtons();
-      renderSelected();
-      renderPosition();
-    };
+    const tech=d&&d.sig?d.sig.direction:'WAIT';
+    const edgeText=d&&d.edge?(d.edge.passed?'EDGE +'+d.edge.netEdgePct.toFixed(3)+'%':'EDGE '+d.edge.netEdgePct.toFixed(3)+'%'):'EDGE —';
+    const trainText=relaxed?' · TRAIN '+rule.score+'/4':'';
+    b.innerHTML='<span>'+name+'</span><small>'+mini+'</small><em>TECH '+tech+' · '+edgeText+trainText+'</em>';
+    if(d)b.title=name+' · TECH '+d.sig.direction+' ('+rule.score+'/4 strict rules) · EDGE '+(d.edge?(d.edge.passed?'PASS':'DROP'):'—')+' · JEV '+(d.jev?d.jev.verdict:'—')+' · FINAL '+action;
+    b.onclick=()=>{APP.selected=pair;renderPairButtons();renderSelected();renderPosition();};
     host.appendChild(b);
   }
+  if(!pairs.length)host.innerHTML='<div class="muted" style="grid-column:1/-1;padding:10px">За цим фільтром зараз немає ринків.</div>';
 }
 function applyServerResults(results){
   let ok=0;
@@ -724,7 +778,9 @@ function renderSelected(){
   $('mStructure').textContent=d.sig.structure;$('mRsi').textContent=d.sig.rsi.toFixed(1);$('mVol').textContent=d.sig.volumeRatio.toFixed(2)+'x';$('mSpread').textContent=pct(m.spreadPct,4);$('mAtr').textContent=pct(m.atrPct,3);$('mAtrMed').textContent=pct(m.atrMedian,3);
   $('chartOverlay').innerHTML='EMA9 '+fmtPrice(d.sig.emaFast)+' · EMA21 '+fmtPrice(d.sig.emaSlow)+'<br>RSI14 '+d.sig.rsi.toFixed(1)+' · Volume '+d.sig.volumeRatio.toFixed(2)+'x';
   const fa=$('finalAction');fa.textContent=d.action+(d.action==='ENTER'?' '+d.sig.direction:'');fa.className=d.action==='ENTER'?(d.sig.direction==='LONG'?'long':'short'):d.action==='DROP'?'short':'wait';$('finalReason').textContent=d.reason;
-  status('techStatus',d.sig.direction,d.sig.direction==='WAIT'?'mid':'pass');$('techText').textContent=d.sig.reason+' • EMA '+(d.sig.emaFast>d.sig.emaSlow?'FAST>SLOW':'FAST<SLOW')+' • '+d.sig.structure;
+  const tr=techRuleScore(d.sig),relaxed=!!(APP.training&&APP.training.active&&d.sig.direction!=='WAIT'&&!tr.strict);
+  status('techStatus',d.sig.direction,d.sig.direction==='WAIT'?'mid':relaxed?'mid':'pass');
+  $('techText').textContent=d.sig.reason+' • EMA '+(d.sig.emaFast>d.sig.emaSlow?'FAST>SLOW':'FAST<SLOW')+' • '+d.sig.structure+(relaxed?' • TRAIN '+tr.score+'/4 (strict 4/4 не виконано)':'');
   if(d.edge){
     status('edgeStatus',d.edge.passed?'PASS':'DROP',d.edge.passed?'pass':'drop');$('eMove').textContent=pct(d.edge.expectedMovePct);$('eCosts').textContent=pct(d.edge.totalCostPct);$('eNet').textContent=pct(d.edge.netEdgePct);$('eBasis').textContent=d.edge.basis+' · n='+d.edge.nSamples;
   }else{status('edgeStatus','—','mid');$('eMove').textContent=$('eCosts').textContent=$('eNet').textContent=$('eBasis').textContent='—'}
@@ -802,7 +858,10 @@ function renderReadiness(){
     if(d&&d.edge&&d.edge.passed)counts.EDGE++;
     if(d&&d.jev&&d.jev.verdict==='REJECT')counts.JEVREJECT++;
   }
-  $('scanSummary').innerHTML=
+  const trainingChip=(APP.training&&APP.training.active)
+    ? '<span class="scan-chip">TRAINING <b>'+((APP.training.tech_rule)||'relaxed')+'</b> · learner '+(APP.training.learner_n??'—')+'/'+(APP.training.until_trades??'—')+'</span>'
+    : '<span class="scan-chip">MODE <b>PAPER STRICT</b></span>';
+  $('scanSummary').innerHTML=trainingChip+
     '<span class="scan-chip">Universe <b>'+universe.length+'</b></span>'+
     '<span class="scan-chip">ENTER <b class="long">'+counts.ENTER+'</b></span>'+
     '<span class="scan-chip">DROP <b class="short">'+counts.DROP+'</b></span>'+
@@ -853,6 +912,7 @@ function renderLog(){
   $('logList').innerHTML=APP.logs.slice(0,50).map(e=>'<div class="logrow"><span class="muted">'+new Date(e.ts).toLocaleTimeString('uk-UA')+'</span><b>'+e.type+'</b><span>'+e.pair.replace('/USDT:USDT','')+'</span><span>'+e.text+'</span><b class="'+((parseFloat(e.val)||0)>=0?'long':'short')+'">'+e.val+'</b></div>').join('')||'<div class="muted">Ще немає записів.</div>'
 }
 async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of (APP.universePairs||CFG.pairs)){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected();renderPairButtons()}renderReadiness()}
+$('pairFilter').onchange=renderPairButtons;
 $('scanBtn').onclick=()=>APP.backendReady?phoneScanNow():scanAll();$('killBtn').onclick=()=>setKill(!APP.kill);$('runReadiness').onclick=async()=>{if(APP.backendReady)await refreshPhoneControl();else await scanAll();renderReadiness()};
 $('phoneRefresh').onclick=refreshPhoneControl;$('phoneScan').onclick=phoneScanNow;
 $('phonePause').onclick=()=>setServerControl('paused',!(APP.serverRuntime&&APP.serverRuntime.paused)).then(refreshPhoneControl);
