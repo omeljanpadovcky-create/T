@@ -412,7 +412,7 @@ def _latest_quality() -> Optional[dict]:
 def _config_history(limit: int = 8) -> list[dict]:
     init()
     with _LOCK, _db() as con:
-        rows = con.execute("SELECT * FROM config_versions ORDER BY id DESC LIMIT ?", (max(1, min(50, int(limit))),)).fetchall()
+        rows = con.execute("SELECT * FROM config_versions ORDER BY last_seen DESC, id DESC LIMIT ?", (max(1, min(50, int(limit))),)).fetchall()
     out = []
     for r in rows:
         try:
