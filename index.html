@@ -466,6 +466,60 @@ button{cursor:pointer}
     </div>
   </section>
 
+  <section class="card glass" id="qualityPanel">
+    <div class="stats-title">
+      <div>
+        <h2>🧾 QUALITY CONTROL · SHADOW</h2>
+        <div class="sub">Decision Black Box · Guard Effectiveness · Confidence Calibration · Promotion Gate · Drift · Watchdog</div>
+      </div>
+      <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
+        <span class="sub" id="qcState">Quality Control: warming</span>
+        <button class="btn" id="qualityRefresh">↻ Оновити Quality</button>
+        <button class="btn" id="qualityReplay">▶ Replay останнє</button>
+      </div>
+    </div>
+
+    <div class="stats" style="grid-template-columns:repeat(5,1fr)">
+      <div class="stat"><small>STATE INTEGRITY</small><b id="qcIntegrity">—</b></div>
+      <div class="stat"><small>Matrix guards</small><b id="qcGuards">0</b></div>
+      <div class="stat"><small>Drift</small><b id="qcDrift">—</b></div>
+      <div class="stat"><small>Promotion ready</small><b id="qcPromotionReady">0</b></div>
+      <div class="stat"><small>Black Box</small><b id="qcBlackbox">0</b></div>
+    </div>
+
+    <div class="mode-stats">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>🛡 Guard Effectiveness Matrix</h3><span>5m hypothetical outcomes</span></div>
+        <div id="qcGuardMatrix"><div class="muted">Чекаємо closed Risk Intelligence outcomes.</div></div>
+      </div>
+      <div class="mode-card train">
+        <div class="mode-head"><h3>🎯 Confidence calibration</h3><span>чи 70/100 реально кращий за 40/100</span></div>
+        <div id="qcConfidence"><div class="muted">Чекаємо достатню вибірку.</div></div>
+      </div>
+    </div>
+
+    <div class="mode-stats" style="margin-top:10px">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>🚦 Promotion Gate</h3><span>тільки READY FOR REVIEW, без автоактивації</span></div>
+        <div id="qcPromotion"><div class="muted">WARMING</div></div>
+      </div>
+      <div class="mode-card train">
+        <div class="mode-head"><h3>🩺 STATE INTEGRITY + Drift</h3><span>settlement / stale / scanner / DB</span></div>
+        <div id="qcWatchdog"><div class="muted">Перевірка ще не завантажена.</div></div>
+        <div id="qcDriftDetail" class="sub" style="margin-top:8px">Drift: warming</div>
+      </div>
+    </div>
+
+    <div class="mode-card" style="margin-top:10px">
+      <div class="mode-head"><h3>🎞 Decision Replay / Black Box</h3><span>TECH → EDGE → Context → JEV → Guard → Risk → Final</span></div>
+      <div id="qcReplay"><div class="muted">Натисни “Replay останнє”.</div></div>
+    </div>
+
+    <div class="sub" style="margin-top:8px">
+      SHADOW only: Quality Control нічого не вмикає автоматично і не змінює ENTER/DROP.
+    </div>
+  </section>
+
   <section class="card glass readiness" id="readinessPanel">
     <div class="ready-head">
       <div>
@@ -980,6 +1034,100 @@ async function refreshRiskIntelligence(){
   }
 }
 
+function qcSigned(v,d=3){
+  const n=Number(v);return Number.isFinite(n)?(n>=0?'+':'')+n.toFixed(d)+'%':'—';
+}
+function qcClass(state){
+  const s=String(state||'').toUpperCase();
+  return (s==='READY_FOR_REVIEW'||s==='STABLE'||s==='CLEAR'||s==='OK')?'long':
+    (s==='STALE'||s==='HOLD'||s==='WARN'||s==='BAD')?'short':'wait';
+}
+function loadRiskQuality(q){
+  if(!q||q.status!=='ok')return;
+  APP.riskQuality=q;
+  const wd=q.watchdog||{},matrix=Array.isArray(q.guard_effectiveness)?q.guard_effectiveness:[],
+        promo=Array.isArray(q.promotion_gate)?q.promotion_gate:[],drift=q.drift||{};
+  $('qcIntegrity').textContent=Number(wd.ok_n||0)+'/'+Number(wd.total||0);
+  $('qcIntegrity').className=wd.ok?'long':'short';
+  $('qcGuards').textContent=matrix.length;
+  $('qcBlackbox').textContent=Number(q.blackbox_count||0);
+  $('qcDrift').textContent=String(drift.state||'WARMING');
+  $('qcDrift').className=qcClass(drift.state);
+  const ready=promo.filter(x=>x.readiness==='READY_FOR_REVIEW').length;
+  $('qcPromotionReady').textContent=ready;
+  $('qcPromotionReady').className=ready?'long':'';
+  $('qcState').textContent='Quality Control: '+(wd.ok?'INTEGRITY OK':'CHECK WARNINGS')+' · SHADOW';
+
+  $('qcGuardMatrix').innerHTML=matrix.length?matrix.slice(0,12).map(x=>
+    '<div class="check"><span>'+String(x.guard||'')+' · n='+Number(x.n||0)+
+    ' · saved '+Number(x.saved_losses||0)+' · false '+Number(x.false_blocks||0)+
+    '</span><span class="'+(Number(x.avg_hypothetical_net_pct)<0?'long':'short')+'">'+
+    qcSigned(x.avg_hypothetical_net_pct)+' · '+Number(x.false_block_rate_pct||0).toFixed(1)+'% false</span></div>'
+  ).join(''):'<div class="muted">Ще немає guard outcomes.</div>';
+
+  const bins=Array.isArray(q.confidence_calibration)?q.confidence_calibration:[];
+  $('qcConfidence').innerHTML=bins.map(x=>
+    '<div class="check"><span>'+String(x.label||'')+' · n='+Number(x.n||0)+
+    '</span><span>'+qcSigned(x.avg_net_pct)+' · win '+Number(x.win_rate_pct||0).toFixed(1)+'%</span></div>'
+  ).join('')||'<div class="muted">Ще немає calibration data.</div>';
+
+  $('qcPromotion').innerHTML=promo.length?promo.slice(0,12).map(x=>
+    '<div class="check"><span>'+String(x.guard||'')+' · n='+Number(x.n||0)+
+    ' · false '+Number(x.false_block_rate_pct||0).toFixed(1)+'%</span>'+
+    '<span class="'+qcClass(x.readiness)+'">'+String(x.readiness||'WARMING')+
+    (x.effect_stable?' · stable':'')+'</span></div>'
+  ).join(''):'<div class="muted">Ще немає promotion data.</div>';
+
+  const checks=Array.isArray(wd.checks)?wd.checks:[];
+  $('qcWatchdog').innerHTML=checks.map(x=>
+    '<div class="check"><span>'+String(x.name||'')+'</span><span class="'+(x.ok?'long':'short')+'">'+
+    (x.ok?'OK':'WARN')+' · '+String(x.detail||'')+'</span></div>'
+  ).join('')||'<div class="muted">Watchdog warming.</div>';
+
+  if(String(drift.state||'WARMING')==='WARMING'){
+    $('qcDriftDetail').textContent='Drift: WARMING · n='+Number(drift.n||0)+' · '+String(drift.reason||'collecting data');
+  }else{
+    $('qcDriftDetail').textContent='Drift: '+String(drift.state)+' · window '+Number(drift.window||0)+
+      ' · Δavg NET '+qcSigned(drift.avg_net_delta_pct)+
+      ' · Δwin '+Number(drift.win_rate_delta_pp||0).toFixed(1)+'pp'+
+      ' · Δcost '+qcSigned(drift.avg_cost_delta_pct);
+  }
+}
+async function refreshRiskQuality(){
+  if(!APP.backendReady)return;
+  try{
+    const q=await bridgeFetch('/risk-intelligence/quality');
+    loadRiskQuality(q);
+  }catch(e){
+    if($('qcState'))$('qcState').textContent='Quality Control: backend patch required / warming';
+  }
+}
+function renderDecisionReplay(item){
+  const host=$('qcReplay');if(!host)return;
+  if(!item){host.innerHTML='<div class="muted">Black Box ще порожній.</div>';return}
+  const s=item.stages||{},tech=s.tech||{},edge=s.edge||{},ctx=s.context||{},jev=s.jev||{},
+        guard=s.guard||{},risk=s.risk_intelligence||{},fin=s.final||{};
+  const flags=Array.isArray(risk.flags)?risk.flags:[];
+  host.innerHTML=
+    '<div class="check"><span><b>'+String(item.pair||'').replace('/USDT:USDT','')+'</b> · '+new Date(Number(item.observed_at||0)*1000).toLocaleTimeString('uk-UA')+'</span><span>'+String(fin.action||item.action||'—')+' · '+String(fin.reason||item.reason||'—')+'</span></div>'+
+    '<div class="check"><span>1 · TECH</span><span>'+String(tech.direction||'WAIT')+' · '+Number(tech.score||0)+'/4 · '+String(tech.structure||'—')+'</span></div>'+
+    '<div class="check"><span>2 · EDGE</span><span>'+((edge.passed===true)?'PASS':edge.passed===false?'DROP':'—')+' · '+qcSigned(edge.net_edge_pct)+'</span></div>'+
+    '<div class="check"><span>3 · CONTEXT</span><span>n='+Number(ctx.samples||0)+' · BTC15 '+qcSigned(ctx.btc_15m_pct)+' · OI15 '+qcSigned(ctx.oi_15m_pct)+'</span></div>'+
+    '<div class="check"><span>4 · JEV</span><span>'+String(jev.verdict||'—')+' · conf '+(jev.confidence==null?'—':Math.round(Number(jev.confidence)*100)+'%')+'</span></div>'+
+    '<div class="check"><span>5 · GUARD</span><span>'+(guard.passed===true?'PASS':guard.passed===false?'VETO':'—')+'</span></div>'+
+    '<div class="check"><span>6 · RISK INTELLIGENCE</span><span>conf '+(risk.confidence_score==null?'—':Number(risk.confidence_score).toFixed(0)+'/100')+' · '+(flags.length?flags.join(', '):'CLEAR')+'</span></div>'+
+    '<div class="check"><span>7 · FINAL</span><span>'+String(fin.action||'—')+' · '+String(fin.reason||'—')+'</span></div>';
+}
+async function refreshDecisionReplay(){
+  if(!APP.backendReady)return;
+  try{
+    const r=await bridgeFetch('/risk-intelligence/replay?limit=1');
+    renderDecisionReplay(r&&Array.isArray(r.items)?r.items[0]:null);
+  }catch(e){
+    if($('qcReplay'))$('qcReplay').innerHTML='<div class="muted">Replay endpoint unavailable.</div>';
+  }
+}
+
 function loadServerTrades(st){
   if(!st||!st.trades)return;
   APP.backendStats=st;
@@ -1484,7 +1632,9 @@ function renderLog(){
 async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of (APP.universePairs||CFG.pairs)){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected();renderPairButtons()}renderReadiness()}
 $('pairFilter').onchange=renderPairButtons;
 $('statsMode').onchange=drawStatsChart;
-$('analyticsRefresh').onclick=()=>{refreshAnalytics();refreshCounterfactual();refreshRiskIntelligence()};
+$('analyticsRefresh').onclick=()=>{refreshAnalytics();refreshCounterfactual();refreshRiskIntelligence();refreshRiskQuality()};
+$('qualityRefresh').onclick=()=>{refreshRiskQuality();refreshDecisionReplay()};
+$('qualityReplay').onclick=refreshDecisionReplay;
 $('scanBtn').onclick=()=>APP.backendReady?phoneScanNow():connectBridge();$('killBtn').onclick=()=>setKill(!APP.kill);$('runReadiness').onclick=async()=>{if(APP.backendReady)await refreshPhoneControl();else await connectBridge();renderReadiness()};
 $('phoneRefresh').onclick=refreshPhoneControl;$('phoneScan').onclick=phoneScanNow;
 $('phonePause').onclick=()=>setServerControl('paused',!(APP.serverRuntime&&APP.serverRuntime.paused)).then(refreshPhoneControl);
@@ -1497,7 +1647,7 @@ $('phoneEngineReset').onclick=async()=>{if(!APP.backendReady||!confirm('Скин
 $('autoMode').onchange=()=>{if(APP.backendReady)setServerControl('auto_scan',$('autoMode').value==='on').then(refreshPhoneControl)};
 $('resetBtn').onclick=async()=>{if(APP.backendReady){if(!confirm('Скинути paper engine? Learner історія залишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl();return}if(!confirm('Скинути локальні paper-угоди?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.entryTags={};APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
 window.addEventListener('resize',()=>{renderSelected();renderStats()});
-loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(APP.backendReady)refreshPhoneControl()});
+loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(APP.backendReady){refreshPhoneControl();refreshRiskQuality();refreshDecisionReplay()}});
 setInterval(()=>{if(APP.backendReady)refreshPhoneControl();else connectBridge()},CFG.scanMs);
 setInterval(renderPosition,1000);
 </script>
