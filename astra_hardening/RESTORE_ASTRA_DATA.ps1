@@ -49,21 +49,22 @@ try {
     if($LASTEXITCODE -ne 0){ throw 'Could not stop ASTRA service.' }
 
     foreach($f in $files){
-        # Remove stale WAL/SHM sidecars while service is stopped.
-        docker exec $container sh -lc ("rm -f '/data/" + $f.name + "-wal' '/data/" + $f.name + "-shm'") 2>$null | Out-Null
         docker cp (Join-Path $BackupPath $f.name) ($container + ':/data/' + $f.name)
         if($LASTEXITCODE -ne 0){ throw ("docker cp restore failed: " + $f.name) }
     }
 
-    docker start $container | Out-Null
-    Start-Sleep -Seconds 2
+    # Service container is stopped, so use a one-shot compose container that mounts
+    # the same /data volume to clear stale WAL/SHM files and verify restored DBs.
+    docker compose run --rm --no-deps --entrypoint sh astra -lc "rm -f /data/*-wal /data/*-shm"
+    if($LASTEXITCODE -ne 0){ throw 'Could not clear SQLite WAL/SHM sidecars.' }
+
     foreach($f in $files){
-        $q = docker exec $container python -c "import sqlite3,sys; c=sqlite3.connect(sys.argv[1]); print(c.execute('PRAGMA quick_check').fetchone()[0]); c.close()" ("/data/" + $f.name)
+        $db = "/data/" + $f.name
+        $q = docker compose run --rm --no-deps --entrypoint python astra -c "import sqlite3,sys; c=sqlite3.connect(sys.argv[1]); print(c.execute('PRAGMA quick_check').fetchone()[0]); c.close()" $db
         if(($q | Out-String).Trim().ToLower() -ne 'ok'){
             throw ("Container DB integrity failed after restore: " + $f.name)
         }
     }
-    docker stop $container | Out-Null
 
     docker compose up -d --force-recreate astra
     if($LASTEXITCODE -ne 0){ throw 'ASTRA restart failed after restore.' }
