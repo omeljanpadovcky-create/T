@@ -432,6 +432,7 @@ def _record_blackbox(r: dict, now: float, history_rows: list[dict], open_rows: l
     ctx = r.get("context") or {}
     guard = r.get("guard") or {}
     evidence_gate = r.get("evidence_gate") or {}
+    adaptive_learner = r.get("adaptive_learner") or {}
     risk = _candidate_features(r, history_rows, open_rows)
     direction = str(r.get("direction") or sig.get("direction") or "WAIT").upper()
     tech_score = _signal_score(sig)
@@ -476,6 +477,14 @@ def _record_blackbox(r: dict, now: float, history_rows: list[dict], open_rows: l
             "evidence_avg_net_pct": evidence_gate.get("evidence_avg_net_pct"),
             "evidence_profit_factor": evidence_gate.get("evidence_profit_factor"),
             "recent_avg_net_pct": evidence_gate.get("recent_avg_net_pct"),
+        },
+        "adaptive_learner": {
+            "applies": adaptive_learner.get("applies"), "state": adaptive_learner.get("state"),
+            "reason": adaptive_learner.get("reason"),
+            "ml_win_probability": adaptive_learner.get("ml_win_probability"),
+            "required_probability": adaptive_learner.get("required_probability"),
+            "candidate_edge_pct": adaptive_learner.get("candidate_edge_pct"),
+            "required_edge_pct": adaptive_learner.get("required_edge_pct"),
         },
         "risk_intelligence": {
             "flags": flags, "confidence_score": confidence,
