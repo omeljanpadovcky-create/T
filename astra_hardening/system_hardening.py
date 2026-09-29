@@ -172,7 +172,8 @@ def _candle_ok(c: dict) -> bool:
     return h >= max(o, cl) and l <= min(o, cl) and h >= l
 
 
-def _data_quality(results: list[dict], config: dict) -> dict:
+def _data_quality(results: list[dict], config: dict, now: Optional[float] = None) -> dict:
+    now = float(now or time.time())
     pairs = [str(r.get("pair") or "") for r in results]
     expected = int(config.get("universe_target") or EXPECTED_UNIVERSE)
     candle_limit = int(config.get("candle_limit") or 80)
@@ -187,8 +188,9 @@ def _data_quality(results: list[dict], config: dict) -> dict:
     dup = len([p for p in pairs if p]) - len(set(p for p in pairs if p))
     add("duplicate_pairs", dup == 0, f"duplicates {dup}")
 
-    bad_price = bad_bidask = bad_spread = bad_candles = stale_ctx = invariant = 0
+    bad_price = bad_bidask = bad_spread = bad_candles = stale_ctx = time_drift = invariant = 0
     candle_seen = 0
+    timestamp_seen = 0
     for r in results:
         m = r.get("market") or {}
         last = _num(m.get("last_price"))
@@ -211,8 +213,16 @@ def _data_quality(results: list[dict], config: dict) -> dict:
         ctx = r.get("context") or {}
         if ctx:
             age = _num(ctx.get("age_sec"))
+            latest_ts = _num(ctx.get("latest_ts"))
             if age is not None and age > CONTEXT_MAX_AGE_SEC:
                 stale_ctx += 1
+            if latest_ts is not None:
+                timestamp_seen += 1
+                computed_age = now - latest_ts
+                if computed_age < -5.0:
+                    time_drift += 1
+                elif age is not None and abs(computed_age - age) > 10.0:
+                    time_drift += 1
 
         edge = r.get("edge") or {}
         action = str(r.get("action") or "").upper()
@@ -228,6 +238,8 @@ def _data_quality(results: list[dict], config: dict) -> dict:
     add("candle_integrity", candle_seen == 0 or bad_candles == 0,
         "not supplied" if candle_seen == 0 else f"bad {bad_candles}/{candle_seen} · expected {candle_limit}")
     add("context_freshness", stale_ctx == 0, f"stale {stale_ctx}")
+    add("timestamp_alignment", time_drift == 0,
+        "not supplied" if timestamp_seen == 0 else f"drift {time_drift}/{timestamp_seen}")
     add("decision_invariants", invariant == 0, f"violations {invariant}")
 
     ok_n = sum(1 for x in checks if x["ok"])
@@ -251,7 +263,7 @@ def observe_results(results: list[dict], config_snapshot: Optional[dict] = None,
         rows = list(results or [])
         snap = _config_snapshot(rows, config_snapshot)
         ver = _record_config(snap, ts)
-        dq = _data_quality(rows, snap)
+        dq = _data_quality(rows, snap, ts)
         with _LOCK, _db() as con:
             con.execute(
                 """INSERT INTO data_quality_samples(
