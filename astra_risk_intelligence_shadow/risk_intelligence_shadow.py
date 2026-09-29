@@ -46,7 +46,12 @@ BTC_CONFLICT_PCT = float(os.getenv("RISK_BTC_CONFLICT_PCT", "0.10"))
 OI_DIVERGENCE_PCT = float(os.getenv("RISK_OI_DIVERGENCE_PCT", "0.50"))
 FUNDING_EXTREME_PCT = float(os.getenv("RISK_FUNDING_EXTREME_PCT", "0.020"))
 SPREAD_WARN_PCT = float(os.getenv("RISK_SPREAD_WARN_PCT", "0.050"))
+COUNTERFACTUAL_DB_PATH = os.getenv("COUNTERFACTUAL_DB_PATH", "/data/myshka_counterfactual.sqlite3")
+BLACKBOX_RETENTION = max(500, int(os.getenv("RISK_BLACKBOX_RETENTION", "5000")))
+PROMOTION_MIN_N = max(10, int(os.getenv("RISK_PROMOTION_MIN_N", "30")))
+DRIFT_WINDOW = max(20, int(os.getenv("RISK_DRIFT_WINDOW", "50")))
 AB_THRESHOLDS = (0.05, 0.10, 0.15, 0.20)
+CONFIDENCE_BINS = ((0,29),(30,49),(50,69),(70,84),(85,100))
 _LOCK = threading.RLock()
 
 
@@ -138,6 +143,30 @@ def init() -> dict:
         )
         con.execute("CREATE INDEX IF NOT EXISTS idx_ri_status_target ON risk_candidates(status,target_at)")
         con.execute("CREATE INDEX IF NOT EXISTS idx_ri_pair_status ON risk_candidates(pair,status)")
+        con.execute(
+            """
+            CREATE TABLE IF NOT EXISTS decision_blackbox (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pair TEXT NOT NULL,
+                source_slot INTEGER NOT NULL,
+                observed_at REAL NOT NULL,
+                action TEXT,
+                reason TEXT,
+                direction TEXT,
+                tech_score INTEGER,
+                edge_pct REAL,
+                edge_passed INTEGER,
+                jev_verdict TEXT,
+                risk_confidence REAL,
+                risk_flags_json TEXT,
+                stage_json TEXT,
+                raw_json TEXT,
+                UNIQUE(pair, source_slot)
+            )
+            """
+        )
+        con.execute("CREATE INDEX IF NOT EXISTS idx_blackbox_observed ON decision_blackbox(observed_at DESC)")
+        con.execute("CREATE INDEX IF NOT EXISTS idx_blackbox_pair ON decision_blackbox(pair,observed_at DESC)")
     return status()
 
 
@@ -386,6 +415,95 @@ def _candidate_features(r: dict, history_rows: list[dict], open_rows: list[dict]
     }
 
 
+def _json_dump(value: Any) -> str:
+    try:
+        return json.dumps(value, ensure_ascii=False, separators=(",", ":"), default=str)
+    except Exception:
+        return "{}"
+
+
+def _record_blackbox(r: dict, now: float, history_rows: list[dict], open_rows: list[dict]) -> bool:
+    pair = str(r.get("pair") or "")
+    if not pair:
+        return False
+    sig = r.get("signal") or {}
+    edge = r.get("edge") or {}
+    jev = r.get("jev") or {}
+    ctx = r.get("context") or {}
+    guard = r.get("guard") or {}
+    risk = _candidate_features(r, history_rows, open_rows)
+    direction = str(r.get("direction") or sig.get("direction") or "WAIT").upper()
+    tech_score = _signal_score(sig)
+    flags = (risk or {}).get("flags", [])
+    confidence = (risk or {}).get("confidence_score")
+    stage = {
+        "tech": {
+            "direction": direction, "score": tech_score,
+            "structure": sig.get("structure"), "rsi": sig.get("rsi"),
+            "volume_ratio": sig.get("volume_ratio"), "reason": sig.get("reason"),
+        },
+        "edge": {
+            "passed": bool(edge.get("passed")) if edge else None,
+            "net_edge_pct": edge.get("net_edge_pct"),
+            "expected_move_pct": edge.get("expected_move_pct"),
+            "total_cost_pct": edge.get("total_cost_pct"),
+            "reason": edge.get("reason"),
+            "min_required_net_edge_pct": edge.get("min_required_net_edge_pct"),
+        },
+        "context": {
+            "samples": ctx.get("samples"), "age_sec": ctx.get("age_sec"),
+            "price_15m_pct": ctx.get("price_change_15m_pct"),
+            "oi_15m_pct": ctx.get("oi_change_15m_pct"),
+            "funding_rate_pct": ctx.get("funding_rate_pct"),
+            "long_short_ratio": ctx.get("long_short_ratio"),
+            "btc_15m_pct": ctx.get("btc_price_change_15m_pct"),
+            "external_event_count": ctx.get("external_event_count"),
+        },
+        "jev": {
+            "verdict": jev.get("verdict"), "confidence": jev.get("confidence"),
+            "reason": jev.get("reason"),
+        },
+        "guard": {
+            "passed": guard.get("passed"), "reasons": guard.get("reasons"),
+        },
+        "risk_intelligence": {
+            "flags": flags, "confidence_score": confidence,
+            "pair_edge_recommendation": (risk or {}).get("pair_edge_recommendation"),
+            "regime_edge_recommendation": (risk or {}).get("regime_edge_recommendation"),
+        },
+        "final": {"action": r.get("action"), "reason": r.get("reason")},
+        "market": {
+            "last_price": (r.get("market") or {}).get("last_price"),
+            "spread_pct": (r.get("market") or {}).get("spread_pct"),
+            "atr_pct": (r.get("market") or {}).get("atr_pct"),
+            "atr_pct_median": (r.get("market") or {}).get("atr_pct_median"),
+        },
+    }
+    slot = int(now // 15) * 15
+    with _LOCK, _db() as con:
+        cur = con.execute(
+            """
+            INSERT OR REPLACE INTO decision_blackbox(
+                pair,source_slot,observed_at,action,reason,direction,tech_score,
+                edge_pct,edge_passed,jev_verdict,risk_confidence,risk_flags_json,
+                stage_json,raw_json
+            ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            """,
+            (
+                pair, slot, now, str(r.get("action") or ""), str(r.get("reason") or "")[:1000],
+                direction, tech_score, _num(edge.get("net_edge_pct")),
+                1 if bool(edge.get("passed")) else 0 if edge else None,
+                str(jev.get("verdict") or ""), confidence, _json_dump(flags),
+                _json_dump(stage), _json_dump(r),
+            ),
+        )
+        con.execute(
+            "DELETE FROM decision_blackbox WHERE id NOT IN (SELECT id FROM decision_blackbox ORDER BY id DESC LIMIT ?)",
+            (BLACKBOX_RETENTION,),
+        )
+        return bool(cur.rowcount)
+
+
 def _record_candidate(r: dict, now: float, history_rows: list[dict], open_rows: list[dict]) -> bool:
     f = _candidate_features(r, history_rows, open_rows)
     if not f:
@@ -463,10 +581,13 @@ def observe_results(results: list[dict], now: Optional[float] = None) -> dict:
         history_rows = _analytics_rows()
         open_rows = _open_analytics_rows()
         created = 0
+        blackbox = 0
         for r in results or []:
+            if _record_blackbox(r, ts, history_rows, open_rows):
+                blackbox += 1
             if _record_candidate(r, ts, history_rows, open_rows):
                 created += 1
-        return {"status":"ok","created":created,**out}
+        return {"status":"ok","created":created,"blackbox":blackbox,**out}
     except Exception as exc:
         return {"status":"error","error":f"{type(exc).__name__}: {exc}","created":0,"closed":0,"skipped":0}
 
@@ -547,6 +668,197 @@ def _cost_report(rows: list[dict]) -> list[dict]:
         })
     out.sort(key=lambda x:-x["n"])
     return out
+
+
+def _flag_groups(rows: list[dict]) -> dict[str,list[dict]]:
+    groups: dict[str,list[dict]] = defaultdict(list)
+    for r in rows:
+        try:
+            flags = json.loads(r.get("flags_json") or "[]")
+        except Exception:
+            flags = []
+        for flag in flags:
+            groups[str(flag)].append(r)
+    return groups
+
+
+def _guard_effectiveness(rows: list[dict]) -> list[dict]:
+    out = []
+    for flag, q in _flag_groups(rows).items():
+        nets = [float(x["net_pct"]) for x in q if x.get("net_pct") is not None]
+        n = len(nets)
+        saved = sum(1 for x in nets if x <= 0)
+        false_blocks = sum(1 for x in nets if x > 0)
+        out.append({
+            "guard": flag, "n": n,
+            "saved_losses": saved,
+            "false_blocks": false_blocks,
+            "false_block_rate_pct": (false_blocks / n * 100.0) if n else 0.0,
+            "avg_hypothetical_net_pct": (sum(nets) / n) if n else 0.0,
+            "total_hypothetical_net_pct": sum(nets),
+        })
+    out.sort(key=lambda x: (-int(x["n"]), float(x["avg_hypothetical_net_pct"])))
+    return out
+
+
+def _confidence_calibration(rows: list[dict]) -> list[dict]:
+    out = []
+    for lo, hi in CONFIDENCE_BINS:
+        q = [r for r in rows if _num(r.get("confidence_score")) is not None and lo <= float(r["confidence_score"]) <= hi]
+        m = _metrics(q)
+        out.append({"label": f"{lo}-{hi}", "min": lo, "max": hi, **m})
+    return out
+
+
+def _promotion_gate(rows: list[dict]) -> list[dict]:
+    out = []
+    for flag, q in _flag_groups(rows).items():
+        q = [x for x in q if x.get("net_pct") is not None]
+        n = len(q)
+        m = _metrics(q)
+        half = max(1, n // 2)
+        first = _metrics(q[:half]) if q else _metrics([])
+        second = _metrics(q[half:]) if q[half:] else _metrics([])
+        stable = bool(
+            n >= PROMOTION_MIN_N
+            and first["n"] >= max(5, PROMOTION_MIN_N // 3)
+            and second["n"] >= max(5, PROMOTION_MIN_N // 3)
+            and first["avg_net_pct"] < 0
+            and second["avg_net_pct"] < 0
+        )
+        false_rate = 100.0 - m["win_rate_pct"]
+        # For a veto-style guard, hypothetical positive outcomes are false blocks.
+        false_block_rate = m["win_rate_pct"]
+        if n < 10:
+            readiness = "WARMING"
+        elif n < PROMOTION_MIN_N:
+            readiness = "EARLY"
+        elif stable and m["avg_net_pct"] < 0 and false_block_rate <= 20.0:
+            readiness = "READY_FOR_REVIEW"
+        else:
+            readiness = "HOLD"
+        out.append({
+            "guard": flag, "n": n, "sample_state": "COLD" if n < 10 else "EARLY" if n < PROMOTION_MIN_N else "USABLE",
+            "effect_stable": stable, "false_block_rate_pct": false_block_rate,
+            "avg_hypothetical_net_pct": m["avg_net_pct"], "readiness": readiness,
+        })
+    out.sort(key=lambda x: (x["readiness"] != "READY_FOR_REVIEW", -int(x["n"])))
+    return out
+
+
+def _drift_report(rows: list[dict]) -> dict:
+    q = [r for r in rows if r.get("net_pct") is not None]
+    if len(q) < 40:
+        return {"state":"WARMING","n":len(q),"window":DRIFT_WINDOW,"reason":"need >=40 closed shadow outcomes"}
+    w = min(DRIFT_WINDOW, len(q) // 2)
+    recent = q[-w:]
+    prior = q[-2*w:-w]
+    mr, mp = _metrics(recent), _metrics(prior)
+    def mean_field(part: list[dict], field: str) -> float:
+        vals = [float(x[field]) for x in part if x.get(field) is not None]
+        return sum(vals)/len(vals) if vals else 0.0
+    net_delta = mr["avg_net_pct"] - mp["avg_net_pct"]
+    win_delta = mr["win_rate_pct"] - mp["win_rate_pct"]
+    cost_delta = mean_field(recent,"total_cost_pct") - mean_field(prior,"total_cost_pct")
+    conf_delta = mean_field(recent,"confidence_score") - mean_field(prior,"confidence_score")
+    stale = abs(net_delta) >= 0.25 or abs(win_delta) >= 20.0 or abs(cost_delta) >= 0.05
+    return {
+        "state":"STALE" if stale else "STABLE","n":len(q),"window":w,
+        "recent":mr,"prior":mp,
+        "avg_net_delta_pct":net_delta,"win_rate_delta_pp":win_delta,
+        "avg_cost_delta_pct":cost_delta,"confidence_delta":conf_delta,
+    }
+
+
+def _db_open_stale(path: str, table: str, now: float, target_col: Optional[str] = None) -> dict:
+    if not os.path.exists(path):
+        return {"ok":False,"count":0,"stale":0,"detail":"DB missing"}
+    try:
+        with _db(path) as con:
+            if target_col:
+                rows = con.execute(f"SELECT * FROM {table} WHERE status='OPEN'").fetchall()
+                stale = sum(1 for r in rows if r[target_col] is not None and now > float(r[target_col]) + MAX_SETTLE_DELAY_SEC)
+            else:
+                rows = con.execute(f"SELECT * FROM {table} WHERE status='OPEN'").fetchall()
+                stale = sum(1 for r in rows if r["opened_at"] is not None and now > float(r["opened_at"]) + HORIZON_SEC + MAX_SETTLE_DELAY_SEC)
+        return {"ok":stale==0,"count":len(rows),"stale":stale}
+    except Exception as exc:
+        return {"ok":False,"count":0,"stale":0,"detail":f"{type(exc).__name__}: {exc}"}
+
+
+def _watchdog() -> dict:
+    now = time.time()
+    checks = []
+    try:
+        with _LOCK, _db() as con:
+            last = con.execute("SELECT MAX(observed_at) t FROM decision_blackbox").fetchone()
+            last_t = float(last["t"] or 0) if last else 0.0
+            recent = con.execute(
+                "SELECT stage_json FROM decision_blackbox WHERE observed_at>=? ORDER BY observed_at DESC LIMIT 60",
+                (now - 90.0,),
+            ).fetchall()
+        age = now - last_t if last_t else None
+        checks.append({"name":"scanner_freshness","ok":age is not None and age <= 90.0,"detail":"no snapshots" if age is None else f"age {age:.0f}s"})
+        missing = 0
+        for row in recent:
+            try:
+                stage = json.loads(row["stage_json"] or "{}")
+            except Exception:
+                stage = {}
+            if (stage.get("market") or {}).get("last_price") in (None,0,""):
+                missing += 1
+        checks.append({"name":"market_price_coverage","ok":missing==0,"detail":f"missing {missing}/{len(recent)}"})
+    except Exception as exc:
+        checks.extend([
+            {"name":"scanner_freshness","ok":False,"detail":f"{type(exc).__name__}: {exc}"},
+            {"name":"market_price_coverage","ok":False,"detail":"blackbox unavailable"},
+        ])
+
+    risk = _db_open_stale(DB_PATH,"risk_candidates",now,"target_at")
+    analytics = _db_open_stale(ANALYTICS_DB_PATH,"analytics_trades",now,None)
+    cf = _db_open_stale(COUNTERFACTUAL_DB_PATH,"counterfactuals",now,"target_at")
+    checks.append({"name":"risk_settlement","ok":risk["ok"],"detail":f"open {risk['count']} · stale {risk['stale']}"})
+    checks.append({"name":"paper_analytics_positions","ok":analytics["ok"],"detail":f"open {analytics['count']} · stale {analytics['stale']}"})
+    checks.append({"name":"counterfactual_settlement","ok":cf["ok"],"detail":f"open {cf['count']} · stale {cf['stale']}"})
+    checks.append({"name":"risk_db","ok":os.path.exists(DB_PATH),"detail":DB_PATH})
+    checks.append({"name":"analytics_and_cf_db","ok":os.path.exists(ANALYTICS_DB_PATH) and os.path.exists(COUNTERFACTUAL_DB_PATH),"detail":"analytics + counterfactual"})
+    ok_n = sum(1 for x in checks if x["ok"])
+    return {"ok":ok_n==len(checks),"ok_n":ok_n,"total":len(checks),"checks":checks}
+
+
+def quality_report() -> dict:
+    rows = _closed_rows()
+    return {
+        "status":"ok","mode":"SHADOW","shadow_only":True,
+        "guard_effectiveness":_guard_effectiveness(rows),
+        "confidence_calibration":_confidence_calibration(rows),
+        "promotion_gate":_promotion_gate(rows),
+        "drift":_drift_report(rows),
+        "watchdog":_watchdog(),
+        "policy":{"promotion_min_n":PROMOTION_MIN_N,"drift_window":DRIFT_WINDOW},
+        "note":"Quality Control is observational only. It never activates guards automatically.",
+    }
+
+
+def replay(limit: int = 20, decision_id: Optional[int] = None) -> dict:
+    init()
+    n = max(1,min(100,int(limit)))
+    with _LOCK, _db() as con:
+        if decision_id is not None:
+            rows = con.execute("SELECT * FROM decision_blackbox WHERE id=?",(int(decision_id),)).fetchall()
+        else:
+            rows = con.execute("SELECT * FROM decision_blackbox ORDER BY observed_at DESC LIMIT ?",(n,)).fetchall()
+    items = []
+    for row in rows:
+        d = dict(row)
+        for field, target in (("risk_flags_json","risk_flags"),("stage_json","stages"),("raw_json","raw")):
+            try:
+                d[target] = json.loads(d.get(field) or ("[]" if field=="risk_flags_json" else "{}"))
+            except Exception:
+                d[target] = [] if field=="risk_flags_json" else {}
+            d.pop(field,None)
+        items.append(d)
+    return {"status":"ok","mode":"BLACK_BOX","items":items}
 
 
 def report() -> dict:
