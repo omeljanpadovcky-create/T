@@ -2,7 +2,7 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
 Write-Host '=== MYSHKA / ASTRA - EVIDENCE GATE V1 ===' -ForegroundColor Cyan
-$bundleCommit = 'efecab59f1e1bc9f931dbf63c20b8b28be189583'
+$bundleCommit = 'c418a3238d05662117375ee38aecd4f84c9d64b5'
 $root = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit
 
 $app = $null
