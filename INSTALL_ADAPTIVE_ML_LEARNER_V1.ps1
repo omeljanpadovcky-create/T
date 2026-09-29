@@ -5,7 +5,7 @@ Write-Host '======================================================' -ForegroundC
 Write-Host ' MYSHKA / ASTRA - ADAPTIVE ML LEARNER V1 ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$bundleCommit = '7d57edc3b68757b0a13eb7cf5f957ba442dce430'
+$bundleCommit = '7078a7993326f46f28a421183665744e9c7da3da'
 $root = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit
 
 $app = $null
