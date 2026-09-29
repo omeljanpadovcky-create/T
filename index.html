@@ -98,7 +98,7 @@ button{cursor:pointer}
 .position h3{margin:0 0 8px;font-size:13px}.prow{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px solid #18304e;font-size:10px}.prow:last-child{border:0}
 .stats-wrap{margin-top:12px}
 .stats-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:9px;flex-wrap:wrap}.stats-title h2{margin:0;font-size:17px}
-.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+.stats{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
 .stat{padding:10px;border-radius:12px;background:#091522;border:1px solid #20395d}.stat small{display:block;color:#7e94b5;font-size:8px}.stat b{display:block;margin-top:4px;font-size:18px}
 .stats-chart{height:260px;margin-top:9px;border-radius:13px;background:#06111e;border:1px solid #1d3659;overflow:hidden;position:relative}.stats-chart canvas{width:100%;height:100%;display:block}
 .legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:7px;color:#7f95b6;font-size:9px}.dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px}
@@ -284,14 +284,18 @@ button{cursor:pointer}
       <div class="stat"><small>NET LOSS</small><b class="short" id="sLosses">0</b></div>
       <div class="stat"><small>Win rate</small><b id="sWinRate">0%</b></div>
       <div class="stat"><small>Direction HIT</small><b id="sHitRate">0%</b></div>
-      <div class="stat"><small>Cumulative NET</small><b id="sNet">0.000%</b></div>
+      <div class="stat"><small>Signal NET sum</small><b id="sNet">0.000%</b></div>
+      <div class="stat"><small>Account P&amp;L</small><b id="sAccountPnl">0.000%</b></div>
       <div class="stat"><small>Paper equity</small><b id="sEquity">1000.00</b></div>
     </div>
     <div class="stats-chart"><canvas id="statsCanvas"></canvas></div>
     <div class="legend">
       <span><i class="dot" style="background:#2bdd8d"></i>NET WIN</span>
       <span><i class="dot" style="background:#ff5264"></i>NET LOSS</span>
-      <span><i class="dot" style="background:#7da0ff"></i>накопичений NET %</span>
+      <span><i class="dot" style="background:#7da0ff"></i>Signal NET sum % (не account return)</span>
+    </div>
+    <div class="sub" style="margin-top:7px">
+      Signal NET sum = сума net% окремих угод для аналізу якості сигналів. Account P&amp;L = фактична зміна paper equity з урахуванням position sizing.
     </div>
   </section>
 
@@ -987,8 +991,17 @@ function renderPosition(){
     '<div class="prow"><span>Settle</span><b>'+Math.ceil(left/1000)+'s</b></div>'
 }
 function renderStats(){
-  const t=APP.trades,w=t.filter(x=>x.netPct>0).length,l=t.filter(x=>x.netPct<0).length,hit=t.filter(x=>x.directionHit).length,net=t.reduce((a,x)=>a+x.netPct,0);
-  $('sWins').textContent=w;$('sLosses').textContent=l;$('sWinRate').textContent=(w+l?w/(w+l)*100:0).toFixed(1)+'%';$('sHitRate').textContent=(t.length?hit/t.length*100:0).toFixed(1)+'%';$('sNet').textContent=(net>=0?'+':'')+net.toFixed(3)+'%';$('sNet').className=net>=0?'long':'short';$('sEquity').textContent=APP.equity.toFixed(2);
+  const t=APP.trades,w=t.filter(x=>x.netPct>0).length,l=t.filter(x=>x.netPct<0).length,hit=t.filter(x=>x.directionHit).length,net=t.reduce((a,x)=>a+(Number(x.netPct)||0),0);
+  const accountPnl=APP.startEquity>0?(APP.equity-APP.startEquity)/APP.startEquity*100:0;
+  $('sWins').textContent=w;
+  $('sLosses').textContent=l;
+  $('sWinRate').textContent=(w+l?w/(w+l)*100:0).toFixed(1)+'%';
+  $('sHitRate').textContent=(t.length?hit/t.length*100:0).toFixed(1)+'%';
+  $('sNet').textContent=(net>=0?'+':'')+net.toFixed(3)+'%';
+  $('sNet').className=net>=0?'long':'short';
+  $('sAccountPnl').textContent=(accountPnl>=0?'+':'')+accountPnl.toFixed(3)+'%';
+  $('sAccountPnl').className=accountPnl>=0?'long':'short';
+  $('sEquity').textContent=APP.equity.toFixed(2);
   const learnerPairs=(APP.universePairs&&APP.universePairs.length)?APP.universePairs:CFG.pairs;
   const maxBucket=Math.max(0,...learnerPairs.flatMap(pair=>['LONG','SHORT'].flatMap(side=>['UP','DOWN','RANGE'].map(reg=>learnerSamples(pair,side,reg).bucket.length))));
   $('learnerStatus').textContent=maxBucket>=100?'Learner: full bucket confidence':maxBucket>=30?'Learner: shrinkage active':'Learner: cold start · max bucket n='+maxBucket;
