@@ -154,7 +154,7 @@ def patch_api(path: Path) -> None:
         for x in weak[:2]:
             lines.append(f"• {x.get('dimension')} / {x.get('label')}: n={x.get('n')} avg {float(x.get('avg_net_pct') or 0):+.3f}%")
     lines.append("SHADOW only — rules are unchanged.")
-    return "\n".join(lines)
+    return "\\n".join(lines)
 
 
 '''
