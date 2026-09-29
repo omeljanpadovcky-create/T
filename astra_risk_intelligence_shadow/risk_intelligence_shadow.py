@@ -182,8 +182,8 @@ def _metrics(rows: list[dict]) -> dict:
     }
 
 
-def _loss_streak() -> int:
-    rows = _analytics_rows()
+def _loss_streak(rows: Optional[list[dict]] = None) -> int:
+    rows = rows if rows is not None else _analytics_rows()
     streak = 0
     for r in reversed(rows):
         if float(r.get("net_pct") or 0.0) < 0:
@@ -193,14 +193,16 @@ def _loss_streak() -> int:
     return streak
 
 
-def _pair_stats(pair: str, limit: int = 10) -> dict:
-    rows = _analytics_rows("pair=?", (pair,))
-    return _metrics(rows[-max(1,limit):])
+def _pair_stats(pair: str, limit: int = 10, rows: Optional[list[dict]] = None) -> dict:
+    src = rows if rows is not None else _analytics_rows()
+    q = [r for r in src if str(r.get("pair") or "") == pair]
+    return _metrics(q[-max(1,limit):])
 
 
-def _regime_stats(regime: str, limit: int = 50) -> dict:
-    rows = _analytics_rows("regime=?", (regime,))
-    return _metrics(rows[-max(1,limit):])
+def _regime_stats(regime: str, limit: int = 50, rows: Optional[list[dict]] = None) -> dict:
+    src = rows if rows is not None else _analytics_rows()
+    q = [r for r in src if str(r.get("regime") or "") == regime]
+    return _metrics(q[-max(1,limit):])
 
 
 def _context_signature(side: str, btc15: Optional[float], oi15: Optional[float],
@@ -221,8 +223,8 @@ def _context_signature(side: str, btc15: Optional[float], oi15: Optional[float],
     return f"{side}|BTC{sgn(btc15,0.05)}|OI{sgn(oi15,0.25)}|F{sgn(funding,0.005)}|LS{lsb}"
 
 
-def _context_historical(signature: str) -> dict:
-    rows = _analytics_rows()
+def _context_historical(signature: str, rows: Optional[list[dict]] = None) -> dict:
+    rows = rows if rows is not None else _analytics_rows()
     matched = []
     for r in rows:
         sig = _context_signature(
@@ -260,7 +262,7 @@ def _market_price(r: dict) -> Optional[float]:
     return x if x is not None and x > 0 else None
 
 
-def _candidate_features(r: dict) -> Optional[dict]:
+def _candidate_features(r: dict, history_rows: list[dict], open_rows: list[dict]) -> Optional[dict]:
     sig = r.get("signal") or {}
     side = str(r.get("direction") or sig.get("direction") or "WAIT").upper()
     if side not in {"LONG","SHORT"}:
@@ -282,14 +284,15 @@ def _candidate_features(r: dict) -> Optional[dict]:
     ls = _num(ctx.get("long_short_ratio"))
     signature = _context_signature(side, btc15, oi15, funding, ls)
 
-    pair_hist = _pair_stats(str(r.get("pair") or ""))
-    regime_hist = _regime_stats(regime)
-    context_hist = _context_historical(signature)
-    loss_streak = _loss_streak()
-    same_side_open = sum(1 for x in _open_analytics_rows() if str(x.get("side") or "").upper() == side)
+    pair_name = str(r.get("pair") or "")
+    pair_hist = _pair_stats(pair_name, rows=history_rows)
+    regime_hist = _regime_stats(regime, rows=history_rows)
+    context_hist = _context_historical(signature, rows=history_rows)
+    loss_streak = _loss_streak(history_rows)
+    same_side_open = sum(1 for x in open_rows if str(x.get("side") or "").upper() == side)
 
-    pair_rows = _analytics_rows("pair=?", (str(r.get("pair") or ""),))
-    regime_rows = _analytics_rows("regime=?", (regime,))
+    pair_rows = [x for x in history_rows if str(x.get("pair") or "") == pair_name]
+    regime_rows = [x for x in history_rows if str(x.get("regime") or "") == regime]
     pair_edge = _adaptive_edge(pair_rows)
     regime_edge = _adaptive_edge(regime_rows)
 
@@ -364,8 +367,8 @@ def _candidate_features(r: dict) -> Optional[dict]:
     }
 
 
-def _record_candidate(r: dict, now: float) -> bool:
-    f = _candidate_features(r)
+def _record_candidate(r: dict, now: float, history_rows: list[dict], open_rows: list[dict]) -> bool:
+    f = _candidate_features(r, history_rows, open_rows)
     if not f:
         return False
     source_minute = int(now // 60) * 60
@@ -438,9 +441,11 @@ def observe_results(results: list[dict], now: Optional[float] = None) -> dict:
         init()
         ts = float(now or time.time())
         out = _settle(results or [], ts)
+        history_rows = _analytics_rows()
+        open_rows = _open_analytics_rows()
         created = 0
         for r in results or []:
-            if _record_candidate(r, ts):
+            if _record_candidate(r, ts, history_rows, open_rows):
                 created += 1
         return {"status":"ok","created":created,**out}
     except Exception as exc:
