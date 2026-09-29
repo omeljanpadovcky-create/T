@@ -63,6 +63,22 @@ def _num(v: Any) -> Optional[float]:
         return None
 
 
+def _strict_score(sig: dict) -> int:
+    side = str(sig.get("direction") or "WAIT").upper()
+    fast = _num(sig.get("ema_fast"))
+    slow = _num(sig.get("ema_slow"))
+    rsi = _num(sig.get("rsi"))
+    vol = _num(sig.get("volume_ratio"))
+    regime = str(sig.get("structure") or "RANGE").upper()
+    if side not in {"LONG","SHORT"} or None in {fast,slow,rsi,vol}:
+        return 0
+    if side == "LONG":
+        checks = [fast > slow, regime == "UP", 52 <= rsi <= 72, vol >= 0.60]
+    else:
+        checks = [fast < slow, regime == "DOWN", 28 <= rsi <= 48, vol >= 0.60]
+    return sum(bool(x) for x in checks)
+
+
 def _conn(path: str = DB_PATH) -> sqlite3.Connection:
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     con = sqlite3.connect(path, timeout=10)
@@ -462,8 +478,12 @@ def apply_results(results: list[dict]) -> dict:
             r["adaptive_learner"] = {"applies":False,"state":rep.get("state"),"reason":"no_promoted_champion"}
             continue
         try:
+            sig = r.get("signal") or {}
             edge = r.get("edge") or {}
             jev = r.get("jev") or {}
+            if _strict_score(sig) != 4:
+                r["adaptive_learner"] = {"applies":False,"state":"NOT_APPLICABLE","reason":"not_strict_4of4"}
+                continue
             if not bool(edge.get("passed")) or str(jev.get("verdict") or "").upper() != "APPROVE":
                 r["adaptive_learner"] = {"applies":False,"state":"NOT_APPLICABLE","reason":"prerequisite_not_passed"}
                 continue
