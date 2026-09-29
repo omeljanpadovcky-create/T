@@ -172,7 +172,7 @@ button{cursor:pointer}
 
   <section class="bridge glass" id="bridgePanel">
     <div class="bridge-top">
-      <div><label>ASTRA Bridge URL</label><input id="bridgeUrl" value="http://localhost:8088" placeholder="http://localhost:8088 або https://твій-tunnel"></div>
+      <div><label>ASTRA URL · AUTO: локальна ASTRA → Cloudflare для телефону</label><input id="bridgeUrl" value="http://localhost:8088" placeholder="AUTO: http://127.0.0.1:8088 або https://твій-tunnel"></div>
       <div><label>MYSHKA token (якщо увімкнений)</label><input id="bridgeToken" type="password" placeholder="X-MYSHKA-TOKEN"></div>
       <button class="btn green" id="bridgeConnect">🔌 Підключити ASTRA</button>
     </div>
@@ -550,6 +550,26 @@ async function bridgeFetch(path,opts={}){
     throw e;
   }finally{clearTimeout(timer)}
 }
+
+async function probeBridge(base){
+  const url=String(base||'').replace(/\/$/,'');
+  if(!url)return null;
+  const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),2200);
+  try{
+    const r=await fetch(url+'/health',{cache:'no-store',signal:ctl.signal,headers:bridgeHeaders(false)});
+    if(!r.ok)return null;
+    const j=await r.json();
+    return j&&j.status==='ok'?j:null;
+  }catch(e){return null}
+  finally{clearTimeout(timer)}
+}
+function bridgeCandidates(preferred){
+  const p=(preferred||'').trim().replace(/\/$/,'');
+  const local=['http://127.0.0.1:8088','http://localhost:8088'];
+  const isMobile=(navigator.userAgentData&&navigator.userAgentData.mobile)||/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent||'');
+  const list=isMobile?[p,...local]:[...local,p];
+  return [...new Set(list.filter(Boolean))];
+}
 function integrationNode(id,status,detail=''){
   const e=$(id);
   const ok=['ok','configured','live','direct_live','active'].includes(status);
@@ -702,25 +722,40 @@ async function phoneScanNow(){
   finally{$('phoneScan').textContent='🔎 Scan зараз'}
 }
 async function connectBridge(){
-  APP.bridgeUrl=$('bridgeUrl').value.trim()||'http://localhost:8088';APP.bridgeToken=$('bridgeToken').value.trim();saveState();
-  $('bridgeConnect').textContent='… Перевірка';
+  const preferred=$('bridgeUrl').value.trim()||APP.bridgeUrl||'http://localhost:8088';
+  APP.bridgeToken=$('bridgeToken').value.trim();
+  $('bridgeConnect').textContent='… Пошук ASTRA';
+  let h=null,chosen='';
   try{
-    const h=await bridgeFetch('/health');
-    APP.backendReady=h.status==='ok';APP.training=h.training||null;
+    for(const candidate of bridgeCandidates(preferred)){
+      $('bridgeMsg').textContent='Шукаю ASTRA: '+candidate+' …';
+      const probe=await probeBridge(candidate);
+      if(probe){h=probe;chosen=candidate;break}
+    }
+    if(!h)throw new Error('ASTRA не відповідає ні локально, ні через Bridge');
+
+    APP.bridgeUrl=chosen;
+    APP.backendReady=true;
+    APP.training=h.training||null;
+    $('bridgeUrl').value=chosen;
+    saveState();
+
     if($('modeBadge')){
       if(APP.training&&APP.training.active){
         $('modeBadge').textContent='TRAINING · learner '+(APP.training.learner_n??0)+'/'+(APP.training.until_trades??30)+' · TECH '+(APP.training.tech_rule||'strict');
         $('modeBadge').className='badge';
       }else{
-        $('modeBadge').textContent='ASTRA SERVER';
+        $('modeBadge').textContent=chosen.includes('127.0.0.1')||chosen.includes('localhost')?'ASTRA LOCAL':'ASTRA BRIDGE';
         $('modeBadge').className='badge live';
       }
     }
+
     if(h.universe&&h.universe.last&&Array.isArray(h.universe.last.pairs)&&h.universe.last.pairs.length){
       APP.universePairs=h.universe.last.pairs.slice();
       if(!APP.universePairs.includes(APP.selected))APP.selected=APP.universePairs[0];
       renderPairButtons();
     }
+
     integrationNode('iAstra',h.status,h.service||'');
     const ints=await bridgeFetch('/integrations');
     const ol=ints.ollama||{},ba=ints.bybit_account||{},ft=ints.freqtrade||{},nn=ints.n8n||{},tg=ints.telegram||{};
@@ -729,11 +764,15 @@ async function connectBridge(){
     integrationNode('iFreqtrade',ft.status);
     integrationNode('iN8n',nn.status);
     integrationNode('iTelegram',tg.status);
-    const uni=(h.universe&&h.universe.dynamic)?(' • TOP-'+(h.universe.top_n||APP.universePairs.length)+' coins'):'';
+
+    const localMode=chosen.includes('127.0.0.1')||chosen.includes('localhost');
+    const uni=(h.universe&&h.universe.dynamic)?(' • TOP-'+(h.universe.top_n||APP.universePairs.length)+' markets'):'';
     $('bridgeMsg').textContent=(APP.training&&APP.training.active)
-      ?'🧪 TRAINING '+APP.training.learner_n+'/'+APP.training.until_trades+' • TECH '+APP.training.tech_rule+uni+' • EDGE/JEV/Guard • PAPER only'
-      :'✅ Серверна ASTRA активна'+uni+'. Phone Engine працює на ПК самостійно; телефон тільки керує і дивиться.';
-    $('marketBadge').textContent='● ASTRA BRIDGE';$('marketBadge').className='badge live';
+      ?'🧪 ASTRA '+(localMode?'LOCAL':'BRIDGE')+' · TRAINING '+APP.training.learner_n+'/'+APP.training.until_trades+' · TECH '+APP.training.tech_rule+uni+' · EDGE/JEV/Guard · PAPER only'
+      :'✅ ASTRA '+(localMode?'LOCAL':'BRIDGE')+' активна'+uni+'.';
+
+    $('marketBadge').textContent='● '+(localMode?'ASTRA LOCAL':'ASTRA BRIDGE');
+    $('marketBadge').className='badge live';
     await refreshPhoneControl();
   }catch(e){
     APP.backendReady=false;
@@ -741,8 +780,17 @@ async function connectBridge(){
     integrationNode('iBybit','direct_live','public market API');
     ['iOllama','iFreqtrade','iN8n','iTelegram'].forEach(id=>integrationNode(id,'bridge_offline'));
     if($('modeBadge')){$('modeBadge').textContent='LOCAL FALLBACK · PAPER';$('modeBadge').className='badge'}
-    $('bridgeMsg').textContent='⚠ ASTRA Bridge зараз недоступний ('+e.message+'). Сайт не падає: працює direct Bybit + local PAPER на 15 валідних perpetual-парах. Серверні Ollama/JEV/n8n/Telegram повернуться після відновлення Bridge.';
-  }finally{$('bridgeConnect').textContent='🔌 Підключити ASTRA';renderReadiness()}
+    $('bridgeMsg').textContent='⚠ ASTRA не знайдена. Запусти MYSHKA/ASTRA на ПК — сайт сам підхопить http://127.0.0.1:8088. Cloudflare URL потрібен тільки для телефону. Поки що працює direct Bybit + local PAPER.';
+    // Do not keep a dead temporary trycloudflare URL as the active desktop bridge.
+    if(/trycloudflare\.com/i.test(preferred)){
+      APP.bridgeUrl='http://127.0.0.1:8088';
+      $('bridgeUrl').value=APP.bridgeUrl;
+      saveState();
+    }
+  }finally{
+    $('bridgeConnect').textContent='🔌 Підключити ASTRA';
+    renderReadiness();
+  }
 }
 function adaptServerResult(r){
   const m=r.market||{},raw=(m.candles||[]),candles=raw.map(c=>({o:+c.open,h:+c.high,l:+c.low,c:+c.close,v:+c.volume}));
