@@ -292,10 +292,11 @@ button{cursor:pointer}
       <div><h2>📊 Статистика Trade Мишки</h2><div class="sub">тільки закриті paper-угоди на LIVE Bybit даних</div></div>
       <div class="sub" id="learnerStatus">Learner: cold start</div>
     </div>
-    <div class="stats" style="grid-template-columns:repeat(6,1fr)">
+    <div class="stats" style="grid-template-columns:repeat(7,1fr)">
       <div class="stat"><small>Paper equity</small><b id="sEquity">1000.00</b></div>
       <div class="stat"><small>Account P&amp;L</small><b id="sAccountPnl">0.000%</b></div>
       <div class="stat"><small>All closed</small><b id="sTotalTrades">0</b></div>
+      <div class="stat"><small>Avg NET / trade</small><b id="sAvgNetTrade">0.000%</b></div>
       <div class="stat"><small>STRICT 4/4</small><b class="long" id="sStrictCount">0</b></div>
       <div class="stat"><small>TRAIN 3/4</small><b class="wait" id="sTrainCount">0</b></div>
       <div class="stat"><small>LEGACY / UNKNOWN</small><b id="sLegacyCount">0</b></div>
@@ -1106,6 +1107,9 @@ function renderStats(){
   $('sAccountPnl').textContent=(accountPnl>=0?'+':'')+accountPnl.toFixed(3)+'%';
   $('sAccountPnl').className=accountPnl>=0?'long':'short';
   $('sTotalTrades').textContent=APP.trades.length;
+  const allStats=calcTradeStats(APP.trades);
+  $('sAvgNetTrade').textContent=(allStats.avg>=0?'+':'')+allStats.avg.toFixed(3)+'%';
+  $('sAvgNetTrade').className=allStats.avg>=0?'long':'short';
   $('sStrictCount').textContent=strict.length;
   $('sTrainCount').textContent=train.length;
   $('sLegacyCount').textContent=legacy.length;
