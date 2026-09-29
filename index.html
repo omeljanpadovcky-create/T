@@ -348,6 +348,39 @@ button{cursor:pointer}
     </div>
   </section>
 
+  <section class="card glass stats-wrap" id="analyticsPanel">
+    <div class="stats-title">
+      <div>
+        <h2>🧠 DATA ANALYTICS · SHADOW</h2>
+        <div class="sub">Нові чисті STRICT-угоди після встановлення · EDGE + TECH + Context 24/7 → фактичний NET</div>
+      </div>
+      <div class="sub" id="analyticsState">Analytics: warming</div>
+    </div>
+
+    <div class="stats" style="grid-template-columns:repeat(5,1fr)">
+      <div class="stat"><small>Clean STRICT trades</small><b id="aTrades">0</b></div>
+      <div class="stat"><small>Avg NET / trade</small><b id="aAvg">0.000%</b></div>
+      <div class="stat"><small>Win rate</small><b id="aWin">0.0%</b></div>
+      <div class="stat"><small>Profit factor</small><b id="aPF">0.00</b></div>
+      <div class="stat"><small>Context coverage</small><b id="aCtx">0.0%</b></div>
+    </div>
+
+    <div class="mode-stats">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>📏 EDGE bands</h3><span>що реально дає NET</span></div>
+        <div id="analyticsEdge"><div class="muted">Чекаємо нові закриті STRICT-угоди.</div></div>
+      </div>
+      <div class="mode-card train">
+        <div class="mode-head"><h3>🔬 Context observations</h3><span>SHADOW · не veto</span></div>
+        <div id="analyticsObs"><div class="muted">Потрібно мінімум 3 угоди в сегменті.</div></div>
+      </div>
+    </div>
+
+    <div class="sub" style="margin-top:8px">
+      Analytics нічого не змінює в ENTER/DROP. Він лише шукає історичні закономірності по EDGE, LONG/SHORT, RSI, volume, OI, funding, L/S, momentum, BTC context, external events і часу доби.
+    </div>
+  </section>
+
   <section class="log glass">
     <h2>Останні рішення та угоди</h2>
     <div class="log-list" id="logList"></div>
@@ -708,6 +741,53 @@ function paintPhoneControl(status){
   $('pcTelegram').textContent=en.telegram_control_running?'ACTIVE':'OFF';
   syncEnginePositions(en);
 }
+function analyticsPct(v,d=3){
+  const n=Number(v);
+  return Number.isFinite(n)?(n>=0?'+':'')+n.toFixed(d)+'%':'—';
+}
+function analyticsRows(items,limit=6){
+  const a=(items||[]).slice(0,limit);
+  if(!a.length)return '<div class="muted">Ще недостатньо чистих даних.</div>';
+  return a.map(x=>'<div class="check"><span>'+String(x.label||'—')+' · n='+Number(x.n||0)+'</span><span class="'+(Number(x.avg_net_pct||0)>=0?'ok':'bad')+'">'+analyticsPct(x.avg_net_pct)+'</span></div>').join('');
+}
+function loadAnalyticsReport(r){
+  if(!r||r.status!=='ok')return;
+  APP.analyticsReport=r;
+  const o=r.overall||{};
+  $('aTrades').textContent=Number(o.n||0);
+  $('aAvg').textContent=analyticsPct(o.avg_net_pct);
+  $('aAvg').className=Number(o.avg_net_pct||0)>=0?'long':'short';
+  $('aWin').textContent=Number(o.win_rate_pct||0).toFixed(1)+'%';
+  const pf=Number(o.profit_factor||0);
+  $('aPF').textContent=pf>=999?'∞':pf.toFixed(2);
+  $('aPF').className=pf>=1?'long':'short';
+  $('aCtx').textContent=Number(r.context_coverage_pct||0).toFixed(1)+'%';
+  $('analyticsState').textContent='Analytics: '+String(r.sample_state||'COLD')+' · SHADOW';
+  const edge=((r.dimensions||{}).edge_band)||[];
+  $('analyticsEdge').innerHTML=analyticsRows(edge,6);
+
+  const obs=r.observations||{},strong=(obs.stronger_segments||[]).slice(0,3),weak=(obs.weaker_segments||[]).slice(0,3);
+  let html='';
+  if(strong.length){
+    html+='<div class="sub" style="margin:3px 0 5px">Сильніші поки:</div>';
+    html+=strong.map(x=>'<div class="check"><span>'+String(x.dimension||'')+' · '+String(x.label||'')+' · n='+Number(x.n||0)+'</span><span class="ok">'+analyticsPct(x.avg_net_pct)+'</span></div>').join('');
+  }
+  if(weak.length){
+    html+='<div class="sub" style="margin:8px 0 5px">Слабші поки:</div>';
+    html+=weak.map(x=>'<div class="check"><span>'+String(x.dimension||'')+' · '+String(x.label||'')+' · n='+Number(x.n||0)+'</span><span class="bad">'+analyticsPct(x.avg_net_pct)+'</span></div>').join('');
+  }
+  $('analyticsObs').innerHTML=html||'<div class="muted">Потрібно мінімум '+Number(r.min_segment_n||3)+' угоди в сегменті.</div>';
+}
+async function refreshAnalytics(){
+  if(!APP.backendReady)return;
+  try{
+    const r=await bridgeFetch('/analytics/report?mode=STRICT&min_segment_n=3');
+    loadAnalyticsReport(r);
+  }catch(e){
+    if($('analyticsState'))$('analyticsState').textContent='Analytics: backend patch required / warming';
+  }
+}
+
 function loadServerTrades(st){
   if(!st||!st.trades)return;
   APP.backendStats=st;
@@ -809,6 +889,7 @@ async function refreshPhoneControl(){
     const st=await bridgeFetch('/control/status');paintPhoneControl(st);
     const latest=await bridgeFetch('/control/latest');applyServerResults(latest.results||[]);if(latest.engine)paintPhoneControl({runtime:latest.engine.runtime,engine:latest.engine});
     const trades=await bridgeFetch('/stats?limit=120');loadServerTrades(trades);
+    await refreshAnalytics();
   }catch(e){
     APP.backendReady=false;
     integrationNode('iAstra','bridge_offline');
@@ -825,7 +906,7 @@ async function setServerControl(name,value){
 async function phoneScanNow(){
   if(!APP.backendReady)return scanAll();
   $('phoneScan').textContent='… Scan';
-  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st)}
+  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshAnalytics()}
   finally{$('phoneScan').textContent='🔎 Scan зараз'}
 }
 async function connectBridge(){
