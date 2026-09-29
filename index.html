@@ -23,7 +23,7 @@ button,select,input{font:inherit}
 button{cursor:pointer}
 .app{max-width:1460px;margin:auto;padding:12px 12px 40px}
 .glass{background:linear-gradient(180deg,rgba(14,27,47,.96),rgba(7,16,29,.96));border:1px solid var(--line);box-shadow:var(--shadow)}
-.header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;border-radius:18px;position:sticky;top:8px;z-index:20;backdrop-filter:blur(15px)}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;border-radius:18px;position:relative;z-index:20;backdrop-filter:blur(15px)}
 .brand{display:flex;align-items:center;gap:10px}
 .logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:28px;background:radial-gradient(circle at 40% 30%,#fff5cf,#e9a83b 48%,#3a2510 82%);border:1px solid #ffd16f}
 .brand h1{margin:0;font-size:21px}.brand h1 span{color:#ffd471}.brand p{margin:2px 0 0;color:var(--muted);font-size:10px}
@@ -41,7 +41,7 @@ button{cursor:pointer}
 .market-toolbar .summary{display:flex;gap:6px;align-items:center;flex-wrap:wrap;color:#8fa5c6;font-size:9px}
 .market-toolbar .summary b{color:#fff}
 .pairs{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
-.pair-btn{min-width:0;padding:9px 9px;border-radius:11px;border:1px solid #29466f;background:#0a1728;color:#b7c9e4;font-weight:850;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 7px;text-align:left}
+.pair-btn{min-width:0;min-height:54px;padding:9px 9px;border-radius:11px;border:1px solid #29466f;background:#0a1728;color:#b7c9e4;font-weight:850;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 7px;text-align:left}
 .pair-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pair-btn small{font-size:8px;padding:3px 5px;border-radius:999px;background:#13253e;color:#91a8c8;align-self:start}
 .pair-btn em{grid-column:1/-1;font-style:normal;font-size:7.5px;color:#6f87a8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -147,7 +147,7 @@ button{cursor:pointer}
     </div>
     <div class="head-right">
       <span class="badge" id="marketBadge">● Підключення…</span>
-      <span class="badge" id="universeBadge">15 markets · 1m · 80 candles · scan 15s</span>
+      <span class="badge" id="universeBadge">15 markets · 1m · 80 candles · scan 15s</span><span class="badge" id="modeBadge">LOCAL FALLBACK</span>
       <button class="btn red" id="killBtn">🛡 Kill switch: OFF</button>
     </div>
   </header>
@@ -362,15 +362,18 @@ button{cursor:pointer}
     Bybit → TECH → EDGE → JEV/Ollama → Astra Guard → PAPER ENTER → 5m REVIEW → SQLite learner.
     Telegram та n8n отримують події через сервер, а Bybit private context допускається тільки READ-ONLY.
     <b>Freqtrade тут не отримує live-order команд:</b> лишаємо його окремою execution authority для dry-run/майбутнього live після валідації.
+    <br><b>TRAINING TECH 3/4:</b> у навчальному режимі сервер може пропустити кандидата з 3 із 4 TECH-умов тільки для збору learner-даних. Це не strict/live правило.
   </div>
 </div>
 
 <script>
 const CFG={
+  // Local browser fallback only. ASTRA server may override this with its dynamic TOP-15.
+  // These are widely supported Bybit USDT perpetuals, avoiding invalid-symbol spam when Bridge is offline.
   pairs:[
-    'BTC/USDT:USDT','ETH/USDT:USDT','SOL/USDT:USDT','ZEC/USDT:USDT','XRP/USDT:USDT',
-    'NEAR/USDT:USDT','QNT/USDT:USDT','HBAR/USDT:USDT','HYPE/USDT:USDT','SOXL/USDT:USDT',
-    'LINK/USDT:USDT','CL/USDT:USDT','PUMPFUN/USDT:USDT','SUI/USDT:USDT','XAU/USDT:USDT'
+    'BTC/USDT:USDT','ETH/USDT:USDT','SOL/USDT:USDT','XRP/USDT:USDT','BNB/USDT:USDT',
+    'DOGE/USDT:USDT','ADA/USDT:USDT','AVAX/USDT:USDT','LINK/USDT:USDT','DOT/USDT:USDT',
+    'LTC/USDT:USDT','BCH/USDT:USDT','SUI/USDT:USDT','NEAR/USDT:USDT','TRX/USDT:USDT'
   ],
   emaFast:9,emaSlow:21,rsiPeriod:14,volumeLookback:20,structureLookback:20,candleLimit:80,
   rsiLong:[52,72],rsiShort:[28,48],volumeMin:.6,scanMs:15000,cooldownMs:240000,horizonMs:300000,
@@ -537,12 +540,23 @@ function bridgeHeaders(json=false){
 }
 async function bridgeFetch(path,opts={}){
   const base=(APP.bridgeUrl||'').replace(/\/$/,'');if(!base)throw new Error('Bridge URL порожній');
-  const r=await fetch(base+path,{cache:'no-store',...opts,headers:{...(opts.headers||{}),...bridgeHeaders(!!opts.body)}});
-  if(!r.ok)throw new Error('ASTRA HTTP '+r.status);return await r.json()
+  const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),6500);
+  try{
+    const r=await fetch(base+path,{cache:'no-store',...opts,signal:ctl.signal,headers:{...(opts.headers||{}),...bridgeHeaders(!!opts.body)}});
+    if(!r.ok)throw new Error('ASTRA HTTP '+r.status);
+    return await r.json();
+  }catch(e){
+    if(e&&e.name==='AbortError')throw new Error('ASTRA timeout 6.5s');
+    throw e;
+  }finally{clearTimeout(timer)}
 }
 function integrationNode(id,status,detail=''){
-  const e=$(id),ok=status==='ok'||status==='configured',warn=status==='disabled'||status==='unconfigured';
-  e.className='bridge-node '+(ok?'ok':warn?'warn':'bad');e.querySelector('b').textContent=(status||'unknown').toUpperCase()+(detail?' · '+detail:'')
+  const e=$(id);
+  const ok=['ok','configured','live','direct_live','active'].includes(status);
+  const warn=['disabled','unconfigured','offline','bridge_offline','unknown'].includes(status);
+  e.className='bridge-node '+(ok?'ok':warn?'warn':'bad');
+  const label=status==='direct_live'?'DIRECT LIVE':status==='bridge_offline'?'BRIDGE OFFLINE':(status||'unknown').toUpperCase();
+  e.querySelector('b').textContent=label+(detail?' · '+detail:'');
 }
 
 function syncEnginePositions(engine){
@@ -628,7 +642,14 @@ function renderPairButtons(){
     b.dataset.pair=pair;
     const name=pair.replace(':USDT','');
     const edgePass=!!(d&&d.edge&&d.edge.passed),jevVerdict=d&&d.jev?d.jev.verdict:'';
-    const mini=edgePass&&jevVerdict==='REJECT'?'EDGE✓ JEV✕':action;
+    let mini=action;
+    if(d){
+      if(action==='ENTER')mini=d.sig.direction;
+      else if(!d.edge&&d.sig.direction==='WAIT')mini='TECH WAIT';
+      else if(d.edge&&!d.edge.passed)mini='EDGE ✕';
+      else if(edgePass&&jevVerdict==='REJECT')mini='EDGE✓ JEV✕';
+      else if(edgePass&&jevVerdict==='APPROVE')mini='EDGE✓ JEV✓';
+    }
     const tech=d&&d.sig?d.sig.direction:'WAIT';
     const edgeText=d&&d.edge?(d.edge.passed?'EDGE +'+d.edge.netEdgePct.toFixed(3)+'%':'EDGE '+d.edge.netEdgePct.toFixed(3)+'%'):'EDGE —';
     const trainText=relaxed?' · TRAIN '+rule.score+'/4':'';
@@ -662,7 +683,12 @@ async function refreshPhoneControl(){
     const latest=await bridgeFetch('/control/latest');applyServerResults(latest.results||[]);if(latest.engine)paintPhoneControl({runtime:latest.engine.runtime,engine:latest.engine});
     const trades=await bridgeFetch('/stats?limit=120');loadServerTrades(trades);
   }catch(e){
-    APP.backendReady=false;$('bridgeMsg').textContent='⚠ Phone Control lost: '+e.message;
+    APP.backendReady=false;
+    integrationNode('iAstra','bridge_offline');
+    integrationNode('iBybit','direct_live','public market API');
+    ['iOllama','iFreqtrade','iN8n','iTelegram'].forEach(id=>integrationNode(id,'bridge_offline'));
+    if($('modeBadge')){$('modeBadge').textContent='LOCAL FALLBACK · PAPER';$('modeBadge').className='badge'}
+    $('bridgeMsg').textContent='⚠ Phone Control / Bridge втрачено: '+e.message+'. Перемкнувся на direct Bybit + local PAPER.';
   }
 }
 async function setServerControl(name,value){
@@ -681,6 +707,15 @@ async function connectBridge(){
   try{
     const h=await bridgeFetch('/health');
     APP.backendReady=h.status==='ok';APP.training=h.training||null;
+    if($('modeBadge')){
+      if(APP.training&&APP.training.active){
+        $('modeBadge').textContent='TRAINING · learner '+(APP.training.learner_n??0)+'/'+(APP.training.until_trades??30)+' · TECH '+(APP.training.tech_rule||'strict');
+        $('modeBadge').className='badge';
+      }else{
+        $('modeBadge').textContent='ASTRA SERVER';
+        $('modeBadge').className='badge live';
+      }
+    }
     if(h.universe&&h.universe.last&&Array.isArray(h.universe.last.pairs)&&h.universe.last.pairs.length){
       APP.universePairs=h.universe.last.pairs.slice();
       if(!APP.universePairs.includes(APP.selected))APP.selected=APP.universePairs[0];
@@ -702,9 +737,11 @@ async function connectBridge(){
     await refreshPhoneControl();
   }catch(e){
     APP.backendReady=false;
-    integrationNode('iAstra','error');
-    ['iOllama','iBybit','iFreqtrade','iN8n','iTelegram'].forEach(id=>integrationNode(id,'unconfigured'));
-    $('bridgeMsg').textContent='⚠ ASTRA bridge недоступний: '+e.message+'. Працює fallback: LIVE Bybit + локальний PAPER.';
+    integrationNode('iAstra','bridge_offline');
+    integrationNode('iBybit','direct_live','public market API');
+    ['iOllama','iFreqtrade','iN8n','iTelegram'].forEach(id=>integrationNode(id,'bridge_offline'));
+    if($('modeBadge')){$('modeBadge').textContent='LOCAL FALLBACK · PAPER';$('modeBadge').className='badge'}
+    $('bridgeMsg').textContent='⚠ ASTRA Bridge зараз недоступний ('+e.message+'). Сайт не падає: працює direct Bybit + local PAPER на 15 валідних perpetual-парах. Серверні Ollama/JEV/n8n/Telegram повернуться після відновлення Bridge.';
   }finally{$('bridgeConnect').textContent='🔌 Підключити ASTRA';renderReadiness()}
 }
 function adaptServerResult(r){
@@ -736,7 +773,17 @@ async function sendReviewToBridge(t){
 }
 
 async function fetchJSON(url){
-  const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();if(j.retCode!==0)throw new Error(j.retMsg||'Bybit error');return j
+  const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),7000);
+  try{
+    const r=await fetch(url,{cache:'no-store',signal:ctl.signal});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const j=await r.json();
+    if(j.retCode!==0)throw new Error(j.retMsg||'Bybit error');
+    return j;
+  }catch(e){
+    if(e&&e.name==='AbortError')throw new Error('Bybit timeout 7s');
+    throw e;
+  }finally{clearTimeout(timer)}
 }
 async function fetchMarket(pair){
   const symbol=pairSymbol(pair),base='https://api.bybit.com';
@@ -829,7 +876,7 @@ function renderReadiness(){
   setCheck('ckOps',(n8n.text||'—')+' / '+(tg.text||'—'),opsOk?'ok':(n8n.bad||tg.bad)?'bad':'warn');
 
   const checks=[
-    APP.backendReady,
+    (APP.backendReady||bybit.ok),
     universe.length>=15,
     CFG.maxDailyLoss>0,
     CFG.maxWeeklyLoss>0,
@@ -845,7 +892,7 @@ function renderReadiness(){
   $('rCritical').textContent=passed+' / '+checks.length;
   $('rScore').textContent=score+' / 100';
 
-  const badIntegrations=[astra,bybit].filter(x=>x.bad).length;
+  const badIntegrations=[bybit].filter(x=>x.bad).length;
   const warnings=(universe.length<15?1:0)+(!APP.backendReady?1:0)+(!edgeSeen?1:0)+(!jevSeen?1:0)+(!guardSeen?1:0)+badIntegrations;
   const summary=$('readinessSummary');
   if(warnings===0){summary.textContent='✓ READY FOR PAPER';summary.className='ready-pill ok'}
