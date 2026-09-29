@@ -6,8 +6,10 @@ Write-Host ' MYSHKA / ASTRA - RISK INTELLIGENCE SHADOW ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 Write-Host ''
 
-$base = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/main/astra_risk_intelligence_shadow'
+$bundleCommit = '62d9e6c64a134811788ae6aa76504d4034808bcc'
+$base = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit + '/astra_risk_intelligence_shadow'
 $cacheBust = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+Write-Host ("Pinned bundle: " + $bundleCommit) -ForegroundColor DarkGray
 
 $app = $null
 try {
@@ -28,7 +30,7 @@ if (-not $app -or -not (Test-Path (Join-Path $app 'Dockerfile'))) {
 Write-Host "[OK] ASTRA project: $app" -ForegroundColor Green
 $apiPath = Join-Path $app 'api.py'
 
-Write-Host '[0/7] Preflight current api.py...'
+Write-Host '[0/8] Preflight current api.py...'
 & python -m py_compile $apiPath
 if($LASTEXITCODE -ne 0) {
     throw 'Current api.py is not valid. Risk Intelligence installer did not modify anything.'
