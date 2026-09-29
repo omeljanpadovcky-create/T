@@ -431,6 +431,7 @@ def _record_blackbox(r: dict, now: float, history_rows: list[dict], open_rows: l
     jev = r.get("jev") or {}
     ctx = r.get("context") or {}
     guard = r.get("guard") or {}
+    evidence_gate = r.get("evidence_gate") or {}
     risk = _candidate_features(r, history_rows, open_rows)
     direction = str(r.get("direction") or sig.get("direction") or "WAIT").upper()
     tech_score = _signal_score(sig)
@@ -465,6 +466,16 @@ def _record_blackbox(r: dict, now: float, history_rows: list[dict], open_rows: l
         },
         "guard": {
             "passed": guard.get("passed"), "reasons": guard.get("reasons"),
+        },
+        "evidence_gate": {
+            "applies": evidence_gate.get("applies"), "passed": evidence_gate.get("passed"),
+            "state": evidence_gate.get("state"), "reason": evidence_gate.get("reason"),
+            "candidate_edge_pct": evidence_gate.get("candidate_edge_pct"),
+            "qualified_threshold_pct": evidence_gate.get("qualified_threshold_pct"),
+            "evidence_n": evidence_gate.get("evidence_n"),
+            "evidence_avg_net_pct": evidence_gate.get("evidence_avg_net_pct"),
+            "evidence_profit_factor": evidence_gate.get("evidence_profit_factor"),
+            "recent_avg_net_pct": evidence_gate.get("recent_avg_net_pct"),
         },
         "risk_intelligence": {
             "flags": flags, "confidence_score": confidence,
