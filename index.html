@@ -102,6 +102,19 @@ button{cursor:pointer}
 .stat{padding:10px;border-radius:12px;background:#091522;border:1px solid #20395d}.stat small{display:block;color:#7e94b5;font-size:8px}.stat b{display:block;margin-top:4px;font-size:18px}
 .stats-chart{height:260px;margin-top:9px;border-radius:13px;background:#06111e;border:1px solid #1d3659;overflow:hidden;position:relative}.stats-chart canvas{width:100%;height:100%;display:block}
 .legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:7px;color:#7f95b6;font-size:9px}.dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px}
+.mode-stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.mode-card{padding:11px;border-radius:13px;background:#071522;border:1px solid #1d3658}
+.mode-card.strict{border-color:#236d52}.mode-card.train{border-color:#7a6427}
+.mode-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px}
+.mode-head h3{margin:0;font-size:12px}.mode-head span{font-size:8px;padding:4px 6px;border-radius:999px;background:#12233a;color:#a9bdd8}
+.mode-card.strict .mode-head span{background:#0b2d21;color:#5ce5aa}.mode-card.train .mode-head span{background:#2d250c;color:#ffd76e}
+.mode-metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.mode-metric{padding:8px;border-radius:9px;background:#08111e;border:1px solid #17304f}
+.mode-metric small{display:block;color:#7188aa;font-size:7px;text-transform:uppercase}.mode-metric b{display:block;margin-top:3px;font-size:13px}
+.stats-chart-head{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.stats-chart-head .sub{margin:0}
+@media(max-width:900px){.mode-stats{grid-template-columns:1fr}.mode-metrics{grid-template-columns:repeat(5,1fr)}}
+@media(max-width:620px){.mode-metrics{grid-template-columns:repeat(2,1fr)}}
 .log{margin-top:12px;border-radius:16px;padding:12px}.log h2{font-size:15px;margin:0 0 8px}.log-list{max-height:300px;overflow:auto}
 .logrow{display:grid;grid-template-columns:70px 80px 100px 1fr auto;gap:7px;padding:8px 4px;border-bottom:1px solid #162d49;font-size:9px}.logrow:last-child{border:0}.muted{color:var(--muted)}
 .note{margin-top:12px;padding:12px;border-radius:14px;background:#091522;border:1px solid #20395d;color:#8da2c1;font-size:10px;line-height:1.55}
@@ -279,23 +292,54 @@ button{cursor:pointer}
       <div><h2>📊 Статистика Trade Мишки</h2><div class="sub">тільки закриті paper-угоди на LIVE Bybit даних</div></div>
       <div class="sub" id="learnerStatus">Learner: cold start</div>
     </div>
-    <div class="stats">
-      <div class="stat"><small>NET WIN</small><b class="long" id="sWins">0</b></div>
-      <div class="stat"><small>NET LOSS</small><b class="short" id="sLosses">0</b></div>
-      <div class="stat"><small>Win rate</small><b id="sWinRate">0%</b></div>
-      <div class="stat"><small>Direction HIT</small><b id="sHitRate">0%</b></div>
-      <div class="stat"><small>Signal NET sum</small><b id="sNet">0.000%</b></div>
-      <div class="stat"><small>Account P&amp;L</small><b id="sAccountPnl">0.000%</b></div>
+    <div class="stats" style="grid-template-columns:repeat(6,1fr)">
       <div class="stat"><small>Paper equity</small><b id="sEquity">1000.00</b></div>
+      <div class="stat"><small>Account P&amp;L</small><b id="sAccountPnl">0.000%</b></div>
+      <div class="stat"><small>All closed</small><b id="sTotalTrades">0</b></div>
+      <div class="stat"><small>STRICT 4/4</small><b class="long" id="sStrictCount">0</b></div>
+      <div class="stat"><small>TRAIN 3/4</small><b class="wait" id="sTrainCount">0</b></div>
+      <div class="stat"><small>LEGACY / UNKNOWN</small><b id="sLegacyCount">0</b></div>
+    </div>
+
+    <div class="mode-stats">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>✅ STRICT 4/4</h3><span>окрема статистика</span></div>
+        <div class="mode-metrics">
+          <div class="mode-metric"><small>Trades</small><b id="strictTrades">0</b></div>
+          <div class="mode-metric"><small>Win rate</small><b id="strictWinRate">0%</b></div>
+          <div class="mode-metric"><small>Direction HIT</small><b id="strictHit">0%</b></div>
+          <div class="mode-metric"><small>Signal NET</small><b id="strictNet">0.000%</b></div>
+          <div class="mode-metric"><small>Avg NET/trade</small><b id="strictAvg">0.000%</b></div>
+        </div>
+      </div>
+      <div class="mode-card train">
+        <div class="mode-head"><h3>🧪 TRAIN 3/4</h3><span>тільки learner training</span></div>
+        <div class="mode-metrics">
+          <div class="mode-metric"><small>Trades</small><b id="trainTrades">0</b></div>
+          <div class="mode-metric"><small>Win rate</small><b id="trainWinRate">0%</b></div>
+          <div class="mode-metric"><small>Direction HIT</small><b id="trainHit">0%</b></div>
+          <div class="mode-metric"><small>Signal NET</small><b id="trainNet">0.000%</b></div>
+          <div class="mode-metric"><small>Avg NET/trade</small><b id="trainAvg">0.000%</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-chart-head">
+      <div class="sub">Графік показує тільки один режим за раз — статистика не змішується.</div>
+      <select class="select" id="statsMode" aria-label="Режим статистики">
+        <option value="STRICT">STRICT 4/4</option>
+        <option value="TRAIN">TRAIN 3/4</option>
+        <option value="LEGACY">LEGACY / UNKNOWN</option>
+      </select>
     </div>
     <div class="stats-chart"><canvas id="statsCanvas"></canvas></div>
     <div class="legend">
       <span><i class="dot" style="background:#2bdd8d"></i>NET WIN</span>
       <span><i class="dot" style="background:#ff5264"></i>NET LOSS</span>
-      <span><i class="dot" style="background:#7da0ff"></i>Signal NET sum % (не account return)</span>
+      <span><i class="dot" style="background:#7da0ff"></i>Signal NET sum % вибраного режиму</span>
     </div>
     <div class="sub" style="margin-top:7px">
-      Signal NET sum = сума net% окремих угод для аналізу якості сигналів. Account P&amp;L = фактична зміна paper equity з урахуванням position sizing.
+      Старі угоди без записаного TECH score не приписуються навмання: вони залишаються в LEGACY / UNKNOWN. Нові угоди маркуються як STRICT 4/4 або TRAIN 3/4 при вході.
     </div>
   </section>
 
@@ -388,7 +432,7 @@ const CFG={
 const STORE='myshka_astra_live_lab_v1';
 const $=id=>document.getElementById(id);
 // MYSHKA_BRIDGE_UI_V1
-let APP={selected:CFG.pairs[0],markets:{},decisions:{},universePairs:CFG.pairs.slice(),kill:false,cooldowns:{},positions:{},trades:[],equity:1000,startEquity:1000,logs:[],scanning:false,
+let APP={selected:CFG.pairs[0],markets:{},decisions:{},universePairs:CFG.pairs.slice(),kill:false,cooldowns:{},positions:{},trades:[],equity:1000,startEquity:1000,logs:[],entryTags:{},scanning:false,
   bridgeUrl:'http://localhost:8088',bridgeToken:'',backendReady:false,backendStats:null};
 
 // MYSHKA_PHONE_FRAGMENT_V1
@@ -410,12 +454,12 @@ function loadState(){
   try{
     const x=JSON.parse(localStorage.getItem(STORE)||'{}');
     APP.kill=!!x.kill;APP.cooldowns=x.cooldowns||{};APP.positions=x.positions||{};APP.trades=x.trades||[];
-    APP.equity=Number(x.equity)||1000;APP.startEquity=Number(x.startEquity)||1000;APP.logs=x.logs||[];
+    APP.equity=Number(x.equity)||1000;APP.startEquity=Number(x.startEquity)||1000;APP.logs=x.logs||[];APP.entryTags=x.entryTags||{};
     APP.bridgeUrl=x.bridgeUrl||'http://localhost:8088';APP.bridgeToken=x.bridgeToken||'';
   }catch(e){}
 }
 function saveState(){
-  try{localStorage.setItem(STORE,JSON.stringify({kill:APP.kill,cooldowns:APP.cooldowns,positions:APP.positions,trades:APP.trades,equity:APP.equity,startEquity:APP.startEquity,logs:APP.logs.slice(0,100),bridgeUrl:APP.bridgeUrl,bridgeToken:APP.bridgeToken}))}catch(e){}
+  try{localStorage.setItem(STORE,JSON.stringify({kill:APP.kill,cooldowns:APP.cooldowns,positions:APP.positions,trades:APP.trades,equity:APP.equity,startEquity:APP.startEquity,logs:APP.logs.slice(0,100),entryTags:APP.entryTags,bridgeUrl:APP.bridgeUrl,bridgeToken:APP.bridgeToken}))}catch(e){}
 }
 function pairSymbol(pair){return pair.split('/')[0]+'USDT'}
 function fmtPrice(v){if(!Number.isFinite(v))return '—';return v>=1000?v.toLocaleString('uk-UA',{maximumFractionDigits:1}):v.toLocaleString('uk-UA',{maximumFractionDigits:4})}
@@ -517,12 +561,52 @@ function evaluateMarket(market){
 function addLog(type,pair,text,val=''){
   APP.logs.unshift({ts:Date.now(),type,pair,text,val});APP.logs=APP.logs.slice(0,100);saveState();renderLog()
 }
+function normalizeTradeMode(v){
+  const raw=String(v||'').toUpperCase().replace(/\s+/g,'');
+  if(raw==='STRICT'||raw==='STRICT4/4'||raw==='4/4'||raw==='4')return 'STRICT';
+  if(raw==='TRAIN'||raw==='TRAIN3/4'||raw==='3/4'||raw==='3')return 'TRAIN';
+  return 'LEGACY';
+}
+function decisionTradeMode(d){
+  if(!d||!d.sig)return{mode:'LEGACY',score:0};
+  const r=techRuleScore(d.sig);
+  return{mode:r.score===4?'STRICT':r.score===3?'TRAIN':'LEGACY',score:r.score};
+}
+function rememberEntryTag(pair,side,d,ts=Date.now()){
+  const m=decisionTradeMode(d),key=pair+'|'+side;
+  const a=APP.entryTags[key]||[];
+  if(!a.some(x=>Math.abs((x.ts||0)-ts)<45000&&x.mode===m.mode)){
+    a.push({ts,mode:m.mode,techScore:m.score});
+    APP.entryTags[key]=a.slice(-12);
+    saveState();
+  }
+  return m;
+}
+function serverTradeMode(t){
+  const explicit=t.trade_mode||t.tech_mode||t.entry_mode||t.rule_mode||'';
+  if(explicit)return normalizeTradeMode(explicit);
+  const score=Number(t.tech_score??t.tech_rule_score??t.rule_score);
+  if(score===4)return 'STRICT';
+  if(score===3)return 'TRAIN';
+  if(t.training===true||t.is_training===true)return 'TRAIN';
+  const entered=(Number(t.entered_at)||0)*1000,key=t.pair+'|'+t.side,tags=APP.entryTags[key]||[];
+  if(entered&&tags.length){
+    let best=null,dist=Infinity;
+    for(const tag of tags){
+      const d=Math.abs((tag.ts||0)-entered);
+      if(d<dist){dist=d;best=tag}
+    }
+    if(best&&dist<=120000)return normalizeTradeMode(best.mode);
+  }
+  return 'LEGACY';
+}
 function maybeEnter(market,d){
   if(d.action!=='ENTER'||APP.positions[market.pair])return;
+  const tag=rememberEntryTag(market.pair,d.sig.direction,d,Date.now());
   const p={pair:market.pair,side:d.sig.direction,regime:d.sig.structure,entry:market.lastPrice,openedAt:Date.now(),horizonMs:CFG.horizonMs,
-    expectedEdge:d.edge.netEdgePct,costs:d.edge.totalCostPct,notionalPct:d.size.notionalPct,entrySpread:market.spreadPct};
+    expectedEdge:d.edge.netEdgePct,costs:d.edge.totalCostPct,notionalPct:d.size.notionalPct,entrySpread:market.spreadPct,tradeMode:tag.mode,techScore:tag.score};
   APP.positions[market.pair]=p;APP.cooldowns[market.pair+'|'+p.side]=Date.now();
-  addLog('ENTER',market.pair,p.side+' @ '+fmtPrice(p.entry),'edge '+p.expectedEdge.toFixed(3)+'%');saveState()
+  addLog('ENTER',market.pair,p.side+' · '+tag.mode+' '+tag.score+'/4 @ '+fmtPrice(p.entry),'edge '+p.expectedEdge.toFixed(3)+'%');saveState()
 }
 function settlePositions(){
   const now=Date.now();
@@ -530,7 +614,7 @@ function settlePositions(){
     const p=APP.positions[pair],m=APP.markets[pair];if(!m||now-p.openedAt<CFG.horizonMs)continue;
     const raw=(m.lastPrice-p.entry)/p.entry*100,gross=p.side==='LONG'?raw:-raw,net=gross-p.costs,hit=gross>0,pnlAmount=APP.equity*(p.notionalPct/100)*(net/100);
     APP.equity+=pnlAmount;
-    const trade={pair:p.pair,side:p.side,regime:p.regime,horizonMs:p.horizonMs,grossPct:gross,netPct:net,directionHit:hit,pnlAmount,expectedEdge:p.expectedEdge,openedAt:p.openedAt,closedAt:now};
+    const trade={pair:p.pair,side:p.side,regime:p.regime,horizonMs:p.horizonMs,grossPct:gross,netPct:net,directionHit:hit,pnlAmount,expectedEdge:p.expectedEdge,openedAt:p.openedAt,closedAt:now,tradeMode:normalizeTradeMode(p.tradeMode),techScore:Number(p.techScore)||0};
     APP.trades.push(trade);
     delete APP.positions[pair];
     addLog('CLOSE',pair,p.side+' gross '+gross.toFixed(3)+'% · net '+net.toFixed(3)+'%',net.toFixed(3)+'%');
@@ -615,7 +699,12 @@ function paintPhoneControl(status){
 function loadServerTrades(st){
   if(!st||!st.trades)return;
   APP.backendStats=st;
-  APP.trades=st.trades.slice().reverse().map(t=>({pair:t.pair,side:t.side,regime:t.regime,horizonMs:t.horizon_sec*1000,grossPct:t.gross_return_pct,netPct:t.net_return_pct,directionHit:!!t.direction_hit,pnlAmount:0,expectedEdge:t.expected_edge_pct,openedAt:(t.entered_at||0)*1000,closedAt:(t.entered_at||0)*1000+t.horizon_sec*1000}));
+  APP.trades=st.trades.slice().reverse().map(t=>({
+    pair:t.pair,side:t.side,regime:t.regime,horizonMs:t.horizon_sec*1000,
+    grossPct:t.gross_return_pct,netPct:t.net_return_pct,directionHit:!!t.direction_hit,pnlAmount:Number(t.pnl_amount)||0,
+    expectedEdge:t.expected_edge_pct,openedAt:(t.entered_at||0)*1000,closedAt:(t.entered_at||0)*1000+t.horizon_sec*1000,
+    tradeMode:serverTradeMode(t),techScore:Number(t.tech_score??t.tech_rule_score??t.rule_score)||0
+  }));
   renderStats();
 }
 function techRuleScore(sig){
@@ -689,7 +778,9 @@ function applyServerResults(results){
   const ordered=[];
   for(const r of (results||[])){
     const a=adaptServerResult(r);if(!a.market.candles.length)continue;
-    APP.markets[r.pair]=a.market;APP.decisions[r.pair]=a.decision;ordered.push(r.pair);ok++;
+    APP.markets[r.pair]=a.market;APP.decisions[r.pair]=a.decision;
+    if(a.decision.action==='ENTER'&&a.decision.sig&&a.decision.sig.direction!=='WAIT')rememberEntryTag(r.pair,a.decision.sig.direction,a.decision,Date.now());
+    ordered.push(r.pair);ok++;
   }
   if(ordered.length){
     APP.universePairs=ordered;
@@ -990,37 +1081,75 @@ function renderPosition(){
     '<div class="prow"><span>Size</span><b>'+p.notionalPct.toFixed(3)+'% equity</b></div>'+
     '<div class="prow"><span>Settle</span><b>'+Math.ceil(left/1000)+'s</b></div>'
 }
+function tradesByMode(mode){
+  return APP.trades.filter(t=>normalizeTradeMode(t.tradeMode)===mode);
+}
+function calcTradeStats(a){
+  const n=a.length,w=a.filter(x=>Number(x.netPct)>0).length,hit=a.filter(x=>x.directionHit).length;
+  const net=a.reduce((sum,x)=>sum+(Number(x.netPct)||0),0);
+  return{n,w,loss:n-w,winRate:n?w/n*100:0,hitRate:n?hit/n*100:0,net,avg:n?net/n:0};
+}
+function paintModeStats(prefix,mode){
+  const q=calcTradeStats(tradesByMode(mode));
+  $(prefix+'Trades').textContent=q.n;
+  $(prefix+'WinRate').textContent=q.winRate.toFixed(1)+'%';
+  $(prefix+'Hit').textContent=q.hitRate.toFixed(1)+'%';
+  $(prefix+'Net').textContent=(q.net>=0?'+':'')+q.net.toFixed(3)+'%';
+  $(prefix+'Net').className=q.net>=0?'long':'short';
+  $(prefix+'Avg').textContent=(q.avg>=0?'+':'')+q.avg.toFixed(3)+'%';
+  $(prefix+'Avg').className=q.avg>=0?'long':'short';
+}
 function renderStats(){
-  const t=APP.trades,w=t.filter(x=>x.netPct>0).length,l=t.filter(x=>x.netPct<0).length,hit=t.filter(x=>x.directionHit).length,net=t.reduce((a,x)=>a+(Number(x.netPct)||0),0);
+  const strict=tradesByMode('STRICT'),train=tradesByMode('TRAIN'),legacy=tradesByMode('LEGACY');
   const accountPnl=APP.startEquity>0?(APP.equity-APP.startEquity)/APP.startEquity*100:0;
-  $('sWins').textContent=w;
-  $('sLosses').textContent=l;
-  $('sWinRate').textContent=(w+l?w/(w+l)*100:0).toFixed(1)+'%';
-  $('sHitRate').textContent=(t.length?hit/t.length*100:0).toFixed(1)+'%';
-  $('sNet').textContent=(net>=0?'+':'')+net.toFixed(3)+'%';
-  $('sNet').className=net>=0?'long':'short';
+  $('sEquity').textContent=APP.equity.toFixed(2);
   $('sAccountPnl').textContent=(accountPnl>=0?'+':'')+accountPnl.toFixed(3)+'%';
   $('sAccountPnl').className=accountPnl>=0?'long':'short';
-  $('sEquity').textContent=APP.equity.toFixed(2);
+  $('sTotalTrades').textContent=APP.trades.length;
+  $('sStrictCount').textContent=strict.length;
+  $('sTrainCount').textContent=train.length;
+  $('sLegacyCount').textContent=legacy.length;
+  paintModeStats('strict','STRICT');
+  paintModeStats('train','TRAIN');
+
   const learnerPairs=(APP.universePairs&&APP.universePairs.length)?APP.universePairs:CFG.pairs;
   const maxBucket=Math.max(0,...learnerPairs.flatMap(pair=>['LONG','SHORT'].flatMap(side=>['UP','DOWN','RANGE'].map(reg=>learnerSamples(pair,side,reg).bucket.length))));
   $('learnerStatus').textContent=maxBucket>=100?'Learner: full bucket confidence':maxBucket>=30?'Learner: shrinkage active':'Learner: cold start · max bucket n='+maxBucket;
-  drawStatsChart()
+
+  const sel=$('statsMode');
+  if(sel){
+    const chosen=sel.value||'STRICT';
+    if(!tradesByMode(chosen).length){
+      if(strict.length)sel.value='STRICT';
+      else if(train.length)sel.value='TRAIN';
+      else if(legacy.length)sel.value='LEGACY';
+    }
+  }
+  drawStatsChart();
 }
 function drawStatsChart(){
-  const c=$('statsCanvas'),x=c.getContext('2d'),w=c.clientWidth,h=c.clientHeight,dp=devicePixelRatio||1;c.width=w*dp;c.height=h*dp;x.setTransform(dp,0,0,dp,0,0);x.clearRect(0,0,w,h);
-  const a=APP.trades.slice(-40);if(!a.length){x.fillStyle='#7188aa';x.font='11px system-ui';x.fillText('Ще немає закритих paper-угод',20,30);return}
-  let cum=0,cs=a.map(v=>cum+=v.netPct),vals=a.map(v=>v.netPct).concat(cs,[0]),max=Math.max(...vals),min=Math.min(...vals),span=max-min||1,L=45,R=12,T=15,B=25,gw=w-L-R,gh=h-T-B,y=v=>T+(max-v)/span*gh,zero=y(0),step=gw/a.length,bw=Math.max(3,step*.55);
+  const c=$('statsCanvas'),x=c.getContext('2d'),w=c.clientWidth,h=c.clientHeight,dp=devicePixelRatio||1;
+  c.width=w*dp;c.height=h*dp;x.setTransform(dp,0,0,dp,0,0);x.clearRect(0,0,w,h);
+  const mode=$('statsMode')?$('statsMode').value:'STRICT';
+  const a=tradesByMode(mode).slice(-40);
+  if(!a.length){
+    x.fillStyle='#7188aa';x.font='11px system-ui';
+    x.fillText('Ще немає закритих '+mode+' угод',20,30);return
+  }
+  let cum=0,cs=a.map(v=>cum+=(Number(v.netPct)||0)),vals=a.map(v=>Number(v.netPct)||0).concat(cs,[0]),
+      max=Math.max(...vals),min=Math.min(...vals),span=max-min||1,L=45,R=12,T=15,B=25,gw=w-L-R,gh=h-T-B,
+      y=v=>T+(max-v)/span*gh,zero=y(0),step=gw/a.length,bw=Math.max(3,step*.55);
   x.strokeStyle='#163052';for(let i=0;i<=4;i++){const yy=T+i*gh/4;x.beginPath();x.moveTo(L,yy);x.lineTo(w-R,yy);x.stroke()}
-  a.forEach((v,i)=>{const px=L+i*step+step/2,py=y(v.netPct);x.fillStyle=v.netPct>=0?'#2bdd8d':'#ff5264';x.fillRect(px-bw/2,Math.min(zero,py),bw,Math.max(2,Math.abs(zero-py)))});
+  a.forEach((v,i)=>{const n=Number(v.netPct)||0,px=L+i*step+step/2,py=y(n);x.fillStyle=n>=0?'#2bdd8d':'#ff5264';x.fillRect(px-bw/2,Math.min(zero,py),bw,Math.max(2,Math.abs(zero-py)))});
   x.beginPath();cs.forEach((v,i)=>{const px=L+i*step+step/2,py=y(v);i?x.lineTo(px,py):x.moveTo(px,py)});x.strokeStyle='#7da0ff';x.lineWidth=2;x.stroke();
-  x.fillStyle='#7890b3';x.font='9px system-ui';x.fillText(max.toFixed(3)+'%',3,T+5);x.fillText(min.toFixed(3)+'%',3,h-B)
+  x.fillStyle='#7890b3';x.font='9px system-ui';x.fillText(mode+' · '+max.toFixed(3)+'%',3,T+5);x.fillText(min.toFixed(3)+'%',3,h-B)
 }
 function renderLog(){
   $('logList').innerHTML=APP.logs.slice(0,50).map(e=>'<div class="logrow"><span class="muted">'+new Date(e.ts).toLocaleTimeString('uk-UA')+'</span><b>'+e.type+'</b><span>'+e.pair.replace('/USDT:USDT','')+'</span><span>'+e.text+'</span><b class="'+((parseFloat(e.val)||0)>=0?'long':'short')+'">'+e.val+'</b></div>').join('')||'<div class="muted">Ще немає записів.</div>'
 }
 async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of (APP.universePairs||CFG.pairs)){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected();renderPairButtons()}renderReadiness()}
 $('pairFilter').onchange=renderPairButtons;
+$('statsMode').onchange=drawStatsChart;
 $('scanBtn').onclick=()=>APP.backendReady?phoneScanNow():scanAll();$('killBtn').onclick=()=>setKill(!APP.kill);$('runReadiness').onclick=async()=>{if(APP.backendReady)await refreshPhoneControl();else await scanAll();renderReadiness()};
 $('phoneRefresh').onclick=refreshPhoneControl;$('phoneScan').onclick=phoneScanNow;
 $('phonePause').onclick=()=>setServerControl('paused',!(APP.serverRuntime&&APP.serverRuntime.paused)).then(refreshPhoneControl);
@@ -1031,7 +1160,7 @@ $('phoneN8n').onclick=()=>setServerControl('n8n_events_enabled',!(APP.serverRunt
 $('phoneNotify').onclick=()=>setServerControl('telegram_notifications_enabled',!(APP.serverRuntime&&APP.serverRuntime.telegram_notifications_enabled)).then(refreshPhoneControl);
 $('phoneEngineReset').onclick=async()=>{if(!APP.backendReady||!confirm('Скинути paper equity та відкриті PAPER позиції? Learner лишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl()};
 $('autoMode').onchange=()=>{if(APP.backendReady)setServerControl('auto_scan',$('autoMode').value==='on').then(refreshPhoneControl)};
-$('resetBtn').onclick=async()=>{if(APP.backendReady){if(!confirm('Скинути paper engine? Learner історія залишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl();return}if(!confirm('Скинути локальні paper-угоди?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
+$('resetBtn').onclick=async()=>{if(APP.backendReady){if(!confirm('Скинути paper engine? Learner історія залишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl();return}if(!confirm('Скинути локальні paper-угоди?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.entryTags={};APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
 window.addEventListener('resize',()=>{renderSelected();renderStats()});
 loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(!APP.backendReady)scanAll();else refreshPhoneControl()});
 setInterval(()=>{if(APP.backendReady)refreshPhoneControl();else if($('autoMode').value==='on')scanAll();else{settlePositions();renderPosition()}},CFG.scanMs);
