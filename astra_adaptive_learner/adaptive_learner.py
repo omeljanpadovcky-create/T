@@ -46,8 +46,7 @@ FEATURE_NAMES = (
     "atr_pct", "rsi", "volume_ratio", "jev_confidence",
     "price_15m_pct", "oi_15m_pct", "funding_rate_pct",
     "long_short_ratio", "btc_15m_pct", "context_samples_log",
-    "risk_confidence", "side_long", "regime_up", "regime_down",
-    "flag_count",
+    "side_long", "regime_up", "regime_down",
 )
 
 _LOCK = threading.RLock()
@@ -148,11 +147,9 @@ def _features(r: dict) -> list[Optional[float]]:
         _num(r.get("long_short_ratio")),
         _num(r.get("btc_15m_pct")),
         math.log1p(ctx_n),
-        _num(r.get("confidence_score")),
         1.0 if side == "LONG" else 0.0,
         1.0 if regime == "UP" else 0.0,
         1.0 if regime == "DOWN" else 0.0,
-        float(_flag_count(r.get("flags_json"))),
     ]
 
 
@@ -421,8 +418,6 @@ def _candidate_row(result: dict) -> dict:
     jev = result.get("jev") or {}
     ctx = result.get("context") or {}
     mkt = result.get("market") or {}
-    risk = result.get("risk_intelligence") or {}
-    flags = risk.get("flags") or result.get("risk_flags") or []
     return {
         "side":str(result.get("direction") or sig.get("direction") or ""),
         "regime":str(sig.get("structure") or "RANGE"),
@@ -440,8 +435,6 @@ def _candidate_row(result: dict) -> dict:
         "long_short_ratio":_num(ctx.get("long_short_ratio")),
         "btc_15m_pct":_num(ctx.get("btc_price_change_15m_pct")),
         "context_samples":int(ctx.get("samples") or 0),
-        "confidence_score":_num(risk.get("confidence_score")),
-        "flags_json":json.dumps(flags if isinstance(flags,list) else []),
     }
 
 
