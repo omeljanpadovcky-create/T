@@ -382,6 +382,39 @@ button{cursor:pointer}
     <div class="sub" style="margin-top:8px">
       Analytics нічого не змінює в ENTER/DROP. Він лише шукає історичні закономірності по EDGE, LONG/SHORT, RSI, volume, OI, funding, L/S, momentum, BTC context, external events і часу доби.
     </div>
+
+    <div style="height:1px;background:rgba(255,255,255,.08);margin:16px 0"></div>
+
+    <div class="stats-title">
+      <div>
+        <h2>🧪 COUNTERFACTUAL · ВІДСІЧЕНІ УГОДИ</h2>
+        <div class="sub">EDGE DROP і JEV REJECT → перевірка через 5 хв, що було б без фільтра</div>
+      </div>
+      <div class="sub" id="cfState">Counterfactual: warming</div>
+    </div>
+
+    <div class="stats" style="grid-template-columns:repeat(5,1fr)">
+      <div class="stat"><small>Checked rejects</small><b id="cfChecked">0</b></div>
+      <div class="stat"><small>Would win</small><b id="cfWouldWin">0</b></div>
+      <div class="stat"><small>False reject rate</small><b id="cfFalseRate">0.0%</b></div>
+      <div class="stat"><small>Avg hypothetical NET</small><b id="cfAvgNet">0.000%</b></div>
+      <div class="stat"><small>Pending 5m</small><b id="cfPending">0</b></div>
+    </div>
+
+    <div class="mode-stats">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>🚧 EDGE DROP</h3><span>чи EDGE рятує від мінусів</span></div>
+        <div id="cfEdgeStage"><div class="muted">Чекаємо перші 5-хв перевірки.</div></div>
+      </div>
+      <div class="mode-card train">
+        <div class="mode-head"><h3>🧠 JEV REJECT</h3><span>чи JEV відсікає правильно</span></div>
+        <div id="cfJevStage"><div class="muted">Чекаємо перші 5-хв перевірки.</div></div>
+      </div>
+    </div>
+
+    <div class="sub" id="cfVerdicts" style="margin-top:8px">
+      SHADOW only · жодна відсічена угода реально не відкривається.
+    </div>
   </section>
 
   <section class="card glass readiness" id="readinessPanel">
@@ -786,6 +819,52 @@ async function refreshAnalytics(){
   }
 }
 
+function cfStageHtml(label,m){
+  if(!m||!Number(m.n||0))return '<div class="muted">Ще немає закритих '+label+' shadow-кандидатів.</div>';
+  const n=Number(m.n||0),w=Number(m.would_win||0),wr=Number(m.false_reject_rate_pct||0),avg=Number(m.avg_net_pct||0);
+  return '<div class="check"><span>Checked</span><span>'+n+'</span></div>'+
+    '<div class="check"><span>Would win</span><span>'+w+' · '+wr.toFixed(1)+'%</span></div>'+
+    '<div class="check"><span>Avg hypothetical NET</span><span class="'+(avg>=0?'ok':'bad')+'">'+analyticsPct(avg)+'</span></div>';
+}
+function loadCounterfactualReport(r){
+  if(!r||r.status!=='ok')return;
+  APP.counterfactualReport=r;
+  const o=r.overall||{};
+  const n=Number(o.n||0),w=Number(o.would_win||0),rate=Number(o.false_reject_rate_pct||0),avg=Number(o.avg_net_pct||0);
+  $('cfChecked').textContent=n;
+  $('cfWouldWin').textContent=w;
+  $('cfFalseRate').textContent=rate.toFixed(1)+'%';
+  $('cfAvgNet').textContent=analyticsPct(avg);
+  $('cfAvgNet').className=avg>0?'long':avg<0?'short':'';
+  $('cfPending').textContent=Number(r.open||0);
+  $('cfState').textContent='Counterfactual: '+String(r.sample_state||'COLD')+' · SHADOW';
+
+  const stages=r.stages||{};
+  $('cfEdgeStage').innerHTML=cfStageHtml('EDGE DROP',stages.EDGE_DROP);
+  $('cfJevStage').innerHTML=cfStageHtml('JEV REJECT',stages.JEV_REJECT);
+
+  const verdicts=r.verdicts||[];
+  if(!verdicts.length){
+    $('cfVerdicts').textContent='Потрібно мінімум 3 закриті shadow-кандидати на етап, щоб робити ранній висновок.';
+  }else{
+    $('cfVerdicts').innerHTML=verdicts.map(v=>{
+      const good=String(v.conclusion||'').includes('SAVING');
+      const cls=good?'ok':'bad';
+      const uk=good?'фільтр поки рятує від мінусів':'фільтр може бути занадто строгим';
+      return '<div class="check"><span>'+String(v.stage||'')+' · n='+Number(v.n||0)+'</span><span class="'+cls+'">'+uk+' · '+analyticsPct(v.avg_net_pct)+'</span></div>';
+    }).join('');
+  }
+}
+async function refreshCounterfactual(){
+  if(!APP.backendReady)return;
+  try{
+    const r=await bridgeFetch('/counterfactual/report?min_stage_n=3');
+    loadCounterfactualReport(r);
+  }catch(e){
+    if($('cfState'))$('cfState').textContent='Counterfactual: backend patch required / warming';
+  }
+}
+
 function loadServerTrades(st){
   if(!st||!st.trades)return;
   APP.backendStats=st;
@@ -888,6 +967,7 @@ async function refreshPhoneControl(){
     const latest=await bridgeFetch('/control/latest');applyServerResults(latest.results||[]);if(latest.engine)paintPhoneControl({runtime:latest.engine.runtime,engine:latest.engine});
     const trades=await bridgeFetch('/stats?limit=120');loadServerTrades(trades);
     await refreshAnalytics();
+    await refreshCounterfactual();
   }catch(e){
     APP.backendReady=false;
     integrationNode('iAstra','bridge_offline');
@@ -904,7 +984,7 @@ async function setServerControl(name,value){
 async function phoneScanNow(){
   if(!APP.backendReady)return scanAll();
   $('phoneScan').textContent='… Scan';
-  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshAnalytics()}
+  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshAnalytics();await refreshCounterfactual()}
   finally{$('phoneScan').textContent='🔎 Scan зараз'}
 }
 async function connectBridge(){
@@ -1288,7 +1368,7 @@ function renderLog(){
 async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of (APP.universePairs||CFG.pairs)){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected();renderPairButtons()}renderReadiness()}
 $('pairFilter').onchange=renderPairButtons;
 $('statsMode').onchange=drawStatsChart;
-$('analyticsRefresh').onclick=refreshAnalytics;
+$('analyticsRefresh').onclick=()=>{refreshAnalytics();refreshCounterfactual()};
 $('scanBtn').onclick=()=>APP.backendReady?phoneScanNow():connectBridge();$('killBtn').onclick=()=>setKill(!APP.kill);$('runReadiness').onclick=async()=>{if(APP.backendReady)await refreshPhoneControl();else await connectBridge();renderReadiness()};
 $('phoneRefresh').onclick=refreshPhoneControl;$('phoneScan').onclick=phoneScanNow;
 $('phonePause').onclick=()=>setServerControl('paused',!(APP.serverRuntime&&APP.serverRuntime.paused)).then(refreshPhoneControl);
