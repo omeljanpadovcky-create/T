@@ -6,7 +6,7 @@ Write-Host ' MYSHKA / ASTRA - STRICT EDGE SERVER PAYLOAD V2 ' -ForegroundColor Y
 Write-Host '======================================================' -ForegroundColor Cyan
 Write-Host ''
 
-$bundleCommit = '84ff08f1f2e24b8074515b1da2dc000cdb5b55fb'
+$bundleCommit = '724f995534767f1dc0be5e0ded61e643bddc63b2'
 $patchUrl = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit + '/astra_strict_edge_v2/patch_strict_edge_server_v2.py'
 Write-Host ("Pinned patch: " + $bundleCommit) -ForegroundColor DarkGray
 
