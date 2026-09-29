@@ -1232,6 +1232,7 @@ async function refreshPhoneControl(){
     await refreshAnalytics();
     await refreshCounterfactual();
     await refreshRiskIntelligence();
+    await refreshRiskQuality();
   }catch(e){
     APP.backendReady=false;
     integrationNode('iAstra','bridge_offline');
@@ -1248,7 +1249,7 @@ async function setServerControl(name,value){
 async function phoneScanNow(){
   if(!APP.backendReady)return scanAll();
   $('phoneScan').textContent='… Scan';
-  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshAnalytics();await refreshCounterfactual();await refreshRiskIntelligence()}
+  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshAnalytics();await refreshCounterfactual();await refreshRiskIntelligence();await refreshRiskQuality()}
   finally{$('phoneScan').textContent='🔎 Scan зараз'}
 }
 async function connectBridge(){
