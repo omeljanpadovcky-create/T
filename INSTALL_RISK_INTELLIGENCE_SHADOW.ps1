@@ -63,6 +63,17 @@ Write-Host '[2/8] Downloading safe patcher + runtime self-test...'
 Invoke-WebRequest -UseBasicParsing -Uri ($base + '/patch_risk_intelligence_shadow.py?v=' + $cacheBust) -OutFile (Join-Path $tmp 'patch_risk_intelligence_shadow.py')
 Invoke-WebRequest -UseBasicParsing -Uri ($base + '/selftest_risk_intelligence.py?v=' + $cacheBust) -OutFile (Join-Path $tmp 'selftest_risk_intelligence.py')
 
+# Refuse stale/cached bundle files explicitly.
+$selftestText = Get-Content (Join-Path $tmp 'selftest_risk_intelligence.py') -Raw
+$riskText = Get-Content (Join-Path $tmp 'risk_intelligence_shadow.py') -Raw
+if($selftestText -match 'TemporaryDirectory\(' -or $selftestText -notmatch 'myshka_ri_selftest_'){
+    throw 'STALE BUNDLE DETECTED: old self-test was downloaded. Local ASTRA was not modified.'
+}
+if($riskText -notmatch '@contextmanager' -or $riskText -notmatch 'con\.close\(\)'){
+    throw 'STALE BUNDLE DETECTED: old Risk Intelligence engine was downloaded. Local ASTRA was not modified.'
+}
+Write-Host '[OK] Pinned bundle freshness markers verified.' -ForegroundColor Green
+
 Write-Host '[3/8] Validating downloaded Python files...'
 & python -m py_compile (Join-Path $tmp 'risk_intelligence_shadow.py') (Join-Path $tmp 'patch_risk_intelligence_shadow.py') (Join-Path $tmp 'selftest_risk_intelligence.py')
 if($LASTEXITCODE -ne 0){ throw 'Downloaded Risk Intelligence files failed syntax check. Local ASTRA was not modified.' }
