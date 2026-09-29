@@ -19,7 +19,7 @@ sys.path.insert(0, str(app))
 
 
 def run() -> None:
-    with tempfile.TemporaryDirectory() as td:
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as td:
         t = Path(td)
         os.environ["RISK_INTELLIGENCE_DB_PATH"] = str(t / "risk.sqlite3")
         os.environ["ANALYTICS_DB_PATH"] = str(t / "analytics.sqlite3")
