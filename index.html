@@ -520,6 +520,56 @@ button{cursor:pointer}
     </div>
   </section>
 
+  <section class="card glass" id="hardeningPanel">
+    <div class="stats-title">
+      <div>
+        <h2>🔧 FINAL HARDENING · DIAGNOSTIC</h2>
+        <div class="sub">Exchange isolation/reconciliation · SQLite backup/restore · versioned config · data quality · safe chaos tests</div>
+      </div>
+      <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
+        <span class="sub" id="hardState">Hardening: warming</span>
+        <button class="btn" id="hardRefresh">↻ Оновити</button>
+        <button class="btn" id="hardReconcile">🔄 Reconcile now</button>
+      </div>
+    </div>
+
+    <div class="stats" style="grid-template-columns:repeat(5,1fr)">
+      <div class="stat"><small>DATA QUALITY</small><b id="hardDQ">—</b></div>
+      <div class="stat"><small>CONFIG VERSION</small><b id="hardConfig">—</b></div>
+      <div class="stat"><small>RECONCILIATION</small><b id="hardRec">—</b></div>
+      <div class="stat"><small>EXECUTION</small><b id="hardExec">PAPER</b></div>
+      <div class="stat"><small>TOOLS</small><b id="hardTools">3</b></div>
+    </div>
+
+    <div class="mode-stats">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>🧪 Data-quality checks</h3><span>15-market scan integrity</span></div>
+        <div id="hardDQChecks"><div class="muted">Чекаємо перший scan після встановлення.</div></div>
+      </div>
+      <div class="mode-card train">
+        <div class="mode-head"><h3>🔄 Reconciliation</h3><span>ASTRA PAPER ↔ Analytics + Bybit/Freqtrade status</span></div>
+        <div id="hardRecChecks"><div class="muted">Натисни “Reconcile now” для зовнішнього read-only snapshot.</div></div>
+      </div>
+    </div>
+
+    <div class="mode-stats" style="margin-top:10px">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>🏷 Versioned config</h3><span>кожна зміна параметрів = новий fingerprint</span></div>
+        <div id="hardConfigDetail"><div class="muted">Ще немає config snapshot.</div></div>
+      </div>
+      <div class="mode-card train">
+        <div class="mode-head"><h3>💾 Recovery tools</h3><span>ручні, не автоматичні</span></div>
+        <div class="check"><span>Backup</span><span>BACKUP_ASTRA_DATA.ps1</span></div>
+        <div class="check"><span>Restore</span><span>RESTORE_ASTRA_DATA.ps1 · Confirm RESTORE</span></div>
+        <div class="check"><span>Safe chaos</span><span>RUN_ASTRA_SAFE_CHAOS_TESTS.ps1</span></div>
+      </div>
+    </div>
+
+    <div class="sub" style="margin-top:8px">
+      Diagnostic only: hardening не змінює ENTER/DROP, sizing або execution. Reconcile now використовує лише read-only integration snapshot.
+    </div>
+  </section>
+
   <section class="card glass readiness" id="readinessPanel">
     <div class="ready-head">
       <div>
@@ -1128,6 +1178,57 @@ async function refreshDecisionReplay(){
   }
 }
 
+function hardStateClass(s){
+  s=String(s||'').toUpperCase();
+  return s==='OK'?'long':s==='WARN'?'short':'wait';
+}
+function loadHardeningReport(r){
+  if(!r||r.status!=='ok')return;
+  APP.hardeningReport=r;
+  const dq=r.data_quality||{},cfg=r.config_current||{},rec=r.reconciliation||{};
+  $('hardDQ').textContent=dq.total?Number(dq.ok_n||0)+'/'+Number(dq.total||0):'—';
+  $('hardDQ').className=hardStateClass(dq.state);
+  $('hardConfig').textContent=cfg.version||'—';
+  $('hardRec').textContent=String(rec.state||'UNVERIFIED');
+  $('hardRec').className=hardStateClass(rec.state);
+  $('hardState').textContent='Hardening: '+String(dq.state||'WARMING')+' · '+String(rec.state||'UNVERIFIED');
+
+  const checks=Array.isArray(dq.checks)?dq.checks:[];
+  $('hardDQChecks').innerHTML=checks.length?checks.map(x=>
+    '<div class="check"><span>'+String(x.name||'')+'</span><span class="'+(x.ok?'long':'short')+'">'+
+    (x.ok?'OK':'WARN')+' · '+String(x.detail||'')+'</span></div>'
+  ).join(''):'<div class="muted">Чекаємо перший scan після встановлення.</div>';
+
+  const rc=Array.isArray(rec.checks)?rec.checks:[];
+  $('hardRecChecks').innerHTML=rc.length?rc.map(x=>
+    '<div class="check"><span>'+String(x.name||'')+'</span><span class="'+hardStateClass(x.state)+'">'+
+    String(x.state||'—')+' · '+String(x.detail||'')+'</span></div>'
+  ).join(''):'<div class="muted">Reconciliation ще не виконаний.</div>';
+
+  const snap=cfg.snapshot||{};
+  $('hardConfigDetail').innerHTML=cfg.version?
+    '<div class="check"><span>'+String(cfg.version)+' · '+String(cfg.fingerprint||'')+'</span><span>current</span></div>'+
+    '<div class="check"><span>Universe / TF / candles</span><span>'+Number(snap.universe_target||0)+' · '+String(snap.timeframe||'—')+' · '+Number(snap.candle_limit||0)+'</span></div>'+
+    '<div class="check"><span>Scan / horizon</span><span>'+Number(snap.scan_interval_sec||0)+'s · '+Number(snap.review_horizon_sec||0)+'s</span></div>'+
+    '<div class="check"><span>STRICT min EDGE</span><span>+'+Number(snap.strict_min_net_edge_pct||0).toFixed(2)+'%</span></div>'
+    :'<div class="muted">Ще немає config snapshot.</div>';
+}
+async function refreshHardening(manualReconcile=false){
+  if(!APP.backendReady)return;
+  try{
+    let r;
+    if(manualReconcile){
+      const ints=await bridgeFetch('/integrations');
+      r=await bridgeFetch('/hardening/reconcile',{method:'POST',body:JSON.stringify({integrations:ints||{}})});
+    }else{
+      r=await bridgeFetch('/hardening/status');
+    }
+    loadHardeningReport(r);
+  }catch(e){
+    if($('hardState'))$('hardState').textContent='Hardening: backend patch required / warming';
+  }
+}
+
 function loadServerTrades(st){
   if(!st||!st.trades)return;
   APP.backendStats=st;
@@ -1233,6 +1334,7 @@ async function refreshPhoneControl(){
     await refreshCounterfactual();
     await refreshRiskIntelligence();
     await refreshRiskQuality();
+    await refreshHardening(false);
   }catch(e){
     APP.backendReady=false;
     integrationNode('iAstra','bridge_offline');
@@ -1249,7 +1351,7 @@ async function setServerControl(name,value){
 async function phoneScanNow(){
   if(!APP.backendReady)return scanAll();
   $('phoneScan').textContent='… Scan';
-  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshAnalytics();await refreshCounterfactual();await refreshRiskIntelligence();await refreshRiskQuality()}
+  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshAnalytics();await refreshCounterfactual();await refreshRiskIntelligence();await refreshRiskQuality();await refreshHardening(false)}
   finally{$('phoneScan').textContent='🔎 Scan зараз'}
 }
 async function connectBridge(){
@@ -1635,6 +1737,8 @@ $('pairFilter').onchange=renderPairButtons;
 $('statsMode').onchange=drawStatsChart;
 $('analyticsRefresh').onclick=()=>{refreshAnalytics();refreshCounterfactual();refreshRiskIntelligence();refreshRiskQuality()};
 $('qualityRefresh').onclick=()=>{refreshRiskQuality();refreshDecisionReplay()};
+$('hardRefresh').onclick=()=>refreshHardening(false);
+$('hardReconcile').onclick=()=>refreshHardening(true);
 $('qualityReplay').onclick=refreshDecisionReplay;
 $('scanBtn').onclick=()=>APP.backendReady?phoneScanNow():connectBridge();$('killBtn').onclick=()=>setKill(!APP.kill);$('runReadiness').onclick=async()=>{if(APP.backendReady)await refreshPhoneControl();else await connectBridge();renderReadiness()};
 $('phoneRefresh').onclick=refreshPhoneControl;$('phoneScan').onclick=phoneScanNow;
@@ -1648,7 +1752,7 @@ $('phoneEngineReset').onclick=async()=>{if(!APP.backendReady||!confirm('Скин
 $('autoMode').onchange=()=>{if(APP.backendReady)setServerControl('auto_scan',$('autoMode').value==='on').then(refreshPhoneControl)};
 $('resetBtn').onclick=async()=>{if(APP.backendReady){if(!confirm('Скинути paper engine? Learner історія залишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl();return}if(!confirm('Скинути локальні paper-угоди?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.entryTags={};APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
 window.addEventListener('resize',()=>{renderSelected();renderStats()});
-loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(APP.backendReady){refreshPhoneControl();refreshRiskQuality();refreshDecisionReplay()}});
+loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(APP.backendReady){refreshPhoneControl();refreshRiskQuality();refreshDecisionReplay();refreshHardening(false)}});
 setInterval(()=>{if(APP.backendReady)refreshPhoneControl();else connectBridge()},CFG.scanMs);
 setInterval(renderPosition,1000);
 </script>
