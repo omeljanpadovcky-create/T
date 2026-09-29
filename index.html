@@ -268,7 +268,7 @@ button{cursor:pointer}
             <div><small>Net edge</small><b id="eNet">—</b></div>
             <div><small>Learner</small><b id="eBasis">—</b></div>
           </div>
-          <p>Fee + live spread + volatility-scaled slippage + safety margin.</p>
+          <p>Fee + live spread + volatility-scaled slippage + safety margin. STRICT 4/4 додатково вимагає Net Edge &gt; +0.05%.</p>
         </div>
         <div class="pipe">
           <div class="pipe-head"><b>3 · JEV</b><span class="pipe-status mid" id="jevStatus">—</span></div>
@@ -382,7 +382,7 @@ button{cursor:pointer}
       <div class="check-col">
         <h3>📈 Trade Engine</h3>
         <div class="check"><span>Universe</span><span id="ckUniverse" class="warn">0 / 15</span></div>
-        <div class="check"><span>EDGE gate</span><span id="ckEdge" class="warn">CHECK</span></div>
+        <div class="check"><span>EDGE gate</span><span id="ckEdge" class="warn">CHECK</span></div><div class="check"><span>STRICT min Net Edge</span><span class="ok">+0.05%</span></div>
         <div class="check"><span>JEV gate</span><span id="ckJev" class="warn">CHECK</span></div>
         <div class="check"><span>ASTRA Guard</span><span id="ckGuard" class="warn">CHECK</span></div>
         <div class="check"><span>Execution mode</span><span class="ok">PAPER</span></div>
@@ -411,7 +411,7 @@ button{cursor:pointer}
     Bybit → TECH → EDGE → JEV/Ollama → Astra Guard → PAPER ENTER → 5m REVIEW → SQLite learner.
     Telegram та n8n отримують події через сервер, а Bybit private context допускається тільки READ-ONLY.
     <b>Freqtrade тут не отримує live-order команд:</b> лишаємо його окремою execution authority для dry-run/майбутнього live після валідації.
-    <br><b>TRAINING TECH 3/4:</b> у навчальному режимі сервер може пропустити кандидата з 3 із 4 TECH-умов тільки для збору learner-даних. Це не strict/live правило.
+    <br><b>TRAINING TECH 3/4:</b> у навчальному режимі сервер може пропустити кандидата з 3 із 4 TECH-умов тільки для збору learner-даних. Це не strict/live правило.<br><b>STRICT EDGE BUFFER:</b> для 4/4 кандидата Net Edge має бути більшим за +0.05%, щоб залишити запас над modeled costs.
   </div>
 </div>
 
@@ -427,7 +427,7 @@ const CFG={
   emaFast:9,emaSlow:21,rsiPeriod:14,volumeLookback:20,structureLookback:20,candleLimit:80,
   rsiLong:[52,72],rsiShort:[28,48],volumeMin:.6,scanMs:15000,cooldownMs:240000,horizonMs:300000,
   takerRoundTrip:.11,baseSlippage:.03,slippageVolScalar:.15,safetyBase:.03,safetyVolScalar:.10,
-  minSamplesSoft:30,minSamplesFull:100,expectedQuantile:.25,
+  minSamplesSoft:30,minSamplesFull:100,expectedQuantile:.25,strictMinNetEdge:.05,
   maxDailyLoss:2,maxWeeklyLoss:5,maxLeverage:3,maxExposure:15,maxSpread:.08,riskPerTrade:.5
 };
 const STORE='myshka_astra_live_lab_v1';
@@ -513,7 +513,7 @@ function edgeCheck(market,sig){
   const slippage=CFG.baseSlippage*Math.max(1,vr)*(1+CFG.slippageVolScalar*Math.max(0,vr-1));
   const safety=CFG.safetyBase+CFG.safetyVolScalar*Math.max(0,vr-1);
   const costs=CFG.takerRoundTrip+market.spreadPct+slippage+safety,net=expected-costs;
-  return{expectedMovePct:expected,totalCostPct:costs,netEdgePct:net,passed:net>0,basis,nSamples:n}
+  return{expectedMovePct:expected,totalCostPct:costs,netEdgePct:net,passed:net>0,basis,nSamples:n,minRequiredNetEdge:0}
 }
 function jevDecision(sig,edge){
   if(APP.kill)return{verdict:'REJECT',direction:'WAIT',confidence:1,reason:'manual kill switch engaged'};
@@ -547,7 +547,14 @@ function cooldownPassed(pair,side){
   const k=pair+'|'+side,last=APP.cooldowns[k]||0;return Date.now()-last>=CFG.cooldownMs
 }
 function evaluateMarket(market){
-  const sig=analyze(market.candles),edge=edgeCheck(market,sig),jev=jevDecision(sig,edge);let size=null,guard={passed:false,reasons:[]},action='WAIT',reason=jev.reason;
+  const sig=analyze(market.candles),edge=edgeCheck(market,sig);
+  const rule=techRuleScore(sig);
+  if(edge&&rule.strict){
+    edge.minRequiredNetEdge=CFG.strictMinNetEdge;
+    edge.passed=edge.netEdgePct>CFG.strictMinNetEdge;
+    if(!edge.passed)edge.strictBufferRejected=true;
+  }
+  const jev=jevDecision(sig,edge);let size=null,guard={passed:false,reasons:[]},action='WAIT',reason=jev.reason;
   if(jev.verdict==='APPROVE'){
     if(!cooldownPassed(market.pair,sig.direction)){action='DROP';reason='4m signal cooldown active'}
     else if(APP.positions[market.pair]){action='WAIT';reason='paper position already open for this pair'}
@@ -892,7 +899,12 @@ function adaptServerResult(r){
   const m=r.market||{},raw=(m.candles||[]),candles=raw.map(c=>({o:+c.open,h:+c.high,l:+c.low,c:+c.close,v:+c.volume}));
   const sig0=r.signal||{},closes=candles.map(x=>x.c),ef=closes.length?emaSeries(closes,CFG.emaFast):[],es=closes.length?emaSeries(closes,CFG.emaSlow):[];
   const sig={direction:sig0.direction||'WAIT',reason:sig0.reason||'',structure:sig0.structure||'RANGE',emaFast:+sig0.ema_fast||ef.at(-1)||0,emaSlow:+sig0.ema_slow||es.at(-1)||0,rsi:+sig0.rsi||0,volumeRatio:+sig0.volume_ratio||0,emaFastSeries:ef,emaSlowSeries:es};
-  const e0=r.edge;const edge=e0?{expectedMovePct:+e0.expected_move_pct||0,totalCostPct:+e0.total_cost_pct||0,netEdgePct:+e0.net_edge_pct||0,passed:!!e0.passed,basis:e0.basis||'server',nSamples:+e0.n_samples||0}:null;
+  const e0=r.edge;const edge=e0?{expectedMovePct:+e0.expected_move_pct||0,totalCostPct:+e0.total_cost_pct||0,netEdgePct:+e0.net_edge_pct||0,passed:!!e0.passed,basis:e0.basis||'server',nSamples:+e0.n_samples||0,minRequiredNetEdge:0}:null;
+  const strictRule=techRuleScore(sig);
+  if(edge&&strictRule.strict){
+    edge.minRequiredNetEdge=CFG.strictMinNetEdge;
+    edge.clientStrictPass=edge.netEdgePct>CFG.strictMinNetEdge;
+  }
   const j0=r.jev||{};const jev={verdict:j0.verdict||((r.action==='ENTER')?'APPROVE':'WAIT'),direction:j0.direction||sig.direction,confidence:+j0.confidence||0,reason:j0.reason||r.reason||'',aiUsed:!!j0.ai_used,aiNote:j0.ai_note||''};
   const z=r.size;const size=z?{notionalPct:+z.notional_pct_equity||0,confidenceScalar:+z.confidence_scalar||0}:null;
   const guard={passed:r.action==='ENTER',reasons:r.guard_reasons||[]};
@@ -973,7 +985,16 @@ function renderSelected(){
   status('techStatus',d.sig.direction,d.sig.direction==='WAIT'?'mid':relaxed?'mid':'pass');
   $('techText').textContent=d.sig.reason+' • EMA '+(d.sig.emaFast>d.sig.emaSlow?'FAST>SLOW':'FAST<SLOW')+' • '+d.sig.structure+(relaxed?' • TRAIN '+tr.score+'/4 (strict 4/4 не виконано)':'');
   if(d.edge){
-    status('edgeStatus',d.edge.passed?'PASS':'DROP',d.edge.passed?'pass':'drop');$('eMove').textContent=pct(d.edge.expectedMovePct);$('eCosts').textContent=pct(d.edge.totalCostPct);$('eNet').textContent=pct(d.edge.netEdgePct);$('eBasis').textContent=d.edge.basis+' · n='+d.edge.nSamples;
+    const strictReq=Number(d.edge.minRequiredNetEdge)||0;
+    const clientStrictFail=d.server&&strictReq>0&&d.edge.clientStrictPass===false;
+    status('edgeStatus',clientStrictFail?'BUFFER DROP':(d.edge.passed?'PASS':'DROP'),(clientStrictFail||!d.edge.passed)?'drop':'pass');
+    $('eMove').textContent=pct(d.edge.expectedMovePct);
+    $('eCosts').textContent=pct(d.edge.totalCostPct);
+    $('eNet').textContent=pct(d.edge.netEdgePct);
+    $('eBasis').textContent=d.edge.basis+' · n='+d.edge.nSamples+(strictReq>0?' · min +'+strictReq.toFixed(2)+'%':'');
+    if(clientStrictFail){
+      $('finalReason').textContent='STRICT 4/4: server EDGE passed old >0 rule, but new safety buffer requires > +'+strictReq.toFixed(2)+'%. Server patch needed.';
+    }
   }else{status('edgeStatus','—','mid');$('eMove').textContent=$('eCosts').textContent=$('eNet').textContent=$('eBasis').textContent='—'}
   status('jevStatus',d.jev.verdict,d.jev.verdict==='APPROVE'?'pass':d.jev.verdict==='REJECT'?'drop':'mid');$('jevText').textContent=d.jev.reason+' • confidence '+Math.round(d.jev.confidence*100)+'%';
   if(d.size){
