@@ -1,4 +1,4 @@
-"""MYSHKA / ASTRA — RESCUE MATRIX V2 FIXED (FORWARD SHADOW ONLY).
+"""MYSHKA / ASTRA — RESCUE MATRIX V2.1 FAST (FORWARD SHADOW ONLY).
 
 Goal:
 - freeze PAPER/trading decisions;
@@ -20,6 +20,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from itertools import combinations
+from bisect import bisect_left
 import hashlib
 import json
 import math
@@ -36,6 +37,8 @@ DB_PATH = os.getenv("RESCUE_MATRIX_DB_PATH", "/data/myshka_rescue_matrix.sqlite3
 MOVEMENT_GAP_SEC = max(60, int(os.getenv("RESCUE_MATRIX_MOVEMENT_GAP_SEC", "180")))
 JOIN_TOLERANCE_SEC = max(15, int(os.getenv("RESCUE_MATRIX_JOIN_TOLERANCE_SEC", "90")))
 MAX_ROWS = max(500, int(os.getenv("RESCUE_MATRIX_MAX_ROWS", "20000")))
+REPORT_CACHE_TTL_SEC = max(2, int(os.getenv("RESCUE_MATRIX_REPORT_CACHE_TTL_SEC", "20")))
+_REPORT_CACHE: dict[str, Any] = {"at": 0.0, "value": None}
 
 WATCH_MIN_CN = max(10, int(os.getenv("RESCUE_MATRIX_WATCH_MIN_CN", "30")))
 WATCH_CONFIRM_NEW_CN = max(10, int(os.getenv("RESCUE_MATRIX_WATCH_CONFIRM_NEW_CN", "30")))
@@ -187,9 +190,16 @@ def _load_risk_candidates() -> dict[str, list[dict]]:
                     (MAX_ROWS * 2,),
                 ).fetchall()
             ]
-        out: dict[str, list[dict]] = {}
+        grouped: dict[str, list[dict]] = {}
         for r in rows:
-            out.setdefault(str(r.get("pair") or ""), []).append(r)
+            grouped.setdefault(str(r.get("pair") or ""), []).append(r)
+        out = {}
+        for pair, arr in grouped.items():
+            arr.sort(key=lambda x: float(x.get("opened_at") or 0))
+            out[pair] = {
+                "times": [float(x.get("opened_at") or 0) for x in arr],
+                "rows": arr,
+            }
         return out
     except Exception:
         return {}
@@ -208,7 +218,7 @@ def _load_blackbox() -> dict[str, list[dict]]:
                     (MAX_ROWS * 3,),
                 ).fetchall()
             ]
-        out: dict[str, list[dict]] = {}
+        grouped: dict[str, list[dict]] = {}
         for r in rows:
             try:
                 r["stage"] = json.loads(r.get("stage_json") or "{}")
@@ -218,33 +228,65 @@ def _load_blackbox() -> dict[str, list[dict]]:
                 r["raw"] = json.loads(r.get("raw_json") or "{}")
             except Exception:
                 r["raw"] = {}
-            out.setdefault(str(r.get("pair") or ""), []).append(r)
+            grouped.setdefault(str(r.get("pair") or ""), []).append(r)
+        out = {}
+        for pair, arr in grouped.items():
+            arr.sort(key=lambda x: float(x.get("observed_at") or 0))
+            out[pair] = {
+                "times": [float(x.get("observed_at") or 0) for x in arr],
+                "rows": arr,
+            }
         return out
     except Exception:
         return {}
 
 
-def _nearest(row: dict, by_pair: dict[str, list[dict]], time_field: str) -> Optional[dict]:
+def _nearest(row: dict, by_pair: dict, time_field: str) -> Optional[dict]:
+    """Nearest time join using a per-pair binary-search index.
+
+    Only rows inside JOIN_TOLERANCE_SEC are inspected, avoiding the previous
+    O(forward_rows × history_rows) full scan.
+    """
     pair = str(row.get("pair") or "")
-    arr = by_pair.get(pair, [])
-    if not arr:
+    pack = by_pair.get(pair)
+    if not pack:
         return None
+    arr = pack.get("rows") or []
+    times = pack.get("times") or []
+    if not arr or not times:
+        return None
+
     t = float(row.get("opened_at") or 0)
     side = str(row.get("side") or "").upper()
+    pos = bisect_left(times, t)
     best = None
     best_dt = 1e99
-    for x in arr:
-        dt = abs(float(x.get(time_field) or 0) - t)
-        if dt > JOIN_TOLERANCE_SEC:
-            continue
-        d = str(x.get("direction") or x.get("side") or "").upper()
-        if side in {"LONG", "SHORT"} and d in {"LONG", "SHORT"} and side != d:
-            continue
-        if dt < best_dt:
-            best = x
-            best_dt = dt
-    return best
 
+    i = pos - 1
+    while i >= 0:
+        dt = t - times[i]
+        if dt > JOIN_TOLERANCE_SEC:
+            break
+        x = arr[i]
+        d = str(x.get("direction") or x.get("side") or "").upper()
+        if not (side in {"LONG", "SHORT"} and d in {"LONG", "SHORT"} and side != d):
+            if dt < best_dt:
+                best, best_dt = x, dt
+        i -= 1
+
+    i = pos
+    while i < len(arr):
+        dt = times[i] - t
+        if dt > JOIN_TOLERANCE_SEC:
+            break
+        x = arr[i]
+        d = str(x.get("direction") or x.get("side") or "").upper()
+        if not (side in {"LONG", "SHORT"} and d in {"LONG", "SHORT"} and side != d):
+            if dt < best_dt:
+                best, best_dt = x, dt
+        i += 1
+
+    return best
 
 def _evidence_state(stage: dict, raw: dict) -> str:
     e = (stage or {}).get("evidence_gate")
@@ -444,6 +486,17 @@ def _watch_state(horizon: int, dims: tuple[str, ...], vals: tuple[str, ...], row
     now = time.time()
     state = _status_from_metrics(m)
 
+    # Most matrix cells are tiny. Never open SQLite for cells that cannot yet
+    # have reached WATCH. This keeps report() analytical instead of write-heavy.
+    if int(m.get("cn") or 0) < WATCH_MIN_CN:
+        return {
+            "signature": sig,
+            "watch_state": state,
+            "new_cn_since_watch": 0,
+            "forward_confirm_avg_net_pct": 0.0,
+            "forward_confirm_pf": 0.0,
+        }
+
     with _db(DB_PATH) as con:
         row = con.execute("SELECT * FROM rescue_watchlist WHERE signature=?", (sig,)).fetchone()
 
@@ -619,6 +672,11 @@ def _rank(rows: list[dict], horizon: int) -> dict:
 
 
 def report() -> dict:
+    now = time.time()
+    cached = _REPORT_CACHE.get("value")
+    if cached is not None and now - float(_REPORT_CACHE.get("at") or 0) < REPORT_CACHE_TTL_SEC:
+        return cached
+
     init()
     raw, started = _load_forward()
     enriched, coverage = _enrich(raw)
@@ -641,12 +699,13 @@ def report() -> dict:
             ).fetchall()
         }
 
-    return {
+    result = {
         "status": "ok",
         "mode": "RESCUE_MATRIX_V2_FORWARD_SHADOW_ONLY",
         "forward_started_at": started,
         "movement_cluster_gap_sec": MOVEMENT_GAP_SEC,
         "legacy_fixed_cluster_key_used_for_scoring": False,
+        "performance_mode": "BINARY_JOIN_CACHE_V2_1",
         "coverage": coverage,
         "by_horizon": by_horizon,
         "watchlist_counts": watch_counts,
@@ -678,6 +737,9 @@ def report() -> dict:
         "live_execution": False,
         "note": "No cluster is activated automatically, even with high PF. New forward evidence is mandatory after WATCH.",
     }
+    _REPORT_CACHE["at"] = time.time()
+    _REPORT_CACHE["value"] = result
+    return result
 
 
 def status() -> dict:
