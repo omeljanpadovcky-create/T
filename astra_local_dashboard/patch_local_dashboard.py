@@ -9,8 +9,28 @@ def patch_api(api_path: Path) -> None:
     s = api_path.read_text(encoding="utf-8-sig")
     compile(s, str(api_path), "exec")
     if MARKER in s:
-        print("[OK] Local dashboard route already present")
-        return
+        old = (
+            "def myshka_local_dashboard():\n"
+            "    p = _MyshkaDashboardPath(__file__).resolve().parent / 'index.html'\n"
+            "    return _MyshkaDashboardFileResponse(str(p), media_type='text/html')\n"
+        )
+        new = (
+            "def myshka_local_dashboard():\n"
+            "    data_p = _MyshkaDashboardPath('/data/myshka_dashboard.html')\n"
+            "    app_p = _MyshkaDashboardPath(__file__).resolve().parent / 'index.html'\n"
+            "    p = data_p if data_p.exists() else app_p\n"
+            "    return _MyshkaDashboardFileResponse(str(p), media_type='text/html')\n"
+        )
+        if old in s:
+            s = s.replace(old, new, 1)
+            compile(s, str(api_path), "exec")
+            api_path.write_text(s, encoding="utf-8")
+            print("[OK] Existing local dashboard route upgraded to /data fallback")
+            return
+        if "/data/myshka_dashboard.html" in s:
+            print("[OK] Local dashboard route already upgraded")
+            return
+        raise RuntimeError("Local dashboard marker exists but route shape is unknown")
 
     # Add isolated imports after the module docstring AND any __future__
     # imports (Python requires future imports to remain first).
