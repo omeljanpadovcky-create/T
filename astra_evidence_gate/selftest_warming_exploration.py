@@ -88,7 +88,8 @@ def run():
     os.environ["ANALYTICS_DB_PATH"] = str(analytics)
     os.environ["EVIDENCE_GATE_MIN_N"] = "20"
     os.environ["EVIDENCE_GATE_EXPLORATION_ENABLED"] = "true"
-    os.environ["EVIDENCE_GATE_EXPLORATION_MIN_EDGE_PCT"] = "0.08"\nos.environ["EVIDENCE_GATE_CALIBRATION_MAX_EDGE_PCT"] = "0.15"
+    os.environ["EVIDENCE_GATE_EXPLORATION_MIN_EDGE_PCT"] = "0.08"
+    os.environ["EVIDENCE_GATE_CALIBRATION_MAX_EDGE_PCT"] = "0.15"
     os.environ["EVIDENCE_GATE_EXPLORATION_COOLDOWN_SEC"] = "600"
     os.environ["EVIDENCE_GATE_EXPLORATION_MAX_OPEN"] = "1"
 
@@ -110,10 +111,16 @@ def run():
     assert out["exploration_passed"] == 1, out
 
     # Low edge stays blocked while warming.
-    low = candidate(0.09)
+    low = candidate(0.079)
     eg.apply_results([low])
     assert low["action"] == "DROP", low
-    assert low["reason"] == "evidence_gate_warming_edge_too_low", low\n\n    # Above-band edge also stays blocked while warming.\n    high = candidate(0.151)\n    eg.apply_results([high])\n    assert high["action"] == "DROP", high\n    assert high["reason"] == "evidence_gate_warming_edge_too_high", high
+    assert low["reason"] == "evidence_gate_warming_edge_too_low", low
+
+    # Above-band edge also stays blocked while warming.
+    high = candidate(0.151)
+    eg.apply_results([high])
+    assert high["action"] == "DROP", high
+    assert high["reason"] == "evidence_gate_warming_edge_too_high", high
 
     # Persist a recent exploration as Risk Intelligence would after the scan.
     rc = sqlite3.connect(risk)
@@ -126,7 +133,7 @@ def run():
         """,
         (
             "QNT/USDT:USDT","LONG",time.time(),"ENTER",
-            "evidence_gate_warming_exploration",4,0.108,"APPROVE",
+            "evidence_gate_warming_exploration",4,0.098,"APPROVE",
             None,None,0.18,"OPEN",
         ),
     )
@@ -172,7 +179,8 @@ def run():
     print("WARMING_EXPLORATION_V1_SELFTEST_OK")
     print("warming_first_action=", a["action"])
     print("warming_second_action=", b["action"])
-    print("low_edge_action=", low["action"])\n    print("high_edge_action=", high["action"])
+    print("low_edge_action=", low["action"])
+    print("high_edge_action=", high["action"])
     print("cooldown_action=", cool["action"])
     print("hold_action=", hold["action"])
 
