@@ -470,6 +470,55 @@ button{cursor:pointer}
     </div>
   </section>
 
+  <section class="card glass stats-wrap" id="newsIntelligencePanel">
+    <div class="stats-title">
+      <div>
+        <h2>📰 NEWS INTELLIGENCE · SHADOW</h2>
+        <div class="sub">RSS title + summary → Ollama/Qwen → BTC / ETH / SOL / MARKET → forward 5m / 10m / 15m · PAPER не змінює</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div class="sub" id="newsIntelState">News Intelligence: warming</div>
+        <button class="btn" id="newsIntelRefresh">🧠 Analyze now</button>
+      </div>
+    </div>
+    <div class="stats" style="grid-template-columns:repeat(5,1fr)">
+      <div class="stat"><small>Ollama model</small><b id="newsIntelModel">—</b></div>
+      <div class="stat"><small>Analyzed</small><b id="newsIntelAnalyzed">0</b></div>
+      <div class="stat"><small>Errors</small><b id="newsIntelErrors">0</b></div>
+      <div class="stat"><small>Closed outcomes</small><b id="newsIntelClosed">0</b></div>
+      <div class="stat"><small>Lookback</small><b id="newsIntelLookback">—</b></div>
+    </div>
+
+    <div class="mode-stats">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>🧭 Current news tone</h3><span>Ollama weighted</span></div>
+        <div id="newsIntelCurrent"><div class="muted">Чекаємо класифіковані RSS headlines.</div></div>
+      </div>
+      <div class="mode-card train">
+        <div class="mode-head"><h3>🗞 Recent analyzed headlines</h3><span>title + summary</span></div>
+        <div id="newsIntelHeadlines"><div class="muted">Ще немає проаналізованих новин.</div></div>
+      </div>
+    </div>
+
+    <div class="post-horizon-grid">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>⏱ 5m NEWS</h3><span>ALIGNED vs CONFLICT</span></div>
+        <div id="newsIntelH300"><div class="muted">Чекаємо forward outcomes.</div></div>
+      </div>
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>⏱ 10m NEWS</h3><span>ALIGNED vs CONFLICT</span></div>
+        <div id="newsIntelH600"><div class="muted">Чекаємо forward outcomes.</div></div>
+      </div>
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>⏱ 15m NEWS</h3><span>ALIGNED vs CONFLICT</span></div>
+        <div id="newsIntelH900"><div class="muted">Чекаємо forward outcomes.</div></div>
+      </div>
+    </div>
+    <div class="sub" style="margin-top:8px">
+      ALIGNED = news tone у напрямку MYSHKA; CONFLICT = проти; NEUTRAL = без вираженого tone; NO_NEWS = релевантних новин немає. n / cn = raw / 5m clustered sample.
+    </div>
+  </section>
+
   <section class="card glass stats-wrap" id="analyticsPanel">
     <div class="stats-title">
       <div>
@@ -1249,6 +1298,53 @@ async function refreshForwardExperimentLab(){
   }
 }
 
+function newsMetric(label,m){
+  m=m||{};const n=Number(m.n||0),cn=Number(m.cluster_n||0),avg=Number(m.avg_net_pct||0),pf=Number(m.profit_factor||0),wr=Number(m.win_rate_pct||0);
+  return '<div class="check"><span>'+label+' · n='+n+' / cn='+cn+' · win '+wr.toFixed(1)+'%</span><span class="'+(avg>=0?'ok':'bad')+'">'+analyticsPct(avg)+' · PF '+(pf>=999?'∞':pf.toFixed(2))+'</span></div>';
+}
+function newsHorizonHtml(h){
+  h=h||{};
+  return newsMetric('ALL',h.all)+newsMetric('ALIGNED',h.ALIGNED)+newsMetric('CONFLICT',h.CONFLICT)+newsMetric('NEUTRAL',h.NEUTRAL)+newsMetric('NO NEWS',h.NO_NEWS);
+}
+function newsToneRow(name,x){
+  x=x||{};const tone=String(x.tone||'NO_NEWS'),score=Number(x.score||0),conf=Number(x.confidence||0),n=Number(x.count||0);
+  const cls=tone==='BULLISH'?'ok':tone==='BEARISH'?'bad':'warn';
+  return '<div class="check"><span>'+name+' · n='+n+' · conf '+(conf*100).toFixed(0)+'%</span><span class="'+cls+'">'+tone+' · '+score.toFixed(2)+'</span></div>';
+}
+function loadNewsIntelligenceReport(r){
+  if(!r||r.status!=='ok')return;
+  APP.newsIntelligenceReport=r;
+  const a=r.analyzer||{},o=r.outcomes||{},ol=a.ollama||{};
+  $('newsIntelState').textContent='News Intelligence: '+String(a.mode||r.mode||'SHADOW')+' · '+String(ol.status||'unknown').toUpperCase();
+  $('newsIntelModel').textContent=String(ol.model||'—');
+  $('newsIntelAnalyzed').textContent=Number(a.analysis_ok||0);
+  $('newsIntelErrors').textContent=Number(a.analysis_error||0);
+  $('newsIntelClosed').textContent=Number(o.closed||0);
+  $('newsIntelLookback').textContent=Number(a.lookback_minutes||0)+'m';
+  const cur=a.current||{};
+  $('newsIntelCurrent').innerHTML=newsToneRow('MARKET',cur.MARKET)+newsToneRow('BTC',cur.BTC)+newsToneRow('ETH',cur.ETH)+newsToneRow('SOL',cur.SOL);
+  const heads=Array.isArray(a.recent_headlines)?a.recent_headlines:[];
+  $('newsIntelHeadlines').innerHTML=heads.length?heads.slice(0,8).map(x=>{
+    const sent=String(x.sentiment||'NEUTRAL'),cls=sent==='BULLISH'?'ok':sent==='BEARISH'?'bad':'warn';
+    const assets=(Array.isArray(x.assets)?x.assets:[]).join('/');
+    return '<div class="check"><span title="'+String(x.reason||'').replace(/"/g,'&quot;')+'">'+String(x.title||'').slice(0,90)+'</span><span class="'+cls+'">'+sent+(assets?' · '+assets:'')+'</span></div>';
+  }).join(''):'<div class="muted">Ще немає проаналізованих новин.</div>';
+  const h=o.by_horizon||{};
+  $('newsIntelH300').innerHTML=newsHorizonHtml(h['300']);
+  $('newsIntelH600').innerHTML=newsHorizonHtml(h['600']);
+  $('newsIntelH900').innerHTML=newsHorizonHtml(h['900']);
+}
+async function refreshNewsIntelligence(force=false){
+  if(!APP.backendReady)return;
+  try{
+    if(force)await bridgeFetch('/news-intelligence/refresh-now',{method:'POST',timeoutMs:30000});
+    const r=await bridgeFetch('/news-intelligence/report',{timeoutMs:18000});
+    loadNewsIntelligenceReport(r);
+  }catch(e){
+    if($('newsIntelState')&&!APP.newsIntelligenceReport)$('newsIntelState').textContent='News Intelligence: endpoint unavailable · '+String(e.message||e);
+  }
+}
+
 function loadAnalyticsReport(r){
   if(!r||r.status!=='ok')return;
   APP.analyticsReport=r;
@@ -1655,7 +1751,7 @@ async function refreshSecondaryReports(force=false){
   APP.secondaryBusy=true;
   try{
     // Small groups avoid saturating the single local API worker.
-    await Promise.allSettled([refreshPostCalibration(),refreshBinanceCrosscheck(),refreshForwardExperimentLab(),refreshAnalytics()]);
+    await Promise.allSettled([refreshPostCalibration(),refreshBinanceCrosscheck(),refreshForwardExperimentLab(),refreshNewsIntelligence(false),refreshAnalytics()]);
     await Promise.allSettled([refreshCounterfactual(),refreshRiskIntelligence(),refreshHardening(false)]);
     await Promise.allSettled([refreshRiskQuality(),refreshDecisionReplay()]);
     APP.lastSecondaryRefresh=Date.now();
@@ -2162,6 +2258,7 @@ async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switc
 $('pairFilter').onchange=renderPairButtons;
 $('statsMode').onchange=drawStatsChart;
 $('postV2Refresh').onclick=refreshPostCalibration;$('bxRefresh').onclick=refreshBinanceCrosscheck;$('forwardLabRefresh').onclick=refreshForwardExperimentLab;
+$('newsIntelRefresh').onclick=()=>refreshNewsIntelligence(true);
 $('analyticsRefresh').onclick=()=>refreshSecondaryReports(true);
 $('qualityRefresh').onclick=()=>{refreshRiskQuality();refreshDecisionReplay()};
 $('hardRefresh').onclick=()=>refreshHardening(false);
