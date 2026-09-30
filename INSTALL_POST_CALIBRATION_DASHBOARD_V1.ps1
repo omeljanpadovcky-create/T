@@ -104,10 +104,10 @@ if(-not $health -or $health.status -ne 'ok'){ throw 'ASTRA health check failed.'
 
 $token = $null
 
-# Prefer the token actually running inside the ASTRA container.
+# Prefer the exact Bridge token actually used by ASTRA (_require_token -> CONFIG.BRIDGE_TOKEN).
 try {
   $containerEnv = docker inspect myshka-astra --format '{{range .Config.Env}}{{println .}}{{end}}' 2>$null
-  $tokenLine = $containerEnv | Where-Object { $_ -match '^MYSHKA_TOKEN=' } | Select-Object -First 1
+  $tokenLine = $containerEnv | Where-Object { $_ -match '^MYSHKA_BRIDGE_TOKEN=' } | Select-Object -First 1
   if($tokenLine){
     $token = ($tokenLine -split '=',2)[1]
   }
@@ -117,13 +117,13 @@ try {
 if(-not $token){
   $envFile = Join-Path $app '.env'
   if(Test-Path $envFile){
-    $line = Get-Content $envFile | Where-Object { $_ -match '^MYSHKA_TOKEN=' } | Select-Object -First 1
-    if($line){ $token = ($line -replace '^MYSHKA_TOKEN=','').Trim().Trim('"').Trim("'") }
+    $line = Get-Content $envFile | Where-Object { $_ -match '^MYSHKA_BRIDGE_TOKEN=' } | Select-Object -First 1
+    if($line){ $token = ($line -replace '^MYSHKA_BRIDGE_TOKEN=','').Trim().Trim('"').Trim("'") }
   }
 }
 
 # Last fallback: current PowerShell environment.
-if(-not $token){ $token = $env:MYSHKA_TOKEN }
+if(-not $token){ $token = $env:MYSHKA_BRIDGE_TOKEN }
 
 $headers = @{}
 if($token){ $headers['X-MYSHKA-TOKEN'] = $token }
