@@ -76,7 +76,7 @@ def run():
 
     post = mh.post_calibration_report()
     assert post["paper_strict"]["n"] == 1, post
-    assert post["paper_strict"]["win_rate_pct"] == 100.0, post
+    assert post["paper_strict"]["net_win_rate_pct"] == 100.0, post
     assert post["by_horizon"]["300"]["calibration_band_0.08_0.15"]["n"] == 1, post
     assert post["by_horizon"]["600"]["calibration_band_0.08_0.15"]["n"] == 1, post
     assert post["by_horizon"]["900"]["calibration_band_0.08_0.15"]["n"] == 1, post
