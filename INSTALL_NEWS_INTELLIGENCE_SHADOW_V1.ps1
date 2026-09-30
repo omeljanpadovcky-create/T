@@ -2,10 +2,10 @@ $ErrorActionPreference='Stop'
 Set-StrictMode -Version Latest
 
 Write-Host '======================================================' -ForegroundColor Cyan
-Write-Host ' MYSHKA / ASTRA - FORWARD LAB + NEWS INTELLIGENCE V3 ' -ForegroundColor Yellow
+Write-Host ' MYSHKA / ASTRA - NEWS INTELLIGENCE SHADOW V2 ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$commit='2bb635b42ffd547d3fcb0c0e4c3b8a113aff47bf'
+$commit='7c98763654faa699e81f726044fd60f647e12f28'
 $root='https://raw.githubusercontent.com/omeljanpadovcky-create/T/'+$commit
 
 $app=$null
@@ -180,6 +180,9 @@ if($news.status -ne 'ok'){throw 'News Intelligence report failed.'}
 Write-Host ('[OK] News analyzer mode: '+$news.analyzer.mode) -ForegroundColor Green
 Write-Host ('Ollama: '+$news.analyzer.ollama.status+' · '+$news.analyzer.ollama.model)
 Write-Host ('Analyzed headlines: '+$news.analyzer.analysis_ok+' · errors: '+$news.analyzer.analysis_error)
+Write-Host ('Dynamic universe: '+(($news.analyzer.universe_assets | ForEach-Object {[string]$_}) -join ', '))
+Write-Host ('Time decay half-life: '+$news.analyzer.decay_half_life_minutes+' min')
+Write-Host ('Dedup: Jaccard '+$news.analyzer.dedup_jaccard+' · window '+$news.analyzer.dedup_window_minutes+' min · last dropped '+$news.analyzer.last_deduped)
 Write-Host ('News forward outcomes closed: '+$news.outcomes.closed)
 
 Write-Host '[11/11] Opening authorized dashboard...'
@@ -188,13 +191,15 @@ Start-Process $launch
 
 Write-Host ''
 Write-Host '======================================================' -ForegroundColor Green
-Write-Host ' READY - NEWS INTELLIGENCE SHADOW V1 ' -ForegroundColor Green
+Write-Host ' READY - NEWS INTELLIGENCE SHADOW V2 ' -ForegroundColor Green
 Write-Host '======================================================' -ForegroundColor Green
 Write-Host ('ASTRA health: '+$health.status)
 Write-Host ('RSS feeds: '+$ctx.rss_feeds+' · OK: '+$ctx.news_sources_ok+' · cache: '+$ctx.headline_cache)
 Write-Host ('Ollama news model: '+$news.analyzer.ollama.model)
 Write-Host ('Analyzed headlines: '+$news.analyzer.analysis_ok)
-Write-Host 'News assets: BTC | ETH | SOL | MARKET'
+Write-Host ('News assets: MARKET + dynamic TOP-'+$news.analyzer.universe_assets.Count)
+Write-Host ('Time decay: half-life '+$news.analyzer.decay_half_life_minutes+' min')
+Write-Host ('Cross-source dedup: ON · Jaccard '+$news.analyzer.dedup_jaccard+' · '+$news.analyzer.dedup_window_minutes+' min window')
 Write-Host 'News outcomes: 5m | 10m | 15m'
 Write-Host 'PAPER execution changed: NO'
 Write-Host 'Trading decisions changed: NO'
