@@ -62,6 +62,7 @@ def init():
         _ensure_column(c,"news_analysis","event_type","TEXT")
         _ensure_column(c,"news_analysis","pre_moves_json","TEXT")
         _ensure_column(c,"news_analysis","surprise_json","TEXT")
+        _ensure_column(c,"news_analysis","post_moves_json","TEXT")
         c.execute("CREATE INDEX IF NOT EXISTS idx_news_time ON news_analysis(source_ts DESC)")
         c.execute("CREATE INDEX IF NOT EXISTS idx_news_status ON news_analysis(status,analyzed_at)")
         c.execute("CREATE INDEX IF NOT EXISTS idx_news_event_type ON news_analysis(event_type,source_ts DESC)")
@@ -188,6 +189,41 @@ def _pre_context(analysis,source_ts):
         surprise[asset]=_surprise_state(str(analysis.get("sentiment") or "NEUTRAL"),p5,p15)
     return moves,surprise
 
+def _post_move_pct(asset,source_ts,minutes):
+    pair=("BTC" if asset=="MARKET" else asset)+"/USDT:USDT"
+    p0=_price_at_or_before(pair,source_ts,max_age_sec=240)
+    p1=_price_at_or_before(pair,source_ts+minutes*60,max_age_sec=240)
+    if not p0 or not p1:return None
+    return (p1/p0-1.0)*100.0
+
+def _settle_event_reactions(now=None):
+    """Persist post 5/10/15m raw market moves for analyzed news events."""
+    ts=float(now or time.time())
+    updated=0
+    with _LOCK,_db() as c:
+        rows=[dict(r) for r in c.execute(
+            "SELECT id,source_ts,assets_json,post_moves_json FROM news_analysis WHERE status='OK' ORDER BY source_ts DESC LIMIT 500"
+        ).fetchall()]
+        for r in rows:
+            try:assets=json.loads(r.get("assets_json") or "[]")
+            except Exception:assets=[]
+            try:post=json.loads(r.get("post_moves_json") or "{}")
+            except Exception:post={}
+            changed=False
+            for asset in assets or ["MARKET"]:
+                cur=dict(post.get(asset) or {})
+                for mins,key in ((5,"post_5m_pct"),(10,"post_10m_pct"),(15,"post_15m_pct")):
+                    if key in cur and cur.get(key) is not None:continue
+                    if ts<float(r["source_ts"])+mins*60:continue
+                    val=_post_move_pct(str(asset),float(r["source_ts"]),mins)
+                    if val is not None:
+                        cur[key]=val; changed=True
+                post[asset]=cur
+            if changed:
+                c.execute("UPDATE news_analysis SET post_moves_json=? WHERE id=?",(json.dumps(post,separators=(",",":")),int(r["id"])))
+                updated+=1
+    return updated
+
 def _model():
     try:
         r=requests.get(OLLAMA_BASE+"/api/tags",timeout=min(10,TIMEOUT)); r.raise_for_status()
@@ -280,19 +316,20 @@ def _save(item,status,model="",a=None,error=""):
         c.execute("""INSERT INTO news_analysis(
           source_key,source_ts,title,summary,url,feed,analyzed_at,status,
           sentiment,sentiment_score,confidence,importance,scope,event_type,assets_json,
-          pre_moves_json,surprise_json,reason,model,error)
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+          pre_moves_json,surprise_json,post_moves_json,reason,model,error)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         ON CONFLICT(source_key) DO UPDATE SET
           source_ts=excluded.source_ts,title=excluded.title,summary=excluded.summary,url=excluded.url,feed=excluded.feed,
           analyzed_at=excluded.analyzed_at,status=excluded.status,sentiment=excluded.sentiment,
           sentiment_score=excluded.sentiment_score,confidence=excluded.confidence,importance=excluded.importance,
           scope=excluded.scope,event_type=excluded.event_type,assets_json=excluded.assets_json,
           pre_moves_json=excluded.pre_moves_json,surprise_json=excluded.surprise_json,
+          post_moves_json=COALESCE(news_analysis.post_moves_json,excluded.post_moves_json),
           reason=excluded.reason,model=excluded.model,error=excluded.error""",
         (item["key"],item["ts"],item["title"],item["summary"],item["url"],item["feed"],now,status,
          a.get("sentiment"),_num(a.get("score")),_num(a.get("confidence")),_num(a.get("importance")),
          a.get("scope"),a.get("event_type"),json.dumps(a.get("assets") or []),
-         json.dumps(pre_moves,separators=(",",":")),json.dumps(surprise,separators=(",",":")),
+         json.dumps(pre_moves,separators=(",",":")),json.dumps(surprise,separators=(",",":")),"{}",
          a.get("reason"),model,str(error)[:500]))
 
 def refresh_now(limit=None):
@@ -382,7 +419,7 @@ def aggregate(pair,now=None):
 
 def recent(limit=8):
     init()
-    with _LOCK,_db() as c:rows=[dict(x) for x in c.execute("SELECT id,source_ts,title,url,sentiment,confidence,importance,scope,event_type,assets_json,pre_moves_json,surprise_json,reason,model FROM news_analysis WHERE status='OK' ORDER BY source_ts DESC LIMIT ?",(max(1,min(30,int(limit))),)).fetchall()]
+    with _LOCK,_db() as c:rows=[dict(x) for x in c.execute("SELECT id,source_ts,title,url,sentiment,confidence,importance,scope,event_type,assets_json,pre_moves_json,surprise_json,post_moves_json,reason,model FROM news_analysis WHERE status='OK' ORDER BY source_ts DESC LIMIT ?",(max(1,min(30,int(limit))),)).fetchall()]
     for r in rows:
         try:r["assets"]=json.loads(r.pop("assets_json") or "[]")
         except Exception:r["assets"]=[]
@@ -390,17 +427,22 @@ def recent(limit=8):
         except Exception:r["pre_moves"]={}
         try:r["surprise"]=json.loads(r.pop("surprise_json") or "{}")
         except Exception:r["surprise"]={}
+        try:r["post_moves"]=json.loads(r.pop("post_moves_json") or "{}")
+        except Exception:r["post_moves"]={}
     return rows
 
 def report():
     init()
+    _settle_event_reactions()
     with _LOCK,_db() as c:counts={str(x["status"]):int(x["n"]) for x in c.execute("SELECT status,COUNT(*) n FROM news_analysis GROUP BY status")}
     universe=_universe_assets()
     current={"MARKET":aggregate("MARKET/USDT:USDT")}
     for asset in universe:
         current[asset]=aggregate(asset+"/USDT:USDT")
     st=status()
-    return {"status":"ok","mode":"NEWS_INTELLIGENCE_SHADOW","analysis_ok":counts.get("OK",0),"analysis_error":counts.get("ERROR",0),"lookback_minutes":LOOKBACK_MIN,"decay_half_life_minutes":DECAY_HALF_LIFE_MIN,"dedup_jaccard":DEDUP_JACCARD,"dedup_window_minutes":DEDUP_WINDOW_MIN,"priced_pre5_pct":PRICED_PRE5_PCT,"priced_pre15_pct":PRICED_PRE15_PCT,"universe_assets":universe,"last_deduped":int(st.get("last_deduped") or 0),"last_universe":st.get("last_universe") or universe,"current":current,"recent_headlines":recent(12),"ollama":st["ollama"],"changes_trading_decisions":False,"live_execution":False}
+    latest=recent(12)
+    reaction_closed=sum(1 for x in latest if any((x.get("post_moves") or {}).get(a,{}).get("post_15m_pct") is not None for a in (x.get("assets") or ["MARKET"])))
+    return {"status":"ok","mode":"NEWS_INTELLIGENCE_SHADOW","analysis_ok":counts.get("OK",0),"analysis_error":counts.get("ERROR",0),"event_reactions_15m_ready":reaction_closed,"lookback_minutes":LOOKBACK_MIN,"decay_half_life_minutes":DECAY_HALF_LIFE_MIN,"dedup_jaccard":DEDUP_JACCARD,"dedup_window_minutes":DEDUP_WINDOW_MIN,"priced_pre5_pct":PRICED_PRE5_PCT,"priced_pre15_pct":PRICED_PRE15_PCT,"universe_assets":universe,"last_deduped":int(st.get("last_deduped") or 0),"last_universe":st.get("last_universe") or universe,"current":current,"recent_headlines":latest,"ollama":st["ollama"],"changes_trading_decisions":False,"live_execution":False}
 
 def status():
     init()
