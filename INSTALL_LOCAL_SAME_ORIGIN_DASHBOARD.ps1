@@ -5,7 +5,7 @@ Write-Host '======================================================' -ForegroundC
 Write-Host ' MYSHKA / ASTRA - LOCAL SAME-ORIGIN DASHBOARD FIX ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$bundleCommit = 'fd3ded5081bb76cd659af012015ae88f5ac6f708'
+$bundleCommit = '89b6d870a7a66feb229a880bf03c97c48b993b65'
 $root = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit
 
 $app = $null
@@ -48,10 +48,13 @@ Write-Host '[2/7] Validating downloaded files...'
 if($LASTEXITCODE -ne 0){ throw 'Dashboard patcher syntax invalid. Local ASTRA not modified.' }
 
 $html = Get-Content (Join-Path $tmp 'index.html') -Raw
-if($html -notmatch 'localAstraOrigin' -or $html -notmatch 'POSTV2_300'){
-  throw 'Downloaded dashboard is not the expected same-origin/Post-V2 build.'
+$requiredMarkers = @('localAstraOrigin','POSTV2_300','binanceCrosscheckPanel','id="statsMode"')
+foreach($marker in $requiredMarkers){
+  if($html -notlike ('*' + $marker + '*')){
+    throw ('Downloaded dashboard missing technical marker: ' + $marker)
+  }
 }
-Write-Host '[OK] Downloaded dashboard validated.' -ForegroundColor Green
+Write-Host '[OK] Downloaded dashboard technical markers validated.' -ForegroundColor Green
 
 Write-Host '[3/7] Installing current index.html...'
 Copy-Item (Join-Path $tmp 'index.html') (Join-Path $app 'index.html') -Force
@@ -100,7 +103,7 @@ for($i=0; $i -lt 45; $i++){
 if(-not $health -or $health.status -ne 'ok'){ throw 'ASTRA health failed after rebuild.' }
 
 Write-Host '[6.6/7] Verifying dashboard file inside container...'
-docker exec myshka-astra python -c "from pathlib import Path; p=Path('/data/myshka_dashboard.html'); s=p.read_text(encoding='utf-8'); assert 'MYSHKA / ASTRA Trading Lab' in s and 'localAstraOrigin' in s and 'POSTV2_300' in s; print('[OK] container dashboard markers valid')"
+docker exec myshka-astra python -c "from pathlib import Path; p=Path('/data/myshka_dashboard.html'); s=p.read_text(encoding='utf-8'); need=['localAstraOrigin','POSTV2_300','binanceCrosscheckPanel','id=\"statsMode\"']; missing=[x for x in need if x not in s]; assert not missing, 'missing='+','.join(missing); print('[OK] container dashboard technical markers valid')"
 if($LASTEXITCODE -ne 0){ throw 'Dashboard file inside container is invalid.' }
 
 $page = Invoke-WebRequest -UseBasicParsing 'http://127.0.0.1:8088/dashboard' -TimeoutSec 10
