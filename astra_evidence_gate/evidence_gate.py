@@ -16,9 +16,11 @@ import math
 import os
 import sqlite3
 import threading
+import time
 from typing import Any, Optional
 
 RISK_DB_PATH = os.getenv("RISK_INTELLIGENCE_DB_PATH", "/data/myshka_risk_intelligence.sqlite3")
+ANALYTICS_DB_PATH = os.getenv("ANALYTICS_DB_PATH", "/data/myshka_analytics.sqlite3")
 ENABLED = os.getenv("EVIDENCE_GATE_ENABLED", "true").lower() in {"1","true","yes","on"}
 MIN_N = max(10, int(os.getenv("EVIDENCE_GATE_MIN_N", "20")))
 MIN_AVG_NET_PCT = float(os.getenv("EVIDENCE_GATE_MIN_AVG_NET_PCT", "0.03"))
@@ -26,6 +28,10 @@ MIN_PROFIT_FACTOR = float(os.getenv("EVIDENCE_GATE_MIN_PROFIT_FACTOR", "1.10"))
 REQUIRE_RECENT_POSITIVE = os.getenv("EVIDENCE_GATE_REQUIRE_RECENT_POSITIVE", "true").lower() in {"1","true","yes","on"}
 _THRESHOLDS_RAW = os.getenv("EVIDENCE_GATE_THRESHOLDS", "0.05,0.10,0.15,0.20,0.25,0.30")
 THRESHOLDS = tuple(sorted({float(x.strip()) for x in _THRESHOLDS_RAW.split(",") if x.strip()}))
+EXPLORATION_ENABLED = os.getenv("EVIDENCE_GATE_EXPLORATION_ENABLED", "true").lower() in {"1","true","yes","on"}
+EXPLORATION_MIN_EDGE_PCT = float(os.getenv("EVIDENCE_GATE_EXPLORATION_MIN_EDGE_PCT", "0.10"))
+EXPLORATION_COOLDOWN_SEC = max(60, int(os.getenv("EVIDENCE_GATE_EXPLORATION_COOLDOWN_SEC", "600")))
+EXPLORATION_MAX_OPEN = max(1, int(os.getenv("EVIDENCE_GATE_EXPLORATION_MAX_OPEN", "1")))
 _LOCK = threading.RLock()
 
 
@@ -51,6 +57,64 @@ def _strict_score(sig: dict) -> int:
     else:
         checks = [fast < slow, regime == "DOWN", 28 <= rsi <= 48, vol >= 0.60]
     return sum(bool(x) for x in checks)
+
+
+def _open_strict_positions() -> int:
+    if not os.path.exists(ANALYTICS_DB_PATH):
+        return 0
+    try:
+        con = sqlite3.connect(ANALYTICS_DB_PATH, timeout=5)
+        try:
+            row = con.execute(
+                "SELECT COUNT(*) FROM analytics_trades WHERE status='OPEN' AND mode='STRICT'"
+            ).fetchone()
+            return int(row[0] or 0) if row else 0
+        finally:
+            con.close()
+    except Exception:
+        return 0
+
+
+def _last_exploration_at() -> Optional[float]:
+    if not os.path.exists(RISK_DB_PATH):
+        return None
+    try:
+        con = sqlite3.connect(RISK_DB_PATH, timeout=5)
+        try:
+            row = con.execute(
+                """
+                SELECT MAX(opened_at)
+                FROM risk_candidates
+                WHERE LOWER(COALESCE(reason,''))='evidence_gate_warming_exploration'
+                """
+            ).fetchone()
+            return float(row[0]) if row and row[0] is not None else None
+        finally:
+            con.close()
+    except Exception:
+        return None
+
+
+def _exploration_status(now: Optional[float] = None) -> dict:
+    ts = float(now or time.time())
+    last = _last_exploration_at()
+    elapsed = (ts - last) if last is not None else None
+    cooldown_left = max(0.0, EXPLORATION_COOLDOWN_SEC - elapsed) if elapsed is not None else 0.0
+    open_n = _open_strict_positions()
+    return {
+        "enabled": EXPLORATION_ENABLED,
+        "min_edge_pct": EXPLORATION_MIN_EDGE_PCT,
+        "cooldown_sec": EXPLORATION_COOLDOWN_SEC,
+        "cooldown_left_sec": round(cooldown_left, 1),
+        "max_open": EXPLORATION_MAX_OPEN,
+        "open_strict": open_n,
+        "last_exploration_at": last,
+        "available": bool(
+            EXPLORATION_ENABLED
+            and cooldown_left <= 0.0
+            and open_n < EXPLORATION_MAX_OPEN
+        ),
+    }
 
 
 def _rows() -> list[dict]:
@@ -145,7 +209,8 @@ def report() -> dict:
             "min_profit_factor": MIN_PROFIT_FACTOR,
             "require_recent_positive": REQUIRE_RECENT_POSITIVE,
         },
-        "note": "Only STRICT PAPER ENTER candidates are gated. Rejected candidates keep learning through 5m observers.",
+        "exploration": _exploration_status(),
+        "note": "STRICT PAPER validation gate. During WARMING, controlled exploration may pass one high-edge candidate; HOLD remains a hard block.",
     }
 
 
@@ -172,9 +237,38 @@ def evaluate(result: dict) -> dict:
     threshold = rep.get("qualified_threshold_pct")
     if threshold is None:
         overall = rep.get("overall") or {}
+        state = str(rep.get("state") or "HOLD").upper()
+        exploration = rep.get("exploration") or {}
+
+        # WARMING is a data-collection phase, not a permanent trading freeze.
+        # Allow only a high-edge STRICT candidate when the exploration slot is free.
+        if state == "WARMING":
+            exploration_ok = bool(
+                exploration.get("available")
+                and edge_pct is not None
+                and edge_pct >= EXPLORATION_MIN_EDGE_PCT
+            )
+            return {
+                "applies": True, "passed": exploration_ok,
+                "state": "WARMING_EXPLORATION" if exploration_ok else "WARMING",
+                "reason": "evidence_gate_warming_exploration" if exploration_ok else (
+                    "evidence_gate_warming_edge_too_low"
+                    if edge_pct is None or edge_pct < EXPLORATION_MIN_EDGE_PCT
+                    else "evidence_gate_warming_exploration_unavailable"
+                ),
+                "candidate_edge_pct": edge_pct,
+                "qualified_threshold_pct": None,
+                "evidence_n": int(overall.get("n") or 0),
+                "evidence_avg_net_pct": float(overall.get("avg_net_pct") or 0.0),
+                "evidence_profit_factor": float(overall.get("profit_factor") or 0.0),
+                "recent_avg_net_pct": float(overall.get("recent_avg_net_pct") or 0.0),
+                "exploration": exploration,
+            }
+
+        # Once enough evidence exists and still no threshold qualifies, HOLD is hard.
         return {
             "applies": True, "passed": False,
-            "state": rep.get("state") or "HOLD",
+            "state": "HOLD",
             "reason": "evidence_gate_no_validated_edge",
             "candidate_edge_pct": edge_pct,
             "qualified_threshold_pct": None,
@@ -182,6 +276,7 @@ def evaluate(result: dict) -> dict:
             "evidence_avg_net_pct": float(overall.get("avg_net_pct") or 0.0),
             "evidence_profit_factor": float(overall.get("profit_factor") or 0.0),
             "recent_avg_net_pct": float(overall.get("recent_avg_net_pct") or 0.0),
+            "exploration": exploration,
         }
 
     passed = edge_pct is not None and edge_pct >= float(threshold)
@@ -201,17 +296,35 @@ def evaluate(result: dict) -> dict:
 
 
 def apply_results(results: list[dict]) -> dict:
-    """Mutate only eligible PAPER ENTER results to DROP when evidence is insufficient."""
-    checked = blocked = passed = 0
+    """Gate STRICT PAPER ENTERs, with at most one WARMING exploration pass per scan."""
+    checked = blocked = passed = exploration_passed = 0
     for r in results or []:
         try:
             g = evaluate(r)
+
+            # Multiple pairs can qualify in the same 15s batch before Analytics records
+            # the opened position. Keep exactly one WARMING exploration pass per batch.
+            if (
+                g.get("passed")
+                and str(g.get("reason") or "") == "evidence_gate_warming_exploration"
+            ):
+                if exploration_passed >= 1:
+                    g = dict(g)
+                    g["passed"] = False
+                    g["state"] = "WARMING"
+                    g["reason"] = "evidence_gate_warming_batch_limit"
+                else:
+                    exploration_passed += 1
+
             r["evidence_gate"] = g
             if not g.get("applies"):
                 continue
             checked += 1
             if g.get("passed"):
                 passed += 1
+                # Keep a visible trace in Risk Intelligence / Black Box.
+                if str(g.get("reason") or "") == "evidence_gate_warming_exploration":
+                    r["reason"] = "evidence_gate_warming_exploration"
                 continue
             blocked += 1
             r["action"] = "DROP"
@@ -237,7 +350,10 @@ def apply_results(results: list[dict]) -> dict:
                 }
                 r["action"] = "DROP"
                 r["reason"] = "evidence_gate_error"
-    return {"status": "ok", "checked": checked, "blocked": blocked, "passed": passed, "report": report()}
+    return {
+        "status": "ok", "checked": checked, "blocked": blocked, "passed": passed,
+        "exploration_passed": exploration_passed, "report": report()
+    }
 
 
 def status() -> dict:
@@ -247,5 +363,7 @@ def status() -> dict:
         "qualified_threshold_pct": rep["qualified_threshold_pct"],
         "evidence_n": int((rep.get("overall") or {}).get("n") or 0),
         "risk_db_path": RISK_DB_PATH,
+        "analytics_db_path": ANALYTICS_DB_PATH,
         "policy": rep["policy"],
+        "exploration": rep.get("exploration"),
     }
