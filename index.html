@@ -474,7 +474,7 @@ button{cursor:pointer}
     <div class="stats-title">
       <div>
         <h2>🛟 RESCUE MATRIX · SHADOW</h2>
-        <div class="sub">JEV APPROVE × TECH × EDGE × regime × pair × Binance X-Check × Evidence Gate · cluster-aware · historical discovery + forward confirmation</div>
+        <div class="sub">JEV APPROVE × TECH 3/4 → EDGE × regime × X-Check × Evidence → pair drilldown · movement-cluster aware · forward only</div>
       </div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
         <div class="sub" id="rescueMatrixState">RESCUE: warming</div>
@@ -483,37 +483,37 @@ button{cursor:pointer}
     </div>
 
     <div class="stats" style="grid-template-columns:repeat(5,1fr)">
-      <div class="stat"><small>Historical raw / cn</small><b id="rmHistN">0 / 0</b></div>
+      <div class="stat"><small>5m anchor raw / cn</small><b id="rmHistN">0 / 0</b></div>
       <div class="stat"><small>Black Box join</small><b id="rmJoin">0%</b></div>
-      <div class="stat"><small>Discovery pockets</small><b id="rmDiscoveries">0</b></div>
-      <div class="stat"><small>Forward cn</small><b id="rmForwardN">0</b></div>
-      <div class="stat"><small>Forward review</small><b id="rmReview">0</b></div>
+      <div class="stat"><small>Positive pockets</small><b id="rmDiscoveries">0</b></div>
+      <div class="stat"><small>5m overall cn</small><b id="rmForwardN">0</b></div>
+      <div class="stat"><small>WATCH / confirmed</small><b id="rmReview">0</b></div>
     </div>
 
     <div class="mode-stats">
       <div class="mode-card strict">
-        <div class="mode-head"><h3>🔎 Historical discoveries</h3><span>DISCOVERY ONLY · не правило</span></div>
+        <div class="mode-head"><h3>🟢 Positive clusters</h3><span>SHADOW ONLY · не правило</span></div>
         <div id="rmHistorical"><div class="muted">Чекаємо historical matrix.</div></div>
       </div>
       <div class="mode-card train">
-        <div class="mode-head"><h3>🧪 Forward confirmation</h3><span>cluster-aware · out-of-sample</span></div>
+        <div class="mode-head"><h3>🔴 Toxic clusters</h3><span>що тягне expectancy вниз</span></div>
         <div id="rmForward"><div class="muted">Forward вибірка починається після встановлення.</div></div>
       </div>
     </div>
 
     <div class="mode-stats" style="margin-top:10px">
       <div class="mode-card strict">
-        <div class="mode-head"><h3>⚙ TECH × EDGE</h3><span>JEV APPROVE anchor</span></div>
+        <div class="mode-head"><h3>🧬 EDGE × regime × X-Check × Evidence</h3><span>JEV APPROVE · TECH 3/4</span></div>
         <div id="rmTechEdge"><div class="muted">Немає даних.</div></div>
       </div>
       <div class="mode-card train">
-        <div class="mode-head"><h3>↔ X-Check × Evidence</h3><span>де фільтри реально перетинаються</span></div>
+        <div class="mode-head"><h3>🪙 Pair drilldown</h3><span>pair додаємо після broad cuts</span></div>
         <div id="rmXEvidence"><div class="muted">Немає даних.</div></div>
       </div>
     </div>
 
     <div class="sub" style="margin-top:8px">
-      Historical positive intersection ≠ готовий live-фільтр. Для review потрібна окрема forward cluster-вибірка; RESCUE MATRIX нічого не активує автоматично.
+      Навіть PF 2+ нічого не активує. cn≥30 → WATCH, після чого потрібні нові forward-кластери для підтвердження; PAPER/LIVE не змінюються.
     </div>
   </section>
 
@@ -1404,39 +1404,43 @@ async function refreshForwardExperimentLab(){
 }
 
 function rescueMetric(label,m,tag=''){
-  m=m||{};const cn=Number(m.cluster_n||0),avg=Number(m.cluster_avg_net_pct||0),pf=Number(m.cluster_profit_factor||0),wr=Number(m.cluster_win_rate_pct||0);
-  return '<div class="check"><span>'+label+' · cn='+cn+' · win '+wr.toFixed(1)+'%'+(tag?' · '+tag:'')+'</span><span class="'+(avg>0?'ok':avg<0?'bad':'warn')+'">'+analyticsPct(avg)+' · PF '+(pf>=999?'∞':pf.toFixed(2))+'</span></div>';
+  m=m||{};
+  const raw=Number(m.raw_n||0),cn=Number(m.cn||0),avg=Number(m.avg_net_pct||0),pf=Number(m.profit_factor||0),wr=Number(m.win_rate_pct||0),tot=Number(m.total_net_pct||0);
+  const state=String(tag||m.watch_state||m.status||'');
+  return '<div class="check"><span>'+label+' · n='+raw+' / cn='+cn+' · win '+wr.toFixed(1)+'%'+(state?' · '+state:'')+'</span><span class="'+(avg>0?'ok':avg<0?'bad':'warn')+'">'+analyticsPct(avg)+' · PF '+(pf>=999?'∞':pf.toFixed(2))+' · Σ '+analyticsPct(tot)+'</span></div>';
 }
 function rescueLabel(x){
-  const v=(x&&x.values)||{},order=['tech','edge_band','regime','pair','xcheck','evidence'];
+  const v=(x&&x.values)||{},order=['edge_band','regime','xcheck','evidence','pair','direction'];
   return order.filter(k=>Object.prototype.hasOwnProperty.call(v,k)).map(k=>k.toUpperCase()+' '+String(v[k])).join(' · ');
 }
-function rescueRows(items,limit=8,empty='Немає достатніх cluster-aware перетинів.'){
+function rescueRows(items,limit=8,empty='Немає достатніх movement-cluster перетинів.'){
   const arr=Array.isArray(items)?items:[];
-  return arr.length?arr.slice(0,limit).map(x=>rescueMetric(rescueLabel(x),x,String(x.disposition||x.sample_state||''))).join(''):'<div class="muted">'+empty+'</div>';
+  return arr.length?arr.slice(0,limit).map(x=>rescueMetric(rescueLabel(x),x,String(x.watch_state||x.status||''))).join(''):'<div class="muted">'+empty+'</div>';
 }
 function loadRescueMatrix(r){
   if(!r||r.status!=='ok')return;
   APP.rescueMatrixReport=r;
-  const h=r.historical||{},f=r.forward||{},hm=(h.matrix||{}),fm=(f.matrix||{});
-  const ho=h.overall||{},fo=f.overall||{};
-  $('rmHistN').textContent=Number(ho.n||0)+' / '+Number(ho.cluster_n||0);
-  $('rmJoin').textContent=Number(h.blackbox_join_coverage_pct||0).toFixed(1)+'%';
-  $('rmDiscoveries').textContent=(hm.top_positive_intersections||[]).length;
-  $('rmForwardN').textContent=Number(fo.cluster_n||0);
-  const review=(fm.top_positive_intersections||[]).filter(x=>!!x.forward_review_eligible).length;
-  $('rmReview').textContent=review;
-  $('rmReview').className=review?'long':'wait';
-  const started=Number(r.forward_started_at||0);
-  $('rescueMatrixState').textContent='RESCUE: '+String(r.mode||'SHADOW')+' · forward '+(started?new Date(started*1000).toLocaleString('uk-UA'):'—');
+  const h=((r.by_horizon||{})['300'])||{},rs=h.rescue||{},overall=h.overall||{},anchor=rs.anchor_metrics||{};
+  const cov=r.coverage||{},wc=r.watchlist_counts||{};
+  const pos=rs.top_positive_clusters||[],tox=rs.top_toxic_clusters||[];
+  const watch=Number(wc.WATCH||0),confirmed=Number(wc.FORWARD_CONFIRMED||0);
 
-  $('rmHistorical').innerHTML=rescueRows(hm.top_positive_intersections,10,'Поки немає historical discovery з мінімальним cn/PF.');
-  $('rmForward').innerHTML=rescueRows(fm.top_positive_intersections,10,'Forward confirmation ще накопичується.');
+  $('rmHistN').textContent=Number(anchor.raw_n||0)+' / '+Number(anchor.cn||0);
+  $('rmJoin').textContent=Number(cov.blackbox_join_pct||0).toFixed(1)+'%';
+  $('rmDiscoveries').textContent=pos.length;
+  $('rmForwardN').textContent=Number(overall.cn||0);
+  $('rmReview').textContent=watch+' / '+confirmed;
+  $('rmReview').className=confirmed?'long':watch?'wait':'';
+  $('rescueMatrixState').textContent='RESCUE V2 · '+String(r.mode||'SHADOW')+' · gap '+Number(r.movement_cluster_gap_sec||0)+'s · auto gate OFF';
 
-  const te=(hm.tech_x_edge||[]).filter(x=>Number(x.cluster_n||0)>0).sort((a,b)=>Number(b.cluster_n||0)-Number(a.cluster_n||0));
-  $('rmTechEdge').innerHTML=te.length?te.slice(0,10).map(x=>rescueMetric(rescueLabel(x),x)).join(''):'<div class="muted">Немає TECH × EDGE outcomes.</div>';
-  const xe=(hm.xcheck_x_evidence||[]).filter(x=>Number(x.cluster_n||0)>0).sort((a,b)=>Number(b.cluster_n||0)-Number(a.cluster_n||0));
-  $('rmXEvidence').innerHTML=xe.length?xe.slice(0,10).map(x=>rescueMetric(rescueLabel(x),x)).join(''):'<div class="muted">Немає X-Check × Evidence outcomes.</div>';
+  $('rmHistorical').innerHTML=rescueRows(pos,10,'Поки немає positive cluster-aware pockets.');
+  $('rmForward').innerHTML=rescueRows(tox,10,'Поки немає достатніх toxic clusters.');
+
+  const l2=(rs.level2||[]).filter(x=>Number(x.cn||0)>0).sort((a,b)=>Number(b.cn||0)-Number(a.cn||0));
+  $('rmTechEdge').innerHTML=l2.length?l2.slice(0,10).map(x=>rescueMetric(rescueLabel(x),x,String(x.watch_state||x.status||''))).join(''):'<div class="muted">Ще немає 2D intersections.</div>';
+
+  const pair=(rs.pair_drilldowns||[]).filter(x=>Number(x.cn||0)>0).sort((a,b)=>Number(b.cn||0)-Number(a.cn||0));
+  $('rmXEvidence').innerHTML=pair.length?pair.slice(0,10).map(x=>rescueMetric(rescueLabel(x),x,String(x.watch_state||x.status||''))).join(''):'<div class="muted">Ще немає pair drilldowns.</div>';
 }
 async function refreshRescueMatrix(){
   if(!APP.backendReady)return;
