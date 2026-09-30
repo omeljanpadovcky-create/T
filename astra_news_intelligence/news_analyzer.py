@@ -18,7 +18,7 @@ MAX_BATCH=max(1,min(20,int(os.getenv("NEWS_INTELLIGENCE_MAX_BATCH","6"))))
 RETRY_SEC=max(60,int(os.getenv("NEWS_INTELLIGENCE_RETRY_SEC","600")))
 THRESHOLD=min(.75,max(.05,float(os.getenv("NEWS_INTELLIGENCE_STATE_THRESHOLD",".15"))))
 _LOCK=threading.RLock(); _THREAD=None; _STOP=threading.Event()
-_STATUS={"running":False,"last_cycle_at":None,"last_success_at":None,"last_error":None,"last_model":None,"cycles":0}
+_STATUS={"running":False,"last_cycle_at":None,"last_success_at":None,"last_error":None,"last_model":None,"ollama_status":"unknown","ollama_error":None,"cycles":0}
 
 def _num(v):
     try:
@@ -146,14 +146,14 @@ def _save(item,status,model="",a=None,error=""):
 def refresh_now(limit=None):
     init(); now=time.time(); model,err=_model()
     if not model:
-        with _LOCK:_STATUS.update({"last_cycle_at":now,"last_error":err})
+        with _LOCK:_STATUS.update({"last_cycle_at":now,"last_error":err,"ollama_status":"unavailable","ollama_error":err})
         return {"status":"error","error":err,"analyzed":0}
     items=_source(); todo=[x for x in items if _pending(x,now)][:max(1,min(MAX_BATCH,int(limit or MAX_BATCH)))]
     ok=bad=0
     for item in reversed(todo):
         try:_save(item,"OK",model,_analyze(item,model)); ok+=1
         except Exception as e:_save(item,"ERROR",model,error=f"{type(e).__name__}: {e}"); bad+=1
-    with _LOCK:_STATUS.update({"last_cycle_at":time.time(),"last_success_at":time.time() if ok else _STATUS.get("last_success_at"),"last_error":None if not bad else f"{bad} failed","last_model":model,"cycles":int(_STATUS.get("cycles") or 0)+1})
+    with _LOCK:_STATUS.update({"last_cycle_at":time.time(),"last_success_at":time.time() if ok else _STATUS.get("last_success_at"),"last_error":None if not bad else f"{bad} failed","last_model":model,"ollama_status":"ok","ollama_error":None,"cycles":int(_STATUS.get("cycles") or 0)+1})
     return {"status":"ok" if not bad else "partial","model":model,"headlines_seen":len(items),"pending":len(todo),"analyzed":ok,"failed":bad}
 
 def _loop():
@@ -211,7 +211,7 @@ def report():
     return {"status":"ok","mode":"NEWS_INTELLIGENCE_SHADOW","analysis_ok":counts.get("OK",0),"analysis_error":counts.get("ERROR",0),"lookback_minutes":LOOKBACK_MIN,"current":{"MARKET":aggregate("MARKET/USDT:USDT"),"BTC":aggregate("BTC/USDT:USDT"),"ETH":aggregate("ETH/USDT:USDT"),"SOL":aggregate("SOL/USDT:USDT")},"recent_headlines":recent(8),"ollama":status()["ollama"],"changes_trading_decisions":False,"live_execution":False}
 
 def status():
-    init(); model,err=_model() if ENABLED else (None,None)
+    init()
     with _LOCK:out=dict(_STATUS)
-    out.update({"enabled":ENABLED,"mode":"NEWS_INTELLIGENCE_SHADOW","db_path":DB_PATH,"context_db_path":CONTEXT_DB_PATH,"ollama":{"base_url":OLLAMA_BASE,"model":model or out.get("last_model"),"status":"ok" if model else "unavailable","error":err},"lookback_minutes":LOOKBACK_MIN,"changes_trading_decisions":False,"live_execution":False})
+    out.update({"enabled":ENABLED,"mode":"NEWS_INTELLIGENCE_SHADOW","db_path":DB_PATH,"context_db_path":CONTEXT_DB_PATH,"ollama":{"base_url":OLLAMA_BASE,"model":out.get("last_model"),"status":out.get("ollama_status") or "unknown","error":out.get("ollama_error")},"lookback_minutes":LOOKBACK_MIN,"changes_trading_decisions":False,"live_execution":False})
     return out
