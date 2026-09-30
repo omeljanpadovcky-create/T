@@ -77,16 +77,24 @@ def _open_strict_positions() -> int:
 
 
 def _last_exploration_at() -> Optional[float]:
-    if not os.path.exists(RISK_DB_PATH):
+    """Return the last ACTUAL STRICT PAPER entry time.
+
+    Important: do not use Risk Intelligence SHADOW rows for this cooldown.
+    SHADOW candidates are recorded before the paper engine confirms a position,
+    so using them here can create a phantom cooldown even when no PAPER trade
+    was actually opened.
+    """
+    if not os.path.exists(ANALYTICS_DB_PATH):
         return None
     try:
-        con = sqlite3.connect(RISK_DB_PATH, timeout=5)
+        con = sqlite3.connect(ANALYTICS_DB_PATH, timeout=5)
         try:
             row = con.execute(
                 """
                 SELECT MAX(opened_at)
-                FROM risk_candidates
-                WHERE LOWER(COALESCE(reason,''))='evidence_gate_warming_exploration'
+                FROM analytics_trades
+                WHERE mode='STRICT'
+                  AND UPPER(COALESCE(status,'')) IN ('OPEN','CLOSED')
                 """
             ).fetchone()
             return float(row[0]) if row and row[0] is not None else None
@@ -111,6 +119,7 @@ def _exploration_status(now: Optional[float] = None) -> dict:
         "max_open": EXPLORATION_MAX_OPEN,
         "open_strict": open_n,
         "last_exploration_at": last,
+        "cooldown_source": "analytics_actual_strict_paper",
         "available": bool(
             EXPLORATION_ENABLED
             and cooldown_left <= 0.0
