@@ -334,18 +334,21 @@ button{cursor:pointer}
     </div>
 
     <div class="stats-chart-head">
-      <div class="sub">Графік показує тільки один режим за раз — статистика не змішується.</div>
+      <div class="sub">Графік показує один режим за раз. POST-V2 5m/10m/15m беруть тільки нові SHADOW outcomes EDGE 0.08–0.15%.</div>
       <select class="select" id="statsMode" aria-label="Режим статистики">
         <option value="STRICT">STRICT 4/4</option>
         <option value="TRAIN">TRAIN 3/4</option>
         <option value="LEGACY">LEGACY / UNKNOWN</option>
+        <option value="POSTV2_300">POST-V2 SHADOW · 5m</option>
+        <option value="POSTV2_600">POST-V2 SHADOW · 10m</option>
+        <option value="POSTV2_900">POST-V2 SHADOW · 15m</option>
       </select>
     </div>
     <div class="stats-chart"><canvas id="statsCanvas"></canvas></div>
     <div class="legend">
       <span><i class="dot" style="background:#2bdd8d"></i>NET WIN</span>
       <span><i class="dot" style="background:#ff5264"></i>NET LOSS</span>
-      <span><i class="dot" style="background:#7da0ff"></i>Signal NET sum % вибраного режиму</span>
+      <span><i class="dot" style="background:#7da0ff"></i>Cumulative NET % вибраного режиму</span>
     </div>
     <div class="sub" style="margin-top:7px">
       Старі угоди без записаного TECH score не приписуються навмання: вони залишаються в LEGACY / UNKNOWN. Нові угоди маркуються як STRICT 4/4 або TRAIN 3/4 при вході.
@@ -1082,6 +1085,7 @@ function loadPostCalibration(r){
   $('postV2H300').innerHTML=postV2HorizonHtml(((h['300']||{})['calibration_band_0.08_0.15'])||{});
   $('postV2H600').innerHTML=postV2HorizonHtml(((h['600']||{})['calibration_band_0.08_0.15'])||{});
   $('postV2H900').innerHTML=postV2HorizonHtml(((h['900']||{})['calibration_band_0.08_0.15'])||{});
+  if($('statsMode')&&String($('statsMode').value).startsWith('POSTV2_'))drawStatsChart();
 }
 async function refreshPostCalibration(){
   if(!APP.backendReady)return;
@@ -1921,6 +1925,31 @@ function renderPosition(){
 function tradesByMode(mode){
   return APP.trades.filter(t=>normalizeTradeMode(t.tradeMode)===mode);
 }
+function postV2ChartMode(mode){
+  const m=String(mode||'');
+  if(!m.startsWith('POSTV2_'))return null;
+  const horizon=m.split('_')[1];
+  const series=(((APP.postCalibrationReport||{}).chart_series||{})[horizon]||[]);
+  return series.map(r=>({
+    pair:r.pair||'',
+    side:r.side||'',
+    netPct:Number(r.net_pct)||0,
+    grossPct:Number(r.gross_pct)||0,
+    directionHit:!!r.direction_hit,
+    openedAt:(Number(r.opened_at)||0)*1000,
+    tradeMode:m
+  }));
+}
+function chartTradesForMode(mode){
+  const post=postV2ChartMode(mode);
+  return post===null?tradesByMode(mode):post;
+}
+function chartModeLabel(mode){
+  if(mode==='POSTV2_300')return 'POST-V2 5m';
+  if(mode==='POSTV2_600')return 'POST-V2 10m';
+  if(mode==='POSTV2_900')return 'POST-V2 15m';
+  return mode;
+}
 function calcTradeStats(a){
   const n=a.length,w=a.filter(x=>Number(x.netPct)>0).length,hit=a.filter(x=>x.directionHit).length;
   const net=a.reduce((sum,x)=>sum+(Number(x.netPct)||0),0);
@@ -1959,7 +1988,8 @@ function renderStats(){
   const sel=$('statsMode');
   if(sel){
     const chosen=sel.value||'STRICT';
-    if(!tradesByMode(chosen).length){
+    const isPost=String(chosen).startsWith('POSTV2_');
+    if(!isPost&&!tradesByMode(chosen).length){
       if(strict.length)sel.value='STRICT';
       else if(train.length)sel.value='TRAIN';
       else if(legacy.length)sel.value='LEGACY';
@@ -1971,10 +2001,11 @@ function drawStatsChart(){
   const c=$('statsCanvas'),x=c.getContext('2d'),w=c.clientWidth,h=c.clientHeight,dp=devicePixelRatio||1;
   c.width=w*dp;c.height=h*dp;x.setTransform(dp,0,0,dp,0,0);x.clearRect(0,0,w,h);
   const mode=$('statsMode')?$('statsMode').value:'STRICT';
-  const a=tradesByMode(mode).slice(-40);
+  const label=chartModeLabel(mode);
+  const a=chartTradesForMode(mode).slice(-40);
   if(!a.length){
     x.fillStyle='#7188aa';x.font='11px system-ui';
-    x.fillText('Ще немає закритих '+mode+' угод',20,30);return
+    x.fillText('Ще немає закритих '+label+' outcomes',20,30);return
   }
   let cum=0,cs=a.map(v=>cum+=(Number(v.netPct)||0)),vals=a.map(v=>Number(v.netPct)||0).concat(cs,[0]),
       max=Math.max(...vals),min=Math.min(...vals),span=max-min||1,L=45,R=12,T=15,B=25,gw=w-L-R,gh=h-T-B,
@@ -1982,7 +2013,7 @@ function drawStatsChart(){
   x.strokeStyle='#163052';for(let i=0;i<=4;i++){const yy=T+i*gh/4;x.beginPath();x.moveTo(L,yy);x.lineTo(w-R,yy);x.stroke()}
   a.forEach((v,i)=>{const n=Number(v.netPct)||0,px=L+i*step+step/2,py=y(n);x.fillStyle=n>=0?'#2bdd8d':'#ff5264';x.fillRect(px-bw/2,Math.min(zero,py),bw,Math.max(2,Math.abs(zero-py)))});
   x.beginPath();cs.forEach((v,i)=>{const px=L+i*step+step/2,py=y(v);i?x.lineTo(px,py):x.moveTo(px,py)});x.strokeStyle='#7da0ff';x.lineWidth=2;x.stroke();
-  x.fillStyle='#7890b3';x.font='9px system-ui';x.fillText(mode+' · '+max.toFixed(3)+'%',3,T+5);x.fillText(min.toFixed(3)+'%',3,h-B)
+  x.fillStyle='#7890b3';x.font='9px system-ui';x.fillText(label+' · '+max.toFixed(3)+'%',3,T+5);x.fillText(min.toFixed(3)+'%',3,h-B)
 }
 function renderLog(){
   const host=$('logList');
