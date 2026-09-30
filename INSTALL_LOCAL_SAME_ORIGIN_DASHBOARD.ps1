@@ -5,7 +5,7 @@ Write-Host '======================================================' -ForegroundC
 Write-Host ' MYSHKA / ASTRA - LOCAL SAME-ORIGIN DASHBOARD FIX ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$bundleCommit = '548264e72410a46c6f94fed5ebc7441c17f5bc49'
+$bundleCommit = '21c01bc9be0669d2eea6beefba3a5395b44dcc96'
 $root = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit
 
 $app = $null
@@ -83,7 +83,12 @@ try {
   if($LASTEXITCODE -ne 0){ throw 'docker compose rebuild failed.' }
 } finally { Pop-Location }
 
-Write-Host '[6/7] Checking /health and local dashboard...'
+Write-Host '[6/7] Publishing dashboard into persistent /data volume...'
+docker cp (Join-Path $tmp 'index.html') 'myshka-astra:/data/myshka_dashboard.html'
+if($LASTEXITCODE -ne 0){ throw 'docker cp dashboard -> /data failed.' }
+Write-Host '[OK] Dashboard copied to /data/myshka_dashboard.html' -ForegroundColor Green
+
+Write-Host '[6.5/7] Checking /health and local dashboard...'
 $health = $null
 for($i=0; $i -lt 45; $i++){
   Start-Sleep -Seconds 2
