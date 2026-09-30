@@ -95,7 +95,7 @@ try {
     $old = Join-Path $backup $f
     $dst = Join-Path $app $f
     if(Test-Path $old){ Copy-Item $old $dst -Force }
-    elseif(Test-Path $dst -and $f -in @('edge_calibration_v2.py','multihorizon_shadow.py')){ Remove-Item $dst -Force }
+    elseif((Test-Path $dst) -and ($f -in @('edge_calibration_v2.py','multihorizon_shadow.py'))){ Remove-Item $dst -Force }
   }
   Write-Host '[ROLLBACK] Restored pre-V2 files.' -ForegroundColor Yellow
   throw
