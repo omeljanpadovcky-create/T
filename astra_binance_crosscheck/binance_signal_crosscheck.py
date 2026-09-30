@@ -42,6 +42,7 @@ _CACHE: dict[str, dict] = {}
 _Q: "queue.Queue[str]" = queue.Queue(maxsize=200)
 _QUEUED: set[str] = set()
 _WORKER_STARTED = False
+WORKER_COUNT = max(1, min(6, int(os.getenv("BINANCE_CROSSCHECK_WORKERS", "3"))))
 
 
 def _num(v: Any) -> Optional[float]:
@@ -106,8 +107,9 @@ def init() -> dict:
             con.close()
 
         if ENABLED and not _WORKER_STARTED:
-            t = threading.Thread(target=_worker_loop, name="binance-crosscheck", daemon=True)
-            t.start()
+            for i in range(WORKER_COUNT):
+                t = threading.Thread(target=_worker_loop, name=f"binance-crosscheck-{i+1}", daemon=True)
+                t.start()
             _WORKER_STARTED = True
     return status()
 
@@ -170,7 +172,7 @@ def _fetch_symbol(symbol: str) -> dict:
 
     gl, gs = _shares(global_row, ("longAccount",), ("shortAccount",))
     tl, ts = _shares(top_row, ("longAccount",), ("shortAccount",))
-    pl, ps = _shares(pos_row, ("longPosition",), ("shortPosition",))
+    pl, ps = _shares(pos_row, ("longPosition","longAccount"), ("shortPosition","shortAccount"))
 
     components = []
     for lo, sh in ((gl,gs),(tl,ts),(pl,ps)):
@@ -210,6 +212,8 @@ def _worker_loop() -> None:
             snap = _fetch_symbol(symbol)
             with _LOCK:
                 _CACHE[symbol] = snap
+        except Exception:
+            pass
         finally:
             with _LOCK:
                 _QUEUED.discard(symbol)
@@ -431,6 +435,7 @@ def status() -> dict:
         "horizons_sec":list(HORIZONS),
         "cache_symbols":len(_CACHE),
         "queue_size":_Q.qsize(),
+        "workers":WORKER_COUNT,
         "db_path":DB_PATH,
         "live_execution":False,
         "changes_trade_decision":False,
