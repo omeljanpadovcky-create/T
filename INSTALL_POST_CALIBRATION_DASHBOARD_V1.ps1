@@ -102,7 +102,18 @@ for($i=0; $i -lt 45; $i++){
 }
 if(-not $health -or $health.status -ne 'ok'){ throw 'ASTRA health check failed.' }
 
-$token = $env:MYSHKA_TOKEN
+$token = $null
+
+# Prefer the token actually running inside the ASTRA container.
+try {
+  $containerEnv = docker inspect myshka-astra --format '{{range .Config.Env}}{{println .}}{{end}}' 2>$null
+  $tokenLine = $containerEnv | Where-Object { $_ -match '^MYSHKA_TOKEN=' } | Select-Object -First 1
+  if($tokenLine){
+    $token = ($tokenLine -split '=',2)[1]
+  }
+} catch {}
+
+# Fallback to project .env only if the running container did not expose it.
 if(-not $token){
   $envFile = Join-Path $app '.env'
   if(Test-Path $envFile){
@@ -110,8 +121,12 @@ if(-not $token){
     if($line){ $token = ($line -replace '^MYSHKA_TOKEN=','').Trim().Trim('"').Trim("'") }
   }
 }
+
+# Last fallback: current PowerShell environment.
+if(-not $token){ $token = $env:MYSHKA_TOKEN }
+
 $headers = @{}
-if($token){ $headers['X-MYSHKA-Token'] = $token }
+if($token){ $headers['X-MYSHKA-TOKEN'] = $token }
 
 $post = $null
 try {
