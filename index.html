@@ -470,6 +470,53 @@ button{cursor:pointer}
     </div>
   </section>
 
+  <section class="card glass stats-wrap" id="rescueMatrixPanel">
+    <div class="stats-title">
+      <div>
+        <h2>🛟 RESCUE MATRIX · SHADOW</h2>
+        <div class="sub">JEV APPROVE × TECH × EDGE × regime × pair × Binance X-Check × Evidence Gate · cluster-aware · historical discovery + forward confirmation</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div class="sub" id="rescueMatrixState">RESCUE: warming</div>
+        <button class="btn" id="rescueMatrixRefresh">↻ Оновити Matrix</button>
+      </div>
+    </div>
+
+    <div class="stats" style="grid-template-columns:repeat(5,1fr)">
+      <div class="stat"><small>Historical raw / cn</small><b id="rmHistN">0 / 0</b></div>
+      <div class="stat"><small>Black Box join</small><b id="rmJoin">0%</b></div>
+      <div class="stat"><small>Discovery pockets</small><b id="rmDiscoveries">0</b></div>
+      <div class="stat"><small>Forward cn</small><b id="rmForwardN">0</b></div>
+      <div class="stat"><small>Forward review</small><b id="rmReview">0</b></div>
+    </div>
+
+    <div class="mode-stats">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>🔎 Historical discoveries</h3><span>DISCOVERY ONLY · не правило</span></div>
+        <div id="rmHistorical"><div class="muted">Чекаємо historical matrix.</div></div>
+      </div>
+      <div class="mode-card train">
+        <div class="mode-head"><h3>🧪 Forward confirmation</h3><span>cluster-aware · out-of-sample</span></div>
+        <div id="rmForward"><div class="muted">Forward вибірка починається після встановлення.</div></div>
+      </div>
+    </div>
+
+    <div class="mode-stats" style="margin-top:10px">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>⚙ TECH × EDGE</h3><span>JEV APPROVE anchor</span></div>
+        <div id="rmTechEdge"><div class="muted">Немає даних.</div></div>
+      </div>
+      <div class="mode-card train">
+        <div class="mode-head"><h3>↔ X-Check × Evidence</h3><span>де фільтри реально перетинаються</span></div>
+        <div id="rmXEvidence"><div class="muted">Немає даних.</div></div>
+      </div>
+    </div>
+
+    <div class="sub" style="margin-top:8px">
+      Historical positive intersection ≠ готовий live-фільтр. Для review потрібна окрема forward cluster-вибірка; RESCUE MATRIX нічого не активує автоматично.
+    </div>
+  </section>
+
   <section class="card glass stats-wrap" id="newsIntelligencePanel">
     <div class="stats-title">
       <div>
@@ -1356,6 +1403,51 @@ async function refreshForwardExperimentLab(){
   }
 }
 
+function rescueMetric(label,m,tag=''){
+  m=m||{};const cn=Number(m.cluster_n||0),avg=Number(m.cluster_avg_net_pct||0),pf=Number(m.cluster_profit_factor||0),wr=Number(m.cluster_win_rate_pct||0);
+  return '<div class="check"><span>'+label+' · cn='+cn+' · win '+wr.toFixed(1)+'%'+(tag?' · '+tag:'')+'</span><span class="'+(avg>0?'ok':avg<0?'bad':'warn')+'">'+analyticsPct(avg)+' · PF '+(pf>=999?'∞':pf.toFixed(2))+'</span></div>';
+}
+function rescueLabel(x){
+  const v=(x&&x.values)||{},order=['tech','edge_band','regime','pair','xcheck','evidence'];
+  return order.filter(k=>Object.prototype.hasOwnProperty.call(v,k)).map(k=>k.toUpperCase()+' '+String(v[k])).join(' · ');
+}
+function rescueRows(items,limit=8,empty='Немає достатніх cluster-aware перетинів.'){
+  const arr=Array.isArray(items)?items:[];
+  return arr.length?arr.slice(0,limit).map(x=>rescueMetric(rescueLabel(x),x,String(x.disposition||x.sample_state||''))).join(''):'<div class="muted">'+empty+'</div>';
+}
+function loadRescueMatrix(r){
+  if(!r||r.status!=='ok')return;
+  APP.rescueMatrixReport=r;
+  const h=r.historical||{},f=r.forward||{},hm=(h.matrix||{}),fm=(f.matrix||{});
+  const ho=h.overall||{},fo=f.overall||{};
+  $('rmHistN').textContent=Number(ho.n||0)+' / '+Number(ho.cluster_n||0);
+  $('rmJoin').textContent=Number(h.blackbox_join_coverage_pct||0).toFixed(1)+'%';
+  $('rmDiscoveries').textContent=(hm.top_positive_intersections||[]).length;
+  $('rmForwardN').textContent=Number(fo.cluster_n||0);
+  const review=(fm.top_positive_intersections||[]).filter(x=>!!x.forward_review_eligible).length;
+  $('rmReview').textContent=review;
+  $('rmReview').className=review?'long':'wait';
+  const started=Number(r.forward_started_at||0);
+  $('rescueMatrixState').textContent='RESCUE: '+String(r.mode||'SHADOW')+' · forward '+(started?new Date(started*1000).toLocaleString('uk-UA'):'—');
+
+  $('rmHistorical').innerHTML=rescueRows(hm.top_positive_intersections,10,'Поки немає historical discovery з мінімальним cn/PF.');
+  $('rmForward').innerHTML=rescueRows(fm.top_positive_intersections,10,'Forward confirmation ще накопичується.');
+
+  const te=(hm.tech_x_edge||[]).filter(x=>Number(x.cluster_n||0)>0).sort((a,b)=>Number(b.cluster_n||0)-Number(a.cluster_n||0));
+  $('rmTechEdge').innerHTML=te.length?te.slice(0,10).map(x=>rescueMetric(rescueLabel(x),x)).join(''):'<div class="muted">Немає TECH × EDGE outcomes.</div>';
+  const xe=(hm.xcheck_x_evidence||[]).filter(x=>Number(x.cluster_n||0)>0).sort((a,b)=>Number(b.cluster_n||0)-Number(a.cluster_n||0));
+  $('rmXEvidence').innerHTML=xe.length?xe.slice(0,10).map(x=>rescueMetric(rescueLabel(x),x)).join(''):'<div class="muted">Немає X-Check × Evidence outcomes.</div>';
+}
+async function refreshRescueMatrix(){
+  if(!APP.backendReady)return;
+  try{
+    const r=await bridgeFetch('/rescue-matrix/report',{timeoutMs:22000});
+    loadRescueMatrix(r);
+  }catch(e){
+    if($('rescueMatrixState')&&!APP.rescueMatrixReport)$('rescueMatrixState').textContent='RESCUE: endpoint unavailable · '+String(e.message||e);
+  }
+}
+
 function newsMetric(label,m){
   m=m||{};const n=Number(m.n||0),cn=Number(m.cluster_n||0),avg=Number(m.avg_net_pct||0),pf=Number(m.profit_factor||0),wr=Number(m.win_rate_pct||0);
   return '<div class="check"><span>'+label+' · n='+n+' / cn='+cn+' · win '+wr.toFixed(1)+'%</span><span class="'+(avg>=0?'ok':'bad')+'">'+analyticsPct(avg)+' · PF '+(pf>=999?'∞':pf.toFixed(2))+'</span></div>';
@@ -1915,7 +2007,7 @@ async function refreshSecondaryReports(force=false){
   APP.secondaryBusy=true;
   try{
     // Small groups avoid saturating the single local API worker.
-    await Promise.allSettled([refreshPostCalibration(),refreshBinanceCrosscheck(),refreshForwardExperimentLab(),refreshNewsIntelligence(false),refreshAnalytics(),refreshLiveReadiness()]);
+    await Promise.allSettled([refreshPostCalibration(),refreshBinanceCrosscheck(),refreshForwardExperimentLab(),refreshRescueMatrix(),refreshNewsIntelligence(false),refreshAnalytics(),refreshLiveReadiness()]);
     await Promise.allSettled([refreshCounterfactual(),refreshRiskIntelligence(),refreshHardening(false)]);
     await Promise.allSettled([refreshRiskQuality(),refreshDecisionReplay()]);
     APP.lastSecondaryRefresh=Date.now();
@@ -2422,6 +2514,7 @@ async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switc
 $('pairFilter').onchange=renderPairButtons;
 $('statsMode').onchange=drawStatsChart;
 $('postV2Refresh').onclick=refreshPostCalibration;$('bxRefresh').onclick=refreshBinanceCrosscheck;$('forwardLabRefresh').onclick=refreshForwardExperimentLab;
+$('rescueMatrixRefresh').onclick=refreshRescueMatrix;
 $('newsIntelRefresh').onclick=()=>refreshNewsIntelligence(true);
 $('liveReadinessRefresh').onclick=refreshLiveReadiness;
 $('analyticsRefresh').onclick=()=>refreshSecondaryReports(true);
