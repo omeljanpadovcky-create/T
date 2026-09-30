@@ -237,10 +237,10 @@ def _record(r: dict, now: float) -> int:
                     entry_price,action,reason,tech_score,tech_source,edge_pct,total_cost_pct,edge_basis,
                     xcheck_state,xcheck_score,rsi,volume_ratio,atr_pct,structure,momentum_5m_pct,
                     momentum_15m_pct,oi_change_15m_pct,funding_rate,long_short_ratio,hour_utc
-                ) VALUES(?,?,?,?,?,?,?,?, 'OPEN', ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                 """,
                 (
-                    pair, side, source_minute, cluster_bucket, cluster_key, now, now + int(h), int(h),
+                    pair, side, source_minute, cluster_bucket, cluster_key, now, now + int(h), int(h), "OPEN",
                     entry, common["action"], common["reason"], common["tech_score"], common["tech_source"],
                     common["edge_pct"], common["total_cost_pct"], common["edge_basis"],
                     common["xcheck_state"], common["xcheck_score"], common["rsi"], common["volume_ratio"],
