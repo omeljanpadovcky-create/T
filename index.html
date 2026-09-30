@@ -430,6 +430,46 @@ button{cursor:pointer}
     </div>
   </section>
 
+  <section class="card glass stats-wrap" id="forwardExperimentPanel">
+    <div class="stats-title">
+      <div>
+        <h2>🧪 FORWARD EXPERIMENT LAB · SHADOW</h2>
+        <div class="sub">Forward-only · NEUTRAL OFF · AGREE vs CONFLICT · EDGE bands · TECH 3/4 · costs · нічого не змінює в PAPER</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div class="sub" id="forwardLabState">Forward Lab: not installed / warming</div>
+        <button class="btn" id="forwardLabRefresh">↻ Оновити Lab</button>
+      </div>
+    </div>
+
+    <div class="stats" style="grid-template-columns:repeat(5,1fr)">
+      <div class="stat"><small>Closed outcomes</small><b id="forwardLabClosed">0</b></div>
+      <div class="stat"><small>Open</small><b id="forwardLabOpen">0</b></div>
+      <div class="stat"><small>Skipped</small><b id="forwardLabSkipped">0</b></div>
+      <div class="stat"><small>Cluster window</small><b id="forwardLabCluster">5m</b></div>
+      <div class="stat"><small>X-Check audit</small><b id="forwardLabAudit">—</b></div>
+    </div>
+
+    <div class="post-horizon-grid">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>⏱ 5m FORWARD</h3><span id="forwardLabS300">COLD</span></div>
+        <div id="forwardLabH300"><div class="muted">Чекаємо нові forward outcomes.</div></div>
+      </div>
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>⏱ 10m FORWARD</h3><span id="forwardLabS600">COLD</span></div>
+        <div id="forwardLabH600"><div class="muted">Чекаємо нові forward outcomes.</div></div>
+      </div>
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>⏱ 15m FORWARD</h3><span id="forwardLabS900">COLD</span></div>
+        <div id="forwardLabH900"><div class="muted">Чекаємо нові forward outcomes.</div></div>
+      </div>
+    </div>
+
+    <div class="sub" id="forwardLabNote" style="margin-top:8px">
+      n = raw observations; cn = незалежніші pair+side+5m clusters. Promotion не автоматична: Lab тільки збирає докази.
+    </div>
+  </section>
+
   <section class="card glass stats-wrap" id="analyticsPanel">
     <div class="stats-title">
       <div>
@@ -1145,6 +1185,70 @@ async function refreshBinanceCrosscheck(){
   }
 }
 
+function forwardLabMetric(label,m){
+  m=m||{};
+  const n=Number(m.n||0),cn=Number(m.cluster_n||0),avg=Number(m.avg_net_pct||0),pf=Number(m.profit_factor||0);
+  return '<div class="check"><span>'+label+' · n='+n+' / cn='+cn+'</span><span class="'+(avg>=0?'ok':'bad')+'">'+
+    analyticsPct(avg)+' · PF '+(pf>=999?'∞':pf.toFixed(2))+'</span></div>';
+}
+function forwardLabGroup(title,rows){
+  return '<div class="sub" style="margin:9px 0 4px">'+title+'</div>'+rows;
+}
+function forwardLabHorizonHtml(h){
+  h=h||{};
+  const all=h.all||{},x=h.by_xcheck||{},ne=h.neutral_exclusion||{},t=h.by_tech||{},e=h.by_edge_band||{},c=h.cost_sensitivity||{};
+  let out=forwardLabMetric('ALL',all);
+  out+=forwardLabGroup('BINANCE X-CHECK',
+    forwardLabMetric('AGREE',x.AGREE)+forwardLabMetric('CONFLICT',x.CONFLICT)+forwardLabMetric('NEUTRAL',x.NEUTRAL));
+  out+=forwardLabGroup('NEUTRAL EXP',
+    forwardLabMetric('NEUTRAL OFF',ne.NEUTRAL_OFF)+forwardLabMetric('Directional only',ne.DIRECTIONAL_ONLY));
+  out+=forwardLabGroup('TECH',
+    forwardLabMetric('3/4 SHADOW',t.TECH_3_OF_4)+forwardLabMetric('4/4 STRICT',t.TECH_4_OF_4));
+  out+=forwardLabGroup('EDGE',
+    forwardLabMetric('0.05–0.10%',e['0.05-0.10'])+
+    forwardLabMetric('0.10–0.20%',e['0.10-0.20'])+
+    forwardLabMetric('0.20–0.35%',e['0.20-0.35'])+
+    forwardLabMetric('≥0.35%',e['>=0.35'])+
+    forwardLabMetric('<0.05%',e['<0.05']));
+  out+=forwardLabGroup('COST SENSITIVITY',
+    forwardLabMetric('cost ×0.75',c['x0.75'])+
+    forwardLabMetric('cost ×1.00',c['x1.00'])+
+    forwardLabMetric('cost ×1.25',c['x1.25']));
+  return out;
+}
+function loadForwardExperimentReport(r){
+  if(!r||r.status!=='ok')return;
+  APP.forwardExperimentReport=r;
+  const started=Number(r.forward_started_at||0);
+  const when=started?new Date(started*1000).toLocaleString('uk-UA'):'—';
+  $('forwardLabState').textContent='Forward Lab: '+String(r.mode||'FORWARD_SHADOW_ONLY')+' · старт '+when;
+  $('forwardLabClosed').textContent=Number(r.closed||0);
+  $('forwardLabOpen').textContent=Number(r.open||0);
+  $('forwardLabSkipped').textContent=Number(r.skipped||0);
+  $('forwardLabCluster').textContent=Math.round(Number(r.cluster_sec||300)/60)+'m';
+  const audit=(r.xcheck_definition||{}).audit||'—';
+  $('forwardLabAudit').textContent=audit==='DIRECTION_LOGIC_VERIFIED'?'VERIFIED':String(audit);
+  $('forwardLabAudit').className=audit==='DIRECTION_LOGIC_VERIFIED'?'long':'wait';
+  const h=r.by_horizon||{};
+  for(const sec of ['300','600','900']){
+    const x=h[sec]||{};
+    $('forwardLabH'+sec).innerHTML=forwardLabHorizonHtml(x);
+    $('forwardLabS'+sec).textContent=String(x.sample_state||'COLD');
+  }
+  if($('forwardLabNote')){
+    $('forwardLabNote').textContent='X-Check audit: AGREE = Binance crowd direction дорівнює MYSHKA; CONFLICT = протилежний. n = raw; cn = pair+side+5m clusters. Forward-only, PAPER не змінюється.';
+  }
+}
+async function refreshForwardExperimentLab(){
+  if(!APP.backendReady)return;
+  try{
+    const r=await bridgeFetch('/forward-experiments/report',{timeoutMs:18000});
+    loadForwardExperimentReport(r);
+  }catch(e){
+    if($('forwardLabState')&&!APP.forwardExperimentReport)$('forwardLabState').textContent='Forward Lab: endpoint unavailable · '+String(e.message||e);
+  }
+}
+
 function loadAnalyticsReport(r){
   if(!r||r.status!=='ok')return;
   APP.analyticsReport=r;
@@ -1551,7 +1655,7 @@ async function refreshSecondaryReports(force=false){
   APP.secondaryBusy=true;
   try{
     // Small groups avoid saturating the single local API worker.
-    await Promise.allSettled([refreshPostCalibration(),refreshBinanceCrosscheck(),refreshAnalytics()]);
+    await Promise.allSettled([refreshPostCalibration(),refreshBinanceCrosscheck(),refreshForwardExperimentLab(),refreshAnalytics()]);
     await Promise.allSettled([refreshCounterfactual(),refreshRiskIntelligence(),refreshHardening(false)]);
     await Promise.allSettled([refreshRiskQuality(),refreshDecisionReplay()]);
     APP.lastSecondaryRefresh=Date.now();
@@ -2055,7 +2159,7 @@ function renderLog(){
 async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of (APP.universePairs||CFG.pairs)){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected();renderPairButtons()}renderReadiness()}
 $('pairFilter').onchange=renderPairButtons;
 $('statsMode').onchange=drawStatsChart;
-$('postV2Refresh').onclick=refreshPostCalibration;$('bxRefresh').onclick=refreshBinanceCrosscheck;
+$('postV2Refresh').onclick=refreshPostCalibration;$('bxRefresh').onclick=refreshBinanceCrosscheck;$('forwardLabRefresh').onclick=refreshForwardExperimentLab;
 $('analyticsRefresh').onclick=()=>refreshSecondaryReports(true);
 $('qualityRefresh').onclick=()=>{refreshRiskQuality();refreshDecisionReplay()};
 $('hardRefresh').onclick=()=>refreshHardening(false);
