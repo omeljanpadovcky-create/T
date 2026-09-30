@@ -82,7 +82,12 @@ def init() -> dict:
                 "INSERT OR IGNORE INTO mh_meta(key,value) VALUES('post_calibration_v2_started_at',?)",
                 (str(started),),
             )
-    return status()
+    return {
+        "enabled": True,
+        "mode": "SHADOW",
+        "db_path": DB_PATH,
+        "horizons_sec": list(HORIZONS),
+    }
 
 
 def _num(v: Any) -> Optional[float]:
