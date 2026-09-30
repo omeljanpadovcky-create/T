@@ -71,6 +71,12 @@ def _num(v: Any) -> Optional[float]:
 
 
 def init() -> dict:
+    """Initialize Hardening storage without calling status().
+
+    Important: this function must never call status(), because status() itself
+    calls init(). The previous init()->status()->init() recursion could hang
+    /hardening/status until the HTTP client timed out.
+    """
     with _LOCK, _db() as con:
         con.execute(
             """
@@ -112,7 +118,7 @@ def init() -> dict:
         )
         con.execute("CREATE INDEX IF NOT EXISTS idx_hardening_dq_time ON data_quality_samples(observed_at DESC)")
         con.execute("CREATE INDEX IF NOT EXISTS idx_hardening_rec_time ON reconciliation_samples(observed_at DESC)")
-    return status()
+    return {"status": "ok", "enabled": True, "mode": "DIAGNOSTIC_ONLY", "db_path": DB_PATH}
 
 
 def _config_snapshot(results: list[dict], hint: Optional[dict]) -> dict:
