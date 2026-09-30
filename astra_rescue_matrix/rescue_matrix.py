@@ -1,4 +1,4 @@
-"""MYSHKA / ASTRA — RESCUE MATRIX V2.1 FAST (FORWARD SHADOW ONLY).
+"""MYSHKA / ASTRA — RESCUE MATRIX V2.2 ATTRIBUTION (FORWARD SHADOW ONLY).
 
 Goal:
 - freeze PAPER/trading decisions;
@@ -212,7 +212,8 @@ def _load_blackbox() -> dict[str, list[dict]]:
         with _db(RISK_DB_PATH) as con:
             rows = [
                 dict(r) for r in con.execute(
-                    """SELECT id,pair,observed_at,direction,stage_json,raw_json
+                    """SELECT id,pair,observed_at,direction,tech_score,edge_pct,jev_verdict,
+                              action,reason,stage_json,raw_json
                        FROM decision_blackbox
                        ORDER BY observed_at,id LIMIT ?""",
                     (MAX_ROWS * 3,),
@@ -328,8 +329,22 @@ def _enrich(rows: list[dict]) -> tuple[list[dict], dict]:
         stage = (box or {}).get("stage") or {}
         raw = (box or {}).get("raw") or {}
 
-        regime = str((risk or {}).get("regime") or r.get("structure") or "UNKNOWN").upper()
-        jev = str((risk or {}).get("jev_verdict") or "UNKNOWN").upper()
+        regime = str(
+            (risk or {}).get("regime")
+            or ((stage.get("context") or {}).get("regime") if isinstance(stage.get("context"), dict) else None)
+            or r.get("structure")
+            or "UNKNOWN"
+        ).upper()
+
+        stage_jev = stage.get("jev") if isinstance(stage.get("jev"), dict) else {}
+        raw_jev = raw.get("jev") if isinstance(raw.get("jev"), dict) else {}
+        jev = str(
+            (risk or {}).get("jev_verdict")
+            or (box or {}).get("jev_verdict")
+            or stage_jev.get("verdict")
+            or raw_jev.get("verdict")
+            or "UNKNOWN"
+        ).upper()
         evidence = _evidence_state(stage, raw)
 
         r.update({
@@ -341,6 +356,13 @@ def _enrich(rows: list[dict]) -> tuple[list[dict], dict]:
             "jev": jev,
             "xcheck": str(r.get("xcheck_state") or "NO_DATA").upper(),
             "evidence": evidence,
+            "jev_source": (
+                "risk_candidate" if (risk or {}).get("jev_verdict")
+                else "blackbox_column" if (box or {}).get("jev_verdict")
+                else "blackbox_stage" if stage_jev.get("verdict")
+                else "blackbox_raw" if raw_jev.get("verdict")
+                else "missing"
+            ),
         })
         r["pair"] = r["pair_norm"]
         out.append(r)
@@ -585,6 +607,33 @@ def _group(rows: list[dict], dims: tuple[str, ...], horizon: int) -> list[dict]:
     return out
 
 
+def _count_values(rows: list[dict], field: str) -> dict:
+    out: dict[str, int] = {}
+    for r in rows:
+        k = str(r.get(field) or "UNKNOWN")
+        out[k] = out.get(k, 0) + 1
+    return dict(sorted(out.items(), key=lambda kv: (-kv[1], kv[0])))
+
+
+def _attribution_funnel(rows: list[dict]) -> dict:
+    all_n = len(rows)
+    jev_approve = [r for r in rows if str(r.get("jev") or "") == "APPROVE"]
+    tech3 = [r for r in rows if str(r.get("tech") or "") == "3/4"]
+    both = [r for r in jev_approve if str(r.get("tech") or "") == "3/4"]
+    return {
+        "all_raw_n": all_n,
+        "jev_approve_raw_n": len(jev_approve),
+        "tech3_raw_n": len(tech3),
+        "jev_approve_x_tech3_raw_n": len(both),
+        "jev_distribution": _count_values(rows, "jev"),
+        "tech_distribution": _count_values(rows, "tech"),
+        "jev_source_distribution": _count_values(rows, "jev_source"),
+        "risk_joined_rows": sum(1 for r in rows if str(r.get("jev_source") or "") == "risk_candidate"),
+        "blackbox_jev_rows": sum(1 for r in rows if str(r.get("jev_source") or "").startswith("blackbox")),
+        "missing_jev_rows": sum(1 for r in rows if str(r.get("jev") or "") in {"", "UNKNOWN"}),
+    }
+
+
 def _rank(rows: list[dict], horizon: int) -> dict:
     # Primary hypothesis exactly as requested:
     # JEV APPROVE x TECH 3/4, then drill through EDGE/regime/XCheck/Evidence,
@@ -660,6 +709,7 @@ def _rank(rows: list[dict], horizon: int) -> dict:
 
     return {
         "anchor": "JEV_APPROVE_x_TECH_3_OF_4",
+        "attribution_funnel": _attribution_funnel(rows),
         "anchor_metrics": _metrics(anchor),
         "tech_3_vs_4": tech_compare,
         "level1": sorted(level1, key=lambda x: int(x.get("cn") or 0), reverse=True),
@@ -705,7 +755,7 @@ def report() -> dict:
         "forward_started_at": started,
         "movement_cluster_gap_sec": MOVEMENT_GAP_SEC,
         "legacy_fixed_cluster_key_used_for_scoring": False,
-        "performance_mode": "BINARY_JOIN_CACHE_V2_1",
+        "performance_mode": "BINARY_JOIN_CACHE_ATTRIBUTION_V2_2",
         "coverage": coverage,
         "by_horizon": by_horizon,
         "watchlist_counts": watch_counts,
