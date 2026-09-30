@@ -5,7 +5,7 @@ Write-Host '======================================================' -ForegroundC
 Write-Host ' MYSHKA / ASTRA - LOCAL SAME-ORIGIN DASHBOARD FIX ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$bundleCommit = 'd8d4f58e6f51b069e32462951cab7a10d52186ee'
+$bundleCommit = '548264e72410a46c6f94fed5ebc7441c17f5bc49'
 $root = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit
 
 $app = $null
