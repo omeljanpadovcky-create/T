@@ -27,7 +27,7 @@ def run():
     # Forward Lab DB skeleton
     con = sqlite3.connect(forward)
     con.execute("CREATE TABLE experiment_meta(key TEXT PRIMARY KEY,value TEXT NOT NULL)")
-    start = time.time() - 7200
+    start = time.time() - 30000
     con.execute("INSERT INTO experiment_meta(key,value) VALUES('forward_started_at',?)", (str(start),))
     con.execute("""
         CREATE TABLE forward_outcomes(
