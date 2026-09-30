@@ -6,7 +6,7 @@ Write-Host ' MYSHKA / ASTRA - BINANCE SIGNAL CROSSCHECK V1 ' -ForegroundColor Ye
 Write-Host ' SHADOW ONLY · MYSHKA <-> BINANCE FUTURES SENTIMENT ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$bundleCommit = '1c49108ad444f180213a7bdaa915ee4413fa568c'
+$bundleCommit = '9557a47943659d772c5be330432c6b31f41105b5'
 $root = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit
 
 $app = $null
