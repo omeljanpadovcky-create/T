@@ -12,6 +12,9 @@ on:
       - 'astra_forward_experiment_lab/**'
       - 'astra_evidence_gate/**'
       - 'astra_adaptive_learner/**'
+      - 'INSTALL_FREQTRADE_LIVE_BRIDGE_V1.ps1'
+      - 'ARM_FREQTRADE_LIVE_V1.ps1'
+      - 'DISARM_FREQTRADE_LIVE_V1.ps1'
       - '.github/workflows/astra-core-ci.yml'
   workflow_dispatch:
 
@@ -84,6 +87,25 @@ jobs:
       - name: Adaptive Learner self-test
         working-directory: astra_adaptive_learner
         run: python selftest_adaptive_learner.py
+
+      - name: PowerShell syntax check
+        shell: pwsh
+        run: |
+          $files = @(
+            'INSTALL_FREQTRADE_LIVE_BRIDGE_V1.ps1',
+            'ARM_FREQTRADE_LIVE_V1.ps1',
+            'DISARM_FREQTRADE_LIVE_V1.ps1'
+          )
+          foreach ($f in $files) {
+            $tokens = $null
+            $errors = $null
+            [void][System.Management.Automation.Language.Parser]::ParseFile($f, [ref]$tokens, [ref]$errors)
+            if ($errors.Count -gt 0) {
+              $errors | ForEach-Object { Write-Error $_.Message }
+              throw "PowerShell parse failed: $f"
+            }
+            Write-Host "PowerShell syntax OK: $f"
+          }
 
       - name: Safety invariant grep
         shell: bash
