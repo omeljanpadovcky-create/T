@@ -31,19 +31,24 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m py_compile             astra_external_market_shadow/*.py             astra_live_dry_run/*.py             astra_freqtrade_dryrun_bridge/*.py             astra_binance_crosscheck/*.py             astra_forward_experiment_lab/*.py             astra_evidence_gate/*.py             astra_adaptive_learner/*.py
+          python -m py_compile \
+            astra_external_market_shadow/*.py \
+            astra_live_dry_run/*.py \
+            astra_freqtrade_dryrun_bridge/*.py \
+            astra_binance_crosscheck/*.py \
+            astra_forward_experiment_lab/*.py \
+            astra_evidence_gate/*.py \
+            astra_adaptive_learner/*.py
 
       - name: External Market Shadow self-test
         working-directory: astra_external_market_shadow
         run: python selftest_external_market_shadow.py
 
       - name: Live Dry Run self-test
-        working-directory: astra_live_dry_run
-        run: python selftest_live_dry_run.py
+        run: python -m astra_live_dry_run.selftest_live_dry_run
 
       - name: Freqtrade Dry-run Bridge self-test
-        working-directory: astra_freqtrade_dryrun_bridge
-        run: python selftest_freqtrade_dryrun_bridge.py
+        run: python -m astra_freqtrade_dryrun_bridge.selftest_freqtrade_dryrun_bridge
 
       - name: Binance Crosscheck self-test
         working-directory: astra_binance_crosscheck
@@ -72,4 +77,5 @@ jobs:
           grep -q 'changes_trading_decisions.*False' astra_external_market_shadow/external_market_shadow.py
           grep -q 'live_execution.*False' astra_external_market_shadow/external_market_shadow.py
           grep -q 'execution_blocked' astra_live_dry_run/live_dry_run.py
+          grep -q 'real_money_execution.*False' astra_freqtrade_dryrun_bridge/freqtrade_dryrun_bridge.py
           echo 'Safety invariants present'
