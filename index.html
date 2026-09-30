@@ -736,6 +736,7 @@ const $=id=>document.getElementById(id);
 // MYSHKA_BRIDGE_UI_V1
 let APP={selected:CFG.pairs[0],markets:{},decisions:{},universePairs:CFG.pairs.slice(),kill:false,cooldowns:{},positions:{},trades:[],equity:1000,startEquity:1000,logs:[],entryTags:{},scanning:false,
   bridgeUrl:'http://localhost:8088',bridgeToken:'',backendReady:false,backendStats:null,
+  bridgeConnecting:false,lastBackendSuccess:0,coreFailStreak:0,
   hardeningBusy:false,hardeningLastInternal:0,hardeningLastExternal:0};
 
 // MYSHKA_PHONE_FRAGMENT_V1
@@ -942,7 +943,11 @@ async function bridgeFetch(path,opts={}){
   try{
     const r=await fetch(base+path,{cache:'no-store',...opts,signal:ctl.signal,headers:{...(opts.headers||{}),...bridgeHeaders(!!opts.body)}});
     if(!r.ok)throw new Error('ASTRA HTTP '+r.status);
-    return await r.json();
+    const data=await r.json();
+    APP.lastBackendSuccess=Date.now();
+    APP.coreFailStreak=0;
+    APP.backendReady=true;
+    return data;
   }catch(e){
     if(e&&e.name==='AbortError')throw new Error('ASTRA timeout 6.5s');
     throw e;
@@ -979,6 +984,23 @@ function integrationNode(id,status,detail=''){
   e.className='bridge-node '+(ok?'ok':warn?'warn':'bad');
   const label=status==='direct_live'?'DIRECT LIVE':status==='bridge_offline'?'BRIDGE OFFLINE':(status||'unknown').toUpperCase();
   e.querySelector('b').textContent=label+(detail?' · '+detail:'');
+}
+function markBridgeOffline(message='ASTRA bridge unavailable'){
+  APP.coreFailStreak=(APP.coreFailStreak||0)+1;
+  const recent=Date.now()-(APP.lastBackendSuccess||0)<30000;
+  // One transient failure, or any failure within 30s of a successful core call,
+  // must NOT flip the whole dashboard offline.
+  if(APP.coreFailStreak<2||recent){
+    if($('bridgeMsg'))$('bridgeMsg').textContent='⚠ Тимчасовий bridge warning: '+message+' · ASTRA лишається ONLINE, повторю перевірку.';
+    return false;
+  }
+  APP.backendReady=false;
+  integrationNode('iAstra','bridge_offline');
+  integrationNode('iBybit','bridge_offline','direct fallback disabled');
+  ['iOllama','iFreqtrade','iTelegram'].forEach(id=>integrationNode(id,'bridge_offline'));
+  if($('modeBadge')){$('modeBadge').textContent='ASTRA OFFLINE · RETRY';$('modeBadge').className='badge err'}
+  if($('bridgeMsg'))$('bridgeMsg').textContent='⚠ ASTRA bridge втрачено: '+message;
+  return true;
 }
 
 function syncEnginePositions(engine){
@@ -1489,27 +1511,46 @@ function applyServerResults(results){
 }
 async function refreshPhoneControl(){
   if(!APP.backendReady)return;
+  // CORE connectivity: only this request is allowed to decide bridge health.
   try{
-    const st=await bridgeFetch('/control/status');paintPhoneControl(st);
-    const latest=await bridgeFetch('/control/latest');applyServerResults(latest.results||[]);if(latest.engine)paintPhoneControl({runtime:latest.engine.runtime,engine:latest.engine});
-    const trades=await bridgeFetch('/stats?limit=120');loadServerTrades(trades);
-    await refreshPostCalibration();
-    await refreshAnalytics();
-    await refreshCounterfactual();
-    await refreshRiskIntelligence();
-    await refreshRiskQuality();
-    await refreshHardening(false);
+    const st=await bridgeFetch('/control/status');
+    APP.lastBackendSuccess=Date.now();
+    APP.coreFailStreak=0;
+    paintPhoneControl(st);
+    integrationNode('iAstra','ok');
+    if($('modeBadge')&&/OFFLINE/.test($('modeBadge').textContent||'')){
+      $('modeBadge').textContent=(APP.bridgeUrl.includes('127.0.0.1')||APP.bridgeUrl.includes('localhost'))?'ASTRA LOCAL':'ASTRA BRIDGE';
+      $('modeBadge').className='badge live';
+    }
   }catch(e){
-    APP.backendReady=false;
-    integrationNode('iAstra','bridge_offline');
-    integrationNode('iBybit','bridge_offline','direct fallback disabled');
-    ['iOllama','iFreqtrade','iTelegram'].forEach(id=>integrationNode(id,'bridge_offline'));
-    if($('modeBadge')){$('modeBadge').textContent='ASTRA OFFLINE · RETRY';$('modeBadge').className='badge err'}
-    const auth=/401/.test(String(e&&e.message||''));
-    $('bridgeMsg').textContent=auth
-      ?'⚠ ASTRA відповідає, але bridge token неправильний або порожній. Встав значення MYSHKA_BRIDGE_TOKEN.'
-      :'⚠ ASTRA bridge втрачено: '+e.message+'. Direct Bybit auto-fallback вимкнений, щоб не створювати дубльований scanner / API rate-limit. Сайт спробує перепідключитися.';
+    markBridgeOffline(e.message||String(e));
+    return;
   }
+
+  // Secondary data must NEVER mark the whole bridge offline.
+  try{
+    const latest=await bridgeFetch('/control/latest');
+    applyServerResults(latest.results||[]);
+    if(latest.engine)paintPhoneControl({runtime:latest.engine.runtime,engine:latest.engine});
+  }catch(e){
+    if($('bridgeMsg'))$('bridgeMsg').textContent='⚠ latest scan refresh: '+(e.message||String(e));
+  }
+  try{
+    const trades=await bridgeFetch('/stats?limit=120');
+    loadServerTrades(trades);
+  }catch(e){
+    if($('bridgeMsg'))$('bridgeMsg').textContent='⚠ stats refresh: '+(e.message||String(e));
+  }
+
+  await Promise.allSettled([
+    refreshPostCalibration(),
+    refreshBinanceCrosscheck(),
+    refreshAnalytics(),
+    refreshCounterfactual(),
+    refreshRiskIntelligence(),
+    refreshRiskQuality(),
+    refreshHardening(false)
+  ]);
 }
 async function setServerControl(name,value){
   if(!APP.backendReady)return;
@@ -1522,6 +1563,8 @@ async function phoneScanNow(){
   finally{$('phoneScan').textContent='🔎 Scan зараз'}
 }
 async function connectBridge(){
+  if(APP.bridgeConnecting)return;
+  APP.bridgeConnecting=true;
   const preferred=$('bridgeUrl').value.trim()||APP.bridgeUrl||'http://localhost:8088';
   APP.bridgeToken=$('bridgeToken').value.trim();
   if(APP.bridgeToken==='X-MYSHKA-TOKEN')APP.bridgeToken='';
@@ -1539,6 +1582,8 @@ async function connectBridge(){
 
     APP.bridgeUrl=chosen;
     APP.backendReady=true;
+    APP.lastBackendSuccess=Date.now();
+    APP.coreFailStreak=0;
     APP.training=h.training||null;
     $('bridgeUrl').value=chosen;
     saveState();
@@ -1591,13 +1636,12 @@ async function connectBridge(){
       $('bridgeMsg').textContent+=' · ⚠ control status: '+String((controlError&&controlError.message)||controlError);
     }
   }catch(e){
-    APP.backendReady=false;
-    integrationNode('iAstra','bridge_offline');
-    integrationNode('iBybit','bridge_offline','direct fallback disabled');
-    ['iOllama','iFreqtrade','iTelegram'].forEach(id=>integrationNode(id,'bridge_offline'));
-    if($('modeBadge')){$('modeBadge').textContent='ASTRA OFFLINE · RETRY';$('modeBadge').className='badge err'}
     const msg=String((e&&e.message)||e||'unknown');
-    $('bridgeMsg').textContent='⚠ Bridge diagnostics: '+msg;
+    const wentOffline=markBridgeOffline('connect probe: '+msg);
+    if(!wentOffline&&$('modeBadge')&&APP.backendReady){
+      $('modeBadge').textContent=(APP.bridgeUrl.includes('127.0.0.1')||APP.bridgeUrl.includes('localhost'))?'ASTRA LOCAL':'ASTRA BRIDGE';
+      $('modeBadge').className='badge live';
+    }
     // Do not keep a dead temporary trycloudflare URL as the active desktop bridge.
     if(/trycloudflare\.com/i.test(preferred)){
       APP.bridgeUrl='http://127.0.0.1:8088';
@@ -1605,6 +1649,7 @@ async function connectBridge(){
       saveState();
     }
   }finally{
+    APP.bridgeConnecting=false;
     $('bridgeConnect').textContent='🔌 Підключити ASTRA';
     renderReadiness();
   }
@@ -1951,7 +1996,7 @@ $('autoMode').onchange=()=>{if(APP.backendReady)setServerControl('auto_scan',$('
 $('resetBtn').onclick=async()=>{if(APP.backendReady){if(!confirm('Скинути paper engine? Learner історія залишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl();return}if(!confirm('Скинути локальні paper-угоди?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.entryTags={};APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
 window.addEventListener('resize',()=>{renderSelected();renderStats()});
 loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(APP.backendReady){refreshPhoneControl();refreshBinanceCrosscheck();refreshRiskQuality();refreshDecisionReplay();refreshHardening(false)}});
-setInterval(()=>{if(APP.backendReady)refreshPhoneControl();else connectBridge()},CFG.scanMs);
+setInterval(()=>{if(APP.backendReady)refreshPhoneControl();else if(!APP.bridgeConnecting)connectBridge()},CFG.scanMs);
 // Final Hardening cadence: internal state is local/read-only and cheap.
 setInterval(()=>{if(APP.backendReady)refreshHardening(false)},5000);
 // External integration reconciliation is intentionally slower to avoid private API pressure.
