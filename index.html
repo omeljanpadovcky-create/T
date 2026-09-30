@@ -115,6 +115,8 @@ button{cursor:pointer}
 .stats-chart-head .sub{margin:0}
 @media(max-width:900px){.mode-stats{grid-template-columns:1fr}.mode-metrics{grid-template-columns:repeat(5,1fr)}}
 @media(max-width:620px){.mode-metrics{grid-template-columns:repeat(2,1fr)}}
+.post-horizon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:10px}
+@media(max-width:820px){.post-horizon-grid{grid-template-columns:1fr}}
 .log{margin-top:12px;border-radius:16px;padding:12px}.log h2{font-size:15px;margin:0 0 8px}.log-list{max-height:300px;overflow:auto}
 .logrow{display:grid;grid-template-columns:70px 80px 100px 1fr auto;gap:7px;padding:8px 4px;border-bottom:1px solid #162d49;font-size:9px}.logrow:last-child{border:0}.muted{color:var(--muted)}
 .note{margin-top:12px;padding:12px;border-radius:14px;background:#091522;border:1px solid #20395d;color:#8da2c1;font-size:10px;line-height:1.55}
@@ -345,6 +347,45 @@ button{cursor:pointer}
     </div>
     <div class="sub" style="margin-top:7px">
       Старі угоди без записаного TECH score не приписуються навмання: вони залишаються в LEGACY / UNKNOWN. Нові угоди маркуються як STRICT 4/4 або TRAIN 3/4 при вході.
+    </div>
+  </section>
+
+  <section class="card glass stats-wrap" id="postCalibrationPanel">
+    <div class="stats-title">
+      <div>
+        <h2>🧬 POST-CALIBRATION V2</h2>
+        <div class="sub">Окрема статистика нової Мишки · тільки після EDGE Calibration V2 · старі STRICT не змішуються</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div class="sub" id="postV2State">POST-V2: warming</div>
+        <button class="btn" id="postV2Refresh">↻ Оновити POST-V2</button>
+      </div>
+    </div>
+
+    <div class="stats" style="grid-template-columns:repeat(4,1fr)">
+      <div class="stat"><small>POST-V2 trades</small><b id="postV2Trades">0</b></div>
+      <div class="stat"><small>Win rate</small><b id="postV2Win">0.0%</b></div>
+      <div class="stat"><small>Avg NET / trade</small><b id="postV2Avg">0.000%</b></div>
+      <div class="stat"><small>Profit factor</small><b id="postV2PF">0.00</b></div>
+    </div>
+
+    <div class="post-horizon-grid">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>⏱ 5m SHADOW</h3><span>EDGE 0.08–0.15%</span></div>
+        <div id="postV2H300"><div class="muted">Чекаємо settlement.</div></div>
+      </div>
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>⏱ 10m SHADOW</h3><span>EDGE 0.08–0.15%</span></div>
+        <div id="postV2H600"><div class="muted">Чекаємо settlement.</div></div>
+      </div>
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>⏱ 15m SHADOW</h3><span>EDGE 0.08–0.15%</span></div>
+        <div id="postV2H900"><div class="muted">Чекаємо settlement.</div></div>
+      </div>
+    </div>
+
+    <div class="sub" style="margin-top:8px">
+      Верхній рядок = фактично закриті PAPER STRICT після V2. 5m / 10m / 15m = SHADOW outcomes тих самих STRICT-кандидатів; вони не відкривають додаткових позицій.
     </div>
   </section>
 
@@ -936,6 +977,45 @@ function analyticsRows(items,limit=6){
   if(!a.length)return '<div class="muted">Ще недостатньо чистих даних.</div>';
   return a.map(x=>'<div class="check"><span>'+String(x.label||'—')+' · n='+Number(x.n||0)+'</span><span class="'+(Number(x.avg_net_pct||0)>=0?'ok':'bad')+'">'+analyticsPct(x.avg_net_pct)+'</span></div>').join('');
 }
+function postV2HorizonHtml(m){
+  if(!m||!Number(m.n||0))return '<div class="muted">Ще немає закритих outcomes.</div>';
+  const n=Number(m.n||0),win=Number(m.net_win_rate_pct||0),avg=Number(m.avg_net_pct||0),pf=Number(m.profit_factor||0);
+  return '<div class="check"><span>Outcomes</span><span>'+n+'</span></div>'+
+    '<div class="check"><span>Win rate</span><span class="'+(win>=50?'ok':'bad')+'">'+win.toFixed(1)+'%</span></div>'+
+    '<div class="check"><span>Avg NET</span><span class="'+(avg>=0?'ok':'bad')+'">'+analyticsPct(avg)+'</span></div>'+
+    '<div class="check"><span>Profit factor</span><span class="'+(pf>=1?'ok':'bad')+'">'+(pf>=999?'∞':pf.toFixed(2))+'</span></div>';
+}
+function loadPostCalibration(r){
+  if(!r||r.status!=='ok')return;
+  APP.postCalibrationReport=r;
+  const p=r.paper_strict||{},n=Number(p.n||0),win=Number(p.net_win_rate_pct??p.win_rate_pct??0),
+        avg=Number(p.avg_net_pct||0),pf=Number(p.profit_factor||0);
+  $('postV2Trades').textContent=n;
+  $('postV2Win').textContent=win.toFixed(1)+'%';
+  $('postV2Win').className=n?(win>=50?'long':'short'):'';
+  $('postV2Avg').textContent=analyticsPct(avg);
+  $('postV2Avg').className=avg>0?'long':avg<0?'short':'';
+  $('postV2PF').textContent=pf>=999?'∞':pf.toFixed(2);
+  $('postV2PF').className=n?(pf>=1?'long':'short'):'';
+  const started=Number(r.started_at||0);
+  const when=started?new Date(started*1000).toLocaleString('uk-UA'):'—';
+  $('postV2State').textContent='POST-V2: '+String(r.sample_state||'COLD')+' · старт '+when;
+
+  const h=r.by_horizon||{};
+  $('postV2H300').innerHTML=postV2HorizonHtml(((h['300']||{}).calibration_band_0.08_0.15)||{});
+  $('postV2H600').innerHTML=postV2HorizonHtml(((h['600']||{}).calibration_band_0.08_0.15)||{});
+  $('postV2H900').innerHTML=postV2HorizonHtml(((h['900']||{}).calibration_band_0.08_0.15)||{});
+}
+async function refreshPostCalibration(){
+  if(!APP.backendReady)return;
+  try{
+    const r=await bridgeFetch('/post-calibration/report');
+    loadPostCalibration(r);
+  }catch(e){
+    if($('postV2State'))$('postV2State').textContent='POST-V2: backend patch required / warming';
+  }
+}
+
 function loadAnalyticsReport(r){
   if(!r||r.status!=='ok')return;
   APP.analyticsReport=r;
@@ -1342,6 +1422,7 @@ async function refreshPhoneControl(){
     const st=await bridgeFetch('/control/status');paintPhoneControl(st);
     const latest=await bridgeFetch('/control/latest');applyServerResults(latest.results||[]);if(latest.engine)paintPhoneControl({runtime:latest.engine.runtime,engine:latest.engine});
     const trades=await bridgeFetch('/stats?limit=120');loadServerTrades(trades);
+    await refreshPostCalibration();
     await refreshAnalytics();
     await refreshCounterfactual();
     await refreshRiskIntelligence();
@@ -1363,7 +1444,7 @@ async function setServerControl(name,value){
 async function phoneScanNow(){
   if(!APP.backendReady)return scanAll();
   $('phoneScan').textContent='… Scan';
-  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshAnalytics();await refreshCounterfactual();await refreshRiskIntelligence();await refreshRiskQuality();await refreshHardening(false)}
+  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshPostCalibration();await refreshAnalytics();await refreshCounterfactual();await refreshRiskIntelligence();await refreshRiskQuality();await refreshHardening(false)}
   finally{$('phoneScan').textContent='🔎 Scan зараз'}
 }
 async function connectBridge(){
@@ -1747,7 +1828,8 @@ function renderLog(){
 async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of (APP.universePairs||CFG.pairs)){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected();renderPairButtons()}renderReadiness()}
 $('pairFilter').onchange=renderPairButtons;
 $('statsMode').onchange=drawStatsChart;
-$('analyticsRefresh').onclick=()=>{refreshAnalytics();refreshCounterfactual();refreshRiskIntelligence();refreshRiskQuality()};
+$('postV2Refresh').onclick=refreshPostCalibration;
+$('analyticsRefresh').onclick=()=>{refreshPostCalibration();refreshAnalytics();refreshCounterfactual();refreshRiskIntelligence();refreshRiskQuality()};
 $('qualityRefresh').onclick=()=>{refreshRiskQuality();refreshDecisionReplay()};
 $('hardRefresh').onclick=()=>refreshHardening(false);
 $('hardReconcile').onclick=()=>refreshHardening(true);
