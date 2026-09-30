@@ -5,7 +5,7 @@ Write-Host '======================================================' -ForegroundC
 Write-Host ' MYSHKA / ASTRA - EDGE CALIBRATION V2 ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$bundleCommit = 'f88bc830a44d234ce02009723106f484724e7251'
+$bundleCommit = '9ae7ce762f90f444c3441e2bda4d424294638f6d'
 $root = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit
 
 $app = $null
@@ -54,9 +54,12 @@ foreach($name in $downloads.Keys){
 Write-Host '[OK] Bundle downloaded.' -ForegroundColor Green
 
 Write-Host '[2/8] Syntax check...'
-$pyFiles = $downloads.Keys | ForEach-Object { Join-Path $tmp $_ }
-& python -m py_compile @pyFiles
-if($LASTEXITCODE -ne 0){ throw 'Downloaded Python syntax invalid. Local ASTRA not modified.' }
+foreach($name in $downloads.Keys){
+  $p = Join-Path $tmp $name
+  Write-Host ('  compile: ' + $name)
+  & python -m py_compile $p
+  if($LASTEXITCODE -ne 0){ throw ('Downloaded Python syntax invalid in ' + $name + '. Local ASTRA not modified.') }
+}
 Write-Host '[OK] Python syntax valid.' -ForegroundColor Green
 
 Write-Host '[3/8] Running isolated self-tests...'
