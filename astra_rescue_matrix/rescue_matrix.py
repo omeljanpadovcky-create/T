@@ -51,7 +51,7 @@ def init():
         r=c.execute("SELECT value FROM rescue_meta WHERE key='forward_started_at'").fetchone()
         if not r:
             c.execute("INSERT INTO rescue_meta(key,value) VALUES('forward_started_at',?)",(str(time.time()),))
-    return status()
+    return {"enabled":True,"mode":"RESCUE_MATRIX_SHADOW","db_path":DB_PATH,"risk_db_path":RISK_DB_PATH}
 
 def _forward_started():
     init()
