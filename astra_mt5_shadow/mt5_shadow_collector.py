@@ -6,7 +6,7 @@ Exposes a token-protected local HTTP snapshot API for ASTRA running in Docker.
 READ-ONLY invariants:
 - Uses initialize / terminal_info / account_info / symbols_get / symbol_select /
   symbol_info_tick / copy_rates_from_pos only.
-- No order_send, no trade request, no position modification.
+- No trade-placement API, no trade request, no position modification.
 - If MT5 is unavailable, returns NO_DATA rather than affecting ASTRA decisions.
 """
 from __future__ import annotations
