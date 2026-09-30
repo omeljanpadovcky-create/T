@@ -47,7 +47,7 @@ def run():
     a._model=lambda:("qwen-test",None)
     a._analyze=lambda item,model:a.normalize(
         {"sentiment":"BULLISH","assets":["XRP"],"confidence":0.9,"importance":0.8,
-         "scope":"ASSET","event_type":"ETF","reason":"ETF approval supports demand"},
+         "scope":"ASSET","event_type":"ETF","lifecycle_stage":"CONFIRMED","reason":"ETF approval supports demand"},
         item["title"]+" "+item["summary"],
         allowed_assets=a._universe_assets(now),
     )
@@ -60,6 +60,11 @@ def run():
     agg=a.aggregate("XRP/USDT:USDT",now+1)
     assert agg["tone"]=="BULLISH",agg
     assert agg["event_type"]=="ETF",agg
+    assert agg["lifecycle_stage"]=="CONFIRMED",agg
+    assert agg["story_id"]!="UNKNOWN",agg
+    assert agg["dominant_source"]!="UNKNOWN",agg
+    assert float(agg["impact_score"])>0,agg
+    assert agg["impact_band"] in {"LOW","MEDIUM","HIGH","EXTREME"},agg
     assert agg["surprise_state"]=="ALREADY_PRICED",agg
     assert float(agg["pre_5m_pct"])>0.75,agg
     assert float(agg["pre_15m_pct"])>1.50,agg
@@ -95,11 +100,17 @@ def run():
     assert h["by_event_type"]["ETF"]["n"]>=1,h
     assert h["by_surprise"]["ALREADY_PRICED"]["n"]>=1,h
     assert h["news_x_binance"]["ALIGNED"]["CONFLICT"]["n"]>=1,h
+    assert h["by_lifecycle"]["CONFIRMED"]["n"]>=1,h
+    assert any(int(v.get("n") or 0)>=1 for v in (h["by_source"] or {}).values()),h
+    assert sum(int(v.get("n") or 0) for v in (h["by_impact"] or {}).values())>=1,h
+    assert "XRP/USDT:USDT" in rep["asset_lag"],rep
+    assert "promotion_gate" in rep,rep
 
     print("NEWS_INTELLIGENCE_SELFTEST_OK")
     print("dynamic_universe=",r["universe_assets"])
     print("deduped=",r["deduped"],"analyzed=",r["analyzed"])
-    print("event_type=",agg["event_type"])
+    print("event_type=",agg["event_type"],"lifecycle=",agg["lifecycle_stage"])
+    print("story_id=",agg["story_id"],"impact=",round(float(agg["impact_score"]),2),agg["impact_band"])
     print("surprise=",agg["surprise_state"],"pre5=",round(float(agg["pre_5m_pct"]),3),"pre15=",round(float(agg["pre_15m_pct"]),3))
     print("fresh_weight=",round(fresh_weight,4),"aged_weight=",round(float(aged["effective_weight"]),4))
     print("matrix_ALIGNED_x_CONFLICT_n=",h["news_x_binance"]["ALIGNED"]["CONFLICT"]["n"])
