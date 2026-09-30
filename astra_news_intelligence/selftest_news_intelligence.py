@@ -22,7 +22,8 @@ def run():
     from . import news_analyzer as a
     from . import news_outcomes as o
 
-    now=time.time()
+    o.init()
+    now=time.time()+1.0
     c=sqlite3.connect(os.environ["CONTEXT_DB_PATH"])
     c.execute("CREATE TABLE context_samples(id INTEGER PRIMARY KEY AUTOINCREMENT,ts REAL,pair TEXT,source TEXT,kind TEXT,payload TEXT)")
     payload={"title":"Bitcoin ETF inflows accelerate","summary":"Strong spot ETF inflows support Bitcoin demand.","url":"https://example.test/btc","feed":"test"}
