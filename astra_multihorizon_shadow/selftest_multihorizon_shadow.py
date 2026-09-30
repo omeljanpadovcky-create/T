@@ -1,6 +1,7 @@
 from pathlib import Path
 import importlib
 import os
+import sqlite3
 import tempfile
 import uuid
 
@@ -31,13 +32,37 @@ def wait(price):
 def run():
     tmp = Path(tempfile.gettempdir()) / ("myshka_mh_" + uuid.uuid4().hex)
     tmp.mkdir()
-    os.environ["MULTIHORIZON_DB_PATH"] = str(tmp / "mh.sqlite3")
+    mh_db = tmp / "mh.sqlite3"
+    analytics_db = tmp / "analytics.sqlite3"
+    os.environ["MULTIHORIZON_DB_PATH"] = str(mh_db)
+    os.environ["ANALYTICS_DB_PATH"] = str(analytics_db)
     os.environ["MULTIHORIZON_HORIZONS_SEC"] = "300,600,900"
+
+    ac = sqlite3.connect(analytics_db)
+    ac.execute(
+        """
+        CREATE TABLE analytics_trades(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            status TEXT, mode TEXT, opened_at REAL,
+            gross_pct REAL, net_pct REAL, direction_hit INTEGER
+        )
+        """
+    )
+    ac.execute(
+        "INSERT INTO analytics_trades(status,mode,opened_at,gross_pct,net_pct,direction_hit) VALUES('CLOSED','STRICT',1000,1.0,0.8,1)"
+    )
+    ac.commit(); ac.close()
     import multihorizon_shadow as mh
     importlib.reload(mh)
 
     a = mh.observe_results([strict(100.0)], now=1000.0)
     assert a["created"] == 3, a
+
+    mc = sqlite3.connect(mh_db)
+    mc.execute(
+        "INSERT OR REPLACE INTO mh_meta(key,value) VALUES('post_calibration_v2_started_at','999')"
+    )
+    mc.commit(); mc.close()
     mh.observe_results([wait(101.0)], now=1300.0)
     mh.observe_results([wait(102.0)], now=1600.0)
     mh.observe_results([wait(103.0)], now=1900.0)
@@ -49,8 +74,19 @@ def run():
     assert rep["by_horizon"]["300"]["all_strict"]["avg_net_pct"] > 0, rep
     assert rep["by_horizon"]["900"]["all_strict"]["avg_net_pct"] > rep["by_horizon"]["300"]["all_strict"]["avg_net_pct"], rep
 
+    post = mh.post_calibration_report()
+    assert post["paper_strict"]["n"] == 1, post
+    assert post["paper_strict"]["win_rate_pct"] == 100.0, post
+    assert post["by_horizon"]["300"]["calibration_band_0.08_0.15"]["n"] == 1, post
+    assert post["by_horizon"]["600"]["calibration_band_0.08_0.15"]["n"] == 1, post
+    assert post["by_horizon"]["900"]["calibration_band_0.08_0.15"]["n"] == 1, post
+
+    st = mh.status()
+    assert "error" not in st, st
+
     print("MULTIHORIZON_SHADOW_V1_SELFTEST_OK")
-    print(rep["by_horizon"])
+    print("POST_CALIBRATION_V2_SELFTEST_OK")
+    print(post)
 
 
 if __name__ == "__main__":
