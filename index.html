@@ -277,11 +277,15 @@ button{cursor:pointer}
           <p id="contextText">Фоновий збирач: очікуємо snapshot 5–30 хв.</p>
         </div>
         <div class="pipe">
-          <div class="pipe-head"><b>4 · JEV</b><span class="pipe-status mid" id="jevStatus">—</span></div>
+          <div class="pipe-head"><b>4 · BINANCE X-CHECK</b><span class="pipe-status mid" id="binanceXStatus">WARMING</span></div>
+          <p id="binanceXText">MYSHKA LONG/SHORT ↔ Binance futures crowding · SHADOW only.</p>
+        </div>
+        <div class="pipe">
+          <div class="pipe-head"><b>5 · JEV</b><span class="pipe-status mid" id="jevStatus">—</span></div>
           <p id="jevText">Детермінований координатор. WAIT не може бути перетворений AI у trade.</p>
         </div>
         <div class="pipe">
-          <div class="pipe-head"><b>5 · ASTRA GUARD</b><span class="pipe-status mid" id="guardStatus">—</span></div>
+          <div class="pipe-head"><b>6 · ASTRA GUARD</b><span class="pipe-status mid" id="guardStatus">—</span></div>
           <p id="guardText">Daily -2% • weekly -5% • leverage ≤3x • exposure ≤15% • spread ≤0.08%.</p>
         </div>
       </div>
@@ -386,6 +390,42 @@ button{cursor:pointer}
 
     <div class="sub" style="margin-top:8px">
       Верхній рядок = фактично закриті PAPER STRICT після V2. 5m / 10m / 15m = SHADOW outcomes тих самих STRICT-кандидатів; вони не відкривають додаткових позицій.
+    </div>
+  </section>
+
+  <section class="card glass stats-wrap" id="binanceCrosscheckPanel">
+    <div class="stats-title">
+      <div>
+        <h2>🟡 BINANCE SIGNAL CROSSCHECK · SHADOW</h2>
+        <div class="sub">MYSHKA LONG/SHORT ↔ Binance USDⓈ-M futures crowding · нічого не блокує і не створює ENTER</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div class="sub" id="bxState">Binance X-Check: warming</div>
+        <button class="btn" id="bxRefresh">↻ Оновити Binance X-Check</button>
+      </div>
+    </div>
+    <div class="stats" style="grid-template-columns:repeat(4,1fr)">
+      <div class="stat"><small>Closed outcomes</small><b id="bxClosed">0</b></div>
+      <div class="stat"><small>Open</small><b id="bxOpen">0</b></div>
+      <div class="stat"><small>Skipped</small><b id="bxSkipped">0</b></div>
+      <div class="stat"><small>Binance cache</small><b id="bxCache">0</b></div>
+    </div>
+    <div class="post-horizon-grid">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>⏱ 5m</h3><span>AGREE vs CONFLICT</span></div>
+        <div id="bxH300"><div class="muted">Чекаємо outcomes.</div></div>
+      </div>
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>⏱ 10m</h3><span>AGREE vs CONFLICT</span></div>
+        <div id="bxH600"><div class="muted">Чекаємо outcomes.</div></div>
+      </div>
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>⏱ 15m</h3><span>AGREE vs CONFLICT</span></div>
+        <div id="bxH900"><div class="muted">Чекаємо outcomes.</div></div>
+      </div>
+    </div>
+    <div class="sub" style="margin-top:8px">
+      AGREE = напрямок MYSHKA збігається з агрегованим Binance crowding. CONFLICT = протилежний. NEUTRAL = Binance без вираженого перекосу. SHADOW only.
     </div>
   </section>
 
@@ -1020,6 +1060,36 @@ async function refreshPostCalibration(){
   }
 }
 
+function bxPct(v,d=3){
+  const n=Number(v);return Number.isFinite(n)?(n>=0?'+':'')+n.toFixed(d)+'%':'—';
+}
+function bxHorizonHtml(h){
+  h=h||{};const a=h.AGREE||{},c=h.CONFLICT||{},n=h.NEUTRAL||{};
+  const row=(label,x,good)=>'<div class="check"><span>'+label+' · n='+Number(x.n||0)+' · win '+Number(x.win_rate_pct||0).toFixed(1)+'%</span><span class="'+(Number(x.avg_gross_pct||0)>=0?'ok':'bad')+'">'+bxPct(x.avg_gross_pct)+'</span></div>';
+  return row('AGREE',a,true)+row('CONFLICT',c,false)+row('NEUTRAL',n,false);
+}
+function loadBinanceCrosscheckReport(r){
+  if(!r||r.status!=='ok')return;
+  $('bxState').textContent='Binance X-Check: '+String(r.mode||'SHADOW_ONLY')+' · '+String(r.period||'5m');
+  $('bxClosed').textContent=Number(r.closed||0);
+  $('bxOpen').textContent=Number(r.open||0);
+  $('bxSkipped').textContent=Number(r.skipped||0);
+  $('bxCache').textContent=Number(r.cache_symbols||0);
+  const h=r.by_horizon||{};
+  $('bxH300').innerHTML=bxHorizonHtml(h['300']);
+  $('bxH600').innerHTML=bxHorizonHtml(h['600']);
+  $('bxH900').innerHTML=bxHorizonHtml(h['900']);
+}
+async function refreshBinanceCrosscheck(){
+  if(!APP.backendReady)return;
+  try{
+    const r=await bridgeFetch('/binance-crosscheck/report');
+    loadBinanceCrosscheckReport(r);
+  }catch(e){
+    if($('bxState'))$('bxState').textContent='Binance X-Check: backend patch required / warming';
+  }
+}
+
 function loadAnalyticsReport(r){
   if(!r||r.status!=='ok')return;
   APP.analyticsReport=r;
@@ -1451,7 +1521,7 @@ async function setServerControl(name,value){
 async function phoneScanNow(){
   if(!APP.backendReady)return scanAll();
   $('phoneScan').textContent='… Scan';
-  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshPostCalibration();await refreshAnalytics();await refreshCounterfactual();await refreshRiskIntelligence();await refreshRiskQuality();await refreshHardening(false)}
+  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshPostCalibration();await refreshBinanceCrosscheck();await refreshAnalytics();await refreshCounterfactual();await refreshRiskIntelligence();await refreshRiskQuality();await refreshHardening(false)}
   finally{$('phoneScan').textContent='🔎 Scan зараз'}
 }
 async function connectBridge(){
@@ -1572,8 +1642,9 @@ function adaptServerResult(r){
     reason=strictMsg;
   }
   const context=r.context||null;
+  const binanceCrosscheck=r.binance_crosscheck||null;
   const market={pair:r.pair,symbol:m.symbol||pairSymbol(r.pair),candles,bid:+m.bid,ask:+m.ask,lastPrice:+m.last_price,spreadPct:+m.spread_pct,atrPct:+m.atr_pct,atrMedian:+m.atr_pct_median,updatedAt:Date.now()};
-  return{market,decision:{sig,edge,jev,size,guard,context,action,reason,server:true}}
+  return{market,decision:{sig,edge,jev,size,guard,context,binanceCrosscheck,action,reason,server:true}}
 }
 async function scanBackend(){
   const j=await bridgeFetch('/control/scan-now',{method:'POST'});
@@ -1671,6 +1742,19 @@ function renderSelected(){
   }else{
     status('contextStatus',d.server?'WARMING':'LOCAL','mid');
     $('contextText').textContent=d.server?'Collector ще не віддав snapshot.':'Context 24/7 доступний через ASTRA Bridge.';
+  }
+  if(d.binanceCrosscheck){
+    const bx=d.binanceCrosscheck,state=String(bx.state||'NO_DATA').toUpperCase();
+    status('binanceXStatus',state,state==='AGREE'?'pass':state==='CONFLICT'?'drop':'mid');
+    const pct=v=>v==null?'—':(Number(v)*100).toFixed(1)+'%';
+    $('binanceXText').textContent='MYSHKA '+String(bx.myshka_direction||d.sig.direction)+' ↔ Binance '+String(bx.binance_direction||'—')+
+      ' · global L/S '+pct(bx.global_long)+'/'+pct(bx.global_short)+
+      ' · top accounts '+pct(bx.top_long)+'/'+pct(bx.top_short)+
+      ' · top positions '+pct(bx.top_position_long)+'/'+pct(bx.top_position_short)+
+      ' · age '+(bx.snapshot_age_sec==null?'—':Math.round(Number(bx.snapshot_age_sec))+'s');
+  }else{
+    status('binanceXStatus',d.server?'WARMING':'NO DATA','mid');
+    $('binanceXText').textContent=d.server?'Очікуємо Binance futures snapshot.':'Доступно через ASTRA Bridge.';
   }
   status('jevStatus',d.jev.verdict,d.jev.verdict==='APPROVE'?'pass':d.jev.verdict==='REJECT'?'drop':'mid');$('jevText').textContent=d.jev.reason+' • confidence '+Math.round(d.jev.confidence*100)+'%';
   if(d.size){
@@ -1853,8 +1937,8 @@ function renderLog(){
 async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switch: '+(on?'ON':'OFF');$('killBtn').className='btn '+(on?'red':'');saveState();if(APP.backendReady){await setServerControl('kill_switch',on);await refreshPhoneControl()}else{for(const p of (APP.universePairs||CFG.pairs)){if(APP.markets[p])APP.decisions[p]=evaluateMarket(APP.markets[p])}renderSelected();renderPairButtons()}renderReadiness()}
 $('pairFilter').onchange=renderPairButtons;
 $('statsMode').onchange=drawStatsChart;
-$('postV2Refresh').onclick=refreshPostCalibration;
-$('analyticsRefresh').onclick=()=>{refreshPostCalibration();refreshAnalytics();refreshCounterfactual();refreshRiskIntelligence();refreshRiskQuality()};
+$('postV2Refresh').onclick=refreshPostCalibration;$('bxRefresh').onclick=refreshBinanceCrosscheck;
+$('analyticsRefresh').onclick=()=>{refreshPostCalibration();refreshBinanceCrosscheck();refreshAnalytics();refreshCounterfactual();refreshRiskIntelligence();refreshRiskQuality()};
 $('qualityRefresh').onclick=()=>{refreshRiskQuality();refreshDecisionReplay()};
 $('hardRefresh').onclick=()=>refreshHardening(false);
 $('hardReconcile').onclick=()=>refreshHardening(true);
@@ -1871,7 +1955,7 @@ $('phoneEngineReset').onclick=async()=>{if(!APP.backendReady||!confirm('Скин
 $('autoMode').onchange=()=>{if(APP.backendReady)setServerControl('auto_scan',$('autoMode').value==='on').then(refreshPhoneControl)};
 $('resetBtn').onclick=async()=>{if(APP.backendReady){if(!confirm('Скинути paper engine? Learner історія залишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl();return}if(!confirm('Скинути локальні paper-угоди?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.entryTags={};APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
 window.addEventListener('resize',()=>{renderSelected();renderStats()});
-loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(APP.backendReady){refreshPhoneControl();refreshRiskQuality();refreshDecisionReplay();refreshHardening(false)}});
+loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(APP.backendReady){refreshPhoneControl();refreshBinanceCrosscheck();refreshRiskQuality();refreshDecisionReplay();refreshHardening(false)}});
 setInterval(()=>{if(APP.backendReady)refreshPhoneControl();else connectBridge()},CFG.scanMs);
 // Final Hardening cadence: internal state is local/read-only and cheap.
 setInterval(()=>{if(APP.backendReady)refreshHardening(false)},5000);
