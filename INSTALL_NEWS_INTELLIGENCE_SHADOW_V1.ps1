@@ -5,7 +5,7 @@ Write-Host '======================================================' -ForegroundC
 Write-Host ' MYSHKA / ASTRA - FORWARD LAB + NEWS INTELLIGENCE V3 ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$commit='4ff074c67317138fa3d83c89aadd97119de5c821'
+$commit='2bb635b42ffd547d3fcb0c0e4c3b8a113aff47bf'
 $root='https://raw.githubusercontent.com/omeljanpadovcky-create/T/'+$commit
 
 $app=$null
