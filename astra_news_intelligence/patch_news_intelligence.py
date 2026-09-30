@@ -54,9 +54,9 @@ def patch_api(path: Path):
         '    return {"status":"ok","mode":"NEWS_INTELLIGENCE_SHADOW","analyzer":news_intelligence_report(),"outcomes":news_outcomes_report(),'
         '"changes_trading_decisions":False,"changes_paper_execution":False,"live_execution":False}\n\n\n'
         '@app.post("/news-intelligence/refresh-now")\n'
-        'def news_intelligence_refresh_api(x_myshka_token: Optional[str] = Header(default=None)):\n'
+        'def news_intelligence_refresh_api(limit: int = 2, x_myshka_token: Optional[str] = Header(default=None)):\n'
         '    _require_token(x_myshka_token)\n'
-        '    return news_intelligence_refresh()\n\n\n'
+        '    return news_intelligence_refresh(limit=limit)\n\n\n'
     )
     anchor='@app.get("/forward-experiments/status")\n'
     if anchor not in s: raise RuntimeError("Forward Experiment endpoint anchor not found")
