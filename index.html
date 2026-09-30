@@ -474,7 +474,7 @@ button{cursor:pointer}
     <div class="stats-title">
       <div>
         <h2>📰 NEWS INTELLIGENCE · SHADOW</h2>
-        <div class="sub">RSS title + summary → Ollama/Qwen → BTC / ETH / SOL / MARKET → forward 5m / 10m / 15m · PAPER не змінює</div>
+        <div class="sub">RSS title + summary → Ollama/Qwen → dynamic TOP‑15 + MARKET → dedup + time decay → forward 5m / 10m / 15m · PAPER не змінює</div>
       </div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
         <div class="sub" id="newsIntelState">News Intelligence: warming</div>
@@ -486,7 +486,7 @@ button{cursor:pointer}
       <div class="stat"><small>Analyzed</small><b id="newsIntelAnalyzed">0</b></div>
       <div class="stat"><small>Errors</small><b id="newsIntelErrors">0</b></div>
       <div class="stat"><small>Closed outcomes</small><b id="newsIntelClosed">0</b></div>
-      <div class="stat"><small>Lookback</small><b id="newsIntelLookback">—</b></div>
+      <div class="stat"><small>Lookback / decay</small><b id="newsIntelLookback">—</b></div>
     </div>
 
     <div class="mode-stats">
@@ -1320,9 +1320,12 @@ function loadNewsIntelligenceReport(r){
   $('newsIntelAnalyzed').textContent=Number(a.analysis_ok||0);
   $('newsIntelErrors').textContent=Number(a.analysis_error||0);
   $('newsIntelClosed').textContent=Number(o.closed||0);
-  $('newsIntelLookback').textContent=Number(a.lookback_minutes||0)+'m';
-  const cur=a.current||{};
-  $('newsIntelCurrent').innerHTML=newsToneRow('MARKET',cur.MARKET)+newsToneRow('BTC',cur.BTC)+newsToneRow('ETH',cur.ETH)+newsToneRow('SOL',cur.SOL);
+  $('newsIntelLookback').textContent=Number(a.lookback_minutes||0)+'m / half '+Number(a.decay_half_life_minutes||0)+'m';
+  const cur=a.current||{},universe=Array.isArray(a.universe_assets)?a.universe_assets:[];
+  const labels=['MARKET',...universe.filter(x=>x!=='MARKET')];
+  $('newsIntelCurrent').innerHTML=labels.map(k=>newsToneRow(k,cur[k])).join('')||'<div class="muted">Ще немає current tone.</div>';
+  const dedup=Number((a.last_deduped??(a.status&&a.status.last_deduped))||0);
+  $('newsIntelState').textContent+=' · TOP-'+universe.length+' · dedup '+dedup;
   const heads=Array.isArray(a.recent_headlines)?a.recent_headlines:[];
   $('newsIntelHeadlines').innerHTML=heads.length?heads.slice(0,8).map(x=>{
     const sent=String(x.sentiment||'NEUTRAL'),cls=sent==='BULLISH'?'ok':sent==='BEARISH'?'bad':'warn';
