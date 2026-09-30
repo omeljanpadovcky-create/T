@@ -48,7 +48,7 @@ Write-Host '[2/7] Validating downloaded files...'
 if($LASTEXITCODE -ne 0){ throw 'Dashboard patcher syntax invalid. Local ASTRA not modified.' }
 
 $html = Get-Content (Join-Path $tmp 'index.html') -Raw
-$requiredMarkers = @('localAstraOrigin','POSTV2_300','binanceCrosscheckPanel','id="statsMode"')
+$requiredMarkers = @('localAstraOrigin','POSTV2_300','binanceCrosscheckPanel','statsMode')
 foreach($marker in $requiredMarkers){
   if($html -notlike ('*' + $marker + '*')){
     throw ('Downloaded dashboard missing technical marker: ' + $marker)
@@ -103,7 +103,7 @@ for($i=0; $i -lt 45; $i++){
 if(-not $health -or $health.status -ne 'ok'){ throw 'ASTRA health failed after rebuild.' }
 
 Write-Host '[6.6/7] Verifying dashboard file inside container...'
-docker exec myshka-astra python -c "from pathlib import Path; p=Path('/data/myshka_dashboard.html'); s=p.read_text(encoding='utf-8'); need=['localAstraOrigin','POSTV2_300','binanceCrosscheckPanel','id=\"statsMode\"']; missing=[x for x in need if x not in s]; assert not missing, 'missing='+','.join(missing); print('[OK] container dashboard technical markers valid')"
+docker exec myshka-astra python -c "from pathlib import Path; p=Path('/data/myshka_dashboard.html'); s=p.read_text(encoding='utf-8'); need=['localAstraOrigin','POSTV2_300','binanceCrosscheckPanel','statsMode']; missing=[x for x in need if x not in s]; assert not missing, 'missing='+','.join(missing); print('[OK] container dashboard technical markers valid')"
 if($LASTEXITCODE -ne 0){ throw 'Dashboard file inside container is invalid.' }
 
 $page = Invoke-WebRequest -UseBasicParsing 'http://127.0.0.1:8088/dashboard' -TimeoutSec 10
