@@ -9,38 +9,31 @@ def patch_api(api_path: Path) -> None:
     s = api_path.read_text(encoding="utf-8-sig")
     compile(s, str(api_path), "exec")
     if MARKER in s:
-        old = (
-            "def myshka_local_dashboard():\n"
-            "    p = _MyshkaDashboardPath(__file__).resolve().parent / 'index.html'\n"
-            "    return _MyshkaDashboardFileResponse(str(p), media_type='text/html', headers={'X-MYSHKA-Dashboard':'1','Cache-Control':'no-store'})\n"
-        )
-        new = (
+        target = (
             "def myshka_local_dashboard():\n"
             "    data_p = _MyshkaDashboardPath('/data/myshka_dashboard.html')\n"
             "    app_p = _MyshkaDashboardPath(__file__).resolve().parent / 'index.html'\n"
             "    p = data_p if data_p.exists() else app_p\n"
-            "    return _MyshkaDashboardFileResponse(str(p), media_type='text/html')\n"
+            "    return _MyshkaDashboardFileResponse(str(p), media_type='text/html', headers={'X-MYSHKA-Dashboard':'1','Cache-Control':'no-store'})\n"
         )
-        if old in s:
-            s = s.replace(old, new, 1)
+
+        # Replace whichever previous dashboard function is present, while
+        # keeping the /ui alias and the rest of api.py untouched.
+        m_dash = re.search(
+            r"def myshka_local_dashboard\(\):\n(?:    .*\n)+?(?=@app\.get\('/ui'|def myshka_local_ui_alias)",
+            s,
+        )
+        if not m_dash:
+            raise RuntimeError("Local dashboard marker exists but dashboard function was not found")
+        current = m_dash.group(0)
+        if current != target:
+            s = s[:m_dash.start()] + target + s[m_dash.end():]
             compile(s, str(api_path), "exec")
             api_path.write_text(s, encoding="utf-8")
-            print("[OK] Existing local dashboard route upgraded to /data fallback")
-            return
-        if "/data/myshka_dashboard.html" in s and "X-MYSHKA-Dashboard" in s:
-            print("[OK] Local dashboard route already upgraded")
-            return
-        if "/data/myshka_dashboard.html" in s and "X-MYSHKA-Dashboard" not in s:
-            old_return = "    return _MyshkaDashboardFileResponse(str(p), media_type='text/html')\n"
-            new_return = "    return _MyshkaDashboardFileResponse(str(p), media_type='text/html', headers={'X-MYSHKA-Dashboard':'1','Cache-Control':'no-store'})\n"
-            if old_return not in s:
-                raise RuntimeError("Upgraded dashboard route found but FileResponse shape is unknown")
-            s = s.replace(old_return, new_return, 1)
-            compile(s, str(api_path), "exec")
-            api_path.write_text(s, encoding="utf-8")
-            print("[OK] Existing local dashboard route upgraded with verification header")
-            return
-        raise RuntimeError("Local dashboard marker exists but route shape is unknown")
+            print("[OK] Existing local dashboard route normalized to /data + verification header")
+        else:
+            print("[OK] Local dashboard route already canonical")
+        return
 
     # Add isolated imports after the module docstring AND any __future__
     # imports (Python requires future imports to remain first).
