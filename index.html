@@ -957,25 +957,39 @@ async function bridgeFetch(path,opts={}){
 async function probeBridge(base){
   const url=String(base||'').replace(/\/$/,'');
   if(!url)return {ok:false,error:'empty bridge URL'};
-  const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),4500);
+  const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),10000);
   try{
-    // Health probe intentionally sends NO custom token header.
-    // This avoids an unnecessary x-myshka-token preflight before we know the bridge is reachable.
-    const r=await fetch(url+'/health',{cache:'no-store',signal:ctl.signal});
+    // Probe through the SAME browser path the real dashboard uses:
+    // CORS/PNA + X-MYSHKA-TOKEN. This avoids false negatives where an
+    // unauthenticated simple /health request times out while authenticated
+    // bridge requests are actually reachable.
+    const headers={};
+    if(APP.bridgeToken)headers['X-MYSHKA-TOKEN']=APP.bridgeToken;
+    const r=await fetch(url+'/health',{
+      method:'GET',
+      mode:'cors',
+      credentials:'omit',
+      cache:'no-store',
+      signal:ctl.signal,
+      headers
+    });
     if(!r.ok)return {ok:false,error:'HTTP '+r.status,status:r.status};
     const j=await r.json();
     return j&&j.status==='ok'?{ok:true,data:j}:{ok:false,error:'invalid /health payload'};
   }catch(e){
-    if(e&&e.name==='AbortError')return {ok:false,error:'timeout /health'};
+    if(e&&e.name==='AbortError')return {ok:false,error:'timeout /health auth-probe'};
     return {ok:false,error:(e&&e.message)||String(e)};
   }finally{clearTimeout(timer)}
 }
 function bridgeCandidates(preferred){
   const p=(preferred||'').trim().replace(/\/$/,'');
-  const local=['http://127.0.0.1:8088','http://localhost:8088'];
   const isMobile=(navigator.userAgentData&&navigator.userAgentData.mobile)||/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent||'');
-  const list=isMobile?[p,...local]:[...local,p];
-  return [...new Set(list.filter(Boolean))];
+  if(isMobile){
+    return [...new Set([p,'http://127.0.0.1:8088','http://localhost:8088'].filter(Boolean))];
+  }
+  const primary=p||'http://127.0.0.1:8088';
+  const alternate=/127\.0\.0\.1/.test(primary)?'http://localhost:8088':'http://127.0.0.1:8088';
+  return [...new Set([primary,alternate].filter(Boolean))];
 }
 function integrationNode(id,status,detail=''){
   const e=$(id);
