@@ -1492,24 +1492,38 @@ async function connectBridge(){
       renderPairButtons();
     }
 
-    integrationNode('iAstra',h.status,h.service||'');
-    const ints=await bridgeFetch('/integrations');
-    const ol=ints.ollama||{},ba=ints.bybit_account||{},ft=ints.freqtrade||{},nn=ints.n8n||{},tg=ints.telegram||{};
-    integrationNode('iOllama',ol.status,ol.model_present===false?'model missing':'');
-    integrationNode('iBybit',ba.status,ba.readOnly===1||ba.read_only===1?'READ ONLY':'');
-    integrationNode('iFreqtrade',ft.status);
-    integrationNode('iN8n',nn.status);
-    integrationNode('iTelegram',tg.status);
-
+    // Health success means the ASTRA bridge itself is ONLINE.
+    // Integration checks are optional diagnostics and must never flip a healthy
+    // bridge back to OFFLINE just because one downstream service is slow/down.
     const localMode=chosen.includes('127.0.0.1')||chosen.includes('localhost');
     const uni=(h.universe&&h.universe.dynamic)?(' • TOP-'+(h.universe.top_n||APP.universePairs.length)+' markets'):'';
+
+    integrationNode('iAstra','ok',h.service||'');
+    $('marketBadge').textContent='● '+(localMode?'ASTRA LOCAL':'ASTRA BRIDGE');
+    $('marketBadge').className='badge live';
+
     $('bridgeMsg').textContent=(APP.training&&APP.training.active)
       ?'🧪 ASTRA '+(localMode?'LOCAL':'BRIDGE')+' · TRAINING '+APP.training.learner_n+'/'+APP.training.until_trades+' · TECH '+APP.training.tech_rule+uni+' · EDGE/JEV/Guard · PAPER only'
       :'✅ ASTRA '+(localMode?'LOCAL':'BRIDGE')+' активна'+uni+'.';
 
-    $('marketBadge').textContent='● '+(localMode?'ASTRA LOCAL':'ASTRA BRIDGE');
-    $('marketBadge').className='badge live';
-    await refreshPhoneControl();
+    try{
+      const ints=await bridgeFetch('/integrations');
+      const ol=ints.ollama||{},ba=ints.bybit_account||{},ft=ints.freqtrade||{},nn=ints.n8n||{},tg=ints.telegram||{};
+      integrationNode('iOllama',ol.status,ol.model_present===false?'model missing':'');
+      integrationNode('iBybit',ba.status,ba.readOnly===1||ba.read_only===1?'READ ONLY':'');
+      integrationNode('iFreqtrade',ft.status);
+      integrationNode('iN8n',nn.status);
+      integrationNode('iTelegram',tg.status);
+    }catch(integrationError){
+      ['iOllama','iBybit','iFreqtrade','iN8n','iTelegram'].forEach(id=>integrationNode(id,'unknown'));
+      $('bridgeMsg').textContent+=' · ⚠ integrations: '+String((integrationError&&integrationError.message)||integrationError);
+    }
+
+    try{
+      await refreshPhoneControl();
+    }catch(controlError){
+      $('bridgeMsg').textContent+=' · ⚠ control status: '+String((controlError&&controlError.message)||controlError);
+    }
   }catch(e){
     APP.backendReady=false;
     integrationNode('iAstra','bridge_offline');
