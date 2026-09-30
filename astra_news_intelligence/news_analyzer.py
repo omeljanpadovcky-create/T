@@ -22,6 +22,8 @@ DEDUP_JACCARD=max(.40,min(.95,float(os.getenv("NEWS_INTELLIGENCE_DEDUP_JACCARD",
 DEDUP_WINDOW_MIN=max(30,min(720,int(os.getenv("NEWS_INTELLIGENCE_DEDUP_WINDOW_MIN","360"))))
 PRICED_PRE5_PCT=max(.10,float(os.getenv("NEWS_INTELLIGENCE_PRICED_PRE5_PCT",".75")))
 PRICED_PRE15_PCT=max(.20,float(os.getenv("NEWS_INTELLIGENCE_PRICED_PRE15_PCT","1.50")))
+STORY_JACCARD=max(.30,min(.90,float(os.getenv("NEWS_INTELLIGENCE_STORY_JACCARD",".45"))))
+STORY_WINDOW_HOURS=max(6,min(168,int(os.getenv("NEWS_INTELLIGENCE_STORY_WINDOW_HOURS","48"))))
 _LOCK=threading.RLock(); _THREAD=None; _STOP=threading.Event()
 _STATUS={"running":False,"last_cycle_at":None,"last_success_at":None,"last_error":None,"last_model":None,"ollama_status":"unknown","ollama_error":None,"cycles":0,"last_deduped":0,"last_universe":[]}
 
@@ -63,9 +65,14 @@ def init():
         _ensure_column(c,"news_analysis","pre_moves_json","TEXT")
         _ensure_column(c,"news_analysis","surprise_json","TEXT")
         _ensure_column(c,"news_analysis","post_moves_json","TEXT")
+        _ensure_column(c,"news_analysis","story_id","TEXT")
+        _ensure_column(c,"news_analysis","lifecycle_stage","TEXT")
+        _ensure_column(c,"news_analysis","feeds_json","TEXT")
+        _ensure_column(c,"news_analysis","source_count","INTEGER")
         c.execute("CREATE INDEX IF NOT EXISTS idx_news_time ON news_analysis(source_ts DESC)")
         c.execute("CREATE INDEX IF NOT EXISTS idx_news_status ON news_analysis(status,analyzed_at)")
         c.execute("CREATE INDEX IF NOT EXISTS idx_news_event_type ON news_analysis(event_type,source_ts DESC)")
+        c.execute("CREATE INDEX IF NOT EXISTS idx_news_story ON news_analysis(story_id,source_ts DESC)")
     return {"enabled":ENABLED,"mode":"NEWS_INTELLIGENCE_SHADOW","db_path":DB_PATH}
 
 def _key(p,ts):
@@ -286,7 +293,9 @@ def normalize(obj,text="",allowed_assets=None):
     event_type=str(obj.get("event_type") or "OTHER").upper()
     allowed_events={"ETF","REGULATION","HACK","LISTING","DELISTING","MACRO","WHALE","LIQUIDATION","PROTOCOL","EXCHANGE","LEGAL","OTHER"}
     if event_type not in allowed_events:event_type="OTHER"
-    return {"sentiment":sent,"score":score,"confidence":_clamp(obj.get("confidence")),"importance":_clamp(obj.get("importance")),"scope":scope,"event_type":event_type,"assets":assets[:8],"reason":str(obj.get("reason") or "")[:240]}
+    lifecycle_stage=str(obj.get("lifecycle_stage") or "UNKNOWN").upper()
+    if lifecycle_stage not in {"RUMOR","CONFIRMED","FOLLOWUP","OLD","UNKNOWN"}:lifecycle_stage="UNKNOWN"
+    return {"sentiment":sent,"score":score,"confidence":_clamp(obj.get("confidence")),"importance":_clamp(obj.get("importance")),"scope":scope,"event_type":event_type,"lifecycle_stage":lifecycle_stage,"assets":assets[:8],"reason":str(obj.get("reason") or "")[:240]}
 
 def _analyze(item,model):
     universe=_universe_assets()
@@ -295,6 +304,7 @@ def _analyze(item,model):
 Return JSON only with: sentiment (BULLISH|BEARISH|NEUTRAL), assets (array using ONLY: """+allowed+"""),
 confidence (0..1), importance (0..1), scope (ASSET|MARKET|MACRO|REGULATION|SECURITY|OTHER),
 event_type (ETF|REGULATION|HACK|LISTING|DELISTING|MACRO|WHALE|LIQUIDATION|PROTOCOL|EXCHANGE|LEGAL|OTHER),
+lifecycle_stage (RUMOR|CONFIRMED|FOLLOWUP|OLD|UNKNOWN),
 reason (factual, max 160 chars). Do not give trading advice.
 If the story affects crypto broadly rather than one current asset, use MARKET.
 
@@ -309,15 +319,48 @@ def _pending(item,now):
     with _LOCK,_db() as c:r=c.execute("SELECT status,analyzed_at FROM news_analysis WHERE source_key=?",(item["key"],)).fetchone()
     return (not r) or (str(r["status"])!="OK" and now-float(r["analyzed_at"] or 0)>=RETRY_SEC)
 
+def _resolve_story_id(item,analysis):
+    """Reuse a recent story id when title/event/assets strongly overlap."""
+    title=str(item.get("title") or "")
+    assets=set(str(x).upper() for x in (analysis.get("assets") or []))
+    event=str(analysis.get("event_type") or "OTHER")
+    cutoff=float(item.get("ts") or time.time())-STORY_WINDOW_HOURS*3600
+    try:
+        with _LOCK,_db() as c:
+            rows=[dict(r) for r in c.execute(
+                "SELECT story_id,title,event_type,assets_json FROM news_analysis WHERE status='OK' AND source_ts>=? AND story_id IS NOT NULL ORDER BY source_ts DESC LIMIT 250",
+                (cutoff,)
+            ).fetchall()]
+        for r in rows:
+            if str(r.get("event_type") or "OTHER")!=event:continue
+            try:old_assets=set(str(x).upper() for x in json.loads(r.get("assets_json") or "[]"))
+            except Exception:old_assets=set()
+            if assets and old_assets and not (assets & old_assets):continue
+            if _title_similarity(title,r.get("title") or "")>=STORY_JACCARD:
+                return str(r.get("story_id"))
+    except Exception:
+        pass
+    base="|".join(sorted(assets) or ["MARKET"])+"|"+event+"|"+str(int(float(item.get("ts") or time.time())//86400))+"|"+title.lower()
+    return hashlib.sha256(base.encode("utf-8",errors="ignore")).hexdigest()[:16]
+
+def _impact_band(score):
+    x=float(score or 0)
+    if x<30:return "LOW"
+    if x<60:return "MEDIUM"
+    if x<80:return "HIGH"
+    return "EXTREME"
+
 def _save(item,status,model="",a=None,error=""):
     a=a or {}; now=time.time()
     pre_moves,surprise=_pre_context(a,float(item["ts"])) if status=="OK" else ({},{})
+    feeds=[str(x) for x in (item.get("feeds") or [item.get("feed")]) if x]
+    story_id=_resolve_story_id(item,a) if status=="OK" else None
     with _LOCK,_db() as c:
         c.execute("""INSERT INTO news_analysis(
           source_key,source_ts,title,summary,url,feed,analyzed_at,status,
           sentiment,sentiment_score,confidence,importance,scope,event_type,assets_json,
-          pre_moves_json,surprise_json,post_moves_json,reason,model,error)
-        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+          pre_moves_json,surprise_json,post_moves_json,story_id,lifecycle_stage,feeds_json,source_count,reason,model,error)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         ON CONFLICT(source_key) DO UPDATE SET
           source_ts=excluded.source_ts,title=excluded.title,summary=excluded.summary,url=excluded.url,feed=excluded.feed,
           analyzed_at=excluded.analyzed_at,status=excluded.status,sentiment=excluded.sentiment,
@@ -325,11 +368,13 @@ def _save(item,status,model="",a=None,error=""):
           scope=excluded.scope,event_type=excluded.event_type,assets_json=excluded.assets_json,
           pre_moves_json=excluded.pre_moves_json,surprise_json=excluded.surprise_json,
           post_moves_json=COALESCE(news_analysis.post_moves_json,excluded.post_moves_json),
+          story_id=excluded.story_id,lifecycle_stage=excluded.lifecycle_stage,feeds_json=excluded.feeds_json,source_count=excluded.source_count,
           reason=excluded.reason,model=excluded.model,error=excluded.error""",
         (item["key"],item["ts"],item["title"],item["summary"],item["url"],item["feed"],now,status,
          a.get("sentiment"),_num(a.get("score")),_num(a.get("confidence")),_num(a.get("importance")),
          a.get("scope"),a.get("event_type"),json.dumps(a.get("assets") or []),
          json.dumps(pre_moves,separators=(",",":")),json.dumps(surprise,separators=(",",":")),"{}",
+         story_id,a.get("lifecycle_stage"),json.dumps(feeds,separators=(",",":")),len(set(feeds)),
          a.get("reason"),model,str(error)[:500]))
 
 def refresh_now(limit=None):
@@ -389,7 +434,7 @@ def aggregate(pair,now=None):
     if not rows:return {"tone":"NO_NEWS","score":0.0,"confidence":0.0,"count":0,"effective_weight":0.0,"event_type":"NONE","surprise_state":"NO_NEWS","pre_5m_pct":None,"pre_15m_pct":None,"ids":[]}
     asset=_asset(pair)
     num=den=conf=0.0
-    event_weights={}; surprise_weights={}; p5n=p5d=p15n=p15d=0.0
+    event_weights={}; surprise_weights={}; lifecycle_weights={}; source_weights={}; story_weights={}; impact_num=impact_den=0.0; p5n=p5d=p15n=p15d=0.0
     for r in rows:
         confidence=_clamp(r.get("confidence"))
         importance=_clamp(r.get("importance"))
@@ -401,6 +446,19 @@ def aggregate(pair,now=None):
         conf+=confidence*w
         ev=str(r.get("event_type") or "OTHER")
         event_weights[ev]=event_weights.get(ev,0.0)+w
+        stage=str(r.get("lifecycle_stage") or "UNKNOWN")
+        lifecycle_weights[stage]=lifecycle_weights.get(stage,0.0)+w
+        try:feeds=json.loads(r.get("feeds_json") or "[]")
+        except Exception:feeds=[]
+        source_count=max(1,int(r.get("source_count") or len(feeds) or 1))
+        src=str((feeds or [r.get("feed") or "UNKNOWN"])[0])
+        source_weights[src]=source_weights.get(src,0.0)+w
+        story=str(r.get("story_id") or "UNKNOWN")
+        story_weights[story]=story_weights.get(story,0.0)+w
+        relevance=1.0 if asset in (r.get("assets") or []) else .70
+        evidence=min(1.0,.50+.25*max(0,source_count-1))
+        impact=100.0*confidence*importance*decay*relevance*evidence
+        impact_num+=impact*w; impact_den+=w
         key=asset if asset in (r.get("pre_moves") or {}) else "MARKET"
         sp=str((r.get("surprise") or {}).get(key) or "UNKNOWN")
         surprise_weights[sp]=surprise_weights.get(sp,0.0)+w
@@ -412,15 +470,23 @@ def aggregate(pair,now=None):
     tone="BULLISH" if score>THRESHOLD else "BEARISH" if score<-THRESHOLD else "NEUTRAL"
     event_type=max(event_weights,key=event_weights.get) if event_weights else "OTHER"
     surprise_state=max(surprise_weights,key=surprise_weights.get) if surprise_weights else "UNKNOWN"
+    lifecycle_stage=max(lifecycle_weights,key=lifecycle_weights.get) if lifecycle_weights else "UNKNOWN"
+    dominant_source=max(source_weights,key=source_weights.get) if source_weights else "UNKNOWN"
+    story_id=max(story_weights,key=story_weights.get) if story_weights else "UNKNOWN"
+    impact_score=impact_num/impact_den if impact_den else 0.0
     return {"tone":tone,"score":score,"confidence":conf/den if den else 0.0,"count":len(rows),
             "effective_weight":den,"event_type":event_type,"surprise_state":surprise_state,
+            "lifecycle_stage":lifecycle_stage,"dominant_source":dominant_source,"story_id":story_id,
+            "impact_score":impact_score,"impact_band":_impact_band(impact_score),
             "pre_5m_pct":p5n/p5d if p5d else None,"pre_15m_pct":p15n/p15d if p15d else None,
             "ids":[int(r["id"]) for r in rows[:20]]}
 
 def recent(limit=8):
     init()
-    with _LOCK,_db() as c:rows=[dict(x) for x in c.execute("SELECT id,source_ts,title,url,sentiment,confidence,importance,scope,event_type,assets_json,pre_moves_json,surprise_json,post_moves_json,reason,model FROM news_analysis WHERE status='OK' ORDER BY source_ts DESC LIMIT ?",(max(1,min(30,int(limit))),)).fetchall()]
+    with _LOCK,_db() as c:rows=[dict(x) for x in c.execute("SELECT id,source_ts,title,url,sentiment,confidence,importance,scope,event_type,story_id,lifecycle_stage,feeds_json,source_count,assets_json,pre_moves_json,surprise_json,post_moves_json,reason,model FROM news_analysis WHERE status='OK' ORDER BY source_ts DESC LIMIT ?",(max(1,min(30,int(limit))),)).fetchall()]
     for r in rows:
+        try:r["feeds"]=json.loads(r.pop("feeds_json") or "[]")
+        except Exception:r["feeds"]=[]
         try:r["assets"]=json.loads(r.pop("assets_json") or "[]")
         except Exception:r["assets"]=[]
         try:r["pre_moves"]=json.loads(r.pop("pre_moves_json") or "{}")
@@ -442,10 +508,10 @@ def report():
     st=status()
     latest=recent(12)
     reaction_closed=sum(1 for x in latest if any((x.get("post_moves") or {}).get(a,{}).get("post_15m_pct") is not None for a in (x.get("assets") or ["MARKET"])))
-    return {"status":"ok","mode":"NEWS_INTELLIGENCE_SHADOW","analysis_ok":counts.get("OK",0),"analysis_error":counts.get("ERROR",0),"event_reactions_15m_ready":reaction_closed,"lookback_minutes":LOOKBACK_MIN,"decay_half_life_minutes":DECAY_HALF_LIFE_MIN,"dedup_jaccard":DEDUP_JACCARD,"dedup_window_minutes":DEDUP_WINDOW_MIN,"priced_pre5_pct":PRICED_PRE5_PCT,"priced_pre15_pct":PRICED_PRE15_PCT,"universe_assets":universe,"last_deduped":int(st.get("last_deduped") or 0),"last_universe":st.get("last_universe") or universe,"current":current,"recent_headlines":latest,"ollama":st["ollama"],"changes_trading_decisions":False,"live_execution":False}
+    return {"status":"ok","mode":"NEWS_INTELLIGENCE_SHADOW","analysis_ok":counts.get("OK",0),"analysis_error":counts.get("ERROR",0),"event_reactions_15m_ready":reaction_closed,"lookback_minutes":LOOKBACK_MIN,"decay_half_life_minutes":DECAY_HALF_LIFE_MIN,"dedup_jaccard":DEDUP_JACCARD,"dedup_window_minutes":DEDUP_WINDOW_MIN,"priced_pre5_pct":PRICED_PRE5_PCT,"priced_pre15_pct":PRICED_PRE15_PCT,"story_jaccard":STORY_JACCARD,"story_window_hours":STORY_WINDOW_HOURS,"universe_assets":universe,"last_deduped":int(st.get("last_deduped") or 0),"last_universe":st.get("last_universe") or universe,"current":current,"recent_headlines":latest,"ollama":st["ollama"],"changes_trading_decisions":False,"live_execution":False}
 
 def status():
     init()
     with _LOCK:out=dict(_STATUS)
-    out.update({"enabled":ENABLED,"mode":"NEWS_INTELLIGENCE_SHADOW","db_path":DB_PATH,"context_db_path":CONTEXT_DB_PATH,"ollama":{"base_url":OLLAMA_BASE,"model":out.get("last_model"),"status":out.get("ollama_status") or "unknown","error":out.get("ollama_error")},"lookback_minutes":LOOKBACK_MIN,"decay_half_life_minutes":DECAY_HALF_LIFE_MIN,"dedup_jaccard":DEDUP_JACCARD,"dedup_window_minutes":DEDUP_WINDOW_MIN,"priced_pre5_pct":PRICED_PRE5_PCT,"priced_pre15_pct":PRICED_PRE15_PCT,"universe_assets":_universe_assets(),"changes_trading_decisions":False,"live_execution":False})
+    out.update({"enabled":ENABLED,"mode":"NEWS_INTELLIGENCE_SHADOW","db_path":DB_PATH,"context_db_path":CONTEXT_DB_PATH,"ollama":{"base_url":OLLAMA_BASE,"model":out.get("last_model"),"status":out.get("ollama_status") or "unknown","error":out.get("ollama_error")},"lookback_minutes":LOOKBACK_MIN,"decay_half_life_minutes":DECAY_HALF_LIFE_MIN,"dedup_jaccard":DEDUP_JACCARD,"dedup_window_minutes":DEDUP_WINDOW_MIN,"priced_pre5_pct":PRICED_PRE5_PCT,"priced_pre15_pct":PRICED_PRE15_PCT,"story_jaccard":STORY_JACCARD,"story_window_hours":STORY_WINDOW_HOURS,"universe_assets":_universe_assets(),"changes_trading_decisions":False,"live_execution":False})
     return out
