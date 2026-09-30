@@ -300,7 +300,8 @@ def report():
     current={"MARKET":aggregate("MARKET/USDT:USDT")}
     for asset in universe:
         current[asset]=aggregate(asset+"/USDT:USDT")
-    return {"status":"ok","mode":"NEWS_INTELLIGENCE_SHADOW","analysis_ok":counts.get("OK",0),"analysis_error":counts.get("ERROR",0),"lookback_minutes":LOOKBACK_MIN,"decay_half_life_minutes":DECAY_HALF_LIFE_MIN,"dedup_jaccard":DEDUP_JACCARD,"dedup_window_minutes":DEDUP_WINDOW_MIN,"universe_assets":universe,"current":current,"recent_headlines":recent(12),"ollama":status()["ollama"],"changes_trading_decisions":False,"live_execution":False}
+    st=status()
+    return {"status":"ok","mode":"NEWS_INTELLIGENCE_SHADOW","analysis_ok":counts.get("OK",0),"analysis_error":counts.get("ERROR",0),"lookback_minutes":LOOKBACK_MIN,"decay_half_life_minutes":DECAY_HALF_LIFE_MIN,"dedup_jaccard":DEDUP_JACCARD,"dedup_window_minutes":DEDUP_WINDOW_MIN,"universe_assets":universe,"last_deduped":int(st.get("last_deduped") or 0),"last_universe":st.get("last_universe") or universe,"current":current,"recent_headlines":recent(12),"ollama":st["ollama"],"changes_trading_decisions":False,"live_execution":False}
 
 def status():
     init()
