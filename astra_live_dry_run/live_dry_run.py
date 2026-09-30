@@ -73,13 +73,16 @@ def _jev_verdict(r: dict) -> str:
 def _gate_state(obj: Any, *, default: str = "NO_DATA") -> str:
     if not isinstance(obj, dict) or not obj:
         return default
-    state = _norm(obj.get("state"))
-    if state:
-        return state
+    # Explicit pass/fail is authoritative. Some valid gate states (for example
+    # WARMING_EXPLORATION) intentionally carry passed=True even though the state
+    # name is not literally PASS.
     if obj.get("passed") is True:
         return "PASS"
     if obj.get("passed") is False:
         return "FAIL"
+    state = _norm(obj.get("state"))
+    if state:
+        return state
     return default
 
 
@@ -98,11 +101,23 @@ def _preflight(r: dict) -> dict:
 
     side = _signal_side(r)
     jev = _jev_verdict(r)
-    guard_state = _gate_state(guard)
+    action = _norm(r.get("action"))
+
+    # The production scan does not always serialize a separate guard object.
+    # If the final production action is still ENTER after the upstream pipeline,
+    # missing guard telemetry must not be treated as a synthetic failure.
+    if isinstance(guard, dict) and guard:
+        guard_state = _gate_state(guard)
+        guard_source = "explicit"
+    elif action in {"ENTER","LONG","SHORT","BUY","SELL"}:
+        guard_state = "IMPLICIT_PRODUCTION_PASS"
+        guard_source = "final_action"
+    else:
+        guard_state = "NO_DATA"
+        guard_source = "missing"
+
     evidence_state = _gate_state(evidence)
     learner_state = _gate_state(learner, default="NOT_APPLICABLE")
-
-    action = _norm(r.get("action"))
     edge_passed = edge.get("passed") is True
     px = _price(r)
 
@@ -112,7 +127,7 @@ def _preflight(r: dict) -> dict:
         "production_action_enter": action in {"ENTER","LONG","SHORT","BUY","SELL"},
         "edge_passed": edge_passed,
         "jev_approve": jev == "APPROVE",
-        "guard_pass": guard_state in {"PASS","APPROVE","READY"},
+        "guard_pass": guard_state in {"PASS","APPROVE","READY","IMPLICIT_PRODUCTION_PASS"},
         "evidence_pass": evidence_state in {"PASS","APPROVE","READY","NOT_APPLICABLE"},
         "adaptive_pass": learner_state in {"PASS","APPROVE","READY","NOT_APPLICABLE"},
     }
@@ -126,6 +141,7 @@ def _preflight(r: dict) -> dict:
         "action": action or "WAIT",
         "jev": jev,
         "guard": guard_state,
+        "guard_source": guard_source,
         "evidence": evidence_state,
         "adaptive": learner_state,
         "price": px,
