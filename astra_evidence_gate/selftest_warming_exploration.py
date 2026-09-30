@@ -29,7 +29,7 @@ def make_analytics(path):
         """
         CREATE TABLE analytics_trades(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            status TEXT, mode TEXT
+            status TEXT, mode TEXT, opened_at REAL
         )
         """
     )
@@ -122,7 +122,8 @@ def run():
     assert high["action"] == "DROP", high
     assert high["reason"] == "evidence_gate_warming_edge_too_high", high
 
-    # Persist a recent exploration as Risk Intelligence would after the scan.
+    # Persist a recent SHADOW exploration as Risk Intelligence would after the scan.
+    # It must NOT create a cooldown anymore because no PAPER trade was confirmed.
     rc = sqlite3.connect(risk)
     rc.execute(
         """
@@ -142,15 +143,33 @@ def run():
     importlib.reload(eg)
     cool = candidate(0.12)
     eg.apply_results([cool])
-    assert cool["action"] == "DROP", cool
-    assert cool["reason"] == "evidence_gate_warming_exploration_unavailable", cool
+    assert cool["action"] == "ENTER", cool
+    assert cool["reason"] == "evidence_gate_warming_exploration", cool
+
+    # A recent ACTUAL STRICT PAPER trade starts the cooldown.
+    ac = sqlite3.connect(analytics)
+    ac.execute(
+        "INSERT INTO analytics_trades(status,mode,opened_at) VALUES('CLOSED','STRICT',?)",
+        (time.time(),),
+    )
+    ac.commit(); ac.close()
+
+    importlib.reload(eg)
+    actual_cool = candidate(0.12)
+    eg.apply_results([actual_cool])
+    assert actual_cool["action"] == "DROP", actual_cool
+    assert actual_cool["reason"] == "evidence_gate_warming_exploration_unavailable", actual_cool
 
     # An already-open STRICT Analytics position also blocks exploration.
     rc = sqlite3.connect(risk)
     rc.execute("DELETE FROM risk_candidates WHERE status='OPEN'")
     rc.commit(); rc.close()
     ac = sqlite3.connect(analytics)
-    ac.execute("INSERT INTO analytics_trades(status,mode) VALUES('OPEN','STRICT')")
+    ac.execute("DELETE FROM analytics_trades")
+    ac.execute(
+        "INSERT INTO analytics_trades(status,mode,opened_at) VALUES('OPEN','STRICT',?)",
+        (time.time()-700,),
+    )
     ac.commit(); ac.close()
 
     importlib.reload(eg)
@@ -181,7 +200,8 @@ def run():
     print("warming_second_action=", b["action"])
     print("low_edge_action=", low["action"])
     print("high_edge_action=", high["action"])
-    print("cooldown_action=", cool["action"])
+    print("shadow_row_action=", cool["action"])
+    print("actual_trade_cooldown_action=", actual_cool["action"])
     print("hold_action=", hold["action"])
 
 
