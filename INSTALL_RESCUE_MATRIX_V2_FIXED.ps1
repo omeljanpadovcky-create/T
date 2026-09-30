@@ -5,26 +5,24 @@ Write-Host '==========================================================' -Foregro
 Write-Host ' MYSHKA / ASTRA - RESCUE MATRIX V2 FIXED ' -ForegroundColor Yellow
 Write-Host '==========================================================' -ForegroundColor Cyan
 
-$repo='omeljanpadovcky-create/T'
 $bundleCommit='51e968b3f09c924bbbc995f4909aa98ceaaa6d39'
-$apiRoot='https://api.github.com/repos/'+$repo+'/contents'
-$ghHeaders=@{
-  'User-Agent'='MYSHKA-ASTRA-Installer'
-  'Accept'='application/vnd.github+json'
-  'Cache-Control'='no-cache'
-}
+$rawRoot='https://raw.githubusercontent.com/omeljanpadovcky-create/T/'+$bundleCommit
 
-function Get-GitHubFile {
+function Get-PinnedRawFile {
   param(
     [Parameter(Mandatory=$true)][string]$RepoPath,
     [Parameter(Mandatory=$true)][string]$OutFile
   )
-  $encodedPath=($RepoPath -split '/' | ForEach-Object {[uri]::EscapeDataString($_)}) -join '/'
-  $uri=$apiRoot+'/'+$encodedPath+'?ref='+$bundleCommit
-  $resp=Invoke-RestMethod -UseBasicParsing -Uri $uri -Headers $ghHeaders -TimeoutSec 30
-  if(-not $resp.content){throw ('GitHub API returned no content for '+$RepoPath)}
-  $b64=([string]$resp.content) -replace '\s',''
-  [IO.File]::WriteAllBytes($OutFile,[Convert]::FromBase64String($b64))
+  $nonce=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+  $uri=$rawRoot+'/'+$RepoPath+'?x='+$nonce
+  $headers=@{
+    'User-Agent'='MYSHKA-ASTRA-Installer'
+    'Cache-Control'='no-cache, no-store, max-age=0'
+    'Pragma'='no-cache'
+  }
+  Invoke-WebRequest -UseBasicParsing -Uri $uri -Headers $headers -OutFile $OutFile -TimeoutSec 60
+  if(-not (Test-Path $OutFile)){throw ('Download failed: '+$RepoPath)}
+  if((Get-Item $OutFile).Length -lt 32){throw ('Downloaded file too small: '+$RepoPath)}
 }
 
 $app=$null
@@ -60,11 +58,11 @@ $tmp=Join-Path $env:TEMP 'myshka_rescue_v2_fixed'
 if(Test-Path $tmp){Remove-Item $tmp -Recurse -Force}
 New-Item -ItemType Directory -Path $tmp -Force | Out-Null
 
-Write-Host '[1/11] Downloading immutable bundle through GitHub API...'
-Get-GitHubFile 'astra_rescue_matrix/rescue_matrix.py' (Join-Path $tmp 'rescue_matrix.py')
-Get-GitHubFile 'astra_rescue_matrix/patch_rescue_matrix.py' (Join-Path $tmp 'patch_rescue_matrix.py')
-Get-GitHubFile 'astra_rescue_matrix/selftest_rescue_matrix.py' (Join-Path $tmp 'selftest_rescue_matrix.py')
-Get-GitHubFile 'index.html' (Join-Path $tmp 'index.html')
+Write-Host '[1/11] Downloading immutable bundle from pinned raw commit...'
+Get-PinnedRawFile 'astra_rescue_matrix/rescue_matrix.py' (Join-Path $tmp 'rescue_matrix.py')
+Get-PinnedRawFile 'astra_rescue_matrix/patch_rescue_matrix.py' (Join-Path $tmp 'patch_rescue_matrix.py')
+Get-PinnedRawFile 'astra_rescue_matrix/selftest_rescue_matrix.py' (Join-Path $tmp 'selftest_rescue_matrix.py')
+Get-PinnedRawFile 'index.html' (Join-Path $tmp 'index.html')
 
 Write-Host '[2/11] Verifying exact downloaded Rescue source...'
 $rescuePath=Join-Path $tmp 'rescue_matrix.py'
