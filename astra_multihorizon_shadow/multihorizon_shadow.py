@@ -359,6 +359,31 @@ def post_calibration_report() -> dict:
             "calibration_band_0.08_0.15": _metrics(band),
         }
 
+    # Ordered point series for the dashboard chart. Keep the payload bounded but
+    # preserve one point per CLOSED calibration-band outcome.
+    chart_series: dict[str, list[dict]] = {}
+    for h in HORIZONS:
+        band_rows = [
+            r for r in rows
+            if int(r.get("horizon_sec") or 0) == int(h)
+            and _num(r.get("edge_pct")) is not None
+            and 0.08 <= float(r.get("edge_pct") or 0.0) <= 0.15
+            and _num(r.get("net_pct")) is not None
+        ]
+        chart_series[str(h)] = [
+            {
+                "id": int(r.get("id") or 0),
+                "opened_at": float(r.get("opened_at") or 0.0),
+                "pair": str(r.get("pair") or ""),
+                "side": str(r.get("side") or ""),
+                "edge_pct": float(r.get("edge_pct") or 0.0),
+                "net_pct": float(r.get("net_pct") or 0.0),
+                "gross_pct": float(r.get("gross_pct") or 0.0),
+                "direction_hit": bool(r.get("direction_hit")),
+            }
+            for r in band_rows[-120:]
+        ]
+
     n = int(paper.get("n") or 0)
     return {
         "status": "ok",
@@ -369,6 +394,7 @@ def post_calibration_report() -> dict:
         "edge_band_pct": {"min": 0.08, "max": 0.15},
         "horizons_sec": list(HORIZONS),
         "by_horizon": by_horizon,
+        "chart_series": chart_series,
         "multihorizon_open": open_n,
         "multihorizon_skipped": skipped_n,
         "analytics_db_path": ANALYTICS_DB_PATH,
