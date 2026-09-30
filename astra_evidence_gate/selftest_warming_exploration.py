@@ -88,7 +88,7 @@ def run():
     os.environ["ANALYTICS_DB_PATH"] = str(analytics)
     os.environ["EVIDENCE_GATE_MIN_N"] = "20"
     os.environ["EVIDENCE_GATE_EXPLORATION_ENABLED"] = "true"
-    os.environ["EVIDENCE_GATE_EXPLORATION_MIN_EDGE_PCT"] = "0.10"
+    os.environ["EVIDENCE_GATE_EXPLORATION_MIN_EDGE_PCT"] = "0.08"\nos.environ["EVIDENCE_GATE_CALIBRATION_MAX_EDGE_PCT"] = "0.15"
     os.environ["EVIDENCE_GATE_EXPLORATION_COOLDOWN_SEC"] = "600"
     os.environ["EVIDENCE_GATE_EXPLORATION_MAX_OPEN"] = "1"
 
@@ -100,7 +100,7 @@ def run():
     assert rep["exploration"]["available"] is True, rep
 
     # One high-edge exploration is allowed per batch.
-    a = candidate(0.108, "QNT/USDT:USDT")
+    a = candidate(0.098, "QNT/USDT:USDT")
     b = candidate(0.14, "XRP/USDT:USDT")
     out = eg.apply_results([a, b])
     assert a["action"] == "ENTER", (a, out)
@@ -113,7 +113,7 @@ def run():
     low = candidate(0.09)
     eg.apply_results([low])
     assert low["action"] == "DROP", low
-    assert low["reason"] == "evidence_gate_warming_edge_too_low", low
+    assert low["reason"] == "evidence_gate_warming_edge_too_low", low\n\n    # Above-band edge also stays blocked while warming.\n    high = candidate(0.151)\n    eg.apply_results([high])\n    assert high["action"] == "DROP", high\n    assert high["reason"] == "evidence_gate_warming_edge_too_high", high
 
     # Persist a recent exploration as Risk Intelligence would after the scan.
     rc = sqlite3.connect(risk)
@@ -133,7 +133,7 @@ def run():
     rc.commit(); rc.close()
 
     importlib.reload(eg)
-    cool = candidate(0.20)
+    cool = candidate(0.12)
     eg.apply_results([cool])
     assert cool["action"] == "DROP", cool
     assert cool["reason"] == "evidence_gate_warming_exploration_unavailable", cool
@@ -147,7 +147,7 @@ def run():
     ac.commit(); ac.close()
 
     importlib.reload(eg)
-    open_block = candidate(0.20)
+    open_block = candidate(0.12)
     eg.apply_results([open_block])
     assert open_block["action"] == "DROP", open_block
 
@@ -164,7 +164,7 @@ def run():
     importlib.reload(eg)
     hold_rep = eg.report()
     assert hold_rep["state"] == "HOLD", hold_rep
-    hold = candidate(0.30)
+    hold = candidate(0.12)
     eg.apply_results([hold])
     assert hold["action"] == "DROP", hold
     assert hold["reason"] == "evidence_gate_no_validated_edge", hold
@@ -172,7 +172,7 @@ def run():
     print("WARMING_EXPLORATION_V1_SELFTEST_OK")
     print("warming_first_action=", a["action"])
     print("warming_second_action=", b["action"])
-    print("low_edge_action=", low["action"])
+    print("low_edge_action=", low["action"])\n    print("high_edge_action=", high["action"])
     print("cooldown_action=", cool["action"])
     print("hold_action=", hold["action"])
 
