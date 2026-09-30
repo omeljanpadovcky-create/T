@@ -12,7 +12,7 @@ def patch_api(api_path: Path) -> None:
         old = (
             "def myshka_local_dashboard():\n"
             "    p = _MyshkaDashboardPath(__file__).resolve().parent / 'index.html'\n"
-            "    return _MyshkaDashboardFileResponse(str(p), media_type='text/html')\n"
+            "    return _MyshkaDashboardFileResponse(str(p), media_type='text/html', headers={'X-MYSHKA-Dashboard':'1','Cache-Control':'no-store'})\n"
         )
         new = (
             "def myshka_local_dashboard():\n"
@@ -27,8 +27,18 @@ def patch_api(api_path: Path) -> None:
             api_path.write_text(s, encoding="utf-8")
             print("[OK] Existing local dashboard route upgraded to /data fallback")
             return
-        if "/data/myshka_dashboard.html" in s:
+        if "/data/myshka_dashboard.html" in s and "X-MYSHKA-Dashboard" in s:
             print("[OK] Local dashboard route already upgraded")
+            return
+        if "/data/myshka_dashboard.html" in s and "X-MYSHKA-Dashboard" not in s:
+            old_return = "    return _MyshkaDashboardFileResponse(str(p), media_type='text/html')\n"
+            new_return = "    return _MyshkaDashboardFileResponse(str(p), media_type='text/html', headers={'X-MYSHKA-Dashboard':'1','Cache-Control':'no-store'})\n"
+            if old_return not in s:
+                raise RuntimeError("Upgraded dashboard route found but FileResponse shape is unknown")
+            s = s.replace(old_return, new_return, 1)
+            compile(s, str(api_path), "exec")
+            api_path.write_text(s, encoding="utf-8")
+            print("[OK] Existing local dashboard route upgraded with verification header")
             return
         raise RuntimeError("Local dashboard marker exists but route shape is unknown")
 
@@ -78,7 +88,7 @@ def patch_api(api_path: Path) -> None:
         "    data_p = _MyshkaDashboardPath('/data/myshka_dashboard.html')\n"
         "    app_p = _MyshkaDashboardPath(__file__).resolve().parent / 'index.html'\n"
         "    p = data_p if data_p.exists() else app_p\n"
-        "    return _MyshkaDashboardFileResponse(str(p), media_type='text/html')\n\n"
+        "    return _MyshkaDashboardFileResponse(str(p), media_type='text/html', headers={'X-MYSHKA-Dashboard':'1','Cache-Control':'no-store'})\n\n"
         "@app.get('/ui', include_in_schema=False)\n"
         "def myshka_local_ui_alias():\n"
         "    return myshka_local_dashboard()\n"
