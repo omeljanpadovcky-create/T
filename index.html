@@ -474,7 +474,7 @@ button{cursor:pointer}
     <div class="stats-title">
       <div>
         <h2>📰 NEWS INTELLIGENCE · SHADOW</h2>
-        <div class="sub">RSS title + summary → Ollama/Qwen → dynamic TOP‑15 + MARKET → dedup + time decay → forward 5m / 10m / 15m · PAPER не змінює</div>
+        <div class="sub">RSS title + summary → Ollama/Qwen → dynamic TOP‑15 + MARKET → taxonomy + priced-in + Binance matrix → forward 5m / 10m / 15m · PAPER не змінює</div>
       </div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
         <div class="sub" id="newsIntelState">News Intelligence: warming</div>
@@ -1304,7 +1304,20 @@ function newsMetric(label,m){
 }
 function newsHorizonHtml(h){
   h=h||{};
-  return newsMetric('ALL',h.all)+newsMetric('ALIGNED',h.ALIGNED)+newsMetric('CONFLICT',h.CONFLICT)+newsMetric('NEUTRAL',h.NEUTRAL)+newsMetric('NO NEWS',h.NO_NEWS);
+  const ev=h.by_event_type||{},sp=h.by_surprise||{},mx=h.news_x_binance||{};
+  let out=newsMetric('ALL',h.all)+newsMetric('ALIGNED',h.ALIGNED)+newsMetric('CONFLICT',h.CONFLICT)+newsMetric('NEUTRAL',h.NEUTRAL)+newsMetric('NO NEWS',h.NO_NEWS);
+  out+='<div class="sub" style="margin:8px 0 4px">EVENT TAXONOMY</div>';
+  const events=['ETF','REGULATION','HACK','LISTING','DELISTING','MACRO','WHALE','LIQUIDATION','PROTOCOL','EXCHANGE','LEGAL','OTHER'];
+  const ranked=events.filter(k=>Number((ev[k]||{}).n||0)>0).sort((a,b)=>Number((ev[b]||{}).n||0)-Number((ev[a]||{}).n||0)).slice(0,5);
+  out+=ranked.length?ranked.map(k=>newsMetric(k,ev[k])).join(''):'<div class="muted">Ще немає taxonomy outcomes.</div>';
+  out+='<div class="sub" style="margin:8px 0 4px">SURPRISE / PRICED-IN</div>'+
+    newsMetric('FRESH',sp.FRESH)+newsMetric('ALREADY PRICED',sp.ALREADY_PRICED)+newsMetric('COUNTER MOVE',sp.COUNTER_MOVE);
+  out+='<div class="sub" style="margin:8px 0 4px">NEWS × BINANCE</div>'+
+    newsMetric('News ALIGNED × BX AGREE',((mx.ALIGNED||{}).AGREE))+
+    newsMetric('News ALIGNED × BX CONFLICT',((mx.ALIGNED||{}).CONFLICT))+
+    newsMetric('News CONFLICT × BX AGREE',((mx.CONFLICT||{}).AGREE))+
+    newsMetric('News CONFLICT × BX CONFLICT',((mx.CONFLICT||{}).CONFLICT));
+  return out;
 }
 function newsToneRow(name,x){
   x=x||{};const tone=String(x.tone||'NO_NEWS'),score=Number(x.score||0),conf=Number(x.confidence||0),n=Number(x.count||0);
@@ -1315,7 +1328,7 @@ function loadNewsIntelligenceReport(r){
   if(!r||r.status!=='ok')return;
   APP.newsIntelligenceReport=r;
   const a=r.analyzer||{},o=r.outcomes||{},ol=a.ollama||{};
-  $('newsIntelState').textContent='News Intelligence: '+String(a.mode||r.mode||'SHADOW')+' · '+String(ol.status||'unknown').toUpperCase();
+  $('newsIntelState').textContent='News Intelligence: '+String(a.mode||r.mode||'SHADOW')+' · '+String(ol.status||'unknown').toUpperCase()+' · post15 ready '+Number(a.event_reactions_15m_ready||0);
   $('newsIntelModel').textContent=String(ol.model||'—');
   $('newsIntelAnalyzed').textContent=Number(a.analysis_ok||0);
   $('newsIntelErrors').textContent=Number(a.analysis_error||0);
@@ -1329,8 +1342,12 @@ function loadNewsIntelligenceReport(r){
   const heads=Array.isArray(a.recent_headlines)?a.recent_headlines:[];
   $('newsIntelHeadlines').innerHTML=heads.length?heads.slice(0,8).map(x=>{
     const sent=String(x.sentiment||'NEUTRAL'),cls=sent==='BULLISH'?'ok':sent==='BEARISH'?'bad':'warn';
-    const assets=(Array.isArray(x.assets)?x.assets:[]).join('/');
-    return '<div class="check"><span title="'+String(x.reason||'').replace(/"/g,'&quot;')+'">'+String(x.title||'').slice(0,90)+'</span><span class="'+cls+'">'+sent+(assets?' · '+assets:'')+'</span></div>';
+    const arr=Array.isArray(x.assets)?x.assets:[],asset=arr[0]||'MARKET',assets=arr.join('/');
+    const surprise=String(((x.surprise||{})[asset])||'UNKNOWN');
+    const pre=((x.pre_moves||{})[asset])||{},post=((x.post_moves||{})[asset])||{};
+    const fmt=v=>(v==null?'—':(Number(v)>=0?'+':'')+Number(v).toFixed(2)+'%');
+    const tip=(''+String(x.reason||'')+' | pre5 '+fmt(pre.pre_5m_pct)+' | pre15 '+fmt(pre.pre_15m_pct)+' | post5 '+fmt(post.post_5m_pct)+' | post10 '+fmt(post.post_10m_pct)+' | post15 '+fmt(post.post_15m_pct)).replace(/"/g,'&quot;');
+    return '<div class="check"><span title="'+tip+'">'+String(x.title||'').slice(0,82)+'</span><span class="'+cls+'">'+sent+' · '+String(x.event_type||'OTHER')+' · '+surprise+(assets?' · '+assets:'')+'</span></div>';
   }).join(''):'<div class="muted">Ще немає проаналізованих новин.</div>';
   const h=o.by_horizon||{};
   $('newsIntelH300').innerHTML=newsHorizonHtml(h['300']);
