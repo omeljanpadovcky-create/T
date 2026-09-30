@@ -514,8 +514,66 @@ button{cursor:pointer}
         <div id="newsIntelH900"><div class="muted">Чекаємо forward outcomes.</div></div>
       </div>
     </div>
+    <div class="mode-stats" style="margin-top:10px">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>🛰 Source Reliability</h3><span>SHADOW · by source</span></div>
+        <div id="newsIntelSources"><div class="muted">Чекаємо source outcomes.</div></div>
+      </div>
+      <div class="mode-card train">
+        <div class="mode-head"><h3>⏳ Per-asset News Lag</h3><span>5m / 10m / 15m</span></div>
+        <div id="newsIntelAssetLag"><div class="muted">Чекаємо asset outcomes.</div></div>
+      </div>
+    </div>
+
     <div class="sub" style="margin-top:8px">
       ALIGNED = news tone у напрямку MYSHKA; CONFLICT = проти; NEUTRAL = без вираженого tone; NO_NEWS = релевантних новин немає. n / cn = raw / 5m clustered sample.
+    </div>
+  </section>
+
+  <section class="card glass stats-wrap" id="newsResearchPanel">
+    <div class="stats-title">
+      <div>
+        <h2>🧪 NEWS RESEARCH CONTROL · LIVE READINESS</h2>
+        <div class="sub">Story Lifecycle · News Quality · Promotion Gate · evidence-only readiness · LIVE не вмикає</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div class="sub" id="liveReadinessState">Live Readiness: checking</div>
+        <button class="btn" id="liveReadinessRefresh">↻ Перевірити readiness</button>
+      </div>
+    </div>
+
+    <div class="stats" style="grid-template-columns:repeat(5,1fr)">
+      <div class="stat"><small>Readiness</small><b id="lrState">—</b></div>
+      <div class="stat"><small>Clean STRICT</small><b id="lrStrict">0</b></div>
+      <div class="stat"><small>STRICT Avg NET</small><b id="lrAvg">0.000%</b></div>
+      <div class="stat"><small>STRICT PF</small><b id="lrPF">0.00</b></div>
+      <div class="stat"><small>News Quality</small><b id="lrNewsQuality">—</b></div>
+    </div>
+
+    <div class="mode-stats">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>🚦 Readiness blockers</h3><span>нічого не активує автоматично</span></div>
+        <div id="lrChecks"><div class="muted">Перевірка ще не завантажена.</div></div>
+      </div>
+      <div class="mode-card train">
+        <div class="mode-head"><h3>🧬 Story Lifecycle</h3><span>RUMOR → CONFIRMED → FOLLOWUP → OLD</span></div>
+        <div id="lrStories"><div class="muted">Ще немає story groups.</div></div>
+      </div>
+    </div>
+
+    <div class="mode-stats" style="margin-top:10px">
+      <div class="mode-card strict">
+        <div class="mode-head"><h3>🧹 News Data Quality Guard</h3><span>RSS / Ollama / timestamps / duplicates</span></div>
+        <div id="lrQualityChecks"><div class="muted">Чекаємо quality report.</div></div>
+      </div>
+      <div class="mode-card train">
+        <div class="mode-head"><h3>🚦 News Promotion Gate</h3><span>COLD → WARMING → MONITOR → CANDIDATE → MATURE</span></div>
+        <div id="lrPromotion"><div class="muted">Чекаємо forward samples.</div></div>
+      </div>
+    </div>
+
+    <div class="sub" style="margin-top:8px">
+      ELIGIBLE_FOR_MANUAL_REVIEW не означає “прибутково” і не вмикає LIVE. Це лише перевірка мінімальної доказової бази та якості даних.
     </div>
   </section>
 
@@ -1353,6 +1411,26 @@ function loadNewsIntelligenceReport(r){
   $('newsIntelH300').innerHTML=newsHorizonHtml(h['300']);
   $('newsIntelH600').innerHTML=newsHorizonHtml(h['600']);
   $('newsIntelH900').innerHTML=newsHorizonHtml(h['900']);
+
+  const srcRows=[];
+  for(const sec of ['300','600','900']){
+    const by=((h[sec]||{}).by_source)||{};
+    for(const [name,m] of Object.entries(by)){
+      if(Number((m||{}).n||0)>0)srcRows.push({sec,name,m});
+    }
+  }
+  srcRows.sort((a,b)=>Number((b.m||{}).n||0)-Number((a.m||{}).n||0));
+  $('newsIntelSources').innerHTML=srcRows.length?srcRows.slice(0,8).map(x=>newsMetric(String(x.name).replace(/^https?:\/\//,'').slice(0,28)+' · '+(Number(x.sec)/60)+'m',x.m)).join(''):'<div class="muted">Ще немає source outcomes.</div>';
+
+  const lag=o.asset_lag||{},lagRows=[];
+  for(const [pair,hm] of Object.entries(lag)){
+    for(const sec of ['300','600','900']){
+      const m=(hm||{})[sec]||{};
+      if(Number(m.n||0)>0)lagRows.push({pair,sec,m});
+    }
+  }
+  lagRows.sort((a,b)=>Number((b.m||{}).n||0)-Number((a.m||{}).n||0));
+  $('newsIntelAssetLag').innerHTML=lagRows.length?lagRows.slice(0,10).map(x=>newsMetric(String(x.pair).replace('/USDT:USDT','')+' · '+(Number(x.sec)/60)+'m',x.m)).join(''):'<div class="muted">Ще немає asset lag outcomes.</div>';
 }
 async function refreshNewsIntelligence(force=false){
   if(!APP.backendReady)return;
@@ -1362,6 +1440,72 @@ async function refreshNewsIntelligence(force=false){
     loadNewsIntelligenceReport(r);
   }catch(e){
     if($('newsIntelState')&&!APP.newsIntelligenceReport)$('newsIntelState').textContent='News Intelligence: endpoint unavailable · '+String(e.message||e);
+  }
+}
+
+function readinessCheckRow(x){
+  const ok=!!(x&&x.ok),cls=ok?'ok':'bad';
+  return '<div class="check"><span>'+String((x&&x.name)||'')+'</span><span class="'+cls+'">'+(ok?'PASS':'BLOCK')+' · '+String((x&&x.detail)||'')+'</span></div>';
+}
+function qualityCheckRow(x){
+  const state=String((x&&x.state)||'UNKNOWN').toUpperCase();
+  const cls=state==='OK'?'ok':state==='WARN'?'warn':'bad';
+  return '<div class="check"><span>'+String((x&&x.name)||'')+'</span><span class="'+cls+'">'+state+' · '+String((x&&x.detail)||'')+'</span></div>';
+}
+function loadLiveReadiness(r,q,stories){
+  if(!r||r.status!=='ok')return;
+  APP.liveReadinessReport=r;
+  const core=r.core_strict||{},state=String(r.state||'BLOCKED');
+  $('lrState').textContent=state;
+  $('lrState').className=state==='ELIGIBLE_FOR_MANUAL_REVIEW'?'long':'short';
+  $('lrStrict').textContent=Number(core.n||0);
+  $('lrAvg').textContent=analyticsPct(core.avg_net_pct);
+  $('lrAvg').className=Number(core.avg_net_pct||0)>0?'long':'short';
+  const pf=Number(core.profit_factor||0);
+  $('lrPF').textContent=pf>=999?'∞':pf.toFixed(2);
+  $('lrPF').className=pf>=1.2?'long':'short';
+  $('lrNewsQuality').textContent=String((q&&q.state)||((r.news_quality||{}).state)||'—');
+  $('lrNewsQuality').className=String((q&&q.state)||'')==='OK'?'long':String((q&&q.state)||'')==='WARN'?'wait':'short';
+  $('liveReadinessState').textContent='Live Readiness: '+state+' · diagnostic only';
+
+  const checks=Array.isArray(r.checks)?r.checks:[];
+  $('lrChecks').innerHTML=checks.length?checks.map(readinessCheckRow).join(''):'<div class="muted">No checks.</div>';
+
+  const qs=Array.isArray((q||{}).checks)?q.checks:[];
+  $('lrQualityChecks').innerHTML=qs.length?qs.map(qualityCheckRow).join(''):'<div class="muted">No quality checks.</div>';
+
+  const ss=Array.isArray((stories||{}).stories)?stories.stories:[];
+  $('lrStories').innerHTML=ss.length?ss.slice(0,8).map(x=>{
+    const stages=(x.stages||[]).join('→'),assets=(x.assets||[]).join('/'),sources=(x.sources||[]).length;
+    return '<div class="check"><span>'+String(x.latest_title||'').slice(0,72)+'</span><span>'+stages+' · '+assets+' · src '+sources+'</span></div>';
+  }).join(''):'<div class="muted">Ще немає story groups.</div>';
+
+  const news=APP.newsIntelligenceReport||{},out=(news.outcomes||{}),pg=out.promotion_gate||{},rows=[];
+  for(const sec of ['300','600','900']){
+    const families=pg[sec]||{};
+    for(const [family,items] of Object.entries(families)){
+      for(const [label,x] of Object.entries(items||{})){
+        if(Number((x||{}).cluster_n||0)>0)rows.push({sec,family,label,x});
+      }
+    }
+  }
+  rows.sort((a,b)=>Number((b.x||{}).cluster_n||0)-Number((a.x||{}).cluster_n||0));
+  $('lrPromotion').innerHTML=rows.length?rows.slice(0,10).map(v=>{
+    const ready=!!v.x.eligible_for_manual_review,cls=ready?'ok':'warn';
+    return '<div class="check"><span>'+v.family+' · '+v.label+' · '+(Number(v.sec)/60)+'m · cn='+Number(v.x.cluster_n||0)+'</span><span class="'+cls+'">'+String(v.x.state||'COLD')+(ready?' · REVIEW':'')+'</span></div>';
+  }).join(''):'<div class="muted">Ще немає promotion samples.</div>';
+}
+async function refreshLiveReadiness(){
+  if(!APP.backendReady)return;
+  try{
+    const [r,q,stories]=await Promise.all([
+      bridgeFetch('/live-readiness/report',{timeoutMs:18000}),
+      bridgeFetch('/news-research/quality',{timeoutMs:12000}),
+      bridgeFetch('/news-research/stories?limit=20',{timeoutMs:12000})
+    ]);
+    loadLiveReadiness(r,q,stories);
+  }catch(e){
+    if($('liveReadinessState'))$('liveReadinessState').textContent='Live Readiness: endpoint unavailable · '+String(e.message||e);
   }
 }
 
@@ -1771,7 +1915,7 @@ async function refreshSecondaryReports(force=false){
   APP.secondaryBusy=true;
   try{
     // Small groups avoid saturating the single local API worker.
-    await Promise.allSettled([refreshPostCalibration(),refreshBinanceCrosscheck(),refreshForwardExperimentLab(),refreshNewsIntelligence(false),refreshAnalytics()]);
+    await Promise.allSettled([refreshPostCalibration(),refreshBinanceCrosscheck(),refreshForwardExperimentLab(),refreshNewsIntelligence(false),refreshAnalytics(),refreshLiveReadiness()]);
     await Promise.allSettled([refreshCounterfactual(),refreshRiskIntelligence(),refreshHardening(false)]);
     await Promise.allSettled([refreshRiskQuality(),refreshDecisionReplay()]);
     APP.lastSecondaryRefresh=Date.now();
@@ -2279,6 +2423,7 @@ $('pairFilter').onchange=renderPairButtons;
 $('statsMode').onchange=drawStatsChart;
 $('postV2Refresh').onclick=refreshPostCalibration;$('bxRefresh').onclick=refreshBinanceCrosscheck;$('forwardLabRefresh').onclick=refreshForwardExperimentLab;
 $('newsIntelRefresh').onclick=()=>refreshNewsIntelligence(true);
+$('liveReadinessRefresh').onclick=refreshLiveReadiness;
 $('analyticsRefresh').onclick=()=>refreshSecondaryReports(true);
 $('qualityRefresh').onclick=()=>{refreshRiskQuality();refreshDecisionReplay()};
 $('hardRefresh').onclick=()=>refreshHardening(false);
