@@ -12,9 +12,13 @@ on:
       - 'astra_forward_experiment_lab/**'
       - 'astra_evidence_gate/**'
       - 'astra_adaptive_learner/**'
+      - 'astra_mt5_shadow/**'
       - 'INSTALL_FREQTRADE_LIVE_BRIDGE_V1.ps1'
       - 'ARM_FREQTRADE_LIVE_V1.ps1'
       - 'DISARM_FREQTRADE_LIVE_V1.ps1'
+      - 'INSTALL_MT5_SHADOW_V1.ps1'
+      - 'START_MT5_SHADOW_V1.ps1'
+      - 'STOP_MT5_SHADOW_V1.ps1'
       - '.github/workflows/astra-core-ci.yml'
   workflow_dispatch:
 
@@ -43,7 +47,8 @@ jobs:
             astra_binance_crosscheck/*.py \
             astra_forward_experiment_lab/*.py \
             astra_evidence_gate/*.py \
-            astra_adaptive_learner/*.py
+            astra_adaptive_learner/*.py \
+            astra_mt5_shadow/*.py
 
       - name: External Market Shadow self-test
         working-directory: astra_external_market_shadow
@@ -67,6 +72,14 @@ jobs:
           cp astra_live_dry_run/live_dry_run.py astra_freqtrade_live_bridge/live_dry_run.py
           python -m astra_freqtrade_live_bridge.selftest_freqtrade_live_bridge
           rm -f astra_freqtrade_live_bridge/live_dry_run.py
+
+      - name: MT5 Shadow Agent self-test
+        working-directory: astra_mt5_shadow
+        run: python selftest_mt5_shadow_agent.py
+
+      - name: MT5 Shadow Collector synthetic self-test
+        working-directory: astra_mt5_shadow
+        run: python selftest_mt5_shadow_collector.py
 
       - name: Binance Crosscheck self-test
         working-directory: astra_binance_crosscheck
@@ -94,7 +107,10 @@ jobs:
           $files = @(
             'INSTALL_FREQTRADE_LIVE_BRIDGE_V1.ps1',
             'ARM_FREQTRADE_LIVE_V1.ps1',
-            'DISARM_FREQTRADE_LIVE_V1.ps1'
+            'DISARM_FREQTRADE_LIVE_V1.ps1',
+            'INSTALL_MT5_SHADOW_V1.ps1',
+            'START_MT5_SHADOW_V1.ps1',
+            'STOP_MT5_SHADOW_V1.ps1'
           )
           foreach ($f in $files) {
             $tokens = $null
@@ -118,4 +134,11 @@ jobs:
           grep -q 'ASTRA_LIVE_CONFIRM' astra_freqtrade_live_bridge/freqtrade_live_bridge.py
           grep -q 'remote_dry_run_false' astra_freqtrade_live_bridge/freqtrade_live_bridge.py
           grep -q 'ASTRA_LIVE_KILL_SWITCH' astra_freqtrade_live_bridge/freqtrade_live_bridge.py
+          grep -q 'changes_trading_decisions.*False' astra_mt5_shadow/mt5_shadow_agent.py
+          grep -q 'live_execution.*False' astra_mt5_shadow/mt5_shadow_agent.py
+          grep -q 'copy_rates_from_pos' astra_mt5_shadow/mt5_shadow_collector.py
+          if grep -q 'order_send' astra_mt5_shadow/mt5_shadow_collector.py; then
+            echo 'Forbidden MT5 order_send found in read-only collector'
+            exit 1
+          fi
           echo 'Safety invariants present'
