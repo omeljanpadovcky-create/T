@@ -20,7 +20,7 @@ def patch_api(api_path: Path) -> None:
         # Replace whichever previous dashboard function is present, while
         # keeping the /ui alias and the rest of api.py untouched.
         m_dash = re.search(
-            r"def myshka_local_dashboard\(\):\n(?:    .*\n)+?(?=@app\.get\('/ui'|def myshka_local_ui_alias)",
+            r"def myshka_local_dashboard\(\):\n(?:    .*\n)+?\n*(?=@app\.get\('/ui'|def myshka_local_ui_alias)",
             s,
         )
         if not m_dash:
