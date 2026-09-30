@@ -118,7 +118,8 @@ def run():
     print("qualified_threshold_pct=", q)
     print("overall_n=", rep["overall"]["n"])
     print("low_edge_action=", low["action"])
-    print("high_edge_action=", high["action"])\n    print("above_band_action=", too_high["action"])
+    print("high_edge_action=", high["action"])
+    print("above_band_action=", too_high["action"])
 
 
 if __name__ == "__main__":
