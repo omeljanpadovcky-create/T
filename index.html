@@ -297,7 +297,7 @@ button{cursor:pointer}
 
   <section class="card glass stats-wrap">
     <div class="stats-title">
-      <div><h2>📊 Статистика Trade Мишки</h2><div class="sub">тільки закриті paper-угоди на LIVE Bybit даних</div></div>
+      <div><h2>📦 ІСТОРИЧНА СТАТИСТИКА · ДО V2</h2><div class="sub">архів старої логіки · не використовуй цей блок для оцінки нової POST-CALIBRATION V2 Мишки</div></div>
       <div class="sub" id="learnerStatus">Learner: cold start</div>
     </div>
     <div class="stats" style="grid-template-columns:repeat(7,1fr)">
@@ -312,7 +312,7 @@ button{cursor:pointer}
 
     <div class="mode-stats">
       <div class="mode-card strict">
-        <div class="mode-head"><h3>✅ STRICT 4/4</h3><span>окрема статистика</span></div>
+        <div class="mode-head"><h3>✅ STRICT 4/4 · ARCHIVE</h3><span>до V2</span></div>
         <div class="mode-metrics">
           <div class="mode-metric"><small>Trades</small><b id="strictTrades">0</b></div>
           <div class="mode-metric"><small>Win rate</small><b id="strictWinRate">0%</b></div>
@@ -322,7 +322,7 @@ button{cursor:pointer}
         </div>
       </div>
       <div class="mode-card train">
-        <div class="mode-head"><h3>🧪 TRAIN 3/4</h3><span>тільки learner training</span></div>
+        <div class="mode-head"><h3>🧪 TRAIN 3/4 · ARCHIVE</h3><span>до V2</span></div>
         <div class="mode-metrics">
           <div class="mode-metric"><small>Trades</small><b id="trainTrades">0</b></div>
           <div class="mode-metric"><small>Win rate</small><b id="trainWinRate">0%</b></div>
@@ -336,10 +336,10 @@ button{cursor:pointer}
     <div class="stats-chart-head">
       <div class="sub">Графік показує один режим за раз. POST-V2 5m/10m/15m беруть тільки нові SHADOW outcomes EDGE 0.08–0.15%.</div>
       <select class="select" id="statsMode" aria-label="Режим статистики">
-        <option value="STRICT">STRICT 4/4</option>
-        <option value="TRAIN">TRAIN 3/4</option>
-        <option value="LEGACY">LEGACY / UNKNOWN</option>
-        <option value="POSTV2_300">POST-V2 SHADOW · 5m</option>
+        <option value="STRICT">ARCHIVE · STRICT 4/4</option>
+        <option value="TRAIN">ARCHIVE · TRAIN 3/4</option>
+        <option value="LEGACY">ARCHIVE · LEGACY / UNKNOWN</option>
+        <option value="POSTV2_300" selected>POST-V2 SHADOW · 5m</option>
         <option value="POSTV2_600">POST-V2 SHADOW · 10m</option>
         <option value="POSTV2_900">POST-V2 SHADOW · 15m</option>
       </select>
@@ -351,7 +351,7 @@ button{cursor:pointer}
       <span><i class="dot" style="background:#7da0ff"></i>Cumulative NET % вибраного режиму</span>
     </div>
     <div class="sub" style="margin-top:7px">
-      Старі угоди без записаного TECH score не приписуються навмання: вони залишаються в LEGACY / UNKNOWN. Нові угоди маркуються як STRICT 4/4 або TRAIN 3/4 при вході.
+      ARCHIVE = історичні угоди старої логіки. Поточну якість системи оцінюй по POST-V2 5m / 10m / 15m і Binance X-Check; старі угоди не змішуються з новими.
     </div>
   </section>
 
@@ -2046,7 +2046,7 @@ $('phoneEngineReset').onclick=async()=>{if(!APP.backendReady||!confirm('Скин
 $('autoMode').onchange=()=>{if(APP.backendReady)setServerControl('auto_scan',$('autoMode').value==='on').then(refreshPhoneControl)};
 $('resetBtn').onclick=async()=>{if(APP.backendReady){if(!confirm('Скинути paper engine? Learner історія залишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl();return}if(!confirm('Скинути локальні paper-угоди?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.entryTags={};APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
 window.addEventListener('resize',()=>{renderSelected();renderStats()});
-loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(APP.backendReady){refreshPhoneControl();refreshBinanceCrosscheck();refreshRiskQuality();refreshDecisionReplay();refreshHardening(false)}});
+loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;if($('statsMode')&&['STRICT','TRAIN','LEGACY'].includes($('statsMode').value))$('statsMode').value='POSTV2_300';renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(APP.backendReady){refreshPhoneControl();refreshBinanceCrosscheck();refreshRiskQuality();refreshDecisionReplay();refreshHardening(false)}});
 setInterval(()=>{if(APP.backendReady)refreshPhoneControl();else if(!APP.bridgeConnecting)connectBridge()},CFG.scanMs);
 // Final Hardening cadence: internal state is local/read-only and cheap.
 setInterval(()=>{if(APP.backendReady)refreshHardening(false)},5000);
