@@ -1933,6 +1933,8 @@ function renderSelected(){
       ' · Δ15m '+(x.price_change_15m_pct==null?'—':Number(x.price_change_15m_pct).toFixed(3)+'%')+
       ' · OI15 '+(x.oi_change_15m_pct==null?'—':Number(x.oi_change_15m_pct).toFixed(3)+'%')+
       ' · L/S '+(x.long_short_ratio==null?'—':Number(x.long_short_ratio).toFixed(2))+
+      ' · NEWS '+Number(x.news_sources_ok||0)+'/'+(Number(x.news_sources_ok||0)+Number(x.news_sources_failed||0))+
+      ' · cache '+Number(x.news_headline_cache||0)+
       ' · ext '+Number(x.external_event_count||0);
   }else{
     status('contextStatus',d.server?'WARMING':'LOCAL','mid');
