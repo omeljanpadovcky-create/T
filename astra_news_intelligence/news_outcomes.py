@@ -56,12 +56,20 @@ def init():
         c.execute("""CREATE TABLE IF NOT EXISTS news_meta(key TEXT PRIMARY KEY,value TEXT NOT NULL)""")
         r=c.execute("SELECT value FROM news_meta WHERE key='forward_started_at'").fetchone()
         if not r:c.execute("INSERT INTO news_meta(key,value) VALUES('forward_started_at',?)",(str(time.time()),))
-    return {"enabled":True,"mode":"NEWS_INTELLIGENCE_SHADOW","horizons_sec":list(HORIZONS)}
+        v3=c.execute("SELECT value FROM news_meta WHERE key='taxonomy_v3_started_at'").fetchone()
+        if not v3:c.execute("INSERT INTO news_meta(key,value) VALUES('taxonomy_v3_started_at',?)",(str(time.time()),))
+    return {"enabled":True,"mode":"NEWS_INTELLIGENCE_SHADOW","experiment_version":"V3_TAXONOMY_SURPRISE_XCHECK","horizons_sec":list(HORIZONS)}
 
 def _started():
     init()
     with _LOCK,_db() as c:
         r=c.execute("SELECT value FROM news_meta WHERE key='forward_started_at'").fetchone()
+        return float(r["value"]) if r else time.time()
+
+def _v3_started():
+    init()
+    with _LOCK,_db() as c:
+        r=c.execute("SELECT value FROM news_meta WHERE key='taxonomy_v3_started_at'").fetchone()
         return float(r["value"]) if r else time.time()
 
 def _price(r):
@@ -173,7 +181,7 @@ def _sample_state(cluster_n):
     return "MATURE"
 
 def report():
-    init(); start=_started()
+    init(); start=max(_started(),_v3_started())
     with _LOCK,_db() as c:
         rows=[dict(x) for x in c.execute("SELECT * FROM news_outcomes WHERE status='CLOSED' AND opened_at>=? ORDER BY opened_at,id",(start,)).fetchall()]
         counts={str(x["status"]):int(x["n"]) for x in c.execute("SELECT status,COUNT(*) n FROM news_outcomes WHERE opened_at>=? GROUP BY status",(start,))}
@@ -189,8 +197,8 @@ def report():
         by[str(h)]["by_xcheck"]=_dim(part,"xcheck_state",["AGREE","CONFLICT","NEUTRAL","NO_DATA"])
         by[str(h)]["news_x_binance"]=_matrix(part)
         by[str(h)]["by_regime"]=_dim(part,"regime")
-    return {"status":"ok","mode":"NEWS_INTELLIGENCE_SHADOW","forward_started_at":start,"horizons_sec":list(HORIZONS),"open":counts.get("OPEN",0),"closed":counts.get("CLOSED",0),"skipped":counts.get("SKIPPED",0),"by_horizon":by,"event_taxonomy":["ETF","REGULATION","HACK","LISTING","DELISTING","MACRO","WHALE","LIQUIDATION","PROTOCOL","EXCHANGE","LEGAL","OTHER"],"surprise_states":["FRESH","ALREADY_PRICED","COUNTER_MOVE","NEUTRAL","UNKNOWN"],"xcheck_states":["AGREE","CONFLICT","NEUTRAL","NO_DATA"],"changes_paper_execution":False,"changes_trading_decisions":False,"live_execution":False}
+    return {"status":"ok","mode":"NEWS_INTELLIGENCE_SHADOW","experiment_version":"V3_TAXONOMY_SURPRISE_XCHECK","forward_started_at":start,"horizons_sec":list(HORIZONS),"open":counts.get("OPEN",0),"closed":counts.get("CLOSED",0),"skipped":counts.get("SKIPPED",0),"by_horizon":by,"event_taxonomy":["ETF","REGULATION","HACK","LISTING","DELISTING","MACRO","WHALE","LIQUIDATION","PROTOCOL","EXCHANGE","LEGAL","OTHER"],"surprise_states":["FRESH","ALREADY_PRICED","COUNTER_MOVE","NEUTRAL","UNKNOWN"],"xcheck_states":["AGREE","CONFLICT","NEUTRAL","NO_DATA"],"changes_paper_execution":False,"changes_trading_decisions":False,"live_execution":False}
 
 def status():
     init()
-    return {"enabled":True,"mode":"NEWS_INTELLIGENCE_SHADOW","db_path":DB_PATH,"horizons_sec":list(HORIZONS),"changes_paper_execution":False,"changes_trading_decisions":False,"live_execution":False}
+    return {"enabled":True,"mode":"NEWS_INTELLIGENCE_SHADOW","experiment_version":"V3_TAXONOMY_SURPRISE_XCHECK","db_path":DB_PATH,"horizons_sec":list(HORIZONS),"changes_paper_execution":False,"changes_trading_decisions":False,"live_execution":False}
