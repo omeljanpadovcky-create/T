@@ -1093,6 +1093,14 @@ function loadPostCalibration(r){
   $('postV2H900').innerHTML=postV2HorizonHtml(((h['900']||{})['calibration_band_0.08_0.15'])||{});
   if($('statsMode')&&String($('statsMode').value).startsWith('POSTV2_'))drawStatsChart();
 }
+function markBridgeAuthRequired(){
+  APP.backendReady=false;
+  if($('modeBadge')){$('modeBadge').textContent='ASTRA AUTH REQUIRED';$('modeBadge').className='badge err'}
+  integrationNode('iAstra','ok','health reachable');
+  ['iOllama','iBybit','iFreqtrade','iTelegram'].forEach(id=>integrationNode(id,'unknown'));
+  if($('bridgeMsg'))$('bridgeMsg').textContent='🔐 ASTRA доступна, але bridge token відсутній або неправильний. Перепідключення з MYSHKA_BRIDGE_TOKEN потрібне один раз для цього localhost origin.';
+}
+
 async function refreshPostCalibration(){
   if(!APP.backendReady)return;
   try{
@@ -1547,7 +1555,9 @@ async function refreshPhoneControl(){
       $('modeBadge').className='badge live';
     }
   }catch(e){
-    markBridgeOffline(e.message||String(e));
+    const msg=e&&e.message?e.message:String(e);
+    if(/401/.test(msg))markBridgeAuthRequired();
+    else markBridgeOffline(msg);
     return;
   }
 
@@ -1650,8 +1660,12 @@ async function connectBridge(){
       integrationNode('iFreqtrade',ft.status);
       integrationNode('iTelegram',tg.status);
     }catch(integrationError){
-      ['iOllama','iBybit','iFreqtrade','iTelegram'].forEach(id=>integrationNode(id,'unknown'));
-      $('bridgeMsg').textContent+=' · ⚠ integrations: '+String((integrationError&&integrationError.message)||integrationError);
+      const imsg=String((integrationError&&integrationError.message)||integrationError);
+      if(/401/.test(imsg))markBridgeAuthRequired();
+      else{
+        ['iOllama','iBybit','iFreqtrade','iTelegram'].forEach(id=>integrationNode(id,'unknown'));
+        $('bridgeMsg').textContent+=' · ⚠ integrations: '+imsg;
+      }
     }
 
     try{
@@ -1661,6 +1675,7 @@ async function connectBridge(){
     }
   }catch(e){
     const msg=String((e&&e.message)||e||'unknown');
+    if(/401/.test(msg)){markBridgeAuthRequired();return}
     const wentOffline=markBridgeOffline('connect probe: '+msg);
     if(!wentOffline&&$('modeBadge')&&APP.backendReady){
       $('modeBadge').textContent=(APP.bridgeUrl.includes('127.0.0.1')||APP.bridgeUrl.includes('localhost'))?'ASTRA LOCAL':'ASTRA BRIDGE';
