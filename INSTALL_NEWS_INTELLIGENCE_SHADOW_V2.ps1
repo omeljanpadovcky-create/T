@@ -2,10 +2,10 @@ $ErrorActionPreference='Stop'
 Set-StrictMode -Version Latest
 
 Write-Host '======================================================' -ForegroundColor Cyan
-Write-Host ' MYSHKA / ASTRA - NEWS INTELLIGENCE SHADOW V2 ' -ForegroundColor Yellow
+Write-Host ' MYSHKA / ASTRA - NEWS INTELLIGENCE SHADOW V3 ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$commit='7c98763654faa699e81f726044fd60f647e12f28'
+$commit='4f0f91a48cbb5437aadc70dc89696f1d39f9a359'
 $root='https://raw.githubusercontent.com/omeljanpadovcky-create/T/'+$commit
 
 $app=$null
@@ -183,6 +183,10 @@ Write-Host ('Analyzed headlines: '+$news.analyzer.analysis_ok+' · errors: '+$ne
 Write-Host ('Dynamic universe: '+(($news.analyzer.universe_assets | ForEach-Object {[string]$_}) -join ', '))
 Write-Host ('Time decay half-life: '+$news.analyzer.decay_half_life_minutes+' min')
 Write-Host ('Dedup: Jaccard '+$news.analyzer.dedup_jaccard+' · window '+$news.analyzer.dedup_window_minutes+' min · last dropped '+$news.analyzer.last_deduped)
+Write-Host ('Event taxonomy: '+(($news.outcomes.event_taxonomy | ForEach-Object {[string]$_}) -join ', '))
+Write-Host ('Priced-in thresholds: pre5 '+$news.analyzer.priced_pre5_pct+'% · pre15 '+$news.analyzer.priced_pre15_pct+'%')
+Write-Host ('Experiment version: '+$news.outcomes.experiment_version)
+Write-Host 'News x Binance matrix: ENABLED · AGREE / CONFLICT / NEUTRAL / NO_DATA'
 Write-Host ('News forward outcomes closed: '+$news.outcomes.closed)
 
 Write-Host '[11/11] Opening authorized dashboard...'
@@ -191,7 +195,7 @@ Start-Process $launch
 
 Write-Host ''
 Write-Host '======================================================' -ForegroundColor Green
-Write-Host ' READY - NEWS INTELLIGENCE SHADOW V2 ' -ForegroundColor Green
+Write-Host ' READY - NEWS INTELLIGENCE SHADOW V3 ' -ForegroundColor Green
 Write-Host '======================================================' -ForegroundColor Green
 Write-Host ('ASTRA health: '+$health.status)
 Write-Host ('RSS feeds: '+$ctx.rss_feeds+' · OK: '+$ctx.news_sources_ok+' · cache: '+$ctx.headline_cache)
@@ -200,6 +204,9 @@ Write-Host ('Analyzed headlines: '+$news.analyzer.analysis_ok)
 Write-Host ('News assets: MARKET + dynamic TOP-'+$news.analyzer.universe_assets.Count)
 Write-Host ('Time decay: half-life '+$news.analyzer.decay_half_life_minutes+' min')
 Write-Host ('Cross-source dedup: ON · Jaccard '+$news.analyzer.dedup_jaccard+' · '+$news.analyzer.dedup_window_minutes+' min window')
+Write-Host 'Event taxonomy: ETF | REGULATION | HACK | LISTING | DELISTING | MACRO | WHALE | LIQUIDATION | PROTOCOL | EXCHANGE | LEGAL | OTHER'
+Write-Host ('Already-priced-in: pre5 >= '+$news.analyzer.priced_pre5_pct+'% or pre15 >= '+$news.analyzer.priced_pre15_pct+'% in news direction')
+Write-Host 'News x Binance: ALIGNED/CONFLICT x AGREE/CONFLICT/NEUTRAL'
 Write-Host 'News outcomes: 5m | 10m | 15m'
 Write-Host 'PAPER execution changed: NO'
 Write-Host 'Trading decisions changed: NO'
