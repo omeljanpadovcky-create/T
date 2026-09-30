@@ -325,14 +325,15 @@ def _assign_movement_clusters(rows: list[dict]) -> list[dict]:
         arr.sort(key=lambda x: (float(x.get("opened_at") or 0), int(x.get("id") or 0)))
         episode = 0
         prev_t: Optional[float] = None
+        episode_anchor = 0
         for r0 in arr:
             r = dict(r0)
             t = float(r.get("opened_at") or 0)
             if prev_t is None or (t - prev_t) > MOVEMENT_GAP_SEC:
                 episode += 1
+                episode_anchor = int(t)
             prev_t = t
-            anchor = int(t)
-            raw = f"{pair}|{side}|{horizon}|{episode}|{anchor}"
+            raw = f"{pair}|{side}|{horizon}|{episode}|{episode_anchor}"
             r["movement_cluster_id"] = hashlib.sha1(raw.encode("utf-8")).hexdigest()[:16]
             r["movement_episode"] = episode
             out.append(r)
