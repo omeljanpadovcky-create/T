@@ -99,7 +99,17 @@ def init() -> dict:
                 "INSERT INTO rescue_meta(key,value) VALUES('v2_started_at',?)",
                 (str(time.time()),),
             )
-    return status()
+    return {
+        "enabled": True,
+        "mode": "RESCUE_MATRIX_V2_FORWARD_SHADOW_ONLY",
+        "db_path": DB_PATH,
+        "forward_db_path": FORWARD_DB_PATH,
+        "risk_db_path": RISK_DB_PATH,
+        "movement_cluster_gap_sec": MOVEMENT_GAP_SEC,
+        "changes_paper_execution": False,
+        "changes_trading_decisions": False,
+        "live_execution": False,
+    }
 
 
 def _num(v: Any) -> Optional[float]:
