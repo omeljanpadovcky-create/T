@@ -1,336 +1,689 @@
-"""MYSHKA / ASTRA — RESCUE MATRIX V1 (SHADOW / diagnostic only).
+"""MYSHKA / ASTRA — RESCUE MATRIX V2 (FORWARD SHADOW ONLY).
 
-Finds cluster-aware intersections across:
-JEV × TECH × EDGE band × regime × pair × Binance X-Check × Evidence Gate.
+Goal:
+- freeze PAPER/trading decisions;
+- analyze JEV APPROVE x TECH 3/4 first;
+- derive movement-cluster IDs by pair+side+time-gap (not fixed 5m buckets);
+- rank positive and toxic intersections using cluster-aware metrics;
+- keep all findings diagnostic only;
+- when a cluster first reaches WATCH, freeze a watch start and require NEW
+  forward clusters before any confirmation state.
 
-Historical data is discovery-only. A separate forward cutoff is created at
-installation time for out-of-sample confirmation. This module never changes
-ENTER/DROP, PAPER, sizing, execution, or live routing.
+Reads:
+- Forward Experiment Lab DB for 5m/10m/15m outcomes.
+- Risk/decision blackbox DB only to enrich JEV/regime/Evidence fields.
+
+Never changes ENTER/DROP, PAPER execution, sizing, routing, JEV, Guard,
+Evidence Gate, ML, or LIVE.
 """
 from __future__ import annotations
 
 from contextlib import contextmanager
 from itertools import combinations
+import hashlib
 import json
 import math
 import os
 import sqlite3
+import statistics
 import time
 from typing import Any, Optional
 
-RISK_DB_PATH=os.getenv("RISK_INTELLIGENCE_DB_PATH","/data/myshka_risk_intelligence.sqlite3")
-DB_PATH=os.getenv("RESCUE_MATRIX_DB_PATH","/data/myshka_rescue_matrix.sqlite3")
-CLUSTER_SEC=max(60,int(os.getenv("RESCUE_MATRIX_CLUSTER_SEC","300")))
-JOIN_TOLERANCE_SEC=max(15,int(os.getenv("RESCUE_MATRIX_JOIN_TOLERANCE_SEC","75")))
-HIST_MIN_CLUSTER=max(2,int(os.getenv("RESCUE_MATRIX_HIST_MIN_CLUSTER","5")))
-FORWARD_REVIEW_CLUSTER=max(30,int(os.getenv("RESCUE_MATRIX_FORWARD_REVIEW_CLUSTER","150")))
-MIN_PF=float(os.getenv("RESCUE_MATRIX_MIN_PF","1.20"))
-MAX_ROWS=max(200,int(os.getenv("RESCUE_MATRIX_MAX_ROWS","8000")))
+FORWARD_DB_PATH = os.getenv("FORWARD_EXPERIMENT_DB_PATH", "/data/myshka_forward_experiments.sqlite3")
+RISK_DB_PATH = os.getenv("RISK_INTELLIGENCE_DB_PATH", "/data/myshka_risk_intelligence.sqlite3")
+DB_PATH = os.getenv("RESCUE_MATRIX_DB_PATH", "/data/myshka_rescue_matrix.sqlite3")
 
-DIMS=("tech","edge_band","regime","pair","xcheck","evidence")
-EDGE_BANDS=("<0","0-0.05","0.05-0.10","0.10-0.15","0.15-0.20",">=0.20")
+MOVEMENT_GAP_SEC = max(60, int(os.getenv("RESCUE_MATRIX_MOVEMENT_GAP_SEC", "180")))
+JOIN_TOLERANCE_SEC = max(15, int(os.getenv("RESCUE_MATRIX_JOIN_TOLERANCE_SEC", "90")))
+MAX_ROWS = max(500, int(os.getenv("RESCUE_MATRIX_MAX_ROWS", "20000")))
+
+WATCH_MIN_CN = max(10, int(os.getenv("RESCUE_MATRIX_WATCH_MIN_CN", "30")))
+WATCH_CONFIRM_NEW_CN = max(10, int(os.getenv("RESCUE_MATRIX_WATCH_CONFIRM_NEW_CN", "30")))
+CANDIDATE_MIN_CN = max(WATCH_MIN_CN, int(os.getenv("RESCUE_MATRIX_CANDIDATE_MIN_CN", "50")))
+ROBUST_MIN_CN = max(CANDIDATE_MIN_CN, int(os.getenv("RESCUE_MATRIX_ROBUST_MIN_CN", "100")))
+WATCH_MIN_PF = float(os.getenv("RESCUE_MATRIX_WATCH_MIN_PF", "1.10"))
+CANDIDATE_MIN_PF = float(os.getenv("RESCUE_MATRIX_CANDIDATE_MIN_PF", "1.20"))
+
+HORIZON_LABELS = {300: "5m", 600: "10m", 900: "15m"}
+BASE_DIMS = ("edge_band", "regime", "xcheck", "evidence", "pair", "direction")
 
 
-def _conn(path=DB_PATH):
-    os.makedirs(os.path.dirname(path) or ".",exist_ok=True)
-    c=sqlite3.connect(path,timeout=10); c.row_factory=sqlite3.Row
-    if path==DB_PATH:
-        c.execute("PRAGMA journal_mode=WAL"); c.execute("PRAGMA synchronous=NORMAL")
-    return c
+def _conn(path: str) -> sqlite3.Connection:
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    con = sqlite3.connect(path, timeout=10)
+    con.row_factory = sqlite3.Row
+    if path == DB_PATH:
+        con.execute("PRAGMA journal_mode=WAL")
+        con.execute("PRAGMA synchronous=NORMAL")
+    return con
+
 
 @contextmanager
-def _db(path=DB_PATH):
-    c=_conn(path)
-    try: yield c; c.commit()
-    except Exception: c.rollback(); raise
-    finally: c.close()
-
-def init():
-    with _db() as c:
-        c.execute("CREATE TABLE IF NOT EXISTS rescue_meta(key TEXT PRIMARY KEY,value TEXT NOT NULL)")
-        r=c.execute("SELECT value FROM rescue_meta WHERE key='forward_started_at'").fetchone()
-        if not r:
-            c.execute("INSERT INTO rescue_meta(key,value) VALUES('forward_started_at',?)",(str(time.time()),))
-    return {"enabled":True,"mode":"RESCUE_MATRIX_SHADOW","db_path":DB_PATH,"risk_db_path":RISK_DB_PATH}
-
-def _forward_started():
-    init()
-    with _db() as c:
-        r=c.execute("SELECT value FROM rescue_meta WHERE key='forward_started_at'").fetchone()
-        return float(r["value"]) if r else time.time()
-
-def _num(v):
+def _db(path: str):
+    con = _conn(path)
     try:
-        if v is None or v=="": return None
-        x=float(v); return x if math.isfinite(x) else None
-    except Exception:return None
+        yield con
+        con.commit()
+    except Exception:
+        con.rollback()
+        raise
+    finally:
+        con.close()
 
-def _pf(vals):
-    pos=sum(x for x in vals if x>0)
-    neg=abs(sum(x for x in vals if x<=0))
-    return pos/neg if neg>1e-12 else (999.0 if pos>0 else 0.0)
 
-def _sample_state(cn):
-    n=int(cn or 0)
-    if n<30:return "COLD"
-    if n<50:return "WARMING"
-    if n<150:return "MONITOR"
-    if n<300:return "CANDIDATE"
-    return "MATURE"
+def init() -> dict:
+    with _db(DB_PATH) as con:
+        con.execute("""
+            CREATE TABLE IF NOT EXISTS rescue_meta(
+                key TEXT PRIMARY KEY,
+                value TEXT NOT NULL
+            )
+        """)
+        con.execute("""
+            CREATE TABLE IF NOT EXISTS rescue_watchlist(
+                signature TEXT PRIMARY KEY,
+                horizon_sec INTEGER NOT NULL,
+                dimensions_json TEXT NOT NULL,
+                values_json TEXT NOT NULL,
+                watch_started_at REAL NOT NULL,
+                baseline_cn INTEGER NOT NULL,
+                baseline_avg_net_pct REAL NOT NULL,
+                baseline_pf REAL NOT NULL,
+                state TEXT NOT NULL DEFAULT 'WATCH',
+                last_seen_at REAL NOT NULL
+            )
+        """)
+        row = con.execute("SELECT value FROM rescue_meta WHERE key='v2_started_at'").fetchone()
+        if not row:
+            con.execute(
+                "INSERT INTO rescue_meta(key,value) VALUES('v2_started_at',?)",
+                (str(time.time()),),
+            )
+    return status()
 
-def _edge_band(v):
-    x=_num(v)
-    if x is None:return "NO_EDGE"
-    if x<0:return "<0"
-    if x<.05:return "0-0.05"
-    if x<.10:return "0.05-0.10"
-    if x<.15:return "0.10-0.15"
-    if x<.20:return "0.15-0.20"
-    return ">=0.20"
 
-def _tech_label(v):
-    try:n=int(v or 0)
-    except Exception:n=0
-    return f"{n}/4" if n else "0/4"
-
-def _load_risk():
-    if not os.path.exists(RISK_DB_PATH):return []
+def _num(v: Any) -> Optional[float]:
     try:
-        with _db(RISK_DB_PATH) as c:
-            rows=c.execute(
-                """SELECT * FROM risk_candidates
+        if v is None or v == "":
+            return None
+        x = float(v)
+        return x if math.isfinite(x) else None
+    except Exception:
+        return None
+
+
+def _pf(vals: list[float]) -> float:
+    pos = sum(x for x in vals if x > 0)
+    neg = abs(sum(x for x in vals if x <= 0))
+    return pos / neg if neg > 1e-12 else (999.0 if pos > 0 else 0.0)
+
+
+def _edge_band(v: Any) -> str:
+    x = _num(v)
+    if x is None:
+        return "NO_EDGE"
+    if x < 0.05:
+        return "<0.05"
+    if x < 0.08:
+        return "0.05-0.08"
+    if x < 0.10:
+        return "0.08-0.10"
+    if x < 0.12:
+        return "0.10-0.12"
+    if x < 0.15:
+        return "0.12-0.15"
+    if x < 0.20:
+        return "0.15-0.20"
+    if x < 0.35:
+        return "0.20-0.35"
+    return ">=0.35"
+
+
+def _normalize_pair(v: Any) -> str:
+    s = str(v or "").upper()
+    return s.replace("/USDT:USDT", "").replace("USDT:USDT", "").strip()
+
+
+def _load_forward() -> tuple[list[dict], float]:
+    if not os.path.exists(FORWARD_DB_PATH):
+        return [], time.time()
+    with _db(FORWARD_DB_PATH) as con:
+        start_row = con.execute(
+            "SELECT value FROM experiment_meta WHERE key='forward_started_at'"
+        ).fetchone()
+        started = float(start_row["value"]) if start_row else 0.0
+        rows = [
+            dict(r) for r in con.execute(
+                """SELECT * FROM forward_outcomes
                    WHERE status='CLOSED' AND net_pct IS NOT NULL
-                   ORDER BY opened_at ASC,id ASC LIMIT ?""",(MAX_ROWS,)
+                     AND opened_at>=?
+                   ORDER BY opened_at,id
+                   LIMIT ?""",
+                (started, MAX_ROWS),
             ).fetchall()
-            return [dict(r) for r in rows]
-    except Exception:return []
+        ]
+    return rows, started
 
-def _load_blackbox():
-    if not os.path.exists(RISK_DB_PATH):return {}
+
+def _load_risk_candidates() -> dict[str, list[dict]]:
+    if not os.path.exists(RISK_DB_PATH):
+        return {}
     try:
-        with _db(RISK_DB_PATH) as c:
-            rows=c.execute(
-                """SELECT id,pair,observed_at,direction,stage_json,raw_json
-                   FROM decision_blackbox
-                   ORDER BY observed_at ASC,id ASC LIMIT ?""",(MAX_ROWS*3,)
-            ).fetchall()
-        out={}
-        for rr in rows:
-            r=dict(rr)
-            try:r["stage"]=json.loads(r.get("stage_json") or "{}")
-            except Exception:r["stage"]={}
-            try:r["raw"]=json.loads(r.get("raw_json") or "{}")
-            except Exception:r["raw"]={}
-            out.setdefault(str(r.get("pair") or ""),[]).append(r)
+        with _db(RISK_DB_PATH) as con:
+            rows = [
+                dict(r) for r in con.execute(
+                    """SELECT * FROM risk_candidates
+                       ORDER BY opened_at,id LIMIT ?""",
+                    (MAX_ROWS * 2,),
+                ).fetchall()
+            ]
+        out: dict[str, list[dict]] = {}
+        for r in rows:
+            out.setdefault(str(r.get("pair") or ""), []).append(r)
         return out
-    except Exception:return {}
+    except Exception:
+        return {}
 
-def _nearest_blackbox(row,by_pair):
-    arr=by_pair.get(str(row.get("pair") or ""),[])
-    if not arr:return None
-    t=float(row.get("opened_at") or 0)
-    side=str(row.get("side") or "").upper()
-    best=None; best_dt=1e99
-    for b in arr:
-        dt=abs(float(b.get("observed_at") or 0)-t)
-        if dt>JOIN_TOLERANCE_SEC:continue
-        d=str(b.get("direction") or "").upper()
-        if side in {"LONG","SHORT"} and d in {"LONG","SHORT"} and d!=side:continue
-        if dt<best_dt:best=b;best_dt=dt
+
+def _load_blackbox() -> dict[str, list[dict]]:
+    if not os.path.exists(RISK_DB_PATH):
+        return {}
+    try:
+        with _db(RISK_DB_PATH) as con:
+            rows = [
+                dict(r) for r in con.execute(
+                    """SELECT id,pair,observed_at,direction,stage_json,raw_json
+                       FROM decision_blackbox
+                       ORDER BY observed_at,id LIMIT ?""",
+                    (MAX_ROWS * 3,),
+                ).fetchall()
+            ]
+        out: dict[str, list[dict]] = {}
+        for r in rows:
+            try:
+                r["stage"] = json.loads(r.get("stage_json") or "{}")
+            except Exception:
+                r["stage"] = {}
+            try:
+                r["raw"] = json.loads(r.get("raw_json") or "{}")
+            except Exception:
+                r["raw"] = {}
+            out.setdefault(str(r.get("pair") or ""), []).append(r)
+        return out
+    except Exception:
+        return {}
+
+
+def _nearest(row: dict, by_pair: dict[str, list[dict]], time_field: str) -> Optional[dict]:
+    pair = str(row.get("pair") or "")
+    arr = by_pair.get(pair, [])
+    if not arr:
+        return None
+    t = float(row.get("opened_at") or 0)
+    side = str(row.get("side") or "").upper()
+    best = None
+    best_dt = 1e99
+    for x in arr:
+        dt = abs(float(x.get(time_field) or 0) - t)
+        if dt > JOIN_TOLERANCE_SEC:
+            continue
+        d = str(x.get("direction") or x.get("side") or "").upper()
+        if side in {"LONG", "SHORT"} and d in {"LONG", "SHORT"} and side != d:
+            continue
+        if dt < best_dt:
+            best = x
+            best_dt = dt
     return best
 
-def _xcheck(raw):
-    for key in ("binance_crosscheck","binance_xcheck","xcheck"):
-        x=raw.get(key)
-        if isinstance(x,dict):
-            state=str(x.get("state") or x.get("verdict") or x.get("status") or "NO_DATA").upper()
-            if state in {"AGREE","CONFLICT","NEUTRAL","NO_DATA","NOT_APPLICABLE"}:return state
-            return state or "NO_DATA"
+
+def _evidence_state(stage: dict, raw: dict) -> str:
+    e = (stage or {}).get("evidence_gate")
+    if not isinstance(e, dict):
+        e = raw.get("evidence_gate") if isinstance(raw.get("evidence_gate"), dict) else {}
+    state = str(e.get("state") or "").upper()
+    passed = e.get("passed")
+    applies = e.get("applies")
+    reason = str(e.get("reason") or "").upper()
+    if passed is True or state in {"PASS", "APPROVE", "READY"}:
+        return "PASS"
+    if state in {"FAIL", "HOLD", "DROP", "REJECT", "BLOCK"}:
+        return state
+    if passed is False and applies is True:
+        return "HOLD"
+    if applies is False:
+        return "NOT_APPLICABLE"
+    if any(x in reason for x in ("HOLD", "DROP", "REJECT", "BLOCK")):
+        return "HOLD"
     return "NO_DATA"
 
-def _evidence(stage,raw):
-    e=(stage or {}).get("evidence_gate")
-    if not isinstance(e,dict):e=raw.get("evidence_gate") if isinstance(raw.get("evidence_gate"),dict) else {}
-    applies=e.get("applies")
-    passed=e.get("passed")
-    state=str(e.get("state") or "").upper()
-    reason=str(e.get("reason") or "").upper()
-    if passed is True:return "PASS"
-    if state in {"PASS","APPROVE","READY"}:return "PASS"
-    if state in {"HOLD","DROP","REJECT","BLOCK"}:return state
-    if passed is False and applies is True:return "HOLD"
-    if applies is False:return "NOT_APPLICABLE"
-    if "HOLD" in reason or "DROP" in reason or "REJECT" in reason:return "HOLD"
-    return "NO_DATA"
 
-def _enrich(rows):
-    bb=_load_blackbox()
-    out=[]; joined=0
-    for r0 in rows:
-        r=dict(r0)
-        b=_nearest_blackbox(r,bb)
-        stage=(b or {}).get("stage") or {}
-        raw=(b or {}).get("raw") or {}
-        if b:joined+=1
-        pair=str(r.get("pair") or "")
+def _enrich(rows: list[dict]) -> tuple[list[dict], dict]:
+    risks = _load_risk_candidates()
+    blackbox = _load_blackbox()
+    out = []
+    risk_joined = 0
+    blackbox_joined = 0
+
+    for base in rows:
+        r = dict(base)
+        risk = _nearest(r, risks, "opened_at")
+        box = _nearest(r, blackbox, "observed_at")
+        if risk:
+            risk_joined += 1
+        if box:
+            blackbox_joined += 1
+
+        stage = (box or {}).get("stage") or {}
+        raw = (box or {}).get("raw") or {}
+
+        regime = str((risk or {}).get("regime") or r.get("structure") or "UNKNOWN").upper()
+        jev = str((risk or {}).get("jev_verdict") or "UNKNOWN").upper()
+        evidence = _evidence_state(stage, raw)
+
         r.update({
-            "tech":_tech_label(r.get("tech_score")),
-            "edge_band":_edge_band(r.get("edge_pct")),
-            "regime":str(r.get("regime") or "UNKNOWN").upper(),
-            "pair":pair.replace("/USDT:USDT",""),
-            "xcheck":_xcheck(raw),
-            "evidence":_evidence(stage,raw),
-            "jev":str(r.get("jev_verdict") or "WAIT").upper(),
-            "cluster_key":f"{pair}|{str(r.get('side') or '').upper()}|{int(float(r.get('opened_at') or 0)//CLUSTER_SEC)*CLUSTER_SEC}",
-            "blackbox_joined":bool(b),
+            "pair_norm": _normalize_pair(r.get("pair")),
+            "direction": str(r.get("side") or "UNKNOWN").upper(),
+            "tech": f"{int(r.get('tech_score') or 0)}/4",
+            "edge_band": _edge_band(r.get("edge_pct")),
+            "regime": regime,
+            "jev": jev,
+            "xcheck": str(r.get("xcheck_state") or "NO_DATA").upper(),
+            "evidence": evidence,
         })
+        r["pair"] = r["pair_norm"]
         out.append(r)
-    return out,joined
 
-def _cluster_rows(rows):
-    seen=set(); out=[]
-    for r in sorted(rows,key=lambda x:(float(x.get("opened_at") or 0),int(x.get("id") or 0))):
-        k=str(r.get("cluster_key") or "")
-        if k in seen:continue
-        seen.add(k);out.append(r)
-    return out
-
-def _metrics(rows):
-    raw=[float(r["net_pct"]) for r in rows if _num(r.get("net_pct")) is not None]
-    cl_rows=_cluster_rows(rows)
-    cl=[float(r["net_pct"]) for r in cl_rows if _num(r.get("net_pct")) is not None]
-    def core(vals):
-        n=len(vals);wins=sum(1 for x in vals if x>0)
-        return {
-            "n":n,
-            "win_rate_pct":wins/n*100.0 if n else 0.0,
-            "avg_net_pct":sum(vals)/n if n else 0.0,
-            "profit_factor":_pf(vals),
-            "total_net_pct":sum(vals),
-        }
-    a,b=core(raw),core(cl)
-    return {
-        **a,
-        "cluster_n":b["n"],
-        "cluster_win_rate_pct":b["win_rate_pct"],
-        "cluster_avg_net_pct":b["avg_net_pct"],
-        "cluster_profit_factor":b["profit_factor"],
-        "sample_state":_sample_state(b["n"]),
+    total = len(out)
+    coverage = {
+        "rows": total,
+        "risk_joined": risk_joined,
+        "blackbox_joined": blackbox_joined,
+        "risk_join_pct": risk_joined / total * 100.0 if total else 0.0,
+        "blackbox_join_pct": blackbox_joined / total * 100.0 if total else 0.0,
     }
+    return out, coverage
 
-def _group(rows,dims):
-    groups={}
+
+def _assign_movement_clusters(rows: list[dict]) -> list[dict]:
+    """Assign episode clusters by pair+side and gap from prior candidate.
+
+    This intentionally ignores the legacy fixed cluster_bucket. A candidate that
+    crosses a 5-minute wall-clock boundary remains in the same movement episode
+    when the time gap is <= MOVEMENT_GAP_SEC.
+    """
+    grouped: dict[tuple[str, str, int], list[dict]] = {}
     for r in rows:
-        key=tuple(str(r.get(d) or "UNKNOWN") for d in dims)
-        groups.setdefault(key,[]).append(r)
-    out=[]
-    for key,q in groups.items():
-        m=_metrics(q)
-        vals={d:v for d,v in zip(dims,key)}
-        out.append({"dimensions":list(dims),"values":vals,**m})
+        key = (
+            str(r.get("pair") or ""),
+            str(r.get("direction") or ""),
+            int(r.get("horizon_sec") or 0),
+        )
+        grouped.setdefault(key, []).append(r)
+
+    out: list[dict] = []
+    for (pair, side, horizon), arr in grouped.items():
+        arr.sort(key=lambda x: (float(x.get("opened_at") or 0), int(x.get("id") or 0)))
+        episode = 0
+        prev_t: Optional[float] = None
+        for r0 in arr:
+            r = dict(r0)
+            t = float(r.get("opened_at") or 0)
+            if prev_t is None or (t - prev_t) > MOVEMENT_GAP_SEC:
+                episode += 1
+            prev_t = t
+            anchor = int(t)
+            raw = f"{pair}|{side}|{horizon}|{episode}|{anchor}"
+            r["movement_cluster_id"] = hashlib.sha1(raw.encode("utf-8")).hexdigest()[:16]
+            r["movement_episode"] = episode
+            out.append(r)
     return out
 
-def _rank_positive(items,min_cn):
-    q=[x for x in items if int(x.get("cluster_n") or 0)>=min_cn and float(x.get("cluster_avg_net_pct") or 0)>0 and float(x.get("cluster_profit_factor") or 0)>=MIN_PF]
-    q.sort(key=lambda x:(int(x.get("cluster_n") or 0),float(x.get("cluster_avg_net_pct") or 0),float(x.get("cluster_profit_factor") or 0)),reverse=True)
-    return q
 
-def _rank_negative(items,min_cn):
-    q=[x for x in items if int(x.get("cluster_n") or 0)>=min_cn and float(x.get("cluster_avg_net_pct") or 0)<0]
-    q.sort(key=lambda x:(int(x.get("cluster_n") or 0),-float(x.get("cluster_avg_net_pct") or 0)),reverse=True)
-    return q
+def _cluster_rows(rows: list[dict]) -> list[dict]:
+    seen = set()
+    out = []
+    for r in sorted(rows, key=lambda x: (float(x.get("opened_at") or 0), int(x.get("id") or 0))):
+        k = str(r.get("movement_cluster_id") or "")
+        if not k:
+            continue
+        if k in seen:
+            continue
+        seen.add(k)
+        out.append(r)
+    return out
 
-def _intersections(rows,mode):
-    # RESCUE discovery is intentionally anchored on JEV APPROVE, because current
-    # shadow evidence suggests APPROVE is a materially different cohort.
-    approved=[r for r in rows if str(r.get("jev") or "")=="APPROVE"]
-    all_items=[]
-    for size in (2,3,4,5):
-        for dims in combinations(DIMS,size):
-            all_items.extend(_group(approved,dims))
 
-    min_cn=HIST_MIN_CLUSTER if mode=="HISTORICAL_DIAGNOSTIC" else 1
-    positives=_rank_positive(all_items,min_cn)
-    negatives=_rank_negative(all_items,min_cn)
+def _rolling_positive_blocks(clustered: list[dict], blocks: int = 3) -> int:
+    if len(clustered) < 9:
+        return 0
+    arr = sorted(clustered, key=lambda x: float(x.get("opened_at") or 0))
+    positive = 0
+    for i in range(blocks):
+        lo = int(len(arr) * i / blocks)
+        hi = int(len(arr) * (i + 1) / blocks)
+        vals = [float(x["net_pct"]) for x in arr[lo:hi] if _num(x.get("net_pct")) is not None]
+        if vals and sum(vals) / len(vals) > 0 and _pf(vals) > 1.0:
+            positive += 1
+    return positive
 
-    full=_group(approved,DIMS)
-    full.sort(key=lambda x:int(x.get("cluster_n") or 0),reverse=True)
 
-    tech_edge=_group(approved,("tech","edge_band"))
-    regime_pair=_group(approved,("regime","pair"))
-    x_ev=_group(approved,("xcheck","evidence"))
+def _metrics(rows: list[dict]) -> dict:
+    raw_vals = [float(r["net_pct"]) for r in rows if _num(r.get("net_pct")) is not None]
+    cl_rows = _cluster_rows(rows)
+    vals = [float(r["net_pct"]) for r in cl_rows if _num(r.get("net_pct")) is not None]
+    raw_n = len(raw_vals)
+    cn = len(vals)
+    wins = sum(1 for x in vals if x > 0)
 
-    # Forward candidates must be large enough before they can even be reviewed.
-    for x in positives:
-        cn=int(x.get("cluster_n") or 0)
-        x["forward_review_eligible"]=bool(
-            mode=="FORWARD_ONLY"
-            and cn>=FORWARD_REVIEW_CLUSTER
-            and float(x.get("cluster_avg_net_pct") or 0)>0
-            and float(x.get("cluster_profit_factor") or 0)>=MIN_PF
+    pair_sums: dict[str, list[float]] = {}
+    regime_sums: dict[str, list[float]] = {}
+    for r in cl_rows:
+        x = _num(r.get("net_pct"))
+        if x is None:
+            continue
+        pair_sums.setdefault(str(r.get("pair") or ""), []).append(float(x))
+        regime_sums.setdefault(str(r.get("regime") or "UNKNOWN"), []).append(float(x))
+
+    return {
+        "raw_n": raw_n,
+        "cn": cn,
+        "win_rate_pct": wins / cn * 100.0 if cn else 0.0,
+        "avg_net_pct": sum(vals) / cn if cn else 0.0,
+        "profit_factor": _pf(vals),
+        "total_net_pct": sum(vals),
+        "median_net_pct": statistics.median(vals) if vals else 0.0,
+        "best_net_pct": max(vals) if vals else 0.0,
+        "worst_net_pct": min(vals) if vals else 0.0,
+        "positive_pairs": sum(1 for q in pair_sums.values() if sum(q) / len(q) > 0),
+        "pair_count": len(pair_sums),
+        "positive_regimes": sum(1 for q in regime_sums.values() if sum(q) / len(q) > 0),
+        "regime_count": len(regime_sums),
+        "rolling_positive_blocks": _rolling_positive_blocks(cl_rows),
+    }
+
+
+def _status_from_metrics(m: dict) -> str:
+    cn = int(m.get("cn") or 0)
+    avg = float(m.get("avg_net_pct") or 0)
+    pf = float(m.get("profit_factor") or 0)
+    roll = int(m.get("rolling_positive_blocks") or 0)
+
+    if cn < 10:
+        return "NOISE"
+    if avg <= 0 or pf <= 1.0:
+        return "TOXIC" if avg < 0 else "DISCOVERY"
+    if cn < WATCH_MIN_CN:
+        return "DISCOVERY"
+    if cn < CANDIDATE_MIN_CN or pf < CANDIDATE_MIN_PF:
+        return "WATCH"
+    if cn < ROBUST_MIN_CN:
+        return "CANDIDATE"
+    if roll >= 2:
+        return "ROBUST_CANDIDATE"
+    return "CANDIDATE"
+
+
+def _signature(horizon: int, dims: tuple[str, ...], vals: tuple[str, ...]) -> str:
+    blob = json.dumps([int(horizon), list(dims), list(vals)], separators=(",", ":"), sort_keys=False)
+    return hashlib.sha1(blob.encode("utf-8")).hexdigest()
+
+
+def _watch_state(horizon: int, dims: tuple[str, ...], vals: tuple[str, ...], rows: list[dict], m: dict) -> dict:
+    sig = _signature(horizon, dims, vals)
+    now = time.time()
+    state = _status_from_metrics(m)
+
+    with _db(DB_PATH) as con:
+        row = con.execute("SELECT * FROM rescue_watchlist WHERE signature=?", (sig,)).fetchone()
+
+        eligible_watch = (
+            int(m.get("cn") or 0) >= WATCH_MIN_CN
+            and float(m.get("avg_net_pct") or 0) > 0
+            and float(m.get("profit_factor") or 0) >= WATCH_MIN_PF
         )
-        x["disposition"]="FORWARD_REVIEW" if x["forward_review_eligible"] else ("DISCOVERY_ONLY" if mode=="HISTORICAL_DIAGNOSTIC" else "COLLECTING")
+
+        if row is None and eligible_watch:
+            con.execute(
+                """INSERT INTO rescue_watchlist(
+                     signature,horizon_sec,dimensions_json,values_json,watch_started_at,
+                     baseline_cn,baseline_avg_net_pct,baseline_pf,state,last_seen_at
+                   ) VALUES(?,?,?,?,?,?,?,?,?,?)""",
+                (
+                    sig, int(horizon), json.dumps(list(dims)), json.dumps(list(vals)),
+                    now, int(m["cn"]), float(m["avg_net_pct"]), float(m["profit_factor"]),
+                    "WATCH", now,
+                ),
+            )
+            return {
+                "signature": sig,
+                "watch_state": "WATCH",
+                "new_cn_since_watch": 0,
+                "forward_confirm_avg_net_pct": 0.0,
+                "forward_confirm_pf": 0.0,
+            }
+
+        if row is None:
+            return {
+                "signature": sig,
+                "watch_state": state,
+                "new_cn_since_watch": 0,
+                "forward_confirm_avg_net_pct": 0.0,
+                "forward_confirm_pf": 0.0,
+            }
+
+        watch_started = float(row["watch_started_at"])
+        new_rows = [x for x in rows if float(x.get("opened_at") or 0) > watch_started]
+        newm = _metrics(new_rows)
+        new_cn = int(newm.get("cn") or 0)
+        stored_state = str(row["state"])
+
+        if new_cn >= WATCH_CONFIRM_NEW_CN:
+            if float(newm.get("avg_net_pct") or 0) > 0 and float(newm.get("profit_factor") or 0) >= WATCH_MIN_PF:
+                stored_state = "FORWARD_CONFIRMED"
+            else:
+                stored_state = "WATCH_FAILED"
+
+        con.execute(
+            "UPDATE rescue_watchlist SET state=?,last_seen_at=? WHERE signature=?",
+            (stored_state, now, sig),
+        )
+
+        return {
+            "signature": sig,
+            "watch_state": stored_state,
+            "watch_started_at": watch_started,
+            "baseline_cn": int(row["baseline_cn"]),
+            "new_cn_since_watch": new_cn,
+            "required_new_cn": WATCH_CONFIRM_NEW_CN,
+            "forward_confirm_avg_net_pct": float(newm.get("avg_net_pct") or 0),
+            "forward_confirm_pf": float(newm.get("profit_factor") or 0),
+        }
+
+
+def _group(rows: list[dict], dims: tuple[str, ...], horizon: int) -> list[dict]:
+    groups: dict[tuple[str, ...], list[dict]] = {}
+    for r in rows:
+        key = tuple(str(r.get(d) or "UNKNOWN") for d in dims)
+        groups.setdefault(key, []).append(r)
+
+    out = []
+    for vals, q in groups.items():
+        m = _metrics(q)
+        watch = _watch_state(horizon, dims, vals, q, m)
+        out.append({
+            "level": len(dims),
+            "dimensions": list(dims),
+            "values": {d: v for d, v in zip(dims, vals)},
+            **m,
+            "status": _status_from_metrics(m),
+            **watch,
+        })
+    return out
+
+
+def _rank(rows: list[dict], horizon: int) -> dict:
+    # Primary hypothesis exactly as requested:
+    # JEV APPROVE x TECH 3/4, then drill through EDGE/regime/XCheck/Evidence,
+    # with pair added after the first broad cuts.
+    anchor = [
+        r for r in rows
+        if str(r.get("jev") or "") == "APPROVE"
+        and str(r.get("tech") or "") == "3/4"
+    ]
+
+    level1: list[dict] = []
+    level2: list[dict] = []
+    level3: list[dict] = []
+
+    first_dims = ("edge_band", "regime", "xcheck", "evidence")
+    for d in first_dims:
+        level1.extend(_group(anchor, (d,), horizon))
+    for dims in combinations(first_dims, 2):
+        level2.extend(_group(anchor, tuple(dims), horizon))
+    for dims in combinations(first_dims, 3):
+        level3.extend(_group(anchor, tuple(dims), horizon))
+
+    # Add pair only after broad cohort analysis.
+    pair_drilldowns = []
+    for dims in (
+        ("pair", "edge_band"),
+        ("pair", "regime"),
+        ("pair", "xcheck"),
+        ("pair", "evidence"),
+        ("pair", "regime", "edge_band"),
+        ("pair", "edge_band", "xcheck"),
+        ("pair", "regime", "xcheck"),
+    ):
+        pair_drilldowns.extend(_group(anchor, dims, horizon))
+
+    all_items = level1 + level2 + level3 + pair_drilldowns
+
+    positive = [
+        x for x in all_items
+        if int(x.get("cn") or 0) >= 5
+        and float(x.get("avg_net_pct") or 0) > 0
+        and float(x.get("profit_factor") or 0) > 1.0
+    ]
+    positive.sort(
+        key=lambda x: (
+            1 if str(x.get("watch_state")) == "FORWARD_CONFIRMED" else 0,
+            int(x.get("cn") or 0),
+            float(x.get("total_net_pct") or 0),
+            float(x.get("profit_factor") or 0),
+        ),
+        reverse=True,
+    )
+
+    toxic = [
+        x for x in all_items
+        if int(x.get("cn") or 0) >= 5
+        and float(x.get("avg_net_pct") or 0) < 0
+    ]
+    toxic.sort(
+        key=lambda x: (
+            int(x.get("cn") or 0),
+            -float(x.get("total_net_pct") or 0),
+            -float(x.get("avg_net_pct") or 0),
+        ),
+        reverse=True,
+    )
+
+    tech_compare = []
+    approved = [r for r in rows if str(r.get("jev") or "") == "APPROVE"]
+    for tech in ("3/4", "4/4"):
+        q = [r for r in approved if str(r.get("tech") or "") == tech]
+        tech_compare.append({"tech": tech, **_metrics(q)})
 
     return {
-        "jev_anchor":"APPROVE",
-        "approved_metrics":_metrics(approved),
-        "top_positive_intersections":positives[:30],
-        "top_negative_intersections":negatives[:20],
-        "full_cells":full[:50],
-        "tech_x_edge":sorted(tech_edge,key=lambda x:int(x.get("cluster_n") or 0),reverse=True),
-        "regime_x_pair":sorted(regime_pair,key=lambda x:int(x.get("cluster_n") or 0),reverse=True)[:50],
-        "xcheck_x_evidence":sorted(x_ev,key=lambda x:int(x.get("cluster_n") or 0),reverse=True),
+        "anchor": "JEV_APPROVE_x_TECH_3_OF_4",
+        "anchor_metrics": _metrics(anchor),
+        "tech_3_vs_4": tech_compare,
+        "level1": sorted(level1, key=lambda x: int(x.get("cn") or 0), reverse=True),
+        "level2": sorted(level2, key=lambda x: int(x.get("cn") or 0), reverse=True)[:100],
+        "level3": sorted(level3, key=lambda x: int(x.get("cn") or 0), reverse=True)[:100],
+        "pair_drilldowns": sorted(pair_drilldowns, key=lambda x: int(x.get("cn") or 0), reverse=True)[:120],
+        "top_positive_clusters": positive[:40],
+        "top_toxic_clusters": toxic[:40],
     }
 
-def _section(rows,mode):
-    enriched,joined=_enrich(rows)
-    return {
-        "mode":mode,
-        "overall":_metrics(enriched),
-        "raw_rows":len(enriched),
-        "blackbox_joined":joined,
-        "blackbox_join_coverage_pct":joined/len(enriched)*100.0 if enriched else 0.0,
-        "matrix":_intersections(enriched,mode),
-    }
 
-def report():
+def report() -> dict:
     init()
-    rows=_load_risk()
-    start=_forward_started()
-    historical=_section(rows,"HISTORICAL_DIAGNOSTIC")
-    forward=_section([r for r in rows if float(r.get("opened_at") or 0)>=start],"FORWARD_ONLY")
+    raw, started = _load_forward()
+    enriched, coverage = _enrich(raw)
+    enriched = _assign_movement_clusters(enriched)
+
+    by_horizon = {}
+    for horizon in sorted({int(r.get("horizon_sec") or 0) for r in enriched if int(r.get("horizon_sec") or 0) > 0}):
+        part = [r for r in enriched if int(r.get("horizon_sec") or 0) == horizon]
+        by_horizon[str(horizon)] = {
+            "label": HORIZON_LABELS.get(horizon, f"{horizon}s"),
+            "overall": _metrics(part),
+            "rescue": _rank(part, horizon),
+        }
+
+    with _db(DB_PATH) as con:
+        watch_counts = {
+            str(r["state"]): int(r["n"])
+            for r in con.execute(
+                "SELECT state,COUNT(*) n FROM rescue_watchlist GROUP BY state"
+            ).fetchall()
+        }
+
     return {
-        "status":"ok",
-        "mode":"RESCUE_MATRIX_SHADOW",
-        "forward_started_at":start,
-        "cluster_sec":CLUSTER_SEC,
-        "historical":historical,
-        "forward":forward,
-        "policy":{
-            "historical_min_cluster":HIST_MIN_CLUSTER,
-            "forward_review_cluster":FORWARD_REVIEW_CLUSTER,
-            "min_profit_factor":MIN_PF,
-            "join_tolerance_sec":JOIN_TOLERANCE_SEC,
-            "historical_is_discovery_only":True,
-            "auto_promotion":False,
+        "status": "ok",
+        "mode": "RESCUE_MATRIX_V2_FORWARD_SHADOW_ONLY",
+        "forward_started_at": started,
+        "movement_cluster_gap_sec": MOVEMENT_GAP_SEC,
+        "legacy_fixed_cluster_key_used_for_scoring": False,
+        "coverage": coverage,
+        "by_horizon": by_horizon,
+        "watchlist_counts": watch_counts,
+        "policy": {
+            "paper_frozen": True,
+            "primary_anchor": "JEV APPROVE x TECH 3/4",
+            "watch_min_cn": WATCH_MIN_CN,
+            "watch_min_pf": WATCH_MIN_PF,
+            "confirm_with_new_forward_cn": WATCH_CONFIRM_NEW_CN,
+            "candidate_min_cn": CANDIDATE_MIN_CN,
+            "candidate_min_pf": CANDIDATE_MIN_PF,
+            "robust_min_cn": ROBUST_MIN_CN,
+            "auto_gate": False,
+            "auto_promotion": False,
+            "historical_rule_mining_for_activation": False,
         },
-        "dimensions":["JEV APPROVE","TECH","EDGE BAND","REGIME","PAIR","BINANCE X-CHECK","EVIDENCE GATE"],
-        "note":"Historical intersections are discovery-only. Only forward cluster-aware confirmation may become eligible for manual review.",
-        "changes_paper_execution":False,
-        "changes_trading_decisions":False,
-        "live_execution":False,
+        "status_meaning": {
+            "NOISE": "cn < 10",
+            "DISCOVERY": "interesting but too small",
+            "WATCH": "positive cluster reached watch threshold; freeze and collect new forward clusters",
+            "FORWARD_CONFIRMED": "WATCH survived the required number of new forward clusters",
+            "WATCH_FAILED": "WATCH did not survive new forward confirmation",
+            "CANDIDATE": "large positive cohort; still SHADOW only",
+            "ROBUST_CANDIDATE": "large cohort with rolling stability; still manual review only",
+            "TOXIC": "negative cluster-aware expectancy",
+        },
+        "changes_paper_execution": False,
+        "changes_trading_decisions": False,
+        "live_execution": False,
+        "note": "No cluster is activated automatically, even with high PF. New forward evidence is mandatory after WATCH.",
     }
 
-def status():
+
+def status() -> dict:
     init()
+    with _db(DB_PATH) as con:
+        started = con.execute("SELECT value FROM rescue_meta WHERE key='v2_started_at'").fetchone()
+        watches = con.execute("SELECT COUNT(*) n FROM rescue_watchlist").fetchone()
     return {
-        "enabled":True,
-        "mode":"RESCUE_MATRIX_SHADOW",
-        "risk_db_path":RISK_DB_PATH,
-        "db_path":DB_PATH,
-        "forward_started_at":_forward_started(),
-        "cluster_sec":CLUSTER_SEC,
-        "changes_paper_execution":False,
-        "changes_trading_decisions":False,
-        "live_execution":False,
+        "enabled": True,
+        "mode": "RESCUE_MATRIX_V2_FORWARD_SHADOW_ONLY",
+        "db_path": DB_PATH,
+        "forward_db_path": FORWARD_DB_PATH,
+        "risk_db_path": RISK_DB_PATH,
+        "v2_started_at": float(started["value"]) if started else None,
+        "movement_cluster_gap_sec": MOVEMENT_GAP_SEC,
+        "watchlist_size": int(watches["n"]) if watches else 0,
+        "changes_paper_execution": False,
+        "changes_trading_decisions": False,
+        "live_execution": False,
     }
