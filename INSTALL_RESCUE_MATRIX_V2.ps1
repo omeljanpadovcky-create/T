@@ -3,7 +3,7 @@ Set-StrictMode -Version Latest
 
 Write-Host 'MYSHKA / ASTRA - RESCUE MATRIX V2 · FORWARD SHADOW' -ForegroundColor Cyan
 
-$bundleCommit='fa3073078aa413009498d8daf46e1f6f0b17a8c1'
+$bundleCommit='cb9290acc089f1dfceb0a5c05eba140377e39c12'
 $root='https://raw.githubusercontent.com/omeljanpadovcky-create/T/'+$bundleCommit
 
 $app=$null
