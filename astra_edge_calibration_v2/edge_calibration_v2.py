@@ -20,7 +20,7 @@ from typing import Any, Optional
 
 ENABLED = os.getenv("EDGE_CALIBRATION_V2_ENABLED", "true").lower() in {"1","true","yes","on"}
 MIN_EDGE_PCT = float(os.getenv("EDGE_CALIBRATION_V2_MIN_EDGE_PCT", "0.08"))
-MAX_BOOTSTRAP_EDGE_PCT = float(os.getenv("EDGE_CALIBRATION_V2_MAX_BOOTSTRAP_EDGE_PCT", "0.15"))
+MAX_EDGE_PCT = float(os.getenv("EDGE_CALIBRATION_V2_MAX_EDGE_PCT", "0.15"))
 BOOTSTRAP_MAX_DIR_5M_PCT = float(os.getenv("EDGE_CALIBRATION_V2_BOOTSTRAP_MAX_DIR_5M_PCT", "1.00"))
 BOOTSTRAP_MAX_DIR_15M_PCT = float(os.getenv("EDGE_CALIBRATION_V2_BOOTSTRAP_MAX_DIR_15M_PCT", "1.50"))
 
@@ -92,7 +92,7 @@ def apply(*, signal: Any, edge: Any, candles: list[Any],
         "basis": basis,
         "candidate_edge_pct": edge_pct,
         "calibration_min_edge_pct": MIN_EDGE_PCT,
-        "bootstrap_max_edge_pct": MAX_BOOTSTRAP_EDGE_PCT,
+        "calibration_max_edge_pct": MAX_EDGE_PCT,
         "directional_momentum_5m_pct": dir5,
         "directional_momentum_15m_pct": dir15,
         "atr_pct": _num(atr_pct),
@@ -107,12 +107,16 @@ def apply(*, signal: Any, edge: Any, candles: list[Any],
         info.update({"passed": False, "state": "HOLD", "reason": "edge_calibration_v2_below_band"})
         return info
 
+    # During PAPER calibration, the observed working zone is a band, not
+    # "the larger the modeled edge the better". Block values above the band
+    # before JEV so AI cannot reinterpret them as stronger evidence.
+    if edge_pct > MAX_EDGE_PCT:
+        info.update({"passed": False, "state": "HOLD", "reason": "edge_calibration_v2_above_band"})
+        return info
+
     # bootstrap_atr is volatility-derived. It is not validated directional edge.
-    # Keep it only inside the calibration band and avoid chasing an already large move.
+    # Inside the band, additionally avoid chasing an already large directional move.
     if basis == "bootstrap_atr":
-        if edge_pct > MAX_BOOTSTRAP_EDGE_PCT:
-            info.update({"passed": False, "state": "HOLD", "reason": "edge_calibration_v2_bootstrap_edge_too_high"})
-            return info
         if dir5 is not None and dir5 >= BOOTSTRAP_MAX_DIR_5M_PCT:
             info.update({"passed": False, "state": "HOLD", "reason": "edge_calibration_v2_bootstrap_overextended_5m"})
             return info
@@ -128,7 +132,7 @@ def status() -> dict:
         "enabled": ENABLED,
         "mode": "PAPER_CALIBRATION",
         "min_edge_pct": MIN_EDGE_PCT,
-        "max_bootstrap_edge_pct": MAX_BOOTSTRAP_EDGE_PCT,
+        "max_edge_pct": MAX_EDGE_PCT,
         "bootstrap_max_directional_5m_pct": BOOTSTRAP_MAX_DIR_5M_PCT,
         "bootstrap_max_directional_15m_pct": BOOTSTRAP_MAX_DIR_15M_PCT,
         "bootstrap_atr_directional_proof": False,
