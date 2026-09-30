@@ -1,5 +1,5 @@
 from pathlib import Path
-import re
+import ast
 import sys
 
 MARKER = "MYSHKA_LOCAL_BRIDGE_CORS_PNA_V1"
@@ -25,18 +25,21 @@ def patch_api(path: Path) -> None:
         lines.insert(insert_at, inject_import)
         s = "".join(lines)
 
-    app_match = re.search(r"(?m)^(\s*)app\s*=\s*FastAPI\([^\n]*\)\s*$", s)
-    if not app_match:
-        # Multiline FastAPI(...) fallback: insert after the first assignment block
-        idx = s.find("app = FastAPI(")
-        if idx < 0:
-            raise RuntimeError("FastAPI app assignment not found")
-        end = s.find("\n", idx)
-        if end < 0:
-            end = len(s)
-        insert_pos = end + 1
-    else:
-        insert_pos = app_match.end() + 1
+    tree = ast.parse(s, filename=str(path))
+    app_node = None
+    for node in tree.body:
+        if isinstance(node, ast.Assign):
+            names = [t.id for t in node.targets if isinstance(t, ast.Name)]
+            if "app" in names and isinstance(node.value, ast.Call):
+                fn = node.value.func
+                if isinstance(fn, ast.Name) and fn.id == "FastAPI":
+                    app_node = node
+                    break
+    if app_node is None or not getattr(app_node, "end_lineno", None):
+        raise RuntimeError("FastAPI app assignment not found")
+
+    lines = s.splitlines(True)
+    insert_pos = sum(len(x) for x in lines[:app_node.end_lineno])
 
     middleware = f"""
 # {MARKER}
