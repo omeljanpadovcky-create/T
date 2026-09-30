@@ -196,7 +196,6 @@ button{cursor:pointer}
       <div class="bridge-node warn" id="iOllama"><small>Ollama / Qwen</small><b>CHECK…</b></div>
       <div class="bridge-node warn" id="iBybit"><small>Bybit account</small><b>CHECK…</b></div>
       <div class="bridge-node warn" id="iFreqtrade"><small>Freqtrade</small><b>CHECK…</b></div>
-      <div class="bridge-node warn" id="iN8n"><small>n8n</small><b>CHECK…</b></div>
       <div class="bridge-node warn" id="iTelegram"><small>Telegram</small><b>CHECK…</b></div>
     </div>
     <div class="sub" id="bridgeMsg" style="margin-top:8px">На телефоні localhost НЕ працює. Запускай START_PHONE.bat — він сам дасть HTTPS-посилання і підключить цей сайт до ASTRA.</div>
@@ -213,7 +212,6 @@ button{cursor:pointer}
       <button class="btn red" id="phoneKill">🛡 Kill switch OFF</button>
       <button class="btn green" id="phoneAuto">⚡ Auto scan ON</button>
       <button class="btn" id="phoneOllama">🦙 Ollama ON</button>
-      <button class="btn" id="phoneN8n">⚙ n8n events ON</button>
       <button class="btn" id="phoneNotify">✈ Telegram alerts ON</button>
       <button class="btn" id="phoneEngineReset">↺ Reset paper engine</button>
     </div>
@@ -225,7 +223,7 @@ button{cursor:pointer}
       <div class="phone-box"><small>TELEGRAM CONTROL</small><b id="pcTelegram">—</b></div>
     </div>
     <div class="phone-help">
-      У Telegram можна керувати без відкритого сайту: <b>/status /scan /pause /resume /kill /unkill /auto_on /auto_off /ollama_on /ollama_off /n8n_on /n8n_off</b>.
+      У Telegram можна керувати без відкритого сайту: <b>/status /scan /pause /resume /kill /unkill /auto_on /auto_off /ollama_on /ollama_off</b>.
       Для веб-керування з мобільного Bridge URL має бути доступний телефону по HTTPS.
     </div>
   </section>
@@ -696,7 +694,7 @@ button{cursor:pointer}
         <div class="check"><span>Ollama / Qwen</span><span id="ckOllama" class="warn">CHECK</span></div>
         <div class="check"><span>Bybit account</span><span id="ckBybit" class="warn">CHECK</span></div>
         <div class="check"><span>Freqtrade</span><span id="ckFreqtrade" class="warn">CHECK</span></div>
-        <div class="check"><span>n8n + Telegram</span><span id="ckOps" class="warn">CHECK</span></div>
+        <div class="check"><span>Telegram</span><span id="ckOps" class="warn">CHECK</span></div>
       </div>
       <div class="check-col">
         <h3>🧠 Validation</h3>
@@ -711,8 +709,8 @@ button{cursor:pointer}
 
   <div class="note">
     <b>Режим ASTRA Bridge:</b> якщо сервер на 8088 доступний, рішення йдуть через справжні Python-модулі MYSHKA/ASTRA:
-    Bybit → TECH → EDGE → JEV/Ollama → Astra Guard → PAPER ENTER → 5m REVIEW → SQLite learner.
-    Telegram та n8n отримують події через сервер, а Bybit private context допускається тільки READ-ONLY.
+    Bybit → TECH → EDGE → Context → Binance X-Check (SHADOW) → JEV/Ollama → Astra Guard → Evidence/ML → PAPER → REVIEW → SQLite learner.
+    Telegram отримує події та команди через сервер, а Bybit private context допускається тільки READ-ONLY.
     <b>Freqtrade тут не отримує live-order команд:</b> лишаємо його окремою execution authority для dry-run/майбутнього live після валідації.
     <br><b>TRAINING TECH 3/4:</b> у навчальному режимі сервер може пропустити кандидата з 3 із 4 TECH-умов тільки для збору learner-даних. Це не strict/live правило.<br><b>STRICT EDGE BUFFER:</b> для 4/4 кандидата Net Edge має бути більшим за +0.05%, щоб залишити запас над modeled costs.
   </div>
@@ -1003,7 +1001,6 @@ function paintPhoneControl(status){
   $('phoneKill').textContent='🛡 Kill switch '+(rt.kill_switch?'ON':'OFF');$('phoneKill').className='btn '+(rt.kill_switch?'red':'');
   $('phoneAuto').textContent='⚡ Auto scan '+(rt.auto_scan?'ON':'OFF');$('phoneAuto').className='btn '+(rt.auto_scan?'green':'');
   $('phoneOllama').textContent='🦙 Ollama '+(rt.ollama_enabled?'ON':'OFF');
-  $('phoneN8n').textContent='⚙ n8n events '+(rt.n8n_events_enabled?'ON':'OFF');
   $('phoneNotify').textContent='✈ Telegram alerts '+(rt.telegram_notifications_enabled?'ON':'OFF');
   $('pcEngine').textContent=en.running?'RUNNING':'STOPPED';
   $('pcEquity').textContent=Number(en.paper_equity||0).toFixed(2);
@@ -1506,7 +1503,7 @@ async function refreshPhoneControl(){
     APP.backendReady=false;
     integrationNode('iAstra','bridge_offline');
     integrationNode('iBybit','bridge_offline','direct fallback disabled');
-    ['iOllama','iFreqtrade','iN8n','iTelegram'].forEach(id=>integrationNode(id,'bridge_offline'));
+    ['iOllama','iFreqtrade','iTelegram'].forEach(id=>integrationNode(id,'bridge_offline'));
     if($('modeBadge')){$('modeBadge').textContent='ASTRA OFFLINE · RETRY';$('modeBadge').className='badge err'}
     const auth=/401/.test(String(e&&e.message||''));
     $('bridgeMsg').textContent=auth
@@ -1578,14 +1575,13 @@ async function connectBridge(){
 
     try{
       const ints=await bridgeFetch('/integrations');
-      const ol=ints.ollama||{},ba=ints.bybit_account||{},ft=ints.freqtrade||{},nn=ints.n8n||{},tg=ints.telegram||{};
+      const ol=ints.ollama||{},ba=ints.bybit_account||{},ft=ints.freqtrade||{},tg=ints.telegram||{};
       integrationNode('iOllama',ol.status,ol.model_present===false?'model missing':'');
       integrationNode('iBybit',ba.status,ba.readOnly===1||ba.read_only===1?'READ ONLY':'');
       integrationNode('iFreqtrade',ft.status);
-      integrationNode('iN8n',nn.status);
       integrationNode('iTelegram',tg.status);
     }catch(integrationError){
-      ['iOllama','iBybit','iFreqtrade','iN8n','iTelegram'].forEach(id=>integrationNode(id,'unknown'));
+      ['iOllama','iBybit','iFreqtrade','iTelegram'].forEach(id=>integrationNode(id,'unknown'));
       $('bridgeMsg').textContent+=' · ⚠ integrations: '+String((integrationError&&integrationError.message)||integrationError);
     }
 
@@ -1949,7 +1945,6 @@ $('phonePause').onclick=()=>setServerControl('paused',!(APP.serverRuntime&&APP.s
 $('phoneKill').onclick=()=>setServerControl('kill_switch',!(APP.serverRuntime&&APP.serverRuntime.kill_switch)).then(refreshPhoneControl);
 $('phoneAuto').onclick=()=>setServerControl('auto_scan',!(APP.serverRuntime&&APP.serverRuntime.auto_scan)).then(refreshPhoneControl);
 $('phoneOllama').onclick=()=>setServerControl('ollama_enabled',!(APP.serverRuntime&&APP.serverRuntime.ollama_enabled)).then(refreshPhoneControl);
-$('phoneN8n').onclick=()=>setServerControl('n8n_events_enabled',!(APP.serverRuntime&&APP.serverRuntime.n8n_events_enabled)).then(refreshPhoneControl);
 $('phoneNotify').onclick=()=>setServerControl('telegram_notifications_enabled',!(APP.serverRuntime&&APP.serverRuntime.telegram_notifications_enabled)).then(refreshPhoneControl);
 $('phoneEngineReset').onclick=async()=>{if(!APP.backendReady||!confirm('Скинути paper equity та відкриті PAPER позиції? Learner лишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl()};
 $('autoMode').onchange=()=>{if(APP.backendReady)setServerControl('auto_scan',$('autoMode').value==='on').then(refreshPhoneControl)};
