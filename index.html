@@ -1594,7 +1594,7 @@ async function connectBridge(){
     APP.backendReady=false;
     integrationNode('iAstra','bridge_offline');
     integrationNode('iBybit','bridge_offline','direct fallback disabled');
-    ['iOllama','iFreqtrade','iN8n','iTelegram'].forEach(id=>integrationNode(id,'bridge_offline'));
+    ['iOllama','iFreqtrade','iTelegram'].forEach(id=>integrationNode(id,'bridge_offline'));
     if($('modeBadge')){$('modeBadge').textContent='ASTRA OFFLINE · RETRY';$('modeBadge').className='badge err'}
     const msg=String((e&&e.message)||e||'unknown');
     $('bridgeMsg').textContent='⚠ Bridge diagnostics: '+msg;
@@ -1777,7 +1777,7 @@ function renderReadiness(){
   const edgeSeen=decisions.some(d=>d&&d.edge);
   const jevSeen=decisions.some(d=>d&&d.jev);
   const guardSeen=decisions.some(d=>d&&d.guard);
-  const astra=integState('iAstra'),ollama=integState('iOllama'),bybit=integState('iBybit'),freq=integState('iFreqtrade'),n8n=integState('iN8n'),tg=integState('iTelegram');
+  const astra=integState('iAstra'),ollama=integState('iOllama'),bybit=integState('iBybit'),freq=integState('iFreqtrade'),tg=integState('iTelegram');
 
   $('rKill').textContent=killOn?'ON':'OFF';
   $('rKill').className=killOn?'short':'long';
@@ -1793,8 +1793,8 @@ function renderReadiness(){
   setCheck('ckOllama',ollama.text,ollama.ok?'ok':ollama.bad?'bad':'warn');
   setCheck('ckBybit',bybit.text,bybit.ok?'ok':bybit.bad?'bad':'warn');
   setCheck('ckFreqtrade',freq.text,freq.ok?'ok':freq.bad?'bad':'warn');
-  const opsOk=n8n.ok&&tg.ok;
-  setCheck('ckOps',(n8n.text||'—')+' / '+(tg.text||'—'),opsOk?'ok':(n8n.bad||tg.bad)?'bad':'warn');
+  const opsOk=tg.ok;
+  setCheck('ckOps',tg.text||'—',opsOk?'ok':tg.bad?'bad':'warn');
 
   const checks=[
     (APP.backendReady||bybit.ok),
