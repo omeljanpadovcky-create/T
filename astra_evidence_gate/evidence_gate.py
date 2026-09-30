@@ -26,10 +26,11 @@ MIN_N = max(10, int(os.getenv("EVIDENCE_GATE_MIN_N", "20")))
 MIN_AVG_NET_PCT = float(os.getenv("EVIDENCE_GATE_MIN_AVG_NET_PCT", "0.03"))
 MIN_PROFIT_FACTOR = float(os.getenv("EVIDENCE_GATE_MIN_PROFIT_FACTOR", "1.10"))
 REQUIRE_RECENT_POSITIVE = os.getenv("EVIDENCE_GATE_REQUIRE_RECENT_POSITIVE", "true").lower() in {"1","true","yes","on"}
-_THRESHOLDS_RAW = os.getenv("EVIDENCE_GATE_THRESHOLDS", "0.05,0.10,0.15,0.20,0.25,0.30")
+_THRESHOLDS_RAW = os.getenv("EVIDENCE_GATE_THRESHOLDS", "0.08,0.10,0.12")
 THRESHOLDS = tuple(sorted({float(x.strip()) for x in _THRESHOLDS_RAW.split(",") if x.strip()}))
 EXPLORATION_ENABLED = os.getenv("EVIDENCE_GATE_EXPLORATION_ENABLED", "true").lower() in {"1","true","yes","on"}
-EXPLORATION_MIN_EDGE_PCT = float(os.getenv("EVIDENCE_GATE_EXPLORATION_MIN_EDGE_PCT", "0.10"))
+EXPLORATION_MIN_EDGE_PCT = float(os.getenv("EVIDENCE_GATE_EXPLORATION_MIN_EDGE_PCT", "0.08"))
+CALIBRATION_MAX_EDGE_PCT = float(os.getenv("EVIDENCE_GATE_CALIBRATION_MAX_EDGE_PCT", "0.15"))
 EXPLORATION_COOLDOWN_SEC = max(60, int(os.getenv("EVIDENCE_GATE_EXPLORATION_COOLDOWN_SEC", "600")))
 EXPLORATION_MAX_OPEN = max(1, int(os.getenv("EVIDENCE_GATE_EXPLORATION_MAX_OPEN", "1")))
 _LOCK = threading.RLock()
@@ -104,6 +105,7 @@ def _exploration_status(now: Optional[float] = None) -> dict:
     return {
         "enabled": EXPLORATION_ENABLED,
         "min_edge_pct": EXPLORATION_MIN_EDGE_PCT,
+        "max_edge_pct": CALIBRATION_MAX_EDGE_PCT,
         "cooldown_sec": EXPLORATION_COOLDOWN_SEC,
         "cooldown_left_sec": round(cooldown_left, 1),
         "max_open": EXPLORATION_MAX_OPEN,
@@ -177,7 +179,11 @@ def _metrics(rows: list[dict]) -> dict:
 def _threshold_report(rows: list[dict]) -> list[dict]:
     out = []
     for t in THRESHOLDS:
-        q = [r for r in rows if float(r.get("edge_pct") or 0.0) >= t]
+        q = [
+            r for r in rows
+            if float(r.get("edge_pct") or 0.0) >= t
+            and float(r.get("edge_pct") or 0.0) <= CALIBRATION_MAX_EDGE_PCT
+        ]
         m = _metrics(q)
         stable = (not REQUIRE_RECENT_POSITIVE) or float(m["recent_avg_net_pct"]) > 0.0
         passed = (
@@ -208,6 +214,7 @@ def report() -> dict:
             "min_avg_net_pct": MIN_AVG_NET_PCT,
             "min_profit_factor": MIN_PROFIT_FACTOR,
             "require_recent_positive": REQUIRE_RECENT_POSITIVE,
+            "calibration_max_edge_pct": CALIBRATION_MAX_EDGE_PCT,
         },
         "exploration": _exploration_status(),
         "note": "STRICT PAPER validation gate. During WARMING, controlled exploration may pass one high-edge candidate; HOLD remains a hard block.",
@@ -247,6 +254,7 @@ def evaluate(result: dict) -> dict:
                 exploration.get("available")
                 and edge_pct is not None
                 and edge_pct >= EXPLORATION_MIN_EDGE_PCT
+                and edge_pct <= CALIBRATION_MAX_EDGE_PCT
             )
             return {
                 "applies": True, "passed": exploration_ok,
@@ -254,6 +262,8 @@ def evaluate(result: dict) -> dict:
                 "reason": "evidence_gate_warming_exploration" if exploration_ok else (
                     "evidence_gate_warming_edge_too_low"
                     if edge_pct is None or edge_pct < EXPLORATION_MIN_EDGE_PCT
+                    else "evidence_gate_warming_edge_too_high"
+                    if edge_pct > CALIBRATION_MAX_EDGE_PCT
                     else "evidence_gate_warming_exploration_unavailable"
                 ),
                 "candidate_edge_pct": edge_pct,
@@ -279,7 +289,11 @@ def evaluate(result: dict) -> dict:
             "exploration": exploration,
         }
 
-    passed = edge_pct is not None and edge_pct >= float(threshold)
+    passed = (
+        edge_pct is not None
+        and edge_pct >= float(threshold)
+        and edge_pct <= CALIBRATION_MAX_EDGE_PCT
+    )
     chosen = next((x for x in rep.get("thresholds", []) if float(x.get("threshold_pct")) == float(threshold)), {})
     return {
         "applies": True,
@@ -288,6 +302,7 @@ def evaluate(result: dict) -> dict:
         "reason": "evidence_gate_pass" if passed else "evidence_gate_edge_below_validated_threshold",
         "candidate_edge_pct": edge_pct,
         "qualified_threshold_pct": threshold,
+        "qualified_max_edge_pct": CALIBRATION_MAX_EDGE_PCT,
         "evidence_n": int(chosen.get("n") or 0),
         "evidence_avg_net_pct": float(chosen.get("avg_net_pct") or 0.0),
         "evidence_profit_factor": float(chosen.get("profit_factor") or 0.0),
