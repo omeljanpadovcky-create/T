@@ -188,7 +188,7 @@ button{cursor:pointer}
   <section class="bridge glass" id="bridgePanel">
     <div class="bridge-top">
       <div><label>ASTRA URL · AUTO: локальна ASTRA → Cloudflare для телефону</label><input id="bridgeUrl" value="http://localhost:8088" placeholder="AUTO: http://127.0.0.1:8088 або https://твій-tunnel"></div>
-      <div><label>MYSHKA token (якщо увімкнений)</label><input id="bridgeToken" type="password" placeholder="X-MYSHKA-TOKEN"></div>
+      <div><label>MYSHKA bridge token</label><input id="bridgeToken" type="password" placeholder="встав значення MYSHKA_BRIDGE_TOKEN"></div>
       <button class="btn green" id="bridgeConnect">🔌 Підключити ASTRA</button>
     </div>
     <div class="bridge-grid">
@@ -1434,7 +1434,10 @@ async function refreshPhoneControl(){
     integrationNode('iBybit','bridge_offline','direct fallback disabled');
     ['iOllama','iFreqtrade','iN8n','iTelegram'].forEach(id=>integrationNode(id,'bridge_offline'));
     if($('modeBadge')){$('modeBadge').textContent='ASTRA OFFLINE · RETRY';$('modeBadge').className='badge err'}
-    $('bridgeMsg').textContent='⚠ ASTRA bridge втрачено: '+e.message+'. Direct Bybit auto-fallback вимкнений, щоб не створювати дубльований scanner / API rate-limit. Сайт спробує перепідключитися.';
+    const auth=/401/.test(String(e&&e.message||''));
+    $('bridgeMsg').textContent=auth
+      ?'⚠ ASTRA відповідає, але bridge token неправильний або порожній. Встав значення MYSHKA_BRIDGE_TOKEN.'
+      :'⚠ ASTRA bridge втрачено: '+e.message+'. Direct Bybit auto-fallback вимкнений, щоб не створювати дубльований scanner / API rate-limit. Сайт спробує перепідключитися.';
   }
 }
 async function setServerControl(name,value){
@@ -1450,6 +1453,7 @@ async function phoneScanNow(){
 async function connectBridge(){
   const preferred=$('bridgeUrl').value.trim()||APP.bridgeUrl||'http://localhost:8088';
   APP.bridgeToken=$('bridgeToken').value.trim();
+  if(APP.bridgeToken==='X-MYSHKA-TOKEN')APP.bridgeToken='';
   $('bridgeConnect').textContent='… Пошук ASTRA';
   let h=null,chosen='';
   try{
