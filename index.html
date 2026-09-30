@@ -913,15 +913,19 @@ async function bridgeFetch(path,opts={}){
 
 async function probeBridge(base){
   const url=String(base||'').replace(/\/$/,'');
-  if(!url)return null;
-  const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),2200);
+  if(!url)return {ok:false,error:'empty bridge URL'};
+  const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),4500);
   try{
-    const r=await fetch(url+'/health',{cache:'no-store',signal:ctl.signal,headers:bridgeHeaders(false)});
-    if(!r.ok)return null;
+    // Health probe intentionally sends NO custom token header.
+    // This avoids an unnecessary x-myshka-token preflight before we know the bridge is reachable.
+    const r=await fetch(url+'/health',{cache:'no-store',signal:ctl.signal});
+    if(!r.ok)return {ok:false,error:'HTTP '+r.status,status:r.status};
     const j=await r.json();
-    return j&&j.status==='ok'?j:null;
-  }catch(e){return null}
-  finally{clearTimeout(timer)}
+    return j&&j.status==='ok'?{ok:true,data:j}:{ok:false,error:'invalid /health payload'};
+  }catch(e){
+    if(e&&e.name==='AbortError')return {ok:false,error:'timeout /health'};
+    return {ok:false,error:(e&&e.message)||String(e)};
+  }finally{clearTimeout(timer)}
 }
 function bridgeCandidates(preferred){
   const p=(preferred||'').trim().replace(/\/$/,'');
@@ -1457,12 +1461,14 @@ async function connectBridge(){
   $('bridgeConnect').textContent='… Пошук ASTRA';
   let h=null,chosen='';
   try{
+    const probeErrors=[];
     for(const candidate of bridgeCandidates(preferred)){
       $('bridgeMsg').textContent='Шукаю ASTRA: '+candidate+' …';
       const probe=await probeBridge(candidate);
-      if(probe){h=probe;chosen=candidate;break}
+      if(probe&&probe.ok){h=probe.data;chosen=candidate;break}
+      probeErrors.push(candidate+' → '+String((probe&&probe.error)||'unknown'));
     }
-    if(!h)throw new Error('ASTRA не відповідає ні локально, ні через Bridge');
+    if(!h)throw new Error(probeErrors.join(' | ')||'ASTRA не відповідає');
 
     APP.bridgeUrl=chosen;
     APP.backendReady=true;
@@ -1510,7 +1516,8 @@ async function connectBridge(){
     integrationNode('iBybit','bridge_offline','direct fallback disabled');
     ['iOllama','iFreqtrade','iN8n','iTelegram'].forEach(id=>integrationNode(id,'bridge_offline'));
     if($('modeBadge')){$('modeBadge').textContent='ASTRA OFFLINE · RETRY';$('modeBadge').className='badge err'}
-    $('bridgeMsg').textContent='⚠ ASTRA не знайдена. Direct Bybit auto-fallback вимкнений, щоб не дублювати серверні запити. Запусти ASTRA на ПК — сайт сам перепідключиться до http://127.0.0.1:8088.';
+    const msg=String((e&&e.message)||e||'unknown');
+    $('bridgeMsg').textContent='⚠ Bridge diagnostics: '+msg;
     // Do not keep a dead temporary trycloudflare URL as the active desktop bridge.
     if(/trycloudflare\.com/i.test(preferred)){
       APP.bridgeUrl='http://127.0.0.1:8088';
