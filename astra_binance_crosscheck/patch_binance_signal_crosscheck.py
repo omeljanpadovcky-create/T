@@ -1,7 +1,15 @@
 from pathlib import Path
+import re
 import sys
 
 MARKER = "MYSHKA_BINANCE_SIGNAL_CROSSCHECK_V1"
+
+
+def _insert_after_line(s: str, pattern: str, addition: str, label: str) -> str:
+    m = re.search(pattern, s, flags=re.MULTILINE)
+    if not m:
+        raise RuntimeError(f"{label} not found")
+    return s[:m.end()] + addition + s[m.end():]
 
 
 def patch_api(path: Path) -> None:
@@ -11,48 +19,41 @@ def patch_api(path: Path) -> None:
         print("[OK] Binance Signal Crosscheck V1 already present")
         return
 
-    import_anchor = (
-        "from .multihorizon_shadow import init as multihorizon_init, status as multihorizon_status, "
-        "report as multihorizon_report, observe_results as multihorizon_observe\n"
-    )
-    new_import = (
+    # 1) Import: tolerate both original Multi-Horizon import and the later
+    # POST-Calibration variant that also imports post_calibration_report.
+    if not re.search(r"^from \.multihorizon_shadow import .+$", s, flags=re.MULTILINE):
+        raise RuntimeError("Multi-Horizon module import not found")
+    bx_import = (
         "from .binance_signal_crosscheck import init as binance_crosscheck_init, "
         "status as binance_crosscheck_status, report as binance_crosscheck_report, "
         "observe_results as binance_crosscheck_observe\n"
     )
-    if import_anchor not in s:
-        raise RuntimeError("Multi-Horizon import anchor not found. Install EDGE Calibration V2 first.")
-    s = s.replace(import_anchor, import_anchor + new_import, 1)
-
-    startup_anchor = "    multihorizon_init()\n    _start_phone_threads()\n"
-    if startup_anchor not in s:
-        raise RuntimeError("Multi-Horizon startup anchor not found")
-    s = s.replace(
-        startup_anchor,
-        "    multihorizon_init()\n"
-        f"    # {MARKER}\n"
-        "    binance_crosscheck_init()\n"
-        "    _start_phone_threads()\n",
-        1,
+    s = _insert_after_line(
+        s,
+        r"^from \.multihorizon_shadow import .+\n",
+        bx_import,
+        "Multi-Horizon import",
     )
 
-    health_anchor = '        "multihorizon_shadow": multihorizon_status(),\n'
-    if health_anchor not in s:
-        raise RuntimeError("Multi-Horizon health anchor not found")
-    s = s.replace(
-        health_anchor,
-        health_anchor + f'        # {MARKER}\n        "binance_crosscheck": binance_crosscheck_status(),\n',
-        1,
+    # 2) Startup: insert directly after the existing init call regardless of
+    # what modules were added later before _start_phone_threads().
+    s = _insert_after_line(
+        s,
+        r"^[ \t]+multihorizon_init\(\)\n",
+        f"    # {MARKER}\n    binance_crosscheck_init()\n",
+        "Multi-Horizon startup",
     )
 
-    endpoint_anchor = (
-        '@app.get("/multihorizon/report")\n'
-        'def multihorizon_report_api(x_myshka_token: Optional[str] = Header(default=None)):\n'
-        '    _require_token(x_myshka_token)\n'
-        '    return multihorizon_report()\n\n\n'
+    # 3) Health.
+    s = _insert_after_line(
+        s,
+        r'^[ \t]+"multihorizon_shadow":\s*multihorizon_status\(\),\n',
+        f'        # {MARKER}\n        "binance_crosscheck": binance_crosscheck_status(),\n',
+        "Multi-Horizon health entry",
     )
-    if endpoint_anchor not in s:
-        raise RuntimeError("Multi-Horizon report endpoint anchor not found")
+
+    # 4) Endpoints: POST-Calibration V2 is installed on this project, so use
+    # its route as a stable insertion point. Fall back to multihorizon route.
     endpoints = (
         f'# {MARKER}\n'
         '@app.get("/binance-crosscheck/status")\n'
@@ -64,34 +65,24 @@ def patch_api(path: Path) -> None:
         '    _require_token(x_myshka_token)\n'
         '    return binance_crosscheck_report()\n\n\n'
     )
-    s = s.replace(endpoint_anchor, endpoint_anchor + endpoints, 1)
-
-    flow_anchor = (
-        "        # MYSHKA_MULTIHORIZON_SHADOW_V1: 5m/10m/15m SHADOW outcomes from normal scan prices\n"
-        "        multihorizon_observe(results)\n"
-        "        counterfactual_observe(results)\n"
-    )
-    if flow_anchor not in s:
-        # More tolerant fallback for already-patched variants.
-        simple = "        multihorizon_observe(results)\n        counterfactual_observe(results)\n"
-        if simple not in s:
-            raise RuntimeError("Multi-Horizon observer flow anchor not found")
-        replacement = (
-            "        multihorizon_observe(results)\n"
-            f"        # {MARKER}: diagnostic crosscheck only; never changes action\n"
-            "        binance_crosscheck_observe(results)\n"
-            "        counterfactual_observe(results)\n"
-        )
-        s = s.replace(simple, replacement, 1)
+    post_route = '@app.get("/post-calibration/report")\n'
+    mh_route = '@app.get("/multihorizon/report")\n'
+    if post_route in s:
+        s = s.replace(post_route, endpoints + post_route, 1)
+    elif mh_route in s:
+        s = s.replace(mh_route, endpoints + mh_route, 1)
     else:
-        replacement = (
-            "        # MYSHKA_MULTIHORIZON_SHADOW_V1: 5m/10m/15m SHADOW outcomes from normal scan prices\n"
-            "        multihorizon_observe(results)\n"
-            f"        # {MARKER}: diagnostic crosscheck only; never changes action\n"
-            "        binance_crosscheck_observe(results)\n"
-            "        counterfactual_observe(results)\n"
-        )
-        s = s.replace(flow_anchor, replacement, 1)
+        raise RuntimeError("Multi-Horizon/Post-Calibration endpoint insertion point not found")
+
+    # 5) Observer: insert directly after the Multi-Horizon observer call.
+    # This is SHADOW and never changes r['action'].
+    s = _insert_after_line(
+        s,
+        r"^[ \t]+multihorizon_observe\(results\)\n",
+        f"        # {MARKER}: diagnostic crosscheck only; never changes action\n"
+        "        binance_crosscheck_observe(results)\n",
+        "Multi-Horizon observer call",
+    )
 
     compile(s, str(path), "exec")
     path.write_text(s, encoding="utf-8")
