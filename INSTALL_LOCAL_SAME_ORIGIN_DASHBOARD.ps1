@@ -5,7 +5,7 @@ Write-Host '======================================================' -ForegroundC
 Write-Host ' MYSHKA / ASTRA - LOCAL SAME-ORIGIN DASHBOARD FIX ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$bundleCommit = '21c01bc9be0669d2eea6beefba3a5395b44dcc96'
+$bundleCommit = 'c507151227f3873f7faba2efff81c117d76dd2b2'
 $root = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit
 
 $app = $null
@@ -99,11 +99,17 @@ for($i=0; $i -lt 45; $i++){
 }
 if(-not $health -or $health.status -ne 'ok'){ throw 'ASTRA health failed after rebuild.' }
 
+Write-Host '[6.6/7] Verifying dashboard file inside container...'
+docker exec myshka-astra python -c "from pathlib import Path; p=Path('/data/myshka_dashboard.html'); s=p.read_text(encoding='utf-8'); assert 'MYSHKA / ASTRA Trading Lab' in s and 'localAstraOrigin' in s and 'POSTV2_300' in s; print('[OK] container dashboard markers valid')"
+if($LASTEXITCODE -ne 0){ throw 'Dashboard file inside container is invalid.' }
+
 $page = Invoke-WebRequest -UseBasicParsing 'http://127.0.0.1:8088/dashboard' -TimeoutSec 10
 if($page.StatusCode -ne 200){ throw 'Local dashboard HTTP check failed.' }
-if($page.Content -notmatch 'MYSHKA / ASTRA Trading Lab' -or $page.Content -notmatch 'localAstraOrigin'){
-  throw 'Local dashboard content check failed.'
+$dashHeader = $page.Headers['X-MYSHKA-Dashboard']
+if($dashHeader -ne '1'){
+  throw ('Local dashboard route verification header missing. Got: ' + [string]$dashHeader)
 }
+Write-Host '[OK] /dashboard route verified by X-MYSHKA-Dashboard=1' -ForegroundColor Green
 
 Write-Host '[7/7] Opening same-origin dashboard...'
 Start-Process 'http://127.0.0.1:8088/dashboard'
