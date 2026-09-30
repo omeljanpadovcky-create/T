@@ -15,6 +15,7 @@ import time
 from typing import Any, Optional
 
 DB_PATH = os.getenv("MULTIHORIZON_DB_PATH", "/data/myshka_multihorizon.sqlite3")
+ANALYTICS_DB_PATH = os.getenv("ANALYTICS_DB_PATH", "/data/myshka_analytics.sqlite3")
 HORIZONS = tuple(sorted({int(x) for x in os.getenv("MULTIHORIZON_HORIZONS_SEC", "300,600,900").split(",") if x.strip()}))
 MAX_SETTLE_DELAY_SEC = max(30, int(os.getenv("MULTIHORIZON_MAX_SETTLE_DELAY_SEC", "90")))
 _LOCK = threading.RLock()
@@ -65,6 +66,22 @@ def init() -> dict:
         )
         con.execute("CREATE INDEX IF NOT EXISTS idx_mh_status_target ON mh_outcomes(status,target_at)")
         con.execute("CREATE INDEX IF NOT EXISTS idx_mh_horizon_status ON mh_outcomes(horizon_sec,status)")
+        con.execute(
+            """
+            CREATE TABLE IF NOT EXISTS mh_meta(
+                key TEXT PRIMARY KEY,
+                value TEXT NOT NULL
+            )
+            """
+        )
+        row = con.execute("SELECT value FROM mh_meta WHERE key='post_calibration_v2_started_at'").fetchone()
+        if not row:
+            first = con.execute("SELECT MIN(opened_at) FROM mh_outcomes").fetchone()
+            started = float(first[0]) if first and first[0] is not None else time.time()
+            con.execute(
+                "INSERT OR IGNORE INTO mh_meta(key,value) VALUES('post_calibration_v2_started_at',?)",
+                (str(started),),
+            )
     return status()
 
 
@@ -251,6 +268,111 @@ def report() -> dict:
     }
 
 
+def _post_calibration_started_at() -> float:
+    init()
+    with _LOCK, _conn() as con:
+        row = con.execute(
+            "SELECT value FROM mh_meta WHERE key='post_calibration_v2_started_at'"
+        ).fetchone()
+        if row:
+            try:
+                return float(row["value"])
+            except Exception:
+                pass
+        first = con.execute("SELECT MIN(opened_at) AS first_at FROM mh_outcomes").fetchone()
+        started = float(first["first_at"]) if first and first["first_at"] is not None else time.time()
+        con.execute(
+            "INSERT OR REPLACE INTO mh_meta(key,value) VALUES('post_calibration_v2_started_at',?)",
+            (str(started),),
+        )
+        return started
+
+
+def _post_analytics_rows(started_at: float) -> list[dict]:
+    if not os.path.exists(ANALYTICS_DB_PATH):
+        return []
+    try:
+        con = sqlite3.connect(ANALYTICS_DB_PATH, timeout=10)
+        con.row_factory = sqlite3.Row
+        try:
+            rows = con.execute(
+                """
+                SELECT *
+                FROM analytics_trades
+                WHERE status='CLOSED'
+                  AND mode='STRICT'
+                  AND opened_at>=?
+                ORDER BY opened_at ASC
+                """,
+                (float(started_at),),
+            ).fetchall()
+            return [dict(r) for r in rows]
+        finally:
+            con.close()
+    except Exception:
+        return []
+
+
+def post_calibration_report() -> dict:
+    """Strict PAPER + 5/10/15m SHADOW stats since EDGE Calibration V2 began."""
+    init()
+    started = _post_calibration_started_at()
+    paper_rows = _post_analytics_rows(started)
+    paper = _metrics(paper_rows)
+
+    with _LOCK, _conn() as con:
+        rows = [
+            dict(r) for r in con.execute(
+                """
+                SELECT *
+                FROM mh_outcomes
+                WHERE status='CLOSED' AND opened_at>=?
+                ORDER BY opened_at ASC
+                """,
+                (float(started),),
+            ).fetchall()
+        ]
+        open_n = int(con.execute(
+            "SELECT COUNT(*) FROM mh_outcomes WHERE status='OPEN' AND opened_at>=?",
+            (float(started),),
+        ).fetchone()[0])
+        skipped_n = int(con.execute(
+            "SELECT COUNT(*) FROM mh_outcomes WHERE status='SKIPPED' AND opened_at>=?",
+            (float(started),),
+        ).fetchone()[0])
+
+    by_horizon: dict[str, dict] = {}
+    for h in HORIZONS:
+        part = [r for r in rows if int(r.get("horizon_sec") or 0) == int(h)]
+        band = [
+            r for r in part
+            if _num(r.get("edge_pct")) is not None
+            and 0.08 <= float(r.get("edge_pct") or 0.0) <= 0.15
+        ]
+        by_horizon[str(h)] = {
+            "all_strict": _metrics(part),
+            "calibration_band_0.08_0.15": _metrics(band),
+        }
+
+    n = int(paper.get("n") or 0)
+    return {
+        "status": "ok",
+        "mode": "POST_CALIBRATION_V2",
+        "started_at": started,
+        "paper_strict": paper,
+        "sample_state": "COLD" if n < 10 else "EARLY" if n < 30 else "USABLE" if n < 100 else "MATURE",
+        "edge_band_pct": {"min": 0.08, "max": 0.15},
+        "horizons_sec": list(HORIZONS),
+        "by_horizon": by_horizon,
+        "multihorizon_open": open_n,
+        "multihorizon_skipped": skipped_n,
+        "analytics_db_path": ANALYTICS_DB_PATH,
+        "multihorizon_db_path": DB_PATH,
+        "shadow_horizons_only": True,
+        "live_execution": False,
+    }
+
+
 def status() -> dict:
     try:
         rep = report()
@@ -263,6 +385,7 @@ def status() -> dict:
             "closed":rep["closed"],
             "skipped":rep["skipped"],
             "extra_market_api_calls":False,
+            "post_calibration_v2_started_at": _post_calibration_started_at(),
         }
     except Exception as exc:
         return {"enabled":True,"mode":"SHADOW","db_path":DB_PATH,"error":f"{type(exc).__name__}: {exc}"}
