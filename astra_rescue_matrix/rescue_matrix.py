@@ -1,4 +1,4 @@
-"""MYSHKA / ASTRA — RESCUE MATRIX V2.2 ATTRIBUTION (FORWARD SHADOW ONLY).
+"""MYSHKA / ASTRA — RESCUE MATRIX V2.3 JEV SCHEMA (FORWARD SHADOW ONLY).
 
 Goal:
 - freeze PAPER/trading decisions;
@@ -289,6 +289,39 @@ def _nearest(row: dict, by_pair: dict, time_field: str) -> Optional[dict]:
 
     return best
 
+def _normalize_jev_value(v: Any) -> str:
+    if isinstance(v, bool):
+        return "APPROVE" if v else "REJECT"
+    s = str(v or "").strip().upper()
+    if not s:
+        return ""
+    if s in {"APPROVE","APPROVED","PASS","PASSED","ENTER","ALLOW","ALLOWED","GO","YES","TRUE"}:
+        return "APPROVE"
+    if s in {"REJECT","REJECTED","DROP","BLOCK","BLOCKED","DENY","DENIED","NO","FALSE"}:
+        return "REJECT"
+    if s in {"WAIT","HOLD","NEUTRAL","SKIP","PENDING","NONE","NO_DATA","N/A"}:
+        return "WAIT"
+    return s
+
+
+def _extract_jev(obj: Any) -> tuple[str, str, list[str], dict]:
+    """Return normalized verdict, source-key, visible keys and compact sample."""
+    if not isinstance(obj, dict):
+        return "", "", [], {}
+    keys = [str(k) for k in obj.keys()]
+    sample = {}
+    for k in keys[:12]:
+        v = obj.get(k)
+        if isinstance(v, (str, int, float, bool)) or v is None:
+            sample[k] = v
+    for key in ("verdict","decision","state","action","result","label","recommendation","approved","passed"):
+        if key in obj:
+            n = _normalize_jev_value(obj.get(key))
+            if n:
+                return n, key, keys, sample
+    return "", "", keys, sample
+
+
 def _evidence_state(stage: dict, raw: dict) -> str:
     e = (stage or {}).get("evidence_gate")
     if not isinstance(e, dict):
@@ -338,13 +371,23 @@ def _enrich(rows: list[dict]) -> tuple[list[dict], dict]:
 
         stage_jev = stage.get("jev") if isinstance(stage.get("jev"), dict) else {}
         raw_jev = raw.get("jev") if isinstance(raw.get("jev"), dict) else {}
-        jev = str(
-            (risk or {}).get("jev_verdict")
-            or (box or {}).get("jev_verdict")
-            or stage_jev.get("verdict")
-            or raw_jev.get("verdict")
+        stage_norm, stage_key, stage_keys, stage_sample = _extract_jev(stage_jev)
+        raw_norm, raw_key, raw_keys, raw_sample = _extract_jev(raw_jev)
+
+        risk_norm = _normalize_jev_value((risk or {}).get("jev_verdict"))
+        box_norm = _normalize_jev_value((box or {}).get("jev_verdict"))
+        # Historical direct columns may contain the recorder fallback WAIT even
+        # when raw_json has a more specific JEV field. Prefer explicit raw/stage
+        # verdicts over a fallback WAIT.
+        jev = (
+            raw_norm
+            or stage_norm
+            or (risk_norm if risk_norm not in {"", "WAIT"} else "")
+            or (box_norm if box_norm not in {"", "WAIT"} else "")
+            or risk_norm
+            or box_norm
             or "UNKNOWN"
-        ).upper()
+        )
         evidence = _evidence_state(stage, raw)
 
         r.update({
@@ -357,12 +400,18 @@ def _enrich(rows: list[dict]) -> tuple[list[dict], dict]:
             "xcheck": str(r.get("xcheck_state") or "NO_DATA").upper(),
             "evidence": evidence,
             "jev_source": (
-                "risk_candidate" if (risk or {}).get("jev_verdict")
-                else "blackbox_column" if (box or {}).get("jev_verdict")
-                else "blackbox_stage" if stage_jev.get("verdict")
-                else "blackbox_raw" if raw_jev.get("verdict")
+                ("blackbox_raw."+raw_key) if raw_norm
+                else ("blackbox_stage."+stage_key) if stage_norm
+                else "risk_candidate" if (risk or {}).get("jev_verdict") is not None
+                else "blackbox_column" if (box or {}).get("jev_verdict") is not None
                 else "missing"
             ),
+            "raw_jev_present": bool(raw_jev),
+            "stage_jev_present": bool(stage_jev),
+            "raw_jev_keys": raw_keys,
+            "stage_jev_keys": stage_keys,
+            "raw_jev_sample": raw_sample,
+            "stage_jev_sample": stage_sample,
         })
         r["pair"] = r["pair_norm"]
         out.append(r)
@@ -631,6 +680,22 @@ def _attribution_funnel(rows: list[dict]) -> dict:
         "risk_joined_rows": sum(1 for r in rows if str(r.get("jev_source") or "") == "risk_candidate"),
         "blackbox_jev_rows": sum(1 for r in rows if str(r.get("jev_source") or "").startswith("blackbox")),
         "missing_jev_rows": sum(1 for r in rows if str(r.get("jev") or "") in {"", "UNKNOWN"}),
+        "raw_jev_present_rows": sum(1 for r in rows if bool(r.get("raw_jev_present"))),
+        "stage_jev_present_rows": sum(1 for r in rows if bool(r.get("stage_jev_present"))),
+        "raw_jev_key_sets": _count_values([
+            {"v": ",".join(r.get("raw_jev_keys") or []) or "NONE"} for r in rows
+        ], "v"),
+        "stage_jev_key_sets": _count_values([
+            {"v": ",".join(r.get("stage_jev_keys") or []) or "NONE"} for r in rows
+        ], "v"),
+        "raw_jev_examples": [
+            r.get("raw_jev_sample") for r in rows
+            if r.get("raw_jev_sample")
+        ][:5],
+        "stage_jev_examples": [
+            r.get("stage_jev_sample") for r in rows
+            if r.get("stage_jev_sample")
+        ][:5],
     }
 
 
@@ -755,7 +820,7 @@ def report() -> dict:
         "forward_started_at": started,
         "movement_cluster_gap_sec": MOVEMENT_GAP_SEC,
         "legacy_fixed_cluster_key_used_for_scoring": False,
-        "performance_mode": "BINARY_JOIN_CACHE_ATTRIBUTION_V2_2",
+        "performance_mode": "BINARY_JOIN_CACHE_JEV_SCHEMA_V2_3",
         "coverage": coverage,
         "by_horizon": by_horizon,
         "watchlist_counts": watch_counts,
