@@ -5,7 +5,7 @@ Write-Host '======================================================' -ForegroundC
 Write-Host ' MYSHKA / ASTRA - LOCAL SAME-ORIGIN DASHBOARD FIX ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$bundleCommit = '89b6d870a7a66feb229a880bf03c97c48b993b65'
+$bundleCommit = 'bcbea88fe206d831df725f683830e41b61e2425c'
 $root = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit
 
 $app = $null
@@ -114,8 +114,18 @@ if($dashHeader -ne '1'){
 }
 Write-Host '[OK] /dashboard route verified by X-MYSHKA-Dashboard=1' -ForegroundColor Green
 
-Write-Host '[7/7] Opening same-origin dashboard...'
-Start-Process 'http://127.0.0.1:8088/dashboard'
+Write-Host '[7/7] Bootstrapping local dashboard authorization...'
+$token = $null
+try {
+  $token = (docker inspect myshka-astra --format '{{range .Config.Env}}{{println .}}{{end}}' |
+    Where-Object { $_ -match '^MYSHKA_BRIDGE_TOKEN=' } |
+    Select-Object -First 1) -replace '^MYSHKA_BRIDGE_TOKEN=',''
+} catch {}
+if(-not $token){ throw 'MYSHKA_BRIDGE_TOKEN not found in container environment.' }
+$encodedToken = [uri]::EscapeDataString($token)
+$launchUrl = 'http://127.0.0.1:8088/dashboard#token=' + $encodedToken
+Start-Process $launchUrl
+Write-Host '[OK] One-time token bootstrap URL opened. Fragment is removed by the dashboard after saving to localhost storage.' -ForegroundColor Green
 
 Write-Host ''
 Write-Host '======================================================' -ForegroundColor Green
@@ -124,6 +134,7 @@ Write-Host '======================================================' -ForegroundC
 Write-Host ('ASTRA health: ' + $health.status)
 Write-Host 'Dashboard: http://127.0.0.1:8088/dashboard'
 Write-Host 'Bridge path: SAME-ORIGIN'
+Write-Host 'Local auth bootstrap: MYSHKA_BRIDGE_TOKEN -> URL fragment -> localStorage (fragment auto-removed)'
 Write-Host 'CORS/PNA dependency on desktop: NO'
 Write-Host 'GitHub Pages -> localhost dependency on desktop: NO'
 Write-Host 'Trading logic changed: NO'
