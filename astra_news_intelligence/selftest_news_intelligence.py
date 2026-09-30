@@ -1,6 +1,17 @@
 from __future__ import annotations
-import json, os, sqlite3, tempfile, time, uuid
+import json, os, sqlite3, tempfile, time, uuid, sys, types
 from pathlib import Path
+
+# The synthetic self-test does not perform HTTP. On Windows the host Python may
+# not have requests installed even though the Docker image does. Provide a tiny
+# import stub so the test validates our DB/aggregation/outcome logic only.
+try:
+    import requests  # noqa: F401
+except ModuleNotFoundError:
+    stub=types.ModuleType("requests")
+    stub.get=lambda *a,**k: (_ for _ in ()).throw(RuntimeError("HTTP disabled in self-test"))
+    stub.post=lambda *a,**k: (_ for _ in ()).throw(RuntimeError("HTTP disabled in self-test"))
+    sys.modules["requests"]=stub
 
 def run():
     root=Path(tempfile.gettempdir())/("myshka_news_test_"+uuid.uuid4().hex)
