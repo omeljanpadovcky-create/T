@@ -736,9 +736,13 @@ const CFG={
 };
 const STORE='myshka_astra_live_lab_v1';
 const $=id=>document.getElementById(id);
+function localAstraOrigin(){
+  const h=String(location.hostname||'').toLowerCase();
+  return ((h==='127.0.0.1'||h==='localhost')&&String(location.port||'')==='8088')?location.origin:'';
+}
 // MYSHKA_BRIDGE_UI_V1
 let APP={selected:CFG.pairs[0],markets:{},decisions:{},universePairs:CFG.pairs.slice(),kill:false,cooldowns:{},positions:{},trades:[],equity:1000,startEquity:1000,logs:[],entryTags:{},scanning:false,
-  bridgeUrl:'http://localhost:8088',bridgeToken:'',backendReady:false,backendStats:null,
+  bridgeUrl:localAstraOrigin()||'http://localhost:8088',bridgeToken:'',backendReady:false,backendStats:null,
   bridgeConnecting:false,lastBackendSuccess:0,coreFailStreak:0,
   hardeningBusy:false,hardeningLastInternal:0,hardeningLastExternal:0};
 
@@ -762,7 +766,7 @@ function loadState(){
     const x=JSON.parse(localStorage.getItem(STORE)||'{}');
     APP.kill=!!x.kill;APP.cooldowns=x.cooldowns||{};APP.positions=x.positions||{};APP.trades=x.trades||[];
     APP.equity=Number(x.equity)||1000;APP.startEquity=Number(x.startEquity)||1000;APP.logs=x.logs||[];APP.entryTags=x.entryTags||{};
-    APP.bridgeUrl=x.bridgeUrl||'http://localhost:8088';APP.bridgeToken=x.bridgeToken||'';
+    APP.bridgeUrl=localAstraOrigin()||x.bridgeUrl||'http://localhost:8088';APP.bridgeToken=x.bridgeToken||'';
   }catch(e){}
 }
 function saveState(){
@@ -985,6 +989,8 @@ async function probeBridge(base){
   }finally{clearTimeout(timer)}
 }
 function bridgeCandidates(preferred){
+  const same=localAstraOrigin();
+  if(same)return [same];
   const p=(preferred||'').trim().replace(/\/$/,'');
   const isMobile=(navigator.userAgentData&&navigator.userAgentData.mobile)||/Android|iPhone|iPad|Mobile/i.test(navigator.userAgent||'');
   if(isMobile){
@@ -1583,7 +1589,7 @@ async function phoneScanNow(){
 async function connectBridge(){
   if(APP.bridgeConnecting)return;
   APP.bridgeConnecting=true;
-  const preferred=$('bridgeUrl').value.trim()||APP.bridgeUrl||'http://localhost:8088';
+  const preferred=localAstraOrigin()||$('bridgeUrl').value.trim()||APP.bridgeUrl||'http://localhost:8088';
   APP.bridgeToken=$('bridgeToken').value.trim();
   if(APP.bridgeToken==='X-MYSHKA-TOKEN')APP.bridgeToken='';
   $('bridgeConnect').textContent='… Пошук ASTRA';
@@ -1634,7 +1640,7 @@ async function connectBridge(){
 
     $('bridgeMsg').textContent=(APP.training&&APP.training.active)
       ?'🧪 ASTRA '+(localMode?'LOCAL':'BRIDGE')+' · TRAINING '+APP.training.learner_n+'/'+APP.training.until_trades+' · TECH '+APP.training.tech_rule+uni+' · EDGE/JEV/Guard · PAPER only'
-      :'✅ ASTRA '+(localMode?'LOCAL':'BRIDGE')+' активна'+uni+'.';
+      :'✅ ASTRA '+(localMode?'LOCAL':'BRIDGE')+' активна'+uni+(localAstraOrigin()?' · SAME-ORIGIN':'')+'.';
 
     try{
       const ints=await bridgeFetch('/integrations');
