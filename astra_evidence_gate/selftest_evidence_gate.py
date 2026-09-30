@@ -76,12 +76,20 @@ def run():
     import evidence_gate as eg
     importlib.reload(eg)
 
-    # No evidence -> fail closed for a would-be STRICT PAPER entry.
+    # No evidence -> controlled WARMING exploration inside 0.08-0.15.
     r = candidate(0.12)
     out = eg.apply_results([r])
-    assert r["action"] == "DROP", (r, out)
-    assert r["reason"] == "evidence_gate_no_validated_edge", r
-    assert out["blocked"] == 1, out
+    assert r["action"] == "ENTER", (r, out)
+    assert r["reason"] == "evidence_gate_warming_exploration", r
+    assert out["passed"] == 1, out
+
+    below = candidate(0.07)
+    eg.apply_results([below])
+    assert below["action"] == "DROP", below
+
+    above = candidate(0.16)
+    eg.apply_results([above])
+    assert above["action"] == "DROP", above
 
     # Low edge history is deliberately bad.
     con = sqlite3.connect(db)
@@ -95,20 +103,22 @@ def run():
     importlib.reload(eg)
     rep = eg.report()
     q = rep["qualified_threshold_pct"]
-    assert q is not None and q >= 0.10, rep
+    assert q is not None and q >= 0.08, rep
 
-    low = candidate(0.08)
+    low = candidate(0.07)
     high = candidate(0.14)
-    a = eg.apply_results([low, high])
+    too_high = candidate(0.16)
+    a = eg.apply_results([low, high, too_high])
     assert low["action"] == "DROP", (low, rep)
     assert high["action"] == "ENTER", (high, rep)
-    assert a["blocked"] == 1 and a["passed"] == 1, a
+    assert too_high["action"] == "DROP", (too_high, rep)
+    assert a["blocked"] == 2 and a["passed"] == 1, a
 
     print("EVIDENCE_GATE_V1_SELFTEST_OK")
     print("qualified_threshold_pct=", q)
     print("overall_n=", rep["overall"]["n"])
     print("low_edge_action=", low["action"])
-    print("high_edge_action=", high["action"])
+    print("high_edge_action=", high["action"])\n    print("above_band_action=", too_high["action"])
 
 
 if __name__ == "__main__":
