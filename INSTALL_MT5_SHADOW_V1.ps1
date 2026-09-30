@@ -6,7 +6,7 @@ Write-Host ' MYSHKA / ASTRA - INSTALL MT5 SHADOW V1 ' -ForegroundColor Yellow
 Write-Host ' WINDOWS MT5 COLLECTOR + ASTRA READ-ONLY XCHECK ' -ForegroundColor Yellow
 Write-Host '==========================================================' -ForegroundColor Cyan
 
-$bundleCommit='236003f78b03cd538b1d9e8eddb200d0a9c06f7b'
+$bundleCommit='b9399e43cc8d2b155c29e9bc78bd8b3b2019c7f5'
 $root='https://raw.githubusercontent.com/omeljanpadovcky-create/T/'+$bundleCommit
 
 $app=$null
