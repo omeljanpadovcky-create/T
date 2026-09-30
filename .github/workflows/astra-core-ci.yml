@@ -1,0 +1,75 @@
+name: ASTRA Core CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'astra_external_market_shadow/**'
+      - 'astra_live_dry_run/**'
+      - 'astra_freqtrade_dryrun_bridge/**'
+      - 'astra_binance_crosscheck/**'
+      - 'astra_forward_experiment_lab/**'
+      - 'astra_evidence_gate/**'
+      - 'astra_adaptive_learner/**'
+      - '.github/workflows/astra-core-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  core-selftests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile critical modules
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile             astra_external_market_shadow/*.py             astra_live_dry_run/*.py             astra_freqtrade_dryrun_bridge/*.py             astra_binance_crosscheck/*.py             astra_forward_experiment_lab/*.py             astra_evidence_gate/*.py             astra_adaptive_learner/*.py
+
+      - name: External Market Shadow self-test
+        working-directory: astra_external_market_shadow
+        run: python selftest_external_market_shadow.py
+
+      - name: Live Dry Run self-test
+        working-directory: astra_live_dry_run
+        run: python selftest_live_dry_run.py
+
+      - name: Freqtrade Dry-run Bridge self-test
+        working-directory: astra_freqtrade_dryrun_bridge
+        run: python selftest_freqtrade_dryrun_bridge.py
+
+      - name: Binance Crosscheck self-test
+        working-directory: astra_binance_crosscheck
+        run: python selftest_binance_signal_crosscheck.py
+
+      - name: Forward Experiment Lab self-test
+        working-directory: astra_forward_experiment_lab
+        run: python selftest_forward_experiment_lab.py
+
+      - name: Evidence Gate self-tests
+        working-directory: astra_evidence_gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python selftest_evidence_gate.py
+          python selftest_warming_exploration.py
+
+      - name: Adaptive Learner self-test
+        working-directory: astra_adaptive_learner
+        run: python selftest_adaptive_learner.py
+
+      - name: Safety invariant grep
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'changes_trading_decisions.*False' astra_external_market_shadow/external_market_shadow.py
+          grep -q 'live_execution.*False' astra_external_market_shadow/external_market_shadow.py
+          grep -q 'execution_blocked' astra_live_dry_run/live_dry_run.py
+          echo 'Safety invariants present'
