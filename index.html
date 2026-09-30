@@ -744,6 +744,7 @@ function localAstraOrigin(){
 let APP={selected:CFG.pairs[0],markets:{},decisions:{},universePairs:CFG.pairs.slice(),kill:false,cooldowns:{},positions:{},trades:[],equity:1000,startEquity:1000,logs:[],entryTags:{},scanning:false,
   bridgeUrl:localAstraOrigin()||'http://localhost:8088',bridgeToken:'',backendReady:false,backendStats:null,
   bridgeConnecting:false,lastBackendSuccess:0,coreFailStreak:0,
+  secondaryBusy:false,lastSecondaryRefresh:0,
   hardeningBusy:false,hardeningLastInternal:0,hardeningLastExternal:0};
 
 // MYSHKA_PHONE_FRAGMENT_V1
@@ -901,9 +902,9 @@ function rememberEntryTag(pair,side,d,ts=Date.now()){
   return m;
 }
 function serverTradeMode(t){
-  const explicit=t.trade_mode||t.tech_mode||t.entry_mode||t.rule_mode||'';
+  const explicit=t.trade_mode||t.tech_mode||t.entry_mode||t.rule_mode||t.mode||t.tradeMode||t.techMode||t.entryMode||t.ruleMode||'';
   if(explicit)return normalizeTradeMode(explicit);
-  const score=Number(t.tech_score??t.tech_rule_score??t.rule_score);
+  const score=Number(t.tech_score??t.tech_rule_score??t.rule_score??t.techScore??t.ruleScore);
   if(score===4)return 'STRICT';
   if(score===3)return 'TRAIN';
   if(t.training===true||t.is_training===true)return 'TRAIN';
@@ -946,9 +947,11 @@ function bridgeHeaders(json=false){
 }
 async function bridgeFetch(path,opts={}){
   const base=(APP.bridgeUrl||'').replace(/\/$/,'');if(!base)throw new Error('Bridge URL порожній');
-  const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),6500);
+  const timeoutMs=Math.max(1500,Number(opts.timeoutMs||6500));
+  const fetchOpts={...opts};delete fetchOpts.timeoutMs;
+  const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),timeoutMs);
   try{
-    const r=await fetch(base+path,{cache:'no-store',...opts,signal:ctl.signal,headers:{...(opts.headers||{}),...bridgeHeaders(!!opts.body)}});
+    const r=await fetch(base+path,{cache:'no-store',...fetchOpts,signal:ctl.signal,headers:{...(fetchOpts.headers||{}),...bridgeHeaders(!!fetchOpts.body)}});
     if(!r.ok)throw new Error('ASTRA HTTP '+r.status);
     const data=await r.json();
     APP.lastBackendSuccess=Date.now();
@@ -956,7 +959,7 @@ async function bridgeFetch(path,opts={}){
     APP.backendReady=true;
     return data;
   }catch(e){
-    if(e&&e.name==='AbortError')throw new Error('ASTRA timeout 6.5s');
+    if(e&&e.name==='AbortError')throw new Error('ASTRA timeout '+(timeoutMs/1000).toFixed(1)+'s');
     throw e;
   }finally{clearTimeout(timer)}
 }
@@ -1104,10 +1107,10 @@ function markBridgeAuthRequired(){
 async function refreshPostCalibration(){
   if(!APP.backendReady)return;
   try{
-    const r=await bridgeFetch('/post-calibration/report');
+    const r=await bridgeFetch('/post-calibration/report',{timeoutMs:12000});
     loadPostCalibration(r);
   }catch(e){
-    if($('postV2State'))$('postV2State').textContent='POST-V2: backend patch required / warming';
+    if($('postV2State')&&!APP.postCalibrationReport)$('postV2State').textContent='POST-V2: endpoint unavailable · '+String(e.message||e);
   }
 }
 
@@ -1121,6 +1124,7 @@ function bxHorizonHtml(h){
 }
 function loadBinanceCrosscheckReport(r){
   if(!r||r.status!=='ok')return;
+  APP.binanceCrosscheckReport=r;
   $('bxState').textContent='Binance X-Check: '+String(r.mode||'SHADOW_ONLY')+' · '+String(r.period||'5m');
   $('bxClosed').textContent=Number(r.closed||0);
   $('bxOpen').textContent=Number(r.open||0);
@@ -1134,10 +1138,10 @@ function loadBinanceCrosscheckReport(r){
 async function refreshBinanceCrosscheck(){
   if(!APP.backendReady)return;
   try{
-    const r=await bridgeFetch('/binance-crosscheck/report');
+    const r=await bridgeFetch('/binance-crosscheck/report',{timeoutMs:12000});
     loadBinanceCrosscheckReport(r);
   }catch(e){
-    if($('bxState'))$('bxState').textContent='Binance X-Check: backend patch required / warming';
+    if($('bxState')&&!APP.binanceCrosscheckReport)$('bxState').textContent='Binance X-Check: endpoint unavailable · '+String(e.message||e);
   }
 }
 
@@ -1172,10 +1176,10 @@ function loadAnalyticsReport(r){
 async function refreshAnalytics(){
   if(!APP.backendReady)return;
   try{
-    const r=await bridgeFetch('/analytics/report?mode=STRICT&min_segment_n=3');
+    const r=await bridgeFetch('/analytics/report?mode=STRICT&min_segment_n=3',{timeoutMs:15000});
     loadAnalyticsReport(r);
   }catch(e){
-    if($('analyticsState'))$('analyticsState').textContent='Analytics: backend patch required / warming';
+    if($('analyticsState')&&!APP.analyticsReport)$('analyticsState').textContent='Analytics: endpoint unavailable · '+String(e.message||e);
   }
 }
 
@@ -1218,10 +1222,10 @@ function loadCounterfactualReport(r){
 async function refreshCounterfactual(){
   if(!APP.backendReady)return;
   try{
-    const r=await bridgeFetch('/counterfactual/report?min_stage_n=3');
+    const r=await bridgeFetch('/counterfactual/report?min_stage_n=3',{timeoutMs:18000});
     loadCounterfactualReport(r);
   }catch(e){
-    if($('cfState'))$('cfState').textContent='Counterfactual: backend patch required / warming';
+    if($('cfState')&&!APP.counterfactualReport)$('cfState').textContent='Counterfactual: endpoint unavailable · '+String(e.message||e);
   }
 }
 
@@ -1284,10 +1288,10 @@ function loadRiskIntelligenceReport(r){
 async function refreshRiskIntelligence(){
   if(!APP.backendReady)return;
   try{
-    const r=await bridgeFetch('/risk-intelligence/report');
+    const r=await bridgeFetch('/risk-intelligence/report',{timeoutMs:20000});
     loadRiskIntelligenceReport(r);
   }catch(e){
-    if($('riState'))$('riState').textContent='Risk Intelligence: backend patch required / warming';
+    if($('riState')&&!APP.riskIntelligenceReport)$('riState').textContent='Risk Intelligence: endpoint unavailable · '+String(e.message||e);
   }
 }
 
@@ -1353,10 +1357,10 @@ function loadRiskQuality(q){
 async function refreshRiskQuality(){
   if(!APP.backendReady)return;
   try{
-    const q=await bridgeFetch('/risk-intelligence/quality');
+    const q=await bridgeFetch('/risk-intelligence/quality',{timeoutMs:22000});
     loadRiskQuality(q);
   }catch(e){
-    if($('qcState'))$('qcState').textContent='Quality Control: backend patch required / warming';
+    if($('qcState')&&!APP.riskQuality)$('qcState').textContent='Quality Control: endpoint unavailable · '+String(e.message||e);
   }
 }
 function renderDecisionReplay(item){
@@ -1378,7 +1382,7 @@ function renderDecisionReplay(item){
 async function refreshDecisionReplay(){
   if(!APP.backendReady)return;
   try{
-    const r=await bridgeFetch('/risk-intelligence/replay?limit=1');
+    const r=await bridgeFetch('/risk-intelligence/replay?limit=1',{timeoutMs:18000});
     renderDecisionReplay(r&&Array.isArray(r.items)?r.items[0]:null);
   }catch(e){
     if($('qcReplay'))$('qcReplay').innerHTML='<div class="muted">Replay endpoint unavailable.</div>';
@@ -1426,11 +1430,11 @@ async function refreshHardening(externalReconcile=false){
   try{
     let r;
     if(externalReconcile){
-      const ints=await bridgeFetch('/integrations');
-      r=await bridgeFetch('/hardening/reconcile',{method:'POST',body:JSON.stringify({integrations:ints||{}})});
+      const ints=await bridgeFetch('/integrations',{timeoutMs:12000});
+      r=await bridgeFetch('/hardening/reconcile',{method:'POST',body:JSON.stringify({integrations:ints||{}}),timeoutMs:22000});
       APP.hardeningLastExternal=Date.now();
     }else{
-      r=await bridgeFetch('/hardening/status');
+      r=await bridgeFetch('/hardening/status',{timeoutMs:18000});
       APP.hardeningLastInternal=Date.now();
     }
     loadHardeningReport(r);
@@ -1440,7 +1444,7 @@ async function refreshHardening(externalReconcile=false){
       'AUTO: internal 5s'+(internalAge==null?'':' · last '+internalAge+'s ago')+
       ' · Bybit/Freqtrade read-only 60s'+(externalAge==null?' · warming':' · last '+externalAge+'s ago');
   }catch(e){
-    if($('hardState'))$('hardState').textContent='Hardening: backend patch required / warming';
+    if($('hardState')&&!APP.hardeningReport)$('hardState').textContent='Hardening: endpoint unavailable · '+String(e.message||e);
   }finally{
     APP.hardeningBusy=false;
   }
@@ -1541,6 +1545,21 @@ function applyServerResults(results){
   if(ok){$('marketBadge').textContent='● ASTRA TOP-'+ok;$('marketBadge').className='badge live';$('universeBadge').textContent=ok+' markets · 1m · 80 candles · scan 15s';renderSelected();renderReadiness()}
   return ok
 }
+async function refreshSecondaryReports(force=false){
+  if(!APP.backendReady||APP.secondaryBusy)return;
+  if(!force&&Date.now()-(APP.lastSecondaryRefresh||0)<30000)return;
+  APP.secondaryBusy=true;
+  try{
+    // Small groups avoid saturating the single local API worker.
+    await Promise.allSettled([refreshPostCalibration(),refreshBinanceCrosscheck(),refreshAnalytics()]);
+    await Promise.allSettled([refreshCounterfactual(),refreshRiskIntelligence(),refreshHardening(false)]);
+    await Promise.allSettled([refreshRiskQuality(),refreshDecisionReplay()]);
+    APP.lastSecondaryRefresh=Date.now();
+  }finally{
+    APP.secondaryBusy=false;
+  }
+}
+
 async function refreshPhoneControl(){
   if(!APP.backendReady)return;
   // CORE connectivity: only this request is allowed to decide bridge health.
@@ -1576,15 +1595,7 @@ async function refreshPhoneControl(){
     if($('bridgeMsg'))$('bridgeMsg').textContent='⚠ stats refresh: '+(e.message||String(e));
   }
 
-  await Promise.allSettled([
-    refreshPostCalibration(),
-    refreshBinanceCrosscheck(),
-    refreshAnalytics(),
-    refreshCounterfactual(),
-    refreshRiskIntelligence(),
-    refreshRiskQuality(),
-    refreshHardening(false)
-  ]);
+  refreshSecondaryReports(false);
 }
 async function setServerControl(name,value){
   if(!APP.backendReady)return;
@@ -1593,7 +1604,7 @@ async function setServerControl(name,value){
 async function phoneScanNow(){
   if(!APP.backendReady)return scanAll();
   $('phoneScan').textContent='… Scan';
-  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshPostCalibration();await refreshBinanceCrosscheck();await refreshAnalytics();await refreshCounterfactual();await refreshRiskIntelligence();await refreshRiskQuality();await refreshHardening(false)}
+  try{const j=await bridgeFetch('/control/scan-now',{method:'POST'});applyServerResults(j.results||[]);if(j.engine)paintPhoneControl({runtime:j.engine.runtime,engine:j.engine});const st=await bridgeFetch('/stats?limit=120');loadServerTrades(st);await refreshSecondaryReports(true)}
   finally{$('phoneScan').textContent='🔎 Scan зараз'}
 }
 async function connectBridge(){
@@ -1653,7 +1664,7 @@ async function connectBridge(){
       :'✅ ASTRA '+(localMode?'LOCAL':'BRIDGE')+' активна'+uni+(localAstraOrigin()?' · SAME-ORIGIN':'')+'.';
 
     try{
-      const ints=await bridgeFetch('/integrations');
+      const ints=await bridgeFetch('/integrations',{timeoutMs:12000});
       const ol=ints.ollama||{},ba=ints.bybit_account||{},ft=ints.freqtrade||{},tg=ints.telegram||{};
       integrationNode('iOllama',ol.status,ol.model_present===false?'model missing':'');
       integrationNode('iBybit',ba.status,ba.readOnly===1||ba.read_only===1?'READ ONLY':'');
@@ -2045,7 +2056,7 @@ async function setKill(on){APP.kill=on;$('killBtn').textContent='🛡 Kill switc
 $('pairFilter').onchange=renderPairButtons;
 $('statsMode').onchange=drawStatsChart;
 $('postV2Refresh').onclick=refreshPostCalibration;$('bxRefresh').onclick=refreshBinanceCrosscheck;
-$('analyticsRefresh').onclick=()=>{refreshPostCalibration();refreshBinanceCrosscheck();refreshAnalytics();refreshCounterfactual();refreshRiskIntelligence();refreshRiskQuality()};
+$('analyticsRefresh').onclick=()=>refreshSecondaryReports(true);
 $('qualityRefresh').onclick=()=>{refreshRiskQuality();refreshDecisionReplay()};
 $('hardRefresh').onclick=()=>refreshHardening(false);
 $('hardReconcile').onclick=()=>refreshHardening(true);
