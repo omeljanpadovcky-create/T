@@ -36,11 +36,17 @@ INTERVAL_SEC = max(15, int(os.getenv("CONTEXT_COLLECT_INTERVAL_SEC", "60")))
 DETAIL_INTERVAL_SEC = max(INTERVAL_SEC, int(os.getenv("CONTEXT_DETAIL_INTERVAL_SEC", "300")))
 HISTORY_MINUTES = max(5, min(240, int(os.getenv("CONTEXT_HISTORY_MINUTES", "30"))))
 RETENTION_HOURS = max(1, min(168, int(os.getenv("CONTEXT_RETENTION_HOURS", "48"))))
-MAX_HEADLINES = max(0, min(30, int(os.getenv("CONTEXT_MAX_HEADLINES", "8"))))
+MAX_HEADLINES = max(0, min(50, int(os.getenv("CONTEXT_MAX_HEADLINES", "12"))))
+NEWS_LOOKBACK_MINUTES = max(30, min(720, int(os.getenv("CONTEXT_NEWS_LOOKBACK_MINUTES", "180"))))
 CONTEXT_DB_PATH = os.getenv("CONTEXT_DB_PATH", "/data/myshka_context.sqlite3")
 
-# Public feeds only. Failures are non-fatal. Override/disable with CONTEXT_RSS_URLS.
-_DEFAULT_RSS = "https://cointelegraph.com/?format=rss"
+# Public RSS feeds only. Failures are non-fatal and one broken source must not
+# suppress the others. Override/disable with CONTEXT_RSS_URLS.
+_DEFAULT_RSS = ",".join([
+    "https://cointelegraph.com/rss",
+    "https://www.coindesk.com/arc/outboundfeeds/rss/",
+    "https://decrypt.co/feed",
+])
 RSS_URLS = [x.strip() for x in os.getenv("CONTEXT_RSS_URLS", _DEFAULT_RSS).split(",") if x.strip()]
 
 _EXCLUDED_BASES = {"USDC", "USDE", "DAI", "FDUSD", "TUSD", "PYUSD", "USDP", "EUR", "EURC"}
@@ -55,6 +61,9 @@ _STATUS = {
     "last_success_at": None,
     "last_detail_at": None,
     "last_news_at": None,
+    "news_sources_ok": 0,
+    "news_sources_failed": 0,
+    "last_news_error": None,
     "cycles": 0,
     "pairs": [],
     "last_error": None,
@@ -197,7 +206,9 @@ def _rss_items(url: str) -> list[dict[str, Any]]:
     r.raise_for_status()
     root = ET.fromstring(r.content)
     out: list[dict[str, Any]] = []
-    for item in root.findall(".//item")[:20]:
+
+    # RSS 2.x
+    for item in root.findall(".//item")[:30]:
         title = (item.findtext("title") or "").strip()
         link = (item.findtext("link") or "").strip()
         pub = (item.findtext("pubDate") or "").strip()
@@ -209,29 +220,69 @@ def _rss_items(url: str) -> list[dict[str, Any]]:
                 pass
         if title:
             out.append({"ts": ts, "title": title[:300], "url": link[:1000], "feed": url})
+
+    # Atom fallback.
+    if not out:
+        for entry in root.findall(".//{*}entry")[:30]:
+            title = (entry.findtext("{*}title") or "").strip()
+            link = ""
+            link_node = entry.find("{*}link")
+            if link_node is not None:
+                link = str(link_node.attrib.get("href") or "").strip()
+            pub = (entry.findtext("{*}published") or entry.findtext("{*}updated") or "").strip()
+            ts = time.time()
+            if pub:
+                try:
+                    ts = parsedate_to_datetime(pub).timestamp()
+                except Exception:
+                    try:
+                        ts = __import__("datetime").datetime.fromisoformat(pub.replace("Z","+00:00")).timestamp()
+                    except Exception:
+                        pass
+            if title:
+                out.append({"ts": ts, "title": title[:300], "url": link[:1000], "feed": url})
     return out
 
-
-def _refresh_news(now: float) -> None:
+def _refresh_news(now: float) -> dict:
     global _NEWS_CACHE
     if not RSS_URLS or MAX_HEADLINES <= 0:
-        return
+        with _LOCK:
+            _STATUS["news_sources_ok"] = 0
+            _STATUS["news_sources_failed"] = 0
+            _STATUS["last_news_error"] = "RSS disabled"
+        return {"ok": 0, "failed": 0, "headlines": 0}
+
     found: list[dict[str, Any]] = []
+    ok = 0
+    failures: list[str] = []
     for url in RSS_URLS:
         try:
-            found.extend(_rss_items(url))
-        except Exception:
-            continue
+            items = _rss_items(url)
+            if items:
+                ok += 1
+                found.extend(items)
+            else:
+                failures.append(f"{url}: empty")
+        except Exception as exc:
+            failures.append(f"{url}: {type(exc).__name__}")
+
     dedup: dict[str, dict[str, Any]] = {}
     for x in sorted(found, key=lambda z: float(z.get("ts") or 0), reverse=True):
         key = str(x.get("url") or x.get("title") or "")
         if key and key not in dedup:
             dedup[key] = x
     _NEWS_CACHE = list(dedup.values())[:MAX_HEADLINES]
+
+    recent_cutoff = now - NEWS_LOOKBACK_MINUTES * 60
     for x in _NEWS_CACHE:
-        if now - float(x.get("ts") or now) <= 6 * 3600:
+        if float(x.get("ts") or now) >= recent_cutoff:
             _write_sample(ts=float(x.get("ts") or now), pair="*", source="rss", kind="headline", payload=x)
 
+    with _LOCK:
+        _STATUS["news_sources_ok"] = ok
+        _STATUS["news_sources_failed"] = len(failures)
+        _STATUS["last_news_error"] = "; ".join(failures[:3]) if failures else None
+    return {"ok": ok, "failed": len(failures), "headlines": len(_NEWS_CACHE)}
 
 def _collect_once() -> None:
     global _LONG_SHORT_CACHE
@@ -348,6 +399,8 @@ def status() -> dict:
     out["age_sec"] = round(max(0.0, time.time() - last), 1) if last else None
     out["rss_feeds"] = len(RSS_URLS)
     out["headline_cache"] = len(_NEWS_CACHE)
+    out["news_lookback_minutes"] = NEWS_LOOKBACK_MINUTES
+    out["rss_urls"] = list(RSS_URLS)
     return out
 
 
@@ -408,7 +461,8 @@ def _oi_change(rows: list[tuple[float, dict]], minutes: int) -> Optional[float]:
 
 
 def _recent_external(pair: str, minutes: int, limit: int = 12) -> list[dict]:
-    cutoff = time.time() - max(1, int(minutes)) * 60
+    # Headlines/events stay useful longer than 1m market microstructure.
+    cutoff = time.time() - max(1, int(minutes), NEWS_LOOKBACK_MINUTES) * 60
     with _db() as con:
         cur = con.execute(
             """
@@ -461,7 +515,13 @@ def snapshot(pair: str, minutes: Optional[int] = None, direction: Optional[str] 
         "btc_price_change_30m_pct": _pct_change(btc_rows, 30),
         "external_events": _recent_external(pair, mins, limit=12),
     }
+    news_status = status()
     out["external_event_count"] = len(out["external_events"])
+    out["news_headline_cache"] = int(news_status.get("headline_cache") or 0)
+    out["news_sources_ok"] = int(news_status.get("news_sources_ok") or 0)
+    out["news_sources_failed"] = int(news_status.get("news_sources_failed") or 0)
+    out["news_last_error"] = news_status.get("last_news_error")
+    out["news_lookback_minutes"] = NEWS_LOOKBACK_MINUTES
     out["decision_effect"] = "NONE_SHADOW_ONLY"
     return out
 
