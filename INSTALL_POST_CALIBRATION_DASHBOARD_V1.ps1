@@ -5,7 +5,7 @@ Write-Host '======================================================' -ForegroundC
 Write-Host ' MYSHKA / ASTRA - POST-CALIBRATION V2 DASHBOARD ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$bundleCommit = 'd782bf76bbe80584bd3cedc9c1786f8aab1aaf89'
+$bundleCommit = '83f4310e269e9bc97caaf2fa2f634d40bee94f44'
 $root = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit
 
 $app = $null
