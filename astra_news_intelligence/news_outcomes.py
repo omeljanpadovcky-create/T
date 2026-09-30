@@ -28,6 +28,11 @@ def _db():
     except Exception: c.rollback(); raise
     finally:c.close()
 
+def _ensure_column(c,table,name,decl):
+    cols={str(r["name"]) for r in c.execute("PRAGMA table_info("+table+")").fetchall()}
+    if name not in cols:
+        c.execute("ALTER TABLE "+table+" ADD COLUMN "+name+" "+decl)
+
 def init():
     with _LOCK,_db() as c:
         c.execute("""CREATE TABLE IF NOT EXISTS news_outcomes(
@@ -37,8 +42,17 @@ def init():
           news_score REAL,news_confidence REAL,news_count INTEGER NOT NULL,analysis_ids_json TEXT,settled_at REAL,
           settle_delay_sec REAL,exit_price REAL,gross_pct REAL,net_pct REAL,direction_hit INTEGER,
           UNIQUE(pair,side,source_minute,horizon_sec))""")
+        _ensure_column(c,"news_outcomes","event_type","TEXT")
+        _ensure_column(c,"news_outcomes","surprise_state","TEXT")
+        _ensure_column(c,"news_outcomes","pre_5m_pct","REAL")
+        _ensure_column(c,"news_outcomes","pre_15m_pct","REAL")
+        _ensure_column(c,"news_outcomes","xcheck_state","TEXT")
+        _ensure_column(c,"news_outcomes","regime","TEXT")
         c.execute("CREATE INDEX IF NOT EXISTS idx_news_out_target ON news_outcomes(status,target_at)")
         c.execute("CREATE INDEX IF NOT EXISTS idx_news_out_state ON news_outcomes(news_state,horizon_sec,status)")
+        c.execute("CREATE INDEX IF NOT EXISTS idx_news_out_event ON news_outcomes(event_type,horizon_sec,status)")
+        c.execute("CREATE INDEX IF NOT EXISTS idx_news_out_surprise ON news_outcomes(surprise_state,horizon_sec,status)")
+        c.execute("CREATE INDEX IF NOT EXISTS idx_news_out_xcheck ON news_outcomes(xcheck_state,horizon_sec,status)")
         c.execute("""CREATE TABLE IF NOT EXISTS news_meta(key TEXT PRIMARY KEY,value TEXT NOT NULL)""")
         r=c.execute("SELECT value FROM news_meta WHERE key='forward_started_at'").fetchone()
         if not r:c.execute("INSERT INTO news_meta(key,value) VALUES('forward_started_at',?)",(str(time.time()),))
@@ -96,12 +110,22 @@ def observe_results(results,now=None):
             pair=str(r.get("pair") or ""); entry=_price(r)
             if not pair or entry is None:continue
             a=aggregate(pair,ts); state=_align(side,a)
-            r["news_intelligence"]={"state":state,"market_tone":a.get("tone"),"score":a.get("score"),"confidence":a.get("confidence"),"news_count":a.get("count"),"shadow_only":True}
+            r["news_intelligence"]={"state":state,"market_tone":a.get("tone"),"score":a.get("score"),"confidence":a.get("confidence"),"news_count":a.get("count"),"event_type":a.get("event_type"),"surprise_state":a.get("surprise_state"),"pre_5m_pct":a.get("pre_5m_pct"),"pre_15m_pct":a.get("pre_15m_pct"),"shadow_only":True}
             attached+=1; edge=r.get("edge") or {}; minute=int(ts//60)*60; bucket=int(ts//CLUSTER_SEC)*CLUSTER_SEC; key=f"{pair}|{side}|{bucket}"
             with _LOCK,_db() as c:
                 for h in HORIZONS:
-                    cur=c.execute("""INSERT OR IGNORE INTO news_outcomes(pair,side,source_minute,cluster_key,opened_at,target_at,horizon_sec,status,entry_price,total_cost_pct,news_state,news_score,news_confidence,news_count,analysis_ids_json)
-                    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",(pair,side,minute,key,ts,ts+int(h),int(h),"OPEN",entry,_num(edge.get("total_cost_pct")),state,_num(a.get("score")),_num(a.get("confidence")),int(a.get("count") or 0),json.dumps(a.get("ids") or [])))
+                    bx=r.get("binance_crosscheck") or {}
+                    sig=r.get("signal") or {}
+                    cur=c.execute("""INSERT OR IGNORE INTO news_outcomes(
+                      pair,side,source_minute,cluster_key,opened_at,target_at,horizon_sec,status,
+                      entry_price,total_cost_pct,news_state,news_score,news_confidence,news_count,
+                      analysis_ids_json,event_type,surprise_state,pre_5m_pct,pre_15m_pct,xcheck_state,regime)
+                    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                    (pair,side,minute,key,ts,ts+int(h),int(h),"OPEN",entry,_num(edge.get("total_cost_pct")),
+                     state,_num(a.get("score")),_num(a.get("confidence")),int(a.get("count") or 0),
+                     json.dumps(a.get("ids") or []),str(a.get("event_type") or "OTHER"),
+                     str(a.get("surprise_state") or "UNKNOWN"),_num(a.get("pre_5m_pct")),_num(a.get("pre_15m_pct")),
+                     str(bx.get("state") or "NO_DATA").upper(),str(sig.get("structure") or "UNKNOWN").upper()))
                     created+=int(bool(cur.rowcount))
         return {"status":"ok","attached":attached,"created":created,**settled}
     except Exception as e:return {"status":"error","error":f"{type(e).__name__}: {e}","attached":0,"created":0,"closed":0,"skipped":0}
@@ -126,6 +150,28 @@ def _metrics(rows):
     a=_core(rows); b=_core(_clusters(rows))
     return {**a,"cluster_n":b["n"],"cluster_win_rate_pct":b["win_rate_pct"],"cluster_avg_net_pct":b["avg_net_pct"],"cluster_profit_factor":b["profit_factor"]}
 
+def _dim(rows,key,labels=None):
+    values=labels or sorted({str(r.get(key) or "UNKNOWN") for r in rows})
+    return {v:_metrics([r for r in rows if str(r.get(key) or "UNKNOWN")==v]) for v in values}
+
+def _matrix(rows):
+    news_labels=("ALIGNED","CONFLICT","NEUTRAL","NO_NEWS")
+    bx_labels=("AGREE","CONFLICT","NEUTRAL","NO_DATA")
+    out={}
+    for n in news_labels:
+        out[n]={}
+        for b in bx_labels:
+            out[n][b]=_metrics([r for r in rows if str(r.get("news_state") or "")==n and str(r.get("xcheck_state") or "NO_DATA")==b])
+    return out
+
+def _sample_state(cluster_n):
+    n=int(cluster_n or 0)
+    if n<30:return "COLD"
+    if n<50:return "WARMING"
+    if n<150:return "MONITOR"
+    if n<300:return "CANDIDATE"
+    return "MATURE"
+
 def report():
     init(); start=_started()
     with _LOCK,_db() as c:
@@ -134,10 +180,16 @@ def report():
     by={}
     for h in HORIZONS:
         part=[r for r in rows if int(r.get("horizon_sec") or 0)==int(h)]
-        by[str(h)]={"all":_metrics(part)}
+        allm=_metrics(part)
+        by[str(h)]={"all":allm,"sample_state":_sample_state(allm.get("cluster_n"))}
         for state in ("ALIGNED","CONFLICT","NEUTRAL","NO_NEWS"):
             by[str(h)][state]=_metrics([r for r in part if r.get("news_state")==state])
-    return {"status":"ok","mode":"NEWS_INTELLIGENCE_SHADOW","forward_started_at":start,"horizons_sec":list(HORIZONS),"open":counts.get("OPEN",0),"closed":counts.get("CLOSED",0),"skipped":counts.get("SKIPPED",0),"by_horizon":by,"changes_paper_execution":False,"changes_trading_decisions":False,"live_execution":False}
+        by[str(h)]["by_event_type"]=_dim(part,"event_type",["ETF","REGULATION","HACK","LISTING","DELISTING","MACRO","WHALE","LIQUIDATION","PROTOCOL","EXCHANGE","LEGAL","OTHER"])
+        by[str(h)]["by_surprise"]=_dim(part,"surprise_state",["FRESH","ALREADY_PRICED","COUNTER_MOVE","NEUTRAL","UNKNOWN"])
+        by[str(h)]["by_xcheck"]=_dim(part,"xcheck_state",["AGREE","CONFLICT","NEUTRAL","NO_DATA"])
+        by[str(h)]["news_x_binance"]=_matrix(part)
+        by[str(h)]["by_regime"]=_dim(part,"regime")
+    return {"status":"ok","mode":"NEWS_INTELLIGENCE_SHADOW","forward_started_at":start,"horizons_sec":list(HORIZONS),"open":counts.get("OPEN",0),"closed":counts.get("CLOSED",0),"skipped":counts.get("SKIPPED",0),"by_horizon":by,"event_taxonomy":["ETF","REGULATION","HACK","LISTING","DELISTING","MACRO","WHALE","LIQUIDATION","PROTOCOL","EXCHANGE","LEGAL","OTHER"],"surprise_states":["FRESH","ALREADY_PRICED","COUNTER_MOVE","NEUTRAL","UNKNOWN"],"xcheck_states":["AGREE","CONFLICT","NEUTRAL","NO_DATA"],"changes_paper_execution":False,"changes_trading_decisions":False,"live_execution":False}
 
 def status():
     init()
