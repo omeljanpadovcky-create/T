@@ -12,17 +12,27 @@ def patch_api(api_path: Path) -> None:
         print("[OK] Local dashboard route already present")
         return
 
-    # Add isolated imports that cannot clash with existing names.
+    # Add isolated imports after the module docstring AND any __future__
+    # imports (Python requires future imports to remain first).
     insert_at = 0
-    lines = s.splitlines(True)
-    if lines and lines[0].startswith("#!"):
-        insert_at = len(lines[0])
-    if s.startswith('"""') or s.startswith("'''"):
-        quote = s[:3]
-        end = s.find(quote, 3)
+    if s.startswith("#!"):
+        nl = s.find("\n")
+        insert_at = (nl + 1) if nl >= 0 else len(s)
+
+    tail = s[insert_at:]
+    if tail.startswith('"""') or tail.startswith("'''"):
+        quote = tail[:3]
+        end = tail.find(quote, 3)
         if end >= 0:
-            nl = s.find("\n", end + 3)
-            insert_at = (nl + 1) if nl >= 0 else (end + 3)
+            nl = tail.find("\n", end + 3)
+            insert_at += (nl + 1) if nl >= 0 else (end + 3)
+
+    future_re = re.compile(r"^from __future__ import .+\n", re.MULTILINE)
+    while True:
+        m_future = future_re.match(s, insert_at)
+        if not m_future:
+            break
+        insert_at = m_future.end()
 
     imports = (
         "from pathlib import Path as _MyshkaDashboardPath\n"
