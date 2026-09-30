@@ -48,7 +48,12 @@ jobs:
         run: python -m astra_live_dry_run.selftest_live_dry_run
 
       - name: Freqtrade Dry-run Bridge self-test
-        run: python -m astra_freqtrade_dryrun_bridge.selftest_freqtrade_dryrun_bridge
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp astra_live_dry_run/live_dry_run.py astra_freqtrade_dryrun_bridge/live_dry_run.py
+          python -m astra_freqtrade_dryrun_bridge.selftest_freqtrade_dryrun_bridge
+          rm -f astra_freqtrade_dryrun_bridge/live_dry_run.py
 
       - name: Binance Crosscheck self-test
         working-directory: astra_binance_crosscheck
