@@ -16,8 +16,10 @@ from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from email.utils import parsedate_to_datetime
+import html
 import json
 import os
+import re
 import sqlite3
 import threading
 import time
@@ -201,6 +203,13 @@ def _collect_long_short(pair: str) -> Optional[dict[str, float]]:
     }
 
 
+def _clean_summary(v: Any) -> str:
+    raw = html.unescape(str(v or ""))
+    raw = re.sub(r"<[^>]+>", " ", raw)
+    raw = re.sub(r"\s+", " ", raw).strip()
+    return raw[:1600]
+
+
 def _rss_items(url: str) -> list[dict[str, Any]]:
     r = requests.get(url, timeout=max(5.0, HTTP_TIMEOUT_SEC), headers={"User-Agent": "MYSHKA-ASTRA/1.0"})
     r.raise_for_status()
@@ -211,6 +220,11 @@ def _rss_items(url: str) -> list[dict[str, Any]]:
     for item in root.findall(".//item")[:30]:
         title = (item.findtext("title") or "").strip()
         link = (item.findtext("link") or "").strip()
+        summary = _clean_summary(
+            item.findtext("description")
+            or item.findtext("{http://purl.org/rss/1.0/modules/content/}encoded")
+            or ""
+        )
         pub = (item.findtext("pubDate") or "").strip()
         ts = time.time()
         if pub:
@@ -219,12 +233,16 @@ def _rss_items(url: str) -> list[dict[str, Any]]:
             except Exception:
                 pass
         if title:
-            out.append({"ts": ts, "title": title[:300], "url": link[:1000], "feed": url})
+            out.append({
+                "ts": ts, "title": title[:300], "summary": summary,
+                "url": link[:1000], "feed": url,
+            })
 
     # Atom fallback.
     if not out:
         for entry in root.findall(".//{*}entry")[:30]:
             title = (entry.findtext("{*}title") or "").strip()
+            summary = _clean_summary(entry.findtext("{*}summary") or entry.findtext("{*}content") or "")
             link = ""
             link_node = entry.find("{*}link")
             if link_node is not None:
@@ -240,7 +258,10 @@ def _rss_items(url: str) -> list[dict[str, Any]]:
                     except Exception:
                         pass
             if title:
-                out.append({"ts": ts, "title": title[:300], "url": link[:1000], "feed": url})
+                out.append({
+                    "ts": ts, "title": title[:300], "summary": summary,
+                    "url": link[:1000], "feed": url,
+                })
     return out
 
 def _refresh_news(now: float) -> dict:
