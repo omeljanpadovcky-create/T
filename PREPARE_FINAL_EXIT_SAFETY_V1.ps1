@@ -72,16 +72,32 @@ if($rc -ne 0){
   throw 'Docker recreate failed. Previous env restored.'
 }
 
-Write-Host '[3/5] Waiting for services...'
-$ready=$false
-for($i=0;$i -lt 45;$i++){
+Write-Host '[3/5] Waiting for ASTRA + Freqtrade...'
+$astraReady=$false
+$ftReady=$false
+for($i=0;$i -lt 60;$i++){
   Start-Sleep -Seconds 2
+
   try{
     $h=Invoke-RestMethod 'http://127.0.0.1:8088/health' -TimeoutSec 5
-    if($h.status -eq 'ok'){$ready=$true;break}
+    if($h.status -eq 'ok'){$astraReady=$true}
   }catch{}
+
+  $old=$ErrorActionPreference
+  $ErrorActionPreference='Continue'
+  try{
+    $ping='import urllib.request; print(urllib.request.urlopen("http://freqtrade:8080/api/v1/ping",timeout=3).status)'
+    $pong=$ping | docker exec -i myshka-astra python - 2>&1
+    $prc=$LASTEXITCODE
+    if($prc -eq 0 -and (($pong -join [Environment]::NewLine) -match '200')){$ftReady=$true}
+  }catch{}
+  $ErrorActionPreference=$old
+
+  if($astraReady -and $ftReady){break}
 }
-if(-not $ready){throw 'ASTRA did not become healthy.'}
+if(-not $astraReady){throw 'ASTRA did not become healthy.'}
+if(-not $ftReady){throw 'Freqtrade API did not become ready.'}
+Write-Host '[OK] ASTRA + Freqtrade API ready.' -ForegroundColor Green
 
 Write-Host '[4/5] Reading effective Freqtrade config...'
 $py=@'
