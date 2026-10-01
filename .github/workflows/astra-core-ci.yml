@@ -19,6 +19,7 @@ on:
       - 'INSTALL_MT5_SHADOW_V1.ps1'
       - 'START_MT5_SHADOW_V1.ps1'
       - 'STOP_MT5_SHADOW_V1.ps1'
+      - 'RUN_MYSHKA_STACK.ps1'
       - '.github/workflows/astra-core-ci.yml'
   workflow_dispatch:
 
@@ -110,7 +111,8 @@ jobs:
             'DISARM_FREQTRADE_LIVE_V1.ps1',
             'INSTALL_MT5_SHADOW_V1.ps1',
             'START_MT5_SHADOW_V1.ps1',
-            'STOP_MT5_SHADOW_V1.ps1'
+            'STOP_MT5_SHADOW_V1.ps1',
+            'RUN_MYSHKA_STACK.ps1'
           )
           foreach ($f in $files) {
             $tokens = $null
