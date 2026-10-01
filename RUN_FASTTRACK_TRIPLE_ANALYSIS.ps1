@@ -6,7 +6,7 @@ Write-Host ' MYSHKA / ASTRA - FASTTRACK TRIPLE INTERSECTION ' -ForegroundColor Y
 Write-Host ' TECH 3/4 + JEV APPROVE + BINANCE AGREE ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$commit='31528686f0834961978fb783c8bf8f1dc4f3acdc'
+$commit='415929dff662da01c48129e702ce046fb5df9a1b'
 $uri='https://raw.githubusercontent.com/omeljanpadovcky-create/T/'+$commit+'/astra_fasttrack/fasttrack_triple_intersection.py'
 $tmp=Join-Path $env:TEMP 'myshka_fasttrack_triple_intersection.py'
 
@@ -30,6 +30,23 @@ $r=$raw | ConvertFrom-Json
 Write-Host '[2/2] Result...' -ForegroundColor Green
 Write-Host ''
 Write-Host ('Joined rows: '+$r.joined_rows)
+
+Write-Host ''
+Write-Host '=== FASTTRACK FUNNEL ===' -ForegroundColor Cyan
+foreach($name in @('TECH3','TECH3_JEV_APPROVE','TECH3_BINANCE_AGREE','TRIPLE','STRICT4')){
+  $node=$r.funnel.$name
+  if($node){
+    $m=$node.'300'
+    Write-Host ($name+' | 5m cn='+$m.cluster_n+
+      ' | Avg NET='+([math]::Round([double]$m.cluster_avg_net_pct,4))+'%'+
+      ' | PF='+([math]::Round([double]$m.cluster_profit_factor,2))+
+      ' | Win='+([math]::Round([double]$m.cluster_win_rate_pct,1))+'%')
+  }
+}
+
+Write-Host ''
+Write-Host ('PAPER CANARY ELIGIBLE: '+$r.paper_canary_eligible) -ForegroundColor Yellow
+Write-Host ('Reason: '+$r.paper_canary_reason)
 foreach($h in @('300','600','900')){
   $m=$r.by_horizon.$h
   if($m){
