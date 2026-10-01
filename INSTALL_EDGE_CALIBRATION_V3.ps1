@@ -6,7 +6,7 @@ Write-Host ' MYSHKA / ASTRA - EDGE CALIBRATION V3 ' -ForegroundColor Yellow
 Write-Host ' CLUSTERED ISOTONIC - PAPER ONLY ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$bundleCommit = '27f4deed1c331ba3f14af115a037155e7fb81739'
+$bundleCommit = '5ee6892d5ae104e1900b9ca26080487d168a0837'
 $root = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit + '/astra_edge_calibration_v3'
 $env:COMPOSE_ANSI = 'never'
 $env:BUILDKIT_PROGRESS = 'plain'
