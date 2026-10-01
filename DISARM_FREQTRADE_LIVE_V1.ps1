@@ -4,6 +4,8 @@ param(
 
 $ErrorActionPreference='Stop'
 Set-StrictMode -Version Latest
+$env:COMPOSE_ANSI='never'
+$env:BUILDKIT_PROGRESS='plain'
 
 Write-Host '==========================================================' -ForegroundColor Cyan
 Write-Host ' MYSHKA / ASTRA - DISARM LIVE V1 ' -ForegroundColor Yellow
@@ -48,9 +50,9 @@ if(-not $KeepFreqtradeLive){
 $lines | Set-Content '.env.live-armed' -Encoding ASCII
 
 if($KeepFreqtradeLive){
-  docker compose up -d --build --force-recreate astra | Out-Host
+  docker compose up -d --build --force-recreate astra
 } else {
-  docker compose up -d --build --force-recreate freqtrade astra | Out-Host
+  docker compose up -d --build --force-recreate freqtrade astra
 }
 if($LASTEXITCODE -ne 0){throw 'Docker recreate failed.'}
 
