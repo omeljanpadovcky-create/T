@@ -2106,6 +2106,7 @@ async function refreshDemoTrading(){
   try{
     const ctl=await bridgeFetch('/control/status',{timeoutMs:8000});
     APP.lastDemoRefresh=Date.now();
+    APP.lastDemoRefresh=Date.now();
     const en=ctl.engine||{};
     if($('demoEquity'))$('demoEquity').textContent=Number(en.paper_equity||0).toFixed(2)+' USDT';
     if($('demoPositions')){
@@ -2660,9 +2661,9 @@ window.addEventListener('resize',()=>{renderSelected();renderStats()});
 loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;if($('statsMode')&&['STRICT','TRAIN','LEGACY'].includes($('statsMode').value))$('statsMode').value='POSTV2_300';renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(APP.backendReady){refreshPhoneControl();refreshBinanceCrosscheck();refreshRiskQuality();refreshDecisionReplay();refreshHardening(false)}});
 setInterval(()=>{if(APP.backendReady)refreshPhoneControl();else if(!APP.bridgeConnecting)connectBridge()},CFG.scanMs);
 // Final Hardening cadence: internal state is local/read-only and cheap.
-setInterval(()=>{if(APP.backendReady)refreshHardening(false)},5000);
+setInterval(()=>{if(APP.backendReady)refreshHardening(false)},60000);
 // External integration reconciliation is intentionally slower to avoid private API pressure.
-setInterval(()=>{if(APP.backendReady)refreshHardening(true)},60000);
+setInterval(()=>{if(APP.backendReady)refreshHardening(true)},600000);
 setInterval(renderPosition,1000);
 </script>
 </body>
