@@ -167,6 +167,40 @@ button{cursor:pointer}
   .logrow{grid-template-columns:58px 62px 82px 1fr}.logrow span:last-child{display:none}
   .price{font-size:23px}.signal strong{font-size:38px}
 }
+
+/* MYSHKA_COMPACT_DASHBOARD_V1
+   Keep only daily-operational controls on the main screen.
+   Research / archive modules stay in code/backend but are hidden from UI. */
+.phone-control,
+.demo-control,
+.stats-wrap,
+#qualityPanel,
+#hardeningPanel,
+.note{
+  display:none !important;
+}
+#readinessPanel .check-grid,
+#readinessPanel #scanSummary,
+#readinessPanel .ready-head p{
+  display:none !important;
+}
+#readinessPanel{
+  margin-top:12px;
+}
+#readinessPanel .ready-grid{
+  grid-template-columns:repeat(4,1fr);
+}
+#bridgePanel .bridge-grid{
+  grid-template-columns:repeat(5,1fr);
+}
+@media(max-width:850px){
+  #readinessPanel .ready-grid{grid-template-columns:repeat(2,1fr)}
+  #bridgePanel .bridge-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:520px){
+  #readinessPanel .ready-grid{grid-template-columns:1fr 1fr}
+}
+
 </style>
 </head>
 <body>
@@ -174,7 +208,7 @@ button{cursor:pointer}
   <header class="header glass">
     <div class="brand">
       <div class="logo">🐭</div>
-      <div><h1><span>MYSHKA / ASTRA</span> Trading Lab</h1><p>15-market LIVE Bybit universe • ASTRA TRAINING / PAPER EXECUTION</p></div>
+      <div><h1><span>MYSHKA / ASTRA</span> Trading Lab</h1><p>ASTRA • Bybit market data • PAPER execution</p></div>
     </div>
     <div class="head-right">
       <span class="badge" id="marketBadge">● Підключення…</span>
@@ -893,12 +927,12 @@ button{cursor:pointer}
   <section class="card glass readiness" id="readinessPanel">
     <div class="ready-head">
       <div>
-        <h2>🛡 Системна перевірка перед запуском</h2>
+        <h2>🛡 Стан системи</h2>
         <p>Risk-control, execution, integrations і 15-market universe в одному місці.</p>
       </div>
       <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
         <span class="ready-pill" id="readinessSummary">CHECK…</span>
-        <button class="btn" id="runReadiness">↻ Перевірити все</button>
+        <button class="btn" id="runReadiness">↻ Оновити</button>
       </div>
     </div>
 
@@ -2118,20 +2152,10 @@ async function refreshDemoTrading(){
 }
 
 async function refreshSecondaryReports(force=false){
-  if(!APP.backendReady||APP.secondaryBusy)return;
-  if(!force&&Date.now()-(APP.lastSecondaryRefresh||0)<300000)return;
-  APP.secondaryBusy=true;
-  try{
-    // Small groups avoid saturating the single local API worker.
-    const firstBatch=[refreshPostCalibration(),refreshBinanceCrosscheck(),refreshForwardExperimentLab(),refreshRescueMatrix(),refreshAnalytics(),refreshLiveReadiness()];
-    if(force)firstBatch.push(refreshNewsIntelligence(false));
-    await Promise.allSettled(firstBatch);
-    await Promise.allSettled([refreshCounterfactual(),refreshRiskIntelligence(),refreshHardening(false)]);
-    await Promise.allSettled([refreshRiskQuality(),refreshDecisionReplay()]);
-    APP.lastSecondaryRefresh=Date.now();
-  }finally{
-    APP.secondaryBusy=false;
-  }
+  // Compact dashboard: research/archive panels are intentionally not refreshed
+  // from the main UI. Their backend modules remain available for diagnostics.
+  APP.lastSecondaryRefresh=Date.now();
+  return {status:'disabled_in_compact_ui'};
 }
 
 async function refreshPhoneControl(){
@@ -2658,12 +2682,8 @@ $('phoneEngineReset').onclick=async()=>{if(!APP.backendReady||!confirm('Скин
 $('autoMode').onchange=()=>{if(APP.backendReady)setServerControl('auto_scan',$('autoMode').value==='on').then(refreshPhoneControl)};
 $('resetBtn').onclick=async()=>{if(APP.backendReady){if(!confirm('Скинути paper engine? Learner історія залишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl();return}if(!confirm('Скинути локальні paper-угоди?'))return;APP.trades=[];APP.positions={};APP.cooldowns={};APP.logs=[];APP.entryTags={};APP.equity=1000;APP.startEquity=1000;saveState();renderStats();renderLog();renderPosition()};
 window.addEventListener('resize',()=>{renderSelected();renderStats()});
-loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;if($('statsMode')&&['STRICT','TRAIN','LEGACY'].includes($('statsMode').value))$('statsMode').value='POSTV2_300';renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(APP.backendReady){refreshPhoneControl();refreshBinanceCrosscheck();refreshRiskQuality();refreshDecisionReplay();refreshHardening(false)}});
+loadState();applyPhoneLaunchFragment();$('bridgeUrl').value=APP.bridgeUrl;$('bridgeToken').value=APP.bridgeToken;$('bridgeConnect').onclick=connectBridge;if($('statsMode')&&['STRICT','TRAIN','LEGACY'].includes($('statsMode').value))$('statsMode').value='POSTV2_300';renderPairButtons();renderReadiness();setKill(APP.kill);renderStats();renderLog();renderPosition();connectBridge().then(()=>{if(APP.backendReady){refreshPhoneControl()}});
 setInterval(()=>{if(APP.backendReady)refreshPhoneControl();else if(!APP.bridgeConnecting)connectBridge()},CFG.scanMs);
-// Final Hardening cadence: internal state is local/read-only and cheap.
-setInterval(()=>{if(APP.backendReady)refreshHardening(false)},60000);
-// External integration reconciliation is intentionally slower to avoid private API pressure.
-setInterval(()=>{if(APP.backendReady)refreshHardening(true)},600000);
 setInterval(renderPosition,1000);
 </script>
 </body>
