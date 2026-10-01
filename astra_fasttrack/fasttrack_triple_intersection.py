@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import math
 import sqlite3
+from bisect import bisect_left
 from collections import defaultdict
 from statistics import median
 
@@ -69,12 +70,107 @@ def with_cluster_metrics(rows):
     }
 
 
+
+def norm_jev(v):
+    if isinstance(v, bool):
+        return "APPROVE" if v else "REJECT"
+    x = str(v or "").strip().upper()
+    if x in {"APPROVE","APPROVED","PASS","PASSED","ENTER","ALLOW","ALLOWED","GO","YES","TRUE"}:
+        return "APPROVE"
+    if x in {"REJECT","REJECTED","DROP","BLOCK","BLOCKED","DENY","DENIED","NO","FALSE"}:
+        return "REJECT"
+    if x in {"WAIT","HOLD","NEUTRAL","SKIP","PENDING","NONE","NO_DATA","N/A"}:
+        return "WAIT"
+    return x
+
+
+def extract_jev_obj(obj):
+    if not isinstance(obj, dict):
+        return ""
+    for key in ("verdict","decision","state","action","result","label","recommendation","approved","passed"):
+        if key in obj:
+            x = norm_jev(obj.get(key))
+            if x:
+                return x
+    return ""
+
+
+def load_blackbox(con):
+    rows = []
+    try:
+        q = con.execute(
+            "SELECT pair,observed_at,direction,jev_verdict,stage_json,raw_json FROM riskdb.decision_blackbox ORDER BY pair,observed_at"
+        ).fetchall()
+    except Exception:
+        return {}
+    by_pair = defaultdict(list)
+    for rr in q:
+        d = dict(rr)
+        for key in ("stage_json","raw_json"):
+            try:
+                d[key[:-5]] = json.loads(d.get(key) or "{}")
+            except Exception:
+                d[key[:-5]] = {}
+        by_pair[str(d.get("pair") or "")].append(d)
+    out = {}
+    for pair, arr in by_pair.items():
+        arr.sort(key=lambda z: float(z.get("observed_at") or 0))
+        out[pair] = {
+            "rows": arr,
+            "times": [float(z.get("observed_at") or 0) for z in arr],
+        }
+    return out
+
+
+def nearest_blackbox(index, pair, side, opened_at, tolerance=90.0):
+    pack = index.get(str(pair))
+    if not pack:
+        return None
+    rows = pack["rows"]
+    times = pack["times"]
+    pos = bisect_left(times, float(opened_at))
+    best = None
+    best_dt = 1e99
+    for direction in (-1, 1):
+        i = pos - 1 if direction < 0 else pos
+        while 0 <= i < len(rows):
+            dt = abs(times[i] - float(opened_at))
+            if dt > tolerance:
+                break
+            d = str(rows[i].get("direction") or "").upper()
+            if not (str(side).upper() in {"LONG","SHORT"} and d in {"LONG","SHORT"} and str(side).upper() != d):
+                if dt < best_dt:
+                    best = rows[i]
+                    best_dt = dt
+            i += direction
+    return best
+
+
+def resolved_jev(risk_value, box):
+    raw = (box or {}).get("raw") or {}
+    stage = (box or {}).get("stage") or {}
+    raw_j = extract_jev_obj(raw.get("jev") if isinstance(raw, dict) else None)
+    stage_j = extract_jev_obj(stage.get("jev") if isinstance(stage, dict) else None)
+    risk_j = norm_jev(risk_value)
+    box_j = norm_jev((box or {}).get("jev_verdict"))
+    return (
+        raw_j
+        or stage_j
+        or (risk_j if risk_j not in {"", "WAIT"} else "")
+        or (box_j if box_j not in {"", "WAIT"} else "")
+        or risk_j
+        or box_j
+        or "UNKNOWN"
+    )
+
+
 def main():
     con = sqlite3.connect(FWD_DB, timeout=10)
     con.row_factory = sqlite3.Row
     con.execute("ATTACH DATABASE ? AS riskdb", (RISK_DB,))
     try:
-        rows = [
+        blackbox = load_blackbox(con)
+        base_rows = [
             dict(r) for r in con.execute(
                 """
                 SELECT
@@ -85,12 +181,13 @@ def main():
                     f.xcheck_state, f.edge_pct, f.total_cost_pct,
                     f.structure, f.rsi, f.volume_ratio, f.atr_pct,
                     f.gross_pct, f.net_pct,
-                    r.jev_verdict, r.jev_confidence,
+                    r.jev_verdict AS risk_jev_verdict,
+                    r.jev_confidence,
                     r.regime AS risk_regime,
                     r.expected_move_pct,
                     r.spread_pct
                 FROM forward_outcomes f
-                JOIN riskdb.risk_candidates r
+                LEFT JOIN riskdb.risk_candidates r
                   ON r.pair = f.pair
                  AND UPPER(r.side) = UPPER(f.side)
                  AND r.source_minute = f.source_minute
@@ -101,6 +198,16 @@ def main():
                 """
             ).fetchall()
         ]
+        rows = []
+        for r in base_rows:
+            box = nearest_blackbox(
+                blackbox,
+                r.get("pair"),
+                r.get("side"),
+                r.get("opened_at"),
+            )
+            r["jev_verdict"] = resolved_jev(r.get("risk_jev_verdict"), box)
+            rows.append(r)
     finally:
         con.close()
 
@@ -126,6 +233,7 @@ def main():
         "status": "ok",
         "mode": "READ_ONLY_FASTTRACK_FUNNEL",
         "joined_rows": len(rows),
+        "jev_distribution": {},
         "funnel": {},
         "by_horizon": {},
         "pair_breakdown_5m": {},
@@ -137,6 +245,10 @@ def main():
         "sends_orders": False,
         "live_execution": False,
     }
+
+    for r in rows:
+        j = str(r.get("jev_verdict") or "UNKNOWN")
+        report["jev_distribution"][j] = int(report["jev_distribution"].get(j, 0)) + 1
 
     for name, predicate in filters.items():
         report["funnel"][name] = {}
