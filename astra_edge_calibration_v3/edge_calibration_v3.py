@@ -34,6 +34,8 @@ CACHE_SEC = max(5, int(os.getenv("EDGE_CALIBRATION_V3_CACHE_SEC", "30")))
 
 _LOCK = threading.RLock()
 _CACHE = {"at": 0.0, "model": None}
+_REFRESHING = False
+_LAST_REFRESH_ERROR = None
 
 
 def _num(v: Any) -> Optional[float]:
@@ -229,25 +231,76 @@ def _build_model(rows: list[dict]) -> dict:
     }
 
 
-def _model(force: bool = False) -> dict:
+def _empty_model() -> dict:
+    return {
+        "state": "WARMING",
+        "cluster_n": 0,
+        "total_cluster_n": 0,
+        "neutral_excluded_n": 0,
+        "raw_avg_net_pct": 0.0,
+        "raw_profit_factor": 0.0,
+        "raw_edge_net_corr": None,
+        "blocks": [],
+        "neutral": {"n": 0, "avg_net_pct": 0.0, "profit_factor": 0.0},
+        "cache_warming": True,
+    }
+
+
+def _refresh_worker() -> None:
+    global _REFRESHING, _LAST_REFRESH_ERROR
+    try:
+        model = _build_model(_load_rows())
+        with _LOCK:
+            _CACHE["at"] = time.time()
+            _CACHE["model"] = model
+            _LAST_REFRESH_ERROR = None
+    except Exception as exc:
+        with _LOCK:
+            _LAST_REFRESH_ERROR = f"{type(exc).__name__}: {exc}"
+    finally:
+        with _LOCK:
+            _REFRESHING = False
+
+
+def _trigger_refresh(force: bool = False) -> bool:
+    global _REFRESHING
     now = time.time()
     with _LOCK:
         cached = _CACHE.get("model")
-        if not force and cached is not None and now - float(_CACHE.get("at") or 0) < CACHE_SEC:
-            return cached
-    try:
-        model = _build_model(_load_rows())
-    except Exception as exc:
-        model = {
-            "state": "ERROR", "cluster_n": 0, "total_cluster_n": 0,
-            "neutral_excluded_n": 0, "raw_avg_net_pct": 0.0,
-            "raw_profit_factor": 0.0, "raw_edge_net_corr": None,
-            "blocks": [], "neutral": {"n": 0, "avg_net_pct": 0.0, "profit_factor": 0.0},
-            "error": f"{type(exc).__name__}: {exc}",
-        }
+        age = now - float(_CACHE.get("at") or 0)
+        if _REFRESHING:
+            return False
+        if not force and cached is not None and age < CACHE_SEC:
+            return False
+        _REFRESHING = True
+    t = threading.Thread(target=_refresh_worker, name="edge-calibration-v3-refresh", daemon=True)
+    t.start()
+    return True
+
+
+def _model(force: bool = False) -> dict:
+    """Return cached calibration immediately; refresh SQLite in background.
+
+    This keeps /health, report and scan decisions non-blocking even if the
+    forward-outcomes database is large or temporarily busy.
+    """
+    now = time.time()
     with _LOCK:
-        _CACHE["at"] = now
-        _CACHE["model"] = model
+        cached = _CACHE.get("model")
+        cache_at = float(_CACHE.get("at") or 0)
+        refreshing = bool(_REFRESHING)
+        last_error = _LAST_REFRESH_ERROR
+
+    age = (now - cache_at) if cache_at > 0 else None
+    stale = cached is None or age is None or age >= CACHE_SEC
+    if force or stale:
+        _trigger_refresh(force=force)
+
+    model = dict(cached) if isinstance(cached, dict) else _empty_model()
+    model["cache_age_sec"] = age
+    model["refreshing"] = refreshing or stale
+    if last_error:
+        model["last_refresh_error"] = last_error
     return model
 
 
@@ -339,6 +392,7 @@ def apply(*, signal: Any, edge: Any, candles: list[Any],
 
 
 def report() -> dict:
+    # Never block an HTTP request on a full SQLite recalculation.
     m = _model(force=True)
     return {
         "status": "ok" if m.get("state") != "ERROR" else "error",
@@ -358,6 +412,9 @@ def report() -> dict:
             "higher modeled EDGE cannot automatically become stronger evidence",
             "calibration can HOLD only; never rescues or creates ENTER",
         ],
+        "cache_age_sec": m.get("cache_age_sec"),
+        "refreshing": bool(m.get("refreshing")),
+        "last_refresh_error": m.get("last_refresh_error"),
         "live_execution": False,
     }
 
@@ -375,6 +432,9 @@ def status() -> dict:
         "blocks": len(m.get("blocks") or []),
         "exclude_neutral_from_fit": EXCLUDE_NEUTRAL_FROM_FIT,
         "raw_edge_net_corr": m.get("raw_edge_net_corr"),
+        "cache_age_sec": m.get("cache_age_sec"),
+        "refreshing": bool(m.get("refreshing")),
+        "last_refresh_error": m.get("last_refresh_error"),
         "paper_only": True,
         "live_execution": False,
         "extra_market_api_calls": False,
