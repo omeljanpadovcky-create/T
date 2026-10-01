@@ -89,6 +89,22 @@ button{cursor:pointer}
 .demo-event{display:grid;grid-template-columns:74px 95px 90px 1fr 80px;gap:8px;align-items:center;padding:9px 10px;border-bottom:1px solid #142944;font-size:9px}
 .demo-event:last-child{border-bottom:0}.demo-event .ok{color:#55e9a7}.demo-event .bad{color:#ff8290}.demo-event .muted{color:#7d93b5}
 .demo-empty{padding:14px;color:#7d93b5;font-size:9px}
+
+/* MYSHKA_LATEST_EXECUTION_V1 */
+.latest-exec{margin:0 0 12px;padding:12px;border-radius:16px}
+.latest-exec-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.latest-exec-head h2{margin:0;font-size:16px}
+.latest-exec-head p{margin:3px 0 0;color:#8399ba;font-size:9px}
+.latest-exec-badge{padding:6px 9px;border-radius:999px;font-size:9px;font-weight:950;border:1px solid #2d4b76;background:#0a182a;color:#a9bfde}
+.latest-exec-badge.live{border-color:#8f6a26;background:#2b1d07;color:#ffd56b}
+.latest-exec-badge.demo{border-color:#217451;background:#082219;color:#55e9a7}
+.latest-exec-grid{display:grid;grid-template-columns:1.3fr .8fr .8fr .7fr .9fr 1.3fr;gap:7px;margin-top:9px}
+.latest-exec-box{padding:10px;border-radius:11px;background:#071522;border:1px solid #1d3659;min-width:0}
+.latest-exec-box small{display:block;color:#758cac;font-size:8px;text-transform:uppercase;letter-spacing:.04em}
+.latest-exec-box b{display:block;margin-top:4px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.latest-exec-note{margin-top:8px;color:#7f96b8;font-size:9px}
+@media(max-width:850px){.latest-exec-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.latest-exec-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:850px){.demo-actions{grid-template-columns:repeat(2,1fr)}.demo-stats{grid-template-columns:repeat(2,1fr)}.demo-event{grid-template-columns:64px 1fr 76px}.demo-event span:nth-child(3),.demo-event span:nth-child(4){display:none}}
 
 .card{border-radius:18px;padding:13px}
@@ -249,6 +265,25 @@ button{cursor:pointer}
       <div class="bridge-node warn" id="iTelegram"><small>Telegram</small><b>CHECK…</b></div>
     </div>
     <div class="sub" id="bridgeMsg" style="margin-top:8px">На телефоні localhost НЕ працює. Запускай START_PHONE.bat — він сам дасть HTTPS-посилання і підключить цей сайт до ASTRA.</div>
+  </section>
+
+  <section class="latest-exec glass" id="latestExecPanel">
+    <div class="latest-exec-head">
+      <div>
+        <h2>⚡ ОСТАННЯ ВІДКРИТА УГОДА</h2>
+        <p>Показує факт execution від ASTRA → Freqtrade. Без hardcoded обмеження по назві монети.</p>
+      </div>
+      <span class="latest-exec-badge" id="latestExecMode">WAITING</span>
+    </div>
+    <div class="latest-exec-grid">
+      <div class="latest-exec-box"><small>Пара</small><b id="latestExecPair">—</b></div>
+      <div class="latest-exec-box"><small>Напрям</small><b id="latestExecSide">—</b></div>
+      <div class="latest-exec-box"><small>Stake</small><b id="latestExecStake">—</b></div>
+      <div class="latest-exec-box"><small>Плече</small><b id="latestExecLev">—</b></div>
+      <div class="latest-exec-box"><small>Статус</small><b id="latestExecStatus">Немає</b></div>
+      <div class="latest-exec-box"><small>Час / джерело</small><b id="latestExecMeta">—</b></div>
+    </div>
+    <div class="latest-exec-note" id="latestExecNote">Чекаємо першу виконану угоду. UI прийме будь-яку пару, яку поверне execution layer.</div>
   </section>
 
   <section class="phone-control glass">
@@ -2085,6 +2120,56 @@ function applyServerResults(results){
 function demoPairLabel(pair){
   return String(pair||'—').replace('/USDT:USDT','').replace(':USDT','');
 }
+function formatExecTime(v){
+  if(!v)return '—';
+  let n=Number(v);
+  if(!Number.isFinite(n))return String(v);
+  if(n<1e12)n*=1000;
+  try{return new Date(n).toLocaleString('uk-UA')}catch(e){return '—'}
+}
+function renderLatestExecution(dryItems=[],liveItems=[]){
+  const live=(liveItems||[]).find(e=>String(e.status||'').toLowerCase()==='sent'&&e.real_money_execution===true);
+  const dry=(dryItems||[]).find(e=>String(e.status||'').toLowerCase()==='sent');
+  const e=live||dry;
+  const mode=live?'LIVE':dry?'DRY_RUN':'WAITING';
+
+  if($('latestExecMode')){
+    $('latestExecMode').textContent=mode;
+    $('latestExecMode').className='latest-exec-badge '+(mode==='LIVE'?'live':mode==='DRY_RUN'?'demo':'');
+  }
+  if(!e){
+    if($('latestExecPair'))$('latestExecPair').textContent='—';
+    if($('latestExecSide')){$('latestExecSide').textContent='—';$('latestExecSide').className=''}
+    if($('latestExecStake'))$('latestExecStake').textContent='—';
+    if($('latestExecLev'))$('latestExecLev').textContent='—';
+    if($('latestExecStatus'))$('latestExecStatus').textContent='Немає';
+    if($('latestExecMeta'))$('latestExecMeta').textContent='—';
+    if($('latestExecNote'))$('latestExecNote').textContent='Чекаємо першу виконану угоду. Монета не фільтрується UI.';
+    return;
+  }
+
+  const p=e.payload||{};
+  const pair=String(e.pair||p.pair||p.symbol||'—');
+  const side=String(e.side||p.side||'—').toUpperCase();
+  const stake=Number(p.stakeamount??p.notional_usdt??e.stake_usdt);
+  const lev=Number(p.leverage??e.leverage??1);
+  const ts=e.created_at||e.sent_at||e.timestamp||e.observed_at;
+  const source=String(e.source||'astra');
+
+  if($('latestExecPair'))$('latestExecPair').textContent=pair;
+  if($('latestExecSide')){
+    $('latestExecSide').textContent=side;
+    $('latestExecSide').className=side==='LONG'?'long':side==='SHORT'?'short':'';
+  }
+  if($('latestExecStake'))$('latestExecStake').textContent=Number.isFinite(stake)?stake.toFixed(2)+' USDT':'—';
+  if($('latestExecLev'))$('latestExecLev').textContent=Number.isFinite(lev)?lev.toFixed(1)+'x':'—';
+  if($('latestExecStatus'))$('latestExecStatus').textContent='SENT';
+  if($('latestExecMeta'))$('latestExecMeta').textContent=formatExecTime(ts)+' · '+source;
+  if($('latestExecNote'))$('latestExecNote').textContent=
+    (mode==='LIVE'?'REAL-MONEY execution event. ':'DRY_RUN execution event. ')+
+    'Пара показується як є — BTC, DOGE, XRP, QNT або будь-яка інша, яку реально виконав Freqtrade.';
+}
+
 function renderDemoEvents(items){
   const host=$('demoEvents');if(!host)return;
   const rows=(items||[]).slice(0,12);
@@ -2130,13 +2215,20 @@ async function refreshDemoTrading(){
   }catch(e){
     if($('demoMode')){$('demoMode').textContent='UNAVAILABLE';$('demoMode').className='short'}
   }
+  let dryItems=[],liveItems=[];
   try{
     const recent=await bridgeFetch('/freqtrade-dryrun/recent?limit=20',{timeoutMs:8000});
-    renderDemoEvents(recent.items||[]);
-    if($('demoEventCount'))$('demoEventCount').textContent=String((recent.items||[]).length);
+    dryItems=recent.items||[];
+    renderDemoEvents(dryItems);
+    if($('demoEventCount'))$('demoEventCount').textContent=String(dryItems.length);
   }catch(e){
     if($('demoEvents'))$('demoEvents').innerHTML='<div class="demo-empty">Freqtrade dry-run events недоступні: '+String(e.message||e)+'</div>';
   }
+  try{
+    const liveRecent=await bridgeFetch('/freqtrade-live/recent?limit=20',{timeoutMs:5000});
+    liveItems=liveRecent.items||[];
+  }catch(e){}
+  renderLatestExecution(dryItems,liveItems);
   try{
     const ctl=await bridgeFetch('/control/status',{timeoutMs:8000});
     APP.lastDemoRefresh=Date.now();
