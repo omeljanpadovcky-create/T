@@ -54,7 +54,7 @@ NEW_FUNC = '''def estimate_expected_move(
 '''
 
 def patch(path: Path) -> None:
-    src = path.read_text(encoding="utf-8-sig").lstrip("\\ufeff")
+    src = path.read_text(encoding="utf-8-sig").lstrip("\ufeff")
     if '"pooled_5m"' in src and "Cold-start V1" in src:
         print("already_patched")
         return
