@@ -6,7 +6,7 @@ Write-Host ' MYSHKA / ASTRA - FASTTRACK TRIPLE INTERSECTION ' -ForegroundColor Y
 Write-Host ' TECH 3/4 + JEV APPROVE + BINANCE AGREE ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
-$commit='415929dff662da01c48129e702ce046fb5df9a1b'
+$commit='d073409201809e42057b0fde1039b9daf4f5340c'
 $uri='https://raw.githubusercontent.com/omeljanpadovcky-create/T/'+$commit+'/astra_fasttrack/fasttrack_triple_intersection.py'
 $tmp=Join-Path $env:TEMP 'myshka_fasttrack_triple_intersection.py'
 
@@ -30,6 +30,7 @@ $r=$raw | ConvertFrom-Json
 Write-Host '[2/2] Result...' -ForegroundColor Green
 Write-Host ''
 Write-Host ('Joined rows: '+$r.joined_rows)
+Write-Host ('JEV distribution: '+($r.jev_distribution | ConvertTo-Json -Compress))
 
 Write-Host ''
 Write-Host '=== FASTTRACK FUNNEL ===' -ForegroundColor Cyan
