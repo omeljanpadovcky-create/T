@@ -182,6 +182,8 @@ def _xcheck(r: dict, pair: str, side: str) -> str:
 
 def _claim(pair: str, side: str, tech_score: int, tech_source: str,
            jev: str, xcheck: str, signal_price: float, now: float) -> Optional[str]:
+    # Be robust when the DB path changes in tests or after a fresh install.
+    _db_init()
     bucket = int(now // CLUSTER_SEC) * CLUSTER_SEC
     key = f"{pair}|{side}|{bucket}"
     with _LOCK, _conn() as con:
@@ -330,6 +332,8 @@ def _execute(cluster_key: str, pair: str, direction: str, price: float, now: flo
 
 
 def observe_results(results: list[dict], now: Optional[float] = None) -> dict:
+    # Ensure schema exists even if observe_results is called before init().
+    _db_init()
     if not ENABLED:
         return {"status":"disabled","mode":MODE,"enabled":False,"real_money_execution":False}
 
