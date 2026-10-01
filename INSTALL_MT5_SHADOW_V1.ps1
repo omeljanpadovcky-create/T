@@ -93,19 +93,19 @@ Write-Host '[4/10] Ensure MetaTrader5 Python package on Windows...'
 $prevEap=$ErrorActionPreference
 $ErrorActionPreference='Continue'
 try {
-  cmd /c 'python -c "import MetaTrader5" >nul 2>&1'
+  & python -c "import MetaTrader5" 2>$null
   $mt5Rc=$LASTEXITCODE
 
   if($mt5Rc -ne 0){
     Write-Host '[INFO] MetaTrader5 package missing. Installing...'
-    cmd /c 'python -m pip install --upgrade MetaTrader5'
+    & python -m pip install --upgrade MetaTrader5
     $pipRc=$LASTEXITCODE
     if($pipRc -ne 0){throw 'Could not install MetaTrader5 Python package.'}
   } else {
     Write-Host '[OK] MetaTrader5 package already installed.' -ForegroundColor Green
   }
 
-  cmd /c 'python -c "import MetaTrader5 as mt5; print(''MetaTrader5 version'', mt5.__version__)"'
+  & python -c "import MetaTrader5 as mt5; print('MetaTrader5 version', mt5.__version__)"
   $importRc=$LASTEXITCODE
   if($importRc -ne 0){throw 'MetaTrader5 package import failed after install.'}
 } finally {
@@ -174,8 +174,22 @@ $ErrorActionPreference='Stop'
 if($dockerRc -ne 0){throw 'ASTRA rebuild failed.'}
 
 Write-Host '[9/10] Verify Docker -> Windows collector + ASTRA API...'
-$dockerProbe=cmd /c 'docker exec myshka-astra python -c "import urllib.request; print(urllib.request.urlopen(''http://host.docker.internal:8115/health'',timeout=5).read().decode())" 2>nul'
-if(-not ($dockerProbe -match '"status":"ok"')){throw ('Docker cannot reach MT5 Shadow Collector: '+($dockerProbe -join ' '))}
+$probeCode=@'
+import urllib.request
+print(urllib.request.urlopen("http://host.docker.internal:8115/health",timeout=5).read().decode())
+'@
+$prevEap=$ErrorActionPreference
+$ErrorActionPreference='Continue'
+try {
+  $dockerProbe = $probeCode | docker exec -i myshka-astra python - 2>&1
+  $dockerProbeRc=$LASTEXITCODE
+} finally {
+  $ErrorActionPreference=$prevEap
+}
+$dockerProbeText=($dockerProbe -join [Environment]::NewLine)
+if($dockerProbeRc -ne 0 -or $dockerProbeText -notmatch '"status":"ok"'){
+  throw ('Docker cannot reach MT5 Shadow Collector: '+$dockerProbeText)
+}
 
 $ready=$false
 for($i=0;$i -lt 30;$i++){
