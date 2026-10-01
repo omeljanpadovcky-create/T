@@ -51,8 +51,8 @@ $src=Get-Content $tmp -Raw -Encoding UTF8
 foreach($m in @('_blackbox_jev','decision_blackbox','jev_blackbox_hit','jev_direct_hit','last_jev_source','JEV_BLACKBOX_MAX_AGE_SEC')){
   if($src -notlike ('*'+$m+'*')){throw ('Missing marker: '+$m)}
 }
-if($src -like '*OLLAMA*' -or $src -like '*api/generate*'){
-  throw 'Unexpected direct Ollama call found in canary module.'
+if($src -like '*api/generate*' -or $src -like '*api/chat*' -or $src -like '*11434*'){
+  throw 'Unexpected direct Ollama HTTP endpoint found in canary module.'
 }
 Write-Host '[OK] Read-only Black Box JEV fallback verified.' -ForegroundColor Green
 
