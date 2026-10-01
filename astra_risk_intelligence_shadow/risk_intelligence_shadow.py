@@ -53,6 +53,10 @@ DRIFT_WINDOW = max(20, int(os.getenv("RISK_DRIFT_WINDOW", "50")))
 AB_THRESHOLDS = (0.05, 0.10, 0.15, 0.20)
 CONFIDENCE_BINS = ((0,29),(30,49),(50,69),(70,84),(85,100))
 _LOCK = threading.RLock()
+HISTORY_CACHE_SEC = max(15, int(os.getenv("RISK_HISTORY_CACHE_SEC", "60")))
+BLACKBOX_CLEANUP_SEC = max(60, int(os.getenv("RISK_BLACKBOX_CLEANUP_SEC", "300")))
+_HISTORY_CACHE: dict[str, Any] = {"at": 0.0, "closed": [], "open": []}
+_LAST_BLACKBOX_CLEANUP = 0.0
 
 
 def _conn(path: str = DB_PATH) -> sqlite3.Connection:
@@ -216,6 +220,23 @@ def _open_analytics_rows() -> list[dict]:
             return [dict(x) for x in con.execute("SELECT * FROM analytics_trades WHERE status='OPEN'").fetchall()]
     except Exception:
         return []
+
+
+def _analytics_snapshot(force: bool = False) -> tuple[list[dict], list[dict]]:
+    """Cache analytics history so every 15s scan does not reread the whole DB."""
+    now = time.time()
+    with _LOCK:
+        age = now - float(_HISTORY_CACHE.get("at") or 0.0)
+        if not force and age < HISTORY_CACHE_SEC:
+            return list(_HISTORY_CACHE.get("closed") or []), list(_HISTORY_CACHE.get("open") or [])
+
+    closed = _analytics_rows()
+    opened = _open_analytics_rows()
+    with _LOCK:
+        _HISTORY_CACHE["at"] = now
+        _HISTORY_CACHE["closed"] = closed
+        _HISTORY_CACHE["open"] = opened
+    return list(closed), list(opened)
 
 
 def _metrics(rows: list[dict]) -> dict:
@@ -422,7 +443,8 @@ def _json_dump(value: Any) -> str:
         return "{}"
 
 
-def _record_blackbox(r: dict, now: float, history_rows: list[dict], open_rows: list[dict]) -> bool:
+def _record_blackbox(r: dict, now: float, history_rows: list[dict], open_rows: list[dict],
+                     features: Optional[dict] = None) -> bool:
     pair = str(r.get("pair") or "")
     if not pair:
         return False
@@ -433,7 +455,7 @@ def _record_blackbox(r: dict, now: float, history_rows: list[dict], open_rows: l
     guard = r.get("guard") or {}
     evidence_gate = r.get("evidence_gate") or {}
     adaptive_learner = r.get("adaptive_learner") or {}
-    risk = _candidate_features(r, history_rows, open_rows)
+    risk = features if features is not None else _candidate_features(r, history_rows, open_rows)
     direction = str(r.get("direction") or sig.get("direction") or "WAIT").upper()
     tech_score = _signal_score(sig)
     flags = (risk or {}).get("flags", [])
@@ -517,15 +539,34 @@ def _record_blackbox(r: dict, now: float, history_rows: list[dict], open_rows: l
                 _json_dump(stage), _json_dump(r),
             ),
         )
-        con.execute(
-            "DELETE FROM decision_blackbox WHERE id NOT IN (SELECT id FROM decision_blackbox ORDER BY id DESC LIMIT ?)",
-            (BLACKBOX_RETENTION,),
-        )
         return bool(cur.rowcount)
 
 
-def _record_candidate(r: dict, now: float, history_rows: list[dict], open_rows: list[dict]) -> bool:
-    f = _candidate_features(r, history_rows, open_rows)
+def _cleanup_blackbox(now: Optional[float] = None) -> None:
+    """Retention cleanup at most once per few minutes instead of once per pair."""
+    global _LAST_BLACKBOX_CLEANUP
+    ts = float(now if now is not None else time.time())
+    with _LOCK:
+        if ts - float(_LAST_BLACKBOX_CLEANUP or 0.0) < BLACKBOX_CLEANUP_SEC:
+            return
+        _LAST_BLACKBOX_CLEANUP = ts
+    try:
+        with _LOCK, _db() as con:
+            row = con.execute("SELECT COUNT(*) n FROM decision_blackbox").fetchone()
+            n = int(row["n"] or 0) if row else 0
+            if n > BLACKBOX_RETENTION + 250:
+                con.execute(
+                    "DELETE FROM decision_blackbox WHERE id NOT IN "
+                    "(SELECT id FROM decision_blackbox ORDER BY id DESC LIMIT ?)",
+                    (BLACKBOX_RETENTION,),
+                )
+    except Exception:
+        pass
+
+
+def _record_candidate(r: dict, now: float, history_rows: list[dict], open_rows: list[dict],
+                      features: Optional[dict] = None) -> bool:
+    f = features if features is not None else _candidate_features(r, history_rows, open_rows)
     if not f:
         return False
     source_minute = int(now // 60) * 60
@@ -598,16 +639,22 @@ def observe_results(results: list[dict], now: Optional[float] = None) -> dict:
         init()
         ts = float(now or time.time())
         out = _settle(results or [], ts)
-        history_rows = _analytics_rows()
-        open_rows = _open_analytics_rows()
+        history_rows, open_rows = _analytics_snapshot()
         created = 0
         blackbox = 0
         for r in results or []:
-            if _record_blackbox(r, ts, history_rows, open_rows):
+            # Compute expensive historical features once, reuse for both recorders.
+            features = _candidate_features(r, history_rows, open_rows)
+            if _record_blackbox(r, ts, history_rows, open_rows, features=features):
                 blackbox += 1
-            if _record_candidate(r, ts, history_rows, open_rows):
+            if _record_candidate(r, ts, history_rows, open_rows, features=features):
                 created += 1
-        return {"status":"ok","created":created,"blackbox":blackbox,**out}
+        _cleanup_blackbox(ts)
+        return {
+            "status":"ok","created":created,"blackbox":blackbox,
+            "history_cache_sec":HISTORY_CACHE_SEC,
+            **out
+        }
     except Exception as exc:
         return {"status":"error","error":f"{type(exc).__name__}: {exc}","created":0,"closed":0,"skipped":0}
 
@@ -623,6 +670,8 @@ def status() -> dict:
             "enabled":True,"mode":"SHADOW","db_path":DB_PATH,"horizon_sec":HORIZON_SEC,
             "open":counts.get("OPEN",0),"closed":counts.get("CLOSED",0),
             "skipped":counts.get("SKIPPED",0),
+            "history_cache_sec":HISTORY_CACHE_SEC,
+            "blackbox_cleanup_sec":BLACKBOX_CLEANUP_SEC,
         }
     except Exception as exc:
         return {"enabled":True,"mode":"SHADOW","db_path":DB_PATH,"error":f"{type(exc).__name__}: {exc}"}
