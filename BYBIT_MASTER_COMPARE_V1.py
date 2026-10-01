@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import csv, json, os, re, subprocess, sys, time, urllib.parse
+import csv, json, os, re, shutil, subprocess, sys, time, urllib.parse
 from pathlib import Path
 
 URLS = [
@@ -195,9 +195,13 @@ def main():
             rr["open_positions"]=" | ".join(f"{p['pair']} {p['side']} lev={p.get('leverage')} pnl={p.get('pnl_pct')}" for p in rr["open_positions"])
             w.writerow(rr)
 
+    zbase = Path.home()/"Downloads"/"BYBIT_MASTER_COMPARE"
+    zpath = shutil.make_archive(str(zbase), "zip", root_dir=OUT)
+
     print("\nDONE")
     print(jpath)
     print(cpath)
+    print(zpath)
     print("\nPaste this summary back to ChatGPT:")
     for r in rows:
         print(json.dumps({
