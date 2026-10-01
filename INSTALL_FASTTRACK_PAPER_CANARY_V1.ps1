@@ -6,7 +6,7 @@ Write-Host ' MYSHKA / ASTRA - FASTTRACK PAPER CANARY V1 ' -ForegroundColor Yello
 Write-Host ' TECH 3/4 + JEV APPROVE + BINANCE AGREE -> FREQTRADE DRY_RUN ' -ForegroundColor Yellow
 Write-Host '==========================================================' -ForegroundColor Cyan
 
-$bundleCommit='c1b9d04481cd785ffd5195be741375297d269cd1'
+$bundleCommit='3074839b115629356d8e5acc59cb74f5eeeef498'
 $root='https://raw.githubusercontent.com/omeljanpadovcky-create/T/'+$bundleCommit
 $env:COMPOSE_ANSI='never'
 $env:BUILDKIT_PROGRESS='plain'
@@ -119,10 +119,26 @@ $files=@{
 }
 
 Write-Host '[1/9] Downloading pinned canary bundle...'
+$nonce=[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
 foreach($name in $files.Keys){
-  Invoke-WebRequest -UseBasicParsing -Uri $files[$name] -OutFile (Join-Path $tmp $name) -TimeoutSec 60
+  $uri=$files[$name]+'?x='+$nonce
+  Invoke-WebRequest -UseBasicParsing -Uri $uri -Headers @{
+    'User-Agent'='MYSHKA-ASTRA-FastTrackCanary'
+    'Cache-Control'='no-cache, no-store, max-age=0'
+    'Pragma'='no-cache'
+  } -OutFile (Join-Path $tmp $name) -TimeoutSec 60
 }
-Write-Host '[OK] Bundle downloaded.' -ForegroundColor Green
+Write-Host '[OK] Bundle downloaded (cache bypass).' -ForegroundColor Green
+
+$downloadedCanary=Get-Content (Join-Path $tmp 'fasttrack_paper_canary.py') -Raw -Encoding UTF8
+$downloadedTest=Get-Content (Join-Path $tmp 'selftest_fasttrack_paper_canary.py') -Raw -Encoding UTF8
+if($downloadedCanary -notlike '*Ensure schema exists even if observe_results is called before init()*'){
+  throw 'Downloaded canary is stale: DB-init hotfix marker missing.'
+}
+if($downloadedTest -notlike '*myshka_canary_selftest_*'){
+  throw 'Downloaded self-test is stale: Windows SQLite temp-path hotfix missing.'
+}
+Write-Host '[OK] DB-init + Windows self-test hotfix markers verified.' -ForegroundColor Green
 
 Write-Host '[2/9] Static safety checks...'
 $canarySrc=Get-Content (Join-Path $tmp 'fasttrack_paper_canary.py') -Raw -Encoding UTF8
