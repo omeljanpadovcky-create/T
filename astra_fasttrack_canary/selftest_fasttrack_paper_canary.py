@@ -1,3 +1,5 @@
+import os
+import sqlite3
 import tempfile
 import time
 try:
@@ -11,8 +13,15 @@ def ok(cond, msg):
         raise AssertionError(msg)
 
 
-c.DB_PATH = tempfile.NamedTemporaryFile(prefix="canary_", suffix=".sqlite3", delete=False).name
+_test_dir = tempfile.mkdtemp(prefix="myshka_canary_selftest_")
+c.DB_PATH = os.path.join(_test_dir, "canary.sqlite3")
 c._EVENTS.clear()
+c._db_init()
+
+with sqlite3.connect(c.DB_PATH) as _con:
+    _tables = {str(r[0]) for r in _con.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()}
+ok("canary_events" in _tables, "canary_events schema was not created")
+
 calls = []
 
 
