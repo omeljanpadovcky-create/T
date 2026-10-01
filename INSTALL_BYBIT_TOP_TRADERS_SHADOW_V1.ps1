@@ -51,13 +51,49 @@ if(-not (Test-Path $api)){ throw 'api.py not found.' }
 
 Write-Host ('Project: '+$app)
 
-Write-Host '[1/8] DRY_RUN preflight...'
+Write-Host '[1/8] ASTRA start + DRY_RUN preflight...'
+
+$health=$null
+try {
+  $health=Invoke-RestMethod 'http://127.0.0.1:8088/health' -TimeoutSec 3
+} catch {}
+
+if(-not $health -or $health.status -ne 'ok'){
+  Write-Host '[INFO] ASTRA API is offline. Starting ASTRA container...' -ForegroundColor Yellow
+  Push-Location $app
+  try {
+    $old=$ErrorActionPreference
+    $ErrorActionPreference='Continue'
+    & docker compose --ansi never up -d astra
+    $rc=$LASTEXITCODE
+    $ErrorActionPreference=$old
+    if($rc -ne 0){ throw 'Could not start ASTRA container.' }
+  } finally { Pop-Location }
+
+  $health=$null
+  for($i=0;$i -lt 40;$i++){
+    Start-Sleep -Seconds 2
+    try {
+      $health=Invoke-RestMethod 'http://127.0.0.1:8088/health' -TimeoutSec 5
+      if($health.status -eq 'ok'){ break }
+    } catch {}
+  }
+}
+
+if(-not $health -or $health.status -ne 'ok'){
+  Write-Host '[DIAG] Container state:' -ForegroundColor Yellow
+  & docker ps -a --filter 'name=myshka-astra'
+  Write-Host '[DIAG] Last ASTRA logs:' -ForegroundColor Yellow
+  & docker logs --tail 80 myshka-astra
+  throw 'ASTRA API did not become healthy on http://127.0.0.1:8088.'
+}
+
 $token=Get-Token
 $headers=@{'X-MYSHKA-TOKEN'=$token}
 $st=Invoke-RestMethod 'http://127.0.0.1:8088/fasttrack-canary/status' -Headers $headers -TimeoutSec 10
 if($st.real_money_execution -ne $false){ throw 'STOP: real_money_execution is not false.' }
 if($st.local_dry_run -ne $true){ throw 'STOP: Freqtrade DRY_RUN not confirmed.' }
-Write-Host '[OK] DRY_RUN confirmed. Real-money execution OFF.' -ForegroundColor Green
+Write-Host '[OK] ASTRA healthy. DRY_RUN confirmed. Real-money execution OFF.' -ForegroundColor Green
 
 $stamp=Get-Date -Format 'yyyyMMdd-HHmmss'
 $apiBackup=$api+'.before-bybit-toptraders-v1-'+$stamp
