@@ -3,7 +3,7 @@ Set-StrictMode -Version Latest
 
 Write-Host '======================================================' -ForegroundColor Cyan
 Write-Host ' MYSHKA / ASTRA - EDGE CALIBRATION V3 ' -ForegroundColor Yellow
-Write-Host ' CLUSTERED ISOTONIC · PAPER ONLY ' -ForegroundColor Yellow
+Write-Host ' CLUSTERED ISOTONIC - PAPER ONLY ' -ForegroundColor Yellow
 Write-Host '======================================================' -ForegroundColor Cyan
 
 $bundleCommit = '27f4deed1c331ba3f14af115a037155e7fb81739'
@@ -150,7 +150,7 @@ Write-Host (' State: ' + $v3.state)
 Write-Host (' Cluster n: ' + $v3.cluster_n + ' / ' + $v3.min_clusters)
 Write-Host (' Horizon: ' + $v3.horizon_sec + ' sec')
 Write-Host (' Isotonic blocks: ' + $v3.blocks)
-Write-Host (' Raw EDGE↔NET corr: ' + $v3.raw_edge_net_corr)
+Write-Host (' Raw EDGE<->NET corr: ' + $v3.raw_edge_net_corr)
 
 Write-Host '[8/8] Summary...'
 Write-Host ''
@@ -158,7 +158,7 @@ Write-Host '==============================================' -ForegroundColor Gre
 Write-Host ' READY - EDGE CALIBRATION V3 ' -ForegroundColor Green
 Write-Host '==============================================' -ForegroundColor Green
 Write-Host ('ASTRA health: ' + $health.status)
-Write-Host ('Calibration: V3 · ' + $v3.mode)
+Write-Host ('Calibration: V3 - ' + $v3.mode)
 Write-Host ('State: ' + $v3.state)
 Write-Host ('Independent clusters: ' + $v3.cluster_n + ' / ' + $v3.min_clusters)
 Write-Host ('5m horizon: ' + $v3.horizon_sec + ' sec')
