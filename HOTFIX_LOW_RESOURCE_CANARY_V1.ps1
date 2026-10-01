@@ -6,7 +6,7 @@ Write-Host ' MYSHKA / ASTRA - LOW RESOURCE CANARY HOTFIX V1 ' -ForegroundColor Y
 Write-Host ' PERFORMANCE ONLY - TRADING LOGIC UNCHANGED ' -ForegroundColor Yellow
 Write-Host '==========================================================' -ForegroundColor Cyan
 
-$bundleCommit='df66454af36d9dd92b7b74c0489ffde5819bd1fe'
+$bundleCommit='00355381e8b6d0ac719ebe2c61d4befefe35843b'
 $root='https://raw.githubusercontent.com/omeljanpadovcky-create/T/'+$bundleCommit
 $env:COMPOSE_ANSI='never'
 $env:BUILDKIT_PROGRESS='plain'
