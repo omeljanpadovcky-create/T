@@ -19,6 +19,7 @@ import urllib.request
 from typing import Any, Optional
 
 from .live_dry_run import build_preview
+from .execution_slippage_audit import start_audit as slippage_start_audit
 
 MODE = "FREQTRADE_DRYRUN_EXECUTION_BRIDGE_V1"
 BASE_URL = os.getenv("FREQTRADE_BASE_URL", "http://freqtrade:8080").rstrip("/")
@@ -194,7 +195,8 @@ def _record(event: dict) -> None:
 
 
 def _send(pair: str, side: str, *, stake_usdt: float, leverage: float,
-          source: str, tag: str) -> dict:
+          source: str, tag: str, signal_price: Optional[float] = None,
+          signal_ts_ms: Optional[int] = None) -> dict:
     pair = str(pair or "").strip()
     side = str(side or "").strip().lower()
     stake = min(MAX_STAKE_USDT, max(1.0, float(stake_usdt)))
@@ -223,6 +225,7 @@ def _send(pair: str, side: str, *, stake_usdt: float, leverage: float,
         "entry_tag": tag,
     }
 
+    send_ts_ms = int(time.time() * 1000)
     code, data = _request(
         "/api/v1/forceenter",
         method="POST",
@@ -230,9 +233,21 @@ def _send(pair: str, side: str, *, stake_usdt: float, leverage: float,
         payload=payload,
     )
 
+    audit = {"status": "not_started"}
     if 200 <= code < 300:
         with _LOCK:
             _LAST_SENT[f"{pair}|{side}"] = time.time()
+        audit = slippage_start_audit(
+            fetch_open_trades=lambda: _request("/api/v1/status", token=guard["token"]),
+            pair=pair,
+            side=side,
+            signal_price=signal_price,
+            signal_ts_ms=signal_ts_ms,
+            send_ts_ms=send_ts_ms,
+            source=source,
+            execution_mode="DRY_RUN",
+            stake_usdt=stake,
+        )
 
     out = {
         "status": "sent" if 200 <= code < 300 else "error",
@@ -245,6 +260,7 @@ def _send(pair: str, side: str, *, stake_usdt: float, leverage: float,
         "response": data,
         "dry_run_confirmed_local": True,
         "dry_run_confirmed_remote": guard["detail"].get("remote_dry_run") is True,
+        "slippage_audit": audit,
         "real_money_execution": False,
     }
     _record(out)
@@ -301,6 +317,8 @@ def observe_results(results: list[dict]) -> dict:
             leverage=float(payload.get("leverage") or 1.0),
             source="astra_scan",
             tag="astra_gated_dryrun",
+            signal_price=payload.get("entry_reference"),
+            signal_ts_ms=int(float(preview.get("observed_at") or time.time()) * 1000),
         )
         (sent if result.get("status") == "sent" else blocked).append(result)
 
