@@ -17,6 +17,7 @@ import os
 import re
 import threading
 import time
+from pathlib import Path
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any, Optional
 from urllib.parse import parse_qs, urlparse
@@ -73,17 +74,86 @@ def _normalize_symbol(s: str) -> str:
     return re.sub(r"[^A-Z0-9]", "", str(s or "").upper())
 
 
+def _terminal_candidates() -> list[str]:
+    out: list[str] = []
+    explicit = str(os.getenv("MT5_TERMINAL_PATH", "") or "").strip().strip('"')
+    if explicit:
+        out.append(explicit)
+
+    roots = []
+    for name in ("ProgramFiles", "ProgramW6432", "ProgramFiles(x86)"):
+        value = os.getenv(name)
+        if value:
+            roots.append(Path(value))
+
+    exact_dirs = [
+        "MetaTrader 5",
+        "Libertex MetaTrader 5",
+        "Libertex - MetaTrader 5",
+        "Libertex MT5",
+        "MetaTrader5",
+    ]
+    for root in roots:
+        for d in exact_dirs:
+            out.append(str(root / d / "terminal64.exe"))
+
+        try:
+            for p in root.glob("*MetaTrader*5*/terminal64.exe"):
+                out.append(str(p))
+            for p in root.glob("*Libertex*/terminal64.exe"):
+                out.append(str(p))
+        except Exception:
+            pass
+
+    seen = set()
+    valid = []
+    for p in out:
+        key = os.path.normcase(os.path.abspath(p))
+        if key in seen:
+            continue
+        seen.add(key)
+        if os.path.isfile(p):
+            valid.append(p)
+    return valid
+
+
 def _ensure_mt5() -> tuple[bool, str]:
     if mt5 is None:
         return False, f"MetaTrader5_import_failed: {IMPORT_ERROR}"
+
+    errors = []
+
     try:
         if mt5.initialize(timeout=INIT_TIMEOUT_MS):
             info = mt5.terminal_info()
             if info is not None and bool(getattr(info, "connected", True)):
-                return True, "ok"
-        return False, f"initialize_failed:{mt5.last_error()}"
+                return True, "ok:auto"
+            errors.append(f"default_not_connected:{mt5.last_error()}")
+        else:
+            errors.append(f"default:{mt5.last_error()}")
     except Exception as exc:
-        return False, f"{type(exc).__name__}: {exc}"
+        errors.append(f"default:{type(exc).__name__}:{exc}")
+
+    for path in _terminal_candidates():
+        try:
+            try:
+                mt5.shutdown()
+            except Exception:
+                pass
+            if mt5.initialize(path=path, timeout=INIT_TIMEOUT_MS):
+                info = mt5.terminal_info()
+                if info is not None and bool(getattr(info, "connected", True)):
+                    return True, f"ok:{path}"
+                errors.append(f"{path}:not_connected:{mt5.last_error()}")
+            else:
+                errors.append(f"{path}:{mt5.last_error()}")
+        except Exception as exc:
+            errors.append(f"{path}:{type(exc).__name__}:{exc}")
+
+    candidates = _terminal_candidates()
+    if not candidates:
+        return False, "initialize_failed: MetaTrader 5 x64 terminal64.exe not found on Windows host"
+    return False, "initialize_failed:" + " | ".join(errors[-6:])
 
 
 def _all_symbol_names() -> list[str]:
