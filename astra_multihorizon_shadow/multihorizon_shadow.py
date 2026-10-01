@@ -405,18 +405,34 @@ def post_calibration_report() -> dict:
 
 
 def status() -> dict:
+    """Lightweight health/status path; never calls full report()."""
     try:
-        rep = report()
+        init()
+        with _LOCK, _conn() as con:
+            rows = con.execute(
+                "SELECT status,COUNT(*) n FROM mh_outcomes GROUP BY status"
+            ).fetchall()
+            counts = {str(r["status"]): int(r["n"]) for r in rows}
+            meta = con.execute(
+                "SELECT value FROM mh_meta WHERE key='post_calibration_v2_started_at'"
+            ).fetchone()
+        started = None
+        if meta:
+            try:
+                started = float(meta["value"])
+            except Exception:
+                started = None
         return {
             "enabled":True,
             "mode":"SHADOW",
             "db_path":DB_PATH,
             "horizons_sec":list(HORIZONS),
-            "open":rep["open"],
-            "closed":rep["closed"],
-            "skipped":rep["skipped"],
+            "open":counts.get("OPEN",0),
+            "closed":counts.get("CLOSED",0),
+            "skipped":counts.get("SKIPPED",0),
             "extra_market_api_calls":False,
-            "post_calibration_v2_started_at": _post_calibration_started_at(),
+            "post_calibration_v2_started_at": started,
+            "status_source":"lightweight_counts",
         }
     except Exception as exc:
         return {"enabled":True,"mode":"SHADOW","db_path":DB_PATH,"error":f"{type(exc).__name__}: {exc}"}
