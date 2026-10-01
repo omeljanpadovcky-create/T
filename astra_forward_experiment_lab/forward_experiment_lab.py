@@ -29,6 +29,8 @@ HORIZONS = tuple(sorted({int(x) for x in os.getenv("FORWARD_EXPERIMENT_HORIZONS_
 MAX_SETTLE_DELAY_SEC = max(30, int(os.getenv("FORWARD_EXPERIMENT_MAX_SETTLE_DELAY_SEC", "120")))
 CLUSTER_SEC = max(60, int(os.getenv("FORWARD_EXPERIMENT_CLUSTER_SEC", "300")))
 _LOCK = threading.RLock()
+_SEEN_MINUTE: Optional[int] = None
+_SEEN_RECORD_KEYS: set[tuple[str, str, int]] = set()
 
 
 def _num(v: Any) -> Optional[float]:
@@ -200,6 +202,18 @@ def _record(r: dict, now: float) -> int:
         state = "NO_DATA"
 
     source_minute = int(now // 60) * 60
+
+    # The DB UNIQUE key already keeps only the first observation per minute.
+    # Avoid repeating the same INSERT OR IGNORE transaction every 15s scan.
+    global _SEEN_MINUTE
+    key = (pair, side, int(score))
+    with _LOCK:
+        if _SEEN_MINUTE != source_minute:
+            _SEEN_MINUTE = source_minute
+            _SEEN_RECORD_KEYS.clear()
+        if key in _SEEN_RECORD_KEYS:
+            return 0
+
     cluster_bucket = int(now // CLUSTER_SEC) * CLUSTER_SEC
     cluster_key = f"{pair}|{side}|{cluster_bucket}"
     m = r.get("market") or {}
@@ -249,6 +263,8 @@ def _record(r: dict, now: float) -> int:
                 ),
             )
             made += int(bool(cur.rowcount))
+    with _LOCK:
+        _SEEN_RECORD_KEYS.add(key)
     return made
 
 
