@@ -34,6 +34,7 @@ LEVERAGE = 1.0
 MAX_CONCURRENT = max(1, int(os.getenv("ASTRA_FASTTRACK_CANARY_MAX_CONCURRENT", "1")))
 HOLD_SEC = max(300, int(os.getenv("ASTRA_FASTTRACK_CANARY_HOLD_SEC", "900")))
 CLUSTER_SEC = max(60, int(os.getenv("ASTRA_FASTTRACK_CANARY_CLUSTER_SEC", "300")))
+REAPER_SEC = max(15, int(os.getenv("ASTRA_FASTTRACK_CANARY_REAPER_SEC", "60")))
 DB_PATH = os.getenv("ASTRA_FASTTRACK_CANARY_DB_PATH", "/data/myshka_fasttrack_canary.sqlite3")
 TAG = "astra_fasttrack_canary"
 
@@ -489,7 +490,7 @@ def _reaper() -> None:
         except Exception as exc:
             with _LOCK:
                 _EVENTS.appendleft({"event":"reaper_error","error":f"{type(exc).__name__}: {exc}"})
-        time.sleep(15)
+        time.sleep(REAPER_SEC)
 
 
 def init() -> dict:
@@ -528,6 +529,7 @@ def status() -> dict:
         "max_concurrent":MAX_CONCURRENT,
         "hold_sec":HOLD_SEC,
         "cluster_sec":CLUSTER_SEC,
+        "reaper_sec":REAPER_SEC,
         "db_path":DB_PATH,
         "event_counts":counts,
         "live_funnel": dict(_STATS),
