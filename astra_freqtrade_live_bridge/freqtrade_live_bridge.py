@@ -57,7 +57,10 @@ PASSWORD = os.getenv("FREQTRADE_PASSWORD", "")
 COOLDOWN_SEC = max(30, int(os.getenv("ASTRA_LIVE_COOLDOWN_SEC", "180")))
 MAX_STAKE_USDT = max(0.0, float(os.getenv("ASTRA_LIVE_MAX_STAKE_USDT", "0")))
 MAX_LEVERAGE = max(1.0, float(os.getenv("ASTRA_LIVE_MAX_LEVERAGE", "1")))
+MAX_OPEN_TRADES = max(1, int(os.getenv("ASTRA_LIVE_MAX_OPEN_TRADES", "1")))
+MAX_ORDERS_PER_DAY = max(1, int(os.getenv("ASTRA_LIVE_MAX_ORDERS_PER_DAY", "3")))
 TIMEOUT_SEC = max(2, int(os.getenv("ASTRA_LIVE_TIMEOUT_SEC", "8")))
+EVENT_LOG = os.getenv("ASTRA_LIVE_EVENT_LOG", "/data/astra_freqtrade_live_bridge.jsonl")
 
 _LOCK = threading.RLock()
 _LAST_SENT: dict[str, float] = {}
@@ -156,6 +159,36 @@ def _bool(d: Any, key: str) -> Optional[bool]:
     return None
 
 
+def _sent_orders_today() -> int:
+    """Persistent daily order cap from the bridge JSONL log."""
+    today = time.strftime("%Y-%m-%d", time.gmtime())
+    n = 0
+    try:
+        with open(EVENT_LOG, "r", encoding="utf-8") as fh:
+            for line in fh:
+                try:
+                    e = json.loads(line)
+                except Exception:
+                    continue
+                if e.get("status") != "sent" or not e.get("real_money_execution"):
+                    continue
+                ts = e.get("created_at") or e.get("sent_at") or e.get("timestamp")
+                if ts is None:
+                    # Older events without timestamps are intentionally not counted.
+                    continue
+                try:
+                    day = time.strftime("%Y-%m-%d", time.gmtime(float(ts)))
+                except Exception:
+                    continue
+                if day == today:
+                    n += 1
+    except FileNotFoundError:
+        pass
+    except Exception:
+        return MAX_ORDERS_PER_DAY
+    return n
+
+
 def _runtime_guard(pair: str, side: str) -> dict:
     local = _local_live_guard()
     checks: dict[str,bool] = dict(local["checks"])
@@ -196,8 +229,10 @@ def _runtime_guard(pair: str, side: str) -> dict:
     detail["count_http"] = code
     detail["count"] = count
     checks["trade_slot_available"] = (
-        code == 200 and isinstance(current, int) and isinstance(maximum, int) and current < maximum
+        code == 200 and isinstance(current, int) and isinstance(maximum, int)
+        and current < maximum and current < MAX_OPEN_TRADES
     )
+    detail["max_open_trades"] = MAX_OPEN_TRADES
 
     code, status_data = _request("/api/v1/status", token=token)
     open_trades = status_data if isinstance(status_data, list) else []
@@ -216,6 +251,11 @@ def _runtime_guard(pair: str, side: str) -> dict:
     detail["cooldown_remaining_sec"] = round(remaining, 1)
     checks["cooldown_clear"] = remaining <= 0
 
+    sent_today = _sent_orders_today()
+    detail["sent_orders_today"] = sent_today
+    detail["max_orders_per_day"] = MAX_ORDERS_PER_DAY
+    checks["daily_order_cap_clear"] = sent_today < MAX_ORDERS_PER_DAY
+
     return {
         "ok":all(checks.values()),
         "checks":checks,
@@ -225,10 +265,12 @@ def _runtime_guard(pair: str, side: str) -> dict:
 
 
 def _record(event: dict) -> None:
+    event = dict(event or {})
+    event.setdefault("created_at", time.time())
     with _LOCK:
         _EVENTS.appendleft(event)
     try:
-        with open("/data/astra_freqtrade_live_bridge.jsonl","a",encoding="utf-8") as fh:
+        with open(EVENT_LOG,"a",encoding="utf-8") as fh:
             fh.write(json.dumps(event,ensure_ascii=False,separators=(",",":")) + "\n")
     except Exception:
         pass
@@ -405,6 +447,9 @@ def status() -> dict:
         "cooldown_sec":COOLDOWN_SEC,
         "max_stake_usdt":MAX_STAKE_USDT,
         "max_leverage":MAX_LEVERAGE,
+        "max_open_trades":MAX_OPEN_TRADES,
+        "max_orders_per_day":MAX_ORDERS_PER_DAY,
+        "sent_orders_today":_sent_orders_today(),
         "forceenter_post_count":posts,
         "events":events,
         "installer_changes_dry_run":False,
