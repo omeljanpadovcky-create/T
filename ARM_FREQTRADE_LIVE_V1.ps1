@@ -7,9 +7,11 @@ param(
 
 $ErrorActionPreference='Stop'
 Set-StrictMode -Version Latest
+$ARM_VERSION='V2-PS5'
 
 Write-Host '==========================================================' -ForegroundColor Red
-Write-Host ' MYSHKA / ASTRA - ARM FREQTRADE LIVE V1 ' -ForegroundColor Yellow
+Write-Host ' MYSHKA / ASTRA - ARM FREQTRADE LIVE ' -ForegroundColor Yellow
+Write-Host (' ARM VERSION: '+$ARM_VERSION) -ForegroundColor Green
 Write-Host ' REAL-MONEY EXECUTION ACTIVATION ' -ForegroundColor Red
 Write-Host '==========================================================' -ForegroundColor Red
 
@@ -108,8 +110,17 @@ for($i=0;$i -lt 45;$i++){
     if($h.status -eq 'ok'){$astraReady=$true}
   } catch {}
   try {
-    $p=cmd /c 'docker exec myshka-astra python -c "import urllib.request; print(urllib.request.urlopen(''http://freqtrade:8080/api/v1/ping'',timeout=3).status)" 2>nul'
-    if($p -match '200'){$ftReady=$true}
+    $pingCode='import urllib.request; print(urllib.request.urlopen("http://freqtrade:8080/api/v1/ping",timeout=3).status)'
+    $prevEap=$ErrorActionPreference
+    $ErrorActionPreference='Continue'
+    try {
+      $p=$pingCode | docker exec -i myshka-astra python - 2>&1
+      $pingRc=$LASTEXITCODE
+    } finally {
+      $ErrorActionPreference=$prevEap
+    }
+    $pingText=($p -join [Environment]::NewLine)
+    if($pingRc -eq 0 -and $pingText -match '200'){$ftReady=$true}
   } catch {}
   if($astraReady -and $ftReady){break}
 }
