@@ -17,97 +17,113 @@ def _insert_after_line(s: str, pattern: str, addition: str, label: str) -> str:
 def patch_api(path: Path) -> None:
     s = path.read_text(encoding="utf-8-sig")
     compile(s, str(path), "exec")
-    if API_MARKER in s:
-        print("[OK] api.py External Market Shadow already present")
-        return
-
-    bx_re = r"^from \.binance_signal_crosscheck import .+\n"
-    mh_re = r"^from \.multihorizon_shadow import .+\n"
-    import_anchor = bx_re if re.search(bx_re, s, flags=re.MULTILINE) else mh_re
-    if not re.search(import_anchor, s, flags=re.MULTILINE):
-        raise RuntimeError("Binance/Multi-Horizon import anchor not found")
+    changed = False
 
     ext_import = (
         "from .external_market_shadow import init as external_market_init, "
         "status as external_market_status, report as external_market_report, "
         "observe_results as external_market_observe\n"
     )
-    s = _insert_after_line(s, import_anchor, ext_import, "external import anchor")
+    if "from .external_market_shadow import" not in s:
+        import_patterns = [
+            r"^from \.binance_signal_crosscheck import .+\n",
+            r"^from \.multihorizon_shadow import .+\n",
+        ]
+        for pat in import_patterns:
+            if re.search(pat, s, flags=re.MULTILINE):
+                s = _insert_after_line(s, pat, ext_import, "external import anchor")
+                changed = True
+                break
+        else:
+            raise RuntimeError("Binance/Multi-Horizon import anchor not found")
 
-    startup_patterns = [
-        r"^[ \t]+binance_crosscheck_init\(\)\n",
-        r"^[ \t]+multihorizon_init\(\)\n",
-    ]
-    for pat in startup_patterns:
-        if re.search(pat, s, flags=re.MULTILINE):
-            s = _insert_after_line(
-                s, pat,
-                f"    # {API_MARKER}\n    external_market_init()\n",
-                "startup anchor",
-            )
-            break
-    else:
-        raise RuntimeError("startup anchor not found")
+    if "external_market_init()" not in s:
+        startup_patterns = [
+            r"^[ \t]+binance_crosscheck_init\(\)\n",
+            r"^[ \t]+multihorizon_init\(\)\n",
+        ]
+        for pat in startup_patterns:
+            if re.search(pat, s, flags=re.MULTILINE):
+                s = _insert_after_line(
+                    s, pat,
+                    f"    # {API_MARKER}\n    external_market_init()\n",
+                    "startup anchor",
+                )
+                changed = True
+                break
+        else:
+            raise RuntimeError("startup anchor not found")
 
-    health_patterns = [
-        r'^[ \t]+"binance_crosscheck":\s*binance_crosscheck_status\(\),\n',
-        r'^[ \t]+"multihorizon_shadow":\s*multihorizon_status\(\),\n',
-    ]
-    for pat in health_patterns:
-        if re.search(pat, s, flags=re.MULTILINE):
-            s = _insert_after_line(
-                s, pat,
-                f'        # {API_MARKER}\n        "external_market_shadow": external_market_status(),\n',
-                "health anchor",
-            )
-            break
-    else:
-        raise RuntimeError("health anchor not found")
+    if '"external_market_shadow": external_market_status(),' not in s:
+        health_patterns = [
+            r'^[ \t]+"binance_crosscheck":\s*binance_crosscheck_status\(\),\n',
+            r'^[ \t]+"multihorizon_shadow":\s*multihorizon_status\(\),\n',
+            r'^[ \t]+"mt5_shadow":\s*mt5_shadow_status\(\),\n',
+        ]
+        for pat in health_patterns:
+            if re.search(pat, s, flags=re.MULTILINE):
+                s = _insert_after_line(
+                    s, pat,
+                    f'        # {API_MARKER}\n        "external_market_shadow": external_market_status(),\n',
+                    "health anchor",
+                )
+                changed = True
+                break
+        else:
+            raise RuntimeError("health anchor not found")
 
-    endpoints = (
-        f'# {API_MARKER}\n'
-        '@app.get("/external-market/status")\n'
-        'def external_market_status_api(x_myshka_token: Optional[str] = Header(default=None)):\n'
-        '    _require_token(x_myshka_token)\n'
-        '    return external_market_status()\n\n\n'
-        '@app.get("/external-market/report")\n'
-        'def external_market_report_api(x_myshka_token: Optional[str] = Header(default=None)):\n'
-        '    _require_token(x_myshka_token)\n'
-        '    return external_market_report()\n\n\n'
-    )
-    route_anchors = [
-        '@app.get("/forward-experiments/status")\n',
-        '@app.get("/post-calibration/report")\n',
-        '@app.get("/binance-crosscheck/status")\n',
-    ]
-    for anchor in route_anchors:
-        if anchor in s:
-            s = s.replace(anchor, endpoints + anchor, 1)
-            break
-    else:
-        raise RuntimeError("endpoint insertion anchor not found")
+    if '@app.get("/external-market/status")' not in s or '@app.get("/external-market/report")' not in s:
+        endpoints = (
+            f'# {API_MARKER}\n'
+            '@app.get("/external-market/status")\n'
+            'def external_market_status_api(x_myshka_token: Optional[str] = Header(default=None)):\n'
+            '    _require_token(x_myshka_token)\n'
+            '    return external_market_status()\n\n\n'
+            '@app.get("/external-market/report")\n'
+            'def external_market_report_api(x_myshka_token: Optional[str] = Header(default=None)):\n'
+            '    _require_token(x_myshka_token)\n'
+            '    return external_market_report()\n\n\n'
+        )
+        route_anchors = [
+            '@app.get("/mt5-shadow/status")\n',
+            '@app.get("/forward-experiments/status")\n',
+            '@app.get("/post-calibration/report")\n',
+            '@app.get("/binance-crosscheck/status")\n',
+        ]
+        for anchor in route_anchors:
+            if anchor in s:
+                s = s.replace(anchor, endpoints + anchor, 1)
+                changed = True
+                break
+        else:
+            raise RuntimeError("endpoint insertion anchor not found")
 
-    observer_patterns = [
-        r"^[ \t]+binance_crosscheck_observe\(results\)\n",
-        r"^[ \t]+multihorizon_observe\(results\)\n",
-    ]
-    for pat in observer_patterns:
-        m = re.search(pat, s, flags=re.MULTILINE)
-        if m:
-            indent = re.match(r"^[ \t]*", m.group(0)).group(0)
-            addition = (
-                f"{indent}# {API_MARKER}: Investing + macro SHADOW only; never changes action\n"
-                f"{indent}external_market_observe(results)\n"
-            )
-            s = s[:m.end()] + addition + s[m.end():]
-            break
-    else:
-        raise RuntimeError("observer anchor not found")
+    if "external_market_observe(results)" not in s:
+        observer_patterns = [
+            r"^[ \t]+mt5_shadow_observe\(results\)\n",
+            r"^[ \t]+binance_crosscheck_observe\(results\)\n",
+            r"^[ \t]+multihorizon_observe\(results\)\n",
+        ]
+        for pat in observer_patterns:
+            m = re.search(pat, s, flags=re.MULTILINE)
+            if m:
+                indent = re.match(r"^[ \t]*", m.group(0)).group(0)
+                addition = (
+                    f"{indent}# {API_MARKER}: Investing + macro SHADOW only; never changes action\n"
+                    f"{indent}external_market_observe(results)\n"
+                )
+                s = s[:m.end()] + addition + s[m.end():]
+                changed = True
+                break
+        else:
+            raise RuntimeError("observer anchor not found")
 
     compile(s, str(path), "exec")
     path.write_text(s, encoding="utf-8")
-    print("[OK] api.py patched: External Market Shadow V1")
-
+    if changed:
+        print("[OK] api.py repaired/patched: External Market Shadow V1")
+    else:
+        print("[OK] api.py External Market Shadow complete")
 
 def _contains_final(node: ast.AST) -> bool:
     for x in ast.walk(node):
