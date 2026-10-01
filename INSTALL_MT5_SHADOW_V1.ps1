@@ -88,15 +88,29 @@ try {
 Write-Host '[OK] Synthetic self-tests passed.' -ForegroundColor Green
 
 Write-Host '[4/10] Ensure MetaTrader5 Python package on Windows...'
-$mt5Pkg=$true
-& python -c "import MetaTrader5; print('MetaTrader5 package already installed')" 2>$null
-if($LASTEXITCODE -ne 0){$mt5Pkg=$false}
-if(-not $mt5Pkg){
-  & python -m pip install --upgrade MetaTrader5
-  if($LASTEXITCODE -ne 0){throw 'Could not install MetaTrader5 Python package.'}
+# Windows PowerShell 5 may promote native stderr to NativeCommandError when
+# $ErrorActionPreference='Stop'. Probe/install under Continue and trust exit codes.
+$prevEap=$ErrorActionPreference
+$ErrorActionPreference='Continue'
+try {
+  cmd /c 'python -c "import MetaTrader5" >nul 2>&1'
+  $mt5Rc=$LASTEXITCODE
+
+  if($mt5Rc -ne 0){
+    Write-Host '[INFO] MetaTrader5 package missing. Installing...'
+    cmd /c 'python -m pip install --upgrade MetaTrader5'
+    $pipRc=$LASTEXITCODE
+    if($pipRc -ne 0){throw 'Could not install MetaTrader5 Python package.'}
+  } else {
+    Write-Host '[OK] MetaTrader5 package already installed.' -ForegroundColor Green
+  }
+
+  cmd /c 'python -c "import MetaTrader5 as mt5; print(''MetaTrader5 version'', mt5.__version__)"'
+  $importRc=$LASTEXITCODE
+  if($importRc -ne 0){throw 'MetaTrader5 package import failed after install.'}
+} finally {
+  $ErrorActionPreference=$prevEap
 }
-& python -c "import MetaTrader5 as mt5; print('MetaTrader5 version',mt5.__version__)"
-if($LASTEXITCODE -ne 0){throw 'MetaTrader5 package import failed after install.'}
 
 Write-Host '[5/10] Configure local MT5 Shadow token/env...'
 $envLines=Get-Content '.env.live-armed'
