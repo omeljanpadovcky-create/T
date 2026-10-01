@@ -406,16 +406,29 @@ def _persist(rep: dict) -> None:
 
 def report(force: bool = False) -> dict:
     try:
-        rows = _risk_rows()
         now = time.time()
-        n = len(rows)
+
+        # Fast path: do NOT touch the risk DB while the cached model is fresh.
+        # The old implementation loaded the full risk table before checking
+        # CACHE_SEC, which could block health checks and normal scan workers.
         with _LOCK:
-            if (
-                not force and _CACHE.get("report") is not None
-                and int(_CACHE.get("closed_n") or -1) == n
-                and now - float(_CACHE.get("ts") or 0.0) < CACHE_SEC
-            ):
-                return _CACHE["report"]
+            cached = _CACHE.get("report")
+            cached_ts = float(_CACHE.get("ts") or 0.0)
+            if not force and cached is not None and now - cached_ts < CACHE_SEC:
+                return cached
+
+        rows = _risk_rows()
+        n = len(rows)
+
+        # If the DB has no new closed rows, reuse the existing model and only
+        # refresh the cache timestamp.
+        with _LOCK:
+            cached = _CACHE.get("report")
+            cached_n = int(_CACHE.get("closed_n") or -1)
+            if not force and cached is not None and cached_n == n:
+                _CACHE["ts"] = now
+                return cached
+
         rep = _build_report(rows)
         _persist(rep)
         with _LOCK:
@@ -526,21 +539,99 @@ def apply_results(results: list[dict]) -> dict:
     return {"status":"ok","state":rep.get("state"),"checked":checked,"blocked":blocked,"passed":passed,"champion":champion}
 
 
+def _status_from_snapshot() -> dict:
+    """Read only the newest learner snapshot; never rebuild the ML model."""
+    if not os.path.exists(DB_PATH):
+        return {
+            "enabled": ENABLED,
+            "mode": "SHADOW_CHAMPION_CHALLENGER",
+            "state": "WARMING",
+            "source_n": 0,
+            "champion": None,
+            "status_source": "no_snapshot_db",
+        }
+    try:
+        con = sqlite3.connect(DB_PATH, timeout=0.25)
+        con.row_factory = sqlite3.Row
+        try:
+            row = con.execute(
+                "SELECT source_closed_n,state,champion_json FROM learner_snapshots ORDER BY id DESC LIMIT 1"
+            ).fetchone()
+        finally:
+            con.close()
+        if not row:
+            return {
+                "enabled": ENABLED,
+                "mode": "SHADOW_CHAMPION_CHALLENGER",
+                "state": "WARMING",
+                "source_n": 0,
+                "champion": None,
+                "status_source": "empty_snapshot_db",
+            }
+        try:
+            champ = json.loads(row["champion_json"]) if row["champion_json"] else None
+        except Exception:
+            champ = None
+        return {
+            "enabled": ENABLED,
+            "mode": "SHADOW_CHAMPION_CHALLENGER",
+            "state": str(row["state"] or "UNKNOWN"),
+            "source_n": int(row["source_closed_n"] or 0),
+            "champion": champ,
+            "status_source": "snapshot",
+        }
+    except Exception as exc:
+        return {
+            "enabled": ENABLED,
+            "mode": "SHADOW_CHAMPION_CHALLENGER",
+            "state": "UNKNOWN",
+            "source_n": 0,
+            "champion": None,
+            "status_source": "snapshot_error",
+            "status_error": f"{type(exc).__name__}: {exc}",
+        }
+
+
 def status() -> dict:
-    rep = report()
-    champ = rep.get("champion")
+    """Lightweight health/status path.
+
+    Never calls report() and therefore never scans the risk database or trains
+    logistic challengers. Full learner evaluation remains in report()/apply_results().
+    """
+    with _LOCK:
+        rep = _CACHE.get("report")
+        cache_ts = float(_CACHE.get("ts") or 0.0)
+
+    if isinstance(rep, dict):
+        base = {
+            "enabled": bool(rep.get("enabled", ENABLED)),
+            "mode": rep.get("mode","SHADOW_CHAMPION_CHALLENGER"),
+            "state": rep.get("state","UNKNOWN"),
+            "source_n": int(rep.get("source_n") or 0),
+            "champion": rep.get("champion"),
+            "status_source": "memory_cache",
+            "cache_age_sec": max(0.0, time.time() - cache_ts) if cache_ts else None,
+        }
+    else:
+        base = _status_from_snapshot()
+        base["cache_age_sec"] = None
+
+    champ = base.get("champion")
     return {
-        "enabled":bool(rep.get("enabled", ENABLED)),
-        "mode":rep.get("mode","SHADOW_CHAMPION_CHALLENGER"),
-        "state":rep.get("state","UNKNOWN"),
-        "source_n":int(rep.get("source_n") or 0),
+        "enabled": bool(base.get("enabled", ENABLED)),
+        "mode": base.get("mode","SHADOW_CHAMPION_CHALLENGER"),
+        "state": base.get("state","UNKNOWN"),
+        "source_n": int(base.get("source_n") or 0),
         "champion":{
             "edge_threshold_pct":champ.get("edge_threshold_pct"),
             "ml_probability_threshold":champ.get("ml_probability_threshold"),
             "holdout_n":(champ.get("holdout") or {}).get("n"),
             "holdout_avg_net_pct":(champ.get("holdout") or {}).get("avg_net_pct"),
             "holdout_profit_factor":(champ.get("holdout") or {}).get("profit_factor"),
-        } if champ else None,
+        } if isinstance(champ, dict) else None,
+        "status_source": base.get("status_source"),
+        "cache_age_sec": base.get("cache_age_sec"),
+        "status_error": base.get("status_error"),
         "db_path":DB_PATH,
         "risk_db_path":RISK_DB_PATH,
         "live_execution":False,
