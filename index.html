@@ -981,7 +981,7 @@ function localAstraOrigin(){
 let APP={selected:CFG.pairs[0],markets:{},decisions:{},universePairs:CFG.pairs.slice(),kill:false,cooldowns:{},positions:{},trades:[],equity:1000,startEquity:1000,logs:[],entryTags:{},scanning:false,
   bridgeUrl:localAstraOrigin()||'http://localhost:8088',bridgeToken:'',backendReady:false,backendStats:null,
   bridgeConnecting:false,lastBackendSuccess:0,coreFailStreak:0,
-  secondaryBusy:false,lastSecondaryRefresh:0,
+  secondaryBusy:false,lastSecondaryRefresh:0,lastDemoRefresh:0,
   hardeningBusy:false,hardeningLastInternal:0,hardeningLastExternal:0};
 
 // MYSHKA_PHONE_FRAGMENT_V1
@@ -2105,6 +2105,7 @@ async function refreshDemoTrading(){
   }
   try{
     const ctl=await bridgeFetch('/control/status',{timeoutMs:8000});
+    APP.lastDemoRefresh=Date.now();
     const en=ctl.engine||{};
     if($('demoEquity'))$('demoEquity').textContent=Number(en.paper_equity||0).toFixed(2)+' USDT';
     if($('demoPositions')){
@@ -2117,11 +2118,13 @@ async function refreshDemoTrading(){
 
 async function refreshSecondaryReports(force=false){
   if(!APP.backendReady||APP.secondaryBusy)return;
-  if(!force&&Date.now()-(APP.lastSecondaryRefresh||0)<30000)return;
+  if(!force&&Date.now()-(APP.lastSecondaryRefresh||0)<300000)return;
   APP.secondaryBusy=true;
   try{
     // Small groups avoid saturating the single local API worker.
-    await Promise.allSettled([refreshPostCalibration(),refreshBinanceCrosscheck(),refreshForwardExperimentLab(),refreshRescueMatrix(),refreshNewsIntelligence(false),refreshAnalytics(),refreshLiveReadiness()]);
+    const firstBatch=[refreshPostCalibration(),refreshBinanceCrosscheck(),refreshForwardExperimentLab(),refreshRescueMatrix(),refreshAnalytics(),refreshLiveReadiness()];
+    if(force)firstBatch.push(refreshNewsIntelligence(false));
+    await Promise.allSettled(firstBatch);
     await Promise.allSettled([refreshCounterfactual(),refreshRiskIntelligence(),refreshHardening(false)]);
     await Promise.allSettled([refreshRiskQuality(),refreshDecisionReplay()]);
     APP.lastSecondaryRefresh=Date.now();
@@ -2639,8 +2642,8 @@ $('hardReconcile').onclick=()=>refreshHardening(true);
 $('qualityReplay').onclick=refreshDecisionReplay;
 $('scanBtn').onclick=()=>APP.backendReady?phoneScanNow():connectBridge();$('killBtn').onclick=()=>setKill(!APP.kill);$('runReadiness').onclick=async()=>{if(APP.backendReady)await refreshPhoneControl();else await connectBridge();renderReadiness()};
 $('phoneRefresh').onclick=refreshPhoneControl;$('phoneScan').onclick=phoneScanNow;
-$('demoRefresh').onclick=refreshDemoTrading;
-$('demoScan').onclick=async()=>{await phoneScanNow();await refreshDemoTrading()};
+$('demoRefresh').onclick=()=>refreshDemoTrading(true);
+$('demoScan').onclick=async()=>{await phoneScanNow();await refreshDemoTrading(true)};
 $('demoPause').onclick=()=>setServerControl('paused',!(APP.serverRuntime&&APP.serverRuntime.paused)).then(async()=>{await refreshPhoneControl();await refreshDemoTrading()});
 $('demoKill').onclick=()=>setServerControl('kill_switch',!(APP.serverRuntime&&APP.serverRuntime.kill_switch)).then(async()=>{await refreshPhoneControl();await refreshDemoTrading()});
 $('demoAuto').onclick=()=>setServerControl('auto_scan',!(APP.serverRuntime&&APP.serverRuntime.auto_scan)).then(async()=>{await refreshPhoneControl();await refreshDemoTrading()});
