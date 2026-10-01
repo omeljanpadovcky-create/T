@@ -44,6 +44,7 @@ _LOCK = threading.RLock()
 _EXEC_LOCK = threading.Lock()
 _EVENTS = deque(maxlen=300)
 _REAPER_STARTED = False
+_SHADOW_JEV_CACHE: dict[str, tuple[str, str, dict]] = {}
 _STATS = {
     "scan_calls": 0,
     "rows_seen": 0,
@@ -52,7 +53,12 @@ _STATS = {
     "jev_direct_hit": 0,
     "jev_blackbox_hit": 0,
     "jev_wait": 0,
+    "jev_shadow_hit": 0,
+    "jev_shadow_edge_reject": 0,
+    "jev_shadow_ai_attempted": 0,
+    "binance_checked": 0,
     "binance_agree": 0,
+    "binance_no_agree": 0,
     "triple_eligible": 0,
     "claimed": 0,
     "sent": 0,
@@ -241,6 +247,102 @@ def _jev(r: dict, pair: str = "", side: str = "", now: Optional[float] = None) -
     # Fallback to the already-recorded decision blackbox. This is read-only and
     # intentionally avoids a second Ollama/JEV call.
     return _blackbox_jev(pair, side, float(now if now is not None else time.time()))
+
+
+class _AttrMap:
+    def __init__(self, data: dict):
+        self._data = dict(data or {})
+        for k, v in self._data.items():
+            setattr(self, k, v)
+
+    def as_dict(self) -> dict:
+        return dict(self._data)
+
+
+def _shadow_jev(r: dict, pair: str, side: str, now: float) -> tuple[str, str]:
+    """Run the real JEV only for a Binance-AGREE relaxed TECH3 candidate.
+
+    Production decisions are untouched. The API only supplies economic context;
+    this function reconstructs the relaxed signal, computes the normal EDGE,
+    then calls the existing JEV coordinator. One result is cached per 5-minute
+    pair+side cluster to avoid repeated Ollama calls.
+    """
+    ctx = r.get("fasttrack_shadow_ctx")
+    sig0 = r.get("signal") or {}
+    if not isinstance(ctx, dict) or not isinstance(sig0, dict):
+        return "WAIT", "shadow_ctx_missing"
+
+    bucket_id = int(float(now) // CLUSTER_SEC) * CLUSTER_SEC
+    cache_key = f"{pair}|{side}|{bucket_id}"
+    with _LOCK:
+        cached = _SHADOW_JEV_CACHE.get(cache_key)
+    if cached:
+        return cached[0], cached[1]
+
+    try:
+        spread = _num(ctx.get("spread_pct"))
+        atr = _num(ctx.get("atr_pct"))
+        atr_med = _num(ctx.get("atr_pct_median"))
+        horizon = int(ctx.get("horizon_sec") or 300)
+        if None in (spread, atr, atr_med):
+            return "WAIT", "shadow_ctx_incomplete"
+
+        from .stats_store import get_bucket_samples, get_pooled_samples
+        from .edge import check_edge
+        from .jev import decide as jev_decide
+
+        sig_data = dict(sig0)
+        sig_data["direction"] = side
+        sig_data["tech_score"] = 3
+        sig_data["tech_required"] = 3
+        sig_data["training_mode"] = True
+        sig_obj = _AttrMap(sig_data)
+
+        hist_bucket = get_bucket_samples(pair, side, str(sig_data.get("structure") or "RANGE"), horizon)
+        pooled = get_pooled_samples(horizon)
+        edge_obj = check_edge(float(spread), float(atr), float(atr_med), hist_bucket, pooled)
+
+        if edge_obj is None or not bool(getattr(edge_obj, "passed", False)):
+            verdict, source = "REJECT", "shadow_edge_reject"
+            meta = {"ai_attempted": False, "edge_passed": False}
+            with _LOCK:
+                _SHADOW_JEV_CACHE[cache_key] = (verdict, source, meta)
+            return verdict, source
+
+        decision = jev_decide(
+            pair=pair,
+            signal=sig_obj,
+            edge=edge_obj,
+            realized_pnl_today_pct=float(ctx.get("realized_pnl_today_pct") or 0.0),
+            realized_pnl_this_week_pct=float(ctx.get("realized_pnl_this_week_pct") or 0.0),
+            open_positions_count=int(ctx.get("open_positions_count") or 0),
+            kill_switch_engaged=bool(ctx.get("kill_switch_engaged", False)),
+        )
+        data = decision.as_dict() if hasattr(decision, "as_dict") else {}
+        verdict = _norm_jev(data.get("verdict") or getattr(decision, "verdict", "WAIT")) or "WAIT"
+        source = "shadow_real_jev"
+        meta = {
+            "ai_attempted": bool(data.get("ai_attempted")),
+            "ai_used": bool(data.get("ai_used")),
+            "edge_passed": True,
+            "reason": data.get("reason"),
+        }
+        with _LOCK:
+            _SHADOW_JEV_CACHE[cache_key] = (verdict, source, meta)
+            # bounded cache
+            if len(_SHADOW_JEV_CACHE) > 300:
+                for k in list(_SHADOW_JEV_CACHE)[:100]:
+                    _SHADOW_JEV_CACHE.pop(k, None)
+        return verdict, source
+    except Exception as exc:
+        with _LOCK:
+            _EVENTS.appendleft({
+                "event":"shadow_jev_error",
+                "pair":pair,
+                "side":side,
+                "error":f"{type(exc).__name__}: {exc}",
+            })
+        return "WAIT", "shadow_jev_error"
 
 
 def _xcheck(r: dict, pair: str, side: str) -> str:
@@ -449,13 +551,39 @@ def observe_results(results: list[dict], now: Optional[float] = None) -> dict:
             _STATS["last_pair"] = pair
             _STATS["last_stage"] = "TECH3"
 
+        # Low-resource order: Binance first. Only AGREE candidates are allowed
+        # to invoke the relaxed shadow JEV / optional Ollama advisory.
+        if not pair:
+            continue
+        bx = _xcheck(r, pair, direction)
+        with _LOCK:
+            _STATS["binance_checked"] = int(_STATS.get("binance_checked") or 0) + 1
+        if bx != "AGREE":
+            with _LOCK:
+                _STATS["binance_no_agree"] = int(_STATS.get("binance_no_agree") or 0) + 1
+            continue
+        with _LOCK:
+            _STATS["binance_agree"] = int(_STATS.get("binance_agree") or 0) + 1
+            _STATS["last_stage"] = "BINANCE_AGREE"
+
         j, j_source = _jev(r, pair=pair, side=direction, now=ts)
+        if j == "WAIT":
+            j, j_source = _shadow_jev(r, pair, direction, ts)
+
         with _LOCK:
             _STATS["last_jev_source"] = j_source
             if j_source.startswith("direct_"):
                 _STATS["jev_direct_hit"] = int(_STATS.get("jev_direct_hit") or 0) + 1
             elif j_source.startswith("blackbox_") and j != "WAIT":
                 _STATS["jev_blackbox_hit"] = int(_STATS.get("jev_blackbox_hit") or 0) + 1
+            elif j_source == "shadow_real_jev":
+                _STATS["jev_shadow_hit"] = int(_STATS.get("jev_shadow_hit") or 0) + 1
+                bucket_id = int(ts // CLUSTER_SEC) * CLUSTER_SEC
+                meta = _SHADOW_JEV_CACHE.get(f"{pair}|{direction}|{bucket_id}", (None,None,{}))[2]
+                if bool((meta or {}).get("ai_attempted")):
+                    _STATS["jev_shadow_ai_attempted"] = int(_STATS.get("jev_shadow_ai_attempted") or 0) + 1
+            elif j_source == "shadow_edge_reject":
+                _STATS["jev_shadow_edge_reject"] = int(_STATS.get("jev_shadow_edge_reject") or 0) + 1
 
         if j != "APPROVE":
             with _LOCK:
@@ -465,16 +593,6 @@ def observe_results(results: list[dict], now: Optional[float] = None) -> dict:
         with _LOCK:
             _STATS["jev_approve"] = int(_STATS.get("jev_approve") or 0) + 1
             _STATS["last_stage"] = "JEV_APPROVE"
-
-        if not pair:
-            continue
-
-        bx = _xcheck(r, pair, direction)
-        if bx != "AGREE":
-            continue
-        with _LOCK:
-            _STATS["binance_agree"] = int(_STATS.get("binance_agree") or 0) + 1
-            _STATS["last_stage"] = "BINANCE_AGREE"
 
         price = _market_price(r)
         if price is None:
