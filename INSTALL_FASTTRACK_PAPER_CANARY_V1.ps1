@@ -6,7 +6,7 @@ Write-Host ' MYSHKA / ASTRA - FASTTRACK PAPER CANARY V1 ' -ForegroundColor Yello
 Write-Host ' TECH 3/4 + JEV APPROVE + BINANCE AGREE -> FREQTRADE DRY_RUN ' -ForegroundColor Yellow
 Write-Host '==========================================================' -ForegroundColor Cyan
 
-$bundleCommit='51765b9f37ff35fb1ccb3c2b45e532996d331101'
+$bundleCommit='c1b9d04481cd785ffd5195be741375297d269cd1'
 $root='https://raw.githubusercontent.com/omeljanpadovcky-create/T/'+$bundleCommit
 $env:COMPOSE_ANSI='never'
 $env:BUILDKIT_PROGRESS='plain'
