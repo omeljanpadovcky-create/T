@@ -14,7 +14,7 @@ $work=Join-Path $env:TEMP 'myshka_fasttrack_to_live_prep_v1'
 if(Test-Path $work){Remove-Item $work -Recurse -Force}
 New-Item -ItemType Directory -Path $work -Force | Out-Null
 
-$auditCommit='c5dc57190690c56732a8116ba04ca34c9d4ac67a'
+$auditCommit='214719b6d4fe2c662d7db5ab85376f203e5808f4'
 $analysisCommit='73dbbb4bf549dc3901341a7504aa45c7bc8ad156'
 
 $auditUri='https://raw.githubusercontent.com/omeljanpadovcky-create/T/'+$auditCommit+'/INSTALL_EXECUTION_SLIPPAGE_AUDIT_V1.ps1'
