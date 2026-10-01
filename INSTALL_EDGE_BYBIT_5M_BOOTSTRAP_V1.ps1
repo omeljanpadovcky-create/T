@@ -6,7 +6,7 @@ Write-Host ' MYSHKA / ASTRA - BYBIT 5M EDGE COLD-START V1 ' -ForegroundColor Yel
 Write-Host ' POOLED 5M HISTORY FIRST - DRY_RUN ONLY ' -ForegroundColor Yellow
 Write-Host '==========================================================' -ForegroundColor Cyan
 
-$patchCommit='f1a16c5b95c5e1edf61f3f313f4ab8249ee77f83'
+$patchCommit='bf6e463547df6a31351df78585017c99c1224f91'
 $patchUri='https://raw.githubusercontent.com/omeljanpadovcky-create/T/'+$patchCommit+'/astra_edge_bybit_5m_bootstrap/patch_edge_bybit_5m_bootstrap.py'
 $env:COMPOSE_ANSI='never'
 $env:BUILDKIT_PROGRESS='plain'
