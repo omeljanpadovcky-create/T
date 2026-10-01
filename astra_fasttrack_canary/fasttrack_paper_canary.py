@@ -36,6 +36,8 @@ HOLD_SEC = max(300, int(os.getenv("ASTRA_FASTTRACK_CANARY_HOLD_SEC", "900")))
 CLUSTER_SEC = max(60, int(os.getenv("ASTRA_FASTTRACK_CANARY_CLUSTER_SEC", "300")))
 REAPER_SEC = max(15, int(os.getenv("ASTRA_FASTTRACK_CANARY_REAPER_SEC", "60")))
 DB_PATH = os.getenv("ASTRA_FASTTRACK_CANARY_DB_PATH", "/data/myshka_fasttrack_canary.sqlite3")
+RISK_DB_PATH = os.getenv("RISK_INTELLIGENCE_DB_PATH", "/data/myshka_risk_intelligence.sqlite3")
+JEV_BLACKBOX_MAX_AGE_SEC = max(5, int(os.getenv("ASTRA_FASTTRACK_CANARY_JEV_BLACKBOX_MAX_AGE_SEC", "45")))
 TAG = "astra_fasttrack_canary"
 
 _LOCK = threading.RLock()
@@ -47,6 +49,9 @@ _STATS = {
     "rows_seen": 0,
     "tech3": 0,
     "jev_approve": 0,
+    "jev_direct_hit": 0,
+    "jev_blackbox_hit": 0,
+    "jev_wait": 0,
     "binance_agree": 0,
     "triple_eligible": 0,
     "claimed": 0,
@@ -55,6 +60,7 @@ _STATS = {
     "last_scan_at": None,
     "last_pair": None,
     "last_stage": None,
+    "last_jev_source": None,
 }
 
 
@@ -158,20 +164,83 @@ def _norm_jev(v: Any) -> str:
     return s
 
 
-def _jev(r: dict) -> str:
+def _extract_jev_obj(obj: Any) -> str:
+    if not isinstance(obj, dict):
+        return ""
+    for key in ("verdict","decision","state","action","result","label","recommendation","approved","passed"):
+        if key in obj:
+            x = _norm_jev(obj.get(key))
+            if x:
+                return x
+    return ""
+
+
+def _blackbox_jev(pair: str, side: str, now: float) -> tuple[str, str]:
+    """Read a fresh existing JEV decision; never calls Ollama/JEV itself."""
+    if not pair or not os.path.exists(RISK_DB_PATH):
+        return "WAIT", "missing"
+    try:
+        con = sqlite3.connect(RISK_DB_PATH, timeout=0.20)
+        con.row_factory = sqlite3.Row
+        row = con.execute(
+            """
+            SELECT observed_at,direction,tech_score,jev_verdict,stage_json,raw_json
+            FROM decision_blackbox
+            WHERE pair=?
+              AND observed_at>=?
+              AND tech_score=3
+            ORDER BY observed_at DESC,id DESC
+            LIMIT 8
+            """,
+            (pair, float(now) - float(JEV_BLACKBOX_MAX_AGE_SEC)),
+        ).fetchall()
+        con.close()
+    except Exception:
+        return "WAIT", "db_error"
+
+    want = str(side or "").upper()
+    for rr in row:
+        d = str(rr["direction"] or "").upper()
+        if d in {"LONG","SHORT"} and want in {"LONG","SHORT"} and d != want:
+            continue
+        try:
+            raw = json.loads(rr["raw_json"] or "{}")
+        except Exception:
+            raw = {}
+        try:
+            stage = json.loads(rr["stage_json"] or "{}")
+        except Exception:
+            stage = {}
+
+        raw_j = _extract_jev_obj(raw.get("jev") if isinstance(raw, dict) else None)
+        stage_j = _extract_jev_obj(stage.get("jev") if isinstance(stage, dict) else None)
+        col_j = _norm_jev(rr["jev_verdict"])
+
+        if raw_j and raw_j != "WAIT":
+            return raw_j, "blackbox_raw"
+        if stage_j and stage_j != "WAIT":
+            return stage_j, "blackbox_stage"
+        if col_j and col_j != "WAIT":
+            return col_j, "blackbox_column"
+
+    return "WAIT", "blackbox_wait"
+
+
+def _jev(r: dict, pair: str = "", side: str = "", now: Optional[float] = None) -> tuple[str, str]:
     obj = r.get("jev")
     if isinstance(obj, dict):
-        for key in ("verdict","decision","state","action","result","label","recommendation","approved","passed"):
-            if key in obj:
-                x = _norm_jev(obj.get(key))
-                if x:
-                    return x
+        x = _extract_jev_obj(obj)
+        if x and x != "WAIT":
+            return x, "direct_object"
     for key in ("jev_verdict","jev_decision"):
         if key in r:
             x = _norm_jev(r.get(key))
-            if x:
-                return x
-    return "WAIT"
+            if x and x != "WAIT":
+                return x, f"direct_{key}"
+
+    # Fallback to the already-recorded decision blackbox. This is read-only and
+    # intentionally avoids a second Ollama/JEV call.
+    return _blackbox_jev(pair, side, float(now if now is not None else time.time()))
 
 
 def _xcheck(r: dict, pair: str, side: str) -> str:
@@ -380,9 +449,19 @@ def observe_results(results: list[dict], now: Optional[float] = None) -> dict:
             _STATS["last_pair"] = pair
             _STATS["last_stage"] = "TECH3"
 
-        j = _jev(r)
+        j, j_source = _jev(r, pair=pair, side=direction, now=ts)
+        with _LOCK:
+            _STATS["last_jev_source"] = j_source
+            if j_source.startswith("direct_"):
+                _STATS["jev_direct_hit"] = int(_STATS.get("jev_direct_hit") or 0) + 1
+            elif j_source.startswith("blackbox_") and j != "WAIT":
+                _STATS["jev_blackbox_hit"] = int(_STATS.get("jev_blackbox_hit") or 0) + 1
+
         if j != "APPROVE":
+            with _LOCK:
+                _STATS["jev_wait"] = int(_STATS.get("jev_wait") or 0) + 1
             continue
+
         with _LOCK:
             _STATS["jev_approve"] = int(_STATS.get("jev_approve") or 0) + 1
             _STATS["last_stage"] = "JEV_APPROVE"
@@ -530,6 +609,8 @@ def status() -> dict:
         "hold_sec":HOLD_SEC,
         "cluster_sec":CLUSTER_SEC,
         "reaper_sec":REAPER_SEC,
+        "jev_blackbox_max_age_sec":JEV_BLACKBOX_MAX_AGE_SEC,
+        "risk_db_path":RISK_DB_PATH,
         "db_path":DB_PATH,
         "event_counts":counts,
         "live_funnel": dict(_STATS),
