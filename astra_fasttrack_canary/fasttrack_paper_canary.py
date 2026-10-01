@@ -39,6 +39,9 @@ DB_PATH = os.getenv("ASTRA_FASTTRACK_CANARY_DB_PATH", "/data/myshka_fasttrack_ca
 RISK_DB_PATH = os.getenv("RISK_INTELLIGENCE_DB_PATH", "/data/myshka_risk_intelligence.sqlite3")
 JEV_BLACKBOX_MAX_AGE_SEC = max(5, int(os.getenv("ASTRA_FASTTRACK_CANARY_JEV_BLACKBOX_MAX_AGE_SEC", "45")))
 TAG = "astra_fasttrack_canary"
+EXECUTION_MODE = str(os.getenv("ASTRA_FASTTRACK_EXECUTION_MODE", "DRY_RUN")).strip().upper()
+if EXECUTION_MODE not in {"DRY_RUN","LIVE"}:
+    EXECUTION_MODE = "DRY_RUN"
 
 _LOCK = threading.RLock()
 _EXEC_LOCK = threading.Lock()
@@ -67,6 +70,7 @@ _STATS = {
     "last_pair": None,
     "last_stage": None,
     "last_jev_source": None,
+    "execution_mode": EXECUTION_MODE,
 }
 
 
@@ -481,27 +485,44 @@ def _direct_request(path: str, *, token: str, payload: Optional[dict] = None) ->
 def _execute(cluster_key: str, pair: str, direction: str, price: float, now: float) -> None:
     side = direction.lower()
     with _EXEC_LOCK:
-        token, auth = bridge._token()
-        if not token:
-            _update_event(cluster_key, send_status="BLOCKED_AUTH", response_json=json.dumps(auth))
-            return
-        if not _remote_dry_run(token):
-            _update_event(cluster_key, send_status="BLOCKED_NOT_DRYRUN")
-            return
-        if _canary_open_count(token) >= MAX_CONCURRENT:
-            _update_event(cluster_key, send_status="BLOCKED_MAX_CONCURRENT")
-            return
+        if EXECUTION_MODE == "LIVE":
+            try:
+                from . import freqtrade_live_bridge as live_bridge
+            except Exception as exc:
+                _update_event(cluster_key, send_status="BLOCKED_LIVE_IMPORT", response_json=json.dumps({"error":str(exc)}))
+                return
+            result = live_bridge._send(
+                pair,
+                side,
+                stake_usdt=STAKE_USDT,
+                leverage=1.0,
+                source="fasttrack_lean_live",
+                tag="astra_fasttrack_lean_live",
+                signal_price=price,
+                signal_ts_ms=int(now * 1000),
+            )
+        else:
+            token, auth = bridge._token()
+            if not token:
+                _update_event(cluster_key, send_status="BLOCKED_AUTH", response_json=json.dumps(auth))
+                return
+            if not _remote_dry_run(token):
+                _update_event(cluster_key, send_status="BLOCKED_NOT_DRYRUN")
+                return
+            if _canary_open_count(token) >= MAX_CONCURRENT:
+                _update_event(cluster_key, send_status="BLOCKED_MAX_CONCURRENT")
+                return
 
-        result = bridge._send(
-            pair,
-            side,
-            stake_usdt=STAKE_USDT,
-            leverage=LEVERAGE,
-            source="fasttrack_canary",
-            tag=TAG,
-            signal_price=price,
-            signal_ts_ms=int(now * 1000),
-        )
+            result = bridge._send(
+                pair,
+                side,
+                stake_usdt=STAKE_USDT,
+                leverage=LEVERAGE,
+                source="fasttrack_canary",
+                tag=TAG,
+                signal_price=price,
+                signal_ts_ms=int(now * 1000),
+            )
         with _LOCK:
             if str(result.get("status") or "").lower() == "sent":
                 _STATS["sent"] = int(_STATS.get("sent") or 0) + 1
@@ -732,6 +753,7 @@ def status() -> dict:
         "db_path":DB_PATH,
         "event_counts":counts,
         "live_funnel": dict(_STATS),
+        "execution_mode":EXECUTION_MODE,
         "local_dry_run":bridge._local_dry_run(),
         "changes_production_decisions":False,
         "real_money_execution":False,
