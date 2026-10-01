@@ -1,6 +1,9 @@
 import tempfile
 import time
-import fasttrack_paper_canary as c
+try:
+    from . import fasttrack_paper_canary as c
+except Exception:
+    import fasttrack_paper_canary as c
 
 
 def ok(cond, msg):
