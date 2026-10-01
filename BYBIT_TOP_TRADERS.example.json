@@ -1,0 +1,20 @@
+{
+  "browser": "edge",
+  "headless": false,
+  "profile_dir": "~/.myshka/bybit-toptraders-browser",
+  "bridge_url": "http://127.0.0.1:8088",
+  "interval_sec": 60,
+  "page_wait_sec": 4,
+  "pairs": [
+    "BTC/USDT",
+    "ETH/USDT",
+    "SOL/USDT"
+  ],
+  "traders": [
+    {
+      "id": "capital-trading",
+      "name": "CAPITAL TRADING",
+      "url": "PASTE_BYBIT_MASTER_TRADER_PROFILE_URL_HERE"
+    }
+  ]
+}
