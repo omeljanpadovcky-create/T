@@ -95,9 +95,7 @@ def main():
                  AND UPPER(r.side) = UPPER(f.side)
                  AND r.source_minute = f.source_minute
                 WHERE f.status='CLOSED'
-                  AND f.tech_score=3
-                  AND UPPER(COALESCE(r.jev_verdict,''))='APPROVE'
-                  AND UPPER(COALESCE(f.xcheck_state,''))='AGREE'
+                  AND f.tech_score IN (3,4)
                   AND f.net_pct IS NOT NULL
                 ORDER BY f.opened_at, f.id
                 """
@@ -106,26 +104,76 @@ def main():
     finally:
         con.close()
 
+    filters = {
+        "TECH3": lambda r: int(r["tech_score"] or 0) == 3,
+        "TECH3_JEV_APPROVE": lambda r: (
+            int(r["tech_score"] or 0) == 3
+            and str(r["jev_verdict"] or "").upper() == "APPROVE"
+        ),
+        "TECH3_BINANCE_AGREE": lambda r: (
+            int(r["tech_score"] or 0) == 3
+            and str(r["xcheck_state"] or "").upper() == "AGREE"
+        ),
+        "TRIPLE": lambda r: (
+            int(r["tech_score"] or 0) == 3
+            and str(r["jev_verdict"] or "").upper() == "APPROVE"
+            and str(r["xcheck_state"] or "").upper() == "AGREE"
+        ),
+        "STRICT4": lambda r: int(r["tech_score"] or 0) == 4,
+    }
+
     report = {
         "status": "ok",
-        "mode": "READ_ONLY_FASTTRACK",
-        "filter": "TECH_3_OF_4 + JEV_APPROVE + BINANCE_AGREE",
+        "mode": "READ_ONLY_FASTTRACK_FUNNEL",
         "joined_rows": len(rows),
+        "funnel": {},
         "by_horizon": {},
         "pair_breakdown_5m": {},
         "side_breakdown_5m": {},
         "regime_breakdown_5m": {},
-        "decision_hint": "DIAGNOSTIC_ONLY",
+        "paper_canary_eligible": False,
+        "paper_canary_reason": "",
         "changes_trading_decisions": False,
         "sends_orders": False,
         "live_execution": False,
     }
 
-    for h in HORIZONS:
-        part = [r for r in rows if int(r["horizon_sec"]) == h]
-        report["by_horizon"][str(h)] = with_cluster_metrics(part)
+    for name, predicate in filters.items():
+        report["funnel"][name] = {}
+        selected = [r for r in rows if predicate(r)]
+        for h in HORIZONS:
+            part = [r for r in selected if int(r["horizon_sec"]) == h]
+            report["funnel"][name][str(h)] = with_cluster_metrics(part)
 
-    p5 = [r for r in rows if int(r["horizon_sec"]) == 300]
+    # Backward-compatible main view = triple intersection.
+    report["by_horizon"] = report["funnel"]["TRIPLE"]
+
+    h5 = report["funnel"]["TRIPLE"]["300"]
+    h10 = report["funnel"]["TRIPLE"]["600"]
+    h15 = report["funnel"]["TRIPLE"]["900"]
+    enough = int(h5["cluster_n"]) >= 30
+    positive = float(h5["cluster_avg_net_pct"]) > 0 and float(h5["cluster_profit_factor"]) > 1.10
+    persistence = (
+        int(h10["cluster_n"]) >= 15
+        and int(h15["cluster_n"]) >= 15
+        and float(h10["cluster_avg_net_pct"]) >= 0
+        and float(h15["cluster_avg_net_pct"]) >= 0
+    )
+    report["paper_canary_eligible"] = bool(enough and positive and persistence)
+    if not enough:
+        report["paper_canary_reason"] = "TRIPLE_5M_CLUSTER_N_BELOW_30"
+    elif not positive:
+        report["paper_canary_reason"] = "TRIPLE_5M_EXPECTANCY_NOT_POSITIVE"
+    elif not persistence:
+        report["paper_canary_reason"] = "TRIPLE_10M_15M_NOT_PERSISTENT"
+    else:
+        report["paper_canary_reason"] = "RETROSPECTIVE_GATE_PASSED_FORWARD_PAPER_REQUIRED"
+
+    p5 = [
+        r for r in rows
+        if int(r["horizon_sec"]) == 300
+        and filters["TRIPLE"](r)
+    ]
     for field, outkey in (
         ("pair", "pair_breakdown_5m"),
         ("side", "side_breakdown_5m"),
