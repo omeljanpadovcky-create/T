@@ -44,7 +44,7 @@ $stamp=Get-Date -Format 'yyyyMMdd-HHmmss'
 $backup=Join-Path $app ('backup-before-slippage-audit-v1-'+$stamp)
 New-Item -ItemType Directory -Path $backup -Force | Out-Null
 
-foreach($name in @('api.py','freqtrade_dryrun_bridge.py','freqtrade_live_bridge.py','execution_slippage_audit.py')){
+foreach($name in @('api.py','freqtrade_dryrun_bridge.py','execution_slippage_audit.py')){
   $src=Join-Path $app $name
   if(Test-Path $src){Copy-Item $src (Join-Path $backup $name) -Force}
 }
@@ -59,7 +59,6 @@ $downloads=@{
   'patch_execution_slippage_audit.py'=$root+'/astra_execution_audit/patch_execution_slippage_audit.py'
   'selftest_execution_slippage_audit.py'=$root+'/astra_execution_audit/selftest_execution_slippage_audit.py'
   'freqtrade_dryrun_bridge.py'=$root+'/astra_freqtrade_dryrun_bridge/freqtrade_dryrun_bridge.py'
-  'freqtrade_live_bridge.py'=$root+'/astra_freqtrade_live_bridge/freqtrade_live_bridge.py'
 }
 
 Write-Host '[1/8] Downloading pinned bundle...'
@@ -98,9 +97,6 @@ try{
   Copy-Item (Join-Path $tmp 'execution_slippage_audit.py') (Join-Path $app 'execution_slippage_audit.py') -Force
   Copy-Item (Join-Path $tmp 'freqtrade_dryrun_bridge.py') (Join-Path $app 'freqtrade_dryrun_bridge.py') -Force
 
-  if(Test-Path (Join-Path $app 'freqtrade_live_bridge.py')){
-    Copy-Item (Join-Path $tmp 'freqtrade_live_bridge.py') (Join-Path $app 'freqtrade_live_bridge.py') -Force
-  }
 
   $old=$ErrorActionPreference
   $ErrorActionPreference='Continue'
@@ -110,7 +106,6 @@ try{
     Push-Location $app
     try{
       $compile=@('api.py','execution_slippage_audit.py','freqtrade_dryrun_bridge.py')
-      if(Test-Path '.\freqtrade_live_bridge.py'){$compile+='freqtrade_live_bridge.py'}
       & python -m py_compile @compile
       $compileRc=$LASTEXITCODE
     }finally{Pop-Location}
@@ -119,7 +114,7 @@ try{
 
   if($patchRc -ne 0 -or $compileRc -ne 0){throw 'Patch/final compile failed.'}
 }catch{
-  foreach($name in @('api.py','freqtrade_dryrun_bridge.py','freqtrade_live_bridge.py','execution_slippage_audit.py')){
+  foreach($name in @('api.py','freqtrade_dryrun_bridge.py','execution_slippage_audit.py')){
     $b=Join-Path $backup $name
     $dst=Join-Path $app $name
     if(Test-Path $b){Copy-Item $b $dst -Force}
@@ -185,7 +180,7 @@ Write-Host ('Telegram critical alert: '+$st.alert_bps+' bps')
 Write-Host ('Telegram configured: '+$st.telegram_configured)
 Write-Host 'JSONL: /data/astra_slippage_audit.jsonl'
 Write-Host 'DRY_RUN fills are explicitly marked simulated.'
-Write-Host 'LIVE bridge telemetry installed but LIVE was NOT armed.'
+Write-Host 'LIVE bridge was NOT modified or armed.'
 Write-Host 'Trading decisions changed: NO'
 Write-Host 'Freqtrade dry_run changed: NO'
 Write-Host ('Backup: '+$backup)
