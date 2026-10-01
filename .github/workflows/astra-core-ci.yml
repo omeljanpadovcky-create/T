@@ -17,6 +17,7 @@ on:
       - 'ARM_FREQTRADE_LIVE_V1.ps1'
       - 'DISARM_FREQTRADE_LIVE_V1.ps1'
       - 'INSTALL_MT5_SHADOW_V1.ps1'
+      - 'INSTALL_EXTERNAL_MARKET_SHADOW_V1.ps1'
       - 'START_MT5_SHADOW_V1.ps1'
       - 'STOP_MT5_SHADOW_V1.ps1'
       - 'RUN_MYSHKA_STACK.ps1'
@@ -110,6 +111,7 @@ jobs:
             'ARM_FREQTRADE_LIVE_V1.ps1',
             'DISARM_FREQTRADE_LIVE_V1.ps1',
             'INSTALL_MT5_SHADOW_V1.ps1',
+            'INSTALL_EXTERNAL_MARKET_SHADOW_V1.ps1',
             'START_MT5_SHADOW_V1.ps1',
             'STOP_MT5_SHADOW_V1.ps1',
             'RUN_MYSHKA_STACK.ps1'
