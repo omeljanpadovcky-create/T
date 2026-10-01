@@ -29,8 +29,15 @@ $errLog=Join-Path $app 'mt5-shadow.err.log'
 if(-not (Test-Path $collector)){throw 'mt5_shadow_collector.py not found.'}
 if(-not (Test-Path $envFile)){throw '.env.live-armed not found.'}
 
-& python -c "import MetaTrader5; print('MetaTrader5 package OK')"
-if($LASTEXITCODE -ne 0){throw 'MetaTrader5 Python package is not installed.'}
+$prevEap=$ErrorActionPreference
+$ErrorActionPreference='Continue'
+try {
+  cmd /c 'python -c "import MetaTrader5; print(''MetaTrader5 package OK'')"'
+  $mt5ImportRc=$LASTEXITCODE
+} finally {
+  $ErrorActionPreference=$prevEap
+}
+if($mt5ImportRc -ne 0){throw 'MetaTrader5 Python package is not installed.'}
 
 $tokenLine=Get-Content $envFile | Where-Object {$_ -match '^MT5_SHADOW_TOKEN='} | Select-Object -First 1
 if(-not $tokenLine){throw 'MT5_SHADOW_TOKEN missing from .env.live-armed'}
@@ -90,13 +97,26 @@ Write-Host ''
 Write-Host '==========================================================' -ForegroundColor Green
 Write-Host ' READY - MT5 SHADOW COLLECTOR V1 ' -ForegroundColor Green
 Write-Host '==========================================================' -ForegroundColor Green
-Write-Host ('Probe status: '+$probe.status)
-Write-Host ('MT5 symbol: '+$probe.symbol)
-Write-Host ('Direction: '+$probe.direction)
-if($probe.terminal){
-  Write-Host ('Company: '+$probe.terminal.company)
-  Write-Host ('Server: '+$probe.terminal.server)
+Write-Host ('Probe status: '+[string]$probe.status)
+
+if([string]$probe.status -eq 'READY'){
+  $symbol = if($probe.PSObject.Properties.Name -contains 'symbol'){[string]$probe.symbol}else{'—'}
+  $direction = if($probe.PSObject.Properties.Name -contains 'direction'){[string]$probe.direction}else{'—'}
+  Write-Host ('MT5 symbol: '+$symbol)
+  Write-Host ('Direction: '+$direction)
+
+  if(($probe.PSObject.Properties.Name -contains 'terminal') -and $probe.terminal){
+    $company = if($probe.terminal.PSObject.Properties.Name -contains 'company'){[string]$probe.terminal.company}else{'—'}
+    $server = if($probe.terminal.PSObject.Properties.Name -contains 'server'){[string]$probe.terminal.server}else{'—'}
+    Write-Host ('Company: '+$company)
+    Write-Host ('Server: '+$server)
+  }
+} else {
+  $reason = if($probe.PSObject.Properties.Name -contains 'reason'){[string]$probe.reason}else{'unknown'}
+  Write-Host ('[WARN] MT5 snapshot is NO_DATA: '+$reason) -ForegroundColor Yellow
+  Write-Host '[WARN] Collector stays running; ASTRA will safely use MT5=NO_DATA until terminal data becomes available.' -ForegroundColor Yellow
 }
+
 Write-Host 'READ ONLY: TRUE'
-Write-Host 'MT5 order execution: NOT IMPLEMENTED'
+Write-Host 'MT5 trade execution: NOT IMPLEMENTED'
 Write-Host ('PID file: '+$pidFile)
