@@ -41,6 +41,20 @@ _LOCK = threading.RLock()
 _EXEC_LOCK = threading.Lock()
 _EVENTS = deque(maxlen=300)
 _REAPER_STARTED = False
+_STATS = {
+    "scan_calls": 0,
+    "rows_seen": 0,
+    "tech3": 0,
+    "jev_approve": 0,
+    "binance_agree": 0,
+    "triple_eligible": 0,
+    "claimed": 0,
+    "sent": 0,
+    "blocked": 0,
+    "last_scan_at": None,
+    "last_pair": None,
+    "last_stage": None,
+}
 
 
 def _num(v: Any) -> Optional[float]:
@@ -316,6 +330,14 @@ def _execute(cluster_key: str, pair: str, direction: str, price: float, now: flo
             signal_price=price,
             signal_ts_ms=int(now * 1000),
         )
+        with _LOCK:
+            if str(result.get("status") or "").lower() == "sent":
+                _STATS["sent"] = int(_STATS.get("sent") or 0) + 1
+                _STATS["last_stage"] = "SENT"
+            else:
+                _STATS["blocked"] = int(_STATS.get("blocked") or 0) + 1
+                _STATS["last_stage"] = "BLOCKED"
+            _STATS["last_pair"] = pair
         _update_event(
             cluster_key,
             send_status=str(result.get("status") or "UNKNOWN").upper(),
@@ -334,37 +356,63 @@ def _execute(cluster_key: str, pair: str, direction: str, price: float, now: flo
 def observe_results(results: list[dict], now: Optional[float] = None) -> dict:
     # Ensure schema exists even if observe_results is called before init().
     _db_init()
+    ts = float(now if now is not None else time.time())
+
+    with _LOCK:
+        _STATS["scan_calls"] = int(_STATS.get("scan_calls") or 0) + 1
+        _STATS["rows_seen"] = int(_STATS.get("rows_seen") or 0) + len(results or [])
+        _STATS["last_scan_at"] = ts
+
     if not ENABLED:
         return {"status":"disabled","mode":MODE,"enabled":False,"real_money_execution":False}
 
-    ts = float(now if now is not None else time.time())
     eligible = claimed = 0
     for r in results or []:
+        pair = str(r.get("pair") or "")
         sig = r.get("signal") or {}
         direction, score, tech_source = _tech_candidate(sig)
+
         if direction not in {"LONG","SHORT"} or score != 3:
             continue
+        with _LOCK:
+            _STATS["tech3"] = int(_STATS.get("tech3") or 0) + 1
+            _STATS["last_pair"] = pair
+            _STATS["last_stage"] = "TECH3"
 
         j = _jev(r)
         if j != "APPROVE":
             continue
+        with _LOCK:
+            _STATS["jev_approve"] = int(_STATS.get("jev_approve") or 0) + 1
+            _STATS["last_stage"] = "JEV_APPROVE"
 
-        pair = str(r.get("pair") or "")
         if not pair:
             continue
+
         bx = _xcheck(r, pair, direction)
         if bx != "AGREE":
             continue
+        with _LOCK:
+            _STATS["binance_agree"] = int(_STATS.get("binance_agree") or 0) + 1
+            _STATS["last_stage"] = "BINANCE_AGREE"
 
         price = _market_price(r)
         if price is None:
             continue
 
         eligible += 1
+        with _LOCK:
+            _STATS["triple_eligible"] = int(_STATS.get("triple_eligible") or 0) + 1
+            _STATS["last_stage"] = "TRIPLE"
+
         key = _claim(pair, direction, score, tech_source, j, bx, price, ts)
         if not key:
             continue
         claimed += 1
+        with _LOCK:
+            _STATS["claimed"] = int(_STATS.get("claimed") or 0) + 1
+            _STATS["last_stage"] = "CLAIMED"
+
         threading.Thread(
             target=_execute,
             args=(key, pair, direction, price, ts),
@@ -482,6 +530,7 @@ def status() -> dict:
         "cluster_sec":CLUSTER_SEC,
         "db_path":DB_PATH,
         "event_counts":counts,
+        "live_funnel": dict(_STATS),
         "local_dry_run":bridge._local_dry_run(),
         "changes_production_decisions":False,
         "real_money_execution":False,
