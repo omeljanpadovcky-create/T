@@ -75,6 +75,22 @@ button{cursor:pointer}
 
 @media(max-width:680px){.bridge-top{grid-template-columns:1fr}.bridge-grid{grid-template-columns:1fr 1fr}}
 
+
+/* MYSHKA_DEMO_CONTROL_V1 */
+.demo-control{margin:0 0 12px;padding:12px;border-radius:16px}
+.demo-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:9px}
+.demo-head h2{margin:0;font-size:17px}.demo-head p{margin:3px 0 0;color:#8399ba;font-size:9px}
+.demo-actions{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.demo-actions button{min-height:44px}
+.demo-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:9px}
+.demo-stat{padding:10px;border-radius:11px;background:#071522;border:1px solid #1d3659}
+.demo-stat small{display:block;color:#758cac;font-size:8px}.demo-stat b{display:block;margin-top:4px;font-size:12px}
+.demo-events{margin-top:10px;border:1px solid #1d3659;border-radius:12px;overflow:hidden;background:#06111e}
+.demo-event{display:grid;grid-template-columns:74px 95px 90px 1fr 80px;gap:8px;align-items:center;padding:9px 10px;border-bottom:1px solid #142944;font-size:9px}
+.demo-event:last-child{border-bottom:0}.demo-event .ok{color:#55e9a7}.demo-event .bad{color:#ff8290}.demo-event .muted{color:#7d93b5}
+.demo-empty{padding:14px;color:#7d93b5;font-size:9px}
+@media(max-width:850px){.demo-actions{grid-template-columns:repeat(2,1fr)}.demo-stats{grid-template-columns:repeat(2,1fr)}.demo-event{grid-template-columns:64px 1fr 76px}.demo-event span:nth-child(3),.demo-event span:nth-child(4){display:none}}
+
 .card{border-radius:18px;padding:13px}
 .chart-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:9px}
 .chart-head h2{margin:0;font-size:17px}.chart-head small{color:var(--muted)}
@@ -225,6 +241,33 @@ button{cursor:pointer}
     <div class="phone-help">
       У Telegram можна керувати без відкритого сайту: <b>/status /scan /pause /resume /kill /unkill /auto_on /auto_off /ollama_on /ollama_off</b>.
       Для веб-керування з мобільного Bridge URL має бути доступний телефону по HTTPS.
+    </div>
+  </section>
+
+  <section class="demo-control glass" id="demoControlPanel">
+    <div class="demo-head">
+      <div>
+        <h2>🧪 DEMO TRADING · ASTRA → Freqtrade</h2>
+        <p>Bybit = live market data/read-only. Угоди нижче — тільки локальна симуляція Freqtrade DRY_RUN.</p>
+      </div>
+      <button class="btn" id="demoRefresh">↻ Оновити DEMO</button>
+    </div>
+    <div class="demo-actions">
+      <button class="btn gold" id="demoScan">🔎 Scan зараз</button>
+      <button class="btn" id="demoPause">⏸ Pause entries</button>
+      <button class="btn red" id="demoKill">🛡 Kill switch OFF</button>
+      <button class="btn green" id="demoAuto">⚡ Auto scan ON</button>
+      <button class="btn" id="demoReset">↺ Reset simulation</button>
+    </div>
+    <div class="demo-stats">
+      <div class="demo-stat"><small>EXECUTION</small><b id="demoMode">CHECK…</b></div>
+      <div class="demo-stat"><small>SIM EQUITY</small><b id="demoEquity">—</b></div>
+      <div class="demo-stat"><small>OPEN PAPER POSITIONS</small><b id="demoPositions">—</b></div>
+      <div class="demo-stat"><small>MAX DEMO STAKE</small><b id="demoMaxStake">—</b></div>
+      <div class="demo-stat"><small>DRY-RUN EVENTS</small><b id="demoEventCount">—</b></div>
+    </div>
+    <div class="demo-events" id="demoEvents">
+      <div class="demo-empty">Підключаємося до ASTRA/Freqtrade…</div>
     </div>
   </section>
 
@@ -2005,6 +2048,73 @@ function applyServerResults(results){
   if(ok){$('marketBadge').textContent='● ASTRA TOP-'+ok;$('marketBadge').className='badge live';$('universeBadge').textContent=ok+' markets · 1m · 80 candles · scan 15s';renderSelected();renderReadiness()}
   return ok
 }
+function demoPairLabel(pair){
+  return String(pair||'—').replace('/USDT:USDT','').replace(':USDT','');
+}
+function renderDemoEvents(items){
+  const host=$('demoEvents');if(!host)return;
+  const rows=(items||[]).slice(0,12);
+  if(!rows.length){
+    host.innerHTML='<div class="demo-empty">Ще немає dry-run execution events. ASTRA відкриє симуляцію тільки після валідного ENTER.</div>';
+    return;
+  }
+  host.innerHTML=rows.map(e=>{
+    const side=String(e.side||'—').toUpperCase();
+    const status=String(e.status||'—').toUpperCase();
+    const p=e.payload||{};
+    const stake=Number(p.stakeamount||0);
+    const lev=Number(p.leverage||1);
+    const source=String(e.source||'—');
+    const cls=status==='SENT'?'ok':status==='BLOCKED'||status==='ERROR'?'bad':'muted';
+    return '<div class="demo-event">'+
+      '<span class="muted">'+status+'</span>'+
+      '<b class="'+(side==='LONG'?'long':side==='SHORT'?'short':'')+'">'+demoPairLabel(e.pair)+' '+side+'</b>'+
+      '<span>'+((stake>0)?stake.toFixed(2)+' USDT':'—')+'</span>'+
+      '<span class="muted">'+source+' · '+lev.toFixed(1)+'x</span>'+
+      '<b class="'+cls+'">'+(e.real_money_execution===false?'DEMO':'CHECK')+'</b>'+
+    '</div>';
+  }).join('');
+}
+function paintDemoControls(){
+  const rt=APP.serverRuntime||{};
+  if($('demoPause')){$('demoPause').textContent=rt.paused?'▶ Resume entries':'⏸ Pause entries';$('demoPause').className='btn '+(rt.paused?'green':'')}
+  if($('demoKill')){$('demoKill').textContent='🛡 Kill switch '+(rt.kill_switch?'ON':'OFF');$('demoKill').className='btn '+(rt.kill_switch?'red':'')}
+  if($('demoAuto')){$('demoAuto').textContent='⚡ Auto scan '+(rt.auto_scan?'ON':'OFF');$('demoAuto').className='btn '+(rt.auto_scan?'green':'')}
+}
+async function refreshDemoTrading(){
+  if(!APP.backendReady)return;
+  paintDemoControls();
+  try{
+    const st=await bridgeFetch('/freqtrade-dryrun/status',{timeoutMs:8000});
+    if($('demoMode')){
+      const ok=st.local_dry_run===true&&st.real_money_execution===false;
+      $('demoMode').textContent=ok?'DRY_RUN · SAFE':'CHECK';
+      $('demoMode').className=ok?'long':'short';
+    }
+    if($('demoMaxStake'))$('demoMaxStake').textContent=Number(st.max_stake_usdt||0).toFixed(2)+' USDT';
+    if($('demoEventCount'))$('demoEventCount').textContent=String(st.events??0);
+  }catch(e){
+    if($('demoMode')){$('demoMode').textContent='UNAVAILABLE';$('demoMode').className='short'}
+  }
+  try{
+    const recent=await bridgeFetch('/freqtrade-dryrun/recent?limit=20',{timeoutMs:8000});
+    renderDemoEvents(recent.items||[]);
+    if($('demoEventCount'))$('demoEventCount').textContent=String((recent.items||[]).length);
+  }catch(e){
+    if($('demoEvents'))$('demoEvents').innerHTML='<div class="demo-empty">Freqtrade dry-run events недоступні: '+String(e.message||e)+'</div>';
+  }
+  try{
+    const ctl=await bridgeFetch('/control/status',{timeoutMs:8000});
+    const en=ctl.engine||{};
+    if($('demoEquity'))$('demoEquity').textContent=Number(en.paper_equity||0).toFixed(2)+' USDT';
+    if($('demoPositions')){
+      const ps=en.positions||[];
+      $('demoPositions').textContent=ps.length?ps.map(p=>demoPairLabel(p.pair)+' '+p.side).join(' • '):'0';
+    }
+    if(ctl.runtime){APP.serverRuntime=ctl.runtime;paintDemoControls()}
+  }catch(e){}
+}
+
 async function refreshSecondaryReports(force=false){
   if(!APP.backendReady||APP.secondaryBusy)return;
   if(!force&&Date.now()-(APP.lastSecondaryRefresh||0)<30000)return;
@@ -2055,6 +2165,7 @@ async function refreshPhoneControl(){
     if($('bridgeMsg'))$('bridgeMsg').textContent='⚠ stats refresh: '+(e.message||String(e));
   }
 
+  await refreshDemoTrading();
   refreshSecondaryReports(false);
 }
 async function setServerControl(name,value){
@@ -2528,6 +2639,12 @@ $('hardReconcile').onclick=()=>refreshHardening(true);
 $('qualityReplay').onclick=refreshDecisionReplay;
 $('scanBtn').onclick=()=>APP.backendReady?phoneScanNow():connectBridge();$('killBtn').onclick=()=>setKill(!APP.kill);$('runReadiness').onclick=async()=>{if(APP.backendReady)await refreshPhoneControl();else await connectBridge();renderReadiness()};
 $('phoneRefresh').onclick=refreshPhoneControl;$('phoneScan').onclick=phoneScanNow;
+$('demoRefresh').onclick=refreshDemoTrading;
+$('demoScan').onclick=async()=>{await phoneScanNow();await refreshDemoTrading()};
+$('demoPause').onclick=()=>setServerControl('paused',!(APP.serverRuntime&&APP.serverRuntime.paused)).then(async()=>{await refreshPhoneControl();await refreshDemoTrading()});
+$('demoKill').onclick=()=>setServerControl('kill_switch',!(APP.serverRuntime&&APP.serverRuntime.kill_switch)).then(async()=>{await refreshPhoneControl();await refreshDemoTrading()});
+$('demoAuto').onclick=()=>setServerControl('auto_scan',!(APP.serverRuntime&&APP.serverRuntime.auto_scan)).then(async()=>{await refreshPhoneControl();await refreshDemoTrading()});
+$('demoReset').onclick=async()=>{if(!APP.backendReady||!confirm('Скинути симуляцію PAPER equity та відкриті PAPER позиції? Learner лишиться.'))return;await bridgeFetch('/control/engine-reset',{method:'POST'});await refreshPhoneControl();await refreshDemoTrading()};
 $('phonePause').onclick=()=>setServerControl('paused',!(APP.serverRuntime&&APP.serverRuntime.paused)).then(refreshPhoneControl);
 $('phoneKill').onclick=()=>setServerControl('kill_switch',!(APP.serverRuntime&&APP.serverRuntime.kill_switch)).then(refreshPhoneControl);
 $('phoneAuto').onclick=()=>setServerControl('auto_scan',!(APP.serverRuntime&&APP.serverRuntime.auto_scan)).then(refreshPhoneControl);
