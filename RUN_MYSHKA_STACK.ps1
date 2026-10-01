@@ -4,6 +4,7 @@ param(
 
 $ErrorActionPreference='Stop'
 Set-StrictMode -Version Latest
+$RUN_VERSION='V3-AUTOREPAIR'
 
 function Get-Field {
   param(
@@ -35,7 +36,8 @@ function Invoke-SafeRest {
 }
 
 Write-Host '==========================================================' -ForegroundColor Cyan
-Write-Host ' MYSHKA / ASTRA - RUN FULL STACK V2 ' -ForegroundColor Yellow
+Write-Host ' MYSHKA / ASTRA - RUN FULL STACK ' -ForegroundColor Yellow
+Write-Host (' RUN VERSION: '+$RUN_VERSION) -ForegroundColor Green
 Write-Host ' ASTRA + FREQTRADE + MT5 SHADOW + XCHECKS ' -ForegroundColor Yellow
 Write-Host '==========================================================' -ForegroundColor Cyan
 
