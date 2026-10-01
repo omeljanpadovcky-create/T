@@ -393,7 +393,7 @@ def apply(*, signal: Any, edge: Any, candles: list[Any],
 
 def report() -> dict:
     # Never block an HTTP request on a full SQLite recalculation.
-    m = _model(force=True)
+    m = _model(force=False)
     return {
         "status": "ok" if m.get("state") != "ERROR" else "error",
         "version": 3,
