@@ -152,10 +152,56 @@ for($i=0;$i -lt 30;$i++){
   $health=Invoke-SafeRest 'http://127.0.0.1:8088/health' @{} 5
   if($health -and (Get-Field $health 'status' '') -eq 'ok'){break}
 }
+
 if(-not $health -or (Get-Field $health 'status' '') -ne 'ok'){
-  throw 'ASTRA did not become healthy.'
+  Write-Host '[WARN] ASTRA health failed. Running automatic repair/rebuild...' -ForegroundColor Yellow
+
+  $prevEap=$ErrorActionPreference
+  $ErrorActionPreference='Continue'
+  try {
+    Write-Host '--- ASTRA logs before repair ---' -ForegroundColor DarkYellow
+    docker logs myshka-astra --tail 120 2>&1 | Select-Object -Last 120 | ForEach-Object { Write-Host $_ }
+
+    Write-Host '--- Rebuilding ASTRA image ---' -ForegroundColor DarkYellow
+    docker compose build astra 2>&1 | ForEach-Object { Write-Host $_ }
+    $buildRc=$LASTEXITCODE
+
+    if($buildRc -eq 0){
+      Write-Host '--- Force recreating ASTRA ---' -ForegroundColor DarkYellow
+      docker compose up -d --force-recreate astra 2>&1 | ForEach-Object { Write-Host $_ }
+      $recreateRc=$LASTEXITCODE
+    } else {
+      $recreateRc=1
+    }
+  } finally {
+    $ErrorActionPreference=$prevEap
+  }
+
+  if($buildRc -eq 0 -and $recreateRc -eq 0){
+    $health=$null
+    for($i=0;$i -lt 30;$i++){
+      Start-Sleep -Seconds 2
+      $health=Invoke-SafeRest 'http://127.0.0.1:8088/health' @{} 5
+      if($health -and (Get-Field $health 'status' '') -eq 'ok'){break}
+    }
+  }
+
+  if(-not $health -or (Get-Field $health 'status' '') -ne 'ok'){
+    Write-Host '--- ASTRA logs after repair attempt ---' -ForegroundColor Red
+    $prevEap=$ErrorActionPreference
+    $ErrorActionPreference='Continue'
+    try {
+      docker logs myshka-astra --tail 180 2>&1 | Select-Object -Last 180 | ForEach-Object { Write-Host $_ }
+    } finally {
+      $ErrorActionPreference=$prevEap
+    }
+    throw 'ASTRA still unhealthy after automatic rebuild. See logs above for the exact error.'
+  }
+
+  Write-Host '[OK] ASTRA recovered after automatic rebuild.' -ForegroundColor Green
+}else{
+  Write-Host '[OK] ASTRA health=ok' -ForegroundColor Green
 }
-Write-Host '[OK] ASTRA health=ok' -ForegroundColor Green
 
 Write-Host '[5/8] Reading ASTRA bridge token...'
 $token=$null
