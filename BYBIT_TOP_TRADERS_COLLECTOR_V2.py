@@ -104,6 +104,17 @@ def pair_aliases(pair: str) -> list[str]:
     return list(dict.fromkeys([p, raw, f"{base}-{quote}", f"{base}_{quote}"]))
 
 
+def detect_symbols(text: str) -> list[str]:
+    """Best-effort list of visible USDT/USDC symbols for diagnostics."""
+    u = text.upper()
+    found = set()
+    for m in re.finditer(r"\b([A-Z0-9]{2,15})\s*[/_-]?\s*(USDT|USDC)\b", u):
+        base, quote = m.group(1), m.group(2)
+        if base not in {"USDT","USDC"}:
+            found.add(f"{base}/{quote}")
+    return sorted(found)
+
+
 def _side_from_window(window: str) -> str:
     u = window.upper()
     for tok in SIDE_LONG:
@@ -284,6 +295,7 @@ def scrape_one(driver, trader: dict, pairs: list[str], wait_sec: float) -> dict:
 
     body = driver.find_element("tag name","body").text
     positions = parse_positions(body, pairs)
+    symbols_seen = detect_symbols(body)
     digest = hashlib.sha256(body.encode("utf-8",errors="ignore")).hexdigest()[:16]
     diag_path = ""
     if not positions:
@@ -300,6 +312,7 @@ def scrape_one(driver, trader: dict, pairs: list[str], wait_sec: float) -> dict:
         "positions":positions,
         "page_text_sha16":digest,
         "body_chars":len(body),
+        "symbols_seen":symbols_seen,
         "collector":"selenium_read_only_v2",
         "diag_path":diag_path,
         "page_title":getattr(driver, "title", ""),
@@ -327,6 +340,8 @@ def run_cycle(driver, cfg: dict, token: str) -> list[dict]:
             )
             for p in snap["positions"]:
                 print(f"  {p['pair']} {p['side']} lev={p.get('leverage')} pnl={p.get('pnl_pct')}")
+            if snap.get("symbols_seen"):
+                print("  symbols_seen=" + ",".join(snap["symbols_seen"][:20]))
             if not snap["positions"] and snap.get("diag_path"):
                 print(f"  diag={snap['diag_path']}")
             rows.append(snap)
