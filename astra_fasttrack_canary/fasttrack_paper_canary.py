@@ -46,6 +46,7 @@ if EXECUTION_MODE not in {"DRY_RUN","LIVE"}:
 _LOCK = threading.RLock()
 _EXEC_LOCK = threading.Lock()
 _EVENTS = deque(maxlen=300)
+_EDGE_RECENT = deque(maxlen=100)
 _REAPER_STARTED = False
 _SHADOW_JEV_CACHE: dict[str, tuple[str, str, dict]] = {}
 _STATS = {
@@ -59,6 +60,11 @@ _STATS = {
     "jev_shadow_hit": 0,
     "jev_shadow_edge_reject": 0,
     "jev_shadow_ai_attempted": 0,
+    "shadow_cache_hits": 0,
+    "edge_evaluations": 0,
+    "edge_passed": 0,
+    "edge_rejected": 0,
+    "last_edge": None,
     "binance_checked": 0,
     "binance_agree": 0,
     "binance_no_agree": 0,
@@ -281,6 +287,8 @@ def _shadow_jev(r: dict, pair: str, side: str, now: float) -> tuple[str, str]:
     with _LOCK:
         cached = _SHADOW_JEV_CACHE.get(cache_key)
     if cached:
+        with _LOCK:
+            _STATS["shadow_cache_hits"] = int(_STATS.get("shadow_cache_hits") or 0) + 1
         return cached[0], cached[1]
 
     try:
@@ -306,9 +314,43 @@ def _shadow_jev(r: dict, pair: str, side: str, now: float) -> tuple[str, str]:
         pooled = get_pooled_samples(horizon)
         edge_obj = check_edge(float(spread), float(atr), float(atr_med), hist_bucket, pooled)
 
-        if edge_obj is None or not bool(getattr(edge_obj, "passed", False)):
+        # EDGE diagnostic V3: count real evaluations (not repeated cached rejects)
+        # and expose the economics that led to pass/reject.
+        def _edge_attr(*names: str, default: Any = None) -> Any:
+            for name in names:
+                if hasattr(edge_obj, name):
+                    return getattr(edge_obj, name)
+            return default
+
+        edge_passed = bool(_edge_attr("passed", default=False)) if edge_obj is not None else False
+        edge_diag = {
+            "ts": float(now),
+            "pair": pair,
+            "side": side,
+            "cluster_key": cache_key,
+            "horizon_sec": int(horizon),
+            "spread_pct": float(spread),
+            "atr_pct": float(atr),
+            "atr_pct_median": float(atr_med),
+            "expected_move_pct": _num(_edge_attr("expected_move_pct", "expected_move")),
+            "total_cost_pct": _num(_edge_attr("total_cost_pct", "total_cost", "cost_pct")),
+            "net_edge_pct": _num(_edge_attr("net_edge_pct", "net_edge")),
+            "basis": str(_edge_attr("basis", default="unknown")),
+            "samples": int(_edge_attr("n_samples", "samples", "n", default=len(hist_bucket)) or 0),
+            "passed": bool(edge_passed),
+        }
+        with _LOCK:
+            _STATS["edge_evaluations"] = int(_STATS.get("edge_evaluations") or 0) + 1
+            if edge_passed:
+                _STATS["edge_passed"] = int(_STATS.get("edge_passed") or 0) + 1
+            else:
+                _STATS["edge_rejected"] = int(_STATS.get("edge_rejected") or 0) + 1
+            _STATS["last_edge"] = dict(edge_diag)
+            _EDGE_RECENT.appendleft(dict(edge_diag))
+
+        if edge_obj is None or not edge_passed:
             verdict, source = "REJECT", "shadow_edge_reject"
-            meta = {"ai_attempted": False, "edge_passed": False}
+            meta = {"ai_attempted": False, "edge_passed": False, "edge_diag": edge_diag}
             with _LOCK:
                 _SHADOW_JEV_CACHE[cache_key] = (verdict, source, meta)
             return verdict, source
@@ -753,6 +795,7 @@ def status() -> dict:
         "db_path":DB_PATH,
         "event_counts":counts,
         "live_funnel": dict(_STATS),
+        "edge_recent": list(_EDGE_RECENT),
         "execution_mode":EXECUTION_MODE,
         "local_dry_run":bridge._local_dry_run(),
         "changes_production_decisions":False,
