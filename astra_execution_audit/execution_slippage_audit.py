@@ -279,6 +279,7 @@ def status() -> dict:
         "alert_bps": ALERT_BPS,
         "alert_cooldown_sec": ALERT_COOLDOWN_SEC,
         "log_path": LOG_PATH,
+        "telegram_configured": bool(os.getenv("TELEGRAM_BOT_TOKEN") and os.getenv("TELEGRAM_CHAT_ID")),
         "changes_trading_decisions": False,
         "sends_orders": False,
     }
