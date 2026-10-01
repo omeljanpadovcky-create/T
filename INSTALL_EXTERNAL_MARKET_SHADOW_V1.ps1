@@ -6,7 +6,7 @@ Write-Host ' MYSHKA / ASTRA - EXTERNAL MARKET SHADOW V1 ' -ForegroundColor Yello
 Write-Host ' INVESTING XCHECK + MACRO + FORWARD ATTRIBUTION · SHADOW ONLY ' -ForegroundColor Yellow
 Write-Host '============================================================' -ForegroundColor Cyan
 
-$bundleCommit = '7e773f21306b8c21214817ce4fbd31b58a33daf9'
+$bundleCommit = '35a85ac1b0be4f989a8a15414efd563bf6804b02'
 $root = 'https://raw.githubusercontent.com/omeljanpadovcky-create/T/' + $bundleCommit
 
 $app = $null
@@ -99,8 +99,15 @@ Write-Host '[OK] Module installed and Python compile passed.' -ForegroundColor G
 Write-Host '[5/8] Rebuilding ASTRA...'
 Push-Location $app
 try {
-  docker compose up -d --build --force-recreate astra
-  if($LASTEXITCODE -ne 0){ throw 'docker compose rebuild failed.' }
+  $prevEap=$ErrorActionPreference
+  $ErrorActionPreference='Continue'
+  try {
+    docker compose up -d --build --force-recreate astra
+    $dockerRc=$LASTEXITCODE
+  } finally {
+    $ErrorActionPreference=$prevEap
+  }
+  if($dockerRc -ne 0){ throw 'docker compose rebuild failed.' }
 } finally { Pop-Location }
 
 Write-Host '[6/8] Waiting for ASTRA health...'
@@ -118,11 +125,18 @@ Write-Host '[OK] ASTRA health + External Market Shadow present.' -ForegroundColo
 
 Write-Host '[7/8] Checking authenticated report endpoint...'
 $token = $null
+$prevEap=$ErrorActionPreference
+$ErrorActionPreference='Continue'
 try {
-  $token = (docker inspect myshka-astra --format '{{range .Config.Env}}{{println .}}{{end}}' |
-    Where-Object { $_ -match '^MYSHKA_BRIDGE_TOKEN=' } |
-    Select-Object -First 1) -replace '^MYSHKA_BRIDGE_TOKEN=',''
+  $envLines = docker inspect myshka-astra --format '{{range .Config.Env}}{{println .}}{{end}}' 2>$null
+  if($LASTEXITCODE -eq 0){
+    $line = $envLines | Where-Object { $_ -match '^MYSHKA_BRIDGE_TOKEN=' } | Select-Object -First 1
+    if($line){ $token = ($line -replace '^MYSHKA_BRIDGE_TOKEN=','').Trim() }
+  }
 } catch {}
+finally {
+  $ErrorActionPreference=$prevEap
+}
 if(-not $token){
   $envFile = Join-Path $app '.env'
   if(Test-Path $envFile){
