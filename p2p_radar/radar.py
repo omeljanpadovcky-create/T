@@ -52,25 +52,100 @@ def keep(xs,action):
     return sorted(xs,key=lambda x:x.price,reverse=action=='SELL')[:KEEP_PER_SIDE]
 
 def binance():
-    if not eb('P2P_BINANCE_ENABLED','1'): return {'exchange':'Binance','ok':False,'note':'вимкнено','buy':[],'sell':[]}
-    url='https://www.binance.com/bapi/c2c/v1/public/c2c/agent/ad-list'
-    def get(action):
-        r=S.get(url,params={'fiat':FIAT,'asset':ASSET,'tradeType':action,'limit':20},headers={'Referer':'https://www.binance.com/'},timeout=12)
-        r.raise_for_status(); out=[]
+    if not eb('P2P_BINANCE_ENABLED','1'):
+        return {'exchange':'Binance','ok':False,'note':'вимкнено','buy':[],'sell':[]}
+
+    # Primary source: the same friendly C2C web feed used by Binance P2P pages.
+    # This generally matches what the user sees in the browser much better than
+    # the older agent/ad-list endpoint.
+    friendly='https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search'
+    headers={
+        'User-Agent':S.headers['User-Agent'],
+        'Accept':'application/json',
+        'Content-Type':'application/json',
+        'Origin':'https://p2p.binance.com',
+        'Referer':'https://p2p.binance.com/'
+    }
+
+    def parse_friendly(action):
+        out=[]
+        for page in range(1,MARKET_PAGES+1):
+            payload={
+                'asset':ASSET,
+                'fiat':FIAT,
+                'page':page,
+                'rows':20,
+                'tradeType':action,
+                'payTypes':[],
+                'countries':[],
+                'publisherType':None,
+                'merchantCheck':False,
+                'transAmount':''
+            }
+            r=S.post(friendly,json=payload,headers=headers,timeout=12)
+            r.raise_for_status()
+            raw=r.json()
+            items=raw.get('data') or []
+            if not items: break
+            for item in items:
+                a=item.get('adv') or {}
+                m=item.get('advertiser') or {}
+                pays=[]
+                for p in a.get('tradeMethods') or []:
+                    if isinstance(p,dict):
+                        name=p.get('tradeMethodName') or p.get('identifier') or p.get('tradeMethodShortName')
+                        if name:pays.append(str(name))
+                    elif p:
+                        pays.append(str(p))
+                out.append(Offer(
+                    'Binance',action,
+                    num(a.get('price')),
+                    num(a.get('minSingleTransAmount')),
+                    num(a.get('maxSingleTransAmount')),
+                    str(m.get('nickName') or 'unknown'),
+                    rate(m.get('monthFinishRate') or m.get('positiveRate')),
+                    int(num(m.get('monthOrderCount'),0)) or None,
+                    pays,
+                    'web-feed'
+                ))
+            if len(items)<20: break
+        return keep(out,action)
+
+    try:
+        b,s=parse_friendly('BUY'),parse_friendly('SELL')
+        if b or s:
+            return {'exchange':'Binance','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж · Binance P2P web feed','buy':b,'sell':s}
+    except Exception:
+        pass
+
+    # Fallback if Binance blocks the friendly feed from the cloud runner.
+    fallback='https://www.binance.com/bapi/c2c/v1/public/c2c/agent/ad-list'
+    def parse_fallback(action):
+        r=S.get(fallback,params={'fiat':FIAT,'asset':ASSET,'tradeType':action,'limit':40},headers={'Referer':'https://www.binance.com/'},timeout=12)
+        r.raise_for_status()
+        out=[]
         data=r.json().get('data') or {}
         for a in data.get('items') or []:
-            m=a.get('advertiser') or {}; price=num(a.get('price'))
-            # Current public Agent API exposes min/max transaction size in asset units.
-            # Convert to fiat so the common CAPITAL filter stays exchange-agnostic.
-            min_fiat=num(a.get('minTransAmount'))*price
-            max_fiat=num(a.get('maxTransAmount'))*price
+            m=a.get('advertiser') or {}
+            price=num(a.get('price'))
             pays=[str(x) for x in (a.get('tradeMethods') or []) if x]
-            orders=int(num(m.get('monthOrderCount'),0)) or None
-            out.append(Offer('Binance',action,price,min_fiat,max_fiat,str(m.get('nickName') or 'unknown'),rate(m.get('monthFinishRate') or m.get('positiveRate')),orders,pays,'official-public'))
+            out.append(Offer(
+                'Binance',action,price,
+                num(a.get('minTransAmount'))*price,
+                num(a.get('maxTransAmount'))*price,
+                str(m.get('nickName') or 'unknown'),
+                rate(m.get('monthFinishRate') or m.get('positiveRate')),
+                int(num(m.get('monthOrderCount'),0)) or None,
+                pays,
+                'official-public'
+            ))
         return keep(out,action)
+
     try:
-        b,s=get('BUY'),get('SELL'); return {'exchange':'Binance','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж','buy':b,'sell':s}
-    except Exception as e:return {'exchange':'Binance','ok':False,'note':f'{type(e).__name__}: {e}','buy':[],'sell':[]}
+        b,s=parse_fallback('BUY'),parse_fallback('SELL')
+        return {'exchange':'Binance','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж · fallback feed','buy':b,'sell':s}
+    except Exception as e:
+        return {'exchange':'Binance','ok':False,'note':f'Binance P2P feed unavailable: {type(e).__name__}: {e}','buy':[],'sell':[]}
 
 def bybit():
     if not eb('P2P_BYBIT_ENABLED','1'):
