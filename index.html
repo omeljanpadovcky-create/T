@@ -25,7 +25,7 @@
 </section>
 <section class="grid">
   <div class="card glass"><div class="title"><div><h2>🎯 Найкращий варіант зараз</h2><div class="sub">Мишка лише знаходить і рахує варіант. Угоду ти відкриваєш сам.</div></div><span class="badge" id="verdict">ОЧІКУВАННЯ</span></div><div class="hero" id="hero"><div class="empty">Запусти <b>START_P2P_RADAR.bat</b> на комп'ютері — тут з'явиться живий скан.</div></div></div>
-  <div class="card glass"><div class="title"><div><h2>🔌 Біржі</h2><div class="sub">АКТИВНО = Мишка читає котирування автоматично. P2P СТОРІНКА = кнопка відкриває біржу напряму.</div></div></div><div class="providers" id="providers"></div></div>
+  <div class="card glass"><div class="title"><div><h2>🔌 Біржі</h2><div class="sub">АКТИВНО = є живі P2P-дані. АКТИВНО · 0 ОГОЛОШЕНЬ = джерело працює, але зараз нічого не пройшло фільтри. P2P СТОРІНКА = тільки пряме відкриття біржі.</div></div></div><div class="providers" id="providers"></div></div>
 </section>
 <section class="card glass" style="margin-top:12px"><div class="title"><div><h2>📡 Усі знайдені варіанти</h2><div class="sub" id="summary">Очікування даних</div></div></div><div class="tableWrap"><table><thead><tr><th>Купити</th><th>Продати</th><th class="num">Курс купівлі</th><th class="num">Курс продажу</th><th class="num">Спред</th><th class="num">Чистими</th><th class="num">Результат ₴</th><th class="num">Ризик</th><th>Статус</th><th>Відкрити</th></tr></thead><tbody id="routes"><tr><td colspan="10" class="empty">Немає скану</td></tr></tbody></table></div></section>
 <div class="foot glass"><b>Як рахується:</b> ціна продажу − ціна купівлі − орієнтовні витрати − переказ USDT − запас безпеки. Аномальний спред понад поріг перевірки не позначається як готовий сигнал — він отримує статус «ПОТРІБНА ПЕРЕВІРКА». Перед оплатою завжди перевіряй живе оголошення, спосіб оплати, ліміти та реквізити.</div>
@@ -84,6 +84,11 @@ function verdictUk(v){
   })[v]||v||'ОЧІКУВАННЯ'
 }
 function routeTypeUk(v){return v==='INTRA'?'НА ОДНІЙ БІРЖІ':v==='CROSS'?'МІЖ БІРЖАМИ':(v||'P2P')}
+function exchangeLabel(ex){
+  const s=String(ex||'');
+  const item=EXCHANGE_DIRECTORY.find(x=>String(x.id||'').toLowerCase()===s.toLowerCase()||String(x.name||'').toLowerCase()===s.toLowerCase());
+  return item?.name||s;
+}
 function noteUk(s){
   s=String(s||'');
   if(/needs API keys/i.test(s))return 'потрібні API-ключі та доступ до P2P API';
@@ -124,7 +129,9 @@ function aiAnswer(q){
     return t.buy_exchange+' → '+t.sell_exchange+'\nКупівля: '+money(t.buy_price)+'\nПродаж: '+money(t.sell_price)+'\nЧистими: '+pct(t.net_pct)+' ≈ '+money(t.net_profit_fiat)+' '+(d.fiat||'UAH')+'\nРизик: '+t.risk_score+'/100\nСтатус: '+verdictUk(t.verdict);
   }
   if(s.includes('актив')||s.includes('бірж')){
-    return 'Автоматично читаються: '+(active.map(x=>x.exchange).join(', ')||'немає')+'.\nЛише P2P-сторінка: '+(pages.map(x=>x.exchange).join(', ')||'немає')+'.';
+    const full=active.filter(x=>Number(x.buy_offers||0)>0&&Number(x.sell_offers||0)>0);
+    const partial=active.filter(x=>!(Number(x.buy_offers||0)>0&&Number(x.sell_offers||0)>0));
+    return 'Повністю активні: '+(full.map(x=>exchangeLabel(x.exchange)).join(', ')||'немає')+'.\nЧастково/без оголошень: '+(partial.map(x=>exchangeLabel(x.exchange)).join(', ')||'немає')+'.\nЛише P2P-сторінка: '+(pages.map(x=>exchangeLabel(x.exchange)).join(', ')||'немає')+'.';
   }
   if(s.includes('перевір')||s.includes('3%')||s.includes('великий спред')){
     return 'Статус «ПОТРІБНА ПЕРЕВІРКА» з’являється для аномально великого спреду. Це означає: курс може бути промо, застарілий, з іншим способом оплати або з обмеженнями. Такий маршрут не вважається готовим сигналом.';
@@ -158,11 +165,21 @@ function render(d){LAST_RADAR_DATA=d;$('market').textContent=(d.asset||'USDT')+'
  if(t){$('hero').innerHTML=`<div class="route"><span>${t.buy_exchange}</span> → <span>${t.sell_exchange}</span></div><div class="money ${Number(t.net_profit_fiat)>=0?'pos':'neg'}">${Number(t.net_profit_fiat)>=0?'+':''}${money(t.net_profit_fiat)} ${d.fiat}</div><div class="chips"><div class="chip">${routeTypeUk(t.route_type)}</div><div class="chip">КУПІВЛЯ <strong>${money(t.buy_price)}</strong></div><div class="chip">ПРОДАЖ <strong>${money(t.sell_price)}</strong></div><div class="chip">СПРЕД <strong>${pct(t.gross_spread_pct)}</strong></div><div class="chip">ЧИСТИМИ <strong>${pct(t.net_pct)}</strong></div><div class="chip">БЕЗ ПЕРЕКАЗУ <strong>${pct(t.prefunded_net_pct)}</strong></div><div class="chip">РИЗИК <strong class="risk ${riskClass(t.risk_score)}">${t.risk_score}/100</strong></div></div><div class="actions"><a class="action buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(t.buy_exchange,'BUY')}">🟢 КУПИТИ · ${t.buy_exchange}</a><a class="action sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(t.sell_exchange,'SELL')}">🔴 ПРОДАТИ · ${t.sell_exchange}</a></div><div class="sub" style="margin-top:12px">${(t.reasons||[]).slice(0,4).map(reasonUk).join(' • ')||'Перевірки пройдені'}</div>`}else{$('hero').innerHTML=`<div class="empty">Поки немає варіанту, що проходить фільтри.</div>`}
  $('providers').innerHTML=(d.providers||[]).map(p=>{
    const b=Number(p.buy_offers||0),s=Number(p.sell_offers||0);
-   const empty=p.ok&&(b===0||s===0);
-   const label=!p.ok?'P2P СТОРІНКА':empty?'ФІД ПРАЦЮЄ':'АКТИВНО';
-   const cls=!p.ok?'':empty?'warn':'ok';
-   const note=!p.ok?'Пряме посилання на P2P':empty?(b===0&&s===0?'немає відповідних оголошень':`${b} купівля / ${s} продаж · одна сторона порожня`):(noteUk(p.note)||'—');
-   return `<div class="provider"><b>${p.exchange}</b><span class="state ${cls}">${label}</span><span>${note}</span><a class="mini" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(p.exchange,'BUY')}">Відкрити P2P ↗</a></div>`;
+   let label='P2P СТОРІНКА',cls='',note='Пряме посилання на P2P';
+   if(p.ok&&b>0&&s>0){
+     label='АКТИВНО';cls='ok';
+     note=(noteUk(p.note)||'живі P2P-дані').replace('публічний веб-фід','живі P2P-дані');
+   }else if(p.ok&&b===0&&s===0){
+     label='АКТИВНО · 0 ОГОЛОШЕНЬ';cls='warn';
+     note='джерело працює, але зараз нічого не пройшло фільтри';
+   }else if(p.ok&&b===0){
+     label='АКТИВНО · ЛИШЕ ПРОДАЖ';cls='warn';
+     note=`0 купівля / ${s} продаж · для маршруту потрібні обидві сторони`;
+   }else if(p.ok&&s===0){
+     label='АКТИВНО · ЛИШЕ КУПІВЛЯ';cls='warn';
+     note=`${b} купівля / 0 продаж · для маршруту потрібні обидві сторони`;
+   }
+   return `<div class="provider"><b>${exchangeLabel(p.exchange)}</b><span class="state ${cls}">${label}</span><span>${note}</span><a class="mini" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(p.exchange,'BUY')}">Відкрити P2P ↗</a></div>`;
  }).join('')||'<div class="empty">Немає провайдерів</div>';
  const rs=d.routes||[];const total=Number(d.route_count??rs.length);const shown=Number(d.shown_routes??rs.length);$('summary').textContent=`${total} знайдено · показано ${shown} найкращих · ${d.alerts||0} готових · ${d.review_count||0} на перевірку`;$('routes').innerHTML=rs.length?rs.map(r=>`<tr><td>${r.buy_exchange}</td><td>${r.sell_exchange}</td><td class="num">${money(r.buy_price)}</td><td class="num">${money(r.sell_price)}</td><td class="num">${pct(r.gross_spread_pct)}</td><td class="num">${pct(r.net_pct)}</td><td class="num">${Number(r.net_profit_fiat)>=0?'+':''}${money(r.net_profit_fiat)}</td><td class="num risk ${riskClass(r.risk_score)}">${r.risk_score}</td><td class="${verdictClass(r.verdict)}">${verdictUk(r.verdict)}</td><td><div class="exchangeLinks"><a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(r.buy_exchange,'BUY')}">КУПИТИ ↗</a><a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(r.sell_exchange,'SELL')}">ПРОДАТИ ↗</a></div></td></tr>`).join(''):'<tr><td colspan="10" class="empty">Маршрутів поки немає</td></tr>'}
 async function refresh(){try{const r=await fetch('https://raw.githubusercontent.com/omeljanpadovcky-create/T/live-data/latest.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);render(await r.json())}catch(e){$('time').textContent='JSON недоступний';$('time').className='badge bad'}}initAi();loadExchangeDirectory();refresh();setInterval(refresh,15000);setInterval(loadExchangeDirectory,15000);
