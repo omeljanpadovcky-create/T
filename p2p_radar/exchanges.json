@@ -1,6 +1,6 @@
 {
   "scan_seconds": 15,
-  "note": "Explicit P2P exchange directory. Only verified direct P2P pages are added; scanner adapters are connected separately.",
+  "note": "Explicit P2P exchange directory. Entries are added only when current official sources confirm an active P2P service. Scanner adapters are connected separately.",
   "exchanges": [
     {
       "id": "binance",
@@ -85,6 +85,48 @@
       "enabled": true,
       "buy_url": "https://whitebit.com/ua/m/p-2-p-express",
       "sell_url": "https://whitebit.com/ua/m/p-2-p-express"
+    },
+    {
+      "id": "lbank",
+      "name": "LBank",
+      "enabled": true,
+      "buy_url": "https://www.lbank.com/uk/crypto/buy",
+      "sell_url": "https://www.lbank.com/uk/crypto/buy"
+    },
+    {
+      "id": "coinw",
+      "name": "CoinW",
+      "enabled": true,
+      "buy_url": "https://www.coinw.com/en_XA/p2p-trading/personalized/buy",
+      "sell_url": "https://www.coinw.com/en_XA/p2p-trading/personalized/sell"
+    },
+    {
+      "id": "toobit",
+      "name": "Toobit",
+      "enabled": true,
+      "buy_url": "https://www.toobit.com/en-US/p2p",
+      "sell_url": "https://www.toobit.com/en-US/p2p"
+    },
+    {
+      "id": "bitunix",
+      "name": "Bitunix",
+      "enabled": true,
+      "buy_url": "https://www.bitunix.com/p2p/p2p-trade",
+      "sell_url": "https://www.bitunix.com/p2p/p2p-trade"
+    },
+    {
+      "id": "weex",
+      "name": "WEEX",
+      "enabled": true,
+      "buy_url": "https://www.weex.com/buy-crypto/trading",
+      "sell_url": "https://www.weex.com/buy-crypto/trading"
+    },
+    {
+      "id": "digifinex",
+      "name": "DigiFinex",
+      "enabled": true,
+      "buy_url": "https://www.digifinex.com/",
+      "sell_url": "https://www.digifinex.com/"
     }
   ]
 }
