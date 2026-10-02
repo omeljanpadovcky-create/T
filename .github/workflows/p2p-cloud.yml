@@ -18,7 +18,7 @@ permissions:
 
 concurrency:
   group: myshka-p2p-cloud
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   cloud-radar:
@@ -152,7 +152,7 @@ jobs:
 
           # Keep this runner alive long enough that the next 5-minute scheduled run
           # is normally already queued. That removes dependency on the user's PC.
-          END=$((SECONDS+630))
+          END=$((SECONDS+270))
           while [ "$SECONDS" -lt "$END" ]; do
             sleep 15
             publish_live || true
