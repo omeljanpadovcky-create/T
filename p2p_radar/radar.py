@@ -410,14 +410,44 @@ def offer_risk(o):
     if not o.payments:r+=4
     return r,why
 
+def payment_key(x):
+    s=str(x or '').strip().lower()
+    aliases=[
+        ('monobank','monobank'),('mono bank','monobank'),
+        ('privatbank','privatbank'),('privat bank','privatbank'),
+        ('pumb','pumb'),('пумб','pumb'),
+        ('a-bank','abank'),('abank','abank'),('a bank','abank'),
+        ('otp','otp'),('oschad','oschad'),('ощад','oschad'),
+        ('raiffeisen','raiffeisen'),('райффайзен','raiffeisen'),
+        ('sense','sense'),('izibank','izibank'),('izi bank','izibank'),
+        ('sportbank','sportbank'),('universal','universal')
+    ]
+    for needle,key in aliases:
+        if needle in s:return key
+    return ''
+
+def payment_match(a,b):
+    ka={payment_key(x) for x in (a or []) if payment_key(x)}
+    kb={payment_key(x) for x in (b or []) if payment_key(x)}
+    if ka and kb:
+        common=sorted(ka&kb)
+        return bool(common),common,True
+    return True,sorted(ka&kb),False
+
 def routes(providers):
     buys=[o for p in providers if p['ok'] for o in p['buy']]; sells=[o for p in providers if p['ok'] for o in p['sell']]; out=[]
     for b in buys:
       for s in sells:
+        pay_ok,common_payments,pay_known=payment_match(b.payments,s.payments)
+        if not pay_ok: continue
         same=b.exchange==s.exchange; transfer_fee=0.0 if same else XFER
         qty=CAPITAL/b.price; gross=(s.price/b.price-1)*100; safety=CAPITAL*BUFFER/100
         net=(max(0,qty-transfer_fee)*s.price)-CAPITAL-safety; pref=(qty*s.price)-CAPITAL-safety; rb,wb=offer_risk(b); rs,ws=offer_risk(s); risk=max(rb,rs); why=wb+ws
         if same: why=['same-exchange route: no modeled crypto transfer fee']+why
+        if pay_known and common_payments:
+            why.append('common payment: '+', '.join(common_payments))
+        elif not pay_known:
+            risk+=6;why.append('payment compatibility not fully verified')
         drag=(transfer_fee*b.price/CAPITAL*100) if CAPITAL else 0
         if drag>.7:risk+=10;why.append(f'transfer drag {drag:.2f}%')
         abnormal=gross>REVIEW_SPREAD
@@ -434,9 +464,15 @@ def routes(providers):
             verdict='PREFUNDED_ONLY'
         else:
             verdict='DROP'
-        out.append({'buy_exchange':b.exchange,'sell_exchange':s.exchange,'route_type':'INTRA' if same else 'CROSS','buy_price':round(b.price,4),'sell_price':round(s.price,4),'gross_spread_pct':round(gross,3),'net_profit_fiat':round(net,2),'net_pct':round(netpct,3),'prefunded_net_pct':round(prefpct,3),'risk_score':risk,'verdict':verdict,'buy_merchant':b.merchant,'sell_merchant':s.merchant,'buy_completion_pct':b.completion,'sell_completion_pct':s.completion,'buy_payments':b.payments,'sell_payments':s.payments,'reasons':why[:6]})
+        out.append({'buy_exchange':b.exchange,'sell_exchange':s.exchange,'route_type':'INTRA' if same else 'CROSS','buy_price':round(b.price,4),'sell_price':round(s.price,4),'gross_spread_pct':round(gross,3),'net_profit_fiat':round(net,2),'net_pct':round(netpct,3),'prefunded_net_pct':round(prefpct,3),'risk_score':risk,'verdict':verdict,'buy_merchant':b.merchant,'sell_merchant':s.merchant,'buy_completion_pct':b.completion,'sell_completion_pct':s.completion,'buy_payments':b.payments,'sell_payments':s.payments,'common_payments':common_payments,'payment_verified':pay_known and bool(common_payments),'reasons':why[:7]})
     priority={'ALERT':3,'REVIEW':2,'PREFUNDED_ONLY':1,'DROP':0}
-    return sorted(out,key=lambda x:(priority.get(x['verdict'],0),x['net_pct'],-x['risk_score']),reverse=True)
+    ranked=sorted(out,key=lambda x:(priority.get(x['verdict'],0),x['net_pct'],-x['risk_score']),reverse=True)
+    seen=set(); unique=[]
+    for x in ranked:
+        key=(x['buy_exchange'],x['sell_exchange'],x['buy_merchant'],x['sell_merchant'],round(x['buy_price'],2),round(x['sell_price'],2))
+        if key in seen: continue
+        seen.add(key); unique.append(x)
+    return unique
 
 def public_provider(p):
     return {'exchange':p['exchange'],'ok':p['ok'],'note':p['note'],'buy_offers':len(p['buy']),'sell_offers':len(p['sell']),'best_buy':asdict(p['buy'][0]) if p['buy'] else None,'best_sell':asdict(p['sell'][0]) if p['sell'] else None}
