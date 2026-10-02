@@ -49,6 +49,41 @@ jobs:
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID || secrets.TG_CHAT_ID }}
       BYBIT_API_KEY: ${{ secrets.BYBIT_API_KEY }}
       BYBIT_API_SECRET: ${{ secrets.BYBIT_API_SECRET }}
+      BITGET_API_KEY: ${{ secrets.BITGET_API_KEY }}
+      BITGET_API_SECRET: ${{ secrets.BITGET_API_SECRET }}
+      BITGET_API_PASSPHRASE: ${{ secrets.BITGET_API_PASSPHRASE }}
+      GATE_API_KEY: ${{ secrets.GATE_API_KEY }}
+      GATE_API_SECRET: ${{ secrets.GATE_API_SECRET }}
+      OKX_API_KEY: ${{ secrets.OKX_API_KEY }}
+      OKX_API_SECRET: ${{ secrets.OKX_API_SECRET }}
+      OKX_API_PASSPHRASE: ${{ secrets.OKX_API_PASSPHRASE }}
+      KUCOIN_API_KEY: ${{ secrets.KUCOIN_API_KEY }}
+      KUCOIN_API_SECRET: ${{ secrets.KUCOIN_API_SECRET }}
+      KUCOIN_API_PASSPHRASE: ${{ secrets.KUCOIN_API_PASSPHRASE }}
+      MEXC_API_KEY: ${{ secrets.MEXC_API_KEY }}
+      MEXC_API_SECRET: ${{ secrets.MEXC_API_SECRET }}
+      HTX_API_KEY: ${{ secrets.HTX_API_KEY }}
+      HTX_API_SECRET: ${{ secrets.HTX_API_SECRET }}
+      BINGX_API_KEY: ${{ secrets.BINGX_API_KEY }}
+      BINGX_API_SECRET: ${{ secrets.BINGX_API_SECRET }}
+      COINEX_API_KEY: ${{ secrets.COINEX_API_KEY }}
+      COINEX_API_SECRET: ${{ secrets.COINEX_API_SECRET }}
+      WHITEBIT_API_KEY: ${{ secrets.WHITEBIT_API_KEY }}
+      WHITEBIT_API_SECRET: ${{ secrets.WHITEBIT_API_SECRET }}
+      LBANK_API_KEY: ${{ secrets.LBANK_API_KEY }}
+      LBANK_API_SECRET: ${{ secrets.LBANK_API_SECRET }}
+      COINW_API_KEY: ${{ secrets.COINW_API_KEY }}
+      COINW_API_SECRET: ${{ secrets.COINW_API_SECRET }}
+      TOOBIT_API_KEY: ${{ secrets.TOOBIT_API_KEY }}
+      TOOBIT_API_SECRET: ${{ secrets.TOOBIT_API_SECRET }}
+      BITUNIX_API_KEY: ${{ secrets.BITUNIX_API_KEY }}
+      BITUNIX_API_SECRET: ${{ secrets.BITUNIX_API_SECRET }}
+      WEEX_API_KEY: ${{ secrets.WEEX_API_KEY }}
+      WEEX_API_SECRET: ${{ secrets.WEEX_API_SECRET }}
+      DIGIFINEX_API_KEY: ${{ secrets.DIGIFINEX_API_KEY }}
+      DIGIFINEX_API_SECRET: ${{ secrets.DIGIFINEX_API_SECRET }}
+      BITMART_API_KEY: ${{ secrets.BITMART_API_KEY }}
+      BITMART_API_SECRET: ${{ secrets.BITMART_API_SECRET }}
 
     steps:
       - name: Checkout app
