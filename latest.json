@@ -1,0 +1,1692 @@
+{
+  "version": "MYSHKA_P2P_RADAR_V4",
+  "scanned_at": "2026-10-03T15:23:15+03:00",
+  "fiat": "UAH",
+  "asset": "USDT",
+  "mode": "ХМАРНИЙ СКАНЕР 24/7",
+  "telegram_bot_username": "",
+  "bank_guard": {
+    "level": "OK",
+    "paused": false,
+    "reason": "",
+    "confirmed_transfers": 0,
+    "confirmed_cycles": 0,
+    "alerts_sent": 0,
+    "warn_at": 4,
+    "max_transfers": 6,
+    "transfers_per_cycle": 2,
+    "cooldown_minutes": 60,
+    "cooldown_remaining_seconds": 0
+  },
+  "providers": [
+    {
+      "exchange": "Binance",
+      "ok": true,
+      "note": "60 купівля / 60 продаж · Binance P2P web feed",
+      "buy_offers": 60,
+      "sell_offers": 60,
+      "buy_eligible": 58,
+      "sell_eligible": 50,
+      "best_buy": {
+        "exchange": "Binance",
+        "action": "BUY",
+        "price": 45.15,
+        "min_fiat": 400.0,
+        "max_fiat": 1000.0,
+        "merchant": "YashaNuk",
+        "completion": 86.8,
+        "orders": 163,
+        "payments": [
+          "PUMB (Card)",
+          "Monobank (Card)",
+          "OTP BANK"
+        ],
+        "source": "web-feed"
+      },
+      "best_sell": {
+        "exchange": "Binance",
+        "action": "SELL",
+        "price": 53.9,
+        "min_fiat": 734000.0,
+        "max_fiat": 735000.0,
+        "merchant": "HA6OP_B_KOMAHDY_368",
+        "completion": 100,
+        "orders": 1,
+        "payments": [
+          "Monobank (Card)",
+          "Privat Bank (Universal Card)",
+          "PUMB (Card)",
+          "OschadBank (Card)",
+          "A-Bank (Card)"
+        ],
+        "source": "web-feed"
+      },
+      "best_buy_by_payment": {
+        "pumb": {
+          "price": 45.15,
+          "merchant": "YashaNuk",
+          "completion": 86.8,
+          "orders": 163
+        },
+        "monobank": {
+          "price": 45.15,
+          "merchant": "YashaNuk",
+          "completion": 86.8,
+          "orders": 163
+        },
+        "otp": {
+          "price": 45.15,
+          "merchant": "YashaNuk",
+          "completion": 86.8,
+          "orders": 163
+        },
+        "abank": {
+          "price": 45.15,
+          "merchant": "Obmen_USDT_UAH_UA2",
+          "completion": 100,
+          "orders": 637
+        },
+        "oschad": {
+          "price": 45.15,
+          "merchant": "Obmen_USDT_UAH_UA2",
+          "completion": 100,
+          "orders": 637
+        },
+        "privatbank": {
+          "price": 45.21,
+          "merchant": "ExTurk",
+          "completion": 100,
+          "orders": 34689
+        },
+        "raiffeisen": {
+          "price": 45.25,
+          "merchant": "Pasha2007",
+          "completion": 100,
+          "orders": 309
+        },
+        "izibank": {
+          "price": 45.26,
+          "merchant": "Mr_EXCLUSIVE_",
+          "completion": 100,
+          "orders": 186
+        },
+        "sense": {
+          "price": 45.48,
+          "merchant": "JenyCash",
+          "completion": 99.5,
+          "orders": 695
+        }
+      },
+      "best_sell_by_payment": {
+        "monobank": {
+          "price": 53.9,
+          "merchant": "HA6OP_B_KOMAHDY_368",
+          "completion": 100,
+          "orders": 1
+        },
+        "privatbank": {
+          "price": 53.9,
+          "merchant": "HA6OP_B_KOMAHDY_368",
+          "completion": 100,
+          "orders": 1
+        },
+        "pumb": {
+          "price": 53.9,
+          "merchant": "HA6OP_B_KOMAHDY_368",
+          "completion": 100,
+          "orders": 1
+        },
+        "oschad": {
+          "price": 53.9,
+          "merchant": "HA6OP_B_KOMAHDY_368",
+          "completion": 100,
+          "orders": 1
+        },
+        "abank": {
+          "price": 53.9,
+          "merchant": "HA6OP_B_KOMAHDY_368",
+          "completion": 100,
+          "orders": 1
+        },
+        "otp": {
+          "price": 47.5,
+          "merchant": "SilvestrFilin",
+          "completion": 95.6,
+          "orders": 1471
+        },
+        "sense": {
+          "price": 46.86,
+          "merchant": "VladG02",
+          "completion": 98.0,
+          "orders": 383
+        },
+        "izibank": {
+          "price": 46.82,
+          "merchant": "dilfin4ik",
+          "completion": 96.89999999999999,
+          "orders": 1016
+        },
+        "raiffeisen": {
+          "price": 46.8,
+          "merchant": "TheCASH_888",
+          "completion": 99.5,
+          "orders": 1328
+        }
+      }
+    },
+    {
+      "exchange": "Bybit",
+      "ok": true,
+      "note": "60 купівля / 60 продаж · публічний веб-фід",
+      "buy_offers": 60,
+      "sell_offers": 60,
+      "buy_eligible": 58,
+      "sell_eligible": 50,
+      "best_buy": {
+        "exchange": "Bybit",
+        "action": "BUY",
+        "price": 45.1,
+        "min_fiat": 10000.0,
+        "max_fiat": 10000.0,
+        "merchant": "Vanek_Voloshyn",
+        "completion": 100,
+        "orders": 5388,
+        "payments": [
+          "545",
+          "1",
+          "43"
+        ],
+        "source": "web-feed"
+      },
+      "best_sell": {
+        "exchange": "Bybit",
+        "action": "SELL",
+        "price": 47.77,
+        "min_fiat": 300000.0,
+        "max_fiat": 350000.0,
+        "merchant": "Fast-Order",
+        "completion": 99.0,
+        "orders": 119,
+        "payments": [
+          "1",
+          "43",
+          "61"
+        ],
+        "source": "web-feed"
+      },
+      "best_buy_by_payment": {},
+      "best_sell_by_payment": {}
+    },
+    {
+      "exchange": "OKX",
+      "ok": true,
+      "note": "80 купівля / 80 продаж · публічний веб-фід",
+      "buy_offers": 80,
+      "sell_offers": 80,
+      "buy_eligible": 75,
+      "sell_eligible": 62,
+      "best_buy": {
+        "exchange": "OKX",
+        "action": "BUY",
+        "price": 45.4,
+        "min_fiat": 6000.0,
+        "max_fiat": 6808.63,
+        "merchant": "vad***@gmail.com",
+        "completion": 100,
+        "orders": 58,
+        "payments": [
+          "PrivatBank (CARD)"
+        ],
+        "source": "web-feed"
+      },
+      "best_sell": {
+        "exchange": "OKX",
+        "action": "SELL",
+        "price": 47.01,
+        "min_fiat": 4000.0,
+        "max_fiat": 1568946.99,
+        "merchant": "Obmen365",
+        "completion": 90.61,
+        "orders": 965,
+        "payments": [
+          "PrivatBank (CARD)",
+          "PrivatBank (IBAN)"
+        ],
+        "source": "web-feed"
+      },
+      "best_buy_by_payment": {
+        "privatbank": {
+          "price": 45.4,
+          "merchant": "vad***@gmail.com",
+          "completion": 100,
+          "orders": 58
+        },
+        "monobank": {
+          "price": 45.59,
+          "merchant": "CharlySheen",
+          "completion": 100,
+          "orders": 64
+        },
+        "abank": {
+          "price": 45.59,
+          "merchant": "CharlySheen",
+          "completion": 100,
+          "orders": 64
+        },
+        "pumb": {
+          "price": 45.62,
+          "merchant": "major_BoB",
+          "completion": 99.83,
+          "orders": 1238
+        },
+        "oschad": {
+          "price": 45.71,
+          "merchant": "MaksymD",
+          "completion": 87.33999999999999,
+          "orders": 4866
+        },
+        "izibank": {
+          "price": 45.71,
+          "merchant": "MaksymD",
+          "completion": 87.33999999999999,
+          "orders": 4866
+        },
+        "raiffeisen": {
+          "price": 45.75,
+          "merchant": "UA_CRYPTO_P2P",
+          "completion": 95.56,
+          "orders": 775
+        },
+        "sense": {
+          "price": 45.75,
+          "merchant": "UA_CRYPTO_P2P",
+          "completion": 95.56,
+          "orders": 775
+        },
+        "otp": {
+          "price": 45.75,
+          "merchant": "UA_CRYPTO_P2P",
+          "completion": 95.56,
+          "orders": 775
+        },
+        "sportbank": {
+          "price": 46.05,
+          "merchant": "Kinodrom",
+          "completion": 98.48,
+          "orders": 5006
+        }
+      },
+      "best_sell_by_payment": {
+        "privatbank": {
+          "price": 47.01,
+          "merchant": "Obmen365",
+          "completion": 90.61,
+          "orders": 965
+        },
+        "pumb": {
+          "price": 46.88,
+          "merchant": "Rudfeller",
+          "completion": 82.58,
+          "orders": 332
+        },
+        "monobank": {
+          "price": 46.88,
+          "merchant": "Rudfeller",
+          "completion": 82.58,
+          "orders": 332
+        },
+        "abank": {
+          "price": 46.88,
+          "merchant": "Rudfeller",
+          "completion": 82.58,
+          "orders": 332
+        },
+        "otp": {
+          "price": 46.87,
+          "merchant": "MisterBiznesOfficial",
+          "completion": 94.44,
+          "orders": 374
+        },
+        "sense": {
+          "price": 46.56,
+          "merchant": "KoT_MYAP",
+          "completion": 94.01,
+          "orders": 157
+        },
+        "oschad": {
+          "price": 46.49,
+          "merchant": "GROSS_OBMEN",
+          "completion": 93.07,
+          "orders": 1600
+        },
+        "raiffeisen": {
+          "price": 46.49,
+          "merchant": "GROSS_OBMEN",
+          "completion": 93.07,
+          "orders": 1600
+        },
+        "izibank": {
+          "price": 46.25,
+          "merchant": "UA_CRYPTO_P2P",
+          "completion": 95.56,
+          "orders": 775
+        }
+      }
+    },
+    {
+      "exchange": "KuCoin",
+      "ok": true,
+      "note": "19 купівля / 48 продаж · публічний веб-фід",
+      "buy_offers": 19,
+      "sell_offers": 48,
+      "buy_eligible": 19,
+      "sell_eligible": 44,
+      "best_buy": {
+        "exchange": "KuCoin",
+        "action": "BUY",
+        "price": 46.34,
+        "min_fiat": 400.0,
+        "max_fiat": 30000.0,
+        "merchant": "TOPkukoinTOP",
+        "completion": null,
+        "orders": 54,
+        "payments": [
+          "Monobank",
+          "BANK",
+          "Privat Bank",
+          "Bank Pivdenny",
+          "OschadBank",
+          "PUMB"
+        ],
+        "source": "web-feed"
+      },
+      "best_sell": {
+        "exchange": "KuCoin",
+        "action": "SELL",
+        "price": 45.03,
+        "min_fiat": 500.0,
+        "max_fiat": 200000.0,
+        "merchant": "CryptoGrace",
+        "completion": null,
+        "orders": 27,
+        "payments": [
+          "Sense SuperApp",
+          "Privat Bank",
+          "Monobank",
+          "BANK",
+          "OschadBank",
+          "PUMB"
+        ],
+        "source": "web-feed"
+      },
+      "best_buy_by_payment": {
+        "monobank": {
+          "price": 46.34,
+          "merchant": "TOPkukoinTOP",
+          "completion": null,
+          "orders": 54
+        },
+        "privatbank": {
+          "price": 46.34,
+          "merchant": "TOPkukoinTOP",
+          "completion": null,
+          "orders": 54
+        },
+        "oschad": {
+          "price": 46.34,
+          "merchant": "TOPkukoinTOP",
+          "completion": null,
+          "orders": 54
+        },
+        "pumb": {
+          "price": 46.34,
+          "merchant": "TOPkukoinTOP",
+          "completion": null,
+          "orders": 54
+        },
+        "izibank": {
+          "price": 46.82,
+          "merchant": "Romanexchange",
+          "completion": null,
+          "orders": 10855
+        },
+        "sense": {
+          "price": 46.82,
+          "merchant": "Romanexchange",
+          "completion": null,
+          "orders": 10855
+        }
+      },
+      "best_sell_by_payment": {
+        "sense": {
+          "price": 45.03,
+          "merchant": "CryptoGrace",
+          "completion": null,
+          "orders": 27
+        },
+        "privatbank": {
+          "price": 45.03,
+          "merchant": "CryptoGrace",
+          "completion": null,
+          "orders": 27
+        },
+        "monobank": {
+          "price": 45.03,
+          "merchant": "CryptoGrace",
+          "completion": null,
+          "orders": 27
+        },
+        "oschad": {
+          "price": 45.03,
+          "merchant": "CryptoGrace",
+          "completion": null,
+          "orders": 27
+        },
+        "pumb": {
+          "price": 45.03,
+          "merchant": "CryptoGrace",
+          "completion": null,
+          "orders": 27
+        },
+        "izibank": {
+          "price": 43.35,
+          "merchant": "Romanexchange",
+          "completion": null,
+          "orders": 10855
+        }
+      }
+    },
+    {
+      "exchange": "MEXC",
+      "ok": true,
+      "note": "10 купівля / 9 продаж · публічний веб-фід",
+      "buy_offers": 10,
+      "sell_offers": 9,
+      "buy_eligible": 10,
+      "sell_eligible": 9,
+      "best_buy": {
+        "exchange": "MEXC",
+        "action": "BUY",
+        "price": 42.8,
+        "min_fiat": 2140.0,
+        "max_fiat": 2565.0,
+        "merchant": "🔮Ghost_TRD🔮",
+        "completion": null,
+        "orders": null,
+        "payments": [
+          "128",
+          "131",
+          "130",
+          "146",
+          "135",
+          "133",
+          "137",
+          "129"
+        ],
+        "source": "web-feed"
+      },
+      "best_sell": {
+        "exchange": "MEXC",
+        "action": "SELL",
+        "price": 45.5,
+        "min_fiat": 10000.0,
+        "max_fiat": 18985.0,
+        "merchant": "worm1",
+        "completion": null,
+        "orders": null,
+        "payments": [
+          "129"
+        ],
+        "source": "web-feed"
+      },
+      "best_buy_by_payment": {},
+      "best_sell_by_payment": {}
+    },
+    {
+      "exchange": "WEEX",
+      "ok": true,
+      "note": "0 купівля / 10 продаж · публічний веб-фід",
+      "buy_offers": 0,
+      "sell_offers": 10,
+      "buy_eligible": 0,
+      "sell_eligible": 6,
+      "best_buy": null,
+      "best_sell": {
+        "exchange": "WEEX",
+        "action": "SELL",
+        "price": 44.8,
+        "min_fiat": 4000.0,
+        "max_fiat": 200000.0,
+        "merchant": "⚡iopakit💎",
+        "completion": 100,
+        "orders": 415,
+        "payments": [
+          "128",
+          "129",
+          "130",
+          "131",
+          "132",
+          "134",
+          "135",
+          "136",
+          "146",
+          "133"
+        ],
+        "source": "web-feed"
+      },
+      "best_buy_by_payment": {},
+      "best_sell_by_payment": {}
+    }
+  ],
+  "market_lowest_buy": {
+    "exchange": "MEXC",
+    "action": "BUY",
+    "price": 42.8,
+    "min_fiat": 2140.0,
+    "max_fiat": 2565.0,
+    "merchant": "🔮Ghost_TRD🔮",
+    "completion": null,
+    "orders": null,
+    "payments": [
+      "128",
+      "131",
+      "130",
+      "146",
+      "135",
+      "133",
+      "137",
+      "129"
+    ],
+    "source": "web-feed"
+  },
+  "market_highest_sell": {
+    "exchange": "Binance",
+    "action": "SELL",
+    "price": 53.9,
+    "min_fiat": 734000.0,
+    "max_fiat": 735000.0,
+    "merchant": "HA6OP_B_KOMAHDY_368",
+    "completion": 100,
+    "orders": 1,
+    "payments": [
+      "Monobank (Card)",
+      "Privat Bank (Universal Card)",
+      "PUMB (Card)",
+      "OschadBank (Card)",
+      "A-Bank (Card)"
+    ],
+    "source": "web-feed"
+  },
+  "routes": [
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Bybit",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.77,
+      "gross_spread_pct": 11.612,
+      "net_pct": 11.462,
+      "prefunded_net_pct": 11.462,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "Fast-Order",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 99.0,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "1",
+        "43",
+        "61"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Bybit: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Bybit",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.6,
+      "gross_spread_pct": 11.215,
+      "net_pct": 11.065,
+      "prefunded_net_pct": 11.065,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "CashLogistik",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 99.0,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "1",
+        "43",
+        "60",
+        "61",
+        "14"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Bybit: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.5,
+      "gross_spread_pct": 10.981,
+      "net_pct": 10.831,
+      "prefunded_net_pct": 10.831,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "SilvestrFilin",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 95.6,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "OTP BANK"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.4,
+      "gross_spread_pct": 10.748,
+      "net_pct": 10.598,
+      "prefunded_net_pct": 10.598,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "VertexP2P",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 92.7,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "Privat Bank (IBAN)",
+        "Privat Bank (Universal Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "Binance: completion 92.7%",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.4,
+      "gross_spread_pct": 10.748,
+      "net_pct": 10.598,
+      "prefunded_net_pct": 10.598,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "DP-9999",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 99.0,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "Privat Bank (IBAN)",
+        "Privat Bank (Universal Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.38,
+      "gross_spread_pct": 10.701,
+      "net_pct": 10.551,
+      "prefunded_net_pct": 10.551,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "Angelochek099",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 94.69999999999999,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "Privat Bank (Universal Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "Binance: completion 94.7%",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.35,
+      "gross_spread_pct": 10.631,
+      "net_pct": 10.481,
+      "prefunded_net_pct": 10.481,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "Deagle007k",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 98.8,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "PUMB (IBAN)",
+        "PUMB (Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.33,
+      "gross_spread_pct": 10.584,
+      "net_pct": 10.434,
+      "prefunded_net_pct": 10.434,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "JosephLorusso",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 97.39999999999999,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "PUMB (Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.33,
+      "gross_spread_pct": 10.584,
+      "net_pct": 10.434,
+      "prefunded_net_pct": 10.434,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "ExchangePlayer",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 97.8,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "Privat Bank (IBAN)",
+        "Privat Bank (Universal Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.32,
+      "gross_spread_pct": 10.561,
+      "net_pct": 10.411,
+      "prefunded_net_pct": 10.411,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "Under_San",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 95.8,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "Privat Bank (Universal Card)",
+        "Privat Bank (IBAN)",
+        "PUMB (Card)",
+        "PUMB (IBAN)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.32,
+      "gross_spread_pct": 10.561,
+      "net_pct": 10.411,
+      "prefunded_net_pct": 10.411,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "Krat0s-_-",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 93.30000000000001,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "Privat Bank (Universal Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "Binance: completion 93.3%",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.32,
+      "gross_spread_pct": 10.561,
+      "net_pct": 10.411,
+      "prefunded_net_pct": 10.411,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "pozitive999",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 97.5,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "PUMB (IBAN)",
+        "PUMB (Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.31,
+      "gross_spread_pct": 10.537,
+      "net_pct": 10.387,
+      "prefunded_net_pct": 10.387,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "VIP-Change",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 91.10000000000001,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "PUMB (IBAN)",
+        "PUMB (Card)",
+        "OTP BANK"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "Binance: completion 91.1%",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.3,
+      "gross_spread_pct": 10.514,
+      "net_pct": 10.364,
+      "prefunded_net_pct": 10.364,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "VIP_ObMinn",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 92.2,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "Privat Bank (IBAN)",
+        "Privat Bank (Universal Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "Binance: completion 92.2%",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.24,
+      "gross_spread_pct": 10.374,
+      "net_pct": 10.224,
+      "prefunded_net_pct": 10.224,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "Buy_Sell_UAH",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 94.0,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "Monobank (Card)",
+        "Privat Bank (Universal Card)",
+        "Privat Bank (IBAN)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "Binance: completion 94.0%",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.22,
+      "gross_spread_pct": 10.327,
+      "net_pct": 10.177,
+      "prefunded_net_pct": 10.177,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "X6M0001",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 98.9,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "PUMB (Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.21,
+      "gross_spread_pct": 10.304,
+      "net_pct": 10.154,
+      "prefunded_net_pct": 10.154,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "Vorchyyn",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 97.5,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "OTP BANK"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.2,
+      "gross_spread_pct": 10.28,
+      "net_pct": 10.13,
+      "prefunded_net_pct": 10.13,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "VsiDoMene777",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 98.1,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "Monobank (Card)",
+        "Privat Bank (Universal Card)",
+        "Privat Bank (IBAN)",
+        "Monobank (IBAN)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.2,
+      "gross_spread_pct": 10.28,
+      "net_pct": 10.13,
+      "prefunded_net_pct": 10.13,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "P2P-8f34a0af",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 98.6,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "Privat Bank (Universal Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.19,
+      "gross_spread_pct": 10.257,
+      "net_pct": 10.107,
+      "prefunded_net_pct": 10.107,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "Banka_Kabanka",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 98.9,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "Privat Bank (IBAN)",
+        "OTP BANK",
+        "Monobank (Card)",
+        "Privat Bank (Universal Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.18,
+      "gross_spread_pct": 10.234,
+      "net_pct": 10.084,
+      "prefunded_net_pct": 10.084,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "Kraken4308",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 99.9,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "Privat Bank (IBAN)",
+        "Privat Bank (Universal Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.17,
+      "gross_spread_pct": 10.21,
+      "net_pct": 10.06,
+      "prefunded_net_pct": 10.06,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "zenerr",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 91.8,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "PUMB (Card)",
+        "Privat Bank (Universal Card)",
+        "OTP BANK (IBAN)",
+        "PUMB (IBAN)",
+        "OTP BANK"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "Binance: completion 91.8%",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.16,
+      "gross_spread_pct": 10.187,
+      "net_pct": 10.037,
+      "prefunded_net_pct": 10.037,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "Obmin_Valyut24",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 93.2,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "A-Bank (Card)",
+        "PUMB (Card)",
+        "Privat Bank (Universal Card)",
+        "PUMB (IBAN)",
+        "OTP BANK"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "Binance: completion 93.2%",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.15,
+      "gross_spread_pct": 10.164,
+      "net_pct": 10.014,
+      "prefunded_net_pct": 10.014,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "avladislav4",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 97.5,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "OTP BANK (IBAN)",
+        "PUMB (IBAN)",
+        "OTP BANK",
+        "PUMB (Card)",
+        "Privat Bank (Universal Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    },
+    {
+      "buy_exchange": "MEXC",
+      "sell_exchange": "Binance",
+      "route_type": "CROSS",
+      "buy_price": 42.8,
+      "sell_price": 47.14,
+      "gross_spread_pct": 10.14,
+      "net_pct": 9.99,
+      "prefunded_net_pct": 9.99,
+      "risk_score": 61,
+      "verdict": "REVIEW",
+      "buy_merchant": "🔮Ghost_TRD🔮",
+      "sell_merchant": "The_WOO_",
+      "buy_completion_pct": null,
+      "sell_completion_pct": 98.1,
+      "buy_payments": [
+        "128",
+        "131",
+        "130",
+        "146",
+        "135",
+        "133",
+        "137",
+        "129"
+      ],
+      "sell_payments": [
+        "PUMB (Card)"
+      ],
+      "common_payments": [],
+      "payment_verified": false,
+      "reasons": [
+        "MEXC: web feed may change",
+        "MEXC: completion unknown",
+        "Binance: web feed may change",
+        "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+        "payment compatibility not fully verified",
+        "unusually large spread > 3.00% — manual verification required"
+      ]
+    }
+  ],
+  "top_route": {
+    "buy_exchange": "MEXC",
+    "sell_exchange": "Bybit",
+    "route_type": "CROSS",
+    "buy_price": 42.8,
+    "sell_price": 47.77,
+    "gross_spread_pct": 11.612,
+    "net_pct": 11.462,
+    "prefunded_net_pct": 11.462,
+    "risk_score": 61,
+    "verdict": "REVIEW",
+    "buy_merchant": "🔮Ghost_TRD🔮",
+    "sell_merchant": "Fast-Order",
+    "buy_completion_pct": null,
+    "sell_completion_pct": 99.0,
+    "buy_payments": [
+      "128",
+      "131",
+      "130",
+      "146",
+      "135",
+      "133",
+      "137",
+      "129"
+    ],
+    "sell_payments": [
+      "1",
+      "43",
+      "61"
+    ],
+    "common_payments": [],
+    "payment_verified": false,
+    "reasons": [
+      "MEXC: web feed may change",
+      "MEXC: completion unknown",
+      "Bybit: web feed may change",
+      "cross-exchange transfer fee/network depends on the chosen amount and is not modeled",
+      "payment compatibility not fully verified",
+      "unusually large spread > 3.00% — manual verification required"
+    ]
+  },
+  "route_count": 46050,
+  "shown_routes": 25,
+  "alerts": 4428,
+  "review_count": 8645,
+  "review_spread_pct": 3.0,
+  "market_pages": 3,
+  "offers_per_side": 80,
+  "scan_duration_seconds": 2.57
+}
