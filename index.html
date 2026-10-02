@@ -466,7 +466,7 @@ function aiAnswer(q){
   }
   if(s.includes('найкращ')||s.includes('варіант')||s.includes('маршрут')){
     if(!t)return 'Зараз немає маршруту, який проходить фільтри.';
-    return t.buy_exchange+' → '+t.sell_exchange+'\nКупівля: '+money(t.buy_price)+'\nПродаж: '+money(t.sell_price)+'\nЧистими: '+pct(t.net_pct)+' ≈ '+money(t.net_profit_fiat)+' '+(d.fiat||'UAH')+'\nРизик: '+t.risk_score+'/100\nСтатус: '+verdictUk(t.verdict);
+    return t.buy_exchange+' → '+t.sell_exchange+'\nКупівля: '+money(t.buy_price)+'\nПродаж: '+money(t.sell_price)+'\nСпред після буфера: '+pct(t.net_pct)+'\nРизик: '+t.risk_score+'/100\nСтатус: '+verdictUk(t.verdict);
   }
   if(s.includes('актив')||s.includes('бірж')){
     const full=active.filter(x=>Number(x.buy_offers||0)>0&&Number(x.sell_offers||0)>0);
