@@ -172,7 +172,29 @@ def scan():
     if did:git_push()
     print(f"[{datetime.now(KYIV):%H:%M:%S}] "+', '.join(f"{p['exchange']}:{'OK' if p['ok'] else 'OFF'}" for p in ps)+(f" | {top['buy_exchange']}->{top['sell_exchange']} net={top['net_pct']:+.2f}% risk={top['risk_score']} {top['verdict']}" if top else ' | no route'),flush=True)
 
+def bank_command(action):
+    b=bank_state()
+    if action=='cycle-done':
+        b['confirmed_cycles']=int(b.get('confirmed_cycles',0))+1
+        b['confirmed_transfers']=int(b.get('confirmed_transfers',0))+BANK_PER_CYCLE
+        b['last_cycle_ts']=time.time()
+        if b['confirmed_transfers']>=BANK_MAX:
+            b['paused']=True
+            b['pause_reason']=f'daily protective threshold reached: {b["confirmed_transfers"]}/{BANK_MAX}'
+    elif action=='pause':
+        b['paused']=True; b['pause_reason']='manual pause'
+    elif action=='resume':
+        b['paused']=False; b['pause_reason']=''
+    elif action=='reset-bank':
+        b={'date':datetime.now(KYIV).date().isoformat(),'confirmed_cycles':0,'confirmed_transfers':0,'alerts_sent':0,'paused':False,'pause_reason':'','last_cycle_ts':0}
+    save_bank(b)
+    bg=bank_guard(b)
+    print(json.dumps(bg,ensure_ascii=False,indent=2))
+    return 0
+
 def main():
+    if len(os.sys.argv)>1 and os.sys.argv[1] in {'cycle-done','pause','resume','reset-bank'}:
+        return bank_command(os.sys.argv[1])
     print(f'MYSHKA P2P RADAR — {ASSET}/{FIAT}, {CAPITAL:.0f} {FIAT}, scan {INTERVAL}s, NO AUTO-TRADE',flush=True)
     while True:
       try:scan()
