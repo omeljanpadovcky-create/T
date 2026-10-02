@@ -19,7 +19,14 @@ jobs:
           s.headers.update({'User-Agent':'Mozilla/5.0','Referer':'https://www.binance.com/'})
           u='https://www.binance.com/bapi/c2c/v1/public/c2c/agent/ad-list'
           for side in ['BUY','SELL']:
-            r=s.get(u,params={'fiat':'UAH','asset':'USDT','tradeType':side,'limit':5},timeout=20)
+            r=s.get(u,params={'fiat':'UAH','asset':'USDT','tradeType':side,'limit':100},timeout=20)
             print('\n===',side,'HTTP',r.status_code,'===')
-            print(r.text[:18000])
+            raw=r.json(); items=(raw.get('data') or {}).get('items') or []
+            print('COUNT',len(items))
+            fit=[]
+            for a in items:
+              p=float(a.get('price') or 0); mn=float(a.get('minTransAmount') or 0)*p; mx=float(a.get('maxTransAmount') or 0)*p
+              if mn<=4500<=mx: fit.append((a.get('price'),a.get('minTransAmount'),a.get('maxTransAmount'),a.get('advertiser',{}).get('nickName')))
+            print('FIT_4500',fit[:20])
+            print(json.dumps(items[:10],ensure_ascii=False)[:18000])
           PY
