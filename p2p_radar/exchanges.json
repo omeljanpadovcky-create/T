@@ -38,13 +38,6 @@
       "sell_url": "https://www.kucoin.com/uk/otc/sell/USDT-UAH"
     },
     {
-      "id": "gate",
-      "name": "Gate",
-      "enabled": true,
-      "buy_url": "https://www.gate.com/uk/p2p",
-      "sell_url": "https://www.gate.com/uk/p2p"
-    },
-    {
       "id": "mexc",
       "name": "MEXC",
       "enabled": true,
