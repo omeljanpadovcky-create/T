@@ -59,20 +59,6 @@
       "sell_url": "https://www.htx.com/fiat-crypto/trade/"
     },
     {
-      "id": "bingx",
-      "name": "BingX",
-      "enabled": true,
-      "buy_url": "https://fiat.bingx.com/en/p2p",
-      "sell_url": "https://fiat.bingx.com/en/p2p"
-    },
-    {
-      "id": "lbank",
-      "name": "LBank",
-      "enabled": true,
-      "buy_url": "https://www.lbank.com/uk/crypto/buy",
-      "sell_url": "https://www.lbank.com/uk/crypto/buy"
-    },
-    {
       "id": "toobit",
       "name": "Toobit",
       "enabled": true,
