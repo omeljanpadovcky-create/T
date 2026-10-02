@@ -44,7 +44,7 @@
 </div>
 <script>
 const $=id=>document.getElementById(id);const money=n=>Number(n||0).toFixed(2);const pct=n=>(Number(n||0)>=0?'+':'')+Number(n||0).toFixed(2)+'%';
-let EXCHANGE_DIRECTORY=[];let LAST_RADAR_DATA=null;
+let EXCHANGE_DIRECTORY=[{"id":"binance","name":"Binance","buy_url":"https://p2p.binance.com/trade/buy/USDT?fiat=UAH&payment=all-payments","sell_url":"https://p2p.binance.com/trade/sell/USDT?fiat=UAH&payment=all-payments","enabled":true},{"id":"bybit","name":"Bybit","buy_url":"https://www.bybit.com/fiat/trade/otc/","sell_url":"https://www.bybit.com/fiat/trade/otc/","enabled":true},{"id":"okx","name":"OKX","buy_url":"https://www.okx.com/ua/p2p-markets/uah/buy-usdt","sell_url":"https://www.okx.com/ua/p2p-markets/uah/sell-usdt","enabled":true},{"id":"bitget","name":"Bitget","buy_url":"https://www.bitget.com/uk/p2p-trade?paymethodIds=-1&fiatName=UAH","sell_url":"https://www.bitget.com/uk/p2p-trade?paymethodIds=-1&fiatName=UAH","enabled":true},{"id":"kucoin","name":"KuCoin","buy_url":"https://www.kucoin.com/uk/otc/buy/USDT-UAH","sell_url":"https://www.kucoin.com/uk/otc/sell/USDT-UAH","enabled":true},{"id":"gate","name":"Gate","buy_url":"https://www.gate.com/uk/p2p","sell_url":"https://www.gate.com/uk/p2p","enabled":true},{"id":"mexc","name":"MEXC","buy_url":"https://www.mexc.com/uk-UA/buy-crypto/p2p","sell_url":"https://www.mexc.com/uk-UA/buy-crypto/p2p","enabled":true},{"id":"htx","name":"HTX","buy_url":"https://www.htx.com/fiat-crypto/trade/","sell_url":"https://www.htx.com/fiat-crypto/trade/","enabled":true},{"id":"bingx","name":"BingX","buy_url":"https://fiat.bingx.com/en/p2p","sell_url":"https://fiat.bingx.com/en/p2p","enabled":true},{"id":"lbank","name":"LBank","buy_url":"https://www.lbank.com/uk/crypto/buy","sell_url":"https://www.lbank.com/uk/crypto/buy","enabled":true},{"id":"toobit","name":"Toobit","buy_url":"https://www.toobit.com/en-US/p2p","sell_url":"https://www.toobit.com/en-US/p2p","enabled":true},{"id":"bitunix","name":"Bitunix","buy_url":"https://www.bitunix.com/p2p/p2p-trade","sell_url":"https://www.bitunix.com/p2p/p2p-trade","enabled":true},{"id":"weex","name":"WEEX","buy_url":"https://www.weex.com/buy-crypto/trading","sell_url":"https://www.weex.com/buy-crypto/sell/USDT","enabled":true}];let LAST_RADAR_DATA=null;
 function exchangeUrl(ex,action){
   ex=String(ex||'').toLowerCase();const a=String(action||'BUY').toUpperCase();
   const item=EXCHANGE_DIRECTORY.find(x=>String(x.id||'').toLowerCase()===ex || String(x.name||'').toLowerCase()===ex);
@@ -54,14 +54,24 @@ function exchangeUrl(ex,action){
   if(ex==='okx')return a==='SELL'?'https://www.okx.com/ua/p2p-markets/uah/sell-usdt':'https://www.okx.com/ua/p2p-markets/uah/buy-usdt';
   return '#';
 }
+function renderExchangeDirectory(){
+  $('exchangeDirectory').innerHTML=EXCHANGE_DIRECTORY.map(x=>`<div class="exchangeCard"><b>${x.name||x.id}</b><div class="exchangeLinks"><a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${x.buy_url||'#'}">КУПИТИ / P2P</a><a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${x.sell_url||x.buy_url||'#'}">ПРОДАТИ / P2P</a></div></div>`).join('');
+}
 async function loadExchangeDirectory(){
+  renderExchangeDirectory();
   try{
     const r=await fetch('https://raw.githubusercontent.com/omeljanpadovcky-create/T/main/p2p_radar/exchanges.json?t='+Date.now(),{cache:'no-store'});
     if(!r.ok)throw Error('HTTP '+r.status);
-    const d=await r.json();EXCHANGE_DIRECTORY=(d.exchanges||[]).filter(x=>x.enabled!==false);
-    $('exchangeDirectory').innerHTML=EXCHANGE_DIRECTORY.map(x=>`<div class="exchangeCard"><b>${x.name||x.id}</b><div class="exchangeLinks"><a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${x.buy_url||'#'}">КУПИТИ / P2P</a><a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${x.sell_url||x.buy_url||'#'}">ПРОДАТИ / P2P</a></div></div>`).join('');
+    const d=await r.json();
+    const fresh=(d.exchanges||[]).filter(x=>x.enabled!==false);
+    if(fresh.length)EXCHANGE_DIRECTORY=fresh;
+    renderExchangeDirectory();
     if(LAST_RADAR_DATA)render(LAST_RADAR_DATA);
-  }catch(e){$('exchangeDirectory').innerHTML='<div class="empty">Список бірж тимчасово недоступний</div>'}
+  }catch(e){
+    // Embedded links remain available even when raw.githubusercontent.com is blocked.
+    renderExchangeDirectory();
+    if(LAST_RADAR_DATA)render(LAST_RADAR_DATA);
+  }
 }
 function clickKey(){const d=new Date(),y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return 'myshka_p2p_link_clicks_'+y+'-'+m+'-'+day}
 function routeLinkClick(){
