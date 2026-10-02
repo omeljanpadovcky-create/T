@@ -29,6 +29,8 @@ jobs:
       P2P_ASSET: USDT
       P2P_EXCHANGES: 'binance,bybit,okx,kucoin,mexc,weex'
       P2P_SCAN_SECONDS: '15'
+      P2P_MARKET_PAGES: '3'
+      P2P_KEEP_OFFERS_PER_SIDE: '60'
       P2P_MIN_NET_PCT: '0.35'
       P2P_MAX_RISK: '60'
       P2P_MIN_COMPLETION: '90'
