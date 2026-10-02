@@ -532,7 +532,7 @@ def payment_match(a,b):
     return True,sorted(ka&kb),False
 
 def routes(providers):
-    buys=[o for p in providers if p['ok'] for o in p['buy']]; sells=[o for p in providers if p['ok'] for o in p['sell']]; out=[]
+    buys=[o for p in providers if p['ok'] for o in p['buy'] if route_eligible(o)]; sells=[o for p in providers if p['ok'] for o in p['sell'] if route_eligible(o)]; out=[]
     for b in buys:
       for s in sells:
         pay_ok,common_payments,pay_known=payment_match(b.payments,s.payments)
@@ -572,7 +572,9 @@ def routes(providers):
     return unique
 
 def public_provider(p):
-    return {'exchange':p['exchange'],'ok':p['ok'],'note':p['note'],'buy_offers':len(p['buy']),'sell_offers':len(p['sell']),'best_buy':asdict(p['buy'][0]) if p['buy'] else None,'best_sell':asdict(p['sell'][0]) if p['sell'] else None}
+    buy_ok=[o for o in p['buy'] if route_eligible(o)]
+    sell_ok=[o for o in p['sell'] if route_eligible(o)]
+    return {'exchange':p['exchange'],'ok':p['ok'],'note':p['note'],'buy_offers':len(p['buy']),'sell_offers':len(p['sell']),'buy_eligible':len(buy_ok),'sell_eligible':len(sell_ok),'best_buy':asdict(p['buy'][0]) if p['buy'] else None,'best_sell':asdict(p['sell'][0]) if p['sell'] else None}
 def state():
     try:return json.loads(STATE.read_text(encoding='utf-8'))
     except:return {}
