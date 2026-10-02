@@ -66,13 +66,6 @@
       "sell_url": "https://www.toobit.com/en-US/p2p"
     },
     {
-      "id": "bitunix",
-      "name": "Bitunix",
-      "enabled": true,
-      "buy_url": "https://www.bitunix.com/p2p/p2p-trade",
-      "sell_url": "https://www.bitunix.com/p2p/p2p-trade"
-    },
-    {
       "id": "weex",
       "name": "WEEX",
       "enabled": true,
