@@ -1,0 +1,25 @@
+name: Binance P2P schema probe
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/binance-p2p-schema-probe.yml'
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install requests
+      - name: Inspect Binance UAH P2P limits
+        run: |
+          python - <<'PY'
+          import requests,json
+          s=requests.Session()
+          s.headers.update({'User-Agent':'Mozilla/5.0','Referer':'https://www.binance.com/'})
+          u='https://www.binance.com/bapi/c2c/v1/public/c2c/agent/ad-list'
+          for side in ['BUY','SELL']:
+            r=s.get(u,params={'fiat':'UAH','asset':'USDT','tradeType':side,'limit':5},timeout=20)
+            print('\n===',side,'HTTP',r.status_code,'===')
+            print(r.text[:18000])
+          PY
