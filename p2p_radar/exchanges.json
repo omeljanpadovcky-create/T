@@ -91,7 +91,7 @@
       "name": "WEEX",
       "enabled": true,
       "buy_url": "https://www.weex.com/buy-crypto/trading",
-      "sell_url": "https://www.weex.com/buy-crypto/trading"
+      "sell_url": "https://www.weex.com/buy-crypto/sell/USDT"
     }
   ]
 }
