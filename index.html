@@ -25,7 +25,7 @@
 </section>
 <section class="grid">
   <div class="card glass"><div class="title"><div><h2>🎯 Найкращий варіант зараз</h2><div class="sub">Мишка лише знаходить і рахує варіант. Угоду ти відкриваєш сам.</div></div><span class="badge" id="verdict">ОЧІКУВАННЯ</span></div><div class="hero" id="hero"><div class="empty">Запусти <b>START_P2P_RADAR.bat</b> на комп'ютері — тут з'явиться живий скан.</div></div></div>
-  <div class="card glass"><div class="title"><div><h2>🔌 Біржі</h2><div class="sub">АКТИВНО = є живі P2P-дані. АКТИВНО · 0 ОГОЛОШЕНЬ = джерело працює, але зараз нічого не пройшло фільтри. P2P СТОРІНКА = тільки пряме відкриття біржі.</div></div></div><div class="providers" id="providers"></div></div>
+  <div class="card glass"><div class="title"><div><h2>🔌 Біржі</h2><div class="sub">АКТИВНО = є живі P2P-дані. Числа показують лише оголошення, що пройшли фільтри Мишки — це не означає, що на самій біржі немає інших пропозицій. P2P СТОРІНКА = тільки пряме відкриття біржі.</div></div></div><div class="providers" id="providers"></div></div>
 </section>
 <section class="card glass" style="margin-top:12px"><div class="title"><div><h2>📡 Усі знайдені варіанти</h2><div class="sub" id="summary">Очікування даних</div></div></div><div class="routesGrid" id="routes"><div class="routeEmpty">Немає скану</div></div></section>
 <div class="foot glass"><b>Як рахується:</b> ціна продажу − ціна купівлі − орієнтовні витрати − переказ USDT − запас безпеки. Аномальний спред понад поріг перевірки не позначається як готовий сигнал — він отримує статус «ПОТРІБНА ПЕРЕВІРКА». Перед оплатою завжди перевіряй живе оголошення, спосіб оплати, ліміти та реквізити.</div>
@@ -183,14 +183,14 @@ function render(d){LAST_RADAR_DATA=d;$('market').textContent=(d.asset||'USDT')+'
      label='АКТИВНО';cls='ok';
      note=(noteUk(p.note)||'живі P2P-дані').replace('публічний веб-фід','живі P2P-дані');
    }else if(p.ok&&b===0&&s===0){
-     label='АКТИВНО · 0 ОГОЛОШЕНЬ';cls='warn';
-     note='джерело працює, але зараз нічого не пройшло фільтри';
+     label='АКТИВНО · ПІСЛЯ ФІЛЬТРІВ 0/0';cls='warn';
+     note='живий фід працює · зараз 0 купівель і 0 продажів пройшли фільтри Мишки';
    }else if(p.ok&&b===0){
-     label='АКТИВНО · ЛИШЕ ПРОДАЖ';cls='warn';
-     note=`0 купівля / ${s} продаж · для маршруту потрібні обидві сторони`;
+     label='АКТИВНО · ПІСЛЯ ФІЛЬТРІВ';cls='warn';
+     note=`після фільтрів: 0 купівля / ${s} продаж · на біржі можуть бути й інші оголошення`;
    }else if(p.ok&&s===0){
-     label='АКТИВНО · ЛИШЕ КУПІВЛЯ';cls='warn';
-     note=`${b} купівля / 0 продаж · для маршруту потрібні обидві сторони`;
+     label='АКТИВНО · ПІСЛЯ ФІЛЬТРІВ';cls='warn';
+     note=`після фільтрів: ${b} купівля / 0 продаж · на біржі можуть бути й інші оголошення`;
    }
    return `<div class="provider"><b>${exchangeLabel(p.exchange)}</b><span class="state ${cls}">${label}</span><span>${note}</span><div class="exchangeLinks"><a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(p.exchange,'BUY')}">КУПИТИ ↗</a><a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(p.exchange,'SELL')}">ПРОДАТИ ↗</a></div></div>`;
  }).join('')||'<div class="empty">Немає провайдерів</div>';
