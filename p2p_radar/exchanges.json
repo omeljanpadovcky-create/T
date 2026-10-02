@@ -6,8 +6,8 @@
       "id": "binance",
       "name": "Binance",
       "enabled": true,
-      "buy_url": "https://p2p.binance.com/en/trade/all-payments/USDT?fiat=UAH",
-      "sell_url": "https://p2p.binance.com/en/trade/all-payments/USDT?fiat=UAH"
+      "buy_url": "https://p2p.binance.com/trade/buy/USDT?fiat=UAH&payment=all-payments",
+      "sell_url": "https://p2p.binance.com/trade/sell/USDT?fiat=UAH&payment=all-payments"
     },
     {
       "id": "bybit",
