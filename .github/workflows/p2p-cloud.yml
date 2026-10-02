@@ -23,7 +23,7 @@ concurrency:
 jobs:
   cloud-radar:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 6
     env:
       P2P_FIAT: UAH
       P2P_ASSET: USDT
@@ -121,7 +121,7 @@ jobs:
             printf "{}\n" > latest.json
             git add .
             git commit -q -m "MYSHKA live data"
-            git push -q --force origin HEAD:live-data
+            timeout 20s git push -q --force origin HEAD:live-data || true
           fi
 
           # If an old non-dedicated live-data branch exists, reset it to a tiny orphan branch.
@@ -187,7 +187,7 @@ jobs:
 
           # Keep this runner alive long enough that the next 5-minute scheduled run
           # is normally already queued. That removes dependency on the user's PC.
-          END=$((SECONDS+270))
+          END=$((SECONDS+240))
           while [ "$SECONDS" -lt "$END" ]; do
             sleep 15
             publish_live || true
@@ -199,7 +199,9 @@ jobs:
           done
 
           publish_live || true
-          kill -INT "$RADAR_PID" 2>/dev/null || true
+          kill -TERM "$RADAR_PID" 2>/dev/null || true
+          sleep 2
+          kill -KILL "$RADAR_PID" 2>/dev/null || true
           wait "$RADAR_PID" 2>/dev/null || true
 
       - name: Scanner log
