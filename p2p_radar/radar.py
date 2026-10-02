@@ -1063,9 +1063,9 @@ def main():
         return bank_command(args[0])
     if '--once' in args:
         scan();return 0
-    if TG_TOKEN and TG_CHAT:
+    if TG_TOKEN:
         threading.Thread(target=telegram_control_loop,name='myshka-p2p-telegram',daemon=True).start()
-    print(f'MYSHKA P2P RADAR V2 — {ASSET}/{FIAT}, no fixed trade amount, scan {INTERVAL}s, Telegram control ON={bool(TG_TOKEN and TG_CHAT)}, NO AUTO-TRADE',flush=True)
+    print(f'MYSHKA P2P RADAR V2 — {ASSET}/{FIAT}, no fixed trade amount, scan {INTERVAL}s, Telegram bot ON={bool(TG_TOKEN)}, owner alerts ON={bool(TG_TOKEN and TG_CHAT)}, NO AUTO-TRADE',flush=True)
     while True:
       tick=time.time()
       try:scan()
