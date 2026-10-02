@@ -1,5 +1,6 @@
 from __future__ import annotations
 import base64, csv, hashlib, hmac, json, os, subprocess, threading, time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from pathlib import Path
@@ -734,13 +735,17 @@ def git_push():
     except Exception as e:print('GIT:',e,flush=True)
 
 def scan():
-    ts=datetime.now(KYIV).isoformat(timespec='seconds'); ids=configured_exchange_ids(); ps=[provider_for(x) for x in ids]; rs=routes(ps); top=rs[0] if rs else None
+    started=time.time(); ts=datetime.now(KYIV).isoformat(timespec='seconds'); ids=configured_exchange_ids()
+    # Scan all configured exchanges in parallel so a full market refresh can stay close to 15 s.
+    with ThreadPoolExecutor(max_workers=max(1,min(8,len(ids)))) as pool:
+        ps=list(pool.map(provider_for,ids))
+    rs=routes(ps); top=rs[0] if rs else None
     b=bank_state(); bg=bank_guard(b)
     if bg['paused'] and top and top['verdict']=='ALERT':
         top=dict(top); top['verdict']='PAUSE_BANK_GUARD'; top['reasons']=([bg['reason']] if bg['reason'] else ['Bank Guard paused actionable alerts'])+list(top.get('reasons') or [])
     elif bg['cooldown_remaining_seconds']>0 and top and top['verdict']=='ALERT':
         top=dict(top); top['verdict']='COOLDOWN'; top['reasons']=[f"Bank Guard cooldown {bg['cooldown_remaining_seconds']//60+1} min remaining"]+list(top.get('reasons') or [])
-    snap={'version':'MYSHKA_P2P_RADAR_V4','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'capital_fiat':CAPITAL,'mode':'ХМАРНИЙ СКАНЕР 24/7','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'route_count':len(rs),'shown_routes':min(25,len(rs)),'alerts':sum(x['verdict']=='ALERT' for x in rs),'review_count':sum(x['verdict']=='REVIEW' for x in rs),'review_spread_pct':REVIEW_SPREAD,'market_pages':MARKET_PAGES,'offers_per_side':KEEP_PER_SIDE}
+    snap={'version':'MYSHKA_P2P_RADAR_V4','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'capital_fiat':CAPITAL,'mode':'ХМАРНИЙ СКАНЕР 24/7','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'route_count':len(rs),'shown_routes':min(25,len(rs)),'alerts':sum(x['verdict']=='ALERT' for x in rs),'review_count':sum(x['verdict']=='REVIEW' for x in rs),'review_spread_pct':REVIEW_SPREAD,'market_pages':MARKET_PAGES,'offers_per_side':KEEP_PER_SIDE,'scan_duration_seconds':round(time.time()-started,2)}
     LATEST.write_text(json.dumps(snap,ensure_ascii=False,indent=2),encoding='utf-8'); history(snap); st=state(); now=time.time(); did=False
     if top and top['verdict']=='ALERT' and (st.get('last_route')!=f"{top['buy_exchange']}->{top['sell_exchange']}" or now-float(st.get('last_alert',0))>=600):
       ok,msg=telegram(tg_text(top,ts,bg),telegram_keyboard(top)); report(snap); print('TELEGRAM:',msg,flush=True); did=True
@@ -770,8 +775,10 @@ def main():
         threading.Thread(target=telegram_control_loop,name='myshka-p2p-telegram',daemon=True).start()
     print(f'MYSHKA P2P RADAR V2 — {ASSET}/{FIAT}, {CAPITAL:.0f} {FIAT}, scan {INTERVAL}s, Telegram control ON={bool(TG_TOKEN and TG_CHAT)}, NO AUTO-TRADE',flush=True)
     while True:
+      tick=time.time()
       try:scan()
       except KeyboardInterrupt:return
       except Exception as e:print('SCAN ERROR:',e,flush=True)
-      time.sleep(INTERVAL)
+      # Keep scan starts on an approximately 15-second cadence instead of sleeping 15 s after a scan finishes.
+      time.sleep(max(0,INTERVAL-(time.time()-tick)))
 if __name__=='__main__':main()
