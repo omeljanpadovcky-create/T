@@ -19,7 +19,6 @@ def ei(k,d):
 def eb(k,d='0'):return os.getenv(k,d).lower() in ('1','true','yes','on')
 FIAT=os.getenv('P2P_FIAT','UAH').upper(); ASSET=os.getenv('P2P_ASSET','USDT').upper(); CAPITAL=ef('P2P_CAPITAL_FIAT','4500')
 EXCHANGES_FILE=HERE/os.getenv('P2P_EXCHANGES_FILE','exchanges.json')
-REQUIRE_LIMIT_FIT=eb('P2P_REQUIRE_CAPITAL_LIMITS','0')
 INTERVAL=max(10,ei('P2P_SCAN_SECONDS','15')); MIN_NET=ef('P2P_MIN_NET_PCT','0.35'); MAX_RISK=ei('P2P_MAX_RISK','60'); REVIEW_SPREAD=ef('P2P_REVIEW_SPREAD_PCT','3.0')
 MIN_RATE=ef('P2P_MIN_COMPLETION','90'); MIN_ORDERS=ei('P2P_MIN_ORDERS','10'); XFER=ef('P2P_TRANSFER_FEE_USDT','1')
 BUFFER=ef('P2P_SAFETY_BUFFER_PCT','0.15'); TG_TOKEN=os.getenv('TELEGRAM_BOT_TOKEN') or os.getenv('TG_BOT_TOKEN','')
@@ -38,7 +37,7 @@ S=requests.Session(); S.headers['User-Agent']='Mozilla/5.0 Myshka-P2P-Radar/2.0'
 @dataclass
 class Offer:
     exchange:str; action:str; price:float; min_fiat:float; max_fiat:float; merchant:str; completion:float|None; orders:int|None; payments:list[str]; source:str
-    def fits(self): return self.price>0 and (not REQUIRE_LIMIT_FIT or self.min_fiat<=CAPITAL<=(self.max_fiat or 1e99))
+    def fits(self): return self.price>0
 
 def num(x,d=0.0):
     try:return float(str(x).replace(',','.'))
