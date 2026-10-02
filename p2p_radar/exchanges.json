@@ -24,13 +24,6 @@
       "sell_url": "https://www.okx.com/ua/p2p-markets/uah/sell-usdt"
     },
     {
-      "id": "bitget",
-      "name": "Bitget",
-      "enabled": true,
-      "buy_url": "https://www.bitget.com/uk/p2p-trade?paymethodIds=-1&fiatName=UAH",
-      "sell_url": "https://www.bitget.com/uk/p2p-trade?paymethodIds=-1&fiatName=UAH"
-    },
-    {
       "id": "kucoin",
       "name": "KuCoin",
       "enabled": true,
