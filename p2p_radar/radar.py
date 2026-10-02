@@ -48,8 +48,11 @@ def rate(x):
     if v<0:return None
     return min(100,max(0,v*100 if v<=1 else v))
 def keep(xs,action):
-    xs=[x for x in xs if x.fits() and (x.completion is None or x.completion>=MIN_RATE) and (x.orders is None or x.orders>=MIN_ORDERS)]
+    xs=[x for x in xs if x.fits()]
     return sorted(xs,key=lambda x:x.price,reverse=action=='SELL')[:KEEP_PER_SIDE]
+
+def route_eligible(o):
+    return (o.completion is None or o.completion>=MIN_RATE) and (o.orders is None or o.orders>=MIN_ORDERS)
 
 def binance():
     if not eb('P2P_BINANCE_ENABLED','1'):
