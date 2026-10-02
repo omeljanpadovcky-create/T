@@ -23,7 +23,7 @@ EXCHANGES_FILE=HERE/os.getenv('P2P_EXCHANGES_FILE','exchanges.json')
 INTERVAL=max(10,ei('P2P_SCAN_SECONDS','15')); MARKET_PAGES=max(1,min(5,ei('P2P_MARKET_PAGES','3'))); KEEP_PER_SIDE=max(15,min(60,ei('P2P_KEEP_OFFERS_PER_SIDE','60'))); MIN_NET=ef('P2P_MIN_NET_PCT','0.35'); MAX_RISK=ei('P2P_MAX_RISK','60'); REVIEW_SPREAD=ef('P2P_REVIEW_SPREAD_PCT','3.0')
 MIN_RATE=ef('P2P_MIN_COMPLETION','90'); MIN_ORDERS=ei('P2P_MIN_ORDERS','10')
 BUFFER=ef('P2P_SAFETY_BUFFER_PCT','0.15'); TG_TOKEN=os.getenv('TELEGRAM_BOT_TOKEN') or os.getenv('TG_BOT_TOKEN','')
-TG_CHAT=os.getenv('TELEGRAM_CHAT_ID') or os.getenv('TG_CHAT_ID','')
+TG_CHAT=os.getenv('TELEGRAM_CHAT_ID') or os.getenv('TG_CHAT_ID',''); TG_TOP_N=max(1,min(10,ei('P2P_TELEGRAM_TOP_N','5')))
 BY_KEY=os.getenv('BYBIT_API_KEY',''); BY_SECRET=os.getenv('BYBIT_API_SECRET','')
 BITGET_KEY=os.getenv('BITGET_API_KEY',''); BITGET_SECRET=os.getenv('BITGET_API_SECRET',''); BITGET_PASS=os.getenv('BITGET_API_PASSPHRASE','')
 GATE_KEY=os.getenv('GATE_API_KEY',''); GATE_SECRET=os.getenv('GATE_API_SECRET','')
@@ -745,6 +745,22 @@ def telegram_control_loop():
         except Exception as e:
             print('TELEGRAM CONTROL:',e,flush=True);time.sleep(4)
 
+def tg_digest(routes,ts,bg):
+    rows=[]
+    for i,r in enumerate(routes[:TG_TOP_N],1):
+        pay=', '.join(r.get('common_payments') or []) if r.get('payment_verified') else 'перевірити'
+        rows.append(
+            f"{i}. {r['buy_exchange']} → {r['sell_exchange']}\n"
+            f"КУПИТИ {r['buy_price']:.4f} · ПРОДАТИ {r['sell_price']:.4f}\n"
+            f"Спред {r['gross_spread_pct']:+.2f}% · після буфера {r['net_pct']:+.2f}%\n"
+            f"Оплата: {pay} · ризик {r['risk_score']}/100"
+        )
+    return (
+        f"🐭 MYSHKA P2P — ТОП {len(routes[:TG_TOP_N])}\n"
+        f"{ASSET}/{FIAT} · {ts}\n\n" + "\n\n".join(rows) +
+        f"\n\nЗахист переказів: {bg['level']} · {bg['confirmed_transfers']}/{bg['max_transfers']} сьогодні"
+    )
+
 def tg_text(r,ts,bg):
     kind='НА ОДНІЙ БІРЖІ' if r.get('route_type')=='INTRA' else 'МІЖ БІРЖАМИ'
     verdict={'ALERT':'Є ВАРІАНТ','PREFUNDED_ONLY':'ЛИШЕ З ГОТОВИМ БАЛАНСОМ','DROP':'НЕ ВИГІДНО'}.get(r.get('verdict'),r.get('verdict'))
@@ -783,10 +799,13 @@ def scan():
         top=dict(top); top['verdict']='COOLDOWN'; top['reasons']=[f"Bank Guard cooldown {bg['cooldown_remaining_seconds']//60+1} min remaining"]+list(top.get('reasons') or [])
     snap={'version':'MYSHKA_P2P_RADAR_V4','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'mode':'ХМАРНИЙ СКАНЕР 24/7','bank_guard':bg,'providers':[public_provider(x) for x in ps],'market_lowest_buy':low_buy,'market_highest_sell':high_sell,'routes':rs[:25],'top_route':top,'route_count':len(rs),'shown_routes':min(25,len(rs)),'alerts':sum(x['verdict']=='ALERT' for x in rs),'review_count':sum(x['verdict']=='REVIEW' for x in rs),'review_spread_pct':REVIEW_SPREAD,'market_pages':MARKET_PAGES,'offers_per_side':KEEP_PER_SIDE,'scan_duration_seconds':round(time.time()-started,2)}
     LATEST.write_text(json.dumps(snap,ensure_ascii=False,indent=2),encoding='utf-8'); history(snap); st=state(); now=time.time(); did=False
-    if top and top['verdict']=='ALERT' and (st.get('last_route')!=f"{top['buy_exchange']}->{top['sell_exchange']}" or now-float(st.get('last_alert',0))>=600):
-      ok,msg=telegram(tg_text(top,ts,bg),telegram_keyboard(top)); report(snap); print('TELEGRAM:',msg,flush=True); did=True
+    tg_routes=[r for r in rs if r.get('verdict')=='ALERT'][:TG_TOP_N]
+    tg_signature='|'.join(f"{r['buy_exchange']}:{r['sell_exchange']}:{r['buy_price']}:{r['sell_price']}:{r['buy_merchant']}:{r['sell_merchant']}" for r in tg_routes)
+    can_alert=(not bg['paused'] and bg['cooldown_remaining_seconds']<=0)
+    if tg_routes and can_alert and (st.get('last_tg_signature')!=tg_signature or now-float(st.get('last_alert',0))>=600):
+      ok,msg=telegram(tg_digest(tg_routes,ts,bg),telegram_keyboard(tg_routes[0])); report(snap); print('TELEGRAM:',msg,flush=True); did=True
       if ok:
-        st['last_route']=f"{top['buy_exchange']}->{top['sell_exchange']}"; st['last_alert']=now
+        st['last_tg_signature']=tg_signature; st['last_alert']=now
         b['alerts_sent']=int(b.get('alerts_sent',0))+1; save_bank(b)
     if now-float(st.get('last_report',0))>=900:report(snap);st['last_report']=now;did=True
     if eb('P2P_GIT_PUSH','0') and now-float(st.get('last_git_sync',0))>=GIT_SYNC_SECONDS:
