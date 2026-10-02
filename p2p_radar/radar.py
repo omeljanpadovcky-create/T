@@ -1,5 +1,5 @@
 from __future__ import annotations
-import csv, json, os, subprocess, time
+import csv, json, os, subprocess, threading, time
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from pathlib import Path
@@ -23,8 +23,9 @@ BUFFER=ef('P2P_SAFETY_BUFFER_PCT','0.15'); TG_TOKEN=os.getenv('TELEGRAM_BOT_TOKE
 TG_CHAT=os.getenv('TELEGRAM_CHAT_ID') or os.getenv('TG_CHAT_ID',''); BY_KEY=os.getenv('BYBIT_API_KEY',''); BY_SECRET=os.getenv('BYBIT_API_SECRET','')
 LATEST=HERE/'latest.json'; HIST=HERE/'history.csv'; REPORTS=HERE/'reports'; STATE=HERE/'state.json'; BANK=HERE/'bank_guard.json'; REPORTS.mkdir(exist_ok=True)
 BANK_WARN=max(1,ei('P2P_BANK_WARN_TRANSFERS_PER_DAY','4')); BANK_MAX=max(BANK_WARN,ei('P2P_BANK_MAX_TRANSFERS_PER_DAY','6'))
-BANK_PER_CYCLE=max(1,ei('P2P_BANK_TRANSFERS_PER_CYCLE','2')); BANK_COOLDOWN=max(0,ei('P2P_BANK_MIN_MINUTES_BETWEEN_CYCLES','60')); BANK_ALERT_MAX=max(1,ei('P2P_BANK_MAX_ALERTS_PER_DAY','8'))
-S=requests.Session(); S.headers['User-Agent']='Mozilla/5.0 Myshka-P2P-Radar/1.0'
+BANK_PER_CYCLE=max(1,ei('P2P_BANK_TRANSFERS_PER_CYCLE','2')); BANK_COOLDOWN=max(0,ei('P2P_BANK_MIN_MINUTES_BETWEEN_CYCLES','60')); BANK_ALERT_MAX=max(1,ei('P2P_BANK_MAX_ALERTS_PER_DAY','8')); TG_CONFIRM_WARN=max(1,ei('P2P_TELEGRAM_CONFIRM_WARN','5'))
+DASHBOARD_URL=os.getenv('P2P_DASHBOARD_URL','https://omeljanpadovcky-create.github.io/T/').strip()
+S=requests.Session(); S.headers['User-Agent']='Mozilla/5.0 Myshka-P2P-Radar/2.0'
 
 @dataclass
 class Offer:
@@ -87,16 +88,17 @@ def routes(providers):
     buys=[o for p in providers if p['ok'] for o in p['buy']]; sells=[o for p in providers if p['ok'] for o in p['sell']]; out=[]
     for b in buys:
       for s in sells:
-        if b.exchange==s.exchange:continue
+        same=b.exchange==s.exchange; transfer_fee=0.0 if same else XFER
         qty=CAPITAL/b.price; gross=(s.price/b.price-1)*100; safety=CAPITAL*BUFFER/100
-        net=(max(0,qty-XFER)*s.price)-CAPITAL-safety; pref=(qty*s.price)-CAPITAL-safety; rb,wb=offer_risk(b); rs,ws=offer_risk(s); risk=max(rb,rs); why=wb+ws
-        drag=(XFER*b.price/CAPITAL*100) if CAPITAL else 0
+        net=(max(0,qty-transfer_fee)*s.price)-CAPITAL-safety; pref=(qty*s.price)-CAPITAL-safety; rb,wb=offer_risk(b); rs,ws=offer_risk(s); risk=max(rb,rs); why=wb+ws
+        if same: why=['same-exchange route: no modeled crypto transfer fee']+why
+        drag=(transfer_fee*b.price/CAPITAL*100) if CAPITAL else 0
         if drag>.7:risk+=10;why.append(f'transfer drag {drag:.2f}%')
         if gross>3:risk+=20;why.append('unusually large spread — verify manually')
         elif gross>1.5:risk+=8;why.append('large spread — re-check freshness')
         risk=min(100,risk); netpct=net/CAPITAL*100; prefpct=pref/CAPITAL*100
         verdict='ALERT' if netpct>=MIN_NET and risk<=MAX_RISK else ('PREFUNDED_ONLY' if prefpct>=MIN_NET else 'DROP')
-        out.append({'buy_exchange':b.exchange,'sell_exchange':s.exchange,'buy_price':round(b.price,4),'sell_price':round(s.price,4),'gross_spread_pct':round(gross,3),'net_profit_fiat':round(net,2),'net_pct':round(netpct,3),'prefunded_net_pct':round(prefpct,3),'risk_score':risk,'verdict':verdict,'buy_merchant':b.merchant,'sell_merchant':s.merchant,'buy_completion_pct':b.completion,'sell_completion_pct':s.completion,'buy_payments':b.payments,'sell_payments':s.payments,'reasons':why[:6]})
+        out.append({'buy_exchange':b.exchange,'sell_exchange':s.exchange,'route_type':'INTRA' if same else 'CROSS','buy_price':round(b.price,4),'sell_price':round(s.price,4),'gross_spread_pct':round(gross,3),'net_profit_fiat':round(net,2),'net_pct':round(netpct,3),'prefunded_net_pct':round(prefpct,3),'risk_score':risk,'verdict':verdict,'buy_merchant':b.merchant,'sell_merchant':s.merchant,'buy_completion_pct':b.completion,'sell_completion_pct':s.completion,'buy_payments':b.payments,'sell_payments':s.payments,'reasons':why[:6]})
     return sorted(out,key=lambda x:(x['verdict']=='ALERT',x['net_pct'],-x['risk_score']),reverse=True)
 
 def public_provider(p):
@@ -110,7 +112,7 @@ def bank_state():
     try:b=json.loads(BANK.read_text(encoding='utf-8'))
     except:b={}
     if b.get('date')!=today:
-        b={'date':today,'confirmed_cycles':0,'confirmed_transfers':0,'alerts_sent':0,'paused':False,'pause_reason':'','last_cycle_ts':0}
+        b={'date':today,'confirmed_cycles':0,'confirmed_transfers':0,'alerts_sent':0,'route_checks':0,'paused':False,'pause_reason':'','last_cycle_ts':0}
     return b
 def save_bank(b):BANK.write_text(json.dumps(b,ensure_ascii=False,indent=2),encoding='utf-8')
 def bank_guard(b):
@@ -125,13 +127,112 @@ def bank_guard(b):
     level='STOP' if paused else ('WARN' if used>=BANK_WARN or used+BANK_PER_CYCLE>=BANK_MAX else 'OK')
     return {'level':level,'paused':paused,'reason':reason,'confirmed_transfers':used,'confirmed_cycles':int(b.get('confirmed_cycles',0)),'alerts_sent':alerts,'warn_at':BANK_WARN,'max_transfers':BANK_MAX,'transfers_per_cycle':BANK_PER_CYCLE,'cooldown_minutes':BANK_COOLDOWN,'cooldown_remaining_seconds':wait}
 
-def telegram(t):
+def exchange_url(exchange,action):
+    e=str(exchange or '').lower(); side='buy' if str(action).upper()=='BUY' else 'sell'
+    if e=='binance':
+        return f"https://p2p.binance.com/en/trade/{side}/{ASSET}?fiat={FIAT}"
+    if e=='bybit':
+        return "https://www.bybit.com/fiat/trade/otc/"
+    return ""
+
+def telegram_keyboard(r):
+    row=[]
+    bu=exchange_url(r.get('buy_exchange'),'BUY'); su=exchange_url(r.get('sell_exchange'),'SELL')
+    if bu:row.append({'text':f"🟢 BUY {r.get('buy_exchange','')} ",'url':bu})
+    if su:row.append({'text':f"🔴 SELL {r.get('sell_exchange','')} ",'url':su})
+    kb=[]
+    if row:kb.append(row)
+    if DASHBOARD_URL:kb.append([{'text':'📊 Відкрити радар','url':DASHBOARD_URL}])
+    kb.append([{'text':'🔗 Я перевірив маршрут','callback_data':'p2p_route_checked'},{'text':'✅ Цикл завершено','callback_data':'p2p_cycle_done'}])
+    kb.append([{'text':'⏸ Пауза alerts','callback_data':'p2p_pause'},{'text':'📋 Статус','callback_data':'p2p_status'}])
+    return {'inline_keyboard':kb}
+
+def telegram(t,reply_markup=None):
     if not TG_TOKEN or not TG_CHAT:return False,'not configured'
     try:
-        r=S.post(f'https://api.telegram.org/bot{TG_TOKEN}/sendMessage',json={'chat_id':TG_CHAT,'text':t,'disable_web_page_preview':True},timeout=10); return r.ok,('sent' if r.ok else f'HTTP {r.status_code}')
+        payload={'chat_id':TG_CHAT,'text':t,'disable_web_page_preview':True}
+        if reply_markup:payload['reply_markup']=reply_markup
+        r=S.post(f'https://api.telegram.org/bot{TG_TOKEN}/sendMessage',json=payload,timeout=10); return r.ok,('sent' if r.ok else f'HTTP {r.status_code}')
     except Exception as e:return False,str(e)
+
+def callback_answer(qid,text='',show=False):
+    try:S.post(f'https://api.telegram.org/bot{TG_TOKEN}/answerCallbackQuery',json={'callback_query_id':qid,'text':text[:190],'show_alert':bool(show)},timeout=10)
+    except Exception:pass
+
+def bank_apply(action):
+    b=bank_state()
+    if action=='cycle-done':
+        b['confirmed_cycles']=int(b.get('confirmed_cycles',0))+1
+        b['confirmed_transfers']=int(b.get('confirmed_transfers',0))+BANK_PER_CYCLE
+        b['last_cycle_ts']=time.time()
+        if b['confirmed_transfers']>=BANK_MAX:
+            b['paused']=True;b['pause_reason']=f'daily protective threshold reached: {b["confirmed_transfers"]}/{BANK_MAX}'
+    elif action=='route-checked':
+        b['route_checks']=int(b.get('route_checks',0))+1
+    elif action=='pause':
+        b['paused']=True;b['pause_reason']='manual pause'
+    elif action=='resume':
+        b['paused']=False;b['pause_reason']=''
+    elif action=='reset-bank':
+        b={'date':datetime.now(KYIV).date().isoformat(),'confirmed_cycles':0,'confirmed_transfers':0,'alerts_sent':0,'route_checks':0,'paused':False,'pause_reason':'','last_cycle_ts':0}
+    save_bank(b);return b,bank_guard(b)
+
+def telegram_status_text():
+    b=bank_state(); bg=bank_guard(b)
+    return (f"🐭 MYSHKA P2P STATUS\nBank Guard: {bg['level']}\n"
+            f"Підтверджені цикли: {bg['confirmed_cycles']}\n"
+            f"Підтверджені bank transfers: {bg['confirmed_transfers']}/{bg['max_transfers']}\n"
+            f"Перевірок маршрутів: {int(b.get('route_checks',0))} (warning at {TG_CONFIRM_WARN})\n"
+            f"Telegram alerts: {bg['alerts_sent']}/{BANK_ALERT_MAX}\n"
+            f"Cooldown: {bg['cooldown_remaining_seconds']//60} min\n"
+            f"Alerts paused: {'YES' if bg['paused'] else 'NO'}")
+
+def telegram_control_loop():
+    if not TG_TOKEN or not TG_CHAT:return
+    offset=None
+    try:
+        r=S.get(f'https://api.telegram.org/bot{TG_TOKEN}/getUpdates',params={'timeout':0,'offset':-1},timeout=5)
+        items=(r.json().get('result') or []) if r.ok else []
+        if items:offset=max(int(x.get('update_id',0)) for x in items)+1
+    except Exception:pass
+    while True:
+        try:
+            params={'timeout':20,'allowed_updates':json.dumps(['callback_query','message'])}
+            if offset is not None:params['offset']=offset
+            r=S.get(f'https://api.telegram.org/bot{TG_TOKEN}/getUpdates',params=params,timeout=30)
+            if not r.ok:time.sleep(3);continue
+            for u in r.json().get('result') or []:
+                offset=int(u.get('update_id',0))+1
+                q=u.get('callback_query') or {}
+                if q:
+                    chat=str(((q.get('message') or {}).get('chat') or {}).get('id',''))
+                    if chat!=str(TG_CHAT):continue
+                    data=str(q.get('data') or '');qid=str(q.get('id') or '')
+                    if data=='p2p_route_checked':
+                        b,bg=bank_apply('route-checked');n=int(b.get('route_checks',0));warn=n>=TG_CONFIRM_WARN
+                        callback_answer(qid,(f"⚠️ Уже {n} перевірок сьогодні. Звір ліміти банку/картки перед наступною дією." if warn else f"Перевірка #{n} зарахована."),warn)
+                        if n==TG_CONFIRM_WARN:telegram(f"⚠️ MYSHKA P2P: сьогодні вже {n} разів відкривався/перевірявся маршрут. Це внутрішнє попередження, не ліміт банку. Перед наступною операцією перевір актуальні ліміти та реквізити.")
+                    elif data=='p2p_cycle_done':
+                        b,bg=bank_apply('cycle-done');callback_answer(qid,f"Цикл #{bg['confirmed_cycles']} зараховано · Bank Guard {bg['level']}",bg['level']!='OK')
+                    elif data=='p2p_pause':
+                        bank_apply('pause');callback_answer(qid,'P2P alerts поставлено на паузу.',True)
+                    elif data=='p2p_status':
+                        callback_answer(qid,'Статус надіслано');telegram(telegram_status_text())
+                    continue
+                m=u.get('message') or {};chat=str((m.get('chat') or {}).get('id',''))
+                if chat!=str(TG_CHAT):continue
+                cmd=str(m.get('text') or '').strip().lower().split()[0] if m.get('text') else ''
+                if cmd in {'/p2p','/p2p_status','/status'}:telegram(telegram_status_text())
+                elif cmd in {'/p2p_pause','/pause'}:bank_apply('pause');telegram('⏸ MYSHKA P2P alerts paused.')
+                elif cmd in {'/p2p_resume','/resume'}:bank_apply('resume');telegram('▶️ MYSHKA P2P alerts resumed.')
+                elif cmd in {'/p2p_done','/done'}:
+                    _,bg=bank_apply('cycle-done');telegram(f"✅ Цикл #{bg['confirmed_cycles']} зараховано · Bank Guard {bg['level']}.")
+                elif cmd in {'/p2p_help','/help'}:telegram("MYSHKA P2P commands:\n/p2p_status\n/p2p_pause\n/p2p_resume\n/p2p_done")
+        except Exception as e:
+            print('TELEGRAM CONTROL:',e,flush=True);time.sleep(4)
+
 def tg_text(r,ts,bg):
-    return f"🐭 MYSHKA P2P RADAR\n{r['verdict']} {ASSET}/{FIAT}\nBUY {r['buy_exchange']}: {r['buy_price']:.4f}\nSELL {r['sell_exchange']}: {r['sell_price']:.4f}\nGross {r['gross_spread_pct']:+.2f}%\nNet {r['net_pct']:+.2f}% ≈ {r['net_profit_fiat']:+.2f} {FIAT}\nPrefunded {r['prefunded_net_pct']:+.2f}%\nRisk {r['risk_score']}/100\nBank Guard {bg['level']} · {bg['confirmed_transfers']}/{bg['max_transfers']} confirmed transfers today\nCapital model {CAPITAL:.0f} {FIAT}\nWhy: {'; '.join(r['reasons'][:3]) or 'filters passed'}\n{ts}\nNo auto-trade. Verify the live P2P ad before payment."
+    return f"🐭 MYSHKA P2P RADAR\n{r['verdict']} {ASSET}/{FIAT}\nBUY {r['buy_exchange']}: {r['buy_price']:.4f}\nSELL {r['sell_exchange']}: {r['sell_price']:.4f}\nGross {r['gross_spread_pct']:+.2f}%\nNet {r['net_pct']:+.2f}% ≈ {r['net_profit_fiat']:+.2f} {FIAT}\nPrefunded {r['prefunded_net_pct']:+.2f}%\nRisk {r['risk_score']}/100\nBank Guard {bg['level']} · {bg['confirmed_transfers']}/{bg['max_transfers']} confirmed transfers today\nCapital model {CAPITAL:.0f} {FIAT}\nWhy: {'; '.join(r['reasons'][:3]) or 'filters passed'}\n{ts}\nВідкрий BUY/SELL кнопки, звір оголошення, потім натисни «Я перевірив маршрут». На 5-й перевірці MYSHKA покаже warning.\nNo auto-trade. Verify the live P2P ad before payment."
 def report(snap):
     d=datetime.now(KYIV); p=REPORTS/f'{d:%Y-%m-%d}.md'; t=snap.get('top_route')
     with p.open('a',encoding='utf-8') as f:
@@ -163,7 +264,7 @@ def scan():
     snap={'version':'MYSHKA_P2P_RADAR_V1','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'capital_fiat':CAPITAL,'mode':'SCAN_ONLY_NO_AUTOTRADE','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'alerts':sum(x['verdict']=='ALERT' for x in rs)}
     LATEST.write_text(json.dumps(snap,ensure_ascii=False,indent=2),encoding='utf-8'); history(snap); st=state(); now=time.time(); did=False
     if top and top['verdict']=='ALERT' and (st.get('last_route')!=f"{top['buy_exchange']}->{top['sell_exchange']}" or now-float(st.get('last_alert',0))>=600):
-      ok,msg=telegram(tg_text(top,ts,bg)); report(snap); print('TELEGRAM:',msg,flush=True); did=True
+      ok,msg=telegram(tg_text(top,ts,bg),telegram_keyboard(top)); report(snap); print('TELEGRAM:',msg,flush=True); did=True
       if ok:
         st['last_route']=f"{top['buy_exchange']}->{top['sell_exchange']}"; st['last_alert']=now
         b['alerts_sent']=int(b.get('alerts_sent',0))+1; save_bank(b)
@@ -173,29 +274,20 @@ def scan():
     print(f"[{datetime.now(KYIV):%H:%M:%S}] "+', '.join(f"{p['exchange']}:{'OK' if p['ok'] else 'OFF'}" for p in ps)+(f" | {top['buy_exchange']}->{top['sell_exchange']} net={top['net_pct']:+.2f}% risk={top['risk_score']} {top['verdict']}" if top else ' | no route'),flush=True)
 
 def bank_command(action):
-    b=bank_state()
-    if action=='cycle-done':
-        b['confirmed_cycles']=int(b.get('confirmed_cycles',0))+1
-        b['confirmed_transfers']=int(b.get('confirmed_transfers',0))+BANK_PER_CYCLE
-        b['last_cycle_ts']=time.time()
-        if b['confirmed_transfers']>=BANK_MAX:
-            b['paused']=True
-            b['pause_reason']=f'daily protective threshold reached: {b["confirmed_transfers"]}/{BANK_MAX}'
-    elif action=='pause':
-        b['paused']=True; b['pause_reason']='manual pause'
-    elif action=='resume':
-        b['paused']=False; b['pause_reason']=''
-    elif action=='reset-bank':
-        b={'date':datetime.now(KYIV).date().isoformat(),'confirmed_cycles':0,'confirmed_transfers':0,'alerts_sent':0,'paused':False,'pause_reason':'','last_cycle_ts':0}
-    save_bank(b)
-    bg=bank_guard(b)
-    print(json.dumps(bg,ensure_ascii=False,indent=2))
+    b,bg=bank_apply(action)
+    out=dict(bg);out['route_checks']=int(b.get('route_checks',0));out['telegram_confirm_warn']=TG_CONFIRM_WARN
+    print(json.dumps(out,ensure_ascii=False,indent=2))
     return 0
 
 def main():
-    if len(os.sys.argv)>1 and os.sys.argv[1] in {'cycle-done','pause','resume','reset-bank'}:
-        return bank_command(os.sys.argv[1])
-    print(f'MYSHKA P2P RADAR — {ASSET}/{FIAT}, {CAPITAL:.0f} {FIAT}, scan {INTERVAL}s, NO AUTO-TRADE',flush=True)
+    args=[x.lower() for x in os.sys.argv[1:]]
+    if args and args[0] in {'cycle-done','pause','resume','reset-bank','route-checked'}:
+        return bank_command(args[0])
+    if '--once' in args:
+        scan();return 0
+    if TG_TOKEN and TG_CHAT:
+        threading.Thread(target=telegram_control_loop,name='myshka-p2p-telegram',daemon=True).start()
+    print(f'MYSHKA P2P RADAR V2 — {ASSET}/{FIAT}, {CAPITAL:.0f} {FIAT}, scan {INTERVAL}s, Telegram control ON={bool(TG_TOKEN and TG_CHAT)}, NO AUTO-TRADE',flush=True)
     while True:
       try:scan()
       except KeyboardInterrupt:return
