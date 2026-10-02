@@ -34,6 +34,7 @@ BANK_WARN=max(1,ei('P2P_BANK_WARN_TRANSFERS_PER_DAY','4')); BANK_MAX=max(BANK_WA
 BANK_PER_CYCLE=max(1,ei('P2P_BANK_TRANSFERS_PER_CYCLE','2')); BANK_COOLDOWN=max(0,ei('P2P_BANK_MIN_MINUTES_BETWEEN_CYCLES','60')); BANK_ALERT_MAX=max(1,ei('P2P_BANK_MAX_ALERTS_PER_DAY','8')); TG_CONFIRM_WARN=max(1,ei('P2P_TELEGRAM_CONFIRM_WARN','5')); GIT_SYNC_SECONDS=max(30,ei('P2P_GIT_SYNC_SECONDS','60'))
 DASHBOARD_URL=os.getenv('P2P_DASHBOARD_URL','https://omeljanpadovcky-create.github.io/T/').strip()
 S=requests.Session(); S.headers['User-Agent']='Mozilla/5.0 Myshka-P2P-Radar/2.0'
+_TG_BOT_USERNAME_CACHE=None
 
 @dataclass
 class Offer:
@@ -701,6 +702,23 @@ def telegram_keyboard(r):
     kb.append([{'text':'⏸ Пауза сповіщень','callback_data':'p2p_pause'},{'text':'📋 Статус','callback_data':'p2p_status'}])
     return {'inline_keyboard':kb}
 
+def telegram_bot_username():
+    global _TG_BOT_USERNAME_CACHE
+    if _TG_BOT_USERNAME_CACHE is not None:
+        return _TG_BOT_USERNAME_CACHE
+    if not TG_TOKEN:
+        _TG_BOT_USERNAME_CACHE=''
+        return ''
+    try:
+        r=S.get(f'https://api.telegram.org/bot{TG_TOKEN}/getMe',timeout=8)
+        if r.ok:
+            _TG_BOT_USERNAME_CACHE=str(((r.json().get('result') or {}).get('username') or '')).lstrip('@')
+            return _TG_BOT_USERNAME_CACHE
+    except Exception:
+        pass
+    _TG_BOT_USERNAME_CACHE=''
+    return ''
+
 def telegram(t,reply_markup=None):
     if not TG_TOKEN or not TG_CHAT:return False,'not configured'
     try:
@@ -838,7 +856,7 @@ def scan():
         top=dict(top); top['verdict']='PAUSE_BANK_GUARD'; top['reasons']=([bg['reason']] if bg['reason'] else ['Bank Guard paused actionable alerts'])+list(top.get('reasons') or [])
     elif bg['cooldown_remaining_seconds']>0 and top and top['verdict']=='ALERT':
         top=dict(top); top['verdict']='COOLDOWN'; top['reasons']=[f"Bank Guard cooldown {bg['cooldown_remaining_seconds']//60+1} min remaining"]+list(top.get('reasons') or [])
-    snap={'version':'MYSHKA_P2P_RADAR_V4','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'mode':'ХМАРНИЙ СКАНЕР 24/7','bank_guard':bg,'providers':[public_provider(x) for x in ps],'market_lowest_buy':low_buy,'market_highest_sell':high_sell,'routes':rs[:25],'top_route':top,'route_count':len(rs),'shown_routes':min(25,len(rs)),'alerts':sum(x['verdict']=='ALERT' for x in rs),'review_count':sum(x['verdict']=='REVIEW' for x in rs),'review_spread_pct':REVIEW_SPREAD,'market_pages':MARKET_PAGES,'offers_per_side':KEEP_PER_SIDE,'scan_duration_seconds':round(time.time()-started,2)}
+    snap={'version':'MYSHKA_P2P_RADAR_V4','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'mode':'ХМАРНИЙ СКАНЕР 24/7','telegram_bot_username':telegram_bot_username(),'bank_guard':bg,'providers':[public_provider(x) for x in ps],'market_lowest_buy':low_buy,'market_highest_sell':high_sell,'routes':rs[:25],'top_route':top,'route_count':len(rs),'shown_routes':min(25,len(rs)),'alerts':sum(x['verdict']=='ALERT' for x in rs),'review_count':sum(x['verdict']=='REVIEW' for x in rs),'review_spread_pct':REVIEW_SPREAD,'market_pages':MARKET_PAGES,'offers_per_side':KEEP_PER_SIDE,'scan_duration_seconds':round(time.time()-started,2)}
     LATEST.write_text(json.dumps(snap,ensure_ascii=False,indent=2),encoding='utf-8'); history(snap); st=state(); now=time.time(); did=False
     tg_routes=[r for r in rs if r.get('verdict')=='ALERT'][:TG_TOP_N]
     tg_signature='|'.join(f"{r['buy_exchange']}:{r['sell_exchange']}:{r['buy_price']}:{r['sell_price']}:{r['buy_merchant']}:{r['sell_merchant']}" for r in tg_routes)
