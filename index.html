@@ -199,6 +199,33 @@
   border-color:#5d95da !important;
   box-shadow:0 0 16px rgba(92,155,255,.15) !important;
 }
+
+/* ===== Exchange directory cards: same blue theme ===== */
+.exchangeCard{
+  border:1px solid #2d5f96 !important;
+  background:linear-gradient(145deg,#0a1827 0%,#081523 100%) !important;
+  box-shadow:0 0 0 1px rgba(92,155,255,.08),0 12px 30px rgba(0,0,0,.28),0 0 24px rgba(92,155,255,.08) !important;
+}
+.exchangeCard:before{
+  background:linear-gradient(90deg,transparent,rgba(92,155,255,.95),transparent) !important;
+  opacity:1 !important;
+}
+.exchangeCard:hover{
+  border-color:#4d84c5 !important;
+  box-shadow:0 0 0 1px rgba(92,155,255,.14),0 14px 34px rgba(0,0,0,.30),0 0 28px rgba(92,155,255,.14) !important;
+}
+.exchangeCard .mini.buy,
+.exchangeCard .mini.sell{
+  color:#9ed0ff !important;
+  border:1px solid #3d73b6 !important;
+  background:#0c1d33 !important;
+  box-shadow:none !important;
+}
+.exchangeCard .mini.buy:hover,
+.exchangeCard .mini.sell:hover{
+  border-color:#5d95da !important;
+  box-shadow:0 0 16px rgba(92,155,255,.15) !important;
+}
 @media(max-width:900px){.grid{grid-template-columns:1fr}.head{align-items:flex-start;flex-direction:column}.badges{justify-content:flex-start}.provider{grid-template-columns:85px 58px 1fr}.provider span:last-child{display:none}.route{font-size:22px}.money{font-size:31px}.exchangeGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.aiFab{right:12px;bottom:12px}.aiPanel{right:8px;bottom:66px;width:calc(100vw - 16px);height:70vh}.routesGrid{grid-template-columns:1fr}.routeMetrics{grid-template-columns:repeat(2,1fr)}.routeTop{align-items:center}.routePair{font-size:16px}}
 </style>
 </head>
