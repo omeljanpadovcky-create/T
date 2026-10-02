@@ -23,7 +23,7 @@ BUFFER=ef('P2P_SAFETY_BUFFER_PCT','0.15'); TG_TOKEN=os.getenv('TELEGRAM_BOT_TOKE
 TG_CHAT=os.getenv('TELEGRAM_CHAT_ID') or os.getenv('TG_CHAT_ID',''); BY_KEY=os.getenv('BYBIT_API_KEY',''); BY_SECRET=os.getenv('BYBIT_API_SECRET','')
 LATEST=HERE/'latest.json'; HIST=HERE/'history.csv'; REPORTS=HERE/'reports'; STATE=HERE/'state.json'; BANK=HERE/'bank_guard.json'; REPORTS.mkdir(exist_ok=True)
 BANK_WARN=max(1,ei('P2P_BANK_WARN_TRANSFERS_PER_DAY','4')); BANK_MAX=max(BANK_WARN,ei('P2P_BANK_MAX_TRANSFERS_PER_DAY','6'))
-BANK_PER_CYCLE=max(1,ei('P2P_BANK_TRANSFERS_PER_CYCLE','2')); BANK_COOLDOWN=max(0,ei('P2P_BANK_MIN_MINUTES_BETWEEN_CYCLES','60')); BANK_ALERT_MAX=max(1,ei('P2P_BANK_MAX_ALERTS_PER_DAY','8')); TG_CONFIRM_WARN=max(1,ei('P2P_TELEGRAM_CONFIRM_WARN','5'))
+BANK_PER_CYCLE=max(1,ei('P2P_BANK_TRANSFERS_PER_CYCLE','2')); BANK_COOLDOWN=max(0,ei('P2P_BANK_MIN_MINUTES_BETWEEN_CYCLES','60')); BANK_ALERT_MAX=max(1,ei('P2P_BANK_MAX_ALERTS_PER_DAY','8')); TG_CONFIRM_WARN=max(1,ei('P2P_TELEGRAM_CONFIRM_WARN','5')); GIT_SYNC_SECONDS=max(30,ei('P2P_GIT_SYNC_SECONDS','60'))
 DASHBOARD_URL=os.getenv('P2P_DASHBOARD_URL','https://omeljanpadovcky-create.github.io/T/').strip()
 S=requests.Session(); S.headers['User-Agent']='Mozilla/5.0 Myshka-P2P-Radar/2.0'
 
@@ -269,8 +269,10 @@ def scan():
         st['last_route']=f"{top['buy_exchange']}->{top['sell_exchange']}"; st['last_alert']=now
         b['alerts_sent']=int(b.get('alerts_sent',0))+1; save_bank(b)
     if now-float(st.get('last_report',0))>=900:report(snap);st['last_report']=now;did=True
+    if eb('P2P_GIT_PUSH','0') and now-float(st.get('last_git_sync',0))>=GIT_SYNC_SECONDS:
+        git_push();st['last_git_sync']=now
     save_state(st)
-    if did:git_push()
+    if did and not eb('P2P_GIT_PUSH','0'):git_push()
     print(f"[{datetime.now(KYIV):%H:%M:%S}] "+', '.join(f"{p['exchange']}:{'OK' if p['ok'] else 'OFF'}" for p in ps)+(f" | {top['buy_exchange']}->{top['sell_exchange']} net={top['net_pct']:+.2f}% risk={top['risk_score']} {top['verdict']}" if top else ' | no route'),flush=True)
 
 def bank_command(action):
