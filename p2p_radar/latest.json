@@ -1,0 +1,25 @@
+{
+  "version": "MYSHKA_P2P_RADAR_V2",
+  "scanned_at": null,
+  "fiat": "UAH",
+  "asset": "USDT",
+  "capital_fiat": 4500,
+  "mode": "SCANNER_OFFLINE",
+  "bank_guard": {
+    "level": "WAIT",
+    "paused": false,
+    "reason": "",
+    "confirmed_transfers": 0,
+    "confirmed_cycles": 0,
+    "alerts_sent": 0,
+    "warn_at": 4,
+    "max_transfers": 6,
+    "transfers_per_cycle": 2,
+    "cooldown_minutes": 60,
+    "cooldown_remaining_seconds": 0
+  },
+  "providers": [],
+  "routes": [],
+  "top_route": null,
+  "alerts": 0
+}
