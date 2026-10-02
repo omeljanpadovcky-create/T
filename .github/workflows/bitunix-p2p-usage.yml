@@ -1,0 +1,18 @@
+name: Bitunix P2P usage probe
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/bitunix-p2p-usage.yml'
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Bitunix P2P JS
+        run: |
+          for u in             https://www.bitunix.com/web/bitunix-assets/funds/p2p-Cgo4Fz-3.js             https://www.bitunix.com/web/bitunix-assets/funds/p2p-CiyDbteo.js
+          do
+            echo "===== $u ====="
+            curl -L -s "$u"
+            echo
+          done
