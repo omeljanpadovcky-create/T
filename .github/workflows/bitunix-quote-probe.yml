@@ -1,0 +1,45 @@
+name: Bitunix quote schema probe
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/bitunix-quote-probe.yml'
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install requests
+      - name: Probe quote schema
+        run: |
+          python - <<'PY'
+          import requests,json
+          S=requests.Session()
+          S.headers.update({'User-Agent':'Mozilla/5.0','Accept':'application/json','Content-Type':'application/json','Origin':'https://www.bitunix.com','Referer':'https://www.bitunix.com/'})
+          for u in [
+            'https://api.bitunix.com/web/p2p/api/public/v1/crypto',
+            'https://api.bitunix.com/web/p2p/api/public/v1/fiat'
+          ]:
+            r=S.get(u,timeout=20)
+            print('\nGET',u,'HTTP',r.status_code,'LEN',len(r.text));print(r.text[:12000])
+          bodies=[
+            {'crypto':'USDT','fiat':'UAH','side':'BUY'},
+            {'cryptoCurrency':'USDT','fiatCurrency':'UAH','side':'BUY'},
+            {'cryptoCode':'USDT','fiatCode':'UAH','side':'BUY'},
+            {'coin':'USDT','currency':'UAH','tradeType':'BUY'},
+            {'crypto':'USDT','fiat':'UAH','type':'BUY'},
+            {'cryptoCode':'USDT','fiatCode':'UAH','tradeType':'BUY'},
+            {'asset':'USDT','fiat':'UAH','side':'BUY'},
+            {'coinId':'USDT','currency':'UAH','tradeType':'BUY'},
+            {'crypto':'USDT','fiat':'UAH','side':1},
+            {'cryptoCurrency':'USDT','fiatCurrency':'UAH','side':1},
+          ]
+          for host in ['https://api.bitunix.com','https://www.bitunix.com']:
+            for body in bodies:
+              u=host+'/p2p/quote/realtime'
+              try:
+                r=S.post(u,json=body,timeout=20)
+                print('\nPOST',u,'BODY',json.dumps(body),'HTTP',r.status_code,'LEN',len(r.text));print(r.text[:4000])
+              except Exception as e: print('ERR',type(e).__name__,e)
+          PY
