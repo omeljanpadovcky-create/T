@@ -1,16 +1,24 @@
 # MYSHKA P2P RADAR
 
+## Quick start
+
+1. Put `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` into `p2p_radar/.env` (or keep the old aliases in root `.env`).
+2. Run `START_P2P_RADAR.bat`.
+3. Optional: run `INSTALL_P2P_AUTOSTART.bat` once to start the radar automatically at Windows logon.
+
+Telegram alerts contain BUY/SELL links plus callback buttons for route check, completed cycle, pause and status. The route-check counter resets each Kyiv calendar day and shows a warning on check **#5** by default (`P2P_TELEGRAM_CONFIRM_WARN=5`). URL clicks on the GitHub Pages dashboard have the same local 5-click warning.
+
 One job only: **scan P2P markets, calculate a realistic cross-exchange spread, score risk, alert Telegram, and keep a detailed repository report.** It never opens, pays, releases, or closes orders.
 
 ## V1 providers
 
-- **Binance**: read-only P2P website feed. It is isolated and gets an extra risk penalty because it is not a documented public P2P market-data API and can change.
+- **Binance**: read-only P2P website feed. It is isolated and gets an extra risk penalty because it is not a documented public P2P market-data API and can change. Binance-only mode can still evaluate same-exchange BUY→SELL routes.
 - **Bybit**: official authenticated P2P API `/v5/p2p/item/online`. Bybit requires General Advertiser status or higher for P2P API access.
 - The scanner keeps providers separate, so another exchange can be added without rewriting the risk/Telegram/report logic.
 
 ## Calculation
 
-For every usable `buy exchange -> sell exchange` route the radar checks:
+For every usable `buy -> sell` route (same exchange or cross-exchange) the radar checks:
 - the configured UAH amount fits both ad limits;
 - merchant completion/orders when the feed exposes them;
 - gross spread;
@@ -27,7 +35,7 @@ Verdicts:
 
 ## Windows
 
-Double-click **START_P2P_RADAR.bat**.
+Double-click **START_P2P_RADAR.bat**. The same process also runs Telegram control polling, so `/p2p_status`, `/p2p_pause`, `/p2p_resume` and `/p2p_done` work while the radar is running.
 
 The first run creates `p2p_radar/.env`. The scanner also reads an existing root `.env`, so old Telegram/Bybit variables can be reused.
 
@@ -42,6 +50,17 @@ Telegram variable aliases:
 - `p2p_radar/reports/YYYY-MM-DD.md` - detailed periodic and alert reports.
 
 With `P2P_GIT_PUSH=1`, the local clone commits/pushes reports automatically when a report is written. Git authentication must already work on the PC.
+
+## Telegram buttons
+
+Every actionable alert can include:
+- direct BUY page;
+- direct SELL page;
+- `Я перевірив маршрут` — increments the daily route-check counter;
+- `Цикл завершено` — confirms a completed cycle for Bank Guard accounting;
+- pause/status controls.
+
+The URL-click warning and Telegram route-check warning are safety counters only. They are not statements about any bank's actual rules.
 
 ## Important
 
