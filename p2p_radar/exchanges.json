@@ -43,13 +43,6 @@
       "enabled": true,
       "buy_url": "https://www.weex.com/buy-crypto/trading",
       "sell_url": "https://www.weex.com/buy-crypto/sell/USDT"
-    },
-    {
-      "id": "whitebit",
-      "name": "WhiteBIT",
-      "enabled": true,
-      "buy_url": "https://whitebit.com/ua/m/p-2-p-express",
-      "sell_url": "https://whitebit.com/ua/m/p-2-p-express"
     }
   ]
 }
