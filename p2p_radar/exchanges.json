@@ -1,0 +1,21 @@
+{
+  "scan_seconds": 15,
+  "note": "MYSHKA scans only this explicit list. Add/remove exchange ids here; no random web discovery.",
+  "exchanges": [
+    {
+      "id": "binance",
+      "name": "Binance",
+      "enabled": true
+    },
+    {
+      "id": "bybit",
+      "name": "Bybit",
+      "enabled": true
+    },
+    {
+      "id": "okx",
+      "name": "OKX",
+      "enabled": true
+    }
+  ]
+}
