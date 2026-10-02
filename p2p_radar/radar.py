@@ -719,13 +719,18 @@ def telegram_bot_username():
     _TG_BOT_USERNAME_CACHE=''
     return ''
 
-def telegram(t,reply_markup=None):
-    if not TG_TOKEN or not TG_CHAT:return False,'not configured'
+def telegram_to(chat_id,t,reply_markup=None):
+    if not TG_TOKEN or not chat_id:return False,'not configured'
     try:
-        payload={'chat_id':TG_CHAT,'text':t,'disable_web_page_preview':True}
+        payload={'chat_id':chat_id,'text':t,'disable_web_page_preview':True}
         if reply_markup:payload['reply_markup']=reply_markup
-        r=S.post(f'https://api.telegram.org/bot{TG_TOKEN}/sendMessage',json=payload,timeout=10); return r.ok,('sent' if r.ok else f'HTTP {r.status_code}')
-    except Exception as e:return False,str(e)
+        r=S.post(f'https://api.telegram.org/bot{TG_TOKEN}/sendMessage',json=payload,timeout=10)
+        return r.ok,('sent' if r.ok else f'HTTP {r.status_code}')
+    except Exception as e:
+        return False,str(e)
+
+def telegram(t,reply_markup=None):
+    return telegram_to(TG_CHAT,t,reply_markup)
 
 def callback_answer(qid,text='',show=False):
     try:S.post(f'https://api.telegram.org/bot{TG_TOKEN}/answerCallbackQuery',json={'callback_query_id':qid,'text':text[:190],'show_alert':bool(show)},timeout=10)
@@ -760,31 +765,177 @@ def telegram_status_text():
             f"Пауза після циклу: {bg['cooldown_remaining_seconds']//60} хв\n"
             f"Сповіщення на паузі: {'ТАК' if bg['paused'] else 'НІ'}")
 
+def latest_snapshot():
+    try:
+        return json.loads(LATEST.read_text(encoding='utf-8'))
+    except Exception:
+        return {}
+
+def telegram_public_help():
+    return (
+        "🐭 MYSHKA P2P — що можна запитати:\n"
+        "• топ / найкраща угода\n"
+        "• покажи 5 варіантів\n"
+        "• де найдешевше купити\n"
+        "• де найдорожче продати\n"
+        "• який ризик\n"
+        "• які біржі активні\n"
+        "• Binance / Bybit / OKX / KuCoin / MEXC / WEEX\n"
+        "• Monobank / PrivatBank / PUMB / A-Bank / Sense / Raiffeisen / Oschad\n\n"
+        "Команди: /help, /status, /top"
+    )
+
+def public_route_keyboard(r):
+    if not r:return None
+    pay=((r.get('common_payments') or [''])[0] if r.get('payment_verified') else '')
+    row=[]
+    bu=exchange_url(r.get('buy_exchange'),'BUY',pay)
+    su=exchange_url(r.get('sell_exchange'),'SELL',pay)
+    if bu:row.append({'text':f"🟢 КУПИТИ · {r.get('buy_exchange','')}",'url':bu})
+    if su:row.append({'text':f"🔴 ПРОДАТИ · {r.get('sell_exchange','')}",'url':su})
+    kb=[]
+    if row:kb.append(row)
+    if DASHBOARD_URL:kb.append([{'text':'📊 Відкрити радар','url':DASHBOARD_URL}])
+    return {'inline_keyboard':kb} if kb else None
+
+def public_route_text(r,prefix='🎯 Варіант'):
+    if not r:return 'Зараз немає маршруту, який проходить перевірки.'
+    pay=', '.join(r.get('common_payments') or []) if r.get('payment_verified') else 'потрібно перевірити'
+    return (
+        f"{prefix}\n"
+        f"{r.get('buy_exchange')} → {r.get('sell_exchange')}\n"
+        f"КУПИТИ {float(r.get('buy_price',0)):.4f} · ПРОДАТИ {float(r.get('sell_price',0)):.4f}\n"
+        f"Спред {float(r.get('gross_spread_pct',0)):+.2f}% · після буфера {float(r.get('net_pct',0)):+.2f}%\n"
+        f"Оплата: {pay}\n"
+        f"Ризик сигналу: {int(r.get('risk_score',0))}/100\n"
+        f"Мерчанти: {r.get('buy_merchant','—')} → {r.get('sell_merchant','—')}"
+    )
+
+def public_market_status(d):
+    ps=d.get('providers') or []
+    active=[p for p in ps if p.get('ok')]
+    scan=d.get('scanned_at') or 'ще немає'
+    rows=[f"• {p.get('exchange')}: {int(p.get('buy_offers',0))} BUY / {int(p.get('sell_offers',0))} SELL" for p in active]
+    return "📡 MYSHKA P2P\nОстанній скан: "+str(scan)+"\n"+"\n".join(rows)
+
+def query_payment_key(s):
+    s=str(s or '').lower()
+    checks=[
+        ('monobank','monobank'),('mono','monobank'),
+        ('privat','privatbank'),('приват','privatbank'),
+        ('pumb','pumb'),('пумб','pumb'),
+        ('a-bank','abank'),('abank','abank'),('а-банк','abank'),
+        ('sense','sense'),('сенс','sense'),
+        ('raiffeisen','raiffeisen'),('райф','raiffeisen'),
+        ('oschad','oschad'),('ощад','oschad')
+    ]
+    for needle,key in checks:
+        if needle in s:return key
+    return ''
+
+def telegram_public_answer(text):
+    d=latest_snapshot()
+    raw=str(text or '').strip()
+    s=raw.lower()
+    routes=d.get('routes') or []
+    alerts=[r for r in routes if r.get('verdict')=='ALERT']
+    top=(alerts[0] if alerts else d.get('top_route'))
+    if not raw:
+        return telegram_public_help(),None
+
+    if s.startswith('/start') or s in {'/help','/p2p_help','help','допомога'}:
+        return telegram_public_help(),None
+
+    if s in {'/status','/p2p','/p2p_status'} or 'статус' in s:
+        return public_market_status(d),None
+
+    if s in {'/top','/best'} or 'топ' in s or 'найкращ' in s or 'краща угода' in s or 'кращий варіант' in s:
+        # "5" or words asking for several options -> short digest.
+        if '5' in s or 'п’ять' in s or "п'ять" in s or 'варіантів' in s or 'угод' in s:
+            chosen=alerts[:5]
+            if not chosen:return 'Зараз немає готових ALERT-маршрутів.',None
+            rows=[]
+            for i,r in enumerate(chosen,1):
+                pay=', '.join(r.get('common_payments') or []) if r.get('payment_verified') else 'перевірити'
+                rows.append(f"{i}. {r['buy_exchange']} → {r['sell_exchange']} · {r['buy_price']:.4f} → {r['sell_price']:.4f} · {r['net_pct']:+.2f}% · {pay}")
+            return "🐭 ТОП "+str(len(chosen))+" готових варіантів\n\n"+"\n".join(rows),chosen[0]
+        return public_route_text(top,'🎯 Найкращий готовий варіант'),top
+
+    if ('дешев' in s and ('куп' in s or 'buy' in s)) or 'мін куп' in s:
+        o=d.get('market_lowest_buy')
+        if not o:return 'Немає даних про найнижчу ціну купівлі.',None
+        return (f"🟢 Найнижча ціна купівлі зараз\n{o.get('exchange')} · {float(o.get('price',0)):.4f} {FIAT}\n"
+                f"Мерчант: {o.get('merchant','—')}\nОплата: {', '.join(o.get('payments') or []) or 'не вказано'}"),None
+
+    if ('дорог' in s and ('прод' in s or 'sell' in s)) or 'макс прод' in s:
+        o=d.get('market_highest_sell')
+        if not o:return 'Немає даних про найвищу ціну продажу.',None
+        return (f"🔴 Найвища ціна продажу зараз\n{o.get('exchange')} · {float(o.get('price',0)):.4f} {FIAT}\n"
+                f"Мерчант: {o.get('merchant','—')}\nОплата: {', '.join(o.get('payments') or []) or 'не вказано'}"),None
+
+    if 'ризик' in s:
+        if not top:return 'Зараз немає готового маршруту для оцінки ризику.',None
+        return (f"🛡 Ризик топ-маршруту: {int(top.get('risk_score',0))}/100\n"
+                f"{top.get('buy_exchange')} → {top.get('sell_exchange')} · після буфера {float(top.get('net_pct',0)):+.2f}%\n"
+                "Це оцінка якості сигналу, а не ймовірність втрати грошей."),top
+
+    if 'бірж' in s or 'exchange' in s:
+        return public_market_status(d),None
+
+    pkey=query_payment_key(s)
+    if pkey:
+        for r in alerts:
+            if pkey in (r.get('common_payments') or []):
+                return public_route_text(r,f"💳 Найкращий готовий варіант для {pkey}"),r
+        return f"Зараз серед готових ALERT-маршрутів немає варіанту зі спільною оплатою {pkey}.",None
+
+    exchange_names=['binance','bybit','okx','kucoin','mexc','weex']
+    ex=next((x for x in exchange_names if x in s),None)
+    if ex:
+        p=next((x for x in (d.get('providers') or []) if str(x.get('exchange','')).lower()==ex),None)
+        if not p:return f"Немає свіжих даних по {ex}.",None
+        bb=p.get('best_buy') or {}; bs=p.get('best_sell') or {}
+        return (
+            f"📊 {p.get('exchange')}\n"
+            f"Бачу: {int(p.get('buy_offers',0))} BUY / {int(p.get('sell_offers',0))} SELL\n"
+            f"Найнижча BUY: {float(bb.get('price',0)):.4f} {FIAT} · {bb.get('merchant','—')}\n"
+            f"Найвища SELL: {float(bs.get('price',0)):.4f} {FIAT} · {bs.get('merchant','—')}"
+        ),None
+
+    return ("Не зовсім зрозуміла запит 🙂\n\n"+telegram_public_help()),None
+
 def telegram_control_loop():
-    if not TG_TOKEN or not TG_CHAT:return
+    if not TG_TOKEN:return
     offset=None
     try:
         r=S.get(f'https://api.telegram.org/bot{TG_TOKEN}/getUpdates',params={'timeout':0,'offset':-1},timeout=5)
         items=(r.json().get('result') or []) if r.ok else []
         if items:offset=max(int(x.get('update_id',0)) for x in items)+1
     except Exception:pass
+
     while True:
         try:
             params={'timeout':20,'allowed_updates':json.dumps(['callback_query','message'])}
             if offset is not None:params['offset']=offset
             r=S.get(f'https://api.telegram.org/bot{TG_TOKEN}/getUpdates',params=params,timeout=30)
-            if not r.ok:time.sleep(3);continue
+            if not r.ok:
+                time.sleep(3);continue
+
             for u in r.json().get('result') or []:
                 offset=int(u.get('update_id',0))+1
                 q=u.get('callback_query') or {}
+
                 if q:
                     chat=str(((q.get('message') or {}).get('chat') or {}).get('id',''))
-                    if chat!=str(TG_CHAT):continue
                     data=str(q.get('data') or '');qid=str(q.get('id') or '')
+                    if chat!=str(TG_CHAT):
+                        callback_answer(qid,'Ця керуюча кнопка доступна лише власнику радара.',True)
+                        continue
                     if data=='p2p_route_checked':
                         b,bg=bank_apply('route-checked');n=int(b.get('route_checks',0));warn=n>=TG_CONFIRM_WARN
                         callback_answer(qid,(f"⚠️ Уже {n} перевірок сьогодні. Звір ліміти банку/картки перед наступною дією." if warn else f"Перевірка #{n} зарахована."),warn)
-                        if n==TG_CONFIRM_WARN:telegram(f"⚠️ MYSHKA P2P: сьогодні вже {n} разів відкривався/перевірявся маршрут. Це внутрішнє попередження, не ліміт банку. Перед наступною операцією перевір актуальні ліміти та реквізити.")
+                        if n==TG_CONFIRM_WARN:
+                            telegram(f"⚠️ MYSHKA P2P: сьогодні вже {n} разів відкривався/перевірявся маршрут. Це внутрішнє попередження, не ліміт банку. Перед наступною операцією перевір актуальні ліміти та реквізити.")
                     elif data=='p2p_cycle_done':
                         b,bg=bank_apply('cycle-done');callback_answer(qid,f"Цикл #{bg['confirmed_cycles']} зараховано · захист: {bg['level']}",bg['level']!='OK')
                     elif data=='p2p_pause':
@@ -792,15 +943,42 @@ def telegram_control_loop():
                     elif data=='p2p_status':
                         callback_answer(qid,'Статус надіслано');telegram(telegram_status_text())
                     continue
-                m=u.get('message') or {};chat=str((m.get('chat') or {}).get('id',''))
-                if chat!=str(TG_CHAT):continue
-                cmd=str(m.get('text') or '').strip().lower().split()[0] if m.get('text') else ''
-                if cmd in {'/p2p','/p2p_status','/status'}:telegram(telegram_status_text())
-                elif cmd in {'/p2p_pause','/pause'}:bank_apply('pause');telegram('⏸ MYSHKA P2P: сповіщення поставлено на паузу.')
-                elif cmd in {'/p2p_resume','/resume'}:bank_apply('resume');telegram('▶️ MYSHKA P2P: сповіщення відновлено.')
-                elif cmd in {'/p2p_done','/done'}:
-                    _,bg=bank_apply('cycle-done');telegram(f"✅ Цикл #{bg['confirmed_cycles']} зараховано · захист: {bg['level']}.")
-                elif cmd in {'/p2p_help','/help'}:telegram("Команди MYSHKA P2P:\n/p2p_status — статус\n/p2p_pause — пауза\n/p2p_resume — продовжити\n/p2p_done — цикл завершено")
+
+                m=u.get('message') or {}
+                chat=str((m.get('chat') or {}).get('id',''))
+                text_msg=str(m.get('text') or '').strip()
+                if not chat or not text_msg:continue
+                cmd=text_msg.lower().split()[0]
+                owner=(chat==str(TG_CHAT))
+
+                # Owner-only controls.
+                if cmd in {'/p2p_pause','/pause'}:
+                    if owner:
+                        bank_apply('pause');telegram_to(chat,'⏸ MYSHKA P2P: сповіщення поставлено на паузу.')
+                    else:
+                        telegram_to(chat,'Ця команда доступна лише власнику радара.')
+                    continue
+                if cmd in {'/p2p_resume','/resume'}:
+                    if owner:
+                        bank_apply('resume');telegram_to(chat,'▶️ MYSHKA P2P: сповіщення відновлено.')
+                    else:
+                        telegram_to(chat,'Ця команда доступна лише власнику радара.')
+                    continue
+                if cmd in {'/p2p_done','/done'}:
+                    if owner:
+                        _,bg=bank_apply('cycle-done');telegram_to(chat,f"✅ Цикл #{bg['confirmed_cycles']} зараховано · захист: {bg['level']}.")
+                    else:
+                        telegram_to(chat,'Ця команда доступна лише власнику радара.')
+                    continue
+
+                # Owner /status keeps the private guard status; public /status shows market status.
+                if owner and cmd in {'/p2p_status'}:
+                    telegram_to(chat,telegram_status_text())
+                    continue
+
+                answer,route=telegram_public_answer(text_msg)
+                telegram_to(chat,answer,public_route_keyboard(route))
+
         except Exception as e:
             print('TELEGRAM CONTROL:',e,flush=True);time.sleep(4)
 
