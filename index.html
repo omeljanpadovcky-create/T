@@ -49,7 +49,7 @@ function exchangeUrl(ex,action){
   ex=String(ex||'').toLowerCase();const a=String(action||'BUY').toUpperCase();
   const item=EXCHANGE_DIRECTORY.find(x=>String(x.id||'').toLowerCase()===ex || String(x.name||'').toLowerCase()===ex);
   if(item)return a==='SELL'?(item.sell_url||item.buy_url||'#'):(item.buy_url||item.sell_url||'#');
-  if(ex==='binance')return 'https://p2p.binance.com/en/trade/all-payments/USDT?fiat=UAH';
+  if(ex==='binance')return a==='SELL'?'https://p2p.binance.com/trade/sell/USDT?fiat=UAH&payment=all-payments':'https://p2p.binance.com/trade/buy/USDT?fiat=UAH&payment=all-payments';
   if(ex==='bybit')return 'https://www.bybit.com/fiat/trade/otc/';
   if(ex==='okx')return a==='SELL'?'https://www.okx.com/ua/p2p-markets/uah/sell-usdt':'https://www.okx.com/ua/p2p-markets/uah/buy-usdt';
   return '#';
@@ -60,6 +60,7 @@ async function loadExchangeDirectory(){
     if(!r.ok)throw Error('HTTP '+r.status);
     const d=await r.json();EXCHANGE_DIRECTORY=(d.exchanges||[]).filter(x=>x.enabled!==false);
     $('exchangeDirectory').innerHTML=EXCHANGE_DIRECTORY.map(x=>`<div class="exchangeCard"><b>${x.name||x.id}</b><div class="exchangeLinks"><a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${x.buy_url||'#'}">КУПИТИ / P2P</a><a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${x.sell_url||x.buy_url||'#'}">ПРОДАТИ / P2P</a></div></div>`).join('');
+    if(LAST_RADAR_DATA)render(LAST_RADAR_DATA);
   }catch(e){$('exchangeDirectory').innerHTML='<div class="empty">Список бірж тимчасово недоступний</div>'}
 }
 function clickKey(){const d=new Date(),y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return 'myshka_p2p_link_clicks_'+y+'-'+m+'-'+day}
@@ -182,5 +183,12 @@ function render(d){LAST_RADAR_DATA=d;$('market').textContent=(d.asset||'USDT')+'
    return `<div class="provider"><b>${exchangeLabel(p.exchange)}</b><span class="state ${cls}">${label}</span><span>${note}</span><div class="exchangeLinks"><a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(p.exchange,'BUY')}">КУПИТИ ↗</a><a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(p.exchange,'SELL')}">ПРОДАТИ ↗</a></div></div>`;
  }).join('')||'<div class="empty">Немає провайдерів</div>';
  const rs=d.routes||[];const total=Number(d.route_count??rs.length);const shown=Number(d.shown_routes??rs.length);$('summary').textContent=`${total} знайдено · показано ${shown} найкращих · ${d.alerts||0} готових · ${d.review_count||0} на перевірку`;$('routes').innerHTML=rs.length?rs.map(r=>`<tr><td>${r.buy_exchange}</td><td>${r.sell_exchange}</td><td class="num">${money(r.buy_price)}</td><td class="num">${money(r.sell_price)}</td><td class="num">${pct(r.gross_spread_pct)}</td><td class="num">${pct(r.net_pct)}</td><td class="num">${Number(r.net_profit_fiat)>=0?'+':''}${money(r.net_profit_fiat)}</td><td class="num risk ${riskClass(r.risk_score)}">${r.risk_score}</td><td class="${verdictClass(r.verdict)}">${verdictUk(r.verdict)}</td><td><div class="exchangeLinks"><a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(r.buy_exchange,'BUY')}">КУПИТИ ↗</a><a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(r.sell_exchange,'SELL')}">ПРОДАТИ ↗</a></div></td></tr>`).join(''):'<tr><td colspan="10" class="empty">Маршрутів поки немає</td></tr>'}
-async function refresh(){try{const r=await fetch('https://raw.githubusercontent.com/omeljanpadovcky-create/T/live-data/latest.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);render(await r.json())}catch(e){$('time').textContent='JSON недоступний';$('time').className='badge bad'}}initAi();loadExchangeDirectory();refresh();setInterval(refresh,15000);setInterval(loadExchangeDirectory,15000);
+async function refresh(){try{const r=await fetch('https://raw.githubusercontent.com/omeljanpadovcky-create/T/live-data/latest.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);render(await r.json())}catch(e){$('time').textContent='JSON недоступний';$('time').className='badge bad'}}async function boot(){
+  initAi();
+  await loadExchangeDirectory();
+  await refresh();
+  setInterval(refresh,15000);
+  setInterval(loadExchangeDirectory,15000);
+}
+boot();
 </script></body></html>
