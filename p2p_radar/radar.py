@@ -21,7 +21,9 @@ INTERVAL=max(10,ei('P2P_SCAN_SECONDS','20')); MIN_NET=ef('P2P_MIN_NET_PCT','0.35
 MIN_RATE=ef('P2P_MIN_COMPLETION','90'); MIN_ORDERS=ei('P2P_MIN_ORDERS','10'); XFER=ef('P2P_TRANSFER_FEE_USDT','1')
 BUFFER=ef('P2P_SAFETY_BUFFER_PCT','0.15'); TG_TOKEN=os.getenv('TELEGRAM_BOT_TOKEN') or os.getenv('TG_BOT_TOKEN','')
 TG_CHAT=os.getenv('TELEGRAM_CHAT_ID') or os.getenv('TG_CHAT_ID',''); BY_KEY=os.getenv('BYBIT_API_KEY',''); BY_SECRET=os.getenv('BYBIT_API_SECRET','')
-LATEST=HERE/'latest.json'; HIST=HERE/'history.csv'; REPORTS=HERE/'reports'; STATE=HERE/'state.json'; REPORTS.mkdir(exist_ok=True)
+LATEST=HERE/'latest.json'; HIST=HERE/'history.csv'; REPORTS=HERE/'reports'; STATE=HERE/'state.json'; BANK=HERE/'bank_guard.json'; REPORTS.mkdir(exist_ok=True)
+BANK_WARN=max(1,ei('P2P_BANK_WARN_TRANSFERS_PER_DAY','4')); BANK_MAX=max(BANK_WARN,ei('P2P_BANK_MAX_TRANSFERS_PER_DAY','6'))
+BANK_PER_CYCLE=max(1,ei('P2P_BANK_TRANSFERS_PER_CYCLE','2')); BANK_COOLDOWN=max(0,ei('P2P_BANK_MIN_MINUTES_BETWEEN_CYCLES','60')); BANK_ALERT_MAX=max(1,ei('P2P_BANK_MAX_ALERTS_PER_DAY','8'))
 S=requests.Session(); S.headers['User-Agent']='Mozilla/5.0 Myshka-P2P-Radar/1.0'
 
 @dataclass
@@ -103,13 +105,33 @@ def state():
     try:return json.loads(STATE.read_text(encoding='utf-8'))
     except:return {}
 def save_state(x):STATE.write_text(json.dumps(x,indent=2),encoding='utf-8')
+def bank_state():
+    today=datetime.now(KYIV).date().isoformat()
+    try:b=json.loads(BANK.read_text(encoding='utf-8'))
+    except:b={}
+    if b.get('date')!=today:
+        b={'date':today,'confirmed_cycles':0,'confirmed_transfers':0,'alerts_sent':0,'paused':False,'pause_reason':'','last_cycle_ts':0}
+    return b
+def save_bank(b):BANK.write_text(json.dumps(b,ensure_ascii=False,indent=2),encoding='utf-8')
+def bank_guard(b):
+    now=time.time(); used=int(b.get('confirmed_transfers',0)); alerts=int(b.get('alerts_sent',0)); paused=bool(b.get('paused'))
+    reason=str(b.get('pause_reason') or '')
+    if used>=BANK_MAX:paused=True;reason=f'daily bank-transfer guard reached: {used}/{BANK_MAX}'
+    elif alerts>=BANK_ALERT_MAX:paused=True;reason=f'daily Telegram action-alert guard reached: {alerts}/{BANK_ALERT_MAX}'
+    wait=0
+    last=float(b.get('last_cycle_ts',0) or 0)
+    if last and BANK_COOLDOWN:
+        wait=max(0,int(BANK_COOLDOWN*60-(now-last)))
+    level='STOP' if paused else ('WARN' if used>=BANK_WARN or used+BANK_PER_CYCLE>=BANK_MAX else 'OK')
+    return {'level':level,'paused':paused,'reason':reason,'confirmed_transfers':used,'confirmed_cycles':int(b.get('confirmed_cycles',0)),'alerts_sent':alerts,'warn_at':BANK_WARN,'max_transfers':BANK_MAX,'transfers_per_cycle':BANK_PER_CYCLE,'cooldown_minutes':BANK_COOLDOWN,'cooldown_remaining_seconds':wait}
+
 def telegram(t):
     if not TG_TOKEN or not TG_CHAT:return False,'not configured'
     try:
         r=S.post(f'https://api.telegram.org/bot{TG_TOKEN}/sendMessage',json={'chat_id':TG_CHAT,'text':t,'disable_web_page_preview':True},timeout=10); return r.ok,('sent' if r.ok else f'HTTP {r.status_code}')
     except Exception as e:return False,str(e)
-def tg_text(r,ts):
-    return f"🐭 MYSHKA P2P RADAR\n{r['verdict']} {ASSET}/{FIAT}\nBUY {r['buy_exchange']}: {r['buy_price']:.4f}\nSELL {r['sell_exchange']}: {r['sell_price']:.4f}\nGross {r['gross_spread_pct']:+.2f}%\nNet {r['net_pct']:+.2f}% ≈ {r['net_profit_fiat']:+.2f} {FIAT}\nPrefunded {r['prefunded_net_pct']:+.2f}%\nRisk {r['risk_score']}/100\nCapital model {CAPITAL:.0f} {FIAT}\nWhy: {'; '.join(r['reasons'][:3]) or 'filters passed'}\n{ts}\nNo auto-trade. Verify the live P2P ad before payment."
+def tg_text(r,ts,bg):
+    return f"🐭 MYSHKA P2P RADAR\n{r['verdict']} {ASSET}/{FIAT}\nBUY {r['buy_exchange']}: {r['buy_price']:.4f}\nSELL {r['sell_exchange']}: {r['sell_price']:.4f}\nGross {r['gross_spread_pct']:+.2f}%\nNet {r['net_pct']:+.2f}% ≈ {r['net_profit_fiat']:+.2f} {FIAT}\nPrefunded {r['prefunded_net_pct']:+.2f}%\nRisk {r['risk_score']}/100\nBank Guard {bg['level']} · {bg['confirmed_transfers']}/{bg['max_transfers']} confirmed transfers today\nCapital model {CAPITAL:.0f} {FIAT}\nWhy: {'; '.join(r['reasons'][:3]) or 'filters passed'}\n{ts}\nNo auto-trade. Verify the live P2P ad before payment."
 def report(snap):
     d=datetime.now(KYIV); p=REPORTS/f'{d:%Y-%m-%d}.md'; t=snap.get('top_route')
     with p.open('a',encoding='utf-8') as f:
@@ -133,11 +155,18 @@ def git_push():
 
 def scan():
     ts=datetime.now(KYIV).isoformat(timespec='seconds'); ps=[binance(),bybit()]; rs=routes(ps); top=rs[0] if rs else None
-    snap={'version':'MYSHKA_P2P_RADAR_V1','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'capital_fiat':CAPITAL,'mode':'SCAN_ONLY_NO_AUTOTRADE','providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'alerts':sum(x['verdict']=='ALERT' for x in rs)}
+    b=bank_state(); bg=bank_guard(b)
+    if bg['paused'] and top and top['verdict']=='ALERT':
+        top=dict(top); top['verdict']='PAUSE_BANK_GUARD'; top['reasons']=([bg['reason']] if bg['reason'] else ['Bank Guard paused actionable alerts'])+list(top.get('reasons') or [])
+    elif bg['cooldown_remaining_seconds']>0 and top and top['verdict']=='ALERT':
+        top=dict(top); top['verdict']='COOLDOWN'; top['reasons']=[f"Bank Guard cooldown {bg['cooldown_remaining_seconds']//60+1} min remaining"]+list(top.get('reasons') or [])
+    snap={'version':'MYSHKA_P2P_RADAR_V1','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'capital_fiat':CAPITAL,'mode':'SCAN_ONLY_NO_AUTOTRADE','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'alerts':sum(x['verdict']=='ALERT' for x in rs)}
     LATEST.write_text(json.dumps(snap,ensure_ascii=False,indent=2),encoding='utf-8'); history(snap); st=state(); now=time.time(); did=False
     if top and top['verdict']=='ALERT' and (st.get('last_route')!=f"{top['buy_exchange']}->{top['sell_exchange']}" or now-float(st.get('last_alert',0))>=600):
-      ok,msg=telegram(tg_text(top,ts)); report(snap); print('TELEGRAM:',msg,flush=True); did=True
-      if ok:st['last_route']=f"{top['buy_exchange']}->{top['sell_exchange']}"; st['last_alert']=now
+      ok,msg=telegram(tg_text(top,ts,bg)); report(snap); print('TELEGRAM:',msg,flush=True); did=True
+      if ok:
+        st['last_route']=f"{top['buy_exchange']}->{top['sell_exchange']}"; st['last_alert']=now
+        b['alerts_sent']=int(b.get('alerts_sent',0))+1; save_bank(b)
     if now-float(st.get('last_report',0))>=900:report(snap);st['last_report']=now;did=True
     save_state(st)
     if did:git_push()
