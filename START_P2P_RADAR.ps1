@@ -1,5 +1,7 @@
 $ErrorActionPreference='Stop'
 Set-Location $PSScriptRoot
+$env:P2P_GIT_PUSH='1'
+$env:P2P_GIT_SYNC_SECONDS='60'
 $dir=Join-Path $PSScriptRoot 'p2p_radar'
 $venv=Join-Path $dir '.venv'
 $python=Join-Path $venv 'Scripts\python.exe'
@@ -16,4 +18,5 @@ Write-Host '=====================================================' -ForegroundCo
 Write-Host ' MYSHKA P2P RADAR V2 - TELEGRAM ALERTS / NO AUTO-TRADING' -ForegroundColor Yellow
 Write-Host ' Telegram control: /p2p_status /p2p_pause /p2p_resume /p2p_done`n Ctrl+C stops the scanner.' -ForegroundColor DarkGray
 Write-Host '=====================================================' -ForegroundColor Cyan
+Start-Process 'https://omeljanpadovcky-create.github.io/T/'
 & $python (Join-Path $dir 'radar.py')
