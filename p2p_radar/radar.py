@@ -74,29 +74,95 @@ def binance():
     except Exception as e:return {'exchange':'Binance','ok':False,'note':f'{type(e).__name__}: {e}','buy':[],'sell':[]}
 
 def bybit():
-    if not eb('P2P_BYBIT_ENABLED','1'): return {'exchange':'Bybit','ok':False,'note':'вимкнено','buy':[],'sell':[]}
-    if not BY_KEY or not BY_SECRET:return {'exchange':'Bybit','ok':False,'note':'потрібні API-ключі та статус P2P-рекламодавця','buy':[],'sell':[]}
+    if not eb('P2P_BYBIT_ENABLED','1'):
+        return {'exchange':'Bybit','ok':False,'note':'вимкнено','buy':[],'sell':[]}
+
+    # Якщо є ключі — пробуємо офіційний API. Якщо нема або він відмовив —
+    # читаємо публічний веб-фід, який використовує P2P-сторінка Bybit.
+    if BY_KEY and BY_SECRET:
+        try:
+            from pybit.unified_trading import HTTP
+            api=HTTP(testnet=False,api_key=BY_KEY,api_secret=BY_SECRET)
+            def get_auth(action):
+                side='1' if action=='BUY' else '0'
+                raw=api.get_online_ads(tokenId=ASSET,currencyId=FIAT,side=side,page='1',size='20')
+                out=[]
+                for a in (raw.get('result') or {}).get('items') or []:
+                    pref=a.get('tradingPreferenceSet') or {}
+                    orders=int(num(a.get('recentOrderNum') or pref.get('orderFinishNumberDay30'),0)) or None
+                    out.append(Offer('Bybit',action,num(a.get('price')),num(a.get('minAmount')),num(a.get('maxAmount')),str(a.get('nickName') or 'unknown'),rate(a.get('recentExecuteRate') or pref.get('completeRateDay30')),orders,[str(x) for x in a.get('payments') or []],'official-api'))
+                return keep(out,action)
+            b,s=get_auth('BUY'),get_auth('SELL')
+            if b or s:
+                return {'exchange':'Bybit','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж · офіційний API','buy':b,'sell':s}
+        except Exception:
+            pass
+
+    url='https://api2.bybit.com/fiat/otc/item/online'
+    headers={'User-Agent':S.headers['User-Agent'],'Accept':'application/json','Content-Type':'application/json','Origin':'https://www.bybit.com','Referer':'https://www.bybit.com/'}
+    def get_public(action):
+        side='1' if action=='BUY' else '0'
+        payload={'userId':'','tokenId':ASSET,'currencyId':FIAT,'payment':[],'side':side,'size':'20','page':'1','amount':'','authMaker':False,'canTrade':False}
+        r=S.post(url,json=payload,headers=headers,timeout=12); r.raise_for_status()
+        out=[]
+        for a in (r.json().get('result') or {}).get('items') or []:
+            pref=a.get('tradingPreferenceSet') or {}
+            orders=int(num(a.get('recentOrderNum') or pref.get('orderFinishNumberDay30'),0)) or None
+            pays=[]
+            for x in a.get('payments') or []:
+                if isinstance(x,dict): pays.append(str(x.get('paymentName') or x.get('paymentType') or ''))
+                elif x: pays.append(str(x))
+            out.append(Offer('Bybit',action,num(a.get('price')),num(a.get('minAmount')),num(a.get('maxAmount')),str(a.get('nickName') or 'unknown'),rate(a.get('recentExecuteRate') or pref.get('completeRateDay30')),orders,[x for x in pays if x],'web-feed'))
+        return keep(out,action)
     try:
-        from pybit.unified_trading import HTTP
-        api=HTTP(testnet=False,api_key=BY_KEY,api_secret=BY_SECRET)
-        def get(action):
-            side='1' if action=='BUY' else '0'; raw=api.get_online_ads(tokenId=ASSET,currencyId=FIAT,side=side,page='1',size='20'); out=[]
-            for a in (raw.get('result') or {}).get('items') or []:
-                pref=a.get('tradingPreferenceSet') or {}; orders=int(num(a.get('recentOrderNum') or pref.get('orderFinishNumberDay30'),0)) or None
-                out.append(Offer('Bybit',action,num(a.get('price')),num(a.get('minAmount')),num(a.get('maxAmount')),str(a.get('nickName') or 'unknown'),rate(a.get('recentExecuteRate') or pref.get('completeRateDay30')),orders,[str(x) for x in a.get('payments') or []],'official-api'))
-            return keep(out,action)
-        b,s=get('BUY'),get('SELL'); return {'exchange':'Bybit','ok':bool(b or s),'note':f'{len(b)} купівля / {len(s)} продаж','buy':b,'sell':s}
-    except Exception as e:return {'exchange':'Bybit','ok':False,'note':f'{type(e).__name__}: {e}','buy':[],'sell':[]}
+        b,s=get_public('BUY'),get_public('SELL')
+        return {'exchange':'Bybit','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж · публічний веб-фід','buy':b,'sell':s}
+    except Exception as e:
+        return {'exchange':'Bybit','ok':False,'note':f'публічний веб-фід недоступний: {type(e).__name__}: {e}','buy':[],'sell':[]}
 
 def okx():
-    if not OKX_KEY or not OKX_SECRET or not OKX_PASS:
-        return {'exchange':'OKX','ok':False,'note':'P2P API доступний для Super/Diamond Merchant; потрібні API key + secret + passphrase після схвалення','buy':[],'sell':[]}
-    return {'exchange':'OKX','ok':False,'note':'ключі OKX є, але P2P API активується біржею лише після окремого merchant-схвалення','buy':[],'sell':[]}
+    # Публічний фід маркетплейсу OKX P2P — ключі не потрібні.
+    url='https://www.okx.com/v3/c2c/tradingOrders/books'
+    headers={'User-Agent':S.headers['User-Agent'],'Accept':'application/json','Referer':'https://www.okx.com/'}
+    def get(action):
+        side='sell' if action=='BUY' else 'buy'
+        params={'quoteCurrency':FIAT.lower(),'baseCurrency':ASSET.lower(),'side':side,'paymentMethod':'all','userType':'all','showTrade':'false','showFollow':'false','showAlreadyTraded':'false','isAbleFilter':'true','receivingAds':'false'}
+        r=S.get(url,params=params,headers=headers,timeout=12); r.raise_for_status()
+        items=((r.json().get('data') or {}).get(side) or [])
+        out=[]
+        for a in items:
+            pays=[]
+            for p in a.get('paymentMethods') or []:
+                if isinstance(p,str): pays.append(p)
+                elif isinstance(p,dict): pays.append(str(p.get('paymentMethod') or p.get('name') or ''))
+            out.append(Offer('OKX',action,num(a.get('price')),num(a.get('quoteMinAmountPerOrder')),num(a.get('quoteMaxAmountPerOrder')),str(a.get('nickName') or 'unknown'),rate(a.get('completedRate') or a.get('completionRate')),int(num(a.get('completedOrderQuantity') or a.get('orders'),0)) or None,[x for x in pays if x],'web-feed'))
+        return keep(out,action)
+    try:
+        b,s=get('BUY'),get('SELL')
+        return {'exchange':'OKX','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж · публічний веб-фід','buy':b,'sell':s}
+    except Exception as e:
+        return {'exchange':'OKX','ok':False,'note':f'публічний веб-фід недоступний: {type(e).__name__}: {e}','buy':[],'sell':[]}
 
 def mexc():
-    if not MEXC_KEY or not MEXC_SECRET:
-        return {'exchange':'MEXC','ok':False,'note':'P2P Open API доступний verified merchant; потрібні API key + secret після схвалення','buy':[],'sell':[]}
-    return {'exchange':'MEXC','ok':False,'note':'ключі MEXC є; P2P endpoint-документація видається в Merchant Portal після активації Open API','buy':[],'sell':[]}
+    # Публічний P2P-фід MEXC — merchant API key для читання маркету не потрібен.
+    coin_ids={'USDT':'128f589271cb4951b03e71e6323eb7be','BTC':'febc9973be4d4d53bb374476239eb219','ETH':'93c38b0169214f8689763ce9a63a73ff','USDC':'34309140878b4ae99f195ac091d49bab'}
+    url='https://www.mexc.com/api/platform/p2p/api/market'
+    headers={'User-Agent':S.headers['User-Agent'],'Accept':'application/json','Referer':'https://www.mexc.com/buy-crypto/p2p'}
+    def get(action):
+        trade_type='SELL' if action=='BUY' else 'BUY'
+        params={'adsType':'0','allowTrade':'true','amount':'','blockTrade':'false','certifiedMerchant':'false','coinId':coin_ids.get(ASSET,coin_ids['USDT']),'countryCode':'','currency':FIAT,'follow':'false','haveTrade':'false','page':'1','payMethod':'','tradeType':trade_type}
+        r=S.get(url,params=params,headers=headers,timeout=12); r.raise_for_status()
+        out=[]
+        for a in r.json().get('data') or []:
+            m=a.get('merchant') if isinstance(a.get('merchant'),dict) else {}
+            pays=[x.strip() for x in str(a.get('payMethod') or '').split(',') if x.strip()]
+            out.append(Offer('MEXC',action,num(a.get('price')),num(a.get('minTradeLimit')),num(a.get('maxTradeLimit')),str(m.get('nickName') or 'unknown'),rate(m.get('completionRate') or a.get('completionRate')),int(num(m.get('orderCount') or a.get('orderCount'),0)) or None,pays,'web-feed'))
+        return keep(out,action)
+    try:
+        b,s=get('BUY'),get('SELL')
+        return {'exchange':'MEXC','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж · публічний веб-фід','buy':b,'sell':s}
+    except Exception as e:
+        return {'exchange':'MEXC','ok':False,'note':f'публічний веб-фід недоступний: {type(e).__name__}: {e}','buy':[],'sell':[]}
 
 def bitget():
     if not BITGET_KEY or not BITGET_SECRET or not BITGET_PASS:
