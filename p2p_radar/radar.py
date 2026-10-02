@@ -18,10 +18,10 @@ def ei(k,d):
     try:return int(os.getenv(k,d))
     except:return int(d)
 def eb(k,d='0'):return os.getenv(k,d).lower() in ('1','true','yes','on')
-FIAT=os.getenv('P2P_FIAT','UAH').upper(); ASSET=os.getenv('P2P_ASSET','USDT').upper(); CAPITAL=ef('P2P_CAPITAL_FIAT','4500')
+FIAT=os.getenv('P2P_FIAT','UAH').upper(); ASSET=os.getenv('P2P_ASSET','USDT').upper()
 EXCHANGES_FILE=HERE/os.getenv('P2P_EXCHANGES_FILE','exchanges.json')
 INTERVAL=max(10,ei('P2P_SCAN_SECONDS','15')); MARKET_PAGES=max(1,min(5,ei('P2P_MARKET_PAGES','3'))); KEEP_PER_SIDE=max(15,min(60,ei('P2P_KEEP_OFFERS_PER_SIDE','40'))); MIN_NET=ef('P2P_MIN_NET_PCT','0.35'); MAX_RISK=ei('P2P_MAX_RISK','60'); REVIEW_SPREAD=ef('P2P_REVIEW_SPREAD_PCT','3.0')
-MIN_RATE=ef('P2P_MIN_COMPLETION','90'); MIN_ORDERS=ei('P2P_MIN_ORDERS','10'); XFER=ef('P2P_TRANSFER_FEE_USDT','1')
+MIN_RATE=ef('P2P_MIN_COMPLETION','90'); MIN_ORDERS=ei('P2P_MIN_ORDERS','10')
 BUFFER=ef('P2P_SAFETY_BUFFER_PCT','0.15'); TG_TOKEN=os.getenv('TELEGRAM_BOT_TOKEN') or os.getenv('TG_BOT_TOKEN','')
 TG_CHAT=os.getenv('TELEGRAM_CHAT_ID') or os.getenv('TG_CHAT_ID','')
 BY_KEY=os.getenv('BYBIT_API_KEY',''); BY_SECRET=os.getenv('BYBIT_API_SECRET','')
@@ -538,22 +538,25 @@ def routes(providers):
       for s in sells:
         pay_ok,common_payments,pay_known=payment_match(b.payments,s.payments)
         if not pay_ok: continue
-        same=b.exchange==s.exchange; transfer_fee=0.0 if same else XFER
-        qty=CAPITAL/b.price; gross=(s.price/b.price-1)*100; safety=CAPITAL*BUFFER/100
-        net=(max(0,qty-transfer_fee)*s.price)-CAPITAL-safety; pref=(qty*s.price)-CAPITAL-safety; rb,wb=offer_risk(b); rs,ws=offer_risk(s); risk=max(rb,rs); why=wb+ws
-        if same: why=['same-exchange route: no modeled crypto transfer fee']+why
+        same=b.exchange==s.exchange
+        gross=(s.price/b.price-1)*100
+        netpct=gross-BUFFER
+        prefpct=netpct
+        rb,wb=offer_risk(b); rs,ws=offer_risk(s); risk=max(rb,rs); why=wb+ws
+        if same:
+            why=['same-exchange route']+why
+        else:
+            risk+=6;why.append('cross-exchange transfer fee/network depends on the chosen amount and is not modeled')
         if pay_known and common_payments:
             why.append('common payment: '+', '.join(common_payments))
         elif not pay_known:
             risk+=6;why.append('payment compatibility not fully verified')
-        drag=(transfer_fee*b.price/CAPITAL*100) if CAPITAL else 0
-        if drag>.7:risk+=10;why.append(f'transfer drag {drag:.2f}%')
         abnormal=gross>REVIEW_SPREAD
         if abnormal:
             risk+=20;why.append(f'unusually large spread > {REVIEW_SPREAD:.2f}% — manual verification required')
         elif gross>1.5:
             risk+=8;why.append('large spread — re-check freshness')
-        risk=min(100,risk); netpct=net/CAPITAL*100; prefpct=pref/CAPITAL*100
+        risk=min(100,risk)
         if netpct>=MIN_NET and abnormal:
             verdict='REVIEW'
         elif netpct>=MIN_NET and risk<=MAX_RISK:
@@ -562,7 +565,7 @@ def routes(providers):
             verdict='PREFUNDED_ONLY'
         else:
             verdict='DROP'
-        out.append({'buy_exchange':b.exchange,'sell_exchange':s.exchange,'route_type':'INTRA' if same else 'CROSS','buy_price':round(b.price,4),'sell_price':round(s.price,4),'gross_spread_pct':round(gross,3),'net_profit_fiat':round(net,2),'net_pct':round(netpct,3),'prefunded_net_pct':round(prefpct,3),'risk_score':risk,'verdict':verdict,'buy_merchant':b.merchant,'sell_merchant':s.merchant,'buy_completion_pct':b.completion,'sell_completion_pct':s.completion,'buy_payments':b.payments,'sell_payments':s.payments,'common_payments':common_payments,'payment_verified':pay_known and bool(common_payments),'reasons':why[:7]})
+        out.append({'buy_exchange':b.exchange,'sell_exchange':s.exchange,'route_type':'INTRA' if same else 'CROSS','buy_price':round(b.price,4),'sell_price':round(s.price,4),'gross_spread_pct':round(gross,3),'net_pct':round(netpct,3),'prefunded_net_pct':round(prefpct,3),'risk_score':risk,'verdict':verdict,'buy_merchant':b.merchant,'sell_merchant':s.merchant,'buy_completion_pct':b.completion,'sell_completion_pct':s.completion,'buy_payments':b.payments,'sell_payments':s.payments,'common_payments':common_payments,'payment_verified':pay_known and bool(common_payments),'reasons':why[:7]})
     priority={'ALERT':3,'REVIEW':2,'PREFUNDED_ONLY':1,'DROP':0}
     ranked=sorted(out,key=lambda x:(priority.get(x['verdict'],0),x['net_pct'],-x['risk_score']),reverse=True)
     seen=set(); unique=[]
@@ -712,12 +715,12 @@ def telegram_control_loop():
 def tg_text(r,ts,bg):
     kind='НА ОДНІЙ БІРЖІ' if r.get('route_type')=='INTRA' else 'МІЖ БІРЖАМИ'
     verdict={'ALERT':'Є ВАРІАНТ','PREFUNDED_ONLY':'ЛИШЕ З ГОТОВИМ БАЛАНСОМ','DROP':'НЕ ВИГІДНО'}.get(r.get('verdict'),r.get('verdict'))
-    return f"🐭 MYSHKA P2P РАДАР\n{verdict} · {kind} · {ASSET}/{FIAT}\nКУПИТИ {r['buy_exchange']}: {r['buy_price']:.4f}\nПРОДАТИ {r['sell_exchange']}: {r['sell_price']:.4f}\nСпред {r['gross_spread_pct']:+.2f}%\nЧистими {r['net_pct']:+.2f}% ≈ {r['net_profit_fiat']:+.2f} {FIAT}\nБез переказу {r['prefunded_net_pct']:+.2f}%\nРизик {r['risk_score']}/100\nЗахист переказів: {bg['level']} · {bg['confirmed_transfers']}/{bg['max_transfers']} сьогодні\n{ts}\nВідкрий кнопки «КУПИТИ» і «ПРОДАТИ», звір живі оголошення та тільки тоді вирішуй, чи робити операцію."
+    return f"🐭 MYSHKA P2P РАДАР\n{verdict} · {kind} · {ASSET}/{FIAT}\nКУПИТИ {r['buy_exchange']}: {r['buy_price']:.4f}\nПРОДАТИ {r['sell_exchange']}: {r['sell_price']:.4f}\nСпред {r['gross_spread_pct']:+.2f}%\nСпред після буфера {r['net_pct']:+.2f}%\nРизик {r['risk_score']}/100\nЗахист переказів: {bg['level']} · {bg['confirmed_transfers']}/{bg['max_transfers']} сьогодні\n{ts}\nВідкрий кнопки «КУПИТИ» і «ПРОДАТИ», звір живі оголошення та тільки тоді вирішуй, чи робити операцію."
 def report(snap):
     d=datetime.now(KYIV); p=REPORTS/f'{d:%Y-%m-%d}.md'; t=snap.get('top_route')
     with p.open('a',encoding='utf-8') as f:
-      f.write(f"\n## {d:%H:%M:%S} Kyiv — {ASSET}/{FIAT}\n\nCapital **{CAPITAL:.0f} {FIAT}**, transfer model **{XFER:g} {ASSET}**, buffer **{BUFFER:.2f}%**.\n\n")
-      if t:f.write(f"Top: **{t['buy_exchange']} → {t['sell_exchange']}**, BUY {t['buy_price']:.4f}, SELL {t['sell_price']:.4f}, gross {t['gross_spread_pct']:+.2f}%, net {t['net_pct']:+.2f}% ({t['net_profit_fiat']:+.2f} {FIAT}), risk {t['risk_score']}/100, **{t['verdict']}**.\n\n")
+      f.write(f"\n## {d:%H:%M:%S} Kyiv — {ASSET}/{FIAT}\n\nNo fixed trade amount. Ranking uses market prices and a **{BUFFER:.2f}%** safety buffer. Cross-exchange transfer costs depend on the chosen amount/network and are not modeled.\n\n")
+      if t:f.write(f"Top: **{t['buy_exchange']} → {t['sell_exchange']}**, BUY {t['buy_price']:.4f}, SELL {t['sell_price']:.4f}, gross {t['gross_spread_pct']:+.2f}%, after buffer {t['net_pct']:+.2f}%, risk {t['risk_score']}/100, **{t['verdict']}**.\n\n")
       f.write('Providers:\n'+''.join(f"- **{x['exchange']}**: {'OK' if x['ok'] else 'OFF'} — {x['note']}\n" for x in snap['providers']))
     return p
 def history(snap):
@@ -725,7 +728,7 @@ def history(snap):
     with HIST.open('a',encoding='utf-8',newline='') as f:
       w=csv.writer(f)
       if new:w.writerow(['scanned_at','buy','sell','buy_price','sell_price','gross_pct','net_pct','profit_fiat','risk','verdict'])
-      w.writerow([snap['scanned_at'],t.get('buy_exchange',''),t.get('sell_exchange',''),t.get('buy_price',''),t.get('sell_price',''),t.get('gross_spread_pct',''),t.get('net_pct',''),t.get('net_profit_fiat',''),t.get('risk_score',''),t.get('verdict','NO_ROUTE')])
+      w.writerow([snap['scanned_at'],t.get('buy_exchange',''),t.get('sell_exchange',''),t.get('buy_price',''),t.get('sell_price',''),t.get('gross_spread_pct',''),t.get('net_pct',''),'',t.get('risk_score',''),t.get('verdict','NO_ROUTE')])
 def git_push():
     if not eb('P2P_GIT_PUSH','0'):return
     try:
@@ -745,7 +748,7 @@ def scan():
         top=dict(top); top['verdict']='PAUSE_BANK_GUARD'; top['reasons']=([bg['reason']] if bg['reason'] else ['Bank Guard paused actionable alerts'])+list(top.get('reasons') or [])
     elif bg['cooldown_remaining_seconds']>0 and top and top['verdict']=='ALERT':
         top=dict(top); top['verdict']='COOLDOWN'; top['reasons']=[f"Bank Guard cooldown {bg['cooldown_remaining_seconds']//60+1} min remaining"]+list(top.get('reasons') or [])
-    snap={'version':'MYSHKA_P2P_RADAR_V4','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'capital_fiat':CAPITAL,'mode':'ХМАРНИЙ СКАНЕР 24/7','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'route_count':len(rs),'shown_routes':min(25,len(rs)),'alerts':sum(x['verdict']=='ALERT' for x in rs),'review_count':sum(x['verdict']=='REVIEW' for x in rs),'review_spread_pct':REVIEW_SPREAD,'market_pages':MARKET_PAGES,'offers_per_side':KEEP_PER_SIDE,'scan_duration_seconds':round(time.time()-started,2)}
+    snap={'version':'MYSHKA_P2P_RADAR_V4','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'mode':'ХМАРНИЙ СКАНЕР 24/7','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'route_count':len(rs),'shown_routes':min(25,len(rs)),'alerts':sum(x['verdict']=='ALERT' for x in rs),'review_count':sum(x['verdict']=='REVIEW' for x in rs),'review_spread_pct':REVIEW_SPREAD,'market_pages':MARKET_PAGES,'offers_per_side':KEEP_PER_SIDE,'scan_duration_seconds':round(time.time()-started,2)}
     LATEST.write_text(json.dumps(snap,ensure_ascii=False,indent=2),encoding='utf-8'); history(snap); st=state(); now=time.time(); did=False
     if top and top['verdict']=='ALERT' and (st.get('last_route')!=f"{top['buy_exchange']}->{top['sell_exchange']}" or now-float(st.get('last_alert',0))>=600):
       ok,msg=telegram(tg_text(top,ts,bg),telegram_keyboard(top)); report(snap); print('TELEGRAM:',msg,flush=True); did=True
@@ -773,7 +776,7 @@ def main():
         scan();return 0
     if TG_TOKEN and TG_CHAT:
         threading.Thread(target=telegram_control_loop,name='myshka-p2p-telegram',daemon=True).start()
-    print(f'MYSHKA P2P RADAR V2 — {ASSET}/{FIAT}, {CAPITAL:.0f} {FIAT}, scan {INTERVAL}s, Telegram control ON={bool(TG_TOKEN and TG_CHAT)}, NO AUTO-TRADE',flush=True)
+    print(f'MYSHKA P2P RADAR V2 — {ASSET}/{FIAT}, no fixed trade amount, scan {INTERVAL}s, Telegram control ON={bool(TG_TOKEN and TG_CHAT)}, NO AUTO-TRADE',flush=True)
     while True:
       tick=time.time()
       try:scan()
