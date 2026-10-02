@@ -2,7 +2,7 @@ name: MYSHKA P2P Cloud 24x7
 
 on:
   schedule:
-    # GitHub scheduler starts jobs every 5 min; the job itself scans/publishes every 30 sec.
+    # GitHub scheduler starts jobs every 5 min; each running job scans/publishes every 15 sec.
     - cron: '2-57/5 * * * *'
   workflow_dispatch:
   push:
@@ -23,10 +23,11 @@ concurrency:
 jobs:
   cloud-radar:
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 7
     env:
       P2P_FIAT: UAH
       P2P_ASSET: USDT
+      P2P_EXCHANGES: 'binance,bybit,okx,kucoin,mexc,weex'
       P2P_CAPITAL_FIAT: '4500'
       P2P_SCAN_SECONDS: '15'
       P2P_MIN_NET_PCT: '0.35'
@@ -187,7 +188,7 @@ jobs:
 
           # Keep this runner alive long enough that the next 5-minute scheduled run
           # is normally already queued. That removes dependency on the user's PC.
-          END=$((SECONDS+240))
+          END=$((SECONDS+330))
           while [ "$SECONDS" -lt "$END" ]; do
             sleep 15
             publish_live || true
