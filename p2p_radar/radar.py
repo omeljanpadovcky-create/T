@@ -164,6 +164,52 @@ def mexc():
     except Exception as e:
         return {'exchange':'MEXC','ok':False,'note':f'публічний веб-фід недоступний: {type(e).__name__}: {e}','buy':[],'sell':[]}
 
+def kucoin():
+    # Публічний KuCoin P2P endpoint — ключі не потрібні.
+    url='https://www.kucoin.com/_api/otc/ad/list'
+    headers={'User-Agent':S.headers['User-Agent'],'Accept':'application/json','Referer':'https://www.kucoin.com/otc/buy/USDT-UAH','x-site':'global'}
+    def get(action):
+        side='SELL' if action=='BUY' else 'BUY'
+        params={'status':'PUTUP','currency':ASSET,'legal':FIAT,'page':'1','pageSize':'20','side':side,'amount':'','payTypeCodes':'','sortCode':'PRICE','highQualityMerchant':'0','canDealOrder':'false','lang':'en_US'}
+        r=S.get(url,params=params,headers=headers,timeout=12); r.raise_for_status()
+        raw=r.json()
+        if not raw.get('success'): raise RuntimeError(raw.get('msg') or raw.get('code'))
+        out=[]
+        for a in raw.get('items') or []:
+            pays=[]
+            for p in a.get('adPayTypes') or []:
+                if isinstance(p,dict): pays.append(str(p.get('payTypeNameEn') or p.get('payTypeCode') or ''))
+            out.append(Offer('KuCoin',action,num(a.get('floatPrice') or a.get('premium')),num(a.get('limitMinQuote')),num(a.get('limitMaxQuote')),str(a.get('nickName') or 'unknown'),rate(a.get('dealOrderRate')),int(num(a.get('dealOrderNum'),0)) or None,[x for x in pays if x],'web-feed'))
+        return keep(out,action)
+    try:
+        b,s=get('BUY'),get('SELL')
+        return {'exchange':'KuCoin','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж · публічний веб-фід','buy':b,'sell':s}
+    except Exception as e:
+        return {'exchange':'KuCoin','ok':False,'note':f'публічний веб-фід недоступний: {type(e).__name__}: {e}','buy':[],'sell':[]}
+
+def htx():
+    # Публічний HTX P2P endpoint. Для UAH код фіату = 45, USDT coinId = 2.
+    url='https://www.htx.com/-/x/otc/v1/data/trade-market'
+    headers={'User-Agent':S.headers['User-Agent'],'Accept':'application/json','Referer':'https://www.htx.com/'}
+    fiat_ids={'UAH':'45','RUB':'11','EUR':'14','USD':'2','GBP':'12','BYN':'72','KZT':'57','UZS':'61','TRY':'23'}
+    coin_ids={'BTC':'1','USDT':'2','ETH':'3'}
+    def get(action):
+        trade_type='sell' if action=='BUY' else 'buy'
+        params={'coinId':coin_ids.get(ASSET,'2'),'currency':fiat_ids.get(FIAT,FIAT.lower()),'tradeType':trade_type,'currPage':'1','payMethod':'0','acceptOrder':'-1','country':'','blockType':'general','online':'1','range':'0','amount':'','onlyTradable':'false','isFollowed':'false'}
+        r=S.get(url,params=params,headers=headers,timeout=12); r.raise_for_status()
+        raw=r.json()
+        if int(raw.get('code',0))!=200: raise RuntimeError(raw.get('message') or raw.get('code'))
+        out=[]
+        for a in raw.get('data') or []:
+            pays=[str(x.get('name') or x.get('payMethodId')) for x in (a.get('payMethods') or []) if isinstance(x,dict)]
+            out.append(Offer('HTX',action,num(a.get('price')),num(a.get('minTradeLimit')),num(a.get('maxTradeLimit')),str(a.get('userName') or 'unknown'),rate(a.get('orderCompleteRate')),int(num(a.get('totalTradeOrderCount') or a.get('tradeMonthTimes'),0)) or None,pays,'web-feed'))
+        return keep(out,action)
+    try:
+        b,s=get('BUY'),get('SELL')
+        return {'exchange':'HTX','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж · публічний веб-фід','buy':b,'sell':s}
+    except Exception as e:
+        return {'exchange':'HTX','ok':False,'note':f'публічний веб-фід недоступний: {type(e).__name__}: {e}','buy':[],'sell':[]}
+
 def bitget():
     if not BITGET_KEY or not BITGET_SECRET or not BITGET_PASS:
         return {'exchange':'Bitget','ok':False,'note':'потрібні API key + secret + passphrase з правом UTA P2P read','buy':[],'sell':[]}
@@ -233,7 +279,7 @@ def configured_exchange_ids():
         return ['binance','bybit']
 
 def provider_for(exchange_id):
-    adapters={'binance':binance,'bybit':bybit,'okx':okx,'bitget':bitget,'gate':gate,'mexc':mexc}
+    adapters={'binance':binance,'bybit':bybit,'okx':okx,'bitget':bitget,'kucoin':kucoin,'gate':gate,'mexc':mexc,'htx':htx}
     fn=adapters.get(str(exchange_id).lower())
     if not fn:return {'exchange':str(exchange_id).upper(),'ok':False,'note':'є пряме P2P-посилання; автоматичне сканування для цієї біржі ще не підключено','buy':[],'sell':[]}
     return fn()
