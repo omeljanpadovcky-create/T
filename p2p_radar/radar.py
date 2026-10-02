@@ -1,8 +1,9 @@
 from __future__ import annotations
-import csv, json, os, subprocess, threading, time
+import base64, csv, hashlib, hmac, json, os, subprocess, threading, time
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import urlencode
 from zoneinfo import ZoneInfo
 import requests
 from dotenv import load_dotenv
@@ -22,7 +23,10 @@ REQUIRE_LIMIT_FIT=eb('P2P_REQUIRE_CAPITAL_LIMITS','0')
 INTERVAL=max(10,ei('P2P_SCAN_SECONDS','15')); MIN_NET=ef('P2P_MIN_NET_PCT','0.35'); MAX_RISK=ei('P2P_MAX_RISK','60')
 MIN_RATE=ef('P2P_MIN_COMPLETION','90'); MIN_ORDERS=ei('P2P_MIN_ORDERS','10'); XFER=ef('P2P_TRANSFER_FEE_USDT','1')
 BUFFER=ef('P2P_SAFETY_BUFFER_PCT','0.15'); TG_TOKEN=os.getenv('TELEGRAM_BOT_TOKEN') or os.getenv('TG_BOT_TOKEN','')
-TG_CHAT=os.getenv('TELEGRAM_CHAT_ID') or os.getenv('TG_CHAT_ID',''); BY_KEY=os.getenv('BYBIT_API_KEY',''); BY_SECRET=os.getenv('BYBIT_API_SECRET','')
+TG_CHAT=os.getenv('TELEGRAM_CHAT_ID') or os.getenv('TG_CHAT_ID','')
+BY_KEY=os.getenv('BYBIT_API_KEY',''); BY_SECRET=os.getenv('BYBIT_API_SECRET','')
+BITGET_KEY=os.getenv('BITGET_API_KEY',''); BITGET_SECRET=os.getenv('BITGET_API_SECRET',''); BITGET_PASS=os.getenv('BITGET_API_PASSPHRASE','')
+GATE_KEY=os.getenv('GATE_API_KEY',''); GATE_SECRET=os.getenv('GATE_API_SECRET','')
 LATEST=HERE/'latest.json'; HIST=HERE/'history.csv'; REPORTS=HERE/'reports'; STATE=HERE/'state.json'; BANK=HERE/'bank_guard.json'; REPORTS.mkdir(exist_ok=True)
 BANK_WARN=max(1,ei('P2P_BANK_WARN_TRANSFERS_PER_DAY','4')); BANK_MAX=max(BANK_WARN,ei('P2P_BANK_MAX_TRANSFERS_PER_DAY','6'))
 BANK_PER_CYCLE=max(1,ei('P2P_BANK_TRANSFERS_PER_CYCLE','2')); BANK_COOLDOWN=max(0,ei('P2P_BANK_MIN_MINUTES_BETWEEN_CYCLES','60')); BANK_ALERT_MAX=max(1,ei('P2P_BANK_MAX_ALERTS_PER_DAY','8')); TG_CONFIRM_WARN=max(1,ei('P2P_TELEGRAM_CONFIRM_WARN','5')); GIT_SYNC_SECONDS=max(30,ei('P2P_GIT_SYNC_SECONDS','60'))
@@ -47,7 +51,7 @@ def keep(xs,action):
     return sorted(xs,key=lambda x:x.price,reverse=action=='SELL')[:15]
 
 def binance():
-    if not eb('P2P_BINANCE_ENABLED','1'): return {'exchange':'Binance','ok':False,'note':'disabled','buy':[],'sell':[]}
+    if not eb('P2P_BINANCE_ENABLED','1'): return {'exchange':'Binance','ok':False,'note':'вимкнено','buy':[],'sell':[]}
     url='https://www.binance.com/bapi/c2c/v1/public/c2c/agent/ad-list'
     def get(action):
         r=S.get(url,params={'fiat':FIAT,'asset':ASSET,'tradeType':action,'limit':20},headers={'Referer':'https://www.binance.com/'},timeout=12)
@@ -64,12 +68,12 @@ def binance():
             out.append(Offer('Binance',action,price,min_fiat,max_fiat,str(m.get('nickName') or 'unknown'),rate(m.get('monthFinishRate') or m.get('positiveRate')),orders,pays,'official-public'))
         return keep(out,action)
     try:
-        b,s=get('BUY'),get('SELL'); return {'exchange':'Binance','ok':True,'note':f'{len(b)} buy / {len(s)} sell','buy':b,'sell':s}
+        b,s=get('BUY'),get('SELL'); return {'exchange':'Binance','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж','buy':b,'sell':s}
     except Exception as e:return {'exchange':'Binance','ok':False,'note':f'{type(e).__name__}: {e}','buy':[],'sell':[]}
 
 def bybit():
-    if not eb('P2P_BYBIT_ENABLED','1'): return {'exchange':'Bybit','ok':False,'note':'disabled','buy':[],'sell':[]}
-    if not BY_KEY or not BY_SECRET:return {'exchange':'Bybit','ok':False,'note':'needs API keys + General Advertiser access','buy':[],'sell':[]}
+    if not eb('P2P_BYBIT_ENABLED','1'): return {'exchange':'Bybit','ok':False,'note':'вимкнено','buy':[],'sell':[]}
+    if not BY_KEY or not BY_SECRET:return {'exchange':'Bybit','ok':False,'note':'потрібні API-ключі та статус P2P-рекламодавця','buy':[],'sell':[]}
     try:
         from pybit.unified_trading import HTTP
         api=HTTP(testnet=False,api_key=BY_KEY,api_secret=BY_SECRET)
@@ -79,13 +83,70 @@ def bybit():
                 pref=a.get('tradingPreferenceSet') or {}; orders=int(num(a.get('recentOrderNum') or pref.get('orderFinishNumberDay30'),0)) or None
                 out.append(Offer('Bybit',action,num(a.get('price')),num(a.get('minAmount')),num(a.get('maxAmount')),str(a.get('nickName') or 'unknown'),rate(a.get('recentExecuteRate') or pref.get('completeRateDay30')),orders,[str(x) for x in a.get('payments') or []],'official-api'))
             return keep(out,action)
-        b,s=get('BUY'),get('SELL'); return {'exchange':'Bybit','ok':bool(b or s),'note':f'{len(b)} buy / {len(s)} sell','buy':b,'sell':s}
+        b,s=get('BUY'),get('SELL'); return {'exchange':'Bybit','ok':bool(b or s),'note':f'{len(b)} купівля / {len(s)} продаж','buy':b,'sell':s}
     except Exception as e:return {'exchange':'Bybit','ok':False,'note':f'{type(e).__name__}: {e}','buy':[],'sell':[]}
 
 def okx():
-    # Adapter placeholder. Keep the exchange in the user's explicit list, but do not invent prices
-    # until a stable market-data source is wired.
-    return {'exchange':'OKX','ok':False,'note':'adapter not configured yet','buy':[],'sell':[]}
+    return {'exchange':'OKX','ok':False,'note':'доступне пряме P2P-посилання; автоматичний API-сканер ще не підключено','buy':[],'sell':[]}
+
+def bitget():
+    if not BITGET_KEY or not BITGET_SECRET or not BITGET_PASS:
+        return {'exchange':'Bitget','ok':False,'note':'потрібні API key + secret + passphrase з правом UTA P2P read','buy':[],'sell':[]}
+    base='https://api.bitget.com'; path='/api/v3/p2p/ad-list'
+    def get(action):
+        # Bitget side is the merchant ad direction. To BUY crypto from ads we need merchant SELL ads, and vice versa.
+        side='sell' if action=='BUY' else 'buy'
+        params={'token':ASSET,'fiat':FIAT,'side':side,'pageNum':'1','limit':'10'}
+        qs=urlencode(sorted(params.items()))
+        ts=str(int(time.time()*1000))
+        msg=ts+'GET'+path+'?'+qs
+        sign=base64.b64encode(hmac.new(BITGET_SECRET.encode(),msg.encode(),hashlib.sha256).digest()).decode()
+        headers={'ACCESS-KEY':BITGET_KEY,'ACCESS-SIGN':sign,'ACCESS-TIMESTAMP':ts,'ACCESS-PASSPHRASE':BITGET_PASS,'locale':'en-US'}
+        r=S.get(base+path,params=params,headers=headers,timeout=12); r.raise_for_status()
+        raw=r.json()
+        if str(raw.get('code'))!='00000': raise RuntimeError(raw.get('msg') or raw.get('code'))
+        out=[]
+        for a in raw.get('data') or []:
+            pays=[str(x.get('payMethodName') or x.get('payMethodId')) for x in (a.get('payMethods') or []) if isinstance(x,dict)]
+            out.append(Offer('Bitget',action,num(a.get('price')),num(a.get('minAmount')),num(a.get('maxAmount')),str(a.get('merchantName') or 'unknown'),rate(a.get('completedRate')),int(num(a.get('completedOrderNum'),0)) or None,pays,'official-api'))
+        return keep(out,action)
+    try:
+        b,s=get('BUY'),get('SELL'); return {'exchange':'Bitget','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж','buy':b,'sell':s}
+    except Exception as e:return {'exchange':'Bitget','ok':False,'note':f'помилка API: {type(e).__name__}: {e}','buy':[],'sell':[]}
+
+def gate():
+    if not GATE_KEY or not GATE_SECRET:
+        return {'exchange':'Gate','ok':False,'note':'потрібні API key + secret з доступом до P2P','buy':[],'sell':[]}
+    host='https://api.gateio.ws'; prefix='/api/v4'; path='/p2p/merchant/books/ads_list'
+    def get(action):
+        # Gate trade_type describes the advertisement side. For our BUY we read sell ads.
+        trade_type='sell' if action=='BUY' else 'buy'
+        body=json.dumps({'asset':ASSET,'fiat_unit':FIAT,'trade_type':trade_type},separators=(',',':'))
+        ts=str(int(time.time()))
+        body_hash=hashlib.sha512(body.encode()).hexdigest()
+        sign_string='POST\n'+prefix+path+'\n\n'+body_hash+'\n'+ts
+        sign=hmac.new(GATE_SECRET.encode(),sign_string.encode(),hashlib.sha512).hexdigest()
+        headers={'Accept':'application/json','Content-Type':'application/json','Timestamp':ts,'KEY':GATE_KEY,'SIGN':sign}
+        r=S.post(host+prefix+path,headers=headers,data=body,timeout=12); r.raise_for_status()
+        raw=r.json()
+        data=raw.get('data') if isinstance(raw,dict) else raw
+        items=(data.get('list') if isinstance(data,dict) else data) or []
+        out=[]
+        for a in items:
+            price=num(a.get('price') or a.get('unit_price'))
+            min_fiat=num(a.get('fiat_min_amount'))
+            max_fiat=num(a.get('fiat_max_amount'))
+            if not min_fiat and a.get('min_single_trans_amount'): min_fiat=num(a.get('min_single_trans_amount'))*price
+            if not max_fiat and a.get('max_single_trans_amount'): max_fiat=num(a.get('max_single_trans_amount'))*price
+            pays=[]
+            for x in a.get('trade_methods') or []:
+                if isinstance(x,dict): pays.append(str(x.get('trade_method_name') or x.get('identifier') or x.get('pay_type') or ''))
+                elif x: pays.append(str(x))
+            out.append(Offer('Gate',action,price,min_fiat,max_fiat,str(a.get('nick_name') or a.get('nickname') or 'unknown'),None,None,[x for x in pays if x],'official-api'))
+        return keep(out,action)
+    try:
+        b,s=get('BUY'),get('SELL'); return {'exchange':'Gate','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж','buy':b,'sell':s}
+    except Exception as e:return {'exchange':'Gate','ok':False,'note':f'помилка API: {type(e).__name__}: {e}','buy':[],'sell':[]}
 
 def configured_exchange_ids():
     env=[x.strip().lower() for x in os.getenv('P2P_EXCHANGES','').split(',') if x.strip()]
@@ -97,9 +158,9 @@ def configured_exchange_ids():
         return ['binance','bybit']
 
 def provider_for(exchange_id):
-    adapters={'binance':binance,'bybit':bybit,'okx':okx}
+    adapters={'binance':binance,'bybit':bybit,'okx':okx,'bitget':bitget,'gate':gate}
     fn=adapters.get(str(exchange_id).lower())
-    if not fn:return {'exchange':str(exchange_id).upper(),'ok':False,'note':'no adapter yet','buy':[],'sell':[]}
+    if not fn:return {'exchange':str(exchange_id).upper(),'ok':False,'note':'є пряме P2P-посилання; автоматичне сканування для цієї біржі ще не підключено','buy':[],'sell':[]}
     return fn()
 
 def offer_risk(o):
@@ -170,13 +231,13 @@ def exchange_url(exchange,action):
 def telegram_keyboard(r):
     row=[]
     bu=exchange_url(r.get('buy_exchange'),'BUY'); su=exchange_url(r.get('sell_exchange'),'SELL')
-    if bu:row.append({'text':f"🟢 BUY {r.get('buy_exchange','')} ",'url':bu})
-    if su:row.append({'text':f"🔴 SELL {r.get('sell_exchange','')} ",'url':su})
+    if bu:row.append({'text':f"🟢 КУПИТИ · {r.get('buy_exchange','')}",'url':bu})
+    if su:row.append({'text':f"🔴 ПРОДАТИ · {r.get('sell_exchange','')}",'url':su})
     kb=[]
     if row:kb.append(row)
     if DASHBOARD_URL:kb.append([{'text':'📊 Відкрити радар','url':DASHBOARD_URL}])
     kb.append([{'text':'🔗 Я перевірив маршрут','callback_data':'p2p_route_checked'},{'text':'✅ Цикл завершено','callback_data':'p2p_cycle_done'}])
-    kb.append([{'text':'⏸ Пауза alerts','callback_data':'p2p_pause'},{'text':'📋 Статус','callback_data':'p2p_status'}])
+    kb.append([{'text':'⏸ Пауза сповіщень','callback_data':'p2p_pause'},{'text':'📋 Статус','callback_data':'p2p_status'}])
     return {'inline_keyboard':kb}
 
 def telegram(t,reply_markup=None):
@@ -211,13 +272,14 @@ def bank_apply(action):
 
 def telegram_status_text():
     b=bank_state(); bg=bank_guard(b)
-    return (f"🐭 MYSHKA P2P STATUS\nBank Guard: {bg['level']}\n"
+    guard={'OK':'НОРМА','WARN':'ПОПЕРЕДЖЕННЯ','STOP':'СТОП'}.get(bg['level'],bg['level'])
+    return (f"🐭 MYSHKA P2P — СТАТУС\nЗахист банківських переказів: {guard}\n"
             f"Підтверджені цикли: {bg['confirmed_cycles']}\n"
-            f"Підтверджені bank transfers: {bg['confirmed_transfers']}/{bg['max_transfers']}\n"
-            f"Перевірок маршрутів: {int(b.get('route_checks',0))} (warning at {TG_CONFIRM_WARN})\n"
-            f"Telegram alerts: {bg['alerts_sent']}/{BANK_ALERT_MAX}\n"
-            f"Cooldown: {bg['cooldown_remaining_seconds']//60} min\n"
-            f"Alerts paused: {'YES' if bg['paused'] else 'NO'}")
+            f"Підтверджені перекази: {bg['confirmed_transfers']}/{bg['max_transfers']}\n"
+            f"Перевірок маршрутів: {int(b.get('route_checks',0))} (попередження після {TG_CONFIRM_WARN})\n"
+            f"Сповіщень сьогодні: {bg['alerts_sent']}/{BANK_ALERT_MAX}\n"
+            f"Пауза після циклу: {bg['cooldown_remaining_seconds']//60} хв\n"
+            f"Сповіщення на паузі: {'ТАК' if bg['paused'] else 'НІ'}")
 
 def telegram_control_loop():
     if not TG_TOKEN or not TG_CHAT:return
@@ -245,9 +307,9 @@ def telegram_control_loop():
                         callback_answer(qid,(f"⚠️ Уже {n} перевірок сьогодні. Звір ліміти банку/картки перед наступною дією." if warn else f"Перевірка #{n} зарахована."),warn)
                         if n==TG_CONFIRM_WARN:telegram(f"⚠️ MYSHKA P2P: сьогодні вже {n} разів відкривався/перевірявся маршрут. Це внутрішнє попередження, не ліміт банку. Перед наступною операцією перевір актуальні ліміти та реквізити.")
                     elif data=='p2p_cycle_done':
-                        b,bg=bank_apply('cycle-done');callback_answer(qid,f"Цикл #{bg['confirmed_cycles']} зараховано · Bank Guard {bg['level']}",bg['level']!='OK')
+                        b,bg=bank_apply('cycle-done');callback_answer(qid,f"Цикл #{bg['confirmed_cycles']} зараховано · захист: {bg['level']}",bg['level']!='OK')
                     elif data=='p2p_pause':
-                        bank_apply('pause');callback_answer(qid,'P2P alerts поставлено на паузу.',True)
+                        bank_apply('pause');callback_answer(qid,'P2P-сповіщення поставлено на паузу.',True)
                     elif data=='p2p_status':
                         callback_answer(qid,'Статус надіслано');telegram(telegram_status_text())
                     continue
@@ -255,16 +317,18 @@ def telegram_control_loop():
                 if chat!=str(TG_CHAT):continue
                 cmd=str(m.get('text') or '').strip().lower().split()[0] if m.get('text') else ''
                 if cmd in {'/p2p','/p2p_status','/status'}:telegram(telegram_status_text())
-                elif cmd in {'/p2p_pause','/pause'}:bank_apply('pause');telegram('⏸ MYSHKA P2P alerts paused.')
-                elif cmd in {'/p2p_resume','/resume'}:bank_apply('resume');telegram('▶️ MYSHKA P2P alerts resumed.')
+                elif cmd in {'/p2p_pause','/pause'}:bank_apply('pause');telegram('⏸ MYSHKA P2P: сповіщення поставлено на паузу.')
+                elif cmd in {'/p2p_resume','/resume'}:bank_apply('resume');telegram('▶️ MYSHKA P2P: сповіщення відновлено.')
                 elif cmd in {'/p2p_done','/done'}:
-                    _,bg=bank_apply('cycle-done');telegram(f"✅ Цикл #{bg['confirmed_cycles']} зараховано · Bank Guard {bg['level']}.")
-                elif cmd in {'/p2p_help','/help'}:telegram("MYSHKA P2P commands:\n/p2p_status\n/p2p_pause\n/p2p_resume\n/p2p_done")
+                    _,bg=bank_apply('cycle-done');telegram(f"✅ Цикл #{bg['confirmed_cycles']} зараховано · захист: {bg['level']}.")
+                elif cmd in {'/p2p_help','/help'}:telegram("Команди MYSHKA P2P:\n/p2p_status — статус\n/p2p_pause — пауза\n/p2p_resume — продовжити\n/p2p_done — цикл завершено")
         except Exception as e:
             print('TELEGRAM CONTROL:',e,flush=True);time.sleep(4)
 
 def tg_text(r,ts,bg):
-    return f"🐭 MYSHKA P2P RADAR\n{r['verdict']} {ASSET}/{FIAT}\nBUY {r['buy_exchange']}: {r['buy_price']:.4f}\nSELL {r['sell_exchange']}: {r['sell_price']:.4f}\nGross {r['gross_spread_pct']:+.2f}%\nNet {r['net_pct']:+.2f}% ≈ {r['net_profit_fiat']:+.2f} {FIAT}\nPrefunded {r['prefunded_net_pct']:+.2f}%\nRisk {r['risk_score']}/100\nBank Guard {bg['level']} · {bg['confirmed_transfers']}/{bg['max_transfers']} confirmed transfers today\nCapital model {CAPITAL:.0f} {FIAT}\nWhy: {'; '.join(r['reasons'][:3]) or 'filters passed'}\n{ts}\nВідкрий BUY/SELL кнопки, звір оголошення, потім натисни «Я перевірив маршрут». На 5-й перевірці MYSHKA покаже warning.\nNo auto-trade. Verify the live P2P ad before payment."
+    kind='НА ОДНІЙ БІРЖІ' if r.get('route_type')=='INTRA' else 'МІЖ БІРЖАМИ'
+    verdict={'ALERT':'Є ВАРІАНТ','PREFUNDED_ONLY':'ЛИШЕ З ГОТОВИМ БАЛАНСОМ','DROP':'НЕ ВИГІДНО'}.get(r.get('verdict'),r.get('verdict'))
+    return f"🐭 MYSHKA P2P РАДАР\n{verdict} · {kind} · {ASSET}/{FIAT}\nКУПИТИ {r['buy_exchange']}: {r['buy_price']:.4f}\nПРОДАТИ {r['sell_exchange']}: {r['sell_price']:.4f}\nСпред {r['gross_spread_pct']:+.2f}%\nЧистими {r['net_pct']:+.2f}% ≈ {r['net_profit_fiat']:+.2f} {FIAT}\nБез переказу {r['prefunded_net_pct']:+.2f}%\nРизик {r['risk_score']}/100\nЗахист переказів: {bg['level']} · {bg['confirmed_transfers']}/{bg['max_transfers']} сьогодні\n{ts}\nВідкрий кнопки «КУПИТИ» і «ПРОДАТИ», звір живі оголошення та тільки тоді вирішуй, чи робити операцію."
 def report(snap):
     d=datetime.now(KYIV); p=REPORTS/f'{d:%Y-%m-%d}.md'; t=snap.get('top_route')
     with p.open('a',encoding='utf-8') as f:
@@ -293,7 +357,7 @@ def scan():
         top=dict(top); top['verdict']='PAUSE_BANK_GUARD'; top['reasons']=([bg['reason']] if bg['reason'] else ['Bank Guard paused actionable alerts'])+list(top.get('reasons') or [])
     elif bg['cooldown_remaining_seconds']>0 and top and top['verdict']=='ALERT':
         top=dict(top); top['verdict']='COOLDOWN'; top['reasons']=[f"Bank Guard cooldown {bg['cooldown_remaining_seconds']//60+1} min remaining"]+list(top.get('reasons') or [])
-    snap={'version':'MYSHKA_P2P_RADAR_V3','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'capital_fiat':CAPITAL,'mode':'LIST_LOOP_NO_AUTOTRADE','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'alerts':sum(x['verdict']=='ALERT' for x in rs)}
+    snap={'version':'MYSHKA_P2P_RADAR_V3','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'capital_fiat':CAPITAL,'mode':'ХМАРНИЙ СКАНЕР 24/7','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'alerts':sum(x['verdict']=='ALERT' for x in rs)}
     LATEST.write_text(json.dumps(snap,ensure_ascii=False,indent=2),encoding='utf-8'); history(snap); st=state(); now=time.time(); did=False
     if top and top['verdict']=='ALERT' and (st.get('last_route')!=f"{top['buy_exchange']}->{top['sell_exchange']}" or now-float(st.get('last_alert',0))>=600):
       ok,msg=telegram(tg_text(top,ts,bg),telegram_keyboard(top)); report(snap); print('TELEGRAM:',msg,flush=True); did=True
