@@ -44,6 +44,7 @@ jobs:
       P2P_BANK_MIN_MINUTES_BETWEEN_CYCLES: '60'
       P2P_BANK_MAX_ALERTS_PER_DAY: '8'
       P2P_TELEGRAM_CONFIRM_WARN: '5'
+      P2P_TELEGRAM_TOP_N: '5'
       P2P_DASHBOARD_URL: 'https://omeljanpadovcky-create.github.io/T/'
       P2P_GIT_PUSH: '0'
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN || secrets.TG_BOT_TOKEN }}
