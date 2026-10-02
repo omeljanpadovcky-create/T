@@ -20,7 +20,7 @@ def ei(k,d):
 def eb(k,d='0'):return os.getenv(k,d).lower() in ('1','true','yes','on')
 FIAT=os.getenv('P2P_FIAT','UAH').upper(); ASSET=os.getenv('P2P_ASSET','USDT').upper()
 EXCHANGES_FILE=HERE/os.getenv('P2P_EXCHANGES_FILE','exchanges.json')
-INTERVAL=max(10,ei('P2P_SCAN_SECONDS','15')); MARKET_PAGES=max(1,min(5,ei('P2P_MARKET_PAGES','3'))); KEEP_PER_SIDE=max(15,min(60,ei('P2P_KEEP_OFFERS_PER_SIDE','40'))); MIN_NET=ef('P2P_MIN_NET_PCT','0.35'); MAX_RISK=ei('P2P_MAX_RISK','60'); REVIEW_SPREAD=ef('P2P_REVIEW_SPREAD_PCT','3.0')
+INTERVAL=max(10,ei('P2P_SCAN_SECONDS','15')); MARKET_PAGES=max(1,min(5,ei('P2P_MARKET_PAGES','3'))); KEEP_PER_SIDE=max(15,min(60,ei('P2P_KEEP_OFFERS_PER_SIDE','60'))); MIN_NET=ef('P2P_MIN_NET_PCT','0.35'); MAX_RISK=ei('P2P_MAX_RISK','60'); REVIEW_SPREAD=ef('P2P_REVIEW_SPREAD_PCT','3.0')
 MIN_RATE=ef('P2P_MIN_COMPLETION','90'); MIN_ORDERS=ei('P2P_MIN_ORDERS','10')
 BUFFER=ef('P2P_SAFETY_BUFFER_PCT','0.15'); TG_TOKEN=os.getenv('TELEGRAM_BOT_TOKEN') or os.getenv('TG_BOT_TOKEN','')
 TG_CHAT=os.getenv('TELEGRAM_CHAT_ID') or os.getenv('TG_CHAT_ID','')
@@ -532,6 +532,13 @@ def payment_match(a,b):
         return bool(common),common,True
     return True,sorted(ka&kb),False
 
+def market_extremes(providers):
+    buys=[o for p in providers if p['ok'] for o in p['buy'] if o.price>0]
+    sells=[o for p in providers if p['ok'] for o in p['sell'] if o.price>0]
+    low=min(buys,key=lambda o:o.price) if buys else None
+    high=max(sells,key=lambda o:o.price) if sells else None
+    return asdict(low) if low else None, asdict(high) if high else None
+
 def routes(providers):
     buys=[o for p in providers if p['ok'] for o in p['buy'] if route_eligible(o)]; sells=[o for p in providers if p['ok'] for o in p['sell'] if route_eligible(o)]; out=[]
     for b in buys:
@@ -567,7 +574,7 @@ def routes(providers):
             verdict='DROP'
         out.append({'buy_exchange':b.exchange,'sell_exchange':s.exchange,'route_type':'INTRA' if same else 'CROSS','buy_price':round(b.price,4),'sell_price':round(s.price,4),'gross_spread_pct':round(gross,3),'net_pct':round(netpct,3),'prefunded_net_pct':round(prefpct,3),'risk_score':risk,'verdict':verdict,'buy_merchant':b.merchant,'sell_merchant':s.merchant,'buy_completion_pct':b.completion,'sell_completion_pct':s.completion,'buy_payments':b.payments,'sell_payments':s.payments,'common_payments':common_payments,'payment_verified':pay_known and bool(common_payments),'reasons':why[:7]})
     priority={'ALERT':3,'REVIEW':2,'PREFUNDED_ONLY':1,'DROP':0}
-    ranked=sorted(out,key=lambda x:(priority.get(x['verdict'],0),x['net_pct'],-x['risk_score']),reverse=True)
+    ranked=sorted(out,key=lambda x:(x['net_pct'],priority.get(x['verdict'],0),-x['risk_score']),reverse=True)
     seen=set(); unique=[]
     for x in ranked:
         key=(x['buy_exchange'],x['sell_exchange'],x['buy_merchant'],x['sell_merchant'],round(x['buy_price'],2),round(x['sell_price'],2))
@@ -768,13 +775,13 @@ def scan():
     # Scan all configured exchanges in parallel so a full market refresh can stay close to 15 s.
     with ThreadPoolExecutor(max_workers=max(1,min(8,len(ids)))) as pool:
         ps=list(pool.map(provider_for,ids))
-    rs=routes(ps); top=rs[0] if rs else None
+    low_buy,high_sell=market_extremes(ps); rs=routes(ps); top=rs[0] if rs else None
     b=bank_state(); bg=bank_guard(b)
     if bg['paused'] and top and top['verdict']=='ALERT':
         top=dict(top); top['verdict']='PAUSE_BANK_GUARD'; top['reasons']=([bg['reason']] if bg['reason'] else ['Bank Guard paused actionable alerts'])+list(top.get('reasons') or [])
     elif bg['cooldown_remaining_seconds']>0 and top and top['verdict']=='ALERT':
         top=dict(top); top['verdict']='COOLDOWN'; top['reasons']=[f"Bank Guard cooldown {bg['cooldown_remaining_seconds']//60+1} min remaining"]+list(top.get('reasons') or [])
-    snap={'version':'MYSHKA_P2P_RADAR_V4','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'mode':'ХМАРНИЙ СКАНЕР 24/7','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'route_count':len(rs),'shown_routes':min(25,len(rs)),'alerts':sum(x['verdict']=='ALERT' for x in rs),'review_count':sum(x['verdict']=='REVIEW' for x in rs),'review_spread_pct':REVIEW_SPREAD,'market_pages':MARKET_PAGES,'offers_per_side':KEEP_PER_SIDE,'scan_duration_seconds':round(time.time()-started,2)}
+    snap={'version':'MYSHKA_P2P_RADAR_V4','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'mode':'ХМАРНИЙ СКАНЕР 24/7','bank_guard':bg,'providers':[public_provider(x) for x in ps],'market_lowest_buy':low_buy,'market_highest_sell':high_sell,'routes':rs[:25],'top_route':top,'route_count':len(rs),'shown_routes':min(25,len(rs)),'alerts':sum(x['verdict']=='ALERT' for x in rs),'review_count':sum(x['verdict']=='REVIEW' for x in rs),'review_spread_pct':REVIEW_SPREAD,'market_pages':MARKET_PAGES,'offers_per_side':KEEP_PER_SIDE,'scan_duration_seconds':round(time.time()-started,2)}
     LATEST.write_text(json.dumps(snap,ensure_ascii=False,indent=2),encoding='utf-8'); history(snap); st=state(); now=time.time(); did=False
     if top and top['verdict']=='ALERT' and (st.get('last_route')!=f"{top['buy_exchange']}->{top['sell_exchange']}" or now-float(st.get('last_alert',0))>=600):
       ok,msg=telegram(tg_text(top,ts,bg),telegram_keyboard(top)); report(snap); print('TELEGRAM:',msg,flush=True); did=True
