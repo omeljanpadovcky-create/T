@@ -13,7 +13,7 @@ if(-not (Test-Path (Join-Path $dir '.env'))){
   Write-Host '[MYSHKA] Created p2p_radar\.env. Existing root .env is also reused.' -ForegroundColor Yellow
 }
 Write-Host '=====================================================' -ForegroundColor Cyan
-Write-Host ' MYSHKA P2P RADAR - SCAN ONLY / NO AUTO-TRADING' -ForegroundColor Yellow
-Write-Host ' Ctrl+C stops the scanner.' -ForegroundColor DarkGray
+Write-Host ' MYSHKA P2P RADAR V2 - TELEGRAM ALERTS / NO AUTO-TRADING' -ForegroundColor Yellow
+Write-Host ' Telegram control: /p2p_status /p2p_pause /p2p_resume /p2p_done`n Ctrl+C stops the scanner.' -ForegroundColor DarkGray
 Write-Host '=====================================================' -ForegroundColor Cyan
 & $python (Join-Path $dir 'radar.py')
