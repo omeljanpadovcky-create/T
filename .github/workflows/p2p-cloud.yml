@@ -27,7 +27,7 @@ jobs:
     env:
       P2P_FIAT: UAH
       P2P_ASSET: USDT
-      P2P_EXCHANGES: 'binance,bybit,okx,kucoin,mexc,weex'
+      P2P_EXCHANGES: 'binance,bybit,okx,kucoin,mexc,weex,whitebit'
       P2P_CAPITAL_FIAT: '4500'
       P2P_SCAN_SECONDS: '15'
       P2P_MIN_NET_PCT: '0.35'
