@@ -557,7 +557,7 @@ def routes(providers):
         elif gross>1.5:
             risk+=8;why.append('large spread — re-check freshness')
         risk=min(100,risk)
-        if netpct>=MIN_NET and abnormal:
+        if netpct>=MIN_NET and (abnormal or not (pay_known and common_payments)):
             verdict='REVIEW'
         elif netpct>=MIN_NET and risk<=MAX_RISK:
             verdict='ALERT'
@@ -603,21 +603,47 @@ def bank_guard(b):
     level='STOP' if paused else ('WARN' if used>=BANK_WARN or used+BANK_PER_CYCLE>=BANK_MAX else 'OK')
     return {'level':level,'paused':paused,'reason':reason,'confirmed_transfers':used,'confirmed_cycles':int(b.get('confirmed_cycles',0)),'alerts_sent':alerts,'warn_at':BANK_WARN,'max_transfers':BANK_MAX,'transfers_per_cycle':BANK_PER_CYCLE,'cooldown_minutes':BANK_COOLDOWN,'cooldown_remaining_seconds':wait}
 
-def exchange_url(exchange,action):
+def exchange_url(exchange,action,payment=''):
     e=str(exchange or '').lower(); a=str(action).upper()
+    p=payment_key(payment)
+    if e=='binance':
+        pm={
+            'monobank':'Monobank',
+            'privatbank':'PrivatBank',
+            'pumb':'PUMBBank',
+            'abank':'ABank',
+            'raiffeisen':'RaiffeisenBankAval',
+            'oschad':'OschadBank',
+            'sense':'SenseBank'
+        }.get(p,'all-payments')
+        side='sell' if a=='SELL' else 'buy'
+        return f"https://p2p.binance.com/trade/{side}/{ASSET}?fiat={FIAT}&payment={pm}"
+    if e=='bybit':
+        side='sell' if a=='SELL' else 'buy'
+        return f"https://www.bybit.com/fiat/trade/otc/{side}/{ASSET}/{FIAT}"
+    if e=='okx':
+        side='sell' if a=='SELL' else 'buy'
+        return f"https://www.okx.com/ua/p2p-markets/{FIAT.lower()}/{side}-{ASSET.lower()}"
+    if e=='kucoin':
+        side='sell' if a=='SELL' else 'buy'
+        return f"https://www.kucoin.com/uk/otc/{side}/{ASSET}-{FIAT}"
+    if e=='mexc':
+        side='sell' if a=='SELL' else 'buy'
+        return f"https://www.mexc.com/uk-UA/buy-crypto/p2p/{side}/{ASSET}/{FIAT}"
+    if e=='weex':
+        return f"https://www.weex.com/buy-crypto/sell/{ASSET}" if a=='SELL' else "https://www.weex.com/buy-crypto/trading"
     try:
         raw=json.loads(EXCHANGES_FILE.read_text(encoding='utf-8'))
         for x in raw.get('exchanges',[]):
             if str(x.get('id','')).lower()==e or str(x.get('name','')).lower()==e:
                 return str(x.get('sell_url') if a=='SELL' else x.get('buy_url') or x.get('sell_url') or '')
     except Exception:pass
-    if e=='binance':return f"https://p2p.binance.com/en/trade/all-payments/{ASSET}?fiat={FIAT}"
-    if e=='bybit':return "https://www.bybit.com/fiat/trade/otc/"
     return ""
 
 def telegram_keyboard(r):
     row=[]
-    bu=exchange_url(r.get('buy_exchange'),'BUY'); su=exchange_url(r.get('sell_exchange'),'SELL')
+    pay=((r.get('common_payments') or [''])[0] if r.get('payment_verified') else '')
+    bu=exchange_url(r.get('buy_exchange'),'BUY',pay); su=exchange_url(r.get('sell_exchange'),'SELL',pay)
     if bu:row.append({'text':f"🟢 КУПИТИ · {r.get('buy_exchange','')}",'url':bu})
     if su:row.append({'text':f"🔴 ПРОДАТИ · {r.get('sell_exchange','')}",'url':su})
     kb=[]
