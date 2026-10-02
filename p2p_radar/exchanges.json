@@ -1,6 +1,6 @@
 {
   "scan_seconds": 15,
-  "note": "Explicit P2P exchange directory. Entries are added only when current official sources confirm an active P2P service. Scanner adapters are connected separately.",
+  "note": "P2P сторінки бірж підключені як прямі посилання. Автоматичне сканування — окрема функція.",
   "exchanges": [
     {
       "id": "binance",
@@ -27,8 +27,8 @@
       "id": "bitget",
       "name": "Bitget",
       "enabled": true,
-      "buy_url": "https://www.bitget.com/uk/p2p-trade?fiatName=UAH&paymethodId=-1",
-      "sell_url": "https://www.bitget.com/uk/p2p-trade?fiatName=UAH&paymethodId=-1"
+      "buy_url": "https://www.bitget.com/uk/p2p-trade?paymethodIds=-1&fiatName=UAH",
+      "sell_url": "https://www.bitget.com/uk/p2p-trade?paymethodIds=-1&fiatName=UAH"
     },
     {
       "id": "kucoin",
