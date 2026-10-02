@@ -17,6 +17,146 @@
 .aiMsgs{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px}.aiMsg{max-width:88%;padding:9px 11px;border-radius:12px;font-size:11px;line-height:1.45;white-space:pre-wrap}.aiMsg.bot{background:#10223a;border:1px solid #29486c}.aiMsg.user{margin-left:auto;background:#0a2a20;border:1px solid #237458}
 .aiQuick{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 10px}.aiQuick button{border:1px solid #315177;background:#0e2034;color:#cfe0f4;border-radius:999px;padding:6px 8px;font-size:9px;cursor:pointer}
 .aiInput{display:flex;gap:7px;padding:10px;border-top:1px solid #1d3655}.aiInput input{flex:1;background:#07121f;border:1px solid #29486c;border-radius:10px;color:#fff;padding:10px;font-size:11px}.aiInput button{border:1px solid #237458;background:#0a2a20;color:#68efb6;border-radius:10px;padding:0 12px;font-weight:900;cursor:pointer}
+
+/* ===== Unified neon card system ===== */
+.card.glass{
+  border-color:#1b3553;
+  background:linear-gradient(180deg,rgba(13,25,40,.97),rgba(7,17,29,.97));
+  box-shadow:0 16px 44px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.025);
+}
+.hero,.provider,.exchangeCard,.routeCard{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(145deg,#0a1827 0%,#07121f 72%,#081522 100%);
+  border:1px solid #234260;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 10px 28px rgba(0,0,0,.20);
+  transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease,background .18s ease;
+}
+.hero:before,.provider:before,.exchangeCard:before,.routeCard:before{
+  content:"";
+  position:absolute;
+  left:12px;right:12px;top:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(120,166,255,.72),transparent);
+  opacity:.72;
+  pointer-events:none;
+}
+.hero:hover,.provider:hover,.exchangeCard:hover,.routeCard:hover{
+  transform:translateY(-1px);
+  border-color:#345f89;
+  box-shadow:0 12px 32px rgba(0,0,0,.30),0 0 24px rgba(62,124,202,.08),inset 0 1px 0 rgba(255,255,255,.04);
+}
+.hero.signal-ok,.provider.signal-ok,.routeCard.signal-ok{
+  border-color:#27765a;
+  box-shadow:0 0 0 1px rgba(52,229,160,.08),0 12px 34px rgba(0,0,0,.30),0 0 26px rgba(52,229,160,.09);
+}
+.hero.signal-ok:before,.provider.signal-ok:before,.routeCard.signal-ok:before{
+  background:linear-gradient(90deg,transparent,rgba(52,229,160,.95),transparent);
+}
+.hero.signal-warn,.provider.signal-warn,.routeCard.signal-warn{
+  border-color:#725c2c;
+  box-shadow:0 0 0 1px rgba(255,209,102,.06),0 12px 34px rgba(0,0,0,.30),0 0 24px rgba(255,209,102,.07);
+}
+.hero.signal-warn:before,.provider.signal-warn:before,.routeCard.signal-warn:before{
+  background:linear-gradient(90deg,transparent,rgba(255,209,102,.95),transparent);
+}
+.hero.signal-bad,.provider.signal-bad,.routeCard.signal-bad{
+  border-color:#733743;
+  box-shadow:0 0 0 1px rgba(255,102,121,.05),0 12px 34px rgba(0,0,0,.30),0 0 24px rgba(255,102,121,.06);
+}
+.hero.signal-bad:before,.provider.signal-bad:before,.routeCard.signal-bad:before{
+  background:linear-gradient(90deg,transparent,rgba(255,102,121,.9),transparent);
+}
+.routeCard.best{
+  border-color:#2f936d;
+  box-shadow:0 0 0 1px rgba(52,229,160,.14),0 14px 38px rgba(0,0,0,.34),0 0 34px rgba(52,229,160,.12);
+}
+.routeCard.best:before{
+  height:2px;
+  background:linear-gradient(90deg,transparent,#34e5a0,transparent);
+  opacity:1;
+}
+.exchangeCard{
+  min-height:96px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.exchangeCard:hover{
+  border-color:#38668f;
+  box-shadow:0 12px 30px rgba(0,0,0,.28),0 0 22px rgba(120,166,255,.08);
+}
+.provider{
+  border-radius:14px;
+  padding:11px 12px;
+}
+.provider b,.exchangeCard b,.routePair,.route{
+  text-shadow:0 0 18px rgba(120,166,255,.06);
+}
+.metric,.chip{
+  background:linear-gradient(180deg,#0d1d2d,#091522);
+  border-color:#284563;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.02);
+}
+.metric{
+  min-height:62px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.metric b{font-size:13px}
+.routeProfit strong,.money.pos,.vAlert,.risk.low{
+  text-shadow:0 0 18px rgba(52,229,160,.16);
+}
+.money.neg,.risk.high{
+  text-shadow:0 0 18px rgba(255,102,121,.14);
+}
+.state{
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
+  padding:5px 8px;
+  border-radius:999px;
+  border:1px solid #2b4669;
+  background:#0c1a2a;
+}
+.state.ok{
+  color:#62edb5;
+  border-color:#27765a;
+  background:#09251d;
+  box-shadow:0 0 14px rgba(52,229,160,.08);
+}
+.state.warn{
+  color:#ffd978;
+  border-color:#725c2c;
+  background:#251e0b;
+  box-shadow:0 0 14px rgba(255,209,102,.07);
+}
+.mini,.action{
+  transition:transform .16s ease,filter .16s ease,box-shadow .16s ease,border-color .16s ease;
+}
+.mini:hover,.action:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.08);
+}
+.mini.buy:hover,.action.buy:hover{
+  box-shadow:0 0 18px rgba(52,229,160,.16);
+  border-color:#31956f;
+}
+.mini.sell:hover,.action.sell:hover{
+  box-shadow:0 0 18px rgba(255,102,121,.14);
+  border-color:#9a4453;
+}
+.badge.ok{
+  box-shadow:0 0 18px rgba(52,229,160,.10);
+}
+.badge.warn{
+  box-shadow:0 0 18px rgba(255,209,102,.09);
+}
+.title h2{
+  letter-spacing:-.01em;
+  text-shadow:0 0 18px rgba(120,166,255,.05);
+}
 @media(max-width:900px){.grid{grid-template-columns:1fr}.head{align-items:flex-start;flex-direction:column}.badges{justify-content:flex-start}.provider{grid-template-columns:85px 58px 1fr}.provider span:last-child{display:none}.route{font-size:22px}.money{font-size:31px}.exchangeGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.aiFab{right:12px;bottom:12px}.aiPanel{right:8px;bottom:66px;width:calc(100vw - 16px);height:70vh}.routesGrid{grid-template-columns:1fr}.routeMetrics{grid-template-columns:repeat(2,1fr)}.routeTop{align-items:center}.routePair{font-size:16px}}
 </style>
 </head>
@@ -178,7 +318,7 @@ function initAi(){
 }
 function render(d){LAST_RADAR_DATA=d;$('market').textContent=(d.asset||'USDT')+' / '+(d.fiat||'UAH');$('mode').textContent=d.mode||'СКАНЕР';$('time').textContent=d.scanned_at?new Date(d.scanned_at).toLocaleString('uk-UA'):'Ще не сканувала';
  const t=d.top_route;$('verdict').textContent=t?verdictUk(t.verdict):'ОЧІКУВАННЯ';$('verdict').className='badge '+(t&&t.verdict==='ALERT'?'ok':t&&t.verdict==='REVIEW'?'warn':t&&t.verdict==='DROP'?'bad':'');
- if(t){$('hero').innerHTML=`<div class="route"><span>${t.buy_exchange}</span> → <span>${t.sell_exchange}</span></div><div class="money ${Number(t.net_profit_fiat)>=0?'pos':'neg'}">${Number(t.net_profit_fiat)>=0?'+':''}${money(t.net_profit_fiat)} ${d.fiat}</div><div class="chips"><div class="chip">${routeTypeUk(t.route_type)}</div><div class="chip">КУПИТИ ПО <strong>${money(t.buy_price)}</strong></div><div class="chip">ПРОДАТИ ПО <strong>${money(t.sell_price)}</strong></div><div class="chip">СПРЕД <strong>${pct(t.gross_spread_pct)}</strong></div><div class="chip">ПІСЛЯ ВИТРАТ <strong>${pct(t.net_pct)}</strong></div><div class="chip">БЕЗ ПЕРЕКАЗУ <strong>${pct(t.prefunded_net_pct)}</strong></div><div class="chip">РИЗИК СИГНАЛУ <strong class="risk ${riskClass(t.risk_score)}">${t.risk_score}/100</strong></div>${t.payment_verified&&Array.isArray(t.common_payments)&&t.common_payments.length?`<div class="chip">ОПЛАТА <strong>${t.common_payments.join(', ')}</strong></div>`:''} </div><div class="actions"><a class="action buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(t.buy_exchange,'BUY')}">🟢 КУПИТИ НА ${t.buy_exchange}</a><a class="action sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(t.sell_exchange,'SELL')}">🔴 ПРОДАТИ НА ${t.sell_exchange}</a></div><div class="sub" style="margin-top:12px">${[...new Set((t.reasons||[]).map(reasonUk))].slice(0,5).join(' • ')||'Перевірки пройдені'}</div>`}else{$('hero').innerHTML=`<div class="empty">Поки немає варіанту, що проходить фільтри.</div>`}
+ if(t){$('hero').className='hero '+(t.verdict==='ALERT'?'signal-ok':t.verdict==='REVIEW'?'signal-warn':t.verdict==='DROP'?'signal-bad':'');$('hero').innerHTML=`<div class="route"><span>${t.buy_exchange}</span> → <span>${t.sell_exchange}</span></div><div class="money ${Number(t.net_profit_fiat)>=0?'pos':'neg'}">${Number(t.net_profit_fiat)>=0?'+':''}${money(t.net_profit_fiat)} ${d.fiat}</div><div class="chips"><div class="chip">${routeTypeUk(t.route_type)}</div><div class="chip">КУПИТИ ПО <strong>${money(t.buy_price)}</strong></div><div class="chip">ПРОДАТИ ПО <strong>${money(t.sell_price)}</strong></div><div class="chip">СПРЕД <strong>${pct(t.gross_spread_pct)}</strong></div><div class="chip">ПІСЛЯ ВИТРАТ <strong>${pct(t.net_pct)}</strong></div><div class="chip">БЕЗ ПЕРЕКАЗУ <strong>${pct(t.prefunded_net_pct)}</strong></div><div class="chip">РИЗИК СИГНАЛУ <strong class="risk ${riskClass(t.risk_score)}">${t.risk_score}/100</strong></div>${t.payment_verified&&Array.isArray(t.common_payments)&&t.common_payments.length?`<div class="chip">ОПЛАТА <strong>${t.common_payments.join(', ')}</strong></div>`:''} </div><div class="actions"><a class="action buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(t.buy_exchange,'BUY')}">🟢 КУПИТИ НА ${t.buy_exchange}</a><a class="action sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(t.sell_exchange,'SELL')}">🔴 ПРОДАТИ НА ${t.sell_exchange}</a></div><div class="sub" style="margin-top:12px">${[...new Set((t.reasons||[]).map(reasonUk))].slice(0,5).join(' • ')||'Перевірки пройдені'}</div>`}else{$('hero').className='hero';$('hero').innerHTML=`<div class="empty">Поки немає варіанту, що проходить фільтри.</div>`}
  $('providers').innerHTML=(d.providers||[]).map(p=>{
    const b=Number(p.buy_offers||0),s=Number(p.sell_offers||0);
    let label='ЛИШЕ ПОСИЛАННЯ',cls='',note='Автосканування не підключене';
@@ -195,12 +335,12 @@ function render(d){LAST_RADAR_DATA=d;$('market').textContent=(d.asset||'USDT')+'
      label='СКАНУЄМО';cls='warn';
      note=`зараз бачимо: ${b} на купівлю · 0 на продаж`;
    }
-   return `<div class="provider"><b>${exchangeLabel(p.exchange)}</b><span class="state ${cls}">${label}</span><span>${note}</span><div class="exchangeLinks"><a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(p.exchange,'BUY')}">КУПИТИ ↗</a><a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(p.exchange,'SELL')}">ПРОДАТИ ↗</a></div></div>`;
+   return `<div class="provider ${cls==='ok'?'signal-ok':cls==='warn'?'signal-warn':''}"><b>${exchangeLabel(p.exchange)}</b><span class="state ${cls}">${label}</span><span>${note}</span><div class="exchangeLinks"><a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(p.exchange,'BUY')}">КУПИТИ ↗</a><a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(p.exchange,'SELL')}">ПРОДАТИ ↗</a></div></div>`;
  }).join('')||'<div class="empty">Немає провайдерів</div>';
  const rs=d.routes||[];const total=Number(d.route_count??rs.length);const shown=Number(d.shown_routes??rs.length);$('summary').textContent=`${total} знайдено · показано ${shown} найкращих · ${d.alerts||0} готових · ${d.review_count||0} на перевірку`;$('routes').innerHTML=rs.length?rs.map((r,i)=>{
    const statusClass=r.verdict==='ALERT'?'good':r.verdict==='REVIEW'?'warn':'';
    const pay=(r.payment_verified&&Array.isArray(r.common_payments)&&r.common_payments.length)?('💳 '+r.common_payments.join(', ')):'💳 спосіб оплати перевірити';
-   return `<article class="routeCard ${i===0?'best':''}">
+   return `<article class="routeCard ${i===0?'best':''} ${r.verdict==='ALERT'?'signal-ok':r.verdict==='REVIEW'?'signal-warn':r.verdict==='DROP'?'signal-bad':''}">`
      <div class="routeTop">
        <div>
          <div class="routePair">${exchangeLabel(r.buy_exchange)} <span class="arrow">→</span> ${exchangeLabel(r.sell_exchange)}</div>
