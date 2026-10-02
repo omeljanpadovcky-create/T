@@ -1,0 +1,55 @@
+name: P2P more keyless probe
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/p2p-more-keyless-probe.yml'
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install requests selenium
+      - name: Probe UAH feeds
+        run: |
+          python - <<'PY'
+          import requests,json,time
+          from selenium import webdriver
+          from selenium.webdriver.chrome.options import Options
+          S=requests.Session();S.headers.update({'User-Agent':'Mozilla/5.0','Accept':'application/json'})
+
+          tests=[
+            ("lbank-buy","GET","https://www.lbank.com/lbk-api/otc-trade-center/fiat/p2p/adv/advertisementList",{'tradeType':'buy','assetCode':'USDT','currencyCode':'UAH','showOnlyPurchasable':'false','certifiedOnly':'false','isFollow':'false','pageNo':'1','pageSize':'20','sortByPrice':'0','sortByOrderCount':'0','sortByCompletionRate':'0'}),
+            ("lbank-sell","GET","https://www.lbank.com/lbk-api/otc-trade-center/fiat/p2p/adv/advertisementList",{'tradeType':'sell','assetCode':'USDT','currencyCode':'UAH','showOnlyPurchasable':'false','certifiedOnly':'false','isFollow':'false','pageNo':'1','pageSize':'20','sortByPrice':'0','sortByOrderCount':'0','sortByCompletionRate':'0'}),
+            ("weex-sell","GET","https://otc-gateway.weex.com/api/market",{'allowTrade':'false','amount':'','blockTrade':'false','coinId':'2','countryCode':'','currency':'UAH','follow':'false','haveTrade':'false','page':'1','payMethod':'','tradeType':'SELL'}),
+            ("weex-buy","GET","https://otc-gateway.weex.com/api/market",{'allowTrade':'false','amount':'','blockTrade':'false','coinId':'2','countryCode':'','currency':'UAH','follow':'false','haveTrade':'false','page':'1','payMethod':'','tradeType':'BUY'}),
+            ("toobit-buy","GET","https://bapi.toobit.com/bapi/v2/fiat/p2p/ad-list",{'tradeType':'BUY','fiatCurrency':'UAH','cryptoCurrency':'USDT','pageNum':'1','pageSize':'10','order':'0'}),
+            ("toobit-sell","GET","https://bapi.toobit.com/bapi/v2/fiat/p2p/ad-list",{'tradeType':'SELL','fiatCurrency':'UAH','cryptoCurrency':'USDT','pageNum':'1','pageSize':'10','order':'0'}),
+          ]
+          for name,method,url,p in tests:
+            print("\n====",name,"====")
+            try:
+              r=S.get(url,params=p,headers={'Referer':url.split('/api/')[0]+'/'},timeout=20)
+              print("HTTP",r.status_code,"TYPE",r.headers.get('content-type'),"LEN",len(r.content))
+              print(r.text[:12000])
+            except Exception as e: print("ERR",type(e).__name__,e)
+
+          print("\n==== bingx-browser-uah ====")
+          o=Options();o.add_argument('--headless=new');o.add_argument('--no-sandbox');o.add_argument('--disable-dev-shm-usage');o.add_argument('--window-size=1400,1000')
+          o.set_capability('goog:loggingPrefs', {'performance':'ALL'})
+          d=webdriver.Chrome(options=o)
+          try:
+            d.get('https://fiat.bingx.com/en/p2p?fiat=UAH');time.sleep(8)
+            print("URL",d.current_url);print("BODY",repr((d.find_element('tag name','body').text or '')[:5000]))
+            for e in d.get_log('performance'):
+              try:
+                m=json.loads(e['message'])['message']
+                if m['method']!='Network.requestWillBeSent':continue
+                req=m['params']['request'];u=req['url']
+                if '/api/c2c/v3/advert/' in u:
+                  print("REQ",req['method'],u,"POSTDATA",req.get('postData',''))
+              except:pass
+          finally:d.quit()
+          PY
