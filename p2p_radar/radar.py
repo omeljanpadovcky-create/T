@@ -269,6 +269,122 @@ def gate():
         b,s=get('BUY'),get('SELL'); return {'exchange':'Gate','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж','buy':b,'sell':s}
     except Exception as e:return {'exchange':'Gate','ok':False,'note':f'помилка API: {type(e).__name__}: {e}','buy':[],'sell':[]}
 
+def lbank():
+    # Публічний LBank P2P endpoint — ключі не потрібні.
+    url='https://www.lbank.com/lbk-api/otc-trade-center/fiat/p2p/adv/advertisementList'
+    headers={'User-Agent':S.headers['User-Agent'],'Accept':'application/json','Referer':'https://www.lbank.com/'}
+    def get(action):
+        # У веб-інтерфейсі tradeType=buy означає, що користувач купує USDT.
+        trade_type='buy' if action=='BUY' else 'sell'
+        params={'tradeType':trade_type,'assetCode':ASSET,'currencyCode':FIAT,'showOnlyPurchasable':'false','certifiedOnly':'false','isFollow':'false','pageNo':'1','pageSize':'20','sortByPrice':'0','sortByOrderCount':'0','sortByCompletionRate':'0'}
+        r=S.get(url,params=params,headers=headers,timeout=12); r.raise_for_status()
+        items=((r.json().get('data') or {}).get('resultList') or []); out=[]
+        for a in items:
+            # Відкидаємо крос-лістинг інших бірж і промо-ціни для нових користувачів.
+            if str(a.get('source') or '').upper() not in {'','LBANK'}: continue
+            if a.get('topTag') or a.get('eligibilityType'): continue
+            price=num(a.get('price'))
+            original=num(a.get('originalPrice'))
+            if original and price and abs(original-price)/original>0.05: continue
+            pays=[str(x.get('name') or x.get('code')) for x in (a.get('payMethods') or []) if isinstance(x,dict)]
+            comp=rate(str(a.get('lastDaysTurnoverRate') or '').replace('%',''))
+            orders=int(num(a.get('dealOrderTotal') or a.get('orderCnt'),0)) or None
+            out.append(Offer('LBank',action,price,num(a.get('minAmount')),num(a.get('maxAmount')),str(a.get('nickName') or 'unknown'),comp,orders,pays,'web-feed'))
+        return keep(out,action)
+    try:
+        b,s=get('BUY'),get('SELL')
+        return {'exchange':'LBank','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж · публічний веб-фід','buy':b,'sell':s}
+    except Exception as e:
+        return {'exchange':'LBank','ok':False,'note':f'публічний веб-фід недоступний: {type(e).__name__}: {e}','buy':[],'sell':[]}
+
+def toobit():
+    # Публічний Toobit P2P endpoint — ключі не потрібні.
+    url='https://bapi.toobit.com/bapi/v2/fiat/p2p/ad-list'
+    headers={'User-Agent':S.headers['User-Agent'],'Accept':'application/json','Referer':'https://www.toobit.com/'}
+    def get(action):
+        params={'tradeType':action,'fiatCurrency':FIAT,'cryptoCurrency':ASSET,'pageNum':'1','pageSize':'20','order':'0'}
+        r=S.get(url,params=params,headers=headers,timeout=12); r.raise_for_status()
+        raw=r.json()
+        if int(raw.get('code',0))!=200: raise RuntimeError(raw.get('msg') or raw.get('code'))
+        out=[]
+        for a in (raw.get('data') or {}).get('adList') or []:
+            pays=[str(x.get('paymethodName') or x.get('paymethodId')) for x in (a.get('paymethodInfoList') or []) if isinstance(x,dict)]
+            trades=int(num(a.get('tradeVolume'),0))
+            comp=rate(a.get('completionRate')) if trades>0 else None
+            orders=trades if trades>=10 else None
+            out.append(Offer('Toobit',action,num(a.get('price')),num(a.get('minLimit')),num(a.get('maxLimit')),str(a.get('merchantNickname') or 'unknown'),comp,orders,pays,'web-feed'))
+        return keep(out,action)
+    try:
+        b,s=get('BUY'),get('SELL')
+        return {'exchange':'Toobit','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж · публічний веб-фід','buy':b,'sell':s}
+    except Exception as e:
+        return {'exchange':'Toobit','ok':False,'note':f'публічний веб-фід недоступний: {type(e).__name__}: {e}','buy':[],'sell':[]}
+
+def weex():
+    # Публічний WEEX P2P endpoint — ключі не потрібні.
+    url='https://otc-gateway.weex.com/api/market'
+    headers={'User-Agent':S.headers['User-Agent'],'Accept':'application/json','Referer':'https://www.weex.com/'}
+    def get(action):
+        trade_type='SELL' if action=='BUY' else 'BUY'
+        params={'allowTrade':'false','amount':'','blockTrade':'false','coinId':'2','countryCode':'','currency':FIAT,'follow':'false','haveTrade':'false','page':'1','payMethod':'','tradeType':trade_type}
+        r=S.get(url,params=params,headers=headers,timeout=12); r.raise_for_status()
+        raw=r.json()
+        if int(raw.get('code',-1))!=0: raise RuntimeError(raw.get('msg') or raw.get('code'))
+        out=[]
+        for a in raw.get('data') or []:
+            # Відкидаємо крос-лістинг MEXC та спеціальні promo/flash ads.
+            if str(a.get('source') or '').upper() not in {'','WEEX'}: continue
+            if a.get('tagAlias') or a.get('tags'): continue
+            m=a.get('merchant') or {}; st=a.get('merchantStatistics') or {}
+            pays=[x.strip() for x in str(a.get('payMethod') or '').split(',') if x.strip()]
+            orders=int(num(st.get('doneLastMonthCount') or st.get('totalBuyCount') or st.get('totalSellCount'),0)) or None
+            comp=rate(st.get('lastMonthCompleteRate') or st.get('completeRate'))
+            out.append(Offer('WEEX',action,num(a.get('price')),num(a.get('minTradeLimit')),num(a.get('maxTradeLimit')),str(m.get('nickName') or 'unknown'),comp,orders,pays,'web-feed'))
+        return keep(out,action)
+    try:
+        b,s=get('BUY'),get('SELL')
+        return {'exchange':'WEEX','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж · публічний веб-фід','buy':b,'sell':s}
+    except Exception as e:
+        return {'exchange':'WEEX','ok':False,'note':f'публічний веб-фід недоступний: {type(e).__name__}: {e}','buy':[],'sell':[]}
+
+def bingx():
+    # Публічний BingX P2P endpoint. Сайт додає короткоживучі anti-replay параметри;
+    # якщо endpoint зміниться, біржа чесно піде в OFF замість вигаданих даних.
+    url='https://api-app.qq-os.com/api/c2c/v3/advert/list'
+    headers={'User-Agent':S.headers['User-Agent'],'Accept':'application/json','Content-Type':'application/json','Origin':'https://fiat.bingx.com','Referer':'https://fiat.bingx.com/'}
+    def get(action):
+        typ=1 if action=='BUY' else 2
+        body={'type':typ,'fiat':FIAT,'asset':ASSET,'pageSize':20,'paymentMethodIds':[],'paymentTimeLimits':[],'sortType':0,'amount':'','pageId':1,'advertFilter':{'matchUserCondition':0,'noPaymentMethodVerification':0,'tradedWithMerchantOnly':0,'verifiedMerchantOnly':0}}
+        # Спочатку беремо серверний timestamp, якщо він потрібен endpoint-у.
+        r=S.post(url,json=body,headers=headers,timeout=12)
+        raw=r.json()
+        if int(raw.get('code',0))==100003 and raw.get('timestamp'):
+            h=dict(headers); h['x-request-timestamp']=str(raw['timestamp'])
+            r=S.post(url,json=body,headers=h,timeout=12); raw=r.json()
+        if not r.ok or raw.get('success') is False: raise RuntimeError(raw.get('msg') or f'HTTP {r.status_code}')
+        data=raw.get('data') or {}
+        items=data.get('list') or data.get('items') or data.get('records') or []
+        out=[]
+        for a in items:
+            adv=a.get('advert') if isinstance(a.get('advert'),dict) else a
+            m=a.get('merchant') if isinstance(a.get('merchant'),dict) else a.get('advertiser') if isinstance(a.get('advertiser'),dict) else {}
+            price=num(adv.get('price') or adv.get('unitPrice'))
+            # Не беремо voucher/flash discount як звичайний арбітражний курс.
+            original=num(adv.get('originalPrice') or adv.get('marketPrice'))
+            if original and price and abs(original-price)/original>0.05: continue
+            if adv.get('voucher') or adv.get('tagAlias') or adv.get('promotion'): continue
+            pays=[]
+            for p in adv.get('paymentMethods') or adv.get('payMethods') or []:
+                if isinstance(p,dict): pays.append(str(p.get('name') or p.get('paymentName') or p.get('methodName') or ''))
+                elif p: pays.append(str(p))
+            out.append(Offer('BingX',action,price,num(adv.get('minAmount') or adv.get('minLimit')),num(adv.get('maxAmount') or adv.get('maxLimit')),str(m.get('nickName') or m.get('nickname') or adv.get('nickName') or 'unknown'),rate(m.get('completionRate') or m.get('finishRate')),int(num(m.get('tradeCount') or m.get('orders'),0)) or None,[x for x in pays if x],'web-feed'))
+        return keep(out,action)
+    try:
+        b,s=get('BUY'),get('SELL')
+        return {'exchange':'BingX','ok':True,'note':f'{len(b)} купівля / {len(s)} продаж · публічний веб-фід','buy':b,'sell':s}
+    except Exception as e:
+        return {'exchange':'BingX','ok':False,'note':f'публічний веб-фід недоступний: {type(e).__name__}: {e}','buy':[],'sell':[]}
+
 def configured_exchange_ids():
     env=[x.strip().lower() for x in os.getenv('P2P_EXCHANGES','').split(',') if x.strip()]
     if env:return env
@@ -279,7 +395,7 @@ def configured_exchange_ids():
         return ['binance','bybit']
 
 def provider_for(exchange_id):
-    adapters={'binance':binance,'bybit':bybit,'okx':okx,'bitget':bitget,'kucoin':kucoin,'gate':gate,'mexc':mexc,'htx':htx}
+    adapters={'binance':binance,'bybit':bybit,'okx':okx,'bitget':bitget,'kucoin':kucoin,'gate':gate,'mexc':mexc,'htx':htx,'bingx':bingx,'lbank':lbank,'toobit':toobit,'weex':weex}
     fn=adapters.get(str(exchange_id).lower())
     if not fn:return {'exchange':str(exchange_id).upper(),'ok':False,'note':'є пряме P2P-посилання; автоматичне сканування для цієї біржі ще не підключено','buy':[],'sell':[]}
     return fn()
