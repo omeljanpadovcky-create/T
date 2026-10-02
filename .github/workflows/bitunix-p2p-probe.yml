@@ -1,0 +1,42 @@
+name: Bitunix P2P endpoint probe
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/bitunix-p2p-probe.yml'
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install requests
+      - name: Discover Bitunix public P2P endpoints
+        run: |
+          python - <<'PY'
+          import requests,re
+          S=requests.Session();S.headers['User-Agent']='Mozilla/5.0'
+          urls=[
+            'https://www.bitunix.com/web/bitunix-assets/funds/p2p-Cgo4Fz-3.js',
+            'https://www.bitunix.com/web/bitunix-assets/funds/p2p-CiyDbteo.js',
+            'https://www.bitunix.com/web/bitunix-assets/funds/p2pProvider-5U3LlyyT.js',
+            'https://www.bitunix.com/web/bitunix-assets/funds/bank-trade-C9MWcKXN.js',
+            'https://www.bitunix.com/web/bitunix-assets/funds/fiat-BLOk-1vb.js'
+          ]
+          for u in urls:
+            r=S.get(u,timeout=20)
+            print('\n===== JS',u,'HTTP',r.status_code,'LEN',len(r.text),'=====')
+            t=r.text
+            for pat in [
+              r'["\']([^"\']{0,220}/web/p2p/api/public/[^"\']{0,220})["\']',
+              r'["\']([^"\']{0,220}/p2p/quote/[^"\']{0,220})["\']',
+              r'["\']([^"\']{0,220}(?:advert|ad-list|advertisement|orderbook|merchant|quote|realtime)[^"\']{0,220})["\']'
+            ]:
+              vals=sorted(set(m.group(1) for m in re.finditer(pat,t,re.I)))
+              for v in vals[:120]: print('HIT',v)
+            low=t.lower()
+            for needle in ['realtime','/public/v1/fiat','/public/v1/crypto','advert','merchant','quote']:
+              i=low.find(needle)
+              if i>=0: print('CTX',needle,repr(t[max(0,i-1400):i+3500]))
+          PY
