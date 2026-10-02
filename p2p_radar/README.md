@@ -46,3 +46,17 @@ With `P2P_GIT_PUSH=1`, the local clone commits/pushes reports automatically when
 ## Important
 
 This is deliberately **not** an execution bot. Prices and P2P ads can disappear between scan and payment, so every Telegram alert is a candidate that still needs a live check.
+
+
+## Bank Guard
+
+The radar keeps scanning even when the bank guard is paused, but it suppresses new actionable Telegram alerts.
+
+Default personal safety thresholds are deliberately conservative placeholders, not claims about any bank rule:
+- warn at 4 confirmed transfers/day;
+- pause at 6 confirmed transfers/day;
+- model 2 bank transfers per completed P2P cycle;
+- 60 minute cooldown after a confirmed cycle;
+- no more than 8 actionable Telegram alerts/day.
+
+All values are configurable in `.env`. The counter resets on the next Kyiv calendar day. The scanner cannot see your bank account, so confirmed transfer/cycle counts must come from an explicit user-side confirmation rather than being guessed from market scans.
