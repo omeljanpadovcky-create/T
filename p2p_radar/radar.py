@@ -19,7 +19,7 @@ def ei(k,d):
 def eb(k,d='0'):return os.getenv(k,d).lower() in ('1','true','yes','on')
 FIAT=os.getenv('P2P_FIAT','UAH').upper(); ASSET=os.getenv('P2P_ASSET','USDT').upper(); CAPITAL=ef('P2P_CAPITAL_FIAT','4500')
 EXCHANGES_FILE=HERE/os.getenv('P2P_EXCHANGES_FILE','exchanges.json')
-INTERVAL=max(10,ei('P2P_SCAN_SECONDS','15')); MIN_NET=ef('P2P_MIN_NET_PCT','0.35'); MAX_RISK=ei('P2P_MAX_RISK','60'); REVIEW_SPREAD=ef('P2P_REVIEW_SPREAD_PCT','3.0')
+INTERVAL=max(10,ei('P2P_SCAN_SECONDS','15')); MARKET_PAGES=max(1,min(5,ei('P2P_MARKET_PAGES','3'))); KEEP_PER_SIDE=max(15,min(60,ei('P2P_KEEP_OFFERS_PER_SIDE','40'))); MIN_NET=ef('P2P_MIN_NET_PCT','0.35'); MAX_RISK=ei('P2P_MAX_RISK','60'); REVIEW_SPREAD=ef('P2P_REVIEW_SPREAD_PCT','3.0')
 MIN_RATE=ef('P2P_MIN_COMPLETION','90'); MIN_ORDERS=ei('P2P_MIN_ORDERS','10'); XFER=ef('P2P_TRANSFER_FEE_USDT','1')
 BUFFER=ef('P2P_SAFETY_BUFFER_PCT','0.15'); TG_TOKEN=os.getenv('TELEGRAM_BOT_TOKEN') or os.getenv('TG_BOT_TOKEN','')
 TG_CHAT=os.getenv('TELEGRAM_CHAT_ID') or os.getenv('TG_CHAT_ID','')
@@ -49,7 +49,7 @@ def rate(x):
     return min(100,max(0,v*100 if v<=1 else v))
 def keep(xs,action):
     xs=[x for x in xs if x.fits() and (x.completion is None or x.completion>=MIN_RATE) and (x.orders is None or x.orders>=MIN_ORDERS)]
-    return sorted(xs,key=lambda x:x.price,reverse=action=='SELL')[:15]
+    return sorted(xs,key=lambda x:x.price,reverse=action=='SELL')[:KEEP_PER_SIDE]
 
 def binance():
     if not eb('P2P_BINANCE_ENABLED','1'): return {'exchange':'Binance','ok':False,'note':'вимкнено','buy':[],'sell':[]}
@@ -84,12 +84,16 @@ def bybit():
             api=HTTP(testnet=False,api_key=BY_KEY,api_secret=BY_SECRET)
             def get_auth(action):
                 side='1' if action=='BUY' else '0'
-                raw=api.get_online_ads(tokenId=ASSET,currencyId=FIAT,side=side,page='1',size='20')
                 out=[]
-                for a in (raw.get('result') or {}).get('items') or []:
-                    pref=a.get('tradingPreferenceSet') or {}
-                    orders=int(num(a.get('recentOrderNum') or pref.get('orderFinishNumberDay30'),0)) or None
-                    out.append(Offer('Bybit',action,num(a.get('price')),num(a.get('minAmount')),num(a.get('maxAmount')),str(a.get('nickName') or 'unknown'),rate(a.get('recentExecuteRate') or pref.get('completeRateDay30')),orders,[str(x) for x in a.get('payments') or []],'official-api'))
+                for page in range(1,MARKET_PAGES+1):
+                    raw=api.get_online_ads(tokenId=ASSET,currencyId=FIAT,side=side,page=str(page),size='20')
+                    items=(raw.get('result') or {}).get('items') or []
+                    if not items: break
+                    for a in items:
+                        pref=a.get('tradingPreferenceSet') or {}
+                        orders=int(num(a.get('recentOrderNum') or pref.get('orderFinishNumberDay30'),0)) or None
+                        out.append(Offer('Bybit',action,num(a.get('price')),num(a.get('minAmount')),num(a.get('maxAmount')),str(a.get('nickName') or 'unknown'),rate(a.get('recentExecuteRate') or pref.get('completeRateDay30')),orders,[str(x) for x in a.get('payments') or []],'official-api'))
+                    if len(items)<20: break
                 return keep(out,action)
             b,s=get_auth('BUY'),get_auth('SELL')
             if b or s:
@@ -101,17 +105,21 @@ def bybit():
     headers={'User-Agent':S.headers['User-Agent'],'Accept':'application/json','Content-Type':'application/json','Origin':'https://www.bybit.com','Referer':'https://www.bybit.com/'}
     def get_public(action):
         side='1' if action=='BUY' else '0'
-        payload={'userId':'','tokenId':ASSET,'currencyId':FIAT,'payment':[],'side':side,'size':'20','page':'1','amount':'','authMaker':False,'canTrade':False}
-        r=S.post(url,json=payload,headers=headers,timeout=12); r.raise_for_status()
         out=[]
-        for a in (r.json().get('result') or {}).get('items') or []:
-            pref=a.get('tradingPreferenceSet') or {}
-            orders=int(num(a.get('recentOrderNum') or pref.get('orderFinishNumberDay30'),0)) or None
-            pays=[]
-            for x in a.get('payments') or []:
-                if isinstance(x,dict): pays.append(str(x.get('paymentName') or x.get('paymentType') or ''))
-                elif x: pays.append(str(x))
-            out.append(Offer('Bybit',action,num(a.get('price')),num(a.get('minAmount')),num(a.get('maxAmount')),str(a.get('nickName') or 'unknown'),rate(a.get('recentExecuteRate') or pref.get('completeRateDay30')),orders,[x for x in pays if x],'web-feed'))
+        for page in range(1,MARKET_PAGES+1):
+            payload={'userId':'','tokenId':ASSET,'currencyId':FIAT,'payment':[],'side':side,'size':'20','page':str(page),'amount':'','authMaker':False,'canTrade':False}
+            r=S.post(url,json=payload,headers=headers,timeout=12); r.raise_for_status()
+            items=(r.json().get('result') or {}).get('items') or []
+            if not items: break
+            for a in items:
+                pref=a.get('tradingPreferenceSet') or {}
+                orders=int(num(a.get('recentOrderNum') or pref.get('orderFinishNumberDay30'),0)) or None
+                pays=[]
+                for x in a.get('payments') or []:
+                    if isinstance(x,dict): pays.append(str(x.get('paymentName') or x.get('paymentType') or ''))
+                    elif x: pays.append(str(x))
+                out.append(Offer('Bybit',action,num(a.get('price')),num(a.get('minAmount')),num(a.get('maxAmount')),str(a.get('nickName') or 'unknown'),rate(a.get('recentExecuteRate') or pref.get('completeRateDay30')),orders,[x for x in pays if x],'web-feed'))
+            if len(items)<20: break
         return keep(out,action)
     try:
         b,s=get_public('BUY'),get_public('SELL')
@@ -149,13 +157,17 @@ def mexc():
     headers={'User-Agent':S.headers['User-Agent'],'Accept':'application/json','Referer':'https://www.mexc.com/buy-crypto/p2p'}
     def get(action):
         trade_type='SELL' if action=='BUY' else 'BUY'
-        params={'adsType':'0','allowTrade':'true','amount':'','blockTrade':'false','certifiedMerchant':'false','coinId':coin_ids.get(ASSET,coin_ids['USDT']),'countryCode':'','currency':FIAT,'follow':'false','haveTrade':'false','page':'1','payMethod':'','tradeType':trade_type}
-        r=S.get(url,params=params,headers=headers,timeout=12); r.raise_for_status()
         out=[]
-        for a in r.json().get('data') or []:
-            m=a.get('merchant') if isinstance(a.get('merchant'),dict) else {}
-            pays=[x.strip() for x in str(a.get('payMethod') or '').split(',') if x.strip()]
-            out.append(Offer('MEXC',action,num(a.get('price')),num(a.get('minTradeLimit')),num(a.get('maxTradeLimit')),str(m.get('nickName') or 'unknown'),rate(m.get('completionRate') or a.get('completionRate')),int(num(m.get('orderCount') or a.get('orderCount'),0)) or None,pays,'web-feed'))
+        for page in range(1,MARKET_PAGES+1):
+            params={'adsType':'0','allowTrade':'true','amount':'','blockTrade':'false','certifiedMerchant':'false','coinId':coin_ids.get(ASSET,coin_ids['USDT']),'countryCode':'','currency':FIAT,'follow':'false','haveTrade':'false','page':str(page),'payMethod':'','tradeType':trade_type}
+            r=S.get(url,params=params,headers=headers,timeout=12); r.raise_for_status()
+            items=r.json().get('data') or []
+            if not items: break
+            for a in items:
+                m=a.get('merchant') if isinstance(a.get('merchant'),dict) else {}
+                pays=[x.strip() for x in str(a.get('payMethod') or '').split(',') if x.strip()]
+                out.append(Offer('MEXC',action,num(a.get('price')),num(a.get('minTradeLimit')),num(a.get('maxTradeLimit')),str(m.get('nickName') or 'unknown'),rate(m.get('completionRate') or a.get('completionRate')),int(num(m.get('orderCount') or a.get('orderCount'),0)) or None,pays,'web-feed'))
+            if len(items)<20: break
         return keep(out,action)
     try:
         b,s=get('BUY'),get('SELL')
@@ -169,16 +181,20 @@ def kucoin():
     headers={'User-Agent':S.headers['User-Agent'],'Accept':'application/json','Referer':'https://www.kucoin.com/otc/buy/USDT-UAH','x-site':'global'}
     def get(action):
         side='SELL' if action=='BUY' else 'BUY'
-        params={'status':'PUTUP','currency':ASSET,'legal':FIAT,'page':'1','pageSize':'20','side':side,'amount':'','payTypeCodes':'','sortCode':'PRICE','highQualityMerchant':'0','canDealOrder':'false','lang':'en_US'}
-        r=S.get(url,params=params,headers=headers,timeout=12); r.raise_for_status()
-        raw=r.json()
-        if not raw.get('success'): raise RuntimeError(raw.get('msg') or raw.get('code'))
         out=[]
-        for a in raw.get('items') or []:
-            pays=[]
-            for p in a.get('adPayTypes') or []:
-                if isinstance(p,dict): pays.append(str(p.get('payTypeNameEn') or p.get('payTypeCode') or ''))
-            out.append(Offer('KuCoin',action,num(a.get('floatPrice') or a.get('premium')),num(a.get('limitMinQuote')),num(a.get('limitMaxQuote')),str(a.get('nickName') or 'unknown'),rate(a.get('dealOrderRate')),int(num(a.get('dealOrderNum'),0)) or None,[x for x in pays if x],'web-feed'))
+        for page in range(1,MARKET_PAGES+1):
+            params={'status':'PUTUP','currency':ASSET,'legal':FIAT,'page':str(page),'pageSize':'20','side':side,'amount':'','payTypeCodes':'','sortCode':'PRICE','highQualityMerchant':'0','canDealOrder':'false','lang':'en_US'}
+            r=S.get(url,params=params,headers=headers,timeout=12); r.raise_for_status()
+            raw=r.json()
+            if not raw.get('success'): raise RuntimeError(raw.get('msg') or raw.get('code'))
+            items=raw.get('items') or []
+            if not items: break
+            for a in items:
+                pays=[]
+                for p in a.get('adPayTypes') or []:
+                    if isinstance(p,dict): pays.append(str(p.get('payTypeNameEn') or p.get('payTypeCode') or ''))
+                out.append(Offer('KuCoin',action,num(a.get('floatPrice') or a.get('premium')),num(a.get('limitMinQuote')),num(a.get('limitMaxQuote')),str(a.get('nickName') or 'unknown'),rate(a.get('dealOrderRate')),int(num(a.get('dealOrderNum'),0)) or None,[x for x in pays if x],'web-feed'))
+            if len(items)<20: break
         return keep(out,action)
     try:
         b,s=get('BUY'),get('SELL')
@@ -325,20 +341,24 @@ def weex():
     headers={'User-Agent':S.headers['User-Agent'],'Accept':'application/json','Referer':'https://www.weex.com/'}
     def get(action):
         trade_type='SELL' if action=='BUY' else 'BUY'
-        params={'allowTrade':'false','amount':'','blockTrade':'false','coinId':'2','countryCode':'','currency':FIAT,'follow':'false','haveTrade':'false','page':'1','payMethod':'','tradeType':trade_type}
-        r=S.get(url,params=params,headers=headers,timeout=12); r.raise_for_status()
-        raw=r.json()
-        if int(raw.get('code',-1))!=0: raise RuntimeError(raw.get('msg') or raw.get('code'))
         out=[]
-        for a in raw.get('data') or []:
-            # Відкидаємо крос-лістинг MEXC та спеціальні promo/flash ads.
-            if str(a.get('source') or '').upper() not in {'','WEEX'}: continue
-            if a.get('tagAlias') or a.get('tags'): continue
-            m=a.get('merchant') or {}; st=a.get('merchantStatistics') or {}
-            pays=[x.strip() for x in str(a.get('payMethod') or '').split(',') if x.strip()]
-            orders=int(num(st.get('doneLastMonthCount') or st.get('totalBuyCount') or st.get('totalSellCount'),0)) or None
-            comp=rate(st.get('lastMonthCompleteRate') or st.get('completeRate'))
-            out.append(Offer('WEEX',action,num(a.get('price')),num(a.get('minTradeLimit')),num(a.get('maxTradeLimit')),str(m.get('nickName') or 'unknown'),comp,orders,pays,'web-feed'))
+        for page in range(1,MARKET_PAGES+1):
+            params={'allowTrade':'false','amount':'','blockTrade':'false','coinId':'2','countryCode':'','currency':FIAT,'follow':'false','haveTrade':'false','page':str(page),'payMethod':'','tradeType':trade_type}
+            r=S.get(url,params=params,headers=headers,timeout=12); r.raise_for_status()
+            raw=r.json()
+            if int(raw.get('code',-1))!=0: raise RuntimeError(raw.get('msg') or raw.get('code'))
+            items=raw.get('data') or []
+            if not items: break
+            for a in items:
+                # Відкидаємо крос-лістинг MEXC та спеціальні promo/flash ads.
+                if str(a.get('source') or '').upper() not in {'','WEEX'}: continue
+                if a.get('tagAlias') or a.get('tags'): continue
+                m=a.get('merchant') or {}; st=a.get('merchantStatistics') or {}
+                pays=[x.strip() for x in str(a.get('payMethod') or '').split(',') if x.strip()]
+                orders=int(num(st.get('doneLastMonthCount') or st.get('totalBuyCount') or st.get('totalSellCount'),0)) or None
+                comp=rate(st.get('lastMonthCompleteRate') or st.get('completeRate'))
+                out.append(Offer('WEEX',action,num(a.get('price')),num(a.get('minTradeLimit')),num(a.get('maxTradeLimit')),str(m.get('nickName') or 'unknown'),comp,orders,pays,'web-feed'))
+            if len(items)<20: break
         return keep(out,action)
     try:
         b,s=get('BUY'),get('SELL')
@@ -640,7 +660,7 @@ def scan():
         top=dict(top); top['verdict']='PAUSE_BANK_GUARD'; top['reasons']=([bg['reason']] if bg['reason'] else ['Bank Guard paused actionable alerts'])+list(top.get('reasons') or [])
     elif bg['cooldown_remaining_seconds']>0 and top and top['verdict']=='ALERT':
         top=dict(top); top['verdict']='COOLDOWN'; top['reasons']=[f"Bank Guard cooldown {bg['cooldown_remaining_seconds']//60+1} min remaining"]+list(top.get('reasons') or [])
-    snap={'version':'MYSHKA_P2P_RADAR_V4','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'capital_fiat':CAPITAL,'mode':'ХМАРНИЙ СКАНЕР 24/7','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'route_count':len(rs),'shown_routes':min(25,len(rs)),'alerts':sum(x['verdict']=='ALERT' for x in rs),'review_count':sum(x['verdict']=='REVIEW' for x in rs),'review_spread_pct':REVIEW_SPREAD}
+    snap={'version':'MYSHKA_P2P_RADAR_V4','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'capital_fiat':CAPITAL,'mode':'ХМАРНИЙ СКАНЕР 24/7','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'route_count':len(rs),'shown_routes':min(25,len(rs)),'alerts':sum(x['verdict']=='ALERT' for x in rs),'review_count':sum(x['verdict']=='REVIEW' for x in rs),'review_spread_pct':REVIEW_SPREAD,'market_pages':MARKET_PAGES,'offers_per_side':KEEP_PER_SIDE}
     LATEST.write_text(json.dumps(snap,ensure_ascii=False,indent=2),encoding='utf-8'); history(snap); st=state(); now=time.time(); did=False
     if top and top['verdict']=='ALERT' and (st.get('last_route')!=f"{top['buy_exchange']}->{top['sell_exchange']}" or now-float(st.get('last_alert',0))>=600):
       ok,msg=telegram(tg_text(top,ts,bg),telegram_keyboard(top)); report(snap); print('TELEGRAM:',msg,flush=True); did=True
