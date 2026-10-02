@@ -20,7 +20,7 @@ def eb(k,d='0'):return os.getenv(k,d).lower() in ('1','true','yes','on')
 FIAT=os.getenv('P2P_FIAT','UAH').upper(); ASSET=os.getenv('P2P_ASSET','USDT').upper(); CAPITAL=ef('P2P_CAPITAL_FIAT','4500')
 EXCHANGES_FILE=HERE/os.getenv('P2P_EXCHANGES_FILE','exchanges.json')
 REQUIRE_LIMIT_FIT=eb('P2P_REQUIRE_CAPITAL_LIMITS','0')
-INTERVAL=max(10,ei('P2P_SCAN_SECONDS','15')); MIN_NET=ef('P2P_MIN_NET_PCT','0.35'); MAX_RISK=ei('P2P_MAX_RISK','60')
+INTERVAL=max(10,ei('P2P_SCAN_SECONDS','15')); MIN_NET=ef('P2P_MIN_NET_PCT','0.35'); MAX_RISK=ei('P2P_MAX_RISK','60'); REVIEW_SPREAD=ef('P2P_REVIEW_SPREAD_PCT','3.0')
 MIN_RATE=ef('P2P_MIN_COMPLETION','90'); MIN_ORDERS=ei('P2P_MIN_ORDERS','10'); XFER=ef('P2P_TRANSFER_FEE_USDT','1')
 BUFFER=ef('P2P_SAFETY_BUFFER_PCT','0.15'); TG_TOKEN=os.getenv('TELEGRAM_BOT_TOKEN') or os.getenv('TG_BOT_TOKEN','')
 TG_CHAT=os.getenv('TELEGRAM_CHAT_ID') or os.getenv('TG_CHAT_ID','')
@@ -420,12 +420,23 @@ def routes(providers):
         if same: why=['same-exchange route: no modeled crypto transfer fee']+why
         drag=(transfer_fee*b.price/CAPITAL*100) if CAPITAL else 0
         if drag>.7:risk+=10;why.append(f'transfer drag {drag:.2f}%')
-        if gross>3:risk+=20;why.append('unusually large spread — verify manually')
-        elif gross>1.5:risk+=8;why.append('large spread — re-check freshness')
+        abnormal=gross>REVIEW_SPREAD
+        if abnormal:
+            risk+=20;why.append(f'unusually large spread > {REVIEW_SPREAD:.2f}% — manual verification required')
+        elif gross>1.5:
+            risk+=8;why.append('large spread — re-check freshness')
         risk=min(100,risk); netpct=net/CAPITAL*100; prefpct=pref/CAPITAL*100
-        verdict='ALERT' if netpct>=MIN_NET and risk<=MAX_RISK else ('PREFUNDED_ONLY' if prefpct>=MIN_NET else 'DROP')
+        if netpct>=MIN_NET and abnormal:
+            verdict='REVIEW'
+        elif netpct>=MIN_NET and risk<=MAX_RISK:
+            verdict='ALERT'
+        elif prefpct>=MIN_NET:
+            verdict='PREFUNDED_ONLY'
+        else:
+            verdict='DROP'
         out.append({'buy_exchange':b.exchange,'sell_exchange':s.exchange,'route_type':'INTRA' if same else 'CROSS','buy_price':round(b.price,4),'sell_price':round(s.price,4),'gross_spread_pct':round(gross,3),'net_profit_fiat':round(net,2),'net_pct':round(netpct,3),'prefunded_net_pct':round(prefpct,3),'risk_score':risk,'verdict':verdict,'buy_merchant':b.merchant,'sell_merchant':s.merchant,'buy_completion_pct':b.completion,'sell_completion_pct':s.completion,'buy_payments':b.payments,'sell_payments':s.payments,'reasons':why[:6]})
-    return sorted(out,key=lambda x:(x['verdict']=='ALERT',x['net_pct'],-x['risk_score']),reverse=True)
+    priority={'ALERT':3,'REVIEW':2,'PREFUNDED_ONLY':1,'DROP':0}
+    return sorted(out,key=lambda x:(priority.get(x['verdict'],0),x['net_pct'],-x['risk_score']),reverse=True)
 
 def public_provider(p):
     return {'exchange':p['exchange'],'ok':p['ok'],'note':p['note'],'buy_offers':len(p['buy']),'sell_offers':len(p['sell']),'best_buy':asdict(p['buy'][0]) if p['buy'] else None,'best_sell':asdict(p['sell'][0]) if p['sell'] else None}
@@ -594,7 +605,7 @@ def scan():
         top=dict(top); top['verdict']='PAUSE_BANK_GUARD'; top['reasons']=([bg['reason']] if bg['reason'] else ['Bank Guard paused actionable alerts'])+list(top.get('reasons') or [])
     elif bg['cooldown_remaining_seconds']>0 and top and top['verdict']=='ALERT':
         top=dict(top); top['verdict']='COOLDOWN'; top['reasons']=[f"Bank Guard cooldown {bg['cooldown_remaining_seconds']//60+1} min remaining"]+list(top.get('reasons') or [])
-    snap={'version':'MYSHKA_P2P_RADAR_V3','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'capital_fiat':CAPITAL,'mode':'ХМАРНИЙ СКАНЕР 24/7','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'alerts':sum(x['verdict']=='ALERT' for x in rs)}
+    snap={'version':'MYSHKA_P2P_RADAR_V4','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'capital_fiat':CAPITAL,'mode':'ХМАРНИЙ СКАНЕР 24/7','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'route_count':len(rs),'shown_routes':min(25,len(rs)),'alerts':sum(x['verdict']=='ALERT' for x in rs),'review_count':sum(x['verdict']=='REVIEW' for x in rs),'review_spread_pct':REVIEW_SPREAD}
     LATEST.write_text(json.dumps(snap,ensure_ascii=False,indent=2),encoding='utf-8'); history(snap); st=state(); now=time.time(); did=False
     if top and top['verdict']=='ALERT' and (st.get('last_route')!=f"{top['buy_exchange']}->{top['sell_exchange']}" or now-float(st.get('last_alert',0))>=600):
       ok,msg=telegram(tg_text(top,ts,bg),telegram_keyboard(top)); report(snap); print('TELEGRAM:',msg,flush=True); did=True
