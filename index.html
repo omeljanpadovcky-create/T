@@ -15,7 +15,7 @@
 .aiPanel{position:fixed;right:18px;bottom:66px;width:min(330px,calc(100vw - 24px));height:min(430px,64vh);z-index:31;display:none;flex-direction:column;background:linear-gradient(180deg,#0a1827,#07121f);border:1px solid #3d73b6;border-radius:16px;box-shadow:0 22px 55px #000b,0 0 24px rgba(92,155,255,.09);overflow:hidden}
 .aiPanel.open{display:flex}.aiHead{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #21466d}.aiHead b{font-size:12px}.aiClose{width:28px;height:28px;border:1px solid #294f78;background:#0c1c2e;border-radius:9px;color:#dcecff;font-size:16px;cursor:pointer}
 .aiMsgs{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:7px}.aiMsg{max-width:90%;padding:8px 10px;border-radius:11px;font-size:10px;line-height:1.4;white-space:pre-wrap}.aiMsg.bot{background:#10243a;border:1px solid #315177}.aiMsg.user{margin-left:auto;background:#112a47;border:1px solid #3d73b6}
-.aiQuick{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:0 10px 8px}.aiQuick button{border:1px solid #315177;background:#0d1f33;color:#cfe0f4;border-radius:9px;padding:6px 7px;font-size:8px;cursor:pointer}
+.aiQuick{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:0 10px 8px}.aiQuick button{border:1px solid #315177;background:#0d1f33;color:#cfe0f4;border-radius:9px;padding:6px 7px;font-size:8px;cursor:pointer}.aiQuick .aiTelegramBtn{grid-column:1/-1;border-color:#235f49;background:#081f18;color:#8ff0bf;font-weight:900}
 .aiInput{display:flex;gap:6px;padding:8px 10px 10px;border-top:1px solid #21466d}.aiInput input{flex:1;min-width:0;background:#07121f;border:1px solid #315177;border-radius:9px;color:#fff;padding:9px 10px;font-size:10px}.aiInput button{border:1px solid #3d73b6;background:#102844;color:#9ec9ff;border-radius:9px;padding:0 10px;font-size:10px;font-weight:900;cursor:pointer}
 
 /* ===== Unified neon card system ===== */
@@ -418,6 +418,7 @@
     <button data-q="Що означає ризик?">Ризик</button>
     <button data-q="Який зараз найкращий варіант?">Топ варіант</button>
     <button data-q="Які біржі активні?">Біржі</button>
+    <button class="aiTelegramBtn" data-q="/help">💬 Telegram</button>
   </div>
   <div class="aiInput"><input id="aiInput" placeholder="Питання або /help…"><button id="aiSend">→</button></div>
 </div>
