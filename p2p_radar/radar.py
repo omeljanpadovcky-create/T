@@ -395,7 +395,7 @@ def configured_exchange_ids():
         return ['binance','bybit']
 
 def provider_for(exchange_id):
-    adapters={'binance':binance,'bybit':bybit,'okx':okx,'bitget':bitget,'kucoin':kucoin,'gate':gate,'mexc':mexc,'htx':htx,'bingx':bingx,'lbank':lbank,'toobit':toobit,'weex':weex}
+    adapters={'binance':binance,'bybit':bybit,'okx':okx,'bitget':bitget,'kucoin':kucoin,'gate':gate,'mexc':mexc,'htx':htx,'toobit':toobit,'weex':weex}
     fn=adapters.get(str(exchange_id).lower())
     if not fn:return {'exchange':str(exchange_id).upper(),'ok':False,'note':'є пряме P2P-посилання; автоматичне сканування для цієї біржі ще не підключено','buy':[],'sell':[]}
     return fn()
