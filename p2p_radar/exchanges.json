@@ -1,21 +1,62 @@
 {
   "scan_seconds": 15,
-  "note": "MYSHKA scans only this explicit list. Add/remove exchange ids here; no random web discovery.",
+  "note": "One explicit list. MYSHKA scans only configured adapters; every entry also exposes a direct P2P page link.",
   "exchanges": [
     {
       "id": "binance",
       "name": "Binance",
-      "enabled": true
+      "enabled": true,
+      "buy_url": "https://p2p.binance.com/en/trade/all-payments/USDT?fiat=UAH",
+      "sell_url": "https://p2p.binance.com/en/trade/all-payments/USDT?fiat=UAH"
     },
     {
       "id": "bybit",
       "name": "Bybit",
-      "enabled": true
+      "enabled": true,
+      "buy_url": "https://www.bybit.com/fiat/trade/otc/",
+      "sell_url": "https://www.bybit.com/fiat/trade/otc/"
     },
     {
       "id": "okx",
       "name": "OKX",
-      "enabled": true
+      "enabled": true,
+      "buy_url": "https://www.okx.com/ua/p2p-markets/uah/buy-usdt",
+      "sell_url": "https://www.okx.com/ua/p2p-markets/uah/sell-usdt"
+    },
+    {
+      "id": "bitget",
+      "name": "Bitget",
+      "enabled": true,
+      "buy_url": "https://www.bitget.com/uk/p2p-trade?fiatName=UAH&paymethodId=-1",
+      "sell_url": "https://www.bitget.com/uk/p2p-trade?fiatName=UAH&paymethodId=-1"
+    },
+    {
+      "id": "kucoin",
+      "name": "KuCoin",
+      "enabled": true,
+      "buy_url": "https://www.kucoin.com/uk/otc/buy/USDT-UAH",
+      "sell_url": "https://www.kucoin.com/uk/otc/sell/USDT-UAH"
+    },
+    {
+      "id": "gate",
+      "name": "Gate",
+      "enabled": true,
+      "buy_url": "https://www.gate.com/uk/p2p",
+      "sell_url": "https://www.gate.com/uk/p2p"
+    },
+    {
+      "id": "mexc",
+      "name": "MEXC",
+      "enabled": true,
+      "buy_url": "https://www.mexc.com/uk-UA/buy-crypto/p2p",
+      "sell_url": "https://www.mexc.com/uk-UA/buy-crypto/p2p"
+    },
+    {
+      "id": "htx",
+      "name": "HTX",
+      "enabled": true,
+      "buy_url": "https://www.htx.com/fiat-crypto/trade/",
+      "sell_url": "https://www.htx.com/fiat-crypto/trade/"
     }
   ]
 }
