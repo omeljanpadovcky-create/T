@@ -1,0 +1,51 @@
+name: P2P keyless HTML probe
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/p2p-keyless-html.yml'
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests
+      - name: Inspect embedded P2P data
+        run: |
+          python - <<'PY'
+          import requests,re,html
+          S=requests.Session();S.headers['User-Agent']='Mozilla/5.0'
+          pages={
+            "bingx":"https://fiat.bingx.com/en/p2p",
+            "lbank":"https://www.lbank.com/uk/crypto/buy",
+            "toobit":"https://www.toobit.com/en-US/p2p",
+            "bitunix":"https://www.bitunix.com/p2p/p2p-trade",
+            "weex":"https://www.weex.com/buy-crypto/trading",
+          }
+          for name,url in pages.items():
+            print("\n===== "+name+" =====")
+            try:
+              r=S.get(url,timeout=25)
+              t=html.unescape(r.text)
+              print("HTTP",r.status_code,"LEN",len(t))
+              low=t.lower()
+              hits=[]
+              for pat in ['"price"', '\\"price\\"', '"merchant"', '\\"merchant\\"', '"paymethods"', '"paymentmethods"']:
+                start=0
+                while True:
+                  i=low.find(pat.lower(),start)
+                  if i<0: break
+                  a=max(0,i-1200);b=min(len(t),i+2200)
+                  ctx=t[a:b]
+                  cl=ctx.lower()
+                  if ('uah' in cl or 'usdt' in cl) and ('merchant' in cl or 'payment' in cl or 'paymethod' in cl):
+                    hits.append(ctx)
+                  start=i+1
+                  if len(hits)>=8: break
+                if len(hits)>=8: break
+              for idx,ctx in enumerate(hits[:8]):
+                print("\nCTX",idx,repr(ctx[:3400]))
+            except Exception as e: print("ERR",type(e).__name__,e)
+          PY
