@@ -17,7 +17,8 @@ def ei(k,d):
     except:return int(d)
 def eb(k,d='0'):return os.getenv(k,d).lower() in ('1','true','yes','on')
 FIAT=os.getenv('P2P_FIAT','UAH').upper(); ASSET=os.getenv('P2P_ASSET','USDT').upper(); CAPITAL=ef('P2P_CAPITAL_FIAT','4500')
-INTERVAL=max(10,ei('P2P_SCAN_SECONDS','20')); MIN_NET=ef('P2P_MIN_NET_PCT','0.35'); MAX_RISK=ei('P2P_MAX_RISK','60')
+EXCHANGES_FILE=HERE/os.getenv('P2P_EXCHANGES_FILE','exchanges.json')
+INTERVAL=max(10,ei('P2P_SCAN_SECONDS','15')); MIN_NET=ef('P2P_MIN_NET_PCT','0.35'); MAX_RISK=ei('P2P_MAX_RISK','60')
 MIN_RATE=ef('P2P_MIN_COMPLETION','90'); MIN_ORDERS=ei('P2P_MIN_ORDERS','10'); XFER=ef('P2P_TRANSFER_FEE_USDT','1')
 BUFFER=ef('P2P_SAFETY_BUFFER_PCT','0.15'); TG_TOKEN=os.getenv('TELEGRAM_BOT_TOKEN') or os.getenv('TG_BOT_TOKEN','')
 TG_CHAT=os.getenv('TELEGRAM_CHAT_ID') or os.getenv('TG_CHAT_ID',''); BY_KEY=os.getenv('BYBIT_API_KEY',''); BY_SECRET=os.getenv('BYBIT_API_SECRET','')
@@ -46,17 +47,23 @@ def keep(xs,action):
 
 def binance():
     if not eb('P2P_BINANCE_ENABLED','1'): return {'exchange':'Binance','ok':False,'note':'disabled','buy':[],'sell':[]}
-    url='https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search'
+    url='https://www.binance.com/bapi/c2c/v1/public/c2c/agent/ad-list'
     def get(action):
-        body={'fiat':FIAT,'page':1,'rows':20,'tradeType':action,'asset':ASSET,'countries':[],'proMerchantAds':False,'shieldMerchantAds':False,'publisherType':None,'payTypes':[]}
-        r=S.post(url,json=body,headers={'Origin':'https://p2p.binance.com','Referer':'https://p2p.binance.com/'},timeout=10); r.raise_for_status(); out=[]
-        for row in r.json().get('data') or []:
-            a=row.get('adv') or {}; m=row.get('advertiser') or {}; pays=[p.get('tradeMethodName') or p.get('identifier') for p in a.get('tradeMethods') or []]
-            orders=int(num(m.get('monthOrderCount') or m.get('monthFinishCount'),0)) or None
-            out.append(Offer('Binance',action,num(a.get('price')),num(a.get('minSingleTransAmount')),num(a.get('dynamicMaxSingleTransAmount') or a.get('maxSingleTransAmount')),str(m.get('nickName') or 'unknown'),rate(m.get('monthFinishRate') or m.get('positiveRate')),orders,[str(p) for p in pays if p],'web-feed'))
+        r=S.get(url,params={'fiat':FIAT,'asset':ASSET,'tradeType':action,'limit':20},headers={'Referer':'https://www.binance.com/'},timeout=12)
+        r.raise_for_status(); out=[]
+        data=r.json().get('data') or {}
+        for a in data.get('items') or []:
+            m=a.get('advertiser') or {}; price=num(a.get('price'))
+            # Current public Agent API exposes min/max transaction size in asset units.
+            # Convert to fiat so the common CAPITAL filter stays exchange-agnostic.
+            min_fiat=num(a.get('minTransAmount'))*price
+            max_fiat=num(a.get('maxTransAmount'))*price
+            pays=[str(x) for x in (a.get('tradeMethods') or []) if x]
+            orders=int(num(m.get('monthOrderCount'),0)) or None
+            out.append(Offer('Binance',action,price,min_fiat,max_fiat,str(m.get('nickName') or 'unknown'),rate(m.get('monthFinishRate') or m.get('positiveRate')),orders,pays,'official-public'))
         return keep(out,action)
     try:
-        b,s=get('BUY'),get('SELL'); return {'exchange':'Binance','ok':bool(b or s),'note':f'{len(b)} buy / {len(s)} sell','buy':b,'sell':s}
+        b,s=get('BUY'),get('SELL'); return {'exchange':'Binance','ok':True,'note':f'{len(b)} buy / {len(s)} sell','buy':b,'sell':s}
     except Exception as e:return {'exchange':'Binance','ok':False,'note':f'{type(e).__name__}: {e}','buy':[],'sell':[]}
 
 def bybit():
@@ -73,6 +80,26 @@ def bybit():
             return keep(out,action)
         b,s=get('BUY'),get('SELL'); return {'exchange':'Bybit','ok':bool(b or s),'note':f'{len(b)} buy / {len(s)} sell','buy':b,'sell':s}
     except Exception as e:return {'exchange':'Bybit','ok':False,'note':f'{type(e).__name__}: {e}','buy':[],'sell':[]}
+
+def okx():
+    # Adapter placeholder. Keep the exchange in the user's explicit list, but do not invent prices
+    # until a stable market-data source is wired.
+    return {'exchange':'OKX','ok':False,'note':'adapter not configured yet','buy':[],'sell':[]}
+
+def configured_exchange_ids():
+    env=[x.strip().lower() for x in os.getenv('P2P_EXCHANGES','').split(',') if x.strip()]
+    if env:return env
+    try:
+        raw=json.loads(EXCHANGES_FILE.read_text(encoding='utf-8'))
+        return [str(x.get('id','')).lower() for x in raw.get('exchanges',[]) if x.get('enabled',True) and x.get('id')]
+    except Exception:
+        return ['binance','bybit']
+
+def provider_for(exchange_id):
+    adapters={'binance':binance,'bybit':bybit,'okx':okx}
+    fn=adapters.get(str(exchange_id).lower())
+    if not fn:return {'exchange':str(exchange_id).upper(),'ok':False,'note':'no adapter yet','buy':[],'sell':[]}
+    return fn()
 
 def offer_risk(o):
     r=16 if o.source=='web-feed' else 0; why=[]
@@ -255,13 +282,13 @@ def git_push():
     except Exception as e:print('GIT:',e,flush=True)
 
 def scan():
-    ts=datetime.now(KYIV).isoformat(timespec='seconds'); ps=[binance(),bybit()]; rs=routes(ps); top=rs[0] if rs else None
+    ts=datetime.now(KYIV).isoformat(timespec='seconds'); ids=configured_exchange_ids(); ps=[provider_for(x) for x in ids]; rs=routes(ps); top=rs[0] if rs else None
     b=bank_state(); bg=bank_guard(b)
     if bg['paused'] and top and top['verdict']=='ALERT':
         top=dict(top); top['verdict']='PAUSE_BANK_GUARD'; top['reasons']=([bg['reason']] if bg['reason'] else ['Bank Guard paused actionable alerts'])+list(top.get('reasons') or [])
     elif bg['cooldown_remaining_seconds']>0 and top and top['verdict']=='ALERT':
         top=dict(top); top['verdict']='COOLDOWN'; top['reasons']=[f"Bank Guard cooldown {bg['cooldown_remaining_seconds']//60+1} min remaining"]+list(top.get('reasons') or [])
-    snap={'version':'MYSHKA_P2P_RADAR_V1','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'capital_fiat':CAPITAL,'mode':'SCAN_ONLY_NO_AUTOTRADE','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'alerts':sum(x['verdict']=='ALERT' for x in rs)}
+    snap={'version':'MYSHKA_P2P_RADAR_V3','scanned_at':ts,'fiat':FIAT,'asset':ASSET,'capital_fiat':CAPITAL,'mode':'LIST_LOOP_NO_AUTOTRADE','bank_guard':bg,'providers':[public_provider(x) for x in ps],'routes':rs[:25],'top_route':top,'alerts':sum(x['verdict']=='ALERT' for x in rs)}
     LATEST.write_text(json.dumps(snap,ensure_ascii=False,indent=2),encoding='utf-8'); history(snap); st=state(); now=time.time(); did=False
     if top and top['verdict']=='ALERT' and (st.get('last_route')!=f"{top['buy_exchange']}->{top['sell_exchange']}" or now-float(st.get('last_alert',0))>=600):
       ok,msg=telegram(tg_text(top,ts,bg),telegram_keyboard(top)); report(snap); print('TELEGRAM:',msg,flush=True); did=True
