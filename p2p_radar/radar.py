@@ -27,6 +27,8 @@ TG_CHAT=os.getenv('TELEGRAM_CHAT_ID') or os.getenv('TG_CHAT_ID','')
 BY_KEY=os.getenv('BYBIT_API_KEY',''); BY_SECRET=os.getenv('BYBIT_API_SECRET','')
 BITGET_KEY=os.getenv('BITGET_API_KEY',''); BITGET_SECRET=os.getenv('BITGET_API_SECRET',''); BITGET_PASS=os.getenv('BITGET_API_PASSPHRASE','')
 GATE_KEY=os.getenv('GATE_API_KEY',''); GATE_SECRET=os.getenv('GATE_API_SECRET','')
+OKX_KEY=os.getenv('OKX_API_KEY',''); OKX_SECRET=os.getenv('OKX_API_SECRET',''); OKX_PASS=os.getenv('OKX_API_PASSPHRASE','')
+MEXC_KEY=os.getenv('MEXC_API_KEY',''); MEXC_SECRET=os.getenv('MEXC_API_SECRET','')
 LATEST=HERE/'latest.json'; HIST=HERE/'history.csv'; REPORTS=HERE/'reports'; STATE=HERE/'state.json'; BANK=HERE/'bank_guard.json'; REPORTS.mkdir(exist_ok=True)
 BANK_WARN=max(1,ei('P2P_BANK_WARN_TRANSFERS_PER_DAY','4')); BANK_MAX=max(BANK_WARN,ei('P2P_BANK_MAX_TRANSFERS_PER_DAY','6'))
 BANK_PER_CYCLE=max(1,ei('P2P_BANK_TRANSFERS_PER_CYCLE','2')); BANK_COOLDOWN=max(0,ei('P2P_BANK_MIN_MINUTES_BETWEEN_CYCLES','60')); BANK_ALERT_MAX=max(1,ei('P2P_BANK_MAX_ALERTS_PER_DAY','8')); TG_CONFIRM_WARN=max(1,ei('P2P_TELEGRAM_CONFIRM_WARN','5')); GIT_SYNC_SECONDS=max(30,ei('P2P_GIT_SYNC_SECONDS','60'))
@@ -87,7 +89,14 @@ def bybit():
     except Exception as e:return {'exchange':'Bybit','ok':False,'note':f'{type(e).__name__}: {e}','buy':[],'sell':[]}
 
 def okx():
-    return {'exchange':'OKX','ok':False,'note':'доступне пряме P2P-посилання; автоматичний API-сканер ще не підключено','buy':[],'sell':[]}
+    if not OKX_KEY or not OKX_SECRET or not OKX_PASS:
+        return {'exchange':'OKX','ok':False,'note':'P2P API доступний для Super/Diamond Merchant; потрібні API key + secret + passphrase після схвалення','buy':[],'sell':[]}
+    return {'exchange':'OKX','ok':False,'note':'ключі OKX є, але P2P API активується біржею лише після окремого merchant-схвалення','buy':[],'sell':[]}
+
+def mexc():
+    if not MEXC_KEY or not MEXC_SECRET:
+        return {'exchange':'MEXC','ok':False,'note':'P2P Open API доступний verified merchant; потрібні API key + secret після схвалення','buy':[],'sell':[]}
+    return {'exchange':'MEXC','ok':False,'note':'ключі MEXC є; P2P endpoint-документація видається в Merchant Portal після активації Open API','buy':[],'sell':[]}
 
 def bitget():
     if not BITGET_KEY or not BITGET_SECRET or not BITGET_PASS:
@@ -158,7 +167,7 @@ def configured_exchange_ids():
         return ['binance','bybit']
 
 def provider_for(exchange_id):
-    adapters={'binance':binance,'bybit':bybit,'okx':okx,'bitget':bitget,'gate':gate}
+    adapters={'binance':binance,'bybit':bybit,'okx':okx,'bitget':bitget,'gate':gate,'mexc':mexc}
     fn=adapters.get(str(exchange_id).lower())
     if not fn:return {'exchange':str(exchange_id).upper(),'ok':False,'note':'є пряме P2P-посилання; автоматичне сканування для цієї біржі ще не підключено','buy':[],'sell':[]}
     return fn()
