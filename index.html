@@ -341,10 +341,62 @@
   color:#7fd7b4 !important;
   text-shadow:0 0 14px rgba(31,92,71,.16) !important;
 }
+
+/* ===== P2P bank warning modal ===== */
+.bankWarning{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(2,6,12,.82);
+  backdrop-filter:blur(8px);
+}
+.bankWarning.hidden{display:none}
+.bankWarningCard{
+  width:min(460px,100%);
+  background:linear-gradient(180deg,#0b1726,#07111d);
+  border:1px solid #6f5a24;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 24px 70px #000c,0 0 28px rgba(255,209,102,.08);
+}
+.bankWarningIcon{font-size:30px;margin-bottom:8px}
+.bankWarningCard h2{margin:0 0 9px;font-size:20px}
+.bankWarningCard p{margin:0;color:#b9c8db;font-size:12px;line-height:1.55}
+.bankWarningCard strong{color:#fff}
+.bankWarningOk{
+  width:100%;
+  margin-top:16px;
+  min-height:44px;
+  border-radius:12px;
+  border:1px solid #806525;
+  background:#2a2109;
+  color:#ffd978;
+  font-weight:950;
+  font-size:13px;
+  cursor:pointer;
+  transition:transform .16s ease,filter .16s ease,box-shadow .16s ease;
+}
+.bankWarningOk:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.08);
+  box-shadow:0 0 18px rgba(255,209,102,.10);
+}
 @media(max-width:900px){.grid{grid-template-columns:1fr}.head{align-items:flex-start;flex-direction:column}.badges{justify-content:flex-start}.provider{grid-template-columns:85px 58px 1fr}.provider span:last-child{display:none}.route{font-size:22px}.money{font-size:31px}.exchangeGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.aiFab{right:12px;bottom:12px}.aiPanel{right:8px;bottom:66px;width:calc(100vw - 16px);height:70vh}.routesGrid{grid-template-columns:1fr}.routeMetrics{grid-template-columns:repeat(2,1fr)}.routeTop{align-items:center}.routePair{font-size:16px}}
 </style>
 </head>
-<body><div class="app">
+<body><div class="bankWarning" id="bankWarning">
+  <div class="bankWarningCard" role="dialog" aria-modal="true" aria-labelledby="bankWarningTitle">
+    <div class="bankWarningIcon">⚠️</div>
+    <h2 id="bankWarningTitle">Увага щодо P2P</h2>
+    <p><strong>Monobank та інші банки</strong> можуть додатково перевіряти часті або нетипові P2P-перекази, тимчасово обмежувати окремі операції або просити пояснення походження коштів. Це залежить від банку та конкретної операції. MYSHKA лише показує ринок — перед переказом перевір правила свого банку.</p>
+    <button class="bankWarningOk" id="bankWarningOk">OK</button>
+  </div>
+</div>
+<div class="app">
 <header class="head glass"><div class="brand"><div class="logo">🐭</div><div><h1><span>MYSHKA</span> P2P РАДАР</h1><p>Сканує біржі → порівнює P2P-ціни → рахує спред → показує найкращі варіанти</p></div></div><div class="badges"><span class="badge live" id="live">LIVE</span><span class="badge" id="mode">ХМАРА 24/7</span><span class="badge" id="market">USDT / UAH</span><span class="badge" id="time">Ще не сканувала</span></div></header>
 <section class="card glass" style="margin-top:12px">
   <div class="title"><div><h2>💱 Обери біржу</h2><div class="sub">Зелена кнопка — купити USDT. Червона — продати. Мишка відкриє потрібну P2P-сторінку, а перед угодою ти просто звіряєш курс і оголошення.</div></div></div>
@@ -422,6 +474,12 @@ function routeLinkClick(){
     if(n===5)setTimeout(()=>alert('⚠️ MYSHKA P2P: сьогодні ти вже 5 разів відкривав P2P-посилання. Це внутрішнє попередження, не банківський ліміт. Перед наступною операцією перевір актуальні ліміти, реквізити й оголошення.'),80);
   }catch(e){}
   return true;
+}
+const bankWarning=document.getElementById('bankWarning');
+const bankWarningOk=document.getElementById('bankWarningOk');
+if(bankWarning&&bankWarningOk){
+  bankWarningOk.addEventListener('click',()=>bankWarning.classList.add('hidden'));
+  bankWarning.addEventListener('click',e=>{if(e.target===bankWarning)bankWarning.classList.add('hidden')});
 }
 function riskClass(v){v=Number(v||0);return v<=35?'low':v<=60?'mid':'high'}
 function verdictClass(v){return v==='ALERT'?'vAlert':v==='REVIEW'?'vReview':v==='PREFUNDED_ONLY'?'vPref':'vDrop'}
