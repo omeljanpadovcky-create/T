@@ -1,6 +1,6 @@
 {
   "scan_seconds": 15,
-  "note": "One explicit list. MYSHKA scans only configured adapters; every entry also exposes a direct P2P page link.",
+  "note": "Explicit P2P exchange directory. Only verified direct P2P pages are added; scanner adapters are connected separately.",
   "exchanges": [
     {
       "id": "binance",
@@ -57,6 +57,34 @@
       "enabled": true,
       "buy_url": "https://www.htx.com/fiat-crypto/trade/",
       "sell_url": "https://www.htx.com/fiat-crypto/trade/"
+    },
+    {
+      "id": "bingx",
+      "name": "BingX",
+      "enabled": true,
+      "buy_url": "https://fiat.bingx.com/en/p2p",
+      "sell_url": "https://fiat.bingx.com/en/p2p"
+    },
+    {
+      "id": "coinex",
+      "name": "CoinEx",
+      "enabled": true,
+      "buy_url": "https://www.coinex.com/p2p",
+      "sell_url": "https://www.coinex.com/p2p"
+    },
+    {
+      "id": "bitmart",
+      "name": "BitMart",
+      "enabled": true,
+      "buy_url": "https://www.bitmart.com/uk-UA/p2p/",
+      "sell_url": "https://www.bitmart.com/uk-UA/p2p/"
+    },
+    {
+      "id": "whitebit",
+      "name": "WhiteBIT P2P Express",
+      "enabled": true,
+      "buy_url": "https://whitebit.com/ua/m/p-2-p-express",
+      "sell_url": "https://whitebit.com/ua/m/p-2-p-express"
     }
   ]
 }
