@@ -1,0 +1,65 @@
+name: P2P browser endpoint discovery
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/p2p-browser-discovery.yml'
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install selenium
+      - name: Capture public marketplace network calls
+        run: |
+          python - <<'PY'
+          import json,time,re
+          from selenium import webdriver
+          from selenium.webdriver.chrome.options import Options
+
+          sites={
+            "bingx":"https://fiat.bingx.com/en/p2p",
+            "lbank":"https://www.lbank.com/uk/crypto/buy",
+            "toobit":"https://www.toobit.com/en-US/p2p",
+            "bitunix":"https://www.bitunix.com/p2p/p2p-trade",
+            "weex":"https://www.weex.com/buy-crypto/trading",
+            "coinex":"https://www.coinex.com/p2p",
+            "whitebit":"https://whitebit.com/ua/m/p-2-p-express",
+            "bitmart":"https://www.bitmart.com/uk-UA/p2p/",
+            "coinw":"https://www.coinw.com/en_XA/p2p-trading/personalized/buy",
+            "digifinex":"https://www.digifinex.com/"
+          }
+          o=Options()
+          o.add_argument('--headless=new');o.add_argument('--no-sandbox');o.add_argument('--disable-dev-shm-usage')
+          o.add_argument('--window-size=1440,1200');o.add_argument('--lang=en-US')
+          o.set_capability('goog:loggingPrefs', {'performance':'ALL'})
+          d=webdriver.Chrome(options=o)
+          try:
+            for name,url in sites.items():
+              print("\n=====",name,"=====")
+              try:
+                d.get(url);time.sleep(8)
+                print("TITLE",d.title,"URL",d.current_url)
+                body=(d.find_element('tag name','body').text or '')[:3000]
+                print("BODY",repr(body))
+                urls=[]
+                for e in d.get_log('performance'):
+                  try:
+                    m=json.loads(e['message'])['message']
+                    if m['method']!='Network.responseReceived': continue
+                    u=m['params']['response']['url']
+                    lu=u.lower()
+                    if any(k in lu for k in ['p2p','otc','fiat','advert','merchant','order','offer','market','trade']):
+                      urls.append((m['params']['response']['status'],m['params']['response'].get('mimeType',''),u))
+                  except: pass
+                seen=set()
+                for status,mime,u in urls:
+                  if u in seen: continue
+                  seen.add(u)
+                  print("NET",status,mime,u)
+              except Exception as e:
+                print("ERR",type(e).__name__,e)
+          finally:d.quit()
+          PY
