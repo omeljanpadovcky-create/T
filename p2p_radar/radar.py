@@ -20,7 +20,7 @@ def ei(k,d):
 def eb(k,d='0'):return os.getenv(k,d).lower() in ('1','true','yes','on')
 FIAT=os.getenv('P2P_FIAT','UAH').upper(); ASSET=os.getenv('P2P_ASSET','USDT').upper()
 EXCHANGES_FILE=HERE/os.getenv('P2P_EXCHANGES_FILE','exchanges.json')
-INTERVAL=max(10,ei('P2P_SCAN_SECONDS','15')); MARKET_PAGES=max(1,min(5,ei('P2P_MARKET_PAGES','3'))); KEEP_PER_SIDE=max(15,min(60,ei('P2P_KEEP_OFFERS_PER_SIDE','60'))); MIN_NET=ef('P2P_MIN_NET_PCT','0.35'); MAX_RISK=ei('P2P_MAX_RISK','60'); REVIEW_SPREAD=ef('P2P_REVIEW_SPREAD_PCT','3.0')
+INTERVAL=max(10,ei('P2P_SCAN_SECONDS','15')); MARKET_PAGES=max(1,min(5,ei('P2P_MARKET_PAGES','3'))); KEEP_PER_SIDE=max(20,min(120,ei('P2P_KEEP_OFFERS_PER_SIDE','80'))); MIN_NET=ef('P2P_MIN_NET_PCT','0.35'); MAX_RISK=ei('P2P_MAX_RISK','60'); REVIEW_SPREAD=ef('P2P_REVIEW_SPREAD_PCT','3.0')
 MIN_RATE=ef('P2P_MIN_COMPLETION','90'); MIN_ORDERS=ei('P2P_MIN_ORDERS','10')
 BUFFER=ef('P2P_SAFETY_BUFFER_PCT','0.15'); TG_TOKEN=os.getenv('TELEGRAM_BOT_TOKEN') or os.getenv('TG_BOT_TOKEN','')
 TG_CHAT=os.getenv('TELEGRAM_CHAT_ID') or os.getenv('TG_CHAT_ID',''); TG_TOP_N=max(1,min(10,ei('P2P_TELEGRAM_TOP_N','5')))
@@ -50,7 +50,37 @@ def rate(x):
     return min(100,max(0,v*100 if v<=1 else v))
 def keep(xs,action):
     xs=[x for x in xs if x.fits()]
-    return sorted(xs,key=lambda x:x.price,reverse=action=='SELL')[:KEEP_PER_SIDE]
+    ranked=sorted(xs,key=lambda x:x.price,reverse=action=='SELL')
+
+    # Do not let one bank/payment method crowd the others out of the retained set.
+    # Keep the best-priced offer for every recognizable payment method first,
+    # then fill the remaining slots by pure price ranking.
+    selected=[]
+    seen_offer=set()
+    seen_payment=set()
+
+    for o in ranked:
+        keys={payment_key(p) for p in (o.payments or []) if payment_key(p)}
+        fresh=keys-seen_payment
+        if not fresh:
+            continue
+        sig=(o.exchange,o.action,o.merchant,round(o.price,6))
+        if sig not in seen_offer:
+            selected.append(o)
+            seen_offer.add(sig)
+        seen_payment.update(fresh)
+        if len(selected)>=KEEP_PER_SIDE:
+            return selected[:KEEP_PER_SIDE]
+
+    for o in ranked:
+        sig=(o.exchange,o.action,o.merchant,round(o.price,6))
+        if sig in seen_offer:
+            continue
+        selected.append(o)
+        seen_offer.add(sig)
+        if len(selected)>=KEEP_PER_SIDE:
+            break
+    return selected
 
 def route_eligible(o):
     return (o.completion is None or o.completion>=MIN_RATE) and (o.orders is None or o.orders>=MIN_ORDERS)
@@ -582,10 +612,21 @@ def routes(providers):
         seen.add(key); unique.append(x)
     return unique
 
+def best_by_payment(offers,action):
+    out={}
+    ranked=sorted(offers,key=lambda o:o.price,reverse=action=='SELL')
+    for o in ranked:
+        for raw in o.payments or []:
+            key=payment_key(raw)
+            if not key or key in out:
+                continue
+            out[key]={'price':round(o.price,4),'merchant':o.merchant,'completion':o.completion,'orders':o.orders}
+    return out
+
 def public_provider(p):
     buy_ok=[o for o in p['buy'] if route_eligible(o)]
     sell_ok=[o for o in p['sell'] if route_eligible(o)]
-    return {'exchange':p['exchange'],'ok':p['ok'],'note':p['note'],'buy_offers':len(p['buy']),'sell_offers':len(p['sell']),'buy_eligible':len(buy_ok),'sell_eligible':len(sell_ok),'best_buy':asdict(p['buy'][0]) if p['buy'] else None,'best_sell':asdict(p['sell'][0]) if p['sell'] else None}
+    return {'exchange':p['exchange'],'ok':p['ok'],'note':p['note'],'buy_offers':len(p['buy']),'sell_offers':len(p['sell']),'buy_eligible':len(buy_ok),'sell_eligible':len(sell_ok),'best_buy':asdict(p['buy'][0]) if p['buy'] else None,'best_sell':asdict(p['sell'][0]) if p['sell'] else None,'best_buy_by_payment':best_by_payment(p['buy'],'BUY'),'best_sell_by_payment':best_by_payment(p['sell'],'SELL')}
 def state():
     try:return json.loads(STATE.read_text(encoding='utf-8'))
     except:return {}
