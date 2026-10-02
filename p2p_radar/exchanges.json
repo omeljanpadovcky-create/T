@@ -38,13 +38,6 @@
       "sell_url": "https://www.mexc.com/uk-UA/buy-crypto/p2p"
     },
     {
-      "id": "toobit",
-      "name": "Toobit",
-      "enabled": true,
-      "buy_url": "https://www.toobit.com/en-US/p2p",
-      "sell_url": "https://www.toobit.com/en-US/p2p"
-    },
-    {
       "id": "weex",
       "name": "WEEX",
       "enabled": true,
