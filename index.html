@@ -371,7 +371,7 @@
 </div>
 <script>
 const $=id=>document.getElementById(id);const money=n=>Number(n||0).toFixed(2);const pct=n=>(Number(n||0)>=0?'+':'')+Number(n||0).toFixed(2)+'%';
-let EXCHANGE_DIRECTORY=[{"id":"binance","name":"Binance","buy_url":"https://p2p.binance.com/trade/buy/USDT?fiat=UAH&payment=all-payments","sell_url":"https://p2p.binance.com/trade/sell/USDT?fiat=UAH&payment=all-payments","enabled":true},{"id":"bybit","name":"Bybit","buy_url":"https://www.bybit.com/fiat/trade/otc/","sell_url":"https://www.bybit.com/fiat/trade/otc/","enabled":true},{"id":"okx","name":"OKX","buy_url":"https://www.okx.com/ua/p2p-markets/uah/buy-usdt","sell_url":"https://www.okx.com/ua/p2p-markets/uah/sell-usdt","enabled":true},{"id":"kucoin","name":"KuCoin","buy_url":"https://www.kucoin.com/uk/otc/buy/USDT-UAH","sell_url":"https://www.kucoin.com/uk/otc/sell/USDT-UAH","enabled":true},{"id":"mexc","name":"MEXC","buy_url":"https://www.mexc.com/uk-UA/buy-crypto/p2p","sell_url":"https://www.mexc.com/uk-UA/buy-crypto/p2p","enabled":true},{"id":"weex","name":"WEEX","buy_url":"https://www.weex.com/buy-crypto/trading","sell_url":"https://www.weex.com/buy-crypto/sell/USDT","enabled":true}];let LAST_RADAR_DATA=null;
+let EXCHANGE_DIRECTORY=[{"id":"binance","name":"Binance","buy_url":"https://p2p.binance.com/trade/buy/USDT?fiat=UAH&payment=all-payments","sell_url":"https://p2p.binance.com/trade/sell/USDT?fiat=UAH&payment=all-payments","enabled":true},{"id":"bybit","name":"Bybit","buy_url":"https://www.bybit.com/fiat/trade/otc/buy/USDT/UAH","sell_url":"https://www.bybit.com/fiat/trade/otc/sell/USDT/UAH","enabled":true},{"id":"okx","name":"OKX","buy_url":"https://www.okx.com/ua/p2p-markets/uah/buy-usdt","sell_url":"https://www.okx.com/ua/p2p-markets/uah/sell-usdt","enabled":true},{"id":"kucoin","name":"KuCoin","buy_url":"https://www.kucoin.com/uk/otc/buy/USDT-UAH","sell_url":"https://www.kucoin.com/uk/otc/sell/USDT-UAH","enabled":true},{"id":"mexc","name":"MEXC","buy_url":"https://www.mexc.com/uk-UA/buy-crypto/p2p/buy/USDT/UAH","sell_url":"https://www.mexc.com/uk-UA/buy-crypto/p2p/sell/USDT/UAH","enabled":true},{"id":"weex","name":"WEEX","buy_url":"https://www.weex.com/buy-crypto/trading","sell_url":"https://www.weex.com/buy-crypto/sell/USDT","enabled":true}];let LAST_RADAR_DATA=null;
 function exchangeUrl(ex,action){
   ex=String(ex||'').toLowerCase();const a=String(action||'BUY').toUpperCase();
   const item=EXCHANGE_DIRECTORY.find(x=>String(x.id||'').toLowerCase()===ex || String(x.name||'').toLowerCase()===ex);
@@ -380,6 +380,21 @@ function exchangeUrl(ex,action){
   if(ex==='bybit')return 'https://www.bybit.com/fiat/trade/otc/';
   if(ex==='okx')return a==='SELL'?'https://www.okx.com/ua/p2p-markets/uah/sell-usdt':'https://www.okx.com/ua/p2p-markets/uah/buy-usdt';
   return '#';
+}
+function routeExchangeUrl(r,action){
+  const ex=String(action==='SELL'?r.sell_exchange:r.buy_exchange||'').toLowerCase();
+  const side=String(action||'BUY').toUpperCase();
+  const pay=(r.payment_verified&&Array.isArray(r.common_payments)&&r.common_payments.length)?String(r.common_payments[0]).toLowerCase():'';
+  if(ex==='binance'){
+    const pm={monobank:'Monobank',privatbank:'PrivatBank',pumb:'PUMBBank',abank:'ABank',raiffeisen:'RaiffeisenBankAval',oschad:'OschadBank',sense:'SenseBank'}[pay]||'all-payments';
+    return `https://p2p.binance.com/trade/${side==='SELL'?'sell':'buy'}/USDT?fiat=UAH&payment=${encodeURIComponent(pm)}`;
+  }
+  if(ex==='bybit')return `https://www.bybit.com/fiat/trade/otc/${side==='SELL'?'sell':'buy'}/USDT/UAH`;
+  if(ex==='okx')return `https://www.okx.com/ua/p2p-markets/uah/${side==='SELL'?'sell':'buy'}-usdt`;
+  if(ex==='kucoin')return `https://www.kucoin.com/uk/otc/${side==='SELL'?'sell':'buy'}/USDT-UAH`;
+  if(ex==='mexc')return `https://www.mexc.com/uk-UA/buy-crypto/p2p/${side==='SELL'?'sell':'buy'}/USDT/UAH`;
+  if(ex==='weex')return side==='SELL'?'https://www.weex.com/buy-crypto/sell/USDT':'https://www.weex.com/buy-crypto/trading';
+  return exchangeUrl(side==='SELL'?r.sell_exchange:r.buy_exchange,side);
 }
 function renderExchangeDirectory(){
   $('exchangeDirectory').innerHTML=EXCHANGE_DIRECTORY.map(x=>`<div class="exchangeCard"><b>${x.name||x.id}</b><div class="exchangeLinks"><a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${x.buy_url||'#'}">КУПИТИ USDT</a><a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${x.sell_url||x.buy_url||'#'}">ПРОДАТИ USDT</a></div></div>`).join('');
@@ -502,7 +517,7 @@ function initAi(){
 }
 function render(d){LAST_RADAR_DATA=d;$('market').textContent=(d.asset||'USDT')+' / '+(d.fiat||'UAH');$('mode').textContent=d.mode||'СКАНЕР';$('time').textContent=d.scanned_at?new Date(d.scanned_at).toLocaleString('uk-UA'):'Ще не сканувала';
  const t=d.top_route;$('verdict').textContent=t?verdictUk(t.verdict):'ОЧІКУВАННЯ';$('verdict').className='badge '+(t&&t.verdict==='ALERT'?'ok':t&&t.verdict==='REVIEW'?'warn':t&&t.verdict==='DROP'?'bad':'');
- if(t){$('hero').className='hero '+(t.verdict==='ALERT'?'signal-ok':t.verdict==='REVIEW'?'signal-warn':t.verdict==='DROP'?'signal-bad':'');$('hero').innerHTML=`<div class="route"><span>${t.buy_exchange}</span> → <span>${t.sell_exchange}</span></div><div class="money ${Number(t.net_pct)>=0?'pos':'neg'}">${Number(t.net_pct)>=0?'+':''}${money(t.net_pct)}%</div><div class="chips"><div class="chip">${routeTypeUk(t.route_type)}</div><div class="chip">КУПИТИ ПО <strong>${money(t.buy_price)}</strong></div><div class="chip">ПРОДАТИ ПО <strong>${money(t.sell_price)}</strong></div><div class="chip">СПРЕД <strong>${pct(t.gross_spread_pct)}</strong></div><div class="chip">ПІСЛЯ БУФЕРА <strong>${pct(t.net_pct)}</strong></div><div class="chip">РИЗИК СИГНАЛУ <strong class="risk ${riskClass(t.risk_score)}">${t.risk_score}/100</strong></div>${t.payment_verified&&Array.isArray(t.common_payments)&&t.common_payments.length?`<div class="chip">ОПЛАТА <strong>${t.common_payments.join(', ')}</strong></div>`:''} </div><div class="sub" style="margin-top:11px">Купуємо у <strong>${t.buy_merchant||'мерчанта'}</strong> → продаємо <strong>${t.sell_merchant||'мерчанту'}</strong></div><div class="actions"><a class="action buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(t.buy_exchange,'BUY')}">🟢 КУПИТИ НА ${t.buy_exchange}</a><a class="action sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(t.sell_exchange,'SELL')}">🔴 ПРОДАТИ НА ${t.sell_exchange}</a></div><div class="sub" style="margin-top:12px">${[...new Set((t.reasons||[]).map(reasonUk))].slice(0,5).join(' • ')||'Перевірки пройдені'}</div>`}else{$('hero').className='hero';$('hero').innerHTML=`<div class="empty">Поки немає варіанту, що проходить фільтри.</div>`}
+ if(t){$('hero').className='hero '+(t.verdict==='ALERT'?'signal-ok':t.verdict==='REVIEW'?'signal-warn':t.verdict==='DROP'?'signal-bad':'');$('hero').innerHTML=`<div class="route"><span>${t.buy_exchange}</span> → <span>${t.sell_exchange}</span></div><div class="money ${Number(t.net_pct)>=0?'pos':'neg'}">${Number(t.net_pct)>=0?'+':''}${money(t.net_pct)}%</div><div class="chips"><div class="chip">${routeTypeUk(t.route_type)}</div><div class="chip">КУПИТИ ПО <strong>${money(t.buy_price)}</strong></div><div class="chip">ПРОДАТИ ПО <strong>${money(t.sell_price)}</strong></div><div class="chip">СПРЕД <strong>${pct(t.gross_spread_pct)}</strong></div><div class="chip">ПІСЛЯ БУФЕРА <strong>${pct(t.net_pct)}</strong></div><div class="chip">РИЗИК СИГНАЛУ <strong class="risk ${riskClass(t.risk_score)}">${t.risk_score}/100</strong></div>${t.payment_verified&&Array.isArray(t.common_payments)&&t.common_payments.length?`<div class="chip">ОПЛАТА <strong>${t.common_payments.join(', ')}</strong></div>`:''} </div><div class="sub" style="margin-top:11px">Купуємо у <strong>${t.buy_merchant||'мерчанта'}</strong> → продаємо <strong>${t.sell_merchant||'мерчанту'}</strong></div><div class="actions"><a class="action buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${routeExchangeUrl(t,'BUY')}">🟢 КУПИТИ НА ${t.buy_exchange}</a><a class="action sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${routeExchangeUrl(t,'SELL')}">🔴 ПРОДАТИ НА ${t.sell_exchange}</a></div><div class="sub" style="margin-top:12px">${[...new Set((t.reasons||[]).map(reasonUk))].slice(0,5).join(' • ')||'Перевірки пройдені'}</div>`}else{$('hero').className='hero';$('hero').innerHTML=`<div class="empty">Поки немає варіанту, що проходить фільтри.</div>`}
  $('providers').innerHTML=(d.providers||[]).map(p=>{
    const b=Number(p.buy_offers||0),s=Number(p.sell_offers||0);
    let label='ЛИШЕ ПОСИЛАННЯ',cls='',note='Автосканування не підключене';
@@ -541,8 +556,8 @@ function render(d){LAST_RADAR_DATA=d;$('market').textContent=(d.asset||'USDT')+'
      <div class="routeBottom">
        <div class="routePayment">👤 ${r.buy_merchant||'—'} → ${r.sell_merchant||'—'} · ${pay} · спред ${pct(r.gross_spread_pct)}</div>
        <div class="routeActions">
-         <a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(r.buy_exchange,'BUY')}">КУПИТИ ↗</a>
-         <a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(r.sell_exchange,'SELL')}">ПРОДАТИ ↗</a>
+         <a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${routeExchangeUrl(r,'BUY')}">КУПИТИ ↗</a>
+         <a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${routeExchangeUrl(r,'SELL')}">ПРОДАТИ ↗</a>
        </div>
      </div>
    </article>`;
