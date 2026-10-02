@@ -1,0 +1,53 @@
+name: Cleanup legacy root files
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/cleanup-legacy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Keep only current MYSHKA P2P root files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          keep_file() {
+            case "$1" in
+              index.html|README.md|START_P2P_RADAR.bat|START_P2P_RADAR.ps1|P2P_SCAN_ONCE.bat|P2P_CYCLE_DONE.bat|P2P_PAUSE_ALERTS.bat|P2P_RESUME_ALERTS.bat|INSTALL_P2P_AUTOSTART.bat|INSTALL_P2P_AUTOSTART.ps1|REMOVE_P2P_AUTOSTART.bat|SETUP_API_KEYS.bat|SETUP_API_KEYS.ps1)
+                return 0 ;;
+              *)
+                return 1 ;;
+            esac
+          }
+
+          while IFS= read -r -d '' f; do
+            name="${f#./}"
+            if ! keep_file "$name"; then
+              git rm -f -- "$name"
+            fi
+          done < <(find . -maxdepth 1 -type f -print0)
+
+          # Self-delete this one-shot cleanup workflow.
+          git rm -f .github/workflows/cleanup-legacy.yml
+
+          if git diff --cached --quiet; then
+            echo "Nothing to clean."
+            exit 0
+          fi
+
+          git config user.name "MYSHKA Cleanup"
+          git config user.email "myshka-cleanup@users.noreply.github.com"
+          git commit -m "Clean obsolete legacy trading files"
+          git push
