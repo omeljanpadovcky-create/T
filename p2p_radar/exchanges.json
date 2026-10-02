@@ -38,13 +38,6 @@
       "sell_url": "https://www.mexc.com/uk-UA/buy-crypto/p2p"
     },
     {
-      "id": "htx",
-      "name": "HTX",
-      "enabled": true,
-      "buy_url": "https://www.htx.com/fiat-crypto/trade/",
-      "sell_url": "https://www.htx.com/fiat-crypto/trade/"
-    },
-    {
       "id": "toobit",
       "name": "Toobit",
       "enabled": true,
