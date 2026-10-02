@@ -28,7 +28,7 @@ jobs:
       P2P_FIAT: UAH
       P2P_ASSET: USDT
       P2P_CAPITAL_FIAT: '4500'
-      P2P_SCAN_SECONDS: '30'
+      P2P_SCAN_SECONDS: '15'
       P2P_MIN_NET_PCT: '0.35'
       P2P_MAX_RISK: '60'
       P2P_MIN_COMPLETION: '90'
@@ -109,7 +109,7 @@ jobs:
           done
           if [ -d live/reports ]; then cp -a live/reports/. app/p2p_radar/reports/ || true; fi
 
-      - name: Run cloud radar and publish every 30 seconds
+      - name: Run cloud radar and publish every 15 seconds
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -132,7 +132,7 @@ jobs:
             find app/p2p_radar/reports -maxdepth 1 -type f -name '*.md' -mtime -2 -exec cp {} live/reports/ \; || true
 
             date -u +"%Y-%m-%dT%H:%M:%SZ" > live/heartbeat.txt
-            printf '{"source":"github-actions","scan_seconds":30,"updated_at":"%s","run_id":"%s"}\n' "$(cat live/heartbeat.txt)" "${GITHUB_RUN_ID}" > live/cloud.json
+            printf '{"source":"github-actions","scan_seconds":15,"updated_at":"%s","run_id":"%s"}\n' "$(cat live/heartbeat.txt)" "${GITHUB_RUN_ID}" > live/cloud.json
 
             pushd live >/dev/null
             git add -A
@@ -154,7 +154,7 @@ jobs:
           # is normally already queued. That removes dependency on the user's PC.
           END=$((SECONDS+630))
           while [ "$SECONDS" -lt "$END" ]; do
-            sleep 30
+            sleep 15
             publish_live || true
             if ! kill -0 "$RADAR_PID" 2>/dev/null; then
               echo "Radar exited; restarting"
