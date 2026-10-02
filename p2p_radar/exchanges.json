@@ -1,6 +1,6 @@
 {
   "scan_seconds": 15,
-  "note": "Прямі P2P-сторінки підключені кнопками. page_only=true означає: відкриваємо офіційну P2P-сторінку, без вимоги API.",
+  "note": "Активний список P2P-бірж для MYSHKA. Видалені біржі без корисних/доступних P2P-даних.",
   "exchanges": [
     {
       "id": "binance",
@@ -66,43 +66,11 @@
       "sell_url": "https://fiat.bingx.com/en/p2p"
     },
     {
-      "id": "coinex",
-      "name": "CoinEx",
-      "enabled": true,
-      "buy_url": "https://www.coinex.com/en/p2p",
-      "sell_url": "https://www.coinex.com/en/p2p",
-      "page_only": true
-    },
-    {
-      "id": "bitmart",
-      "name": "BitMart",
-      "enabled": true,
-      "buy_url": "https://www.bitmart.com/uk-UA/p2p/",
-      "sell_url": "https://www.bitmart.com/uk-UA/p2p/",
-      "page_only": true
-    },
-    {
-      "id": "whitebit",
-      "name": "WhiteBIT P2P Express",
-      "enabled": true,
-      "buy_url": "https://whitebit.com/ua/m/p-2-p-express",
-      "sell_url": "https://whitebit.com/ua/m/p-2-p-express",
-      "page_only": true
-    },
-    {
       "id": "lbank",
       "name": "LBank",
       "enabled": true,
       "buy_url": "https://www.lbank.com/uk/crypto/buy",
       "sell_url": "https://www.lbank.com/uk/crypto/buy"
-    },
-    {
-      "id": "coinw",
-      "name": "CoinW",
-      "enabled": true,
-      "buy_url": "https://www.coinw.com/en_XA/p2p-trading/personalized/buy",
-      "sell_url": "https://www.coinw.com/en_XA/p2p-trading/personalized/sell",
-      "page_only": true
     },
     {
       "id": "toobit",
@@ -124,14 +92,6 @@
       "enabled": true,
       "buy_url": "https://www.weex.com/buy-crypto/trading",
       "sell_url": "https://www.weex.com/buy-crypto/trading"
-    },
-    {
-      "id": "digifinex",
-      "name": "DigiFinex",
-      "enabled": true,
-      "buy_url": "https://www.digifinex.com/",
-      "sell_url": "https://www.digifinex.com/",
-      "page_only": true
     }
   ]
 }
