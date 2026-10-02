@@ -13,8 +13,8 @@
       "id": "bybit",
       "name": "Bybit",
       "enabled": true,
-      "buy_url": "https://www.bybit.com/fiat/trade/otc/",
-      "sell_url": "https://www.bybit.com/fiat/trade/otc/"
+      "buy_url": "https://www.bybit.com/fiat/trade/otc/buy/USDT/UAH",
+      "sell_url": "https://www.bybit.com/fiat/trade/otc/sell/USDT/UAH"
     },
     {
       "id": "okx",
@@ -34,8 +34,8 @@
       "id": "mexc",
       "name": "MEXC",
       "enabled": true,
-      "buy_url": "https://www.mexc.com/uk-UA/buy-crypto/p2p",
-      "sell_url": "https://www.mexc.com/uk-UA/buy-crypto/p2p"
+      "buy_url": "https://www.mexc.com/uk-UA/buy-crypto/p2p/buy/USDT/UAH",
+      "sell_url": "https://www.mexc.com/uk-UA/buy-crypto/p2p/sell/USDT/UAH"
     },
     {
       "id": "weex",
