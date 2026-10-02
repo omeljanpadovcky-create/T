@@ -23,12 +23,12 @@
 <body><div class="app">
 <header class="head glass"><div class="brand"><div class="logo">🐭</div><div><h1><span>MYSHKA</span> P2P РАДАР</h1><p>Сканує біржі → порівнює P2P-ціни → рахує спред → показує найкращі варіанти</p></div></div><div class="badges"><span class="badge" id="mode">ХМАРА 24/7</span><span class="badge" id="market">USDT / UAH</span><span class="badge" id="time">Ще не сканувала</span></div></header>
 <section class="card glass" style="margin-top:12px">
-  <div class="title"><div><h2>🔗 P2P біржі</h2><div class="sub">Натискаєш — відкривається P2P-сторінка потрібної біржі. Фільтри обираєш сам.</div></div></div>
+  <div class="title"><div><h2>💱 Обери біржу</h2><div class="sub">Зелена кнопка — купити USDT. Червона — продати. Мишка відкриє потрібну P2P-сторінку, а перед угодою ти просто звіряєш курс і оголошення.</div></div></div>
   <div class="exchangeGrid" id="exchangeDirectory"><div class="empty">Завантаження списку бірж…</div></div>
 </section>
 <section class="grid">
   <div class="card glass"><div class="title"><div><h2>🎯 Найкращий варіант зараз</h2><div class="sub">Мишка лише знаходить і рахує варіант. Угоду ти відкриваєш сам.</div></div><span class="badge" id="verdict">ОЧІКУВАННЯ</span></div><div class="hero" id="hero"><div class="empty">Запусти <b>START_P2P_RADAR.bat</b> на комп'ютері — тут з'явиться живий скан.</div></div></div>
-  <div class="card glass"><div class="title"><div><h2>🔌 Біржі</h2><div class="sub">АКТИВНО = є живі P2P-дані. Числа показують лише оголошення, що пройшли фільтри Мишки — це не означає, що на самій біржі немає інших пропозицій. P2P СТОРІНКА = тільки пряме відкриття біржі.</div></div></div><div class="providers" id="providers"></div></div>
+  <div class="card glass"><div class="title"><div><h2>📶 Що зараз бачить Мишка</h2><div class="sub">«АКТИВНО» — Мишка отримує живі P2P-оголошення. «ПІСЛЯ ФІЛЬТРІВ» — скільки з них пройшло наші перевірки. «P2P СТОРІНКА» — біржу можна відкрити, але автоматичного сканування для неї немає.</div></div></div><div class="providers" id="providers"></div></div>
 </section>
 <section class="card glass" style="margin-top:12px"><div class="title"><div><h2>📡 Усі знайдені варіанти</h2><div class="sub" id="summary">Очікування даних</div></div></div><div class="routesGrid" id="routes"><div class="routeEmpty">Немає скану</div></div></section>
 <div class="foot glass"><b>Як рахується:</b> ціна продажу − ціна купівлі − орієнтовні витрати − переказ USDT − запас безпеки. Аномальний спред понад поріг перевірки не позначається як готовий сигнал — він отримує статус «ПОТРІБНА ПЕРЕВІРКА». Перед оплатою завжди перевіряй живе оголошення, спосіб оплати, ліміти та реквізити.</div>
@@ -58,7 +58,7 @@ function exchangeUrl(ex,action){
   return '#';
 }
 function renderExchangeDirectory(){
-  $('exchangeDirectory').innerHTML=EXCHANGE_DIRECTORY.map(x=>`<div class="exchangeCard"><b>${x.name||x.id}</b><div class="exchangeLinks"><a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${x.buy_url||'#'}">КУПИТИ / P2P</a><a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${x.sell_url||x.buy_url||'#'}">ПРОДАТИ / P2P</a></div></div>`).join('');
+  $('exchangeDirectory').innerHTML=EXCHANGE_DIRECTORY.map(x=>`<div class="exchangeCard"><b>${x.name||x.id}</b><div class="exchangeLinks"><a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${x.buy_url||'#'}">КУПИТИ USDT</a><a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${x.sell_url||x.buy_url||'#'}">ПРОДАТИ USDT</a></div></div>`).join('');
 }
 async function loadExchangeDirectory(){
   renderExchangeDirectory();
