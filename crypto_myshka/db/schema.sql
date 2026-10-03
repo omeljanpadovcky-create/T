@@ -64,3 +64,16 @@ CREATE TABLE IF NOT EXISTS market_snapshots (
   captured_at timestamptz PRIMARY KEY,
   payload jsonb NOT NULL
 );
+
+
+CREATE TABLE IF NOT EXISTS notification_state (
+  key text PRIMARY KEY,
+  value jsonb NOT NULL DEFAULT '{}'::jsonb,
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS notification_deliveries (
+  item_id text PRIMARY KEY,
+  delivered_at timestamptz NOT NULL DEFAULT now(),
+  channel text NOT NULL DEFAULT 'telegram'
+);
