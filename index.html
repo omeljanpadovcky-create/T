@@ -53,7 +53,7 @@
   </aside>
 </div>
 
-<div class="glass foot">Криптомишка — аналітичний фільтр, не фінансова порада. “JEV Аналіз” зараз робить крос-перевірку RSS-сніпетів і джерел; без підключеної мовної моделі це не повнотекстовий AI-аналіз статті.</div>
+<div class="glass foot">Криптомишка — аналітичний фільтр, не фінансова порада. JEV AI працює через GitHub Models; якщо модель не відпрацювала, картка прямо показує fallback-кросперевірку замість того, щоб видавати її за AI-висновок.</div>
 </div>
 
 <script>
@@ -112,7 +112,19 @@ function renderItems(){
     const rs=(x.reasons||[]).map(r=>'• '+esc(r)).join('<br>');
     let extra='';
     if(isNews){
-      extra='<div class="jevbox"><b>Висновок JEV</b><p>'+esc(x.jev_take||'')+'</p><b>Що перевірити далі</b><p>'+esc(x.watch_for||'')+'</p><b>'+esc(x.confidence_label||'')+'</b></div>';
+      const ai=x.jev_ai||null;
+      if(ai){
+        extra='<div class="jevbox"><b>🧠 JEV AI</b><p>'+esc(ai.short_conclusion||ai.why_it_matters||'')+'</p>'+
+          '<b>Що сталося</b><p>'+esc(ai.what_happened||'')+'</p>'+
+          '<b>Чому це важливо</b><p>'+esc(ai.why_it_matters||'')+'</p>'+
+          '<b>Сценарії</b><p>↑ '+esc(ai.bull_case||'')+'<br>↓ '+esc(ai.bear_case||'')+'</p>'+
+          '<b>За чим стежити</b><p>'+esc(ai.watch_next||'')+'</p>'+
+          '<b>Впевненість: '+esc(ai.confidence||'—')+'</b></div>';
+      }else{
+        extra='<div class="jevbox"><b>Крос-перевірка</b><p>'+esc(x.jev_take||'')+'</p>'+
+          '<b>Що перевірити далі</b><p>'+esc(x.watch_for||'')+'</p>'+
+          '<b>'+esc(x.confidence_label||'')+'</b><p>AI-аналіз для цієї події ще не готовий.</p></div>';
+      }
     }
     el.innerHTML='<div class="itemTop"><h4>'+esc(x.title)+'</h4><span class="risk '+klass+'">'+esc(badge)+'</span></div>'+
       '<div class="meta"><span class="pill">'+esc(who)+'</span><span class="pill">'+esc(meta2)+'</span></div>'+
