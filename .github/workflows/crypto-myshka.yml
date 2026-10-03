@@ -2,7 +2,9 @@ name: CryptoMyshka 2.1 Live + JEV
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    # Stagger off :00/:10/:20 where GitHub Actions cron is most congested.
+    # Still exactly every 10 minutes: :03, :13, :23, :33, :43, :53 UTC.
+    - cron: '3,13,23,33,43,53 * * * *'
   workflow_dispatch:
   push:
     branches: [main]
