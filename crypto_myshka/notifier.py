@@ -103,8 +103,7 @@ def main():
 
     if TEST_ONLY:
         if not configured:
-            print("Telegram test-only mode: TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID are not configured.")
-            return
+            raise SystemExit("Telegram test failed: TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID are not configured.")
         if not state.get("telegram_ready"):
             send("🐭 Криптомишка: тест Telegram — зв’язок працює ✅")
             state["telegram_ready"]=True
