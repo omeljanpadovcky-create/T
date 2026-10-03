@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import json, os, re
+import json, os, re, time, random
 from pathlib import Path
 
 import requests
@@ -133,41 +133,83 @@ APINEX_FALLBACK_MODELS = [
     "free/gemini-3.8-flash",
 ]
 
+# Free tier is 30 RPM per IP. Keep our own ceiling below that.
+APINEX_MIN_INTERVAL_SECONDS = 2.25
+APINEX_MAX_ATTEMPTS_PER_MODEL = 3
+_last_apinex_request_at = 0.0
+
+def apinex_wait_slot():
+    global _last_apinex_request_at
+    now=time.monotonic()
+    wait=APINEX_MIN_INTERVAL_SECONDS-(now-_last_apinex_request_at)
+    if wait>0:
+        time.sleep(wait)
+    _last_apinex_request_at=time.monotonic()
+
+def apinex_retry_delay(response, attempt):
+    retry_after=(response.headers.get("retry-after") or "").strip()
+    try:
+        if retry_after:
+            return max(1.0, min(float(retry_after), 30.0))
+    except Exception:
+        pass
+    return min(2 ** attempt, 20) + random.uniform(0.15, 0.85)
+
 def analyze_apinex(event, feed):
     payload=build_payload(event, feed)
     last_error=None
 
     for model in dict.fromkeys(APINEX_FALLBACK_MODELS):
-        r=requests.post(
-            APINEX_ENDPOINT,
-            headers={
-                "Authorization": f"Bearer {APINEX_API_KEY}",
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            },
-            json={
-                "model": model,
-                "messages": [
-                    {"role":"system","content":SYSTEM},
-                    {"role":"user","content":json.dumps(payload, ensure_ascii=False)},
-                ],
-                "temperature": 0.2,
-                "max_tokens": 900,
-            },
-            timeout=75,
-        )
+        if not str(model).startswith("free/"):
+            continue
 
-        if r.ok:
-            data=r.json()
-            result=extract_json(data["choices"][0]["message"]["content"])
-            result["_model_used"]=model
-            return result
+        for attempt in range(APINEX_MAX_ATTEMPTS_PER_MODEL):
+            apinex_wait_slot()
+            r=requests.post(
+                APINEX_ENDPOINT,
+                headers={
+                    "Authorization": f"Bearer {APINEX_API_KEY}",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                },
+                json={
+                    "model": model,
+                    "messages": [
+                        {"role":"system","content":SYSTEM},
+                        {"role":"user","content":json.dumps(payload, ensure_ascii=False)},
+                    ],
+                    "temperature": 0.2,
+                    "max_tokens": 650,
+                },
+                timeout=75,
+            )
 
-        body=(r.text or "").strip().replace("\n"," ")[:500]
-        last_error=f"APInex {r.status_code} for {model}: {body}"
+            if r.ok:
+                data=r.json()
+                content=((data.get("choices") or [{}])[0].get("message") or {}).get("content") or ""
+                if "<tool_call>" in content or "<arg_key>" in content:
+                    last_error=f"APInex malformed tool-call output for {model}"
+                    break
+                result=extract_json(content)
+                result["_model_used"]=model
+                return result
 
-        # Retry another free model only for model/not-found style errors.
-        if r.status_code not in (400, 404, 422):
+            body=(r.text or "").strip().replace("\n"," ")[:500]
+            last_error=f"APInex {r.status_code} for {model}: {body}"
+
+            if r.status_code == 401:
+                raise RuntimeError(last_error)
+            if r.status_code == 402:
+                # This model/request needs allowance. Do not top up automatically:
+                # move to the next free model.
+                break
+            if r.status_code in (400, 404, 422):
+                break
+            if r.status_code in (429, 502, 503):
+                if attempt + 1 < APINEX_MAX_ATTEMPTS_PER_MODEL:
+                    time.sleep(apinex_retry_delay(r, attempt + 1))
+                    continue
+                break
             break
 
     raise RuntimeError(last_error or "APInex request failed")
@@ -249,7 +291,8 @@ def main():
         reverse=True,
     )
 
-    # Analyze only the most important/current events to keep cost bounded.
+    # Eight events × up to three free models = max 24 first-pass requests,
+    # below the documented 30 RPM free-tier ceiling.
     for event in candidates:
         if done >= 8:
             break
