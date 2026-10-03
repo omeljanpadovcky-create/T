@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-03T12:56:30.116337+00:00",
+  "generated_at": "2026-10-03T13:01:45.778068+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -47,7 +47,7 @@
     }
   },
   "raw_item_count": 240,
-  "item_count": 128,
+  "item_count": 129,
   "items": [
     {
       "id": "9d665cdd859369",
@@ -82,9 +82,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "f3b1706bd14f9d",
@@ -135,9 +133,7 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "89660531956ebe",
@@ -173,9 +169,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "5fa0bb617fd49e",
@@ -210,9 +204,7 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "c5ba51b1caa64e",
@@ -250,9 +242,7 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "bfdf04777641eb",
@@ -287,16 +277,14 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "6365432e76be55",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions - Wealth Management",
-      "summary": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions &nbsp;&nbsp; Wealth Management",
+      "title": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions - wealthmanagement.com",
+      "summary": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions &nbsp;&nbsp; wealthmanagement.com",
       "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQNWEwQlFDaThhTFhfeDI5R24zNnVVakQ4YUpmc1dCOHdWUXpjTmo4dENNdzNxOFM0UjF0eE9BQm5pQ25weHBrLWY2TnZ3ODl3WjJ1aHdEeFByYjNZVEdUV2xpVFhhTE1fRk9wVXFKTlpfaXhmbHVEdWljU2EtbkpPNnFFeXpZRUJvbWZrMmNrVlg0WGNYeENLMXJvX3lIQzVtT0MwZ1lDRQ?oc=5",
       "published_at": "2026-10-02T20:00:03+00:00",
       "assets": [],
@@ -325,9 +313,7 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "c1434e1f4335c5",
@@ -362,9 +348,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "8f930505834b07",
@@ -399,9 +383,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "a7bfea161ca24b",
@@ -438,9 +420,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "d47657ee8e7673",
@@ -475,9 +455,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "09af11f91cb5d7",
@@ -520,9 +498,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "852f2dd37c9b25",
@@ -557,9 +533,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "8855fbd6542ca5",
@@ -604,9 +578,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "5e39bc27debd2e",
@@ -643,9 +615,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "9b740803d60c3b",
@@ -680,9 +650,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "84759ba1ed31dd",
@@ -717,9 +685,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "0c443dc1429c2e",
@@ -754,9 +720,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "b06d3b63cf360f",
@@ -791,9 +755,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "2cf6b19fd05aef",
@@ -829,9 +791,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "f9f6f7ec2b73e3",
@@ -877,9 +837,7 @@
         "Підтверджено кількома джерелами",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "6e4617f343b115",
@@ -914,9 +872,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "6e76591a81280c",
@@ -951,9 +907,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "f10f21b774010b",
@@ -988,9 +942,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "3d5fe9273edc68",
@@ -1025,9 +977,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "dc1bd9510e1b85",
@@ -1063,9 +1013,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "881e0876557325",
@@ -1102,9 +1050,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "74d391650648ee",
@@ -1139,9 +1085,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "8a8f939ff809ef",
@@ -1177,9 +1121,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "b5ac9e41e1a1e1",
@@ -1214,9 +1156,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "1ebda8c8f725a4",
@@ -1252,9 +1192,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "3c7dbac99ce032",
@@ -1290,9 +1228,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "e9e291dc9e6c92",
@@ -1328,9 +1264,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "9d67cfc5430332",
@@ -1367,9 +1301,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "7b30d4f86b2b8c",
@@ -1412,9 +1344,7 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Потенційно позитивний",
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "5dc52a640b3218",
@@ -1451,9 +1381,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "1cbc6de01ca661",
@@ -1490,9 +1418,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "fa1f4f9305265c",
@@ -1527,9 +1453,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "2e07fa540643af",
@@ -1564,9 +1488,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "b723156b16345a",
@@ -1609,9 +1531,7 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "98736b289a333e",
@@ -1648,9 +1568,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "6ccc4dba345097",
@@ -1693,9 +1611,7 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "684814993e15b9",
@@ -1730,9 +1646,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "d7cb6787693d1a",
@@ -1769,9 +1683,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "670347ec743fe8",
@@ -1807,9 +1719,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "fc42588ae2ef17",
@@ -1847,9 +1757,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "edeee15e1a314e",
@@ -1888,9 +1796,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "f948c17f47042c",
@@ -1925,9 +1831,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "708eeea3e0936c",
@@ -1970,9 +1874,7 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "90102ad4dc0766",
@@ -2009,9 +1911,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "dc2df309bc160e",
@@ -2046,9 +1946,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "8a526bc7202771",
@@ -2093,9 +1991,7 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "966a99ed729dbf",
@@ -2140,9 +2036,7 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "bf66406d7f93eb",
@@ -2175,9 +2069,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "630ad426bb44ed",
@@ -2212,9 +2104,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "4dd4bb68bff04f",
@@ -2249,9 +2139,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "f2c8cf8d19a1d0",
@@ -2286,9 +2174,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "6221a49c39451a",
@@ -2325,9 +2211,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "09cd88c674cb6e",
@@ -2365,9 +2249,75 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
+      ]
+    },
+    {
+      "id": "879d78ac6de9dd",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Crypto's Sisyphean struggle",
+      "summary": "",
+      "url": "https://www.coindesk.com/opinion/2026/10/03/crypto-s-sisyphean-struggle",
+      "published_at": "2026-10-03T13:00:00+00:00",
+      "assets": [],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
       ],
-      "analysis_error": "Expecting value: line 1 column 1 (char 0)",
-      "analysis_level": "cross_source_fallback"
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/opinion/2026/10/03/crypto-s-sisyphean-struggle"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "a04880168cf079",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "BlackRock offers a glimpse of how tokenization may change your investment portfolio",
+      "summary": "",
+      "url": "https://www.coindesk.com/business/2026/10/03/blackrock-offers-a-glimpse-of-how-tokenization-may-change-your-investment-portfolio",
+      "published_at": "2026-10-03T13:00:00+00:00",
+      "assets": [],
+      "topics": [
+        "institutional"
+      ],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/business/2026/10/03/blackrock-offers-a-glimpse-of-how-tokenization-may-change-your-investment-portfolio"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Інституційний інтерес до крипторинок важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
+      "watch_for": "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
+      ]
     },
     {
       "id": "72730c037408af",
@@ -3837,88 +3787,6 @@
       ]
     },
     {
-      "id": "366cbcc53e62fb",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Dogecoin Is Getting Apps as DogeOS Opens Its Public Testnet",
-      "summary": "The team behind the MyDoge wallet opened a public test of DogeOS, a layer that lets developers build lending platforms and games on top of the meme coin network.",
-      "url": "https://decrypt.co/379772/dogecoin-getting-apps-dogeos-public-testnet",
-      "published_at": "2026-10-01T04:58:52+00:00",
-      "assets": [
-        "DOGE"
-      ],
-      "topics": [
-        "regulation",
-        "defi",
-        "airdrop"
-      ],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 2,
-      "publishers": [
-        "Decrypt",
-        "CoinDesk"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/379772/dogecoin-getting-apps-dogeos-public-testnet"
-        },
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/tech/2026/10/01/dogecoin-gets-defi-testnet-as-dogeos-bets-miners-will-eventually-secure-its-apps"
-        }
-      ],
-      "confidence_label": "Є незалежне підтвердження",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на DOGE; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Є незалежне підтвердження",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "8a3f85e033e01c",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Bitcoin's soft-inflation pop to $85,500 fades as bond yields refuse to fall",
-      "summary": "",
-      "url": "https://www.coindesk.com/markets/2026/10/01/bitcoin-s-soft-inflation-pop-to-usd85-500-fades-as-bond-yields-refuse-to-fall",
-      "published_at": "2026-10-01T04:15:20+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [
-        "macro",
-        "defi"
-      ],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "CoinDesk"
-      ],
-      "links": [
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/markets/2026/10/01/bitcoin-s-soft-inflation-pop-to-usd85-500-fades-as-bond-yields-refuse-to-fall"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Це макро-фактор для BTC: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
       "id": "b835996b9f2c88",
       "source": "jev_analysis",
       "mode": "news",
@@ -3987,6 +3855,44 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
+      ]
+    },
+    {
+      "id": "75cb4c4d57b40c",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Dogecoin Is Getting Apps as DogeOS Opens Its Public Testnet",
+      "summary": "The team behind the MyDoge wallet opened a public test of DogeOS, a layer that lets developers build lending platforms and games on top of the meme coin network.",
+      "url": "https://decrypt.co/379772/dogecoin-getting-apps-dogeos-public-testnet",
+      "published_at": "2026-09-30T21:46:03+00:00",
+      "assets": [
+        "DOGE"
+      ],
+      "topics": [
+        "defi",
+        "airdrop"
+      ],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Decrypt"
+      ],
+      "links": [
+        {
+          "publisher": "Decrypt",
+          "url": "https://decrypt.co/379772/dogecoin-getting-apps-dogeos-public-testnet"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Це радше можливість/активність, а не торговий сигнал. Ключове — дедлайн, умови, KYC, gas і ризик фішингу.",
+      "watch_for": "Офіційний домен, дедлайн, eligibility, витрати gas/fees та підтвердження команди.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Офіційний домен, дедлайн, eligibility, витрати gas/fees та підтвердження команди."
       ]
     },
     {
@@ -4793,7 +4699,8 @@
       ]
     }
   ],
-  "jev_model": "openai/gpt-4.1",
-  "jev_analyzed_count": 0,
-  "jev_analysis_errors": 59
+  "jev_enabled": false,
+  "jev_status": "not_configured",
+  "jev_model": null,
+  "jev_analyzed_count": 0
 }
