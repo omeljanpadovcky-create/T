@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-03T12:16:37.330729+00:00",
+  "generated_at": "2026-10-03T12:26:54.908606+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -25,16 +25,16 @@
   },
   "market": {
     "bitcoin": {
-      "usd": 84681,
-      "usd_24h_change": -2.0365990951739716
+      "usd": 84864,
+      "usd_24h_change": -2.015135080982131
     },
     "ethereum": {
-      "usd": 2683.4,
-      "usd_24h_change": -2.2797249114161753
+      "usd": 2686.18,
+      "usd_24h_change": -2.205801156871429
     },
     "optimism": {
-      "usd": 0.132425,
-      "usd_24h_change": 0.12063524827262583
+      "usd": 0.131803,
+      "usd_24h_change": -0.6211936553768971
     }
   },
   "items": [
