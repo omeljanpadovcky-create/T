@@ -53,7 +53,7 @@
   </aside>
 </div>
 
-<div class="glass foot">Криптомишка — аналітичний фільтр, не фінансова порада. JEV AI працює через GitHub Models; якщо модель не відпрацювала, картка прямо показує fallback-кросперевірку замість того, щоб видавати її за AI-висновок.</div>
+<div class="glass foot">Криптомишка — аналітичний фільтр, не фінансова порада. JEV AI працює через APInex free-моделі; якщо AI не відпрацював, картка чесно показує fallback-кросперевірку.</div>
 </div>
 
 <script>
@@ -71,7 +71,7 @@ function renderSources(){
   const labels={telegram_main:'Telegram · live',telegram_airdrop:'Retrodrop · live',telegram_archive:'Telegram · архів',site:'База знань',youtube:'YouTube',jev_news:'JEV радар'};
   Object.entries(data.sources||{}).forEach(([k,v])=>{
     const d=document.createElement('div');d.className='source';
-    const state=v.ok?'online · '+(v.count||0)+' матеріалів':'ще збирається / помилка';
+    const state=v.ok?'online · '+(v.count||0)+' матеріалів':(k==='telegram_archive'?'архів ще наповнюється':'тимчасова помилка');
     d.innerHTML='<div><b>'+esc(labels[k]||k)+'</b><br><small>'+esc(state)+'</small></div><a target="_blank" rel="noopener" href="'+esc(v.url||'#')+'">Відкрити ↗</a>';
     box.appendChild(d);
   });
