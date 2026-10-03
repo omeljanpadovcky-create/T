@@ -13,6 +13,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parent
 NEWS = ROOT / "data" / "news.json"
 FEED = ROOT / "data" / "feed.json"
+ARCHIVE = ROOT / "data" / "telegram_archive.json"
 
 APINEX_API_KEY = os.getenv("APINEX_API_KEY", "").strip()
 APINEX_MODEL = os.getenv("JEV_MODEL", "").strip() or "free/gpt-5.6-luna"
@@ -71,6 +72,43 @@ def related_context(event, feed):
             live.append(row)
 
     return live[:6], knowledge[:8]
+
+def related_archive_context(event, archive, limit=6):
+    posts=archive.get("posts") or []
+    terms={str(a).lower() for a in (event.get("assets") or []) if a}
+    terms.update(str(t).lower() for t in (event.get("topics") or []) if t)
+    title_tokens=re.findall(r"[a-z0-9а-яіїєґ]{4,}", (event.get("title") or "").lower())
+    stop={"with","from","that","this","have","will","after","over","into","crypto","bitcoin","ethereum"}
+    terms.update(t for t in title_tokens if t not in stop)
+
+    scored=[]
+    for p in posts:
+        text=(p.get("text") or "").lower()
+        if not text:
+            continue
+        score=sum(2 if len(t)>5 else 1 for t in terms if t and t in text)
+        if score:
+            scored.append((score,p.get("published_at") or "",p))
+    scored.sort(key=lambda row:(row[0],row[1]),reverse=True)
+
+    out=[]
+    seen=set()
+    for _,_,p in scored:
+        url=p.get("url")
+        if not url or url in seen:
+            continue
+        seen.add(url)
+        out.append({
+            "source":p.get("channel") or "telegram_archive",
+            "title":(p.get("text") or "")[:150],
+            "summary":(p.get("text") or "")[:650],
+            "url":url,
+            "published_at":p.get("published_at"),
+        })
+        if len(out)>=limit:
+            break
+    return out
+
 
 def extract_json(text):
     text=(text or "").strip()
@@ -133,8 +171,9 @@ def extract_json(text):
         }
     raise ValueError("Model returned empty content")
 
-def build_payload(event, feed):
+def build_payload(event, feed, archive=None):
     live, knowledge = related_context(event, feed)
+    historical=related_archive_context(event, archive or {"posts":[]})
     return {
         "event": {
             "title": event.get("title"),
@@ -148,6 +187,7 @@ def build_payload(event, feed):
             "links": event.get("links"),
         },
         "related_itstatti_live": live,
+        "related_itstatti_archive": historical,
         "related_itstatti_knowledge": knowledge,
         "instruction": "Дай незалежний JEV-аналіз події. Не повторюй рекламні або реферальні твердження як факт.",
     }
@@ -240,8 +280,8 @@ def apinex_retry_delay(response, attempt):
         pass
     return min(2 ** attempt, 20) + random.uniform(0.15, 0.85)
 
-def analyze_apinex(event, feed):
-    payload=build_payload(event, feed)
+def analyze_apinex(event, feed, archive=None):
+    payload=build_payload(event, feed, archive)
     last_error=None
     best_fallback=None
 
@@ -308,8 +348,8 @@ def analyze_apinex(event, feed):
         return best_fallback
     raise RuntimeError(last_error or "APInex request failed")
 
-def analyze_openai(event, feed):
-    payload=build_payload(event, feed)
+def analyze_openai(event, feed, archive=None):
+    payload=build_payload(event, feed, archive)
     r=requests.post(
         OPENAI_ENDPOINT,
         headers={
@@ -328,8 +368,8 @@ def analyze_openai(event, feed):
     r.raise_for_status()
     return extract_json(openai_response_text(r.json()))
 
-def analyze_generic(event, feed):
-    payload=build_payload(event, feed)
+def analyze_generic(event, feed, archive=None):
+    payload=build_payload(event, feed, archive)
     headers={"Content-Type":"application/json","Accept":"application/json"}
     if GENERIC_TOKEN:
         headers["Authorization"]=f"Bearer {GENERIC_TOKEN}"
@@ -354,6 +394,7 @@ def analyze_generic(event, feed):
 def main():
     news=load(NEWS, {"items":[]})
     feed=load(FEED, {"items":[]})
+    archive=load(ARCHIVE, {"posts":[]})
 
     if APINEX_API_KEY:
         provider="apinex"
@@ -402,7 +443,7 @@ def main():
         event["analysis_retry_count"]=int(event.get("analysis_retry_count") or 0)+1
         event["analysis_last_attempt_at"]=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         try:
-            event["jev_ai"]=analyze(event, feed)
+            event["jev_ai"]=analyze(event, feed, archive)
             event["analysis_engine"]=(event["jev_ai"].get("_model_used") if isinstance(event.get("jev_ai"),dict) else None) or model
             event.pop("analysis_error", None)
             if isinstance(event.get("jev_ai"), dict) and event["jev_ai"].get("_format_fallback"):
