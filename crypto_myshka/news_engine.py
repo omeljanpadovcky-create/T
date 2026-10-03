@@ -9,6 +9,11 @@ from pathlib import Path
 
 import feedparser
 
+try:
+    from storage import sync_news
+except ImportError:
+    from crypto_myshka.storage import sync_news
+
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "data" / "news.json"
 
@@ -288,27 +293,13 @@ def build_events(rows):
     return events[:250]
 
 
-def main():
-    previous = {}
-    if OUT.exists():
-        try:
-            previous = json.loads(OUT.read_text(encoding="utf-8"))
-        except Exception:
-            previous = {}
-
-    prev_items = previous.get("items") or []
+def preserve_jev_analysis(events, prev_items):
     prev_by_id = {x.get("id"): x for x in prev_items if x.get("id")}
     prev_by_title = {
         clean(x.get("title", "")).lower(): x
         for x in prev_items
         if clean(x.get("title", ""))
     }
-
-    rows, feed_status = read_feeds()
-    events = build_events(rows)
-
-    # Preserve finished JEV work between refreshes. news.json is rebuilt from RSS
-    # every run, so without this merge the analyzer would lose its previous work.
     for event in events:
         old = prev_by_id.get(event.get("id"))
         if not old:
@@ -318,6 +309,21 @@ def main():
         for key in ("jev_ai", "analysis_engine", "analysis_level", "analysis_error"):
             if key in old:
                 event[key] = old[key]
+    return events
+
+
+def main():
+    previous = {}
+    if OUT.exists():
+        try:
+            previous = json.loads(OUT.read_text(encoding="utf-8"))
+        except Exception:
+            previous = {}
+
+    prev_items = previous.get("items") or []
+
+    rows, feed_status = read_feeds()
+    events = preserve_jev_analysis(build_events(rows), prev_items)
 
     payload = {
         "version": 2,
@@ -331,10 +337,12 @@ def main():
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    db_count=sync_news(payload)
     print(json.dumps({
         "events": len(events),
         "raw_items": len(rows),
         "sources": feed_status,
+        "postgres": db_count,
     }, ensure_ascii=False))
 
 
