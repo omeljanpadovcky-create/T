@@ -55,6 +55,14 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: python crypto_myshka/collector.py
 
+      - name: Telegram connection preflight
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          TELEGRAM_TEST_ONLY: '1'
+        run: python crypto_myshka/notifier.py
+
       - name: Run JEV language-model analysis
         env:
           APINEX_API_KEY: ${{ secrets.APINEX_API_KEY }}
