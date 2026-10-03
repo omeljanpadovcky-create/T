@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-03T13:16:53.444311+00:00",
+  "generated_at": "2026-10-03T13:19:01.914785+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -47,7 +47,7 @@
     }
   },
   "raw_item_count": 240,
-  "item_count": 130,
+  "item_count": 129,
   "items": [
     {
       "id": "9d665cdd859369",
@@ -83,48 +83,11 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
-      "id": "c3a305c956c7be",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Fed finds a silver lining as China sells U.S. Treasuries - thestreet.com",
-      "summary": "Fed finds a silver lining as China sells U.S. Treasuries &nbsp;&nbsp; thestreet.com",
-      "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQSEZ2V2NUR2F3YmplQWRBQXNwblFHcnZ6bHBMYkFNckluaXZoNk1yRWNzUTlRTWhGTnhwX0lMaW9sZWFHYUh1cWRTY29ZdlRFQ2U5d01kSGU5TTIzR2tPVEhsS1Y0amtyNE8xZC1vU1MxenljMDAxY3dOdi1wcXVkYmhoTkh1eGFRZzFNb0pBS3lWcmhvZUxGT1V6VnY?oc=5",
-      "published_at": "2026-10-03T11:33:00+00:00",
-      "assets": [],
-      "topics": [
-        "macro"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Google News discovery"
-      ],
-      "links": [
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQSEZ2V2NUR2F3YmplQWRBQXNwblFHcnZ6bHBMYkFNckluaXZoNk1yRWNzUTlRTWhGTnhwX0lMaW9sZWFHYUh1cWRTY29ZdlRFQ2U5d01kSGU5TTIzR2tPVEhsS1Y0amtyNE8xZC1vU1MxenljMDAxY3dOdi1wcXVkYmhoTkh1eGFRZzFNb0pBS3lWcmhvZUxGT1V6VnY?oc=5"
-        }
-      ],
-      "confidence_label": "Discovery: потребує підтвердження",
-      "jev_take": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Google News використано лише як радар теми",
-        "Ринковий тон: Невизначений / змішаний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
-    },
-    {
-      "id": "b4b66b183c9611",
+      "id": "b6893f6c5be774",
       "source": "jev_analysis",
       "mode": "news",
       "title": "SEC approves 3x leveraged Bitcoin and Ether ETPs, but trading has to wait - TradingView",
@@ -153,6 +116,10 @@
         },
         {
           "publisher": "Google News discovery",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQbkV3eVJoa3pnUWh6Q3VQbG5peWZ1WVVnUFI2QXJRZU5pbWZRdERFNDFESGJoeDlUWFZweFNoRi1TdzRYZmY2WU9DaGh4Z0QzdE1xUFFKLWZyb0t3UkRNbm83WS1BaXBJREs3cVk5QWFXZl91NTdLUmNhclBtandZcWlMXzhlb1FJRFY5SmQwaktsazE0T2tyeFZMZC1LZlhFblFtZlJ2Yw?oc=5"
+        },
+        {
+          "publisher": "Google News discovery",
           "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQczFQSjFVQnExYUN5NkEzYmZvVzF6aDl5SlBGLVEwaXJ3Y0JQNi14WWplTldLTGpxcFhRNUdQNXI4U3hlVW9JMTZzOFNvZnhTWFBPaFo5cU9wOXNYYWpad0ItcUpmSE4wX2xoSTVsYTRvaTlSWmV2QS0wTXhJSXdpTHYzT1hERnlXZmRJT1Qtd3B5eF9Odk9GVTFkWkhiNWNjVjJuNl9XNm96ZENya2ZFcEdpT254Qy1COEMw?oc=5"
         }
       ],
@@ -165,7 +132,7 @@
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -203,7 +170,7 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -240,7 +207,7 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -280,7 +247,7 @@
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -317,15 +284,15 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
       "id": "6365432e76be55",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions - wealthmanagement.com",
-      "summary": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions &nbsp;&nbsp; wealthmanagement.com",
+      "title": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions - Wealth Management",
+      "summary": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions &nbsp;&nbsp; Wealth Management",
       "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQNWEwQlFDaThhTFhfeDI5R24zNnVVakQ4YUpmc1dCOHdWUXpjTmo4dENNdzNxOFM0UjF0eE9BQm5pQ25weHBrLWY2TnZ3ODl3WjJ1aHdEeFByYjNZVEdUV2xpVFhhTE1fRk9wVXFKTlpfaXhmbHVEdWljU2EtbkpPNnFFeXpZRUJvbWZrMmNrVlg0WGNYeENLMXJvX3lIQzVtT0MwZ1lDRQ?oc=5",
       "published_at": "2026-10-02T20:00:03+00:00",
       "assets": [],
@@ -355,8 +322,19 @@
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      "jev_ai": {
+        "what_happened": "SEC запропонував/впровадив правила самотримання (self-custody) криптоактивів, що викликало розділені реакції ринку. Деталі правил у джерелі не розкриті — лише заголовок і 1 джерело (Google News discovery).",
+        "why_it_matters": "Правила self-custody безпосередньо впливають на інституційних операторів, ETF-провайдерів і банків-посередників — це питання розподілу відповідальності за активи та відповідності вимогам SEC.",
+        "market_effect": "Короткочасно — волатильність у інституційних токенах (BTC, ETH) та на секторі custody-послуг. Тривалий ефект залежить від фінальної редакції правил.",
+        "bull_case": "Чисті правила self-custody знімають правову неясність, полегшують інституційний вхід і схвалення спотових BTC/ETH ETF у США.",
+        "bear_case": "Жорсткі вимоги до custody можуть змусити частину гравців повернути активи на регульовані платформи, зменшуючи децентралізацію та збільшуючи ліквідаційні ризики.",
+        "watch_next": "Офіційний текст правил у Federal Register, коментарі Coinbase/BlackRock/Kraken, позиція CFTC та реакція Congress на пропозицію.",
+        "confidence": "середня",
+        "short_conclusion": "Подія реальна і важлива, але джерело одиничне — потрібен перевірка тексту правил. Ринок вже закладає інституційний сценарій, тому будь-які уточнення правил можуть дати рух у BTC/ETH.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "c1434e1f4335c5",
@@ -392,8 +370,19 @@
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      "jev_ai": {
+        "what_happened": "Nvidia побила травневий максимум, капіталізація сягнула $5,7 трлн. Компанія оголосила рекордний buyback $150 млрд. Слабкий NFP (29K проти 90K) і м'який PCE (3,4% р/р проти 3,7%) знизили ймовірність жовтневого підняття ставки ФРС.",
+        "why_it_matters": "Nvidia — барометр ІТ-споживання та AI-капіталовкладень. Її рекорд підсилює наратив про «нову епоху», але одночасно попередження про перегрів: buyback підтримує ціну, а не операційний зростання.",
+        "market_effect": "Ризиковий настрій зміцнився, долар ослаб, технологічні індекси підтримані. Але концентрація ризику в одному активі зростає — будь-який провал Nvidia може штовхнути Nasdaq назад.",
+        "bull_case": "М'яка інфляція відкриває простір для збереження ліквідності; AI-інфраструктура продовжує капіталовкладення; buyback підтримує EPS.",
+        "bear_case": "NFP переглянутий вниз (липень -10K), попит на чіпи може уповільнитися; buyback — це фінансова інженерія, а не новий попит; кратність уже віддзеркалює оптимістичний сценарій.",
+        "watch_next": "Звіт Nvidia за Q3 (кер. орієнтації на ІХ), динаміка чіпних запасів TSMC, реакція 10-річного казначейства на нові аукціони, NFP за жовтень.",
+        "confidence": "середня",
+        "short_conclusion": "Подія підтверджує макро-підтримку з боку ФРС, але одиничне джерело та фокус на buyback вимагають обережності. Стежити за реальним попитом на чіпи, а не лише на капіталізацію.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "8f930505834b07",
@@ -429,8 +418,19 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      "jev_ai": {
+        "what_happened": "Drift запустив процес відшкодування після експлойту: DFX-тримери можуть подати претензії, але перші виплати — лише ~1% від реальних втрат. Повернення коштів без чіткого терміну.",
+        "why_it_matters": "Подія підтверджує ризик смарт-контрактних брешів у DeFi та слабкість гарантій повернення коштів. Ринок вже оцінює «recovery token» як новий клас активів із непередбачуваною ліквідністю.",
+        "market_effect": "Короткостроково — тиск на DFX та TVL протоколу; середньостроково — залежить від нових ін'єкцій капіталу та довіри інвесторів до плану виплат.",
+        "bull_case": "Команда активувала відшкодування раніше, ніж очидалося; DFX-холдери отримують хоча б часткову ліквідність і голосування за майбутнє фінансування.",
+        "bear_case": "1% виплат — символічний жест; без фіксованого терміну повернення кошти можуть «заморозитися» на місяці/роки, а DFX може втратити репутацію та ліквідність.",
+        "watch_next": "Нові ін'єкції в реєстр відшкодувань, динаміка DFX/ETH, оновлення аудиту безпеки, позиції великих холдерів.",
+        "confidence": "низька",
+        "short_conclusion": "Факт є — виплати запущені, але їхній масштаб мінімальний. Без додаткового капіталу та чітких термінів це більше декларація, ніж рішення.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "a7bfea161ca24b",
@@ -468,7 +468,7 @@
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -505,7 +505,7 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -550,7 +550,7 @@
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -587,7 +587,7 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -634,7 +634,7 @@
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -673,7 +673,7 @@
         "Ринковий тон: Невизначений / змішаний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -710,8 +710,19 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      "jev_ai": {
+        "what_happened": "Через сторонній адаптер злито ~$305K з двох Safe-мультипідписів. Засновник Aave Stani Kulechov підтвердив, що ядро V3 не порушено.",
+        "why_it_matters": "Подія показує, що навіть «незайняті» інтеграції третіх сторін залишаються вектором атак. Safe-гаманці часто використовуються для treasury/governance — тому ризик не лише фінансовий, а й репутаційний.",
+        "market_effect": "Прямого впливу на ціну AAVE я не бачу за відсутності даних; потенційно короткочасний тиск на настрої та підвищена увага до ризиків крос-протокольних інтеграцій.",
+        "bull_case": "Ядро V3 працює, інцидент ізолований, засновник оперативно прокоментував — це зменшує паніку.",
+        "bear_case": "Сторонні адаптери можуть мати подібні вразливості; якщо Safe-підписи були єдиним захистом, це попередження про недостатню глибину безпеки treasury.",
+        "watch_next": "Офіційний аудит адаптера, деталі транзакцій у Explorer, реакція ліквідності/Aave treasury, чи були інші інтеграції з тим самим провайдером.",
+        "confidence": "середня",
+        "short_conclusion": "Ядро Aave V3 не порушено, але інцидент підтверджує ризики сторонніх адаптерів. Потрібні деталі по адаптеру та аудиту, поки не можна робити висновків про системну загрозу.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "84759ba1ed31dd",
@@ -747,7 +758,7 @@
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -784,7 +795,7 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -821,7 +832,7 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -859,8 +870,19 @@
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      "jev_ai": {
+        "what_happened": "SEC запропонував зняти вимоги до custody для інвестиційних радників, які хочуть пропонувати крипто клієнтам. Зараз ці вимоги є бар'єром для частини менеджерів.",
+        "why_it_matters": "Custody — головний інституційний бар'єр. Якщо його послабити, більше радників зможе легально пропонувати крипто, що збільшить потік капіталу з традиційних фінансів.",
+        "market_effect": "Нейтрально-позитивний для ринку в цілому: більше інституційних гравців = більше ліквідності, але без конкретних активів ефект розмитий.",
+        "bull_case": "Більш широкий доступ інвесторів до крипто через традиційних радників, зростення AUM у сегменті, підвищення легітимності класу активів.",
+        "bear_case": "Послаблення custody може знизити безпеку активів клієнтів; пропозиція ще не стала правилом — може бути змінена або відкладена; регуляторні ризики не зникають.",
+        "watch_next": "Період коментарів і фінальна версія правила; реакції великих консультантів (Fidelity, Schwab, Coinbase Prime); чи додасться вимоги до страхування чи аудиту.",
+        "confidence": "низька",
+        "short_conclusion": "Пропозиція важлива для інституційного входу, але ще не закон і базується на одному джерелі. Стежити за фінальною редакцією, а не торгувати на тизері.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "f9f6f7ec2b73e3",
@@ -907,8 +929,19 @@
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      "jev_ai": {
+        "what_happened": "SEC оприлюднив пропозицію щодо правил custody для інвестиційних радників і фондів, що працюють із криптоактивами. Деталі пропозиції в наданих джерелах не розкрито повністю.",
+        "why_it_matters": "Чисті custody-стандарти — головний бар'єр для інституційного входу в крипту. Правила визначать, хто і як може зберігати активи від імені клієнтів.",
+        "market_effect": "Подвійний ефект: легітимізація інституційних продуктів (+), але зростання комплаєнс-витрат може відсіяти дрібних гравців (-).",
+        "bull_case": "Чіткі правила → більше ETF/паїв з криптоекспозицією → потік капіталу в BTC/ETH.",
+        "bear_case": "Надмірні вимоги можуть витіснити частину ринку в юрисдикції з меншим регулюванням або уповільнити запуск нових продуктів.",
+        "watch_next": "Період коментарів, фінальна версія правил, реакція BlackRock/Fidelity/Grayscale, рух цін BTC та ETH у день публікації.",
+        "confidence": "середня",
+        "short_conclusion": "Подія підтверджена джерелами, але без повного тексту пропозиції оцінювати реальний вплив рано. Очікуйте волатильності на новинах, а не напрямку.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "6e4617f343b115",
@@ -944,7 +977,7 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -981,7 +1014,7 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_error": "Model did not return JSON",
       "analysis_level": "cross_source_fallback"
     },
     {
@@ -1018,8 +1051,19 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      "jev_ai": {
+        "what_happened": "Near Intents зафіксував крос-чейн свопи після багу, що дозволив зловмиснику вивести ~$3.8M. Обіцяли повернути кошти користувачам. Інцидент стався за дні до публічного спростування зв'язку з півнінокорейським хакером з Bitget.",
+        "why_it_matters": "Поєднання двох подій — інцидент безпеки та відмова від зв'язку з DPRK-хакером — підриває довіру до заяв про безпеку та комплаєнс Near Intents.",
+        "market_effect": "Тимчасовий відтік ліквідності з протоколу, потенційне падіння TVL та довіри до крос-чейн свопів Near у короткостроковій перспективі.",
+        "bull_case": "Прозоре заморожування та повне відшкодування може показати відповідальність; якщо репутація відновиться, TVL повернеться.",
+        "bear_case": "Баг + крадіжка свідчать про незрілість контрактів; сумнів у незалежності audit та ризик повторення інциденту.",
+        "watch_next": "Оновлення від Near Intents щодо причини багу, аудит-відповідь, статус відшкодувань та реакція ліквідності/TVL.",
+        "confidence": "низька",
+        "short_conclusion": "Одне джерело, деталі багу відсутні — висновки попередні. Подія підсилює загальний ризик крос-чейн мостів, але масштаб впливу поки неясний.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "3d5fe9273edc68",
@@ -1055,8 +1099,19 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      "jev_ai": {
+        "what_happened": "NEAR Intents зазнав експлойту на $3.8 млн. Деталі атаки відсутні — лише одне джерело (CoinDesk), без технічних уточнень.",
+        "why_it_matters": "Це черговий інцидент у ланцюжку хаків 2026 року, що підриває довіру до інфраструктури NEAR та intents-протоколів загалом.",
+        "market_effect": "Короткочасний негативний тиск на NEAR та суміжні intents-токени; потенційний відтік LP та зростання премії за ризик на похідних.",
+        "bull_case": "Команда NEAR може оперативно ізолювати вразливість і компенсувати користувачам — це підсилить репутацію прозорості.",
+        "bear_case": "Системна вразливість intents-моделі може виявитися глибшою, що спровокує ланцюгову продажу та вихід лікідацій.",
+        "watch_next": "Офіційний пост-mortem NEAR, статус мостів/оракулів, рух коштів з гарячих гаманців, реакція TVL та волатильність NEAR/USD.",
+        "confidence": "низька",
+        "short_conclusion": "Фактів дуже мало — джерело одне, технічних деталей немає. Не торгувати за цим заголовком до публікації аудиту та даних про рух коштів.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "dc1bd9510e1b85",
@@ -1092,9 +1147,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "881e0876557325",
@@ -1131,9 +1184,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "74d391650648ee",
@@ -1168,9 +1219,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "8a8f939ff809ef",
@@ -1206,9 +1255,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "b5ac9e41e1a1e1",
@@ -1243,9 +1290,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "1ebda8c8f725a4",
@@ -1281,9 +1326,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "3c7dbac99ce032",
@@ -1319,9 +1362,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "e9e291dc9e6c92",
@@ -1357,9 +1398,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "9d67cfc5430332",
@@ -1396,9 +1435,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "7eb3f6fb70c268",
@@ -1433,9 +1470,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "7b30d4f86b2b8c",
@@ -1478,9 +1513,7 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Потенційно позитивний",
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "5dc52a640b3218",
@@ -1517,9 +1550,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "1cbc6de01ca661",
@@ -1556,9 +1587,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "fa1f4f9305265c",
@@ -1593,9 +1622,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "2e07fa540643af",
@@ -1630,9 +1657,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "b723156b16345a",
@@ -1675,9 +1700,7 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "98736b289a333e",
@@ -1714,9 +1737,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "6ccc4dba345097",
@@ -1759,9 +1780,7 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "684814993e15b9",
@@ -1796,9 +1815,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "d7cb6787693d1a",
@@ -1835,9 +1852,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "670347ec743fe8",
@@ -1873,9 +1888,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "fc42588ae2ef17",
@@ -1913,9 +1926,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "edeee15e1a314e",
@@ -1954,9 +1965,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "f948c17f47042c",
@@ -1991,9 +2000,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "708eeea3e0936c",
@@ -2036,9 +2043,7 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "90102ad4dc0766",
@@ -2075,9 +2080,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "dc2df309bc160e",
@@ -2112,9 +2115,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "8a526bc7202771",
@@ -2159,9 +2160,7 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "966a99ed729dbf",
@@ -2206,9 +2205,7 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "bf66406d7f93eb",
@@ -2241,9 +2238,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "630ad426bb44ed",
@@ -2278,9 +2273,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "4dd4bb68bff04f",
@@ -2315,9 +2308,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "f2c8cf8d19a1d0",
@@ -2352,9 +2343,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "6221a49c39451a",
@@ -2391,9 +2380,7 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "09cd88c674cb6e",
@@ -2431,9 +2418,7 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
-      "analysis_level": "cross_source_fallback"
+      ]
     },
     {
       "id": "879d78ac6de9dd",
@@ -4851,9 +4836,9 @@
     }
   ],
   "jev_enabled": true,
-  "jev_status": "configured_but_no_success",
+  "jev_status": "ok",
   "jev_provider": "apinex",
   "jev_model": "free/gpt-5.6-luna",
-  "jev_analyzed_count": 0,
-  "jev_analysis_errors": 61
+  "jev_analyzed_count": 8,
+  "jev_analysis_errors": 17
 }

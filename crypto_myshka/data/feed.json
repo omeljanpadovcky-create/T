@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-03T13:16:57.512889+00:00",
+  "generated_at": "2026-10-03T13:19:05.987573+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -29,7 +29,7 @@
     },
     "jev_news": {
       "ok": true,
-      "count": 130,
+      "count": 129,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -46,36 +46,36 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 84836,
-        "usd_24h_change": -2.1398711078647494
+        "usd": 84825,
+        "usd_24h_change": -2.155294077444996
       },
       "ethereum": {
-        "usd": 2680.63,
-        "usd_24h_change": -2.554328421558768
+        "usd": 2680.31,
+        "usd_24h_change": -2.5803220042268498
       },
       "optimism": {
-        "usd": 0.133042,
-        "usd_24h_change": -0.18528653672871304
+        "usd": 0.132751,
+        "usd_24h_change": -0.3907064031670453
       },
       "solana": {
-        "usd": 119.47,
-        "usd_24h_change": -2.4438556135599208
+        "usd": 119.46,
+        "usd_24h_change": -2.4495382974102604
       },
       "pendle": {
         "usd": 2.35,
-        "usd_24h_change": -5.323043221992159
+        "usd_24h_change": -5.122288883093145
       },
       "lido-dao": {
-        "usd": 0.457329,
-        "usd_24h_change": -1.5735140192717039
+        "usd": 0.457278,
+        "usd_24h_change": -1.9360049870869311
       },
       "ethereum-name-service": {
         "usd": 6.8,
-        "usd_24h_change": -5.45435754280543
+        "usd_24h_change": -5.173410209048546
       },
       "litecoin": {
-        "usd": 69.3,
-        "usd_24h_change": -0.9119104100137458
+        "usd": 69.33,
+        "usd_24h_change": -0.8917139274693866
       }
     }
   },
@@ -6203,6 +6203,6 @@
     }
   ],
   "archive_count": 0,
-  "news_count": 130,
+  "news_count": 129,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
