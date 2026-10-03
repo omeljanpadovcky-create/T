@@ -5,6 +5,11 @@ from pathlib import Path
 
 import requests
 
+try:
+    from storage import sync_news
+except ImportError:
+    from crypto_myshka.storage import sync_news
+
 ROOT = Path(__file__).resolve().parent
 NEWS = ROOT / "data" / "news.json"
 FEED = ROOT / "data" / "feed.json"
@@ -377,6 +382,7 @@ def main():
     news["jev_pending_count"]=pending_count
     news["jev_analysis_errors"]=errors
     save(NEWS, news)
+    db_count=sync_news(news)
     print(json.dumps({
         "provider":provider,
         "jev_analyzed":done,
@@ -384,6 +390,7 @@ def main():
         "format_fallbacks":format_fallbacks,
         "errors":errors,
         "model":model,
+        "postgres":db_count,
     }, ensure_ascii=False))
 
 if __name__=="__main__":
