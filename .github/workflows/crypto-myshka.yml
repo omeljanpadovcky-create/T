@@ -36,15 +36,23 @@ jobs:
       - name: Install collector dependencies
         run: pip install -r crypto_myshka/requirements.txt
 
+      - name: Run invariant tests
+        run: python -m unittest discover -s crypto_myshka/tests -p 'test_*.py' -v
+
       - name: Build cross-source crypto events
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: python crypto_myshka/news_engine.py
 
       - name: Expand Telegram archive
         env:
           TELEGRAM_ARCHIVE_PAGES: 80
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: python crypto_myshka/telegram_archive.py
 
       - name: Build CryptoMyshka live feed
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: python crypto_myshka/collector.py
 
       - name: Run JEV language-model analysis
@@ -55,6 +63,7 @@ jobs:
           JEV_API_URL: ${{ secrets.JEV_API_URL }}
           JEV_API_KEY: ${{ secrets.JEV_API_KEY }}
           JEV_GENERIC_MODEL: ${{ secrets.JEV_GENERIC_MODEL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: python crypto_myshka/jev_analyzer.py
 
       - name: Send Telegram digest
