@@ -152,6 +152,57 @@ def build_payload(event, feed):
         "instruction": "Дай незалежний JEV-аналіз події. Не повторюй рекламні або реферальні твердження як факт.",
     }
 
+def apinex_response_text(data):
+    choice=(data.get("choices") or [{}])[0] or {}
+    msg=choice.get("message") or {}
+    content=msg.get("content")
+    if isinstance(content,str) and content.strip():
+        return content
+    if isinstance(content,list):
+        parts=[]
+        for part in content:
+            if isinstance(part,str):
+                parts.append(part)
+            elif isinstance(part,dict):
+                value=part.get("text") or part.get("content") or part.get("output_text")
+                if value:
+                    parts.append(str(value))
+        joined="\n".join(parts).strip()
+        if joined:
+            return joined
+    for key in ("reasoning_content","reasoning","text","output_text"):
+        value=msg.get(key) or choice.get(key)
+        if isinstance(value,str) and value.strip():
+            return value
+    return ""
+
+
+def fallback_analysis(event, error=""):
+    target=", ".join((event.get("assets") or [])[:4]) or "крипторинок"
+    take=(event.get("jev_take") or event.get("summary") or event.get("title") or "").strip()
+    watch=(event.get("watch_for") or "Перевірити першоджерело, незалежне підтвердження та реакцію ціни/обсягу.").strip()
+    confidence=(event.get("confidence_label") or "низька").lower()
+    if "висок" in confidence:
+        confidence="висока"
+    elif "серед" in confidence:
+        confidence="середня"
+    else:
+        confidence="низька"
+    return {
+        "what_happened": (event.get("summary") or event.get("title") or "Подія зафіксована новинним радаром.")[:650],
+        "why_it_matters": take[:650] or f"Подія може впливати на {target}, але потребує перевірки.",
+        "market_effect": event.get("tone") or "Невизначено",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": watch[:650],
+        "confidence": confidence,
+        "short_conclusion": (take or "Є подія для перевірки; автоматичний висновок не замінює першоджерело.")[:320],
+        "_cross_source_fallback": True,
+        "_retry_llm": True,
+        "_last_error": str(error)[:220],
+    }
+
+
 def openai_response_text(data):
     for item in data.get("output") or []:
         if item.get("type") != "message":
@@ -214,14 +265,14 @@ def analyze_apinex(event, feed):
                         {"role":"user","content":json.dumps(payload, ensure_ascii=False)},
                     ],
                     "temperature": 0.2,
-                    "max_tokens": 900,
+                    "max_tokens": 1400,
                 },
                 timeout=75,
             )
 
             if r.ok:
                 data=r.json()
-                content=((data.get("choices") or [{}])[0].get("message") or {}).get("content") or ""
+                content=apinex_response_text(data)
                 if "<tool_call>" in content or "<arg_key>" in content:
                     last_error=f"APInex malformed tool-call output for {model}"
                     break
@@ -345,7 +396,7 @@ def main():
         if int(event.get("impact") or 0) < 2:
             continue
         ai=event.get("jev_ai") or {}
-        if ai and not ai.get("_format_fallback"):
+        if ai and event.get("analysis_level")=="llm" and not ai.get("_format_fallback"):
             continue
         attempted += 1
         try:
@@ -360,26 +411,31 @@ def main():
                 done += 1
         except Exception as e:
             event["analysis_error"]=str(e)[:260]
+            event["jev_ai"]=fallback_analysis(event, e)
+            event["analysis_engine"]="cross_source"
             event["analysis_level"]="cross_source_fallback"
             errors += 1
 
     analyzed_count=sum(
         1 for x in (news.get("items") or [])
-        if x.get("jev_ai") and not (x.get("jev_ai") or {}).get("_format_fallback")
+        if x.get("analysis_level")=="llm" and x.get("jev_ai")
     )
-    pending_count=sum(
+    coverage_pending_count=sum(
         1 for x in (news.get("items") or [])
-        if int(x.get("impact") or 0) >= 2 and (
-            not x.get("jev_ai") or (x.get("jev_ai") or {}).get("_format_fallback")
-        )
+        if int(x.get("impact") or 0) >= 2 and not x.get("jev_ai")
+    )
+    llm_pending_count=sum(
+        1 for x in (news.get("items") or [])
+        if int(x.get("impact") or 0) >= 2 and x.get("analysis_level")!="llm"
     )
     news["jev_enabled"]=True
-    news["jev_status"]="complete" if pending_count==0 else ("ok" if done else ("degraded" if (errors or format_fallbacks) else "idle"))
+    news["jev_status"]="complete" if coverage_pending_count==0 else ("ok" if done else "degraded")
     news["jev_provider"]=provider
     news["jev_model"]=model
     news["jev_analyzed_count"]=analyzed_count
     news["jev_analyzed_this_run"]=done
-    news["jev_pending_count"]=pending_count
+    news["jev_pending_count"]=coverage_pending_count
+    news["jev_llm_pending_count"]=llm_pending_count
     news["jev_analysis_errors"]=errors
     save(NEWS, news)
     db_count=sync_news(news)
