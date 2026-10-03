@@ -2,7 +2,7 @@ name: CryptoMyshka 2.0 Feed
 
 on:
   schedule:
-    - cron: '7,37 * * * *'
+    - cron: '*/10 * * * *'
   workflow_dispatch:
   push:
     branches: [main]
@@ -20,27 +20,43 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
       - name: Install collector dependencies
         run: pip install -r crypto_myshka/requirements.txt
+
+      - name: Update Telegram archive
+        run: python crypto_myshka/telegram_archive.py
+
+      - name: Build JEV crypto news
+        run: python crypto_myshka/news_engine.py
+
       - name: Build CryptoMyshka feed
         run: python crypto_myshka/collector.py
-      - name: Commit refreshed feed
+
+      - name: Send Telegram digest
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python crypto_myshka/notifier.py
+
+      - name: Commit refreshed data
         run: |
           git config user.name "CryptoMyshka Bot"
           git config user.email "crypto-myshka@users.noreply.github.com"
-          git add crypto_myshka/data/feed.json
+          git add crypto_myshka/data/feed.json crypto_myshka/data/news.json crypto_myshka/data/telegram_archive.json crypto_myshka/data/notify_state.json
           if git diff --cached --quiet; then
-            echo "No feed changes"
+            echo "No data changes"
             exit 0
           fi
-          git commit -m "Update CryptoMyshka feed"
+          git commit -m "Update CryptoMyshka data"
           git pull --rebase origin main
           git push origin HEAD:main
