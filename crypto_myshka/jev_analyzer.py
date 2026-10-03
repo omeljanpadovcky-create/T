@@ -9,11 +9,14 @@ ROOT = Path(__file__).resolve().parent
 NEWS = ROOT / "data" / "news.json"
 FEED = ROOT / "data" / "feed.json"
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
-OPENAI_MODEL = os.getenv("JEV_MODEL", "").strip() or "gpt-6-luna"
-OPENAI_ENDPOINT = "https://api.openai.com/v1/responses"
+APINEX_API_KEY = os.getenv("APINEX_API_KEY", "").strip()
+APINEX_MODEL = os.getenv("JEV_MODEL", "").strip() or "free/gpt-5.6-luna"
+APINEX_ENDPOINT = "https://api.apinex.bond/v1/chat/completions"
 
-# Optional fallback for any other OpenAI-compatible provider.
+# Optional fallbacks.
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "").strip() or "gpt-6-luna"
+OPENAI_ENDPOINT = "https://api.openai.com/v1/responses"
 GENERIC_ENDPOINT = os.getenv("JEV_API_URL", "").strip()
 GENERIC_TOKEN = os.getenv("JEV_API_KEY", "").strip()
 GENERIC_MODEL = os.getenv("JEV_GENERIC_MODEL", "").strip() or "qwen2.5:7b"
@@ -105,6 +108,30 @@ def openai_response_text(data):
                 return part["text"]
     raise ValueError("OpenAI Responses API returned no output_text")
 
+def analyze_apinex(event, feed):
+    payload=build_payload(event, feed)
+    r=requests.post(
+        APINEX_ENDPOINT,
+        headers={
+            "Authorization": f"Bearer {APINEX_API_KEY}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        },
+        json={
+            "model": APINEX_MODEL,
+            "messages": [
+                {"role":"system","content":SYSTEM},
+                {"role":"user","content":json.dumps(payload, ensure_ascii=False)},
+            ],
+            "temperature": 0.2,
+            "max_tokens": 900,
+        },
+        timeout=75,
+    )
+    r.raise_for_status()
+    data=r.json()
+    return extract_json(data["choices"][0]["message"]["content"])
+
 def analyze_openai(event, feed):
     payload=build_payload(event, feed)
     r=requests.post(
@@ -152,7 +179,11 @@ def main():
     news=load(NEWS, {"items":[]})
     feed=load(FEED, {"items":[]})
 
-    if OPENAI_API_KEY:
+    if APINEX_API_KEY:
+        provider="apinex"
+        model=APINEX_MODEL
+        analyze=analyze_apinex
+    elif OPENAI_API_KEY:
         provider="openai"
         model=OPENAI_MODEL
         analyze=analyze_openai
