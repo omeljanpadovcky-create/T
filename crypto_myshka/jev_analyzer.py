@@ -76,9 +76,28 @@ def extract_json(text):
         return json.loads(text)
     except Exception:
         m=re.search(r"\{.*\}", text, flags=re.S)
-        if not m:
-            raise ValueError("Model did not return JSON")
-        return json.loads(m.group(0))
+        if m:
+            try:
+                return json.loads(m.group(0))
+            except Exception:
+                pass
+
+    # Some free models occasionally answer with useful prose instead of strict JSON.
+    # Preserve the analysis rather than dropping the event, but mark confidence low.
+    plain=re.sub(r"\s+"," ",text).strip()
+    if plain:
+        return {
+            "what_happened": plain[:420],
+            "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
+            "market_effect": "Невизначено",
+            "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
+            "bear_case": "Непідтверджений або неповний контекст може дати хибний висновок.",
+            "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+            "confidence": "низька",
+            "short_conclusion": plain[:260],
+            "_format_fallback": True
+        }
+    raise ValueError("Model returned empty content")
 
 def build_payload(event, feed):
     live, knowledge = related_context(event, feed)
