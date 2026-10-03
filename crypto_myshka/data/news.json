@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-03T13:02:14.254324+00:00",
+  "generated_at": "2026-10-03T13:07:05.656515+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -85,7 +85,7 @@
       ]
     },
     {
-      "id": "f3b1706bd14f9d",
+      "id": "b6893f6c5be774",
       "source": "jev_analysis",
       "mode": "news",
       "title": "SEC approves 3x leveraged Bitcoin and Ether ETPs, but trading has to wait - TradingView",
@@ -115,10 +115,6 @@
         {
           "publisher": "Google News discovery",
           "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQbkV3eVJoa3pnUWh6Q3VQbG5peWZ1WVVnUFI2QXJRZU5pbWZRdERFNDFESGJoeDlUWFZweFNoRi1TdzRYZmY2WU9DaGh4Z0QzdE1xUFFKLWZyb0t3UkRNbm83WS1BaXBJREs3cVk5QWFXZl91NTdLUmNhclBtandZcWlMXzhlb1FJRFY5SmQwaktsazE0T2tyeFZMZC1LZlhFblFtZlJ2Yw?oc=5"
-        },
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNMlctdHJwUFE4SkY4MENkd0pFRnJmcl91UEZ1SkI0Nk03MTl2M0VWNG5fd1J4YTgyal9jem56dG1iSlFTbGU4YTRCTTdLUjljYU1mMVRrMS1QRVFLVy03aC1MUHkxQnNSVUx2d2xicU4yU1dVRm1sdURSV29YNTh5MFJfNVMtYURCZ2xBMG5QSXk?oc=5"
         },
         {
           "publisher": "Google News discovery",
@@ -283,8 +279,8 @@
       "id": "6365432e76be55",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions - Wealth Management",
-      "summary": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions &nbsp;&nbsp; Wealth Management",
+      "title": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions - wealthmanagement.com",
+      "summary": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions &nbsp;&nbsp; wealthmanagement.com",
       "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQNWEwQlFDaThhTFhfeDI5R24zNnVVakQ4YUpmc1dCOHdWUXpjTmo4dENNdzNxOFM0UjF0eE9BQm5pQ25weHBrLWY2TnZ3ODl3WjJ1aHdEeFByYjNZVEdUV2xpVFhhTE1fRk9wVXFKTlpfaXhmbHVEdWljU2EtbkpPNnFFeXpZRUJvbWZrMmNrVlg0WGNYeENLMXJvX3lIQzVtT0MwZ1lDRQ?oc=5",
       "published_at": "2026-10-02T20:00:03+00:00",
       "assets": [],
@@ -1728,6 +1724,41 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
+      ]
+    },
+    {
+      "id": "7eb3f6fb70c268",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "The Pope Has Thoughts on AI Art—And They're Not Flattering",
+      "summary": "The pontiff says algorithms \"lack the spark of humanity,\" and the Vatican wants to renew an alliance with artists and cultural institutions to protect it.",
+      "url": "https://decrypt.co/379983/pope-leo-human-art-ai-creation",
+      "published_at": "2026-10-03T13:01:04+00:00",
+      "assets": [],
+      "topics": [
+        "institutional"
+      ],
+      "impact": 2,
+      "impact_label": "Середній вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Decrypt"
+      ],
+      "links": [
+        {
+          "publisher": "Decrypt",
+          "url": "https://decrypt.co/379983/pope-leo-human-art-ai-creation"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Інституційний інтерес до крипторинок важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
+      "watch_for": "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
       ]
     },
     {
@@ -4945,39 +4976,6 @@
       ]
     },
     {
-      "id": "43346a6b1ebe09",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Morning Minute: Robinhood Adds Perps, Weekend Stocks, and AI Traders",
-      "summary": "Robinhood is leaning deeper into crypto as they look to unlock their “everything app” vision.",
-      "url": "https://decrypt.co/379645/morning-minute-robinhood-adds-perps-weekend-stocks-and-ai-traders",
-      "published_at": "2026-09-30T11:54:22+00:00",
-      "assets": [],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/379645/morning-minute-robinhood-adds-perps-weekend-stocks-and-ai-traders"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
       "id": "bf6d1ef547a200",
       "source": "jev_analysis",
       "mode": "news",
@@ -5528,6 +5526,7 @@
   ],
   "jev_enabled": false,
   "jev_status": "not_configured",
+  "jev_provider": null,
   "jev_model": null,
   "jev_analyzed_count": 0
 }

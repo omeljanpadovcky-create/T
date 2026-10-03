@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-03T13:02:18.235980+00:00",
+  "generated_at": "2026-10-03T13:07:09.743458+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -46,36 +46,36 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 84861,
-        "usd_24h_change": -2.3152757006686757
+        "usd": 84841,
+        "usd_24h_change": -2.2660570746711026
       },
       "ethereum": {
-        "usd": 2681.9,
-        "usd_24h_change": -2.7138723304792567
+        "usd": 2681.42,
+        "usd_24h_change": -2.6942297628838396
       },
       "optimism": {
-        "usd": 0.131625,
-        "usd_24h_change": -1.7993235236434404
+        "usd": 0.13269,
+        "usd_24h_change": -0.8637980881492112
       },
       "solana": {
-        "usd": 119.46,
-        "usd_24h_change": -2.599634483388008
+        "usd": 119.51,
+        "usd_24h_change": -2.5217683539944495
       },
       "pendle": {
         "usd": 2.35,
-        "usd_24h_change": -5.457647549133996
+        "usd_24h_change": -5.306323395152013
       },
       "lido-dao": {
-        "usd": 0.456875,
-        "usd_24h_change": -2.4966851739167804
+        "usd": 0.458511,
+        "usd_24h_change": -1.722364937622542
       },
       "internet-computer": {
-        "usd": 3.28,
-        "usd_24h_change": -1.806262005192091
+        "usd": 3.29,
+        "usd_24h_change": -1.620490769715802
       },
       "ethereum-name-service": {
-        "usd": 6.78,
-        "usd_24h_change": -4.401271203178362
+        "usd": 6.8,
+        "usd_24h_change": -5.39708097667455
       }
     }
   },
