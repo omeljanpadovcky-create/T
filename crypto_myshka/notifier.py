@@ -29,6 +29,7 @@ STATE=ROOT/"data"/"notify_state.json"
 
 TOKEN=os.getenv("TELEGRAM_BOT_TOKEN","").strip()
 CHAT_ID=os.getenv("TELEGRAM_CHAT_ID","").strip()
+TEST_ONLY=os.getenv("TELEGRAM_TEST_ONLY","").strip().lower() in {"1","true","yes","on"}
 
 def load(path, default):
     try: return json.loads(path.read_text(encoding="utf-8"))
@@ -99,6 +100,19 @@ def main():
         seen.update(delivered_notification_ids(ids))
 
     configured=bool(TOKEN and CHAT_ID)
+
+    if TEST_ONLY:
+        if not configured:
+            print("Telegram test-only mode: TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID are not configured.")
+            return
+        if not state.get("telegram_ready"):
+            send("🐭 Криптомишка: тест Telegram — зв’язок працює ✅")
+            state["telegram_ready"]=True
+            save(state)
+            print("Telegram test message sent successfully.")
+        else:
+            print("Telegram test-only mode: connection was already confirmed.")
+        return
 
     if not state.get("initialized"):
         initialized_seen=ids[-3000:]
