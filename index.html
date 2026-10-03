@@ -142,7 +142,7 @@ function renderItems(){
     let extra='';
     if(isNews){
       const ai=x.jev_ai||null;
-      const cleanAi=ai && !ai._format_fallback;
+      const cleanAi=ai && !ai._format_fallback && !ai._cross_source_fallback && x.analysis_level==='llm';
       if(cleanAi){
         extra='<div class="jevbox"><b>🧠 JEV AI</b><p>'+esc(ai.short_conclusion||ai.why_it_matters||'')+'</p>'+
           '<b>Що сталося</b><p>'+esc(ai.what_happened||'')+'</p>'+
@@ -150,10 +150,16 @@ function renderItems(){
           '<b>Сценарії</b><p>↑ '+esc(ai.bull_case||'')+'<br>↓ '+esc(ai.bear_case||'')+'</p>'+
           '<b>За чим стежити</b><p>'+esc(ai.watch_next||'')+'</p>'+
           '<b>Впевненість: '+esc(ai.confidence||'—')+'</b></div>';
+      }else if(ai){
+        extra='<div class="jevbox"><b>🧠 JEV крос-перевірка</b><p>'+esc(ai.short_conclusion||x.jev_take||'')+'</p>'+
+          '<b>Що сталося</b><p>'+esc(ai.what_happened||x.summary||'')+'</p>'+
+          '<b>Чому це важливо</b><p>'+esc(ai.why_it_matters||x.jev_take||'')+'</p>'+
+          '<b>За чим стежити</b><p>'+esc(ai.watch_next||x.watch_for||'')+'</p>'+
+          '<b>Впевненість: '+esc(ai.confidence||x.confidence_label||'—')+'</b><p style="color:#7892ab">LLM ще може покращити цей висновок у наступному запуску.</p></div>';
       }else{
         extra='<div class="jevbox"><b>Крос-перевірка</b><p>'+esc(x.jev_take||'')+'</p>'+
           '<b>Що перевірити далі</b><p>'+esc(x.watch_for||'')+'</p>'+
-          '<b>'+esc(x.confidence_label||'')+'</b><p>AI-аналіз для цієї події ще не готовий.</p></div>';
+          '<b>'+esc(x.confidence_label||'')+'</b></div>';
       }
     }
     el.innerHTML='<div class="itemTop"><h4>'+esc(x.title)+'</h4><span class="risk '+klass+'">'+esc(badge)+'</span></div>'+
