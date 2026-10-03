@@ -1,643 +1,83 @@
 <!doctype html>
 <html lang="uk">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050a12">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<title>MYSHKA — P2P Radar</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071018">
+<title>Криптомишка 2.0 — ITstatti Analyzer</title>
 <style>
-:root{--bg:#050a12;--p:#0b1522;--p2:#0f1d2e;--line:#20344e;--text:#f4f7fb;--muted:#8fa3bd;--g:#34e5a0;--r:#ff6679;--y:#ffd166;--b:#78a6ff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 500px at 15% -10%,#18366566,transparent 60%),linear-gradient(#06101a,#04070c);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}.app{max-width:1400px;margin:auto;padding:14px}.glass{background:linear-gradient(180deg,#0d1928f5,#07111df5);border:1px solid var(--line);border-radius:18px;box-shadow:0 20px 50px #0007}.head{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:14px}.brand{display:flex;gap:11px;align-items:center}.logo{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font-size:29px;background:#17263a;border:1px solid #36547a}.brand h1{margin:0;font-size:22px}.brand h1 span{color:#ffd36c}.brand p{margin:3px 0 0;color:var(--muted);font-size:11px}.badges{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.badge{border:1px solid #2b4669;background:#0c1a2a;color:#b8c9dd;border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800}.badge.ok{color:var(--g);border-color:#21694f;background:#082119}.badge.live{color:#8ff0bf;border-color:#235f49;background:#071d17;box-shadow:0 0 14px rgba(42,117,89,.14)}.badge.live:before{content:'●';margin-right:6px;color:#4fd69b}.badge.offline{color:#ff9aaa;border-color:#733743;background:#260d13}.badge.bad{color:#ff91a0;border-color:#77323e;background:#260d13}.badge.warn{color:var(--y);border-color:#6b5626;background:#251d08}.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:12px;margin-top:12px}.card{padding:14px}.title{display:flex;justify-content:space-between;gap:10px;align-items:center}.title h2{margin:0;font-size:17px}.sub{color:var(--muted);font-size:10px}.hero{margin-top:12px;padding:18px;border-radius:15px;background:#07121f;border:1px solid #1f3856}.route{font-size:27px;font-weight:950}.route span{color:var(--b)}.money{font-size:36px;font-weight:950;margin-top:8px}.money.pos{color:var(--g)}.money.neg{color:var(--r)}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.action{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:9px 12px;border-radius:11px;border:1px solid #315177;background:#10223a;color:#fff;text-decoration:none;font-size:10px;font-weight:900}.action.buy{border-color:#237458;background:#0a2a20;color:#68efb6}.action.sell{border-color:#7a3340;background:#2a0d15;color:#ff9aaa}.action.dash{border-color:#66552b;background:#251d08;color:#ffd66d}.chip{padding:6px 8px;border-radius:9px;background:#0e2034;border:1px solid #29486c;color:#bad0e9;font-size:10px}.chip strong{color:#fff}.providers{display:grid;gap:8px;margin-top:12px}.provider{display:grid;grid-template-columns:110px 72px 1fr auto;gap:8px;align-items:center;padding:10px;border-radius:12px;background:#081522;border:1px solid #1d3655;font-size:10px}.exchangeGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}.exchangeCard{padding:11px;border-radius:13px;background:#081522;border:1px solid #1d3655}.exchangeCard b{display:block;font-size:13px;margin-bottom:8px}.exchangeLinks{display:flex;gap:6px;flex-wrap:wrap}.mini{display:inline-flex;align-items:center;justify-content:center;padding:6px 8px;border-radius:8px;border:1px solid #315177;background:#10223a;color:#fff;text-decoration:none;font-size:9px;font-weight:900}.mini.buy{color:#68efb6;border-color:#237458;background:#0a2a20}.mini.sell{color:#ff9aaa;border-color:#7a3340;background:#2a0d15}.state{font-weight:900}.state.ok{color:var(--g)}.state.warn{color:var(--y)}.state.bad{color:var(--r)}.routesGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}.routeCard{position:relative;padding:14px;border:1px solid #1e3653;border-radius:16px;background:linear-gradient(180deg,#0a1726,#07111d);overflow:hidden}.routeCard.best{border-color:#2d6b56;box-shadow:inset 0 0 0 1px #1b4f3d}.routeCard:before{content:"";position:absolute;inset:0 0 auto 0;height:2px;background:linear-gradient(90deg,transparent,#345f8f,transparent)}.routeCard.best:before{background:linear-gradient(90deg,transparent,#34e5a0,transparent)}.routeTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.routePair{font-size:18px;font-weight:950;letter-spacing:-.02em}.routePair .arrow{color:#627f9f;padding:0 5px}.routeProfit{text-align:right}.routeProfit strong{display:block;font-size:20px;color:var(--g);font-variant-numeric:tabular-nums}.routeProfit small{color:var(--muted);font-size:9px}.routeMeta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.routeMeta span{font-size:9px;font-weight:850;padding:5px 7px;border-radius:999px;border:1px solid #29486c;background:#0d1e31;color:#bcd0e7}.routeMeta .good{color:#6ff0bb;border-color:#237458;background:#09261d}.routeMeta .warn{color:#ffd978;border-color:#6a5425;background:#241d09}.routeMetrics{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:12px}.metric{padding:8px;border:1px solid #1b314d;border-radius:10px;background:#081421}.metric label{display:block;color:#7189a5;font-size:8px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}.metric b{font-size:12px;font-variant-numeric:tabular-nums}.routeBottom{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:12px}.routePayment{color:#8fa3bd;font-size:9px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.routeActions{display:flex;gap:6px;flex-shrink:0}.routeActions .mini{padding:7px 9px}.routeEmpty{grid-column:1/-1;padding:30px;text-align:center;color:#8397b1}.vAlert{color:var(--g);font-weight:950}.vReview{color:var(--y);font-weight:950}.vDrop{color:#8597ad}.vPref{color:var(--y);font-weight:900}.foot{margin-top:12px;padding:12px 14px;color:#8397b1;font-size:10px;line-height:1.55}.empty{padding:28px;color:#8397b1;text-align:center}.risk{font-weight:900}.risk.low{color:var(--g)}.risk.mid{color:var(--y)}.risk.high{color:var(--r)}
-.aiFab{position:fixed;right:18px;bottom:18px;z-index:30;border:1px solid #3d73b6;background:#0d1f34;color:#dcecff;border-radius:999px;padding:9px 13px;font-size:11px;font-weight:900;cursor:pointer;box-shadow:0 12px 28px #0008,0 0 18px rgba(92,155,255,.10)}
-.aiPanel{position:fixed;right:18px;bottom:66px;width:min(330px,calc(100vw - 24px));height:min(430px,64vh);z-index:31;display:none;flex-direction:column;background:linear-gradient(180deg,#0a1827,#07121f);border:1px solid #3d73b6;border-radius:16px;box-shadow:0 22px 55px #000b,0 0 24px rgba(92,155,255,.09);overflow:hidden}
-.aiPanel.open{display:flex}.aiHead{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #21466d}.aiHead b{font-size:12px}.aiClose{width:28px;height:28px;border:1px solid #294f78;background:#0c1c2e;border-radius:9px;color:#dcecff;font-size:16px;cursor:pointer}
-.aiMsgs{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:7px}.aiMsg{max-width:90%;padding:8px 10px;border-radius:11px;font-size:10px;line-height:1.4;white-space:pre-wrap}.aiMsg.bot{background:#10243a;border:1px solid #315177}.aiMsg.user{margin-left:auto;background:#112a47;border:1px solid #3d73b6}
-.aiQuick{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:0 10px 8px}.aiQuick button{border:1px solid #315177;background:#0d1f33;color:#cfe0f4;border-radius:9px;padding:6px 7px;font-size:8px;cursor:pointer}.aiQuick .aiTelegramBtn{grid-column:1/-1;border-color:#235f49;background:#081f18;color:#8ff0bf;font-weight:900}
-.aiInput{display:flex;gap:6px;padding:8px 10px 10px;border-top:1px solid #21466d}.aiInput input{flex:1;min-width:0;background:#07121f;border:1px solid #315177;border-radius:9px;color:#fff;padding:9px 10px;font-size:10px}.aiInput button{border:1px solid #3d73b6;background:#102844;color:#9ec9ff;border-radius:9px;padding:0 10px;font-size:10px;font-weight:900;cursor:pointer}
-
-/* ===== Unified neon card system ===== */
-.card.glass{
-  border-color:#1b3553;
-  background:linear-gradient(180deg,rgba(13,25,40,.97),rgba(7,17,29,.97));
-  box-shadow:0 16px 44px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.025);
-}
-.hero,.provider,.exchangeCard,.routeCard{
-  position:relative;
-  overflow:hidden;
-  background:linear-gradient(145deg,#0a1827 0%,#07121f 72%,#081522 100%);
-  border:1px solid #234260;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 10px 28px rgba(0,0,0,.20);
-  transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease,background .18s ease;
-}
-.hero:before,.provider:before,.exchangeCard:before,.routeCard:before{
-  content:"";
-  position:absolute;
-  left:12px;right:12px;top:0;
-  height:1px;
-  background:linear-gradient(90deg,transparent,rgba(120,166,255,.72),transparent);
-  opacity:.72;
-  pointer-events:none;
-}
-.hero:hover,.provider:hover,.exchangeCard:hover,.routeCard:hover{
-  transform:translateY(-1px);
-  border-color:#345f89;
-  box-shadow:0 12px 32px rgba(0,0,0,.30),0 0 24px rgba(62,124,202,.08),inset 0 1px 0 rgba(255,255,255,.04);
-}
-.hero.signal-ok,.provider.signal-ok,.routeCard.signal-ok{
-  border-color:#27765a;
-  box-shadow:0 0 0 1px rgba(52,229,160,.08),0 12px 34px rgba(0,0,0,.30),0 0 26px rgba(52,229,160,.09);
-}
-.hero.signal-ok:before,.provider.signal-ok:before,.routeCard.signal-ok:before{
-  background:linear-gradient(90deg,transparent,rgba(52,229,160,.95),transparent);
-}
-.hero.signal-warn,.provider.signal-warn,.routeCard.signal-warn{
-  border-color:#725c2c;
-  box-shadow:0 0 0 1px rgba(255,209,102,.06),0 12px 34px rgba(0,0,0,.30),0 0 24px rgba(255,209,102,.07);
-}
-.hero.signal-warn:before,.provider.signal-warn:before,.routeCard.signal-warn:before{
-  background:linear-gradient(90deg,transparent,rgba(255,209,102,.95),transparent);
-}
-.hero.signal-bad,.provider.signal-bad,.routeCard.signal-bad{
-  border-color:#733743;
-  box-shadow:0 0 0 1px rgba(255,102,121,.05),0 12px 34px rgba(0,0,0,.30),0 0 24px rgba(255,102,121,.06);
-}
-.hero.signal-bad:before,.provider.signal-bad:before,.routeCard.signal-bad:before{
-  background:linear-gradient(90deg,transparent,rgba(255,102,121,.9),transparent);
-}
-.routeCard.best{
-  border-color:#2f936d;
-  box-shadow:0 0 0 1px rgba(52,229,160,.14),0 14px 38px rgba(0,0,0,.34),0 0 34px rgba(52,229,160,.12);
-}
-.routeCard.best:before{
-  height:2px;
-  background:linear-gradient(90deg,transparent,#34e5a0,transparent);
-  opacity:1;
-}
-.exchangeCard{
-  min-height:96px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-.exchangeCard:hover{
-  border-color:#38668f;
-  box-shadow:0 12px 30px rgba(0,0,0,.28),0 0 22px rgba(120,166,255,.08);
-}
-.provider{
-  border-radius:14px;
-  padding:11px 12px;
-}
-.provider b,.exchangeCard b,.routePair,.route{
-  text-shadow:0 0 18px rgba(120,166,255,.06);
-}
-.metric,.chip{
-  background:linear-gradient(180deg,#0d1d2d,#091522);
-  border-color:#284563;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.02);
-}
-.metric{
-  min-height:62px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-.metric b{font-size:13px}
-.routeProfit strong,.money.pos,.vAlert,.risk.low{
-  text-shadow:0 0 18px rgba(52,229,160,.16);
-}
-.money.neg,.risk.high{
-  text-shadow:0 0 18px rgba(255,102,121,.14);
-}
-.state{
-  display:inline-flex;
-  align-items:center;
-  width:max-content;
-  padding:5px 8px;
-  border-radius:999px;
-  border:1px solid #2b4669;
-  background:#0c1a2a;
-}
-.state.ok{
-  color:#62edb5;
-  border-color:#27765a;
-  background:#09251d;
-  box-shadow:0 0 14px rgba(52,229,160,.08);
-}
-.state.warn{
-  color:#ffd978;
-  border-color:#725c2c;
-  background:#251e0b;
-  box-shadow:0 0 14px rgba(255,209,102,.07);
-}
-.mini,.action{
-  transition:transform .16s ease,filter .16s ease,box-shadow .16s ease,border-color .16s ease;
-}
-.mini:hover,.action:hover{
-  transform:translateY(-1px);
-  filter:brightness(1.08);
-}
-.mini.buy:hover,.action.buy:hover{
-  box-shadow:0 0 18px rgba(52,229,160,.16);
-  border-color:#31956f;
-}
-.mini.sell:hover,.action.sell:hover{
-  box-shadow:0 0 18px rgba(255,102,121,.14);
-  border-color:#9a4453;
-}
-.badge.ok{
-  box-shadow:0 0 18px rgba(52,229,160,.10);
-}
-.badge.warn{
-  box-shadow:0 0 18px rgba(255,209,102,.09);
-}
-.title h2{
-  letter-spacing:-.01em;
-  text-shadow:0 0 18px rgba(120,166,255,.05);
-}
-
-/* ===== Provider cards: unified blue theme ===== */
-.provider,
-.provider.signal-ok,
-.provider.signal-warn,
-.provider.signal-bad{
-  border:1px solid #2d5f96 !important;
-  background:linear-gradient(145deg,#0a1827 0%,#081523 100%) !important;
-  box-shadow:0 0 0 1px rgba(92,155,255,.08),0 12px 30px rgba(0,0,0,.28),0 0 24px rgba(92,155,255,.08) !important;
-}
-.provider:before,
-.provider.signal-ok:before,
-.provider.signal-warn:before,
-.provider.signal-bad:before{
-  background:linear-gradient(90deg,transparent,rgba(92,155,255,.95),transparent) !important;
-  opacity:1 !important;
-}
-.provider:hover{
-  border-color:#4d84c5 !important;
-  box-shadow:0 0 0 1px rgba(92,155,255,.14),0 14px 34px rgba(0,0,0,.30),0 0 28px rgba(92,155,255,.14) !important;
-}
-.provider .state,
-.provider .state.ok,
-.provider .state.warn,
-.provider .state.bad{
-  color:#ffd978 !important;
-  border:1px solid #8a6a22 !important;
-  background:#251e0b !important;
-  box-shadow:0 0 14px rgba(255,209,102,.10) !important;
-}
-.provider .mini.buy{
-  color:#68efb6 !important;
-  border:1px solid #237458 !important;
-  background:#0a2a20 !important;
-  box-shadow:none !important;
-}
-.provider .mini.sell{
-  color:#ff9aaa !important;
-  border:1px solid #7a3340 !important;
-  background:#2a0d15 !important;
-  box-shadow:none !important;
-}
-.provider .mini.buy:hover{
-  border-color:#31956f !important;
-  box-shadow:0 0 16px rgba(52,229,160,.15) !important;
-}
-.provider .mini.sell:hover{
-  border-color:#9a4453 !important;
-  box-shadow:0 0 16px rgba(255,102,121,.14) !important;
-}
-
-/* ===== Exchange directory cards: same blue theme ===== */
-.exchangeCard{
-  border:1px solid #2d5f96 !important;
-  background:linear-gradient(145deg,#0a1827 0%,#081523 100%) !important;
-  box-shadow:0 0 0 1px rgba(92,155,255,.08),0 12px 30px rgba(0,0,0,.28),0 0 24px rgba(92,155,255,.08) !important;
-}
-.exchangeCard:before{
-  background:linear-gradient(90deg,transparent,rgba(92,155,255,.95),transparent) !important;
-  opacity:1 !important;
-}
-.exchangeCard:hover{
-  border-color:#4d84c5 !important;
-  box-shadow:0 0 0 1px rgba(92,155,255,.14),0 14px 34px rgba(0,0,0,.30),0 0 28px rgba(92,155,255,.14) !important;
-}
-.exchangeCard .mini.buy{
-  color:#68efb6 !important;
-  border:1px solid #237458 !important;
-  background:#0a2a20 !important;
-  box-shadow:none !important;
-}
-.exchangeCard .mini.sell{
-  color:#ff9aaa !important;
-  border:1px solid #7a3340 !important;
-  background:#2a0d15 !important;
-  box-shadow:none !important;
-}
-.exchangeCard .mini.buy:hover{
-  border-color:#31956f !important;
-  box-shadow:0 0 16px rgba(52,229,160,.15) !important;
-}
-.exchangeCard .mini.sell:hover{
-  border-color:#9a4453 !important;
-  box-shadow:0 0 16px rgba(255,102,121,.14) !important;
-}
-
-/* ===== Dark navy theme override ===== */
-.provider,
-.provider.signal-ok,
-.provider.signal-warn,
-.provider.signal-bad,
-.exchangeCard{
-  border-color:#1f456d !important;
-  background:linear-gradient(145deg,#07111d 0%,#081321 100%) !important;
-  box-shadow:0 0 0 1px rgba(40,90,150,.10),0 12px 30px rgba(0,0,0,.30),0 0 22px rgba(40,90,150,.08) !important;
-}
-.provider:before,
-.provider.signal-ok:before,
-.provider.signal-warn:before,
-.provider.signal-bad:before,
-.exchangeCard:before{
-  background:linear-gradient(90deg,transparent,rgba(44,96,170,.90),transparent) !important;
-  opacity:1 !important;
-}
-.provider:hover,
-.exchangeCard:hover{
-  border-color:#2b5b8f !important;
-  box-shadow:0 0 0 1px rgba(44,96,170,.14),0 14px 34px rgba(0,0,0,.32),0 0 26px rgba(44,96,170,.12) !important;
-}
-.provider .state,
-.provider .state.ok,
-.provider .state.warn,
-.provider .state.bad{
-  color:#ffd978 !important;
-  border:1px solid #7c611f !important;
-  background:#1b1609 !important;
-  box-shadow:0 0 12px rgba(255,209,102,.08) !important;
-}
-.aiFab{
-  border-color:#2a5a8c !important;
-  background:#091626 !important;
-  color:#dcecff !important;
-  box-shadow:0 12px 28px #0008,0 0 18px rgba(44,96,170,.10) !important;
-}
-.aiPanel{
-  background:linear-gradient(180deg,#07111d,#081321) !important;
-  border-color:#2a5a8c !important;
-  box-shadow:0 22px 55px #000b,0 0 24px rgba(44,96,170,.08) !important;
-}
-.aiHead{border-bottom:1px solid #1c3f64 !important}
-.aiClose{border-color:#244a72 !important;background:#0a1829 !important}
-.aiMsg.bot{background:#0d2036 !important;border-color:#274d79 !important}
-.aiMsg.user{background:#11243d !important;border-color:#2a5a8c !important}
-.aiQuick button,.aiInput input,.aiInput button{border-color:#2a5a8c !important}
-.aiQuick button{background:#0a1829 !important}
-.aiInput input{background:#07111d !important}
-.aiInput button{background:#0d2036 !important;color:#9ec9ff !important}
-
-/* ===== Dark green semantic override ===== */
-.mini.buy,
-.action.buy,
-.provider .mini.buy,
-.exchangeCard .mini.buy{
-  color:#7fd7b4 !important;
-  border-color:#1f5c47 !important;
-  background:#061d16 !important;
-}
-.mini.buy:hover,
-.action.buy:hover,
-.provider .mini.buy:hover,
-.exchangeCard .mini.buy:hover{
-  border-color:#2a7559 !important;
-  background:#08251c !important;
-  box-shadow:0 0 14px rgba(31,92,71,.22) !important;
-}
-.badge.ok{
-  color:#7fd7b4 !important;
-  border-color:#1f5c47 !important;
-  background:#061d16 !important;
-  box-shadow:0 0 14px rgba(31,92,71,.16) !important;
-}
-.hero.signal-ok,
-.routeCard.signal-ok{
-  border-color:#1f5c47 !important;
-  box-shadow:0 0 0 1px rgba(31,92,71,.10),0 12px 34px rgba(0,0,0,.30),0 0 20px rgba(31,92,71,.10) !important;
-}
-.hero.signal-ok:before,
-.routeCard.signal-ok:before{
-  background:linear-gradient(90deg,transparent,rgba(42,117,89,.9),transparent) !important;
-}
-.routeCard.best{
-  border-color:#28684f !important;
-  box-shadow:0 0 0 1px rgba(31,92,71,.12),0 14px 38px rgba(0,0,0,.34),0 0 24px rgba(31,92,71,.10) !important;
-}
-.routeCard.best:before{
-  background:linear-gradient(90deg,transparent,#2a7559,transparent) !important;
-}
-.money.pos,
-.routeProfit strong,
-.vAlert,
-.risk.low{
-  color:#7fd7b4 !important;
-  text-shadow:0 0 14px rgba(31,92,71,.16) !important;
-}
-
-/* ===== P2P bank warning modal ===== */
-.bankWarning{
-  position:fixed;
-  inset:0;
-  z-index:1000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  background:rgba(2,6,12,.82);
-  backdrop-filter:blur(8px);
-}
-.bankWarning.hidden{display:none}
-.bankWarningCard{
-  width:min(460px,100%);
-  background:linear-gradient(180deg,#0b1726,#07111d);
-  border:1px solid #6f5a24;
-  border-radius:18px;
-  padding:20px;
-  box-shadow:0 24px 70px #000c,0 0 28px rgba(255,209,102,.08);
-}
-.bankWarningIcon{font-size:30px;margin-bottom:8px}
-.bankWarningCard h2{margin:0 0 9px;font-size:20px}
-.bankWarningCard p{margin:0;color:#b9c8db;font-size:12px;line-height:1.55}
-.bankWarningCard strong{color:#fff}
-.bankWarningOk{
-  width:100%;
-  margin-top:16px;
-  min-height:44px;
-  border-radius:12px;
-  border:1px solid #806525;
-  background:#2a2109;
-  color:#ffd978;
-  font-weight:950;
-  font-size:13px;
-  cursor:pointer;
-  transition:transform .16s ease,filter .16s ease,box-shadow .16s ease;
-}
-.bankWarningOk:hover{
-  transform:translateY(-1px);
-  filter:brightness(1.08);
-  box-shadow:0 0 18px rgba(255,209,102,.10);
-}
-.extremaBar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.extremaItem{flex:1;min-width:220px;padding:10px 12px;border-radius:11px;background:#081522;border:1px solid #244361;font-size:10px;color:#a9bfd8}.extremaItem strong{display:block;margin-top:3px;font-size:15px;color:#fff}.extremaItem.buy{border-color:#1f5c47}.extremaItem.sell{border-color:#733743}@media(max-width:900px){.grid{grid-template-columns:1fr}.head{align-items:flex-start;flex-direction:column}.badges{justify-content:flex-start}.provider{grid-template-columns:85px 58px 1fr}.provider span:last-child{display:none}.route{font-size:22px}.money{font-size:31px}.exchangeGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.aiFab{right:12px;bottom:12px}.aiPanel{right:8px;bottom:66px;width:calc(100vw - 16px);height:70vh}.routesGrid{grid-template-columns:1fr}.routeMetrics{grid-template-columns:repeat(2,1fr)}.routeTop{align-items:center}.routePair{font-size:16px}}
+:root{--bg:#050a10;--panel:#0b1520;--panel2:#0f1c2a;--line:#21364d;--txt:#eef5fb;--muted:#8da4ba;--g:#46e6a4;--y:#ffd166;--r:#ff7084;--b:#7fb4ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 520px at 15% -10%,#17365c55,transparent 60%),linear-gradient(#07111a,#04070b);color:var(--txt);font:14px Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+.app{max-width:1280px;margin:auto;padding:16px}.glass{background:linear-gradient(180deg,#0d1825f7,#08111bf7);border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 45px #0008}
+.head{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:16px}.brand{display:flex;gap:12px;align-items:center}.logo{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;font-size:30px;background:#142337;border:1px solid #355579}.brand h1{font-size:22px;margin:0}.brand h1 span{color:#ffd36c}.brand p{margin:4px 0 0;color:var(--muted);font-size:11px}.badges{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.badge{border:1px solid #2b4669;background:#0c1a2a;color:#bdd1e6;border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800}.badge.ok{color:var(--g);border-color:#247053;background:#082219}.badge.warn{color:var(--y);border-color:#695629;background:#241d0b}
+.intro{margin-top:12px;padding:18px;display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.intro h2{font-size:28px;margin:0 0 7px}.intro p{color:#a8bacb;line-height:1.6;margin:0}.sources{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.source{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:11px;border:1px solid #223c58;background:#091522;border-radius:13px}.source b{font-size:11px}.source small{color:var(--muted)}.source a{color:#a9ccff;text-decoration:none;font-size:10px;font-weight:800}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.tab{cursor:pointer;border:1px solid #294664;background:#0b1928;color:#b9cbe0;border-radius:14px;padding:12px 10px;font-weight:900}.tab.active{border-color:#4b79ad;background:#10243a;color:white;box-shadow:0 0 24px #4378b322}
+.layout{display:grid;grid-template-columns:1fr 330px;gap:12px;margin-top:12px}.panel{padding:14px}.sectionHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.sectionHead h3{margin:0}.sectionHead small{color:var(--muted)}
+.items{display:grid;gap:9px;margin-top:12px}.item{border:1px solid #213a55;background:linear-gradient(145deg,#0b1928,#08131f);border-radius:16px;padding:13px}.itemTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.item h4{margin:0;font-size:14px;line-height:1.35}.meta{margin-top:7px;display:flex;gap:6px;flex-wrap:wrap}.pill{padding:5px 7px;border-radius:999px;border:1px solid #294664;background:#0d2033;color:#b7cee6;font-size:9px;font-weight:800}.risk{font-weight:950}.risk.low{color:var(--g)}.risk.mid{color:var(--y)}.risk.high{color:var(--r)}.summary{margin-top:9px;color:#a8bacb;font-size:11px;line-height:1.55}.reasons{margin-top:8px;color:#7f97ae;font-size:10px;line-height:1.5}.actions{margin-top:10px;display:flex;gap:7px;flex-wrap:wrap}.btn{border:1px solid #315477;background:#10263e;color:#d7e8fa;border-radius:10px;padding:8px 10px;text-decoration:none;font-size:10px;font-weight:900;cursor:pointer}.btn.save{border-color:#2a745a;background:#0b281f;color:#7deabb}
+.side{display:grid;gap:12px;align-content:start}.metricGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.metric{padding:11px;border:1px solid #213a55;background:#091522;border-radius:13px}.metric label{display:block;color:#7892ab;font-size:9px;text-transform:uppercase}.metric b{display:block;margin-top:4px;font-size:17px}.journal{display:grid;gap:7px;margin-top:10px}.jrow{padding:9px;border:1px solid #213a55;background:#091522;border-radius:11px;font-size:10px;color:#b8c9d9}.empty{padding:28px 10px;color:#7e95aa;text-align:center}.foot{margin:12px 0;padding:11px 14px;color:#8399ad;font-size:10px;line-height:1.55}
+@media(max-width:860px){.intro,.layout{grid-template-columns:1fr}.tabs{grid-template-columns:repeat(2,1fr)}.sources{grid-template-columns:1fr}.head{align-items:flex-start}.badges{justify-content:flex-start}.route{font-size:22px}}
 </style>
 </head>
-<body><div class="bankWarning" id="bankWarning">
-  <div class="bankWarningCard" role="dialog" aria-modal="true" aria-labelledby="bankWarningTitle">
-    <div class="bankWarningIcon">⚠️</div>
-    <h2 id="bankWarningTitle">Увага щодо P2P</h2>
-    <p><strong>Monobank та інші банки</strong> можуть додатково перевіряти часті або нетипові P2P-перекази, тимчасово обмежувати окремі операції або просити пояснення походження коштів. Це залежить від банку та конкретної операції. MYSHKA лише показує ринок — перед переказом перевір правила свого банку.</p>
-    <button class="bankWarningOk" id="bankWarningOk">OK</button>
-  </div>
+<body><div class="app">
+<header class="glass head"><div class="brand"><div class="logo">🐭</div><div><h1>Крипто<span>мишка</span> 2.0</h1><p>ITstatti → контекст → ризик → твій висновок</p></div></div><div class="badges"><span id="status" class="badge warn">Завантаження feed…</span><span class="badge">NO AUTO-TRADE</span></div></header>
+
+<section class="glass intro"><div><h2>Не копіює. Перевіряє.</h2><p>Мишка збирає матеріали ITstatti з Telegram, окремого каналу ретродропів, сайту та YouTube. Кожну ідею розкладає по режиму, ризику й аргументах. Угоди не відкриває — рішення залишається за тобою.</p></div><div id="sources" class="sources"></div></section>
+
+<nav class="tabs">
+<button class="tab active" data-mode="opportunities">🟢 Можливості</button>
+<button class="tab" data-mode="portfolio">🔵 Портфель</button>
+<button class="tab" data-mode="speculation">🟠 Спекуляції</button>
+<button class="tab" data-mode="trading">🔴 Trading Lab</button>
+</nav>
+
+<div class="layout">
+<section class="glass panel"><div class="sectionHead"><h3 id="modeTitle">Можливості</h3><small id="count">0 ідей</small></div><div id="items" class="items"></div></section>
+<aside class="side">
+<section class="glass panel"><div class="sectionHead"><h3>Ринок</h3><small>контекст</small></div><div id="market" class="metricGrid"></div></section>
+<section class="glass panel"><div class="sectionHead"><h3>Журнал</h3><small>збережене локально</small></div><div id="journal" class="journal"></div></section>
+</aside>
 </div>
-<div class="app">
-<header class="head glass"><div class="brand"><div class="logo">🐭</div><div><h1><span>MYSHKA</span> P2P РАДАР</h1><p>Сканує біржі → порівнює P2P-ціни → рахує спред → показує найкращі варіанти</p></div></div><div class="badges"><span class="badge live" id="live">LIVE</span><span class="badge" id="mode">ХМАРА 24/7</span><span class="badge" id="market">USDT / UAH</span><span class="badge" id="time">Ще не сканувала</span></div></header>
-<section class="card glass" style="margin-top:12px">
-  <div class="title"><div><h2>💱 Обери біржу</h2><div class="sub">Зелена кнопка — купити USDT. Червона — продати. Мишка відкриє потрібну P2P-сторінку, а перед угодою ти просто звіряєш курс і оголошення.</div></div></div>
-  <div class="exchangeGrid" id="exchangeDirectory"><div class="empty">Завантаження списку бірж…</div></div>
-</section>
-<section class="grid">
-  <div class="card glass"><div class="title"><div><h2>🎯 Найвигідніше зараз</h2><div class="sub">Ось маршрут, який Мишка зараз виділяє. Перед угодою звір курс, оплату й ліміти в самому оголошенні.</div></div><span class="badge" id="verdict">ОЧІКУВАННЯ</span></div><div class="extremaBar" id="marketExtremes"><div class="extremaItem">Очікування ринку…</div></div><div class="hero" id="hero"><div class="empty">Запусти <b>START_P2P_RADAR.bat</b> на комп'ютері — тут з'явиться живий скан.</div></div></div>
-  <div class="card glass"><div class="title"><div><h2>📡 Підключення бірж</h2><div class="sub">Зелений статус — Мишка читає P2P автоматично. Поруч видно, скільки оголошень вона бачить зараз.</div></div></div><div class="providers" id="providers"></div></div>
-</section>
-<section class="card glass" style="margin-top:12px"><div class="title"><div><h2>📡 Усі знайдені варіанти</h2><div class="sub" id="summary">Очікування даних</div></div></div><div class="routesGrid" id="routes"><div class="routeEmpty">Немає скану</div></div></section>
-<div class="foot glass"><b>Як рахується:</b> Мишка шукає найнижчу ціну купівлі та найвищу ціну продажу, перевіряє спільний спосіб оплати й якість мерчантів, а потім рахує спред у %. Фіксованої суми угоди немає. Для переходу між різними біржами фактичну мережеву/withdrawal-комісію треба звірити перед угодою.</div>
-</div>
-<button class="aiFab" id="aiFab">🐭 MYSHKA AI</button>
-<div class="aiPanel" id="aiPanel">
-  <div class="aiHead"><b>🐭 MYSHKA AI</b><button class="aiClose" id="aiClose">×</button></div>
-  <div class="aiMsgs" id="aiMsgs"></div>
-  <div class="aiQuick">
-    <button data-q="Як це працює?">Як працює?</button>
-    <button data-q="Що означає ризик?">Ризик</button>
-    <button data-q="Який зараз найкращий варіант?">Топ варіант</button>
-    <button data-q="Які біржі активні?">Біржі</button>
-    <button class="aiTelegramBtn" data-q="/help">💬 Telegram</button>
-  </div>
-  <div class="aiInput"><input id="aiInput" placeholder="Питання або /help…"><button id="aiSend">→</button></div>
+<div class="glass foot">Аналітичний інструмент, а не фінансова порада. Ризик-скоринг — евристика для фільтрації, а не прогноз прибутковості. Перед будь-якою дією перевіряй першоджерело, мережу, контракт, комісії та актуальні ринкові дані.</div>
 </div>
 <script>
-const $=id=>document.getElementById(id);const money=n=>Number(n||0).toFixed(2);const pct=n=>(Number(n||0)>=0?'+':'')+Number(n||0).toFixed(2)+'%';
-let EXCHANGE_DIRECTORY=[{"id":"binance","name":"Binance","buy_url":"https://p2p.binance.com/trade/buy/USDT?fiat=UAH&payment=all-payments","sell_url":"https://p2p.binance.com/trade/sell/USDT?fiat=UAH&payment=all-payments","enabled":true},{"id":"bybit","name":"Bybit","buy_url":"https://www.bybit.com/fiat/trade/otc/buy/USDT/UAH","sell_url":"https://www.bybit.com/fiat/trade/otc/sell/USDT/UAH","enabled":true},{"id":"okx","name":"OKX","buy_url":"https://www.okx.com/ua/p2p-markets/uah/buy-usdt","sell_url":"https://www.okx.com/ua/p2p-markets/uah/sell-usdt","enabled":true},{"id":"kucoin","name":"KuCoin","buy_url":"https://www.kucoin.com/uk/otc/buy/USDT-UAH","sell_url":"https://www.kucoin.com/uk/otc/sell/USDT-UAH","enabled":true},{"id":"mexc","name":"MEXC","buy_url":"https://www.mexc.com/uk-UA/buy-crypto/p2p/buy/USDT/UAH","sell_url":"https://www.mexc.com/uk-UA/buy-crypto/p2p/sell/USDT/UAH","enabled":true},{"id":"weex","name":"WEEX","buy_url":"https://www.weex.com/buy-crypto/trading","sell_url":"https://www.weex.com/buy-crypto/sell/USDT","enabled":true}];let LAST_RADAR_DATA=null;
-function exchangeUrl(ex,action){
-  ex=String(ex||'').toLowerCase();const a=String(action||'BUY').toUpperCase();
-  const item=EXCHANGE_DIRECTORY.find(x=>String(x.id||'').toLowerCase()===ex || String(x.name||'').toLowerCase()===ex);
-  if(item)return a==='SELL'?(item.sell_url||item.buy_url||'#'):(item.buy_url||item.sell_url||'#');
-  if(ex==='binance')return a==='SELL'?'https://p2p.binance.com/trade/sell/USDT?fiat=UAH&payment=all-payments':'https://p2p.binance.com/trade/buy/USDT?fiat=UAH&payment=all-payments';
-  if(ex==='bybit')return 'https://www.bybit.com/fiat/trade/otc/';
-  if(ex==='okx')return a==='SELL'?'https://www.okx.com/ua/p2p-markets/uah/sell-usdt':'https://www.okx.com/ua/p2p-markets/uah/buy-usdt';
-  return '#';
+const FEED='crypto_myshka/data/feed.json?ts='+Date.now();
+const modeNames={opportunities:'Можливості',portfolio:'Портфель',speculation:'Спекуляції',trading:'Trading Lab'};
+let data={items:[],sources:{},market:{}},mode='opportunities';
+const $=s=>document.querySelector(s);
+const esc=s=>(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function riskClass(n){return n<45?'low':n<70?'mid':'high'}
+function renderSources(){
+ const box=$('#sources'); box.innerHTML='';
+ const labels={telegram_main:'Telegram',telegram_airdrop:'Airdrop/Retrodrop',site:'База знань',youtube:'YouTube'};
+ Object.entries(data.sources||{}).forEach(([k,v])=>{
+   const d=document.createElement('div'); d.className='source';
+   d.innerHTML='<div><b>'+esc(labels[k]||k)+'</b><br><small>'+(v.ok?'online · '+(v.count||0)+' матеріалів':'помилка джерела')+'</small></div><a target="_blank" rel="noopener" href="'+esc(v.url||'#')+'">Відкрити ↗</a>';
+   box.appendChild(d);
+ });
 }
-function routeExchangeUrl(r,action){
-  const ex=String(action==='SELL'?r.sell_exchange:r.buy_exchange||'').toLowerCase();
-  const side=String(action||'BUY').toUpperCase();
-  const pay=(r.payment_verified&&Array.isArray(r.common_payments)&&r.common_payments.length)?String(r.common_payments[0]).toLowerCase():'';
-  if(ex==='binance'){
-    const pm={monobank:'Monobank',privatbank:'PrivatBank',pumb:'PUMBBank',abank:'ABank',raiffeisen:'RaiffeisenBankAval',oschad:'OschadBank',sense:'SenseBank'}[pay]||'all-payments';
-    return `https://p2p.binance.com/trade/${side==='SELL'?'sell':'buy'}/USDT?fiat=UAH&payment=${encodeURIComponent(pm)}`;
-  }
-  if(ex==='bybit')return `https://www.bybit.com/fiat/trade/otc/${side==='SELL'?'sell':'buy'}/USDT/UAH`;
-  if(ex==='okx')return `https://www.okx.com/ua/p2p-markets/uah/${side==='SELL'?'sell':'buy'}-usdt`;
-  if(ex==='kucoin')return `https://www.kucoin.com/uk/otc/${side==='SELL'?'sell':'buy'}/USDT-UAH`;
-  if(ex==='mexc')return `https://www.mexc.com/uk-UA/buy-crypto/p2p/${side==='SELL'?'sell':'buy'}/USDT/UAH`;
-  if(ex==='weex')return side==='SELL'?'https://www.weex.com/buy-crypto/sell/USDT':'https://www.weex.com/buy-crypto/trading';
-  return exchangeUrl(side==='SELL'?r.sell_exchange:r.buy_exchange,side);
+function renderMarket(){
+ const box=$('#market'), m=data.market||{}; box.innerHTML='';
+ const map=[['bitcoin','BTC'],['ethereum','ETH'],['optimism','OP']];
+ map.forEach(([id,label])=>{const x=m[id];if(!x)return;const ch=Number(x.usd_24h_change||0);const d=document.createElement('div');d.className='metric';d.innerHTML='<label>'+label+'</label><b>$'+Number(x.usd).toLocaleString('en-US')+'</b><small class="risk '+(ch>=0?'low':'high')+'">'+(ch>=0?'+':'')+ch.toFixed(2)+'% 24h</small>';box.appendChild(d)});
+ if(!box.children.length) box.innerHTML='<div class="empty">Ринкові дані ще не завантажені.</div>';
 }
-function renderExchangeDirectory(){
-  $('exchangeDirectory').innerHTML=EXCHANGE_DIRECTORY.map(x=>`<div class="exchangeCard"><b>${x.name||x.id}</b><div class="exchangeLinks"><a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${x.buy_url||'#'}">КУПИТИ USDT</a><a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${x.sell_url||x.buy_url||'#'}">ПРОДАТИ USDT</a></div></div>`).join('');
+function renderItems(){
+ $('#modeTitle').textContent=modeNames[mode]; const arr=(data.items||[]).filter(x=>x.mode===mode); $('#count').textContent=arr.length+' ідей';
+ const box=$('#items'); box.innerHTML='';
+ if(!arr.length){box.innerHTML='<div class="empty">У цьому режимі feed поки порожній.</div>';return}
+ arr.slice(0,40).forEach(x=>{
+   const el=document.createElement('article');el.className='item';
+   const rs=(x.reasons||[]).map(r=>'• '+esc(r)).join('<br>');
+   el.innerHTML='<div class="itemTop"><h4>'+esc(x.title)+'</h4><span class="risk '+riskClass(x.risk)+'">'+x.risk+'/100</span></div>'+
+   '<div class="meta"><span class="pill">'+esc(x.source)+'</span><span class="pill">'+esc(modeNames[x.mode])+'</span></div>'+
+   '<div class="summary">'+esc(x.summary)+'</div><div class="reasons">'+rs+'</div>'+
+   '<div class="actions"><a class="btn" target="_blank" rel="noopener" href="'+esc(x.url)+'">Першоджерело ↗</a><button class="btn save" data-id="'+esc(x.id)+'">＋ Журнал</button></div>';
+   box.appendChild(el);
+ });
+ box.querySelectorAll('.save').forEach(b=>b.onclick=()=>saveItem(b.dataset.id));
 }
-async function loadExchangeDirectory(){
-  renderExchangeDirectory();
-  try{
-    const r=await fetch('https://raw.githubusercontent.com/omeljanpadovcky-create/T/main/p2p_radar/exchanges.json?t='+Date.now(),{cache:'no-store'});
-    if(!r.ok)throw Error('HTTP '+r.status);
-    const d=await r.json();
-    const fresh=(d.exchanges||[]).filter(x=>x.enabled!==false);
-    if(fresh.length)EXCHANGE_DIRECTORY=fresh;
-    renderExchangeDirectory();
-    if(LAST_RADAR_DATA)render(LAST_RADAR_DATA);
-  }catch(e){
-    // Embedded links remain available even when raw.githubusercontent.com is blocked.
-    renderExchangeDirectory();
-    if(LAST_RADAR_DATA)render(LAST_RADAR_DATA);
-  }
-}
-function clickKey(){const d=new Date(),y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return 'myshka_p2p_link_clicks_'+y+'-'+m+'-'+day}
-function routeLinkClick(){
-  try{
-    const k=clickKey(),n=Number(localStorage.getItem(k)||0)+1;localStorage.setItem(k,String(n));
-    if(n===5)setTimeout(()=>alert('⚠️ MYSHKA P2P: сьогодні ти вже 5 разів відкривав P2P-посилання. Це внутрішнє попередження, не банківський ліміт. Перед наступною операцією перевір актуальні ліміти, реквізити й оголошення.'),80);
-  }catch(e){}
-  return true;
-}
-const bankWarning=document.getElementById('bankWarning');
-const bankWarningOk=document.getElementById('bankWarningOk');
-if(bankWarning&&bankWarningOk){
-  bankWarningOk.addEventListener('click',()=>bankWarning.classList.add('hidden'));
-  bankWarning.addEventListener('click',e=>{if(e.target===bankWarning)bankWarning.classList.add('hidden')});
-}
-function riskClass(v){v=Number(v||0);return v<=35?'low':v<=60?'mid':'high'}
-function verdictClass(v){return v==='ALERT'?'vAlert':v==='REVIEW'?'vReview':v==='PREFUNDED_ONLY'?'vPref':'vDrop'}
-function verdictUk(v){
-  return ({
-    ALERT:'Є ВАРІАНТ',
-    REVIEW:'ПОТРІБНА ПЕРЕВІРКА',
-    PREFUNDED_ONLY:'ЛИШЕ З ГОТОВИМ БАЛАНСОМ',
-    DROP:'НЕ ВИГІДНО',
-    WAIT:'ОЧІКУВАННЯ',
-    COOLDOWN:'ПАУЗА',
-    PAUSE_BANK_GUARD:'ПАУЗА БАНК-ЗАХИСТУ'
-  })[v]||v||'ОЧІКУВАННЯ'
-}
-function routeTypeUk(v){return v==='INTRA'?'ОДНА БІРЖА':v==='CROSS'?'ДВІ БІРЖІ':(v||'P2P')}
-function exchangeLabel(ex){
-  const s=String(ex||'');
-  const item=EXCHANGE_DIRECTORY.find(x=>String(x.id||'').toLowerCase()===s.toLowerCase()||String(x.name||'').toLowerCase()===s.toLowerCase());
-  return item?.name||s;
-}
-function noteUk(s){
-  s=String(s||'');
-  if(/needs API keys/i.test(s))return 'потрібні API-ключі та доступ до P2P API';
-  if(/adapter not configured yet|no adapter yet/i.test(s))return 'автоматичне сканування ще не підключене';
-  if(/^disabled$/i.test(s))return 'вимкнено';
-  const m=s.match(/^(\d+) buy \/ (\d+) sell$/i);
-  if(m)return m[1]+' купівля / '+m[2]+' продаж';
-  return s.replace(/buy/ig,'купівля').replace(/sell/ig,'продаж');
-}
-function reasonUk(s){
-  s=String(s||'');
-  if(s.includes('same-exchange route'))return 'маршрут на одній біржі — без комісії за переказ між біржами';
-  if(s.includes('unusually large spread'))return 'дуже великий спред — перевір вручну перед угодою';
-  if(s.includes('large spread'))return 'великий спред — перевір актуальність';
-  if(s.includes('completion unknown'))return 'рейтинг завершення угод невідомий';
-  if(s.includes('completion '))return s.replace('completion','завершення угод');
-  if(s.includes('web feed may change'))return 'веб-джерело може змінитися';
-  if(s.includes('transfer drag'))return s.replace('transfer drag','витрати на переказ');
-  if(s.includes('common payment:'))return s.replace('common payment:','спільний спосіб оплати:');
-  if(s.includes('payment compatibility not fully verified'))return 'сумісність способів оплати не вдалося повністю перевірити';
-  return s;
-}
-function aiAdd(text,who='bot'){
-  const box=$('aiMsgs');if(!box)return;
-  const el=document.createElement('div');el.className='aiMsg '+who;el.textContent=text;box.appendChild(el);box.scrollTop=box.scrollHeight;
-}
-function aiAnswer(q){
-  const d=LAST_RADAR_DATA||{};const t=d.top_route||null;const s=String(q||'').trim().toLowerCase();
-  const providers=d.providers||[];const active=providers.filter(x=>x.ok);const pages=providers.filter(x=>!x.ok);
-  if(!s)return 'Напиши питання про MYSHKA P2P.';
-  if(s.includes('як')&&(s.includes('працю')||s.includes('робот'))){
-    return 'Мишка кожні ~15 секунд читає P2P-оголошення активних бірж, відбирає ті, що проходять фільтри, комбінує купівлю і продаж, віднімає запас безпеки та модельну вартість переказу, а потім показує найкращі маршрути. Угоду вона сама не відкриває.';
-  }
-  if(s.includes('ризик')){
-    if(t)return 'Зараз у найкращого маршруту ризик '+t.risk_score+'/100. Ризик росте, якщо джерело вебове, немає рейтингу/історії мерчанта, дорогий переказ або спред виглядає аномально великим.';
-    return 'Ризик — це оцінка якості маршруту. Менше = краще. Вона враховує джерело даних, рейтинг/кількість угод, способи оплати, переказ і аномальний спред.';
-  }
-  if(s.includes('найкращ')||s.includes('варіант')||s.includes('маршрут')){
-    if(!t)return 'Зараз немає маршруту, який проходить фільтри.';
-    return t.buy_exchange+' → '+t.sell_exchange+'\nКупівля: '+money(t.buy_price)+'\nПродаж: '+money(t.sell_price)+'\nСпред після буфера: '+pct(t.net_pct)+'\nРизик: '+t.risk_score+'/100\nСтатус: '+verdictUk(t.verdict);
-  }
-  if(s.includes('актив')||s.includes('бірж')){
-    const full=active.filter(x=>Number(x.buy_offers||0)>0&&Number(x.sell_offers||0)>0);
-    const partial=active.filter(x=>!(Number(x.buy_offers||0)>0&&Number(x.sell_offers||0)>0));
-    return 'Повністю активні: '+(full.map(x=>exchangeLabel(x.exchange)).join(', ')||'немає')+'.\nЧастково/без оголошень: '+(partial.map(x=>exchangeLabel(x.exchange)).join(', ')||'немає')+'.\nЛише P2P-сторінка: '+(pages.map(x=>exchangeLabel(x.exchange)).join(', ')||'немає')+'.';
-  }
-  if(s.includes('перевір')||s.includes('3%')||s.includes('великий спред')){
-    return 'Статус «ПОТРІБНА ПЕРЕВІРКА» з’являється для аномально великого спреду. Це означає: курс може бути промо, застарілий, з іншим способом оплати або з обмеженнями. Такий маршрут не вважається готовим сигналом.';
-  }
-  if(s.includes('чист')||s.includes('прибут')){
-    return '«Чистими» = розрахунковий результат після модельної вартості переказу USDT та запасу безпеки. Це не гарантія прибутку — перед угодою треба звірити живі оголошення, ліміти й спосіб оплати.';
-  }
-  if(s.includes('api')){
-    return 'API-ключі сторінка не бачить. Вони мають зберігатися тільки в GitHub Secrets, а сайт читає вже готовий latest.json.';
-  }
-  if(s.includes('binance')){
-    return 'Binance у радарі читається автоматично. Кнопки «КУПИТИ» і «ПРОДАТИ» ведуть прямо на USDT/UAH P2P.';
-  }
-  return 'Можу пояснити: як працює радар, ризик, найкращий маршрут, активні біржі, статус «ПОТРІБНА ПЕРЕВІРКА», чистий спред або API.';
-}
-function aiAsk(q){
-  const text=String(q||'').trim();if(!text)return;
-  aiAdd(text,'user');
-  if(text.toLowerCase()==='/help'){
-    const username=String((LAST_RADAR_DATA||{}).telegram_bot_username||'').replace(/^@/,'');
-    if(username){
-      aiAdd('Відкриваю чат з Мишкою в Telegram…','bot');
-      window.open('https://t.me/'+encodeURIComponent(username)+'?start=help','_blank','noopener');
-    }else{
-      aiAdd('Telegram-чат Мишки зараз не підключений. Тут можеш написати: «топ варіант», «ризик», «біржі», «як працює».','bot');
-    }
-    return;
-  }
-  setTimeout(()=>aiAdd(aiAnswer(text),'bot'),120);
-}
-function initAi(){
-  const fab=$('aiFab'),panel=$('aiPanel'),close=$('aiClose'),input=$('aiInput'),send=$('aiSend');
-  if(!fab||!panel)return;
-  fab.onclick=()=>{panel.classList.add('open');if(!$('aiMsgs').children.length)aiAdd('Привіт 👋 Я пояснюю, як працює MYSHKA P2P і що означають дані на екрані.');};
-  close.onclick=()=>panel.classList.remove('open');
-  send.onclick=()=>{aiAsk(input.value);input.value='';input.focus();};
-  input.addEventListener('keydown',e=>{if(e.key==='Enter'){send.click();}});
-  document.querySelectorAll('.aiQuick button').forEach(b=>b.onclick=()=>aiAsk(b.dataset.q));
-}
-function render(d){LAST_RADAR_DATA=d;$('market').textContent=(d.asset||'USDT')+' / '+(d.fiat||'UAH');$('mode').textContent=d.mode||'СКАНЕР';$('time').textContent=d.scanned_at?new Date(d.scanned_at).toLocaleString('uk-UA'):'Ще не сканувала';const lo=d.market_lowest_buy,hi=d.market_highest_sell;$('marketExtremes').innerHTML=(lo?'<div class="extremaItem buy">🟢 НАЙНИЖЧА КУПІВЛЯ<strong>'+money(lo.price)+' · '+exchangeLabel(lo.exchange)+'</strong><span>'+String(lo.merchant||'')+'</span></div>':'')+(hi?'<div class="extremaItem sell">🔴 НАЙВИЩИЙ ПРОДАЖ<strong>'+money(hi.price)+' · '+exchangeLabel(hi.exchange)+'</strong><span>'+String(hi.merchant||'')+'</span></div>':'')||'<div class="extremaItem">Немає даних</div>';
- const t=d.top_route;$('verdict').textContent=t?verdictUk(t.verdict):'ОЧІКУВАННЯ';$('verdict').className='badge '+(t&&t.verdict==='ALERT'?'ok':t&&t.verdict==='REVIEW'?'warn':t&&t.verdict==='DROP'?'bad':'');
- if(t){$('hero').className='hero '+(t.verdict==='ALERT'?'signal-ok':t.verdict==='REVIEW'?'signal-warn':t.verdict==='DROP'?'signal-bad':'');$('hero').innerHTML=`<div class="route"><span>${t.buy_exchange}</span> → <span>${t.sell_exchange}</span></div><div class="money ${Number(t.net_pct)>=0?'pos':'neg'}">${Number(t.net_pct)>=0?'+':''}${money(t.net_pct)}%</div><div class="chips"><div class="chip">${routeTypeUk(t.route_type)}</div><div class="chip">КУПИТИ ПО <strong>${money(t.buy_price)}</strong></div><div class="chip">ПРОДАТИ ПО <strong>${money(t.sell_price)}</strong></div><div class="chip">СПРЕД <strong>${pct(t.gross_spread_pct)}</strong></div><div class="chip">ПІСЛЯ БУФЕРА <strong>${pct(t.net_pct)}</strong></div><div class="chip">РИЗИК СИГНАЛУ <strong class="risk ${riskClass(t.risk_score)}">${t.risk_score}/100</strong></div>${t.payment_verified&&Array.isArray(t.common_payments)&&t.common_payments.length?`<div class="chip">ОПЛАТА <strong>${t.common_payments.join(', ')}</strong></div>`:''} </div><div class="sub" style="margin-top:11px">Купуємо у <strong>${t.buy_merchant||'мерчанта'}</strong> → продаємо <strong>${t.sell_merchant||'мерчанту'}</strong></div><div class="actions"><a class="action buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${routeExchangeUrl(t,'BUY')}">🟢 КУПИТИ НА ${t.buy_exchange}</a><a class="action sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${routeExchangeUrl(t,'SELL')}">🔴 ПРОДАТИ НА ${t.sell_exchange}</a></div><div class="sub" style="margin-top:12px">${[...new Set((t.reasons||[]).map(reasonUk))].slice(0,5).join(' • ')||'Перевірки пройдені'}</div>`}else{$('hero').className='hero';$('hero').innerHTML=`<div class="empty">Поки немає варіанту, що проходить фільтри.</div>`}
- $('providers').innerHTML=(d.providers||[]).map(p=>{
-   const b=Number(p.buy_offers||0),s=Number(p.sell_offers||0);
-   let label='ЛИШЕ ПОСИЛАННЯ',cls='',note='Автосканування не підключене';
-   if(p.ok&&b>0&&s>0){
-     label='СКАНУЄМО';cls='ok';
-     note=`${b} на купівлю · ${s} на продаж`;
-   }else if(p.ok&&b===0&&s===0){
-     label='СКАНУЄМО';cls='warn';
-     note='зараз не знайшли оголошень, що пройшли перевірки';
-   }else if(p.ok&&b===0){
-     label='СКАНУЄМО';cls='warn';
-     note=`зараз бачимо: 0 на купівлю · ${s} на продаж`;
-   }else if(p.ok&&s===0){
-     label='СКАНУЄМО';cls='warn';
-     note=`зараз бачимо: ${b} на купівлю · 0 на продаж`;
-   }
-   return `<div class="provider ${cls==='ok'?'signal-ok':cls==='warn'?'signal-warn':''}"><b>${exchangeLabel(p.exchange)}</b><span class="state ${cls}">${label}</span><span>${note}</span><div class="exchangeLinks"><a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(p.exchange,'BUY')}">КУПИТИ ↗</a><a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${exchangeUrl(p.exchange,'SELL')}">ПРОДАТИ ↗</a></div></div>`;
- }).join('')||'<div class="empty">Немає провайдерів</div>';
- const rs=d.routes||[];const total=Number(d.route_count??rs.length);const shown=Number(d.shown_routes??rs.length);const offerCount=(d.providers||[]).reduce((n,p)=>n+Number(p.buy_offers||0)+Number(p.sell_offers||0),0);const fmtN=n=>Number(n||0).toLocaleString('uk-UA');$('summary').textContent=`${fmtN(offerCount)} оголошень у скані · ${fmtN(total)} комбінацій перевірено · ${fmtN(d.alerts||0)} сигналів · ${fmtN(d.review_count||0)} на перевірку · показано топ-${fmtN(shown)}`;$('routes').innerHTML=rs.length?rs.map((r,i)=>{
-   const statusClass=r.verdict==='ALERT'?'good':r.verdict==='REVIEW'?'warn':'';
-   const pay=(r.payment_verified&&Array.isArray(r.common_payments)&&r.common_payments.length)?('💳 '+r.common_payments.join(', ')):'💳 спосіб оплати перевірити';
-   return `<article class="routeCard ${i===0?'best':''} ${r.verdict==='ALERT'?'signal-ok':r.verdict==='REVIEW'?'signal-warn':r.verdict==='DROP'?'signal-bad':''}">
-     <div class="routeTop">
-       <div>
-         <div class="routePair">${exchangeLabel(r.buy_exchange)} <span class="arrow">→</span> ${exchangeLabel(r.sell_exchange)}</div>
-         <div class="routeMeta"><span>${routeTypeUk(r.route_type)}</span><span class="${statusClass}">${verdictUk(r.verdict)}</span></div>
-       </div>
-       <div class="routeProfit"><strong>${Number(r.net_pct)>=0?'+':''}${money(r.net_pct)}%</strong><small>спред після буфера</small></div>
-     </div>
-     <div class="routeMetrics">
-       <div class="metric"><label>Купівля</label><b>${money(r.buy_price)}</b></div>
-       <div class="metric"><label>Продаж</label><b>${money(r.sell_price)}</b></div>
-       <div class="metric"><label>Після буфера</label><b class="${Number(r.net_pct)>=0?'vAlert':'vDrop'}">${pct(r.net_pct)}</b></div>
-       <div class="metric"><label>Ризик</label><b class="risk ${riskClass(r.risk_score)}">${r.risk_score}/100</b></div>
-     </div>
-     <div class="routeBottom">
-       <div class="routePayment">👤 ${r.buy_merchant||'—'} → ${r.sell_merchant||'—'} · ${pay} · спред ${pct(r.gross_spread_pct)}</div>
-       <div class="routeActions">
-         <a class="mini buy" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${routeExchangeUrl(r,'BUY')}">КУПИТИ ↗</a>
-         <a class="mini sell" target="_blank" rel="noopener" onclick="return routeLinkClick()" href="${routeExchangeUrl(r,'SELL')}">ПРОДАТИ ↗</a>
-       </div>
-     </div>
-   </article>`;
- }).join(''):'<div class="routeEmpty">Маршрутів поки немає</div>'}
-async function refresh(){try{const r=await fetch('https://raw.githubusercontent.com/omeljanpadovcky-create/T/live-data/latest.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);render(await r.json());$('live').textContent='LIVE';$('live').className='badge live'}catch(e){$('live').textContent='OFFLINE';$('live').className='badge offline';$('time').textContent='JSON недоступний';$('time').className='badge bad'}}async function boot(){
-  initAi();
-  await loadExchangeDirectory();
-  await refresh();
-  setInterval(refresh,15000);
-  setInterval(loadExchangeDirectory,15000);
-}
-boot();
+function getJournal(){try{return JSON.parse(localStorage.getItem('cryptoMyshkaJournal')||'[]')}catch{return[]}}
+function saveItem(id){const item=(data.items||[]).find(x=>x.id===id);if(!item)return;let j=getJournal();if(!j.some(x=>x.id===id))j.unshift({id:item.id,title:item.title,url:item.url,mode:item.mode,risk:item.risk,savedAt:new Date().toISOString()});j=j.slice(0,30);localStorage.setItem('cryptoMyshkaJournal',JSON.stringify(j));renderJournal()}
+function renderJournal(){const j=getJournal(),box=$('#journal');box.innerHTML='';if(!j.length){box.innerHTML='<div class="empty">Ще нічого не збережено.</div>';return}j.slice(0,10).forEach(x=>{const d=document.createElement('div');d.className='jrow';d.innerHTML='<b>'+esc(x.title.slice(0,74))+'</b><br><span class="risk '+riskClass(x.risk)+'">ризик '+x.risk+'/100</span>';d.onclick=()=>window.open(x.url,'_blank');box.appendChild(d)})}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');mode=t.dataset.mode;renderItems()});
+fetch(FEED).then(r=>{if(!r.ok)throw Error(r.status);return r.json()}).then(j=>{data=j;$('#status').textContent='FEED · '+(j.generated_at?new Date(j.generated_at).toLocaleString('uk-UA'):'очікує першого запуску');$('#status').className='badge ok';renderSources();renderMarket();renderItems();renderJournal()}).catch(e=>{$('#status').textContent='FEED ще не згенерований';renderJournal();renderItems()});
 </script></body></html>
