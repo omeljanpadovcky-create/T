@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-03T15:32:21.901487+00:00",
+  "generated_at": "2026-10-03T16:06:49.112345+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,12 +26,12 @@
       "ok": true,
       "count": 10172,
       "complete": true,
-      "updated_at": "2026-10-03T15:32:16.671542+00:00",
+      "updated_at": "2026-10-03T16:06:45.138168+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 131,
+      "count": 132,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -48,36 +48,36 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 84813,
-        "usd_24h_change": -0.7854504764995675
+        "usd": 84841,
+        "usd_24h_change": -0.648711693283016
       },
       "ethereum": {
-        "usd": 2680.39,
-        "usd_24h_change": -0.7426792463069146
+        "usd": 2679.7,
+        "usd_24h_change": -0.756580549971827
       },
       "optimism": {
-        "usd": 0.135139,
-        "usd_24h_change": 2.217139142121895
+        "usd": 0.135956,
+        "usd_24h_change": 1.8786079290172346
       },
       "solana": {
-        "usd": 119.53,
-        "usd_24h_change": -0.37401704069364666
+        "usd": 119.61,
+        "usd_24h_change": -0.3672482660677124
       },
       "pendle": {
-        "usd": 2.37,
-        "usd_24h_change": -3.042253568470845
+        "usd": 2.39,
+        "usd_24h_change": -2.1953834819639333
       },
       "lido-dao": {
-        "usd": 0.460772,
-        "usd_24h_change": 0.9177523519765072
+        "usd": 0.460168,
+        "usd_24h_change": 0.3453227339079251
       },
       "ethereum-name-service": {
-        "usd": 6.84,
-        "usd_24h_change": -2.870461412581005
+        "usd": 6.85,
+        "usd_24h_change": -3.188166493943024
       },
       "litecoin": {
-        "usd": 69.42,
-        "usd_24h_change": -1.936396470417507
+        "usd": 69.51,
+        "usd_24h_change": -1.7631229048117918
       }
     }
   },
@@ -5219,7 +5219,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "How to Earn Crypto on OKX — Passive Income for Beginners",
+      "title": "Як заробляти на криптовалюті на OKX — пасивний дохід для новачків",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=RGbcPPKIW5E",
       "published_at": null,
@@ -6205,6 +6205,6 @@
     }
   ],
   "archive_count": 10172,
-  "news_count": 131,
+  "news_count": 132,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
