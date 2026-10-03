@@ -42,9 +42,11 @@ jobs:
 
       - name: Run JEV language-model analysis
         env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          JEV_MODEL: gpt-6-luna
           JEV_API_URL: ${{ secrets.JEV_API_URL }}
           JEV_API_KEY: ${{ secrets.JEV_API_KEY }}
-          JEV_MODEL: ${{ secrets.JEV_MODEL }}
+          JEV_GENERIC_MODEL: ${{ secrets.JEV_GENERIC_MODEL }}
         run: python crypto_myshka/jev_analyzer.py
 
       - name: Send Telegram digest
