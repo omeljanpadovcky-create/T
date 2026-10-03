@@ -11,6 +11,8 @@ from yt_dlp import YoutubeDL
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "data" / "feed.json"
+ARCHIVE = ROOT / "data" / "telegram_archive.json"
+NEWS = ROOT / "data" / "news.json"
 UA = {"User-Agent": "Mozilla/5.0 CryptoMyshka/2.0"}
 
 SOURCES = {
@@ -157,14 +159,46 @@ def youtube_items():
         })
     return out
 
-def market():
+COINGECKO = {
+    "BTC":"bitcoin","ETH":"ethereum","OP":"optimism","SOL":"solana","PENDLE":"pendle",
+    "ARB":"arbitrum","LDO":"lido-dao","ICP":"internet-computer","STG":"stargate-finance",
+    "TWT":"trust-wallet-token","ENS":"ethereum-name-service","LTC":"litecoin","XRP":"ripple",
+    "BNB":"binancecoin","DOGE":"dogecoin","ADA":"cardano","AVAX":"avalanche-2","LINK":"chainlink"
+}
+
+def mentioned_assets(items):
+    text=" ".join((x.get("title","")+" "+x.get("summary","")) for x in items[:80]).lower()
+    out=["BTC","ETH"]
+    aliases={
+        "OP":[" optimism "," op "],"SOL":[" solana "," sol "],"PENDLE":["pendle"],
+        "ARB":["arbitrum"," arb "],"LDO":["lido"," ldo "],"ICP":["internet computer"," icp "],
+        "STG":["stargate"," stg "],"TWT":["trust wallet"," twt "],"ENS":[" ens "],
+        "LTC":["litecoin"," ltc "],"XRP":["xrp","ripple"],"BNB":["bnb","binance coin"],
+        "DOGE":["dogecoin"," doge "],"ADA":["cardano"," ada "],"AVAX":["avalanche"," avax "],
+        "LINK":["chainlink"," link "],
+    }
+    padded=" "+text+" "
+    for sym,keys in aliases.items():
+        if any(k in padded for k in keys) and sym not in out:
+            out.append(sym)
+    return out[:8]
+
+def market(items):
     try:
+        syms=mentioned_assets(items)
+        ids=[COINGECKO[s] for s in syms if s in COINGECKO]
         data=requests.get("https://api.coingecko.com/api/v3/simple/price",params={
-            "ids":"bitcoin,ethereum,optimism","vs_currencies":"usd","include_24hr_change":"true"
+            "ids":",".join(ids),"vs_currencies":"usd","include_24hr_change":"true"
         },headers=UA,timeout=20).json()
-        return data
+        return {"symbols":syms,"prices":data}
     except Exception as e:
-        return {"error":str(e)}
+        return {"error":str(e),"symbols":["BTC","ETH"],"prices":{}}
+
+def read_json(path: Path, default):
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return default
 
 def main():
     items=[]; status={}
@@ -179,12 +213,27 @@ def main():
         got=youtube_items(); items+=got; status["youtube"]={"ok":True,"count":len(got),"url":"https://www.youtube.com/@it_statti"}
     except Exception as e: status["youtube"]={"ok":False,"error":str(e),"url":"https://www.youtube.com/@it_statti"}
 
+    archive=read_json(ARCHIVE,{"post_count":0})
+    news=read_json(NEWS,{"item_count":0})
+    status["telegram_archive"]={
+        "ok":bool(archive.get("post_count",0)),
+        "count":archive.get("post_count",0),
+        "url":"https://t.me/it_statti"
+    }
+    status["jev_news"]={
+        "ok":bool(news.get("item_count",0)),
+        "count":news.get("item_count",0),
+        "url":"https://news.google.com/search?q=crypto"
+    }
+
     payload={
-        "version":2,
+        "version":3,
         "generated_at":datetime.now(timezone.utc).isoformat(),
         "sources":status,
-        "market":market(),
+        "market":market(items + (news.get("items") or [])[:80]),
         "items":items,
+        "archive_count":archive.get("post_count",0),
+        "news_count":news.get("item_count",0),
         "disclaimer":"Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
     }
     OUT.parent.mkdir(parents=True,exist_ok=True)
