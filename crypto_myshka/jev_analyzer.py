@@ -179,7 +179,7 @@ def analyze_apinex(event, feed):
                         {"role":"user","content":json.dumps(payload, ensure_ascii=False)},
                     ],
                     "temperature": 0.2,
-                    "max_tokens": 650,
+                    "max_tokens": 900,
                 },
                 timeout=75,
             )
@@ -298,7 +298,8 @@ def main():
             break
         if int(event.get("impact") or 0) < 2:
             continue
-        if event.get("jev_ai"):
+        ai=event.get("jev_ai") or {}
+        if ai and not ai.get("_format_fallback"):
             continue
         try:
             event["jev_ai"]=analyze(event, feed)
@@ -311,16 +312,23 @@ def main():
             event["analysis_level"]="cross_source_fallback"
             errors += 1
 
+    analyzed_count=sum(
+        1 for x in (news.get("items") or [])
+        if x.get("jev_ai") and not (x.get("jev_ai") or {}).get("_format_fallback")
+    )
+    pending_count=sum(
+        1 for x in (news.get("items") or [])
+        if int(x.get("impact") or 0) >= 2 and (
+            not x.get("jev_ai") or (x.get("jev_ai") or {}).get("_format_fallback")
+        )
+    )
     news["jev_enabled"]=True
-    news["jev_status"]="ok" if done else "configured_but_no_success"
+    news["jev_status"]="complete" if pending_count==0 else ("ok" if done else ("degraded" if errors else "idle"))
     news["jev_provider"]=provider
     news["jev_model"]=model
-    news["jev_analyzed_count"]=sum(1 for x in (news.get("items") or []) if x.get("jev_ai"))
+    news["jev_analyzed_count"]=analyzed_count
     news["jev_analyzed_this_run"]=done
-    news["jev_pending_count"]=sum(
-        1 for x in (news.get("items") or [])
-        if int(x.get("impact") or 0) >= 2 and not x.get("jev_ai")
-    )
+    news["jev_pending_count"]=pending_count
     news["jev_analysis_errors"]=errors
     save(NEWS, news)
     print(json.dumps({
