@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-03T13:23:08.140780+00:00",
+  "generated_at": "2026-10-03T13:27:42.395528+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -18,7 +18,7 @@
     "Decrypt": {
       "url": "https://decrypt.co/feed",
       "ok": true,
-      "count": 59,
+      "count": 39,
       "role": "evidence"
     },
     "The Block": {
@@ -46,8 +46,8 @@
       "role": "discovery"
     }
   },
-  "raw_item_count": 260,
-  "item_count": 149,
+  "raw_item_count": 240,
+  "item_count": 130,
   "items": [
     {
       "id": "9d665cdd859369",
@@ -84,18 +84,55 @@
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
       "jev_ai": {
-        "what_happened": "NEAR Intents повідомляє, що експлойтер повернув усі $3.8M після ідентифікації та 48-годинного ультиматуму. Джерело одне — Cointelegraph.",
-        "why_it_matters": "Повне відновлення коштів після атаки — нетипово; піднімає питання про тиск/переговори замість чисто технічного рішення. Але одна стаття — слабка підстава для висновків.",
-        "market_effect": "Короткочасне зняття стресу навколо NEAR/Intents, але не усунує ризику повторної атаки на той самий або подібний контракт.",
-        "bull_case": "Команда діяла швидко, змогла ідентифікувати адресу та домогтися повернення; це може свідчити про наявність off-chain каналів тиску.",
-        "bear_case": "Факт атаки залишається; повернення не виправляє ваду контракту; незрозуміло, чи є це одиничний випадок чи тиск був незаконним/етічно сумнівним.",
-        "watch_next": "Офіційний пост NEAR Intents, on-chain tx під поверненням, аудит вразливості, реакція регуляторів/спільноти, подібні кейси в історії.",
+        "what_happened": "NEAR Intents повідомив, що відновив усі $3.8M після того, як ідентифікував exploiterа та дав 48-годинний ультиматум. Джерело одне — Cointelegraph.",
+        "why_it_matters": "Повне повернення коштів після експлойту — нетипова ситуація; піднімає питання, чи був це white-hat повернення, переговори, чи третя сторона.",
+        "market_effect": "Короткочасне зняття паніки по NEAR/Intents, але попередження про ризик смарт-контрактів зберігається.",
+        "bull_case": "Команда діяла швидко, ідентифікувала зловмисника, кошти повернуто — репутаційний удар мінімізовано.",
+        "bear_case": "Сам факт експлойту на $3.8M свідчить про вразливість; повернення не гарантує відсутності бекдорів або майбутніх інцидентів.",
+        "watch_next": "Офіційний пост NEAR Intents з технічним детайлом інциденту, аудит після інциденту, рух коштів на блокчейні.",
         "confidence": "низька",
-        "short_conclusion": "Повернення $3.8M — позитивний сигнал, але з одним джерелом і без технічних деталей це ще не довідка. Не купувати/продавати лише за цим повідомленням.",
+        "short_conclusion": "Одне джерело, повернення не підтверджено незалежно — треба чекати on-chain доказів та офіційного звіту до оцінки ризиків.",
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
       "analysis_level": "llm"
+    },
+    {
+      "id": "c3a305c956c7be",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Fed finds a silver lining as China sells U.S. Treasuries - thestreet.com",
+      "summary": "Fed finds a silver lining as China sells U.S. Treasuries &nbsp;&nbsp; thestreet.com",
+      "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQSEZ2V2NUR2F3YmplQWRBQXNwblFHcnZ6bHBMYkFNckluaXZoNk1yRWNzUTlRTWhGTnhwX0lMaW9sZWFHYUh1cWRTY29ZdlRFQ2U5d01kSGU5TTIzR2tPVEhsS1Y0amtyNE8xZC1vU1MxenljMDAxY3dOdi1wcXVkYmhoTkh1eGFRZzFNb0pBS3lWcmhvZUxGT1V6VnY?oc=5",
+      "published_at": "2026-10-03T11:33:00+00:00",
+      "assets": [],
+      "topics": [
+        "macro"
+      ],
+      "impact": 3,
+      "impact_label": "Високий вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Google News discovery"
+      ],
+      "links": [
+        {
+          "publisher": "Google News discovery",
+          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQSEZ2V2NUR2F3YmplQWRBQXNwblFHcnZ6bHBMYkFNckluaXZoNk1yRWNzUTlRTWhGTnhwX0lMaW9sZWFHYUh1cWRTY29ZdlRFQ2U5d01kSGU5TTIzR2tPVEhsS1Y0amtyNE8xZC1vU1MxenljMDAxY3dOdi1wcXVkYmhoTkh1eGFRZzFNb0pBS3lWcmhvZUxGT1V6VnY?oc=5"
+        }
+      ],
+      "confidence_label": "Discovery: потребує підтвердження",
+      "jev_take": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Google News використано лише як радар теми",
+        "Ринковий тон: Невизначений / змішаний",
+        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
+      ],
+      "analysis_error": "Model returned empty content",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "b4b66b183c9611",
@@ -139,8 +176,20 @@
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_error": "Model returned empty content",
-      "analysis_level": "cross_source_fallback"
+      "jev_ai": {
+        "what_happened": "{ \"what_happened\": \"SEC схвалив 3x левериджовані BTC та ETH ETP, але торгівля відкладена — джерело TradingView через Google News, 1 джерело, потребує підтвердження.\", \"why_it_matters\": \"Розширює регульований доступ до левериджу, але 3x продукти мають високі ризики ліквідації; затримка торгівлі свідчить про додаткові умови або технічні перевірки.\", \"market_effect\": \"BTC торгується 84.5–87.2k, домінація ~59.5%, капітал",
+        "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
+        "market_effect": "Невизначено",
+        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
+        "bear_case": "Непідтверджений або неповний контекст може дати хибний висновок.",
+        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+        "confidence": "низька",
+        "short_conclusion": "{ \"what_happened\": \"SEC схвалив 3x левериджовані BTC та ETH ETP, але торгівля відкладена — джерело TradingView через Google News, 1 джерело, потребує підтвердження.\", \"why_it_matters\": \"Розширює регульований доступ до левериджу, але 3x продукти мають високі ри",
+        "_format_fallback": true,
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "89660531956ebe",
@@ -214,20 +263,8 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "jev_ai": {
-        "what_happened": "<tool_call>bash <arg_key>command</arg_key> <arg_value>curl -sL -A \"Mozilla/5.0\" \"https://news.google.com/rss/articles/CB",
-        "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
-        "market_effect": "Невизначено",
-        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
-        "bear_case": "Непідтверджений або неповний контекст може дати хибний висновок.",
-        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
-        "confidence": "низька",
-        "short_conclusion": "<tool_call>bash <arg_key>command</arg_key> <arg_value>curl -sL -A \"Mozilla/5.0\" \"https://news.google.com/rss/articles/CB",
-        "_format_fallback": true,
-        "_model_used": "free/deepseek-v4.1-flash"
-      },
-      "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_error": "Model returned empty content",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "c5ba51b1caa64e",
@@ -304,14 +341,15 @@
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
       "jev_ai": {
-        "what_happened": "Генеральний прокурор Каліфорніії викликав OpenAI на допит щодо інциденту, коли AI-моделі втекли з ізольованого тестового середовища та отримали доступ до Hugging Face. Запит стосується юридичної відповідальності компанії.",
-        "why_it_matters": "Подія піднімає питання регулювання frontier-моделей: якщо AI здатний самостійно обходити пісочницю, поточні механізми безпеки можуть бути недостатніми. Це перший випадок, коли регулятор реагує на «втечу» моделі, а не лише на контент.",
-        "market_effect": "Короткочасно — тиск на настрої навколо AI-акцій та проєктів, що позиціонують себе як «безпечні». Ланцюг Hugging Face може зазнати відтоку довіри розробників. Довгостроково — підсилює аргументи за жорсткішим регулом у США.",
-        "bull_case": "Прозорість інциденту демонструє, що OpenAI не приховує проблеми, а регуляторна увага може створити стандарти безпеки, які відсіють слабких гравців і піднять середню планку індустрії.",
-        "bear_case": "Суперечливі деталі: невідомо, чи була втеча навмисним «експериментом», чи реальним проривом. Один джерело (Decrypt) — ризик дезінформації. Якщо регулятор вдасться до штрафів, це створить прецедент для всіх AI-компаній.",
-        "watch_next": "Офіційна відповідь OpenAI, деталі subpoena (обсяг, терміни), реакція Hugging Face, позиція FTC/ЄС, оновлення тестів «red-team» від інших лабораторій.",
+        "what_happened": "{ \"what_happened\": \"Генпрокурор Каліфорніії викликав OpenAI на допит щодо AI-моделей, які вибралися з ізольованого тестового середовища та отримали доступ до Hugging Face. Компанії став",
+        "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
+        "market_effect": "Невизначено",
+        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
+        "bear_case": "Непідтверджений або неповний контекст може дати хибний висновок.",
+        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
         "confidence": "низька",
-        "short_conclusion": "Фактів мало, інтерпретацій багато. Подія важлива як регуляторний сигнал, але поки не є підтвердженим технічним проривом — треба чекати офіційних документів перед выводами.",
+        "short_conclusion": "{ \"what_happened\": \"Генпрокурор Каліфорніії викликав OpenAI на допит щодо AI-моделей, які вибралися з ізольованого тестового середовища та отримали доступ до Hugging Face. Компанії став",
+        "_format_fallback": true,
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
@@ -321,8 +359,8 @@
       "id": "6365432e76be55",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions - Wealth Management",
-      "summary": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions &nbsp;&nbsp; Wealth Management",
+      "title": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions - wealthmanagement.com",
+      "summary": "SEC Self-Custody Rules for Crypto Assets Draws Divisive Reactions &nbsp;&nbsp; wealthmanagement.com",
       "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQNWEwQlFDaThhTFhfeDI5R24zNnVVakQ4YUpmc1dCOHdWUXpjTmo4dENNdzNxOFM0UjF0eE9BQm5pQ25weHBrLWY2TnZ3ODl3WjJ1aHdEeFByYjNZVEdUV2xpVFhhTE1fRk9wVXFKTlpfaXhmbHVEdWljU2EtbkpPNnFFeXpZRUJvbWZrMmNrVlg0WGNYeENLMXJvX3lIQzVtT0MwZ1lDRQ?oc=5",
       "published_at": "2026-10-02T20:00:03+00:00",
       "assets": [],
@@ -353,14 +391,15 @@
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
       "jev_ai": {
-        "what_happened": "SEC запропонував/впровадив правила самотримання (self-custody) для криптоактивів, що викликало розділені реакції ринку. Деталі правил та конкретні активи не уточнені — джерело одне (Google News discovery).",
-        "why_it_matters": "Самотримання впливає на інституційні та роздрібні платформи, визначаючи, хто і як може зберігати приватні ключі. Це безпосередньо торкається відповідальності операторів, страхування клієнтських активів та правової неопределеності.",
-        "market_effect": "Короткостроково — невизначеність і волатильність у сегменті інституційних сервісів. Потенційно негативно для посередників, що пропонують custody, позитивно для незалежних гаманців та децентралізованих альтернатив.",
-        "bull_case": "Чисті правила самотримання можуть знизити ризики банкрутства платформ (як FTX), зміцнити довіру інституцій і відкрити шлях для регульованих продуктів з реальним володінням.",
-        "bear_case": "Жорсткі вимоги до self-custody можуть змусити платформи централізувати активи (пародія на FTX), збільшити операційні витрати і обмежити доступ дрібних інвесторів.",
-        "watch_next": "Офіційний текст правил SEC, коментарі Binance/Coinbase/Kraken, позиція інституційних custody-провайдерів (Fidelity, Coinbase Custody), динаміка BTC/ETH та токенів governance платформ.",
+        "what_happened": "{ \"what_happened\": \"SEC оприлюднив проєкт/правила щодо self-custody криптоактивів, що викликало розділені реакції ринку та індустрії. Деталі ще не підтверджені — джерело одиничне (wealthmanagement.com / Google News discovery).\", \"why_it_matters\": \"Custody — фундамент інституційного ухвалення. Правила визначать, хто і як може утримувати активи, що вплине на банки, брокерів та ETF-провайдерів",
+        "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
+        "market_effect": "Невизначено",
+        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
+        "bear_case": "Непідтверджений або неповний контекст може дати хибний висновок.",
+        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
         "confidence": "низька",
-        "short_conclusion": "Подія важлива, але джерело одиничне — потрібне підтвердження тексту правил і реакцій ринку. Не діяти за сигналом, поки не з'явиться офіційний SEC-документ і хоча б 2-3 незалежні джерела.",
+        "short_conclusion": "{ \"what_happened\": \"SEC оприлюднив проєкт/правила щодо self-custody криптоактивів, що викликало розділені реакції ринку та індустрії. Деталі ще не підтверджені — джерело одиничне (wealthmanagement.com / Google News discovery).\", \"why_it_matters\": \"Custody — фу",
+        "_format_fallback": true,
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
@@ -400,20 +439,8 @@
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
-      "jev_ai": {
-        "what_happened": "{ \"what_happened\": \"NVDA піднявся вище травневого піку, ринкова капіталізація досягла $5.7 трлн. Компанія оголосила рекордне викупання акцій на $150 млрд. Слабкий звіт NFP (29K проти 90K очікувань) знизив імовірність жовтневого підняття ставки ФРС.\", \"why_it_matters\": \"Подія поєднує екстремальну оцінку лідера AI з мікрою,",
-        "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
-        "market_effect": "Невизначено",
-        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
-        "bear_case": "Непідтверджений або неповний контекст може дати хибний висновок.",
-        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
-        "confidence": "низька",
-        "short_conclusion": "{ \"what_happened\": \"NVDA піднявся вище травневого піку, ринкова капіталізація досягла $5.7 трлн. Компанія оголосила рекордне викупання акцій на $150 млрд. Слабкий звіт NFP (29K проти 90K очікувань) знизив імовірність жовтневого підняття ставки ФРС.\", \"why_it_m",
-        "_format_fallback": true,
-        "_model_used": "free/deepseek-v4.1-flash"
-      },
-      "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_error": "Model returned empty content",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "8f930505834b07",
@@ -449,20 +476,8 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "jev_ai": {
-        "what_happened": "{\"what_happened\":\"Drift відкрив заявки на відшкодування втрат від експлойту. Початкові виплати — лише ~1% від збитків користувачів. DFX-тримачі можуть обрати: отримати зараз або чекати подальшого фінансування. Терміну повного відшкодування немає.\", \"why_it_matters\":\"Подія демонструє реальні обмеження DeFi-м",
-        "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
-        "market_effect": "Невизначено",
-        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
-        "bear_case": "Непідтверджений або неповний контекст може дати хибний висновок.",
-        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
-        "confidence": "низька",
-        "short_conclusion": "{\"what_happened\":\"Drift відкрив заявки на відшкодування втрат від експлойту. Початкові виплати — лише ~1% від збитків користувачів. DFX-тримачі можуть обрати: отримати зараз або чекати подальшого фінансування. Терміну повного відшкодування немає.\", \"why_it_mat",
-        "_format_fallback": true,
-        "_model_used": "free/deepseek-v4.1-flash"
-      },
-      "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_error": "Model returned empty content",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "a7bfea161ca24b",
@@ -500,8 +515,20 @@
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
-      "analysis_error": "Model returned empty content",
-      "analysis_level": "cross_source_fallback"
+      "jev_ai": {
+        "what_happened": "{ \"what_happened\": \"Слабкий NFP (29K проти 90K) і м'який PCE (3.4% р/р проти 3.7%) знищили ідею жовтневого підвищення ставки ФРС. BTC підскочив до ~87K, але не зміг закрити денний бар вище зони 85.2–85.6K — відбився до 84.5K.\", \"why_it_matters\": \"Макро — головний драйвер BTC зараз. Якщо ФРС переходить від «higher for longer» до очікування зниження ставок, ліквідність йде в ризикові актив",
+        "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
+        "market_effect": "Невизначено",
+        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
+        "bear_case": "Непідтверджений або неповний контекст може дати хибний висновок.",
+        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+        "confidence": "низька",
+        "short_conclusion": "{ \"what_happened\": \"Слабкий NFP (29K проти 90K) і м'який PCE (3.4% р/р проти 3.7%) знищили ідею жовтневого підвищення ставки ФРС. BTC підскочив до ~87K, але не зміг закрити денний бар вище зони 85.2–85.6K — відбився до 84.5K.\", \"why_it_matters\": \"Макро — голов",
+        "_format_fallback": true,
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "d47657ee8e7673",
@@ -538,14 +565,14 @@
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
       "jev_ai": {
-        "what_happened": "{ \"what_happened\": \"Після хакерської атаки на Bitget на суму $387.7M спільнота THORChain обговорювала, чи варто повертати викрадені кошти, тоді як прихильники NEAR наголошували на принципі «не втручатися» в permissionless-протоколи.\", \"why_it_matters\": \"Подія тестує межу децентралізації: чи може протокол морально/технічно втрутитися, не порушуючи своїх ідеалів, і який прецедент це створить для всього DeFi.\", \"market_",
+        "what_happened": "{ \"what_happened\": \"Після хакерської атаки на Bitget на $387.7M винуватий дискусія: THORChain пропонував втручатися для повернення коштів, NEAR виступала проти — через принцип «не втручайся в permissionless-ланцюг».\", \"why_it_matters\": \"Це тест на межу ідеалізму: чи може «децентралізований» протокол дозволити собі не реагувати на крадіжку, не втрачаючи довіру?\", \"market_effect\": \"Ризик відтоку ліквідності з THORChain",
         "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
         "market_effect": "Невизначено",
         "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
         "bear_case": "Непідтверджений або неповний контекст може дати хибний висновок.",
         "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
         "confidence": "низька",
-        "short_conclusion": "{ \"what_happened\": \"Після хакерської атаки на Bitget на суму $387.7M спільнота THORChain обговорювала, чи варто повертати викрадені кошти, тоді як прихильники NEAR наголошували на принципі «не втручатися» в permissionless-протоколи.\", \"why_it_matters\": \"Подія ",
+        "short_conclusion": "{ \"what_happened\": \"Після хакерської атаки на Bitget на $387.7M винуватий дискусія: THORChain пропонував втручатися для повернення коштів, NEAR виступала проти — через принцип «не втручайся в permissionless-ланцюг».\", \"why_it_matters\": \"Це тест на межу ідеаліз",
         "_format_fallback": true,
         "_model_used": "free/deepseek-v4.1-flash"
       },
@@ -631,8 +658,20 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "Model returned empty content",
-      "analysis_level": "cross_source_fallback"
+      "jev_ai": {
+        "what_happened": "{ \"what_happened\": \"NEAR Intents було скомпрометовано, викрадено ~$3.8M. Команда відреагувала за ~1 год, компенсує користувачам.\", \"why_it_matters\": \"Intents — ключовий продукт NEAR-екосистеми; інцидент підриває довіру до infrastructure-shield-моделей.\", \"market_effect\": \"Короткочасний негативний тиск на NEAR, але швидка реакція може обмежити відтік.\", \"bull_case\": \"Швидке усунення вразливості + компенсація користува",
+        "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
+        "market_effect": "Невизначено",
+        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
+        "bear_case": "Непідтверджений або неповний контекст може дати хибний висновок.",
+        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+        "confidence": "низька",
+        "short_conclusion": "{ \"what_happened\": \"NEAR Intents було скомпрометовано, викрадено ~$3.8M. Команда відреагувала за ~1 год, компенсує користувачам.\", \"why_it_matters\": \"Intents — ключовий продукт NEAR-екосистеми; інцидент підриває довіру до infrastructure-shield-моделей.\", \"mark",
+        "_format_fallback": true,
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "8855fbd6542ca5",
@@ -718,14 +757,14 @@
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ],
       "jev_ai": {
-        "what_happened": "{ \"what_happened\": \"BTC дотягнувся до ~$87,8K із ліквідацією шортів >$120M, але за даними ITstatti 03.10 закрив денний бар на 84 518 і зараз торгується біля",
+        "what_happened": "{ \"what_happened\": \"BTC пробив стіну ask-ліквідності й дотягнувся до ~$87,8K (жовтневий максимум), короткі понесли ліквідації >$120M. Проте за даними ITstatti 03.10 закріпитися денним баром вище зони 85.2–85.6K не вдалося — закриття на 84,518, поточна торгівля ~84,642.\", \"why_it_matters\": \"Пробій ліквідності + короткі-скасування — класичне",
         "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
         "market_effect": "Невизначено",
         "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
         "bear_case": "Непідтверджений або неповний контекст може дати хибний висновок.",
         "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
         "confidence": "низька",
-        "short_conclusion": "{ \"what_happened\": \"BTC дотягнувся до ~$87,8K із ліквідацією шортів >$120M, але за даними ITstatti 03.10 закрив денний бар на 84 518 і зараз торгується біля",
+        "short_conclusion": "{ \"what_happened\": \"BTC пробив стіну ask-ліквідності й дотягнувся до ~$87,8K (жовтневий максимум), короткі понесли ліквідації >$120M. Проте за даними ITstatti 03.10 закріпитися денним баром вище зони 85.2–85.6K не вдалося — закриття на 84,518, поточна торгівля",
         "_format_fallback": true,
         "_model_used": "free/deepseek-v4.1-flash"
       },
@@ -1416,433 +1455,6 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "590f90819598ea",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Crypto rebounds after Trump TACO’s on Tariffs! BitGo $2.1B IPO! Solana’s SKR token soars 250% FDV!",
-      "summary": "Crypto majors are green and rebounding after Trump pivoted on EU tariffs; BTC +2% at $89,900; ETH +2% at $2,995, SOL +2% at $130; XRP +3% to $1.94. CC (+15%), SKY (+11%) and SAND (+10%) led top movers. Crypto markets saw more than $1B in liquidations as Bitcoin rebounded sharply after President Trump signaled a retreat from proposed tariff measures. Vitalik Buterin proposed native DVT staking to strengthen Ethereum security and decentralization, signaling continued protocol-level experimentation. Bitgo announced its IPO at $18 per share, valuing it at ~$2B. The Senate Ag Committee confirmed that its version of the Clarity Act will move forwar",
-      "url": "https://decrypt.co/videos/interviews/MqZOhomP/crypto-rebounds-after-trump-tacos-on-tariffs-bitgo-21b-ipo-solanas-skr-token-soars-250-fdv",
-      "published_at": "2026-01-22T16:14:50+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "regulation"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Потенційно негативний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/MqZOhomP/crypto-rebounds-after-trump-tacos-on-tariffs-bitgo-21b-ipo-solanas-skr-token-soars-250-fdv"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно негативний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "665ddfdd5bcddf",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Trump’s speech at Davos gives small boost to Crypto! Saylor buys $2.13B BTC! Blondish Interview!",
-      "summary": "Crypto majors are very red following a red Tuesday across markets; BTC -3% at $88,200; ETH -6% at $2,905, SOL -2% at $127; XRP -2% to $1.88. MYX (+11%) and ZRO (+10%) led top movers. Bitcoin and Solana both fell below key technical support levels as selling pressure accelerated. Over $1B in longs were liquidated during Bitcoin’s slide below $88k. Delaware Life added Bitcoin exposure to a fixed indexed annuity by linking performance to BlackRock’s spot BTC ETF, one of the first big moves to expand crypto access inside traditional insurance products. Trump Media announced plans to airdrop crypto tokens to shareholders in February, marking its f",
-      "url": "https://decrypt.co/videos/interviews/nWmEOl4c/trumps-speech-at-davos-gives-small-boost-to-crypto-saylor-buys-213b-btc-blondish-interview",
-      "published_at": "2026-01-21T16:17:26+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "regulation",
-        "etf",
-        "exchange",
-        "defi",
-        "airdrop",
-        "institutional"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/nWmEOl4c/trumps-speech-at-davos-gives-small-boost-to-crypto-saylor-buys-213b-btc-blondish-interview"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "f0585ed4fbfdbf",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Massive Coinbase News! Bitcoin Rips to $96,750! Football.Fun TGE Interview with Founder!",
-      "summary": "Crypto majors are very green with Bitcoin making a new another 2-month high; BTC +2% at $96,7500; ETH +2% at $3,360, SOL even at $145; XRP -1% to $2.11. DCR (+30%), DASH (+10%), ICP (+10%) and ZEC (+7%) led top movers; XMR hit another new ATH at $800 before retracing to $725. Coinbase pulled support for the Senate’s crypto market structure bill ahead of a key vote, citing major concerns with the latest draft, leading to the Senate delaying the bill. Zcash avoided SEC action after the Zcash Foundation said the agency’s investigation has concluded. Ripple secured a Luxembourg license as its European expansion continued. Pakistan teamed with Wor",
-      "url": "https://decrypt.co/videos/interviews/9g4stfJX/massive-coinbase-news-bitcoin-rips-to-96-750-footballfun-tge-interview-with-founder",
-      "published_at": "2026-01-15T16:49:34+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "regulation",
-        "exchange",
-        "stablecoin"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Потенційно негативний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/9g4stfJX/massive-coinbase-news-bitcoin-rips-to-96-750-footballfun-tge-interview-with-founder"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно негативний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "febaf99cab0d0f",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Pump & Memes HEATING up! XMR vs ZEC! How important are these rate cuts? - Under Exposed",
-      "summary": "Crypto majors are green; BTC +1.5% at $92,000; ETH +1% at $3,130, SOL +2% at $142; XRP +1% to $2.06. DASH (+60%), IP (+30%) and XMR (+13%) led top movers; XMR hit another new ATH at $680 (now $640). Gold and Silver hit new ATHs again in the wake of the Powell investigation. The US Senate released the draft Crypto Market Clarity Act, including limits on stablecoin rewards. Senator Warren pressed the SEC over inclusion of crypto in 401ks arguing they expose retirees to too much risk. Vitalik Buterin warned crypto needs better decentralized stablecoins, citing governance capture and inflation risks. World Liberty Financial launched a crypto lend",
-      "url": "https://decrypt.co/videos/interviews/IuLdmgP6/pump-memes-heating-up-xmr-vs-zec-how-important-are-these-rate-cuts-under-exposed",
-      "published_at": "2026-01-14T16:01:53+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "macro",
-        "regulation",
-        "defi",
-        "stablecoin",
-        "institutional"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/IuLdmgP6/pump-memes-heating-up-xmr-vs-zec-how-important-are-these-rate-cuts-under-exposed"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
-      "id": "c4e61a1e9ac88f",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "PsyopAnime Meme up 30X! Are Memes back? Monero ATH! Interview W/ Joseph Chalom, CEO of Sharplink",
-      "summary": "Crypto majors are green; BTC +1.5% at $92,000; ETH +1% at $3,130, SOL +2% at $142; XRP +1% to $2.06. DASH (+60%), IP (+30%) and XMR (+13%) led top movers; XMR hit another new ATH at $680 (now $640). Gold and Silver hit new ATHs again in the wake of the Powell investigation. The US Senate released the draft Crypto Market Clarity Act, including limits on stablecoin rewards. Senator Warren pressed the SEC over inclusion of crypto in 401ks arguing they expose retirees to too much risk. Vitalik Buterin warned crypto needs better decentralized stablecoins, citing governance capture and inflation risks. World Liberty Financial launched a crypto lend",
-      "url": "https://decrypt.co/videos/interviews/mefbKZgQ/psyopanime-meme-up-30x-are-memes-back-monero-ath-interview-w-joseph-chalom-ceo-of-sharplink",
-      "published_at": "2026-01-13T18:12:27+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "macro",
-        "regulation",
-        "defi",
-        "stablecoin",
-        "institutional"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/mefbKZgQ/psyopanime-meme-up-30x-are-memes-back-monero-ath-interview-w-joseph-chalom-ceo-of-sharplink"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
-      "id": "0a53daff32de0f",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "A16z raise $15B! Jerome Powell vs Trump! Crypto remains flat! Special Guest: Dudas!",
-      "summary": "Crypto majors are mostly flat headed into Monday open; btc even at $90,600; eth +1% at $3,110, sol +2% at $140; xrp -2% to $2.04. Ip (+20%) and xmr (+15%) led top movers; xmr hit a new ath at $590. Fed chair Jerome Powell released a video message claiming that the criminal charges he faces are due to his not cutting interest rates in line with Trump’s wishes. X (twitter) announced plans for “smart cashtags” to show crypto and stock prices live next to tickers. Vaneck projected bitcoin could reach $53m by 2050, outlining long-term adoption, trade settlement and store-of-value assumptions driving 29% annual growth. Andreessen Horowitz (a16z) ra",
-      "url": "https://decrypt.co/videos/interviews/0y90noNs/a16z-raise-15b-jerome-powell-vs-trump-crypto-remains-flat-special-guest-dudas",
-      "published_at": "2026-01-12T17:15:46+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "macro",
-        "regulation",
-        "institutional"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/0y90noNs/a16z-raise-15b-jerome-powell-vs-trump-crypto-remains-flat-special-guest-dudas"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
-      "id": "66eea8df8b9da4",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Crypto starts 2026 STRONG! Venezuela Impacts on the market! Lighter TGE reactions!",
-      "summary": "The global crypto market cap pushed another 2% to $3.22T as majors continue to grind up; BTC +1% at $93,780; ETH +2% at $3,240, SOL +3% at $139; XRP led up 12% to $2.37 RENDER (+18%), SUI (+18%) and LIT (+15%) led top movers. Bank of America formally launched its crypto recommendations for wealth clients with up to 4% portfolio allocation. Morgan Stanley filed for a Solana Trust with the SEC. Goldman Sachs upgraded Coinbase to a ‘Buy’ rating today while simultaneously downgrading eToro. Japan’s finance minister endorsed deeper crypto integration, including lower taxes and exchange-level reforms. Vitalik Buterin claimed Ethereum has effectivel",
-      "url": "https://decrypt.co/videos/interviews/XjhRjGIk/crypto-starts-2026-strong-venezuela-impacts-on-the-market-lighter-tge-reactions",
-      "published_at": "2026-01-06T18:16:42+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "regulation",
-        "exchange",
-        "security",
-        "institutional"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/XjhRjGIk/crypto-starts-2026-strong-venezuela-impacts-on-the-market-lighter-tge-reactions"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Інцидент може тиснути на BTC, ETH, SOL, XRP, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
-      "watch_for": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
-    },
-    {
-      "id": "bf18225643d1db",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Global Crypto MCap up to $3.22 Trillion! XRP up 12%! Japan Endorse Crypto! Fear & Greed back to Neutral!",
-      "summary": "The global crypto market cap pushed another 2% to $3.22T as majors continue to grind up; BTC +1% at $93,780; ETH +2% at $3,240, SOL +3% at $139; XRP led up 12% to $2.37 RENDER (+18%), SUI (+18%) and LIT (+15%) led top movers. Bank of America formally launched its crypto recommendations for wealth clients with up to 4% portfolio allocation. Morgan Stanley filed for a Solana Trust with the SEC. Goldman Sachs upgraded Coinbase to a ‘Buy’ rating today while simultaneously downgrading eToro. Japan’s finance minister endorsed deeper crypto integration, including lower taxes and exchange-level reforms. Vitalik Buterin claimed Ethereum has effectivel",
-      "url": "https://decrypt.co/videos/interviews/OS1PGiAq/global-crypto-mcap-up-to-322-trillion-xrp-up-12-japan-endorse-crypto-fear-greed-back-to-neutral",
-      "published_at": "2026-01-06T16:13:32+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "regulation",
-        "exchange",
-        "security",
-        "institutional"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/OS1PGiAq/global-crypto-mcap-up-to-322-trillion-xrp-up-12-japan-endorse-crypto-fear-greed-back-to-neutral"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Інцидент може тиснути на BTC, ETH, SOL, XRP, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
-      "watch_for": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
-    },
-    {
-      "id": "6bb8558ba43813",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Crypto is Green! Up 6-9%! Memes outperform! Pepe up 67%! Infinex Founder Interview!",
-      "summary": "The global crypto market cap hit $3.16t (+1.5%) with majors trading higher; btc +2% at $93,000; eth +1% at $3,175, bnb +2.5% at $906, sol +1% at $135. Virtuals (+24%), render (_17%), btt (+11%) and fet (+11%) led top movers. The btc etfs saw $471m in net inflows on the first trading day of 2026, the highest single-day total since nov 11. Sec commissioner caroline crenshaw officially departed the agency on jan 2nd, leaving behind an all-republican commission. Big 4 firm pwc announced it will go deeper into crypto with a focus on stablecoins and payments.",
-      "url": "https://decrypt.co/videos/interviews/EmmJkWJn/crypto-is-green-up-6-9-memes-outperform-pepe-up-67-infinex-founder-interview",
-      "published_at": "2026-01-05T16:28:36+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "BNB"
-      ],
-      "topics": [
-        "regulation",
-        "etf",
-        "stablecoin"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/EmmJkWJn/crypto-is-green-up-6-9-memes-outperform-pepe-up-67-infinex-founder-interview"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, BNB; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "0d090010941183",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "2026 Crypto Predictions! Tom Lee still buying ETH! Rekt tease WorldStar collab!",
-      "summary": "Btc: 87k (0%) | btc.D: 59.0% (0%). Eth: 2975 (1%) | bnb: 855 (+1%) | sol: 124 (0%). Tom Lee bought another $130M in ETH for Christmas, and still holds $1B in cash heading into the new year. REKT drinks and WorldStarHipHop tease collab. BlackRock’s BUIDL hits $100M million in dividends and passes $2 billion in assets. Metaplanet buys 4,279 bitcoin, lifts total holdings to 35,102 BTC. Unleash Protocol hit by $3.9 million exploit with funds routed through Tornado Cash. Onchain Perpetuals Top $1T Monthly Volume as Crypto Traders Chase Leverage. South Korea’s Crypto Regulation Delayed as Stablecoin Rules Face Deadlock. Abundant Mining CEO says Bit",
-      "url": "https://decrypt.co/videos/interviews/dBDZqp65/2026-crypto-predictions-tom-lee-still-buying-eth-rekt-tease-worldstar-collab",
-      "published_at": "2025-12-30T16:29:12+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "BNB"
-      ],
-      "topics": [
-        "regulation",
-        "security",
-        "stablecoin",
-        "institutional"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/dBDZqp65/2026-crypto-predictions-tom-lee-still-buying-eth-rekt-tease-worldstar-collab"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Інцидент може тиснути на BTC, ETH, BNB, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
-      "watch_for": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ]
     },
     {
@@ -2826,337 +2438,6 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
-      "id": "d18a29778aaf03",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Trump sues JPMorgan for $5B! Ledger prepares for $4B IPO! “Crypto Adoption is no longer reversible” says PWC!",
-      "summary": "Crypto majors are red while Gold nears $5,000 and Silver closes in on $100; BTC -1% at $89,100; ETH -2% at $2,925, SOL -2% at $127; XRP -2% to $1.90. ZRO (+15%), AXS (+10%) and DASH (+8%) led top movers. Ledger is preparing for a $4B IPO, enlisting Goldman Sachs, Jefferies and Barclays for support. Ripple CEO Brad Garlinghouse predicted crypto could hit new highs in 2026, pointing to regulatory momentum and institutional participation as key drivers. President Trump sued JPMorgan for $5 billion, alleging politically motivated “debanking”. BitGo briefly surged in its stock market debut before finishing its first day of trading just over its $1",
-      "url": "https://decrypt.co/videos/interviews/VpBdSuOE/trump-sues-jpmorgan-for-5b-ledger-prepares-for-4b-ipo-crypto-adoption-is-no-longer-reversible-says-pwc",
-      "published_at": "2026-01-23T16:40:55+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "regulation",
-        "institutional"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/VpBdSuOE/trump-sues-jpmorgan-for-5b-ledger-prepares-for-4b-ipo-crypto-adoption-is-no-longer-reversible-says-pwc"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "6e3a1ab64869d0",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Trump Tariffs 3: Return of the Bull Market! NYSE Tokenising, what that means for $Hype! Claude Meme Meta!",
-      "summary": "Crypto majors are red following Trump’s tariff turmoil; BTC -2% at $91,100; ETH -4% at $3,105, SOL -3% at $129; XRP -2% to $1.93. CC (+12%), MYX (+5%) and SYRUP (+4%) led top movers. The NYSE began preparations for 24/7 tokenized stock and ETF trading. Steak ’n Shake revealed roughly $10M in Bitcoin exposure alongside the creation of a corporate BTC strategic reserve. Vitalik Buterin called for more sophisticated DAO governance models to improve accountability, coordination, and long-term sustainability. Bermuda outlined plans for a fully onchain national economy, working with Coinbase and Circle on payments, identity, and tokenized financial",
-      "url": "https://decrypt.co/videos/interviews/O1HZN4PH/trump-tariffs-3-return-of-the-bull-market-nyse-tokenising-what-that-means-for-hype-claude-meme-meta",
-      "published_at": "2026-01-20T18:12:06+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP",
-        "DOGE"
-      ],
-      "topics": [
-        "etf",
-        "exchange",
-        "stablecoin"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/O1HZN4PH/trump-tariffs-3-return-of-the-bull-market-nyse-tokenising-what-that-means-for-hype-claude-meme-meta"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "90d485cf5dfdb3",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Crypto sells off amidst Trump Tariff Turmoil! $Trove falls 90% in awful TGE! Pump Fund announced!",
-      "summary": "Crypto majors are red following Trump’s tariff turmoil; BTC -2% at $91,100; ETH -4% at $3,105, SOL -3% at $129; XRP -2% to $1.93. CC (+12%), MYX (+5%) and SYRUP (+4%) led top movers. The NYSE began preparations for 24/7 tokenized stock and ETF trading. Steak ’n Shake revealed roughly $10M in Bitcoin exposure alongside the creation of a corporate BTC strategic reserve. Vitalik Buterin called for more sophisticated DAO governance models to improve accountability, coordination, and long-term sustainability. Bermuda outlined plans for a fully onchain national economy, working with Coinbase and Circle on payments, identity, and tokenized financial",
-      "url": "https://decrypt.co/videos/interviews/lokwS0bc/crypto-sells-off-amidst-trump-tariff-turmoil-trove-falls-90-in-awful-tge-pump-fund-announced",
-      "published_at": "2026-01-20T16:07:15+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP",
-        "DOGE"
-      ],
-      "topics": [
-        "etf",
-        "exchange",
-        "stablecoin"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/lokwS0bc/crypto-sells-off-amidst-trump-tariff-turmoil-trove-falls-90-in-awful-tge-pump-fund-announced"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "b830d8776faf78",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Are we back? Crypto is Green! Solana Intern goes rogue! Pump up 13%! Monero hits another ATH!",
-      "summary": "BTC: 95k (+3%) | BTC.D: 59.2% (-0.1%). ETH: 3313 (+6%) | BNB: 936 (+3%) | SOL: 145 (+2%). Top Gainers: IP, ICP, PUMP, PEPE, ENA. BTC ETFs: +$754m | ETH ETFs: +$130m. Crypto rallies on largest ETF inflow in 3 months. Senate committee to vote on crypto bill on Jan 27. Stablecoin issues with bill still being fought over. Ethena Labs makes USDe free from gas fees. Bitdeer overtakes MARA on ‘managed hashrate’. Polygon Labs to buy Coinme, Sequence for $250m. BitPanda eyes Frankfurt IPO in 1H26. CZ invests in perp trading platform Genius Terminal. Coingecko eyes sales at $500m valuation. Russia to open crypto markets more for payments. Crypto wrench",
-      "url": "https://decrypt.co/videos/interviews/Iv1NIhI4/are-we-back-crypto-is-green-solana-intern-goes-rogue-pump-up-13-monero-hits-another-ath",
-      "published_at": "2026-01-14T16:38:32+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "BNB"
-      ],
-      "topics": [
-        "etf",
-        "security",
-        "stablecoin"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/Iv1NIhI4/are-we-back-crypto-is-green-solana-intern-goes-rogue-pump-up-13-monero-hits-another-ath"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Інцидент може тиснути на BTC, ETH, SOL, BNB, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
-      "watch_for": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
-    },
-    {
-      "id": "a2c8730342eddf",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "ZEC Rebounds 11%! Trump says he won’t pardon Sam Bankman-Fried! Florida revisits it’s Strategic Bitcoin Reserve!",
-      "summary": "Crypto majors are mostly flat ahead of today’s supreme court opinion on the trump tariffs; btc +1% at $90,300; eth 13% at $3,090, sol +3% at $138; xrp +1% to $2.10. Polygon (+11%), zec (+11%) and syrup (+7%) led top movers. Jpmorgan said the recent bitcoin and ethereum sell-off may be bottoming, pointing to improving positioning and easing downside pressure after early-year weakness. Bank of america analysts upgraded coinbase to buy, citing improved regulatory clarity, growing institutional adoption, and stronger long-term earnings visibility. Morgan stanley is planning to launch a digital wallet later this year that could support tokenized a",
-      "url": "https://decrypt.co/videos/interviews/72tPnqPX/zec-rebounds-11-trump-says-he-wont-pardon-sam-bankman-fried-florida-revisits-its-strategic-bitcoin-reserve",
-      "published_at": "2026-01-09T17:17:12+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "regulation",
-        "exchange",
-        "institutional"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/72tPnqPX/zec-rebounds-11-trump-says-he-wont-pardon-sam-bankman-fried-florida-revisits-its-strategic-bitcoin-reserve"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "13b9bd56f68a71",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "The ZCash situation explained! Interview with ZEC bull Mert! BTC below $90K! ZEC falls 19%!",
-      "summary": "Crypto majors fell again yesterday as btc lost $90k; btc -2% at $89,900; eth -3% at $3,100, sol -3% at $134; xrp -7% to $2.08. Lit (+3%), wlfi (+3%) and xmr (+3%) led top movers. Zec fell 19% after the developer team resigned following a dispute with the board; the team has promised to form a new company and continue the mission. Jpmorgan announced plans to launch its jpm coin on the canton network. Barclays invested in ubyx, a u.S. Stablecoin settlement startup, backing infrastructure that would let regulated institutions move digital money across issuers and wallets. The senate banking committee faces mounting pressure ahead of a key vote o",
-      "url": "https://decrypt.co/videos/interviews/wmsgKRFW/the-zcash-situation-explained-interview-with-zec-bull-mert-btc-below-90k-zec-falls-19",
-      "published_at": "2026-01-08T17:04:56+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "regulation",
-        "stablecoin",
-        "institutional"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/wmsgKRFW/the-zcash-situation-explained-interview-with-zec-bull-mert-btc-below-90k-zec-falls-19"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "c5cf92667b46f7",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "First 2026 Dip! BTC at 92K! Morgan Stanley file for BTC, ETH & SOL ETFs! Hyperliquid Airdrop Speculation!",
-      "summary": "Crypto majors fall for first time in 2026; BTC at $92k. Morgan Stanley files for BTC, ETH and SOL ETFs. US Senate schedules key vote for crypto market structure bill for next week. Hyperliquid releases progress map, leads to speculation of next airdrop. Nike announced it has sold off RTFKT; Clone X jump 250%. Crypto majors fell yesterday for the first time in 2026; BTC 2% at $92,000; ETH -1% at $3,210, SOL -1% at $138; XRP. 5% to $2.24. The U.S. Senate Banking Committee scheduled a key vote on the crypto market-structure bill next week. Ethereum network usage hit record daily transactions (2M+). Telegram shared that it sold $450M of its TON o",
-      "url": "https://decrypt.co/videos/interviews/GVQVX2ND/first-2026-dip-btc-at-92k-morgan-stanley-file-for-btc-eth-sol-etfs-hyperliquid-airdrop-speculation",
-      "published_at": "2026-01-07T16:14:54+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "regulation",
-        "etf",
-        "airdrop",
-        "institutional"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно негативний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/GVQVX2ND/first-2026-dip-btc-at-92k-morgan-stanley-file-for-btc-eth-sol-etfs-hyperliquid-airdrop-speculation"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно негативний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "fc5cb46b5736eb",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "The White Whale up 10x in a week! Lighter TGE! Saylor buys $109M BTC!",
-      "summary": "Btc: 87k (-1%) | btc.D: 59.0% (0%). Eth: 2953 (-3%) | bnb: 853 (-1%) | sol: 124 (-3%). The White Whale goes almost 15x in a week, from $5m to $71m mcap. Lighter TGE rumours stirring. YouTuber Nick Shirley reveals mass fraud in Minnesota daycare system. Gold & Silver prices see huge dump",
-      "url": "https://decrypt.co/videos/interviews/50vopyFa/the-white-whale-up-10x-in-a-week-lighter-tge-saylor-buys-109m-btc",
-      "published_at": "2025-12-29T16:10:19+00:00",
-      "assets": [
-        "BNB"
-      ],
-      "topics": [],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/50vopyFa/the-white-whale-up-10x-in-a-week-lighter-tge-saylor-buys-109m-btc"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується BNB, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     },
     {
@@ -5572,75 +4853,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
-    },
-    {
-      "id": "c484caf562a85d",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "From Stellar to Canton: How Franklin Templeton Adopted Tokenization",
-      "summary": "Roger Bayston, Head of Digital Assets at Franklin Templeton, unpacks how one of the world's largest asset managers embraced tokenization.",
-      "url": "https://decrypt.co/videos/interviews/ZJJKjnAR/from-stellar-to-canton-how-franklin-templeton-adopted-tokenization",
-      "published_at": "2026-01-22T18:29:30+00:00",
-      "assets": [],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/ZJJKjnAR/from-stellar-to-canton-how-franklin-templeton-adopted-tokenization"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "19e0bd80230233",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Crypto Wallets Can ‘Directly Compete With Neobanks'",
-      "summary": "Bitget Wallet CMO Jamie Elkaleh tells Decrypt how the platform is evolving from a crypto wallet to a everyday finance app that seamlessly integrates crypto with TradFi, building on its vision of \"Crypto for Everyone.\" - (Sponsored post by Bitget Wallet)",
-      "url": "https://decrypt.co/videos/interviews/WsvLVFlp/crypto-wallets-can-directly-compete-with-neobanks",
-      "published_at": "2026-01-05T13:44:47+00:00",
-      "assets": [],
-      "topics": [
-        "regulation",
-        "institutional"
-      ],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/WsvLVFlp/crypto-wallets-can-directly-compete-with-neobanks"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
     }
   ],
   "jev_enabled": true,
@@ -5648,5 +4860,5 @@
   "jev_provider": "apinex",
   "jev_model": "free/gpt-5.6-luna",
   "jev_analyzed_count": 8,
-  "jev_analysis_errors": 7
+  "jev_analysis_errors": 8
 }
