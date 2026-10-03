@@ -48,6 +48,31 @@ class CryptoMyshkaInvariantTests(unittest.TestCase):
             value = str(out.get(key, "")).strip()
             self.assertFalse(value.startswith("{"))
 
+    def test_keyword_matching_does_not_match_substrings(self):
+        self.assertFalse(news_engine.has_keyword("OpenAI researchers discuss safety", "sec"))
+        self.assertTrue(news_engine.has_keyword("SEC approves a crypto ETF", "sec"))
+
+    def test_off_topic_items_are_not_crypto_relevant(self):
+        assets, topics, *_ = news_engine.detect("The Pope comments on AI art")
+        self.assertFalse(news_engine.crypto_relevant("The Pope comments on AI art", assets, topics))
+        assets, topics, *_ = news_engine.detect("SEC approves a Bitcoin ETF")
+        self.assertTrue(news_engine.crypto_relevant("SEC approves a Bitcoin ETF", assets, topics))
+
+    def test_fallback_analysis_is_structured_and_retryable(self):
+        event={
+            "title":"Test crypto event",
+            "summary":"Bitcoin market event",
+            "assets":["BTC"],
+            "jev_take":"Needs confirmation",
+            "watch_for":"Volume and source confirmation",
+            "confidence_label":"Поки одне джерело",
+        }
+        out=jev_analyzer.fallback_analysis(event,"temporary failure")
+        self.assertTrue(out.get("_cross_source_fallback"))
+        self.assertTrue(out.get("_retry_llm"))
+        self.assertIn("short_conclusion",out)
+        self.assertFalse(str(out["short_conclusion"]).startswith("{"))
+
     def test_current_json_has_no_duplicate_primary_ids(self):
         root = Path(__file__).resolve().parents[1] / "data"
         for name, key in (("feed.json", "items"), ("news.json", "items")):
