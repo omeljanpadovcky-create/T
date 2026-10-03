@@ -141,7 +141,8 @@ function renderItems(){
     let extra='';
     if(isNews){
       const ai=x.jev_ai||null;
-      if(ai){
+      const cleanAi=ai && !ai._format_fallback;
+      if(cleanAi){
         extra='<div class="jevbox"><b>🧠 JEV AI</b><p>'+esc(ai.short_conclusion||ai.why_it_matters||'')+'</p>'+
           '<b>Що сталося</b><p>'+esc(ai.what_happened||'')+'</p>'+
           '<b>Чому це важливо</b><p>'+esc(ai.why_it_matters||'')+'</p>'+
