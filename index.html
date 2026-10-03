@@ -22,7 +22,7 @@
 <div class="app">
 <header class="glass head">
   <div class="brand"><div class="logo">🐭</div><div><h1>Крипто<span>мишка</span> 2.1</h1><p>ITstatti → контекст → перевірка → твій висновок</p></div></div>
-  <div class="badges"><span id="status" class="badge warn">Завантаження…</span><span class="badge">NO AUTO-TRADE</span></div>
+  <div class="badges"><span id="status" class="badge warn">Завантаження…</span><span id="liveClock" class="badge">--:--:--</span><span class="badge">NO AUTO-TRADE</span></div>
 </header>
 
 <section class="glass intro">
@@ -321,7 +321,7 @@ async function refreshData(){
     const changed=(j.generated_at!==data.generated_at)||(n.generated_at!==newsData.generated_at);
     data=j;
     newsData=n;
-    $('#status').textContent='FEED · '+(j.generated_at?new Date(j.generated_at).toLocaleString('uk-UA'):'очікує запуску');
+    $('#status').textContent='FEED · оновлено '+(j.generated_at?new Date(j.generated_at).toLocaleString('uk-UA'):'очікує запуску');
     $('#status').className='badge ok';
     if(changed){
       renderSources();
@@ -335,6 +335,14 @@ async function refreshData(){
     $('#status').className='badge warn';
   }
 }
+
+function updateLiveClock(){
+  const el=$('#liveClock');
+  if(!el)return;
+  el.textContent='🕒 '+new Date().toLocaleTimeString('uk-UA',{hour12:false});
+}
+updateLiveClock();
+setInterval(updateLiveClock,1000);
 
 refreshData();
 // GitHub Actions оновлює дані приблизно кожні 10 хв. Сторінка сама
