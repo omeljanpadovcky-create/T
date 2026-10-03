@@ -60,29 +60,51 @@ def main():
             current.append(x)
 
     ids=[x.get("id") for x in current if x.get("id")]
-    state=load(STATE,{"initialized":False,"seen":[]})
+    state=load(STATE,{"initialized":False,"seen":[],"telegram_ready":False})
     seen=set(state.get("seen") or [])
 
+    configured=bool(TOKEN and CHAT_ID)
+
     if not state.get("initialized"):
-        save({"initialized":True,"seen":ids[-3000:]})
+        save({
+            "initialized":True,
+            "seen":ids[-3000:],
+            "telegram_ready":False
+        })
         print(f"Notification state initialized with {len(ids)} existing items; no old spam sent.")
         return
+
+    if configured and not state.get("telegram_ready"):
+        try:
+            send("🐭 Криптомишка підключена. Нові матеріали ITstatti, ретродропи, YouTube та важливі JEV-події приходитимуть сюди автоматично.")
+            state["telegram_ready"]=True
+            print("Telegram connection test sent.")
+        except Exception as e:
+            print(f"Telegram connection test failed: {e}")
 
     fresh=[x for x in current if x.get("id") and x.get("id") not in seen]
     # oldest first for a readable digest, max 6 to avoid spam
     fresh=list(reversed(fresh[:6]))
 
-    if fresh and TOKEN and CHAT_ID:
+    sent=False
+    if fresh and configured:
         body="🐭 Криптомишка: нове\n\n"+"\n\n".join(short(x) for x in fresh)
         send(body)
+        sent=True
         print(f"Sent {len(fresh)} new items")
     elif fresh:
-        print(f"{len(fresh)} new items found, but TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID are not configured.")
+        print(f"{len(fresh)} new items found, but TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID are not configured. Keeping them unseen.")
     else:
         print("No new notification-worthy items.")
 
-    seen.update(ids)
-    save({"initialized":True,"seen":list(seen)[-5000:]})
+    # Never mark fresh items as seen if Telegram is not configured or sending failed.
+    if configured:
+        seen.update(ids)
+    save({
+        "initialized":True,
+        "seen":list(seen)[-5000:],
+        "telegram_ready":bool(state.get("telegram_ready"))
+    })
 
 if __name__=="__main__":
     main()
