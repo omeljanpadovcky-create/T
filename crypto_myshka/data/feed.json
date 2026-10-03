@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-03T13:07:09.743458+00:00",
+  "generated_at": "2026-10-03T13:10:25.470388+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -29,7 +29,7 @@
     },
     "jev_news": {
       "ok": true,
-      "count": 149,
+      "count": 130,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -41,41 +41,41 @@
       "SOL",
       "PENDLE",
       "LDO",
-      "ICP",
-      "ENS"
+      "ENS",
+      "LTC"
     ],
     "prices": {
       "bitcoin": {
-        "usd": 84841,
-        "usd_24h_change": -2.2660570746711026
+        "usd": 84816,
+        "usd_24h_change": -2.234234087793652
       },
       "ethereum": {
-        "usd": 2681.42,
-        "usd_24h_change": -2.6942297628838396
+        "usd": 2680.66,
+        "usd_24h_change": -2.6307251836303274
       },
       "optimism": {
-        "usd": 0.13269,
-        "usd_24h_change": -0.8637980881492112
+        "usd": 0.132828,
+        "usd_24h_change": -0.4890818884072677
       },
       "solana": {
-        "usd": 119.51,
-        "usd_24h_change": -2.5217683539944495
+        "usd": 119.52,
+        "usd_24h_change": -2.455369866884925
       },
       "pendle": {
-        "usd": 2.35,
-        "usd_24h_change": -5.306323395152013
+        "usd": 2.36,
+        "usd_24h_change": -5.1539422680407885
       },
       "lido-dao": {
-        "usd": 0.458511,
-        "usd_24h_change": -1.722364937622542
-      },
-      "internet-computer": {
-        "usd": 3.29,
-        "usd_24h_change": -1.620490769715802
+        "usd": 0.458876,
+        "usd_24h_change": -1.5472322834341268
       },
       "ethereum-name-service": {
         "usd": 6.8,
-        "usd_24h_change": -5.39708097667455
+        "usd_24h_change": -5.890603812409916
+      },
+      "litecoin": {
+        "usd": 69.42,
+        "usd_24h_change": -0.8169796002988375
       }
     }
   },
@@ -6203,6 +6203,6 @@
     }
   ],
   "archive_count": 0,
-  "news_count": 149,
+  "news_count": 130,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
