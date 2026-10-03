@@ -291,12 +291,14 @@ def main():
         reverse=True,
     )
 
-    # Eight events × up to three free models = max 24 first-pass requests,
-    # below the documented 30 RPM free-tier ceiling.
+    # Analyze a new batch on every run. Already analyzed events are skipped,
+    # so the archive is gradually filled instead of re-analyzing the same top 8.
     for event in candidates:
         if done >= 8:
             break
         if int(event.get("impact") or 0) < 2:
+            continue
+        if event.get("jev_ai"):
             continue
         try:
             event["jev_ai"]=analyze(event, feed)
@@ -313,7 +315,12 @@ def main():
     news["jev_status"]="ok" if done else "configured_but_no_success"
     news["jev_provider"]=provider
     news["jev_model"]=model
-    news["jev_analyzed_count"]=done
+    news["jev_analyzed_count"]=sum(1 for x in (news.get("items") or []) if x.get("jev_ai"))
+    news["jev_analyzed_this_run"]=done
+    news["jev_pending_count"]=sum(
+        1 for x in (news.get("items") or [])
+        if int(x.get("impact") or 0) >= 2 and not x.get("jev_ai")
+    )
     news["jev_analysis_errors"]=errors
     save(NEWS, news)
     print(json.dumps({
