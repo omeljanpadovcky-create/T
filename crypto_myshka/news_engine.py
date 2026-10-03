@@ -330,7 +330,10 @@ def preserve_jev_analysis(events, prev_items):
             old = prev_by_title.get(clean(event.get("title", "")).lower())
         if not old:
             continue
-        for key in ("jev_ai", "analysis_engine", "analysis_level", "analysis_error"):
+        for key in (
+            "jev_ai", "analysis_engine", "analysis_level", "analysis_error",
+            "analysis_retry_count", "analysis_last_attempt_at"
+        ):
             if key in old:
                 event[key] = old[key]
     return events
