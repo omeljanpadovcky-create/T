@@ -289,8 +289,35 @@ def build_events(rows):
 
 
 def main():
+    previous = {}
+    if OUT.exists():
+        try:
+            previous = json.loads(OUT.read_text(encoding="utf-8"))
+        except Exception:
+            previous = {}
+
+    prev_items = previous.get("items") or []
+    prev_by_id = {x.get("id"): x for x in prev_items if x.get("id")}
+    prev_by_title = {
+        clean(x.get("title", "")).lower(): x
+        for x in prev_items
+        if clean(x.get("title", ""))
+    }
+
     rows, feed_status = read_feeds()
     events = build_events(rows)
+
+    # Preserve finished JEV work between refreshes. news.json is rebuilt from RSS
+    # every run, so without this merge the analyzer would lose its previous work.
+    for event in events:
+        old = prev_by_id.get(event.get("id"))
+        if not old:
+            old = prev_by_title.get(clean(event.get("title", "")).lower())
+        if not old:
+            continue
+        for key in ("jev_ai", "analysis_engine", "analysis_level", "analysis_error"):
+            if key in old:
+                event[key] = old[key]
 
     payload = {
         "version": 2,
