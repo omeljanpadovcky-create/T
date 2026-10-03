@@ -9,6 +9,11 @@ import requests
 from bs4 import BeautifulSoup
 from yt_dlp import YoutubeDL
 
+try:
+    from storage import sync_feed
+except ImportError:
+    from crypto_myshka.storage import sync_feed
+
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "data" / "feed.json"
 ARCHIVE = ROOT / "data" / "telegram_archive.json"
@@ -241,7 +246,8 @@ def main():
     }
     OUT.parent.mkdir(parents=True,exist_ok=True)
     OUT.write_text(json.dumps(payload,ensure_ascii=False,indent=2),encoding="utf-8")
-    print(f"wrote {len(items)} items -> {OUT}")
+    db_count=sync_feed(payload)
+    print(f"wrote {len(items)} items -> {OUT}; postgres={db_count}")
 
 if __name__=="__main__":
     main()
