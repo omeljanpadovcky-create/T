@@ -2,4 +2,4 @@ requests==2.32.5
 beautifulsoup4==4.13.5
 yt-dlp
 feedparser==6.0.11
-psycopg[binary]>=3.2,<4\n
+psycopg[binary]>=3.2,<4
