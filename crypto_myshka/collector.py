@@ -155,7 +155,8 @@ def youtube_items():
             "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
             "url": url,
             "published_at": published_at,
-            "video_id": vid
+            "video_id": vid,
+            "knowledge": True
         })
     return out
 
@@ -230,7 +231,7 @@ def main():
         "version":3,
         "generated_at":datetime.now(timezone.utc).isoformat(),
         "sources":status,
-        "market":market(items + (news.get("items") or [])[:80]),
+        "market":market([x for x in items if not x.get("knowledge")] + (news.get("items") or [])[:80]),
         "items":items,
         "archive_count":archive.get("post_count",0),
         "news_count":news.get("item_count",0),
