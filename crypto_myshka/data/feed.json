@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-03T13:50:21.967297+00:00",
+  "generated_at": "2026-10-03T14:04:10.791413+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -24,14 +24,14 @@
     },
     "telegram_archive": {
       "ok": true,
-      "count": 6001,
+      "count": 7860,
       "complete": false,
-      "updated_at": "2026-10-03T13:50:17.750977+00:00",
+      "updated_at": "2026-10-03T14:04:06.766424+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 150,
+      "count": 131,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -43,41 +43,41 @@
       "SOL",
       "PENDLE",
       "LDO",
-      "ICP",
-      "ENS"
+      "ENS",
+      "LTC"
     ],
     "prices": {
       "bitcoin": {
-        "usd": 84848,
-        "usd_24h_change": -2.3440967507850283
+        "usd": 84822,
+        "usd_24h_change": -2.1674468079163076
       },
       "ethereum": {
-        "usd": 2681.11,
-        "usd_24h_change": -2.816586198902031
+        "usd": 2680.49,
+        "usd_24h_change": -2.425646312420257
       },
       "optimism": {
-        "usd": 0.132993,
-        "usd_24h_change": -0.7630941679480817
+        "usd": 0.134064,
+        "usd_24h_change": 0.23103263869434718
       },
       "solana": {
-        "usd": 119.44,
-        "usd_24h_change": -2.7646120036370356
+        "usd": 119.33,
+        "usd_24h_change": -2.322355937409103
       },
       "pendle": {
-        "usd": 2.36,
-        "usd_24h_change": -5.2522111320888225
+        "usd": 2.35,
+        "usd_24h_change": -4.935694978788549
       },
       "lido-dao": {
-        "usd": 0.463111,
-        "usd_24h_change": -1.2465745073255177
-      },
-      "internet-computer": {
-        "usd": 3.28,
-        "usd_24h_change": -1.0083471953184624
+        "usd": 0.46121,
+        "usd_24h_change": -1.409870075065293
       },
       "ethereum-name-service": {
-        "usd": 6.83,
-        "usd_24h_change": -4.717025142785978
+        "usd": 6.84,
+        "usd_24h_change": -4.285009707565857
+      },
+      "litecoin": {
+        "usd": 69.92,
+        "usd_24h_change": -1.6970595704470657
       }
     }
   },
@@ -6204,7 +6204,7 @@
       "knowledge": true
     }
   ],
-  "archive_count": 6001,
-  "news_count": 150,
+  "archive_count": 7860,
+  "news_count": 131,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
