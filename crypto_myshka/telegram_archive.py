@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import json, re, time, html, hashlib
+import json, re, time, html, hashlib, os
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlencode
@@ -10,7 +10,8 @@ from bs4 import BeautifulSoup
 
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/"data"/"telegram_archive.json"
-UA={"User-Agent":"Mozilla/5.0 CryptoMyshka/2.0"}
+UA={"User-Agent":"Mozilla/5.0 CryptoMyshka/2.1"}
+MAX_PAGES_PER_CHANNEL=max(5, min(int(os.getenv("TELEGRAM_ARCHIVE_PAGES","80")), 150))
 
 CHANNELS={
     "telegram_main":"it_statti",
@@ -27,11 +28,15 @@ def parse_page(channel:str, raw:str):
         msg=w.select_one(".tgme_widget_message")
         body=w.select_one(".tgme_widget_message_text")
         tm=w.select_one("time")
-        if not msg: continue
+        if not msg:
+            continue
         post=msg.get("data-post","")
-        if not post or "/" not in post: continue
-        try: post_id=int(post.rsplit("/",1)[1])
-        except Exception: continue
+        if not post or "/" not in post:
+            continue
+        try:
+            post_id=int(post.rsplit("/",1)[1])
+        except Exception:
+            continue
         text=clean(body.get_text(" ",strip=True)) if body else ""
         rows.append({
             "id":hashlib.sha1(post.encode()).hexdigest()[:14],
@@ -52,75 +57,125 @@ def fetch_page(channel:str, before:int|None=None):
     return parse_page(channel,r.text)
 
 def load_existing():
-    if not OUT.exists(): return {"version":1,"channels":{},"posts":[]}
-    try: return json.loads(OUT.read_text(encoding="utf-8"))
-    except Exception: return {"version":1,"channels":{},"posts":[]}
+    if not OUT.exists():
+        return {"version":2,"channels":{},"posts":[]}
+    try:
+        return json.loads(OUT.read_text(encoding="utf-8"))
+    except Exception:
+        return {"version":2,"channels":{},"posts":[]}
 
-def crawl_channel(channel:str, existing_by_url:dict[str,dict], max_pages=450):
-    all_rows=[]
-    before=None
+def merge_rows(rows, by_url):
+    added=0
+    for row in rows:
+        url=row.get("url")
+        if not url:
+            continue
+        if url not in by_url:
+            added+=1
+        by_url[url]=row
+    return added
+
+def channel_posts(channel, by_url):
+    return [p for p in by_url.values() if p.get("channel")==channel and isinstance(p.get("post_id"),int)]
+
+def crawl_older(channel:str, by_url:dict[str,dict], state:dict):
+    existing=channel_posts(channel,by_url)
+    before=min((p["post_id"] for p in existing), default=None)
     pages=0
-    consecutive_known_pages=0
-    min_seen=None
-    while pages<max_pages:
+    added=0
+    complete=bool(state.get("complete",False))
+
+    # Always refresh the live edge so archive also receives new posts.
+    latest=fetch_page(channel)
+    pages+=1
+    added+=merge_rows(latest,by_url)
+
+    # If we already reached the beginning of the channel, only the live refresh is needed.
+    if complete:
+        allp=channel_posts(channel,by_url)
+        return added,pages,min((p["post_id"] for p in allp),default=None),True
+
+    # Recalculate the oldest known id after live refresh.
+    allp=channel_posts(channel,by_url)
+    before=min((p["post_id"] for p in allp), default=None)
+
+    # First ever run: latest page is already page 1, continue from its oldest id.
+    if before is None and latest:
+        before=min(p["post_id"] for p in latest)
+
+    while before and pages < MAX_PAGES_PER_CHANNEL:
         rows=fetch_page(channel,before)
         pages+=1
-        if not rows: break
-
-        new_count=0
-        ids=[]
-        for row in rows:
-            ids.append(row["post_id"])
-            if row["url"] not in existing_by_url:
-                existing_by_url[row["url"]]=row
-                all_rows.append(row)
-                new_count+=1
-
-        page_min=min(ids) if ids else None
-        if page_min is None or page_min==min_seen: break
-        min_seen=page_min
-
-        if new_count==0:
-            consecutive_known_pages+=1
-        else:
-            consecutive_known_pages=0
-
-        # Once archive already exists, two fully-known pages mean we've rejoined history.
-        if consecutive_known_pages>=2:
+        if not rows:
+            complete=True
             break
 
-        before=page_min
-        time.sleep(0.08)
+        ids=[r["post_id"] for r in rows if isinstance(r.get("post_id"),int)]
+        if not ids:
+            complete=True
+            break
 
-    return all_rows,pages,min_seen
+        page_min=min(ids)
+        # Telegram sometimes returns the same boundary page. Prevent loops.
+        if page_min >= before:
+            complete=True
+            break
+
+        added+=merge_rows(rows,by_url)
+        before=page_min
+        time.sleep(0.12)
+
+    allp=channel_posts(channel,by_url)
+    earliest=min((p["post_id"] for p in allp), default=None)
+    return added,pages,earliest,complete
 
 def main():
     state=load_existing()
     posts=state.get("posts") or []
     by_url={p.get("url"):p for p in posts if p.get("url")}
+    old_stats=state.get("channels") or {}
     stats={}
 
     for source,channel in CHANNELS.items():
-        added,pages,earliest=crawl_channel(channel,by_url)
-        stats[source]={
-            "channel":channel,
-            "added":len(added),
-            "pages_scanned":pages,
-            "earliest_post_id_seen":earliest,
-        }
+        try:
+            prev=old_stats.get(source) or {}
+            added,pages,earliest,complete=crawl_older(channel,by_url,prev)
+            total=len(channel_posts(channel,by_url))
+            stats[source]={
+                "channel":channel,
+                "ok":True,
+                "added":added,
+                "archived":total,
+                "pages_scanned":pages,
+                "earliest_post_id_seen":earliest,
+                "complete":complete,
+            }
+        except Exception as e:
+            prev=old_stats.get(source) or {}
+            stats[source]={
+                **prev,
+                "channel":channel,
+                "ok":False,
+                "error":str(e)[:300],
+            }
 
     posts=list(by_url.values())
     posts.sort(key=lambda p:(p.get("published_at") or "",p.get("post_id") or 0),reverse=True)
     payload={
-        "version":1,
+        "version":2,
         "updated_at":datetime.now(timezone.utc).isoformat(),
         "channels":stats,
         "post_count":len(posts),
+        "complete":all(bool((stats.get(k) or {}).get("complete")) for k in CHANNELS),
         "posts":posts,
     }
     OUT.parent.mkdir(parents=True,exist_ok=True)
     OUT.write_text(json.dumps(payload,ensure_ascii=False,indent=2),encoding="utf-8")
-    print(json.dumps({"post_count":len(posts),"channels":stats},ensure_ascii=False))
+    print(json.dumps({
+        "post_count":len(posts),
+        "complete":payload["complete"],
+        "channels":stats,
+    },ensure_ascii=False))
 
 if __name__=="__main__":
     main()
