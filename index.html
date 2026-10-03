@@ -311,24 +311,35 @@ document.querySelectorAll('.mouseAiQuick button').forEach(b=>{
   };
 });
 
-Promise.all([
-  fetch(FEED).then(r=>{if(!r.ok)throw Error(r.status);return r.json()}),
-  fetch(NEWS).then(r=>r.ok?r.json():({items:[]}))
-]).then(([j,n])=>{
-  data=j;
-  newsData=n;
-  $('#status').textContent='FEED · '+(j.generated_at?new Date(j.generated_at).toLocaleString('uk-UA'):'очікує запуску');
-  $('#status').className='badge ok';
-  renderSources();
-  renderMarket();
-  renderItems();
-  renderJournal();
-}).catch(err=>{
-  console.error(err);
-  $('#status').textContent='FEED ще оновлюється';
-  renderItems();
-  renderJournal();
-});
+async function refreshData(){
+  try{
+    const stamp=Date.now();
+    const [j,n]=await Promise.all([
+      fetch('crypto_myshka/data/feed.json?ts='+stamp,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(r.status);return r.json()}),
+      fetch('crypto_myshka/data/news.json?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():({items:[]}))
+    ]);
+    const changed=(j.generated_at!==data.generated_at)||(n.generated_at!==newsData.generated_at);
+    data=j;
+    newsData=n;
+    $('#status').textContent='FEED · '+(j.generated_at?new Date(j.generated_at).toLocaleString('uk-UA'):'очікує запуску');
+    $('#status').className='badge ok';
+    if(changed){
+      renderSources();
+      renderMarket();
+      renderItems();
+    }
+    renderJournal();
+  }catch(err){
+    console.error(err);
+    $('#status').textContent='FEED ще оновлюється';
+    $('#status').className='badge warn';
+  }
+}
+
+refreshData();
+// GitHub Actions оновлює дані приблизно кожні 10 хв. Сторінка сама
+// перевіряє нову версію щохвилини, тому Ctrl+F5 більше не потрібен.
+setInterval(refreshData,60000);
 </script>
 </body>
 </html>
