@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-03T12:41:57.397740+00:00",
+  "generated_at": "2026-10-03T12:42:29.635296+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -46,36 +46,36 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 84881,
-        "usd_24h_change": -2.1370573080965483
+        "usd": 84877,
+        "usd_24h_change": -2.0040091192869385
       },
       "ethereum": {
-        "usd": 2682.63,
-        "usd_24h_change": -2.5948002102230463
+        "usd": 2682.61,
+        "usd_24h_change": -2.4188637230785477
       },
       "optimism": {
-        "usd": 0.131373,
-        "usd_24h_change": -1.5727275387913544
+        "usd": 0.13134,
+        "usd_24h_change": -1.5268385420022264
       },
       "solana": {
-        "usd": 119.38,
-        "usd_24h_change": -2.311196971815567
+        "usd": 119.41,
+        "usd_24h_change": -2.090889168896949
       },
       "pendle": {
         "usd": 2.36,
-        "usd_24h_change": -4.603837056488959
+        "usd_24h_change": -4.462720667567828
       },
       "lido-dao": {
-        "usd": 0.456473,
-        "usd_24h_change": -1.124594062882483
+        "usd": 0.456448,
+        "usd_24h_change": -0.8100078828019861
       },
       "ethereum-name-service": {
         "usd": 6.79,
-        "usd_24h_change": -3.8681203091973178
+        "usd_24h_change": -3.6893715665164137
       },
       "litecoin": {
         "usd": 69.59,
-        "usd_24h_change": -0.3371877007497156
+        "usd_24h_change": -0.1799919136539653
       }
     }
   },
