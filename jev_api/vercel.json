@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/jev-chat.js": {
+      "maxDuration": 30
+    }
+  }
+}
