@@ -219,6 +219,8 @@ def main():
     status["telegram_archive"]={
         "ok":bool(archive.get("post_count",0)),
         "count":archive.get("post_count",0),
+        "complete":bool(archive.get("complete",False)),
+        "updated_at":archive.get("updated_at"),
         "url":"https://t.me/it_statti"
     }
     status["jev_news"]={
