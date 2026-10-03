@@ -163,3 +163,70 @@ def sync_archive(payload: dict) -> int:
                 )
         conn.commit()
     return len(posts)
+
+
+def load_notification_state(default: dict) -> dict:
+    if not enabled():
+        return default
+    ensure_schema()
+    with _connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT value FROM notification_state WHERE key=%s", ("telegram",))
+            row = cur.fetchone()
+            if not row:
+                return default
+            value = row[0]
+            return value if isinstance(value, dict) else default
+
+
+def save_notification_state(state: dict) -> bool:
+    if not enabled():
+        return False
+    from psycopg.types.json import Jsonb
+    ensure_schema()
+    with _connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                INSERT INTO notification_state (key, value, updated_at)
+                VALUES (%s, %s, now())
+                ON CONFLICT (key) DO UPDATE SET
+                  value=EXCLUDED.value,
+                  updated_at=now()
+                """,
+                ("telegram", Jsonb(state)),
+            )
+        conn.commit()
+    return True
+
+
+def mark_notification_delivered(item_ids: list[str]) -> int:
+    if not enabled() or not item_ids:
+        return 0
+    ensure_schema()
+    with _connect() as conn:
+        with conn.cursor() as cur:
+            for item_id in item_ids:
+                cur.execute(
+                    """
+                    INSERT INTO notification_deliveries (item_id, channel, delivered_at)
+                    VALUES (%s, 'telegram', now())
+                    ON CONFLICT (item_id) DO NOTHING
+                    """,
+                    (item_id,),
+                )
+        conn.commit()
+    return len(item_ids)
+
+
+def delivered_notification_ids(item_ids: list[str]) -> set[str]:
+    if not enabled() or not item_ids:
+        return set()
+    ensure_schema()
+    with _connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT item_id FROM notification_deliveries WHERE item_id = ANY(%s)",
+                (item_ids,),
+            )
+            return {row[0] for row in cur.fetchall()}
