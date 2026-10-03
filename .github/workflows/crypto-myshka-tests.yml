@@ -1,0 +1,30 @@
+name: CryptoMyshka Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'crypto_myshka/**'
+      - '.github/workflows/crypto-myshka-tests.yml'
+  pull_request:
+    paths:
+      - 'crypto_myshka/**'
+      - '.github/workflows/crypto-myshka-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r crypto_myshka/requirements.txt
+      - name: Run invariants
+        run: python -m unittest discover -s crypto_myshka/tests -p 'test_*.py' -v
