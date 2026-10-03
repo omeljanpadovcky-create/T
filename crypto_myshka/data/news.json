@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-03T13:10:46.695293+00:00",
+  "generated_at": "2026-10-03T13:16:53.444311+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -47,7 +47,7 @@
     }
   },
   "raw_item_count": 240,
-  "item_count": 129,
+  "item_count": 130,
   "items": [
     {
       "id": "9d665cdd859369",
@@ -82,10 +82,49 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
-      "id": "b6893f6c5be774",
+      "id": "c3a305c956c7be",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Fed finds a silver lining as China sells U.S. Treasuries - thestreet.com",
+      "summary": "Fed finds a silver lining as China sells U.S. Treasuries &nbsp;&nbsp; thestreet.com",
+      "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQSEZ2V2NUR2F3YmplQWRBQXNwblFHcnZ6bHBMYkFNckluaXZoNk1yRWNzUTlRTWhGTnhwX0lMaW9sZWFHYUh1cWRTY29ZdlRFQ2U5d01kSGU5TTIzR2tPVEhsS1Y0amtyNE8xZC1vU1MxenljMDAxY3dOdi1wcXVkYmhoTkh1eGFRZzFNb0pBS3lWcmhvZUxGT1V6VnY?oc=5",
+      "published_at": "2026-10-03T11:33:00+00:00",
+      "assets": [],
+      "topics": [
+        "macro"
+      ],
+      "impact": 3,
+      "impact_label": "Високий вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Google News discovery"
+      ],
+      "links": [
+        {
+          "publisher": "Google News discovery",
+          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQSEZ2V2NUR2F3YmplQWRBQXNwblFHcnZ6bHBMYkFNckluaXZoNk1yRWNzUTlRTWhGTnhwX0lMaW9sZWFHYUh1cWRTY29ZdlRFQ2U5d01kSGU5TTIzR2tPVEhsS1Y0amtyNE8xZC1vU1MxenljMDAxY3dOdi1wcXVkYmhoTkh1eGFRZzFNb0pBS3lWcmhvZUxGT1V6VnY?oc=5"
+        }
+      ],
+      "confidence_label": "Discovery: потребує підтвердження",
+      "jev_take": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Google News використано лише як радар теми",
+        "Ринковий тон: Невизначений / змішаний",
+        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
+    },
+    {
+      "id": "b4b66b183c9611",
       "source": "jev_analysis",
       "mode": "news",
       "title": "SEC approves 3x leveraged Bitcoin and Ether ETPs, but trading has to wait - TradingView",
@@ -114,10 +153,6 @@
         },
         {
           "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQbkV3eVJoa3pnUWh6Q3VQbG5peWZ1WVVnUFI2QXJRZU5pbWZRdERFNDFESGJoeDlUWFZweFNoRi1TdzRYZmY2WU9DaGh4Z0QzdE1xUFFKLWZyb0t3UkRNbm83WS1BaXBJREs3cVk5QWFXZl91NTdLUmNhclBtandZcWlMXzhlb1FJRFY5SmQwaktsazE0T2tyeFZMZC1LZlhFblFtZlJ2Yw?oc=5"
-        },
-        {
-          "publisher": "Google News discovery",
           "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQczFQSjFVQnExYUN5NkEzYmZvVzF6aDl5SlBGLVEwaXJ3Y0JQNi14WWplTldLTGpxcFhRNUdQNXI4U3hlVW9JMTZzOFNvZnhTWFBPaFo5cU9wOXNYYWpad0ItcUpmSE4wX2xoSTVsYTRvaTlSWmV2QS0wTXhJSXdpTHYzT1hERnlXZmRJT1Qtd3B5eF9Odk9GVTFkWkhiNWNjVjJuNl9XNm96ZENya2ZFcEdpT254Qy1COEMw?oc=5"
         }
       ],
@@ -129,7 +164,9 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "89660531956ebe",
@@ -165,7 +202,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "5fa0bb617fd49e",
@@ -200,7 +239,9 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "c5ba51b1caa64e",
@@ -238,7 +279,9 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "bfdf04777641eb",
@@ -273,7 +316,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "6365432e76be55",
@@ -309,7 +354,9 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "c1434e1f4335c5",
@@ -344,7 +391,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "8f930505834b07",
@@ -379,7 +428,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "a7bfea161ca24b",
@@ -416,7 +467,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "d47657ee8e7673",
@@ -451,7 +504,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "09af11f91cb5d7",
@@ -494,7 +549,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "852f2dd37c9b25",
@@ -529,7 +586,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "8855fbd6542ca5",
@@ -574,7 +633,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "5e39bc27debd2e",
@@ -611,7 +672,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "9b740803d60c3b",
@@ -646,7 +709,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "84759ba1ed31dd",
@@ -681,7 +746,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "0c443dc1429c2e",
@@ -716,7 +783,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "b06d3b63cf360f",
@@ -751,7 +820,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "2cf6b19fd05aef",
@@ -787,7 +858,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "f9f6f7ec2b73e3",
@@ -833,7 +906,9 @@
         "Підтверджено кількома джерелами",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "6e4617f343b115",
@@ -868,7 +943,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "6e76591a81280c",
@@ -903,7 +980,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "f10f21b774010b",
@@ -938,7 +1017,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "3d5fe9273edc68",
@@ -973,7 +1054,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "dc1bd9510e1b85",
@@ -1009,7 +1092,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "881e0876557325",
@@ -1046,7 +1131,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "74d391650648ee",
@@ -1081,7 +1168,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "8a8f939ff809ef",
@@ -1117,7 +1206,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "404 Client Error: Not Found for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "b5ac9e41e1a1e1",
@@ -1152,7 +1243,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "1ebda8c8f725a4",
@@ -1188,7 +1281,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "3c7dbac99ce032",
@@ -1224,7 +1319,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "e9e291dc9e6c92",
@@ -1260,7 +1357,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "9d67cfc5430332",
@@ -1297,7 +1396,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "7eb3f6fb70c268",
@@ -1332,7 +1433,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "7b30d4f86b2b8c",
@@ -1375,7 +1478,9 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Потенційно позитивний",
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "5dc52a640b3218",
@@ -1412,7 +1517,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "1cbc6de01ca661",
@@ -1449,7 +1556,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "fa1f4f9305265c",
@@ -1484,7 +1593,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "2e07fa540643af",
@@ -1519,7 +1630,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "b723156b16345a",
@@ -1562,7 +1675,9 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "98736b289a333e",
@@ -1599,7 +1714,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "6ccc4dba345097",
@@ -1642,7 +1759,9 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "684814993e15b9",
@@ -1677,7 +1796,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "d7cb6787693d1a",
@@ -1714,7 +1835,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "670347ec743fe8",
@@ -1750,7 +1873,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "fc42588ae2ef17",
@@ -1788,7 +1913,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "edeee15e1a314e",
@@ -1827,7 +1954,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "f948c17f47042c",
@@ -1862,7 +1991,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "708eeea3e0936c",
@@ -1905,7 +2036,9 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "90102ad4dc0766",
@@ -1942,7 +2075,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "dc2df309bc160e",
@@ -1977,7 +2112,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "8a526bc7202771",
@@ -2022,7 +2159,9 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "966a99ed729dbf",
@@ -2067,7 +2206,9 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "bf66406d7f93eb",
@@ -2100,7 +2241,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "630ad426bb44ed",
@@ -2135,7 +2278,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "4dd4bb68bff04f",
@@ -2170,7 +2315,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "f2c8cf8d19a1d0",
@@ -2205,7 +2352,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "6221a49c39451a",
@@ -2242,7 +2391,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "09cd88c674cb6e",
@@ -2280,7 +2431,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "429 Client Error: Too Many Requests for url: https://api.apinex.bond/v1/chat/completions",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "879d78ac6de9dd",
@@ -4697,9 +4850,10 @@
       ]
     }
   ],
-  "jev_enabled": false,
-  "jev_status": "not_configured",
-  "jev_provider": null,
-  "jev_model": null,
-  "jev_analyzed_count": 0
+  "jev_enabled": true,
+  "jev_status": "configured_but_no_success",
+  "jev_provider": "apinex",
+  "jev_model": "free/gpt-5.6-luna",
+  "jev_analyzed_count": 0,
+  "jev_analysis_errors": 61
 }
