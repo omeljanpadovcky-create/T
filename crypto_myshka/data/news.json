@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-03T13:10:21.967409+00:00",
+  "generated_at": "2026-10-03T13:10:46.695293+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -47,7 +47,7 @@
     }
   },
   "raw_item_count": 240,
-  "item_count": 130,
+  "item_count": 129,
   "items": [
     {
       "id": "9d665cdd859369",
@@ -85,42 +85,7 @@
       ]
     },
     {
-      "id": "c3a305c956c7be",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Fed finds a silver lining as China sells U.S. Treasuries - thestreet.com",
-      "summary": "Fed finds a silver lining as China sells U.S. Treasuries &nbsp;&nbsp; thestreet.com",
-      "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQSEZ2V2NUR2F3YmplQWRBQXNwblFHcnZ6bHBMYkFNckluaXZoNk1yRWNzUTlRTWhGTnhwX0lMaW9sZWFHYUh1cWRTY29ZdlRFQ2U5d01kSGU5TTIzR2tPVEhsS1Y0amtyNE8xZC1vU1MxenljMDAxY3dOdi1wcXVkYmhoTkh1eGFRZzFNb0pBS3lWcmhvZUxGT1V6VnY?oc=5",
-      "published_at": "2026-10-03T11:33:00+00:00",
-      "assets": [],
-      "topics": [
-        "macro"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Google News discovery"
-      ],
-      "links": [
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQSEZ2V2NUR2F3YmplQWRBQXNwblFHcnZ6bHBMYkFNckluaXZoNk1yRWNzUTlRTWhGTnhwX0lMaW9sZWFHYUh1cWRTY29ZdlRFQ2U5d01kSGU5TTIzR2tPVEhsS1Y0amtyNE8xZC1vU1MxenljMDAxY3dOdi1wcXVkYmhoTkh1eGFRZzFNb0pBS3lWcmhvZUxGT1V6VnY?oc=5"
-        }
-      ],
-      "confidence_label": "Discovery: потребує підтвердження",
-      "jev_take": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Google News використано лише як радар теми",
-        "Ринковий тон: Невизначений / змішаний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
-      "id": "f3b1706bd14f9d",
+      "id": "b6893f6c5be774",
       "source": "jev_analysis",
       "mode": "news",
       "title": "SEC approves 3x leveraged Bitcoin and Ether ETPs, but trading has to wait - TradingView",
@@ -150,10 +115,6 @@
         {
           "publisher": "Google News discovery",
           "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQbkV3eVJoa3pnUWh6Q3VQbG5peWZ1WVVnUFI2QXJRZU5pbWZRdERFNDFESGJoeDlUWFZweFNoRi1TdzRYZmY2WU9DaGh4Z0QzdE1xUFFKLWZyb0t3UkRNbm83WS1BaXBJREs3cVk5QWFXZl91NTdLUmNhclBtandZcWlMXzhlb1FJRFY5SmQwaktsazE0T2tyeFZMZC1LZlhFblFtZlJ2Yw?oc=5"
-        },
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNMlctdHJwUFE4SkY4MENkd0pFRnJmcl91UEZ1SkI0Nk03MTl2M0VWNG5fd1J4YTgyal9jem56dG1iSlFTbGU4YTRCTTdLUjljYU1mMVRrMS1QRVFLVy03aC1MUHkxQnNSVUx2d2xicU4yU1dVRm1sdURSV29YNTh5MFJfNVMtYURCZ2xBMG5QSXk?oc=5"
         },
         {
           "publisher": "Google News discovery",

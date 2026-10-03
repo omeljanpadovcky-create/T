@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-03T13:10:25.470388+00:00",
+  "generated_at": "2026-10-03T13:10:51.476464+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -29,7 +29,7 @@
     },
     "jev_news": {
       "ok": true,
-      "count": 130,
+      "count": 129,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -6203,6 +6203,6 @@
     }
   ],
   "archive_count": 0,
-  "news_count": 130,
+  "news_count": 129,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
