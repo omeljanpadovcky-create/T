@@ -187,6 +187,7 @@ def apinex_retry_delay(response, attempt):
 def analyze_apinex(event, feed):
     payload=build_payload(event, feed)
     last_error=None
+    best_fallback=None
 
     for model in dict.fromkeys(APINEX_FALLBACK_MODELS):
         if not str(model).startswith("free/"):
@@ -221,6 +222,12 @@ def analyze_apinex(event, feed):
                     break
                 result=extract_json(content)
                 result["_model_used"]=model
+                if isinstance(result, dict) and result.get("_format_fallback"):
+                    # Do not stop on malformed/truncated JSON. Try the next free
+                    # model in the same run and keep this only as a last resort.
+                    best_fallback = result
+                    last_error = f"APInex malformed/truncated JSON for {model}"
+                    break
                 return result
 
             body=(r.text or "").strip().replace("\n"," ")[:500]
@@ -241,6 +248,8 @@ def analyze_apinex(event, feed):
                 break
             break
 
+    if best_fallback:
+        return best_fallback
     raise RuntimeError(last_error or "APInex request failed")
 
 def analyze_openai(event, feed):
