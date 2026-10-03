@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-03T12:42:29.635296+00:00",
+  "generated_at": "2026-10-03T12:56:35.761852+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -28,9 +28,9 @@
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
-      "ok": false,
-      "count": 0,
-      "url": "https://news.google.com/search?q=crypto"
+      "ok": true,
+      "count": 128,
+      "url": "crypto_myshka/data/news.json"
     }
   },
   "market": {
@@ -46,36 +46,36 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 84877,
-        "usd_24h_change": -2.0040091192869385
+        "usd": 84862,
+        "usd_24h_change": -2.2785259864902296
       },
       "ethereum": {
-        "usd": 2682.61,
-        "usd_24h_change": -2.4188637230785477
+        "usd": 2682.33,
+        "usd_24h_change": -2.6053217406445444
       },
       "optimism": {
-        "usd": 0.13134,
-        "usd_24h_change": -1.5268385420022264
+        "usd": 0.131685,
+        "usd_24h_change": -1.8074138737650025
       },
       "solana": {
-        "usd": 119.41,
-        "usd_24h_change": -2.090889168896949
+        "usd": 119.49,
+        "usd_24h_change": -2.391297642956291
       },
       "pendle": {
-        "usd": 2.36,
-        "usd_24h_change": -4.462720667567828
+        "usd": 2.35,
+        "usd_24h_change": -5.292592131101916
       },
       "lido-dao": {
-        "usd": 0.456448,
-        "usd_24h_change": -0.8100078828019861
+        "usd": 0.456353,
+        "usd_24h_change": -2.6778390079093697
       },
       "ethereum-name-service": {
-        "usd": 6.79,
-        "usd_24h_change": -3.6893715665164137
+        "usd": 6.78,
+        "usd_24h_change": -4.3329616750526405
       },
       "litecoin": {
-        "usd": 69.59,
-        "usd_24h_change": -0.1799919136539653
+        "usd": 69.61,
+        "usd_24h_change": -0.4934583580249184
       }
     }
   },
@@ -5141,7 +5141,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=rWtey4NibPU",
       "published_at": null,
-      "video_id": "rWtey4NibPU"
+      "video_id": "rWtey4NibPU",
+      "knowledge": true
     },
     {
       "id": "3844140acf5cd0",
@@ -5156,7 +5157,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=CxNvknaqIME",
       "published_at": null,
-      "video_id": "CxNvknaqIME"
+      "video_id": "CxNvknaqIME",
+      "knowledge": true
     },
     {
       "id": "eb88c3dd7d8d07",
@@ -5171,7 +5173,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=seFNnvpftz4",
       "published_at": null,
-      "video_id": "seFNnvpftz4"
+      "video_id": "seFNnvpftz4",
+      "knowledge": true
     },
     {
       "id": "bc4936e03893e5",
@@ -5186,7 +5189,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=vQw_-w1Dy7o",
       "published_at": null,
-      "video_id": "vQw_-w1Dy7o"
+      "video_id": "vQw_-w1Dy7o",
+      "knowledge": true
     },
     {
       "id": "56c391fc6f4cf6",
@@ -5201,7 +5205,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=RSdKKuXNZ5k",
       "published_at": null,
-      "video_id": "RSdKKuXNZ5k"
+      "video_id": "RSdKKuXNZ5k",
+      "knowledge": true
     },
     {
       "id": "efbfe2084a782f",
@@ -5216,7 +5221,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=RGbcPPKIW5E",
       "published_at": null,
-      "video_id": "RGbcPPKIW5E"
+      "video_id": "RGbcPPKIW5E",
+      "knowledge": true
     },
     {
       "id": "bb4c8ba76ab160",
@@ -5231,7 +5237,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=rmrkuRMutF0",
       "published_at": null,
-      "video_id": "rmrkuRMutF0"
+      "video_id": "rmrkuRMutF0",
+      "knowledge": true
     },
     {
       "id": "9262214004cf03",
@@ -5246,7 +5253,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=cmpvbcc27K0",
       "published_at": null,
-      "video_id": "cmpvbcc27K0"
+      "video_id": "cmpvbcc27K0",
+      "knowledge": true
     },
     {
       "id": "c588d93a0a25ba",
@@ -5261,7 +5269,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=6oL0a355KgI",
       "published_at": null,
-      "video_id": "6oL0a355KgI"
+      "video_id": "6oL0a355KgI",
+      "knowledge": true
     },
     {
       "id": "667d35d767f610",
@@ -5276,7 +5285,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=4QoyO40jff4",
       "published_at": null,
-      "video_id": "4QoyO40jff4"
+      "video_id": "4QoyO40jff4",
+      "knowledge": true
     },
     {
       "id": "94f61cabffceae",
@@ -5291,7 +5301,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=5ynu9H81pww",
       "published_at": null,
-      "video_id": "5ynu9H81pww"
+      "video_id": "5ynu9H81pww",
+      "knowledge": true
     },
     {
       "id": "b9913866498b33",
@@ -5306,7 +5317,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=bYCRLR5t6aU",
       "published_at": null,
-      "video_id": "bYCRLR5t6aU"
+      "video_id": "bYCRLR5t6aU",
+      "knowledge": true
     },
     {
       "id": "82f3d253bc1611",
@@ -5321,7 +5333,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=Xrup8HvN2JI",
       "published_at": null,
-      "video_id": "Xrup8HvN2JI"
+      "video_id": "Xrup8HvN2JI",
+      "knowledge": true
     },
     {
       "id": "0091566c13f8e3",
@@ -5336,7 +5349,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=FHdXLcNg6N8",
       "published_at": null,
-      "video_id": "FHdXLcNg6N8"
+      "video_id": "FHdXLcNg6N8",
+      "knowledge": true
     },
     {
       "id": "e576692176aea3",
@@ -5351,7 +5365,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=XoKZS7pyxUQ",
       "published_at": null,
-      "video_id": "XoKZS7pyxUQ"
+      "video_id": "XoKZS7pyxUQ",
+      "knowledge": true
     },
     {
       "id": "57bd24d050346d",
@@ -5366,7 +5381,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=KQd67gY-fi0",
       "published_at": null,
-      "video_id": "KQd67gY-fi0"
+      "video_id": "KQd67gY-fi0",
+      "knowledge": true
     },
     {
       "id": "bdede194b61443",
@@ -5381,7 +5397,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=STbHImOioJI",
       "published_at": null,
-      "video_id": "STbHImOioJI"
+      "video_id": "STbHImOioJI",
+      "knowledge": true
     },
     {
       "id": "a7f0f9c1a2e35e",
@@ -5396,7 +5413,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=mgrv4cMisOw",
       "published_at": null,
-      "video_id": "mgrv4cMisOw"
+      "video_id": "mgrv4cMisOw",
+      "knowledge": true
     },
     {
       "id": "82249768578ed7",
@@ -5411,7 +5429,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=vC0Bzc8LQf0",
       "published_at": null,
-      "video_id": "vC0Bzc8LQf0"
+      "video_id": "vC0Bzc8LQf0",
+      "knowledge": true
     },
     {
       "id": "a89f4b8d032f28",
@@ -5426,7 +5445,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=V3I1oyZcTZA",
       "published_at": null,
-      "video_id": "V3I1oyZcTZA"
+      "video_id": "V3I1oyZcTZA",
+      "knowledge": true
     },
     {
       "id": "539eb2de9fe21b",
@@ -5441,7 +5461,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=XaxoY3PP65A",
       "published_at": null,
-      "video_id": "XaxoY3PP65A"
+      "video_id": "XaxoY3PP65A",
+      "knowledge": true
     },
     {
       "id": "41dce647bfa5f9",
@@ -5456,7 +5477,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=jc2dpurZYr0",
       "published_at": null,
-      "video_id": "jc2dpurZYr0"
+      "video_id": "jc2dpurZYr0",
+      "knowledge": true
     },
     {
       "id": "274b1a93223079",
@@ -5471,7 +5493,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=cyocx8-QZgs",
       "published_at": null,
-      "video_id": "cyocx8-QZgs"
+      "video_id": "cyocx8-QZgs",
+      "knowledge": true
     },
     {
       "id": "3d2407a1488695",
@@ -5486,7 +5509,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=wfR6ZiqfYP4",
       "published_at": null,
-      "video_id": "wfR6ZiqfYP4"
+      "video_id": "wfR6ZiqfYP4",
+      "knowledge": true
     },
     {
       "id": "91b5485cbb9ad2",
@@ -5501,7 +5525,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=Pk5Xz4_0IpI",
       "published_at": null,
-      "video_id": "Pk5Xz4_0IpI"
+      "video_id": "Pk5Xz4_0IpI",
+      "knowledge": true
     },
     {
       "id": "dc12ba2b91bdc1",
@@ -5516,7 +5541,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=Fo40gtwzJcc",
       "published_at": null,
-      "video_id": "Fo40gtwzJcc"
+      "video_id": "Fo40gtwzJcc",
+      "knowledge": true
     },
     {
       "id": "52bcea737da165",
@@ -5531,7 +5557,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=1X3Eqjd6DNU",
       "published_at": null,
-      "video_id": "1X3Eqjd6DNU"
+      "video_id": "1X3Eqjd6DNU",
+      "knowledge": true
     },
     {
       "id": "19a45a1ca5017f",
@@ -5546,7 +5573,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=nuMrH-sUlM8",
       "published_at": null,
-      "video_id": "nuMrH-sUlM8"
+      "video_id": "nuMrH-sUlM8",
+      "knowledge": true
     },
     {
       "id": "8193160b850764",
@@ -5561,7 +5589,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=yTNHF-LisCk",
       "published_at": null,
-      "video_id": "yTNHF-LisCk"
+      "video_id": "yTNHF-LisCk",
+      "knowledge": true
     },
     {
       "id": "943c95440d5000",
@@ -5576,7 +5605,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=aq9zT8JOx60",
       "published_at": null,
-      "video_id": "aq9zT8JOx60"
+      "video_id": "aq9zT8JOx60",
+      "knowledge": true
     },
     {
       "id": "bd01920bb0b76d",
@@ -5591,7 +5621,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=1KrPswcqvRg",
       "published_at": null,
-      "video_id": "1KrPswcqvRg"
+      "video_id": "1KrPswcqvRg",
+      "knowledge": true
     },
     {
       "id": "ba730cd87c0e51",
@@ -5606,7 +5637,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=acZDee_60Fs",
       "published_at": null,
-      "video_id": "acZDee_60Fs"
+      "video_id": "acZDee_60Fs",
+      "knowledge": true
     },
     {
       "id": "6ef1e1d6129e6c",
@@ -5621,7 +5653,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=63QNVN7nlCE",
       "published_at": null,
-      "video_id": "63QNVN7nlCE"
+      "video_id": "63QNVN7nlCE",
+      "knowledge": true
     },
     {
       "id": "3ea08cf306cc4d",
@@ -5636,7 +5669,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=sooossToAIs",
       "published_at": null,
-      "video_id": "sooossToAIs"
+      "video_id": "sooossToAIs",
+      "knowledge": true
     },
     {
       "id": "4803e5047d51cf",
@@ -5652,7 +5686,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=50n1gEceUuQ",
       "published_at": null,
-      "video_id": "50n1gEceUuQ"
+      "video_id": "50n1gEceUuQ",
+      "knowledge": true
     },
     {
       "id": "06bd8ce16424e0",
@@ -5667,7 +5702,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=4MdsC8boOd0",
       "published_at": null,
-      "video_id": "4MdsC8boOd0"
+      "video_id": "4MdsC8boOd0",
+      "knowledge": true
     },
     {
       "id": "cc5ec91c79d0e0",
@@ -5682,7 +5718,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=GH1x7ST2oHc",
       "published_at": null,
-      "video_id": "GH1x7ST2oHc"
+      "video_id": "GH1x7ST2oHc",
+      "knowledge": true
     },
     {
       "id": "5b38f2101c829a",
@@ -5697,7 +5734,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=LgGh09un7Xk",
       "published_at": null,
-      "video_id": "LgGh09un7Xk"
+      "video_id": "LgGh09un7Xk",
+      "knowledge": true
     },
     {
       "id": "f7c88853c3b587",
@@ -5712,7 +5750,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=NIA4LdYEMzI",
       "published_at": null,
-      "video_id": "NIA4LdYEMzI"
+      "video_id": "NIA4LdYEMzI",
+      "knowledge": true
     },
     {
       "id": "b93d68f0a3b958",
@@ -5727,7 +5766,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=61f9YLRWcOw",
       "published_at": null,
-      "video_id": "61f9YLRWcOw"
+      "video_id": "61f9YLRWcOw",
+      "knowledge": true
     },
     {
       "id": "4f0aa6f8bfe8b8",
@@ -5742,7 +5782,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=JDSyi0jeZLM",
       "published_at": null,
-      "video_id": "JDSyi0jeZLM"
+      "video_id": "JDSyi0jeZLM",
+      "knowledge": true
     },
     {
       "id": "3673099bffca95",
@@ -5757,7 +5798,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=3E7L4AgEQ5Y",
       "published_at": null,
-      "video_id": "3E7L4AgEQ5Y"
+      "video_id": "3E7L4AgEQ5Y",
+      "knowledge": true
     },
     {
       "id": "9591f5ebbe1bde",
@@ -5772,7 +5814,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=IbULUTgQzG8",
       "published_at": null,
-      "video_id": "IbULUTgQzG8"
+      "video_id": "IbULUTgQzG8",
+      "knowledge": true
     },
     {
       "id": "548dad6d39c4c1",
@@ -5787,7 +5830,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=Q-u0phvg6oU",
       "published_at": null,
-      "video_id": "Q-u0phvg6oU"
+      "video_id": "Q-u0phvg6oU",
+      "knowledge": true
     },
     {
       "id": "d974a2c9d51655",
@@ -5802,7 +5846,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=R1vCF-kTn80",
       "published_at": null,
-      "video_id": "R1vCF-kTn80"
+      "video_id": "R1vCF-kTn80",
+      "knowledge": true
     },
     {
       "id": "f4b80ec07a4a35",
@@ -5817,7 +5862,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=k3D4jJWv8UQ",
       "published_at": null,
-      "video_id": "k3D4jJWv8UQ"
+      "video_id": "k3D4jJWv8UQ",
+      "knowledge": true
     },
     {
       "id": "f412aaee9de91b",
@@ -5832,7 +5878,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=vurvUt2A6jw",
       "published_at": null,
-      "video_id": "vurvUt2A6jw"
+      "video_id": "vurvUt2A6jw",
+      "knowledge": true
     },
     {
       "id": "c7993b5a2e0616",
@@ -5847,7 +5894,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=U4IKileQvmQ",
       "published_at": null,
-      "video_id": "U4IKileQvmQ"
+      "video_id": "U4IKileQvmQ",
+      "knowledge": true
     },
     {
       "id": "2fb8c965ff0e98",
@@ -5862,7 +5910,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=5KU-bYMVRAI",
       "published_at": null,
-      "video_id": "5KU-bYMVRAI"
+      "video_id": "5KU-bYMVRAI",
+      "knowledge": true
     },
     {
       "id": "e0441985c95c56",
@@ -5877,7 +5926,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=Cc_iQXlpLEY",
       "published_at": null,
-      "video_id": "Cc_iQXlpLEY"
+      "video_id": "Cc_iQXlpLEY",
+      "knowledge": true
     },
     {
       "id": "8ce3ffa58990ef",
@@ -5892,7 +5942,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=anVFQBqYb-w",
       "published_at": null,
-      "video_id": "anVFQBqYb-w"
+      "video_id": "anVFQBqYb-w",
+      "knowledge": true
     },
     {
       "id": "d411fccd0b2c8d",
@@ -5907,7 +5958,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=44JTlkuHoPE",
       "published_at": null,
-      "video_id": "44JTlkuHoPE"
+      "video_id": "44JTlkuHoPE",
+      "knowledge": true
     },
     {
       "id": "0528bfa6990607",
@@ -5922,7 +5974,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=dAU-l91XWnM",
       "published_at": null,
-      "video_id": "dAU-l91XWnM"
+      "video_id": "dAU-l91XWnM",
+      "knowledge": true
     },
     {
       "id": "5b5e4082f4d593",
@@ -5937,7 +5990,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=U62i9V82sgs",
       "published_at": null,
-      "video_id": "U62i9V82sgs"
+      "video_id": "U62i9V82sgs",
+      "knowledge": true
     },
     {
       "id": "cddf07e982798d",
@@ -5952,7 +6006,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=Gb9dyJuo32s",
       "published_at": null,
-      "video_id": "Gb9dyJuo32s"
+      "video_id": "Gb9dyJuo32s",
+      "knowledge": true
     },
     {
       "id": "1862f170c62fcf",
@@ -5967,7 +6022,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=FCkyRrXMSiw",
       "published_at": null,
-      "video_id": "FCkyRrXMSiw"
+      "video_id": "FCkyRrXMSiw",
+      "knowledge": true
     },
     {
       "id": "d55e9dca012825",
@@ -5982,7 +6038,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=pAng4xhrPeA",
       "published_at": null,
-      "video_id": "pAng4xhrPeA"
+      "video_id": "pAng4xhrPeA",
+      "knowledge": true
     },
     {
       "id": "b2e70028085b56",
@@ -5997,7 +6054,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=33fMyAaj25k",
       "published_at": null,
-      "video_id": "33fMyAaj25k"
+      "video_id": "33fMyAaj25k",
+      "knowledge": true
     },
     {
       "id": "20eb802e4b1dcf",
@@ -6012,7 +6070,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=gcCxAGdl6lA",
       "published_at": null,
-      "video_id": "gcCxAGdl6lA"
+      "video_id": "gcCxAGdl6lA",
+      "knowledge": true
     },
     {
       "id": "fc5eb89bd422e7",
@@ -6027,7 +6086,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=jwX77FH_PTw",
       "published_at": null,
-      "video_id": "jwX77FH_PTw"
+      "video_id": "jwX77FH_PTw",
+      "knowledge": true
     },
     {
       "id": "d88e10e8c33c6c",
@@ -6042,7 +6102,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=Qz3ARQZaodo",
       "published_at": null,
-      "video_id": "Qz3ARQZaodo"
+      "video_id": "Qz3ARQZaodo",
+      "knowledge": true
     },
     {
       "id": "eef2f7f55bf2ea",
@@ -6057,7 +6118,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=_S0NDuurrpE",
       "published_at": null,
-      "video_id": "_S0NDuurrpE"
+      "video_id": "_S0NDuurrpE",
+      "knowledge": true
     },
     {
       "id": "7c6b8c0a370be1",
@@ -6072,7 +6134,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=T9oWd9R9ueA",
       "published_at": null,
-      "video_id": "T9oWd9R9ueA"
+      "video_id": "T9oWd9R9ueA",
+      "knowledge": true
     },
     {
       "id": "9b0b39ab60e753",
@@ -6087,7 +6150,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=rGLmED7nMLE",
       "published_at": null,
-      "video_id": "rGLmED7nMLE"
+      "video_id": "rGLmED7nMLE",
+      "knowledge": true
     },
     {
       "id": "2713e7ae626878",
@@ -6102,7 +6166,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=J5XWSWZ67ns",
       "published_at": null,
-      "video_id": "J5XWSWZ67ns"
+      "video_id": "J5XWSWZ67ns",
+      "knowledge": true
     },
     {
       "id": "30fd27fcccadaa",
@@ -6117,7 +6182,8 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=UJkxLIC4FHI",
       "published_at": null,
-      "video_id": "UJkxLIC4FHI"
+      "video_id": "UJkxLIC4FHI",
+      "knowledge": true
     },
     {
       "id": "689c4e961a7397",
@@ -6132,10 +6198,11 @@
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=W8VkrMIM1UM",
       "published_at": null,
-      "video_id": "W8VkrMIM1UM"
+      "video_id": "W8VkrMIM1UM",
+      "knowledge": true
     }
   ],
   "archive_count": 0,
-  "news_count": 0,
+  "news_count": 128,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
