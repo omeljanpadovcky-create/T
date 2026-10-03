@@ -196,76 +196,137 @@ function mouseScore(x,terms){
 function mouseAnswer(q){
   const low=q.toLowerCase(), terms=mouseTerms(q);
   const prices=(data.market||{}).prices||{};
-  const idMap={btc:'bitcoin',bitcoin:'bitcoin',eth:'ethereum',ethereum:'ethereum',op:'optimism',sol:'solana',pendle:'pendle',ldo:'lido-dao',ens:'ethereum-name-service',icp:'internet-computer'};
+  const idMap={
+    btc:'bitcoin',bitcoin:'bitcoin',
+    eth:'ethereum',ethereum:'ethereum',
+    op:'optimism',sol:'solana',pendle:'pendle',
+    ldo:'lido-dao',ens:'ethereum-name-service',icp:'internet-computer'
+  };
+
   for(const [key,id] of Object.entries(idMap)){
     if(low.includes(key) && prices[id]){
-      const x=prices[id],ch=Number(x.usd_24h_change||0),sym=key==='bitcoin'?'BTC':key==='ethereum'?'ETH':key.toUpperCase();
-      const rel=[...(newsData.items||[]),...(data.items||[])].filter(v=>mouseScore(v,[key,sym.toLowerCase()])>0).slice(0,3);
-      return {text:sym+' зараз ≈ Promise.all([
-  fetch(FEED).then(r=>{if(!r.ok)throw Error(r.status);return r.json()}),
-  fetch(NEWS).then(r=>r.ok?r.json():({items:[]}))
-]).then(([j,n])=>{
-  data=j;newsData=n;
-  $('#status').textContent='FEED · '+(j.generated_at?new Date(j.generated_at).toLocaleString('uk-UA'):'очікує запуску');
-  $('#status').className='badge ok';
-  renderSources();renderMarket();renderItems();renderJournal();
-}).catch(()=>{
-  $('#status').textContent='FEED ще оновлюється';
-  renderItems();renderJournal();
-});
-</script>
-</body>
-</html>
-+Number(x.usd).toLocaleString('en-US')+' ('+(ch>=0?'+':'')+ch.toFixed(2)+'% за 24г).\n\nЗ одного руху ціни висновок не робимо — дивимось на контекст, обсяг і підтвердження.',links:rel};
+      const x=prices[id];
+      const ch=Number(x.usd_24h_change||0);
+      const sym=key==='bitcoin'?'BTC':key==='ethereum'?'ETH':key.toUpperCase();
+      const rel=[...(newsData.items||[]),...(data.items||[])]
+        .filter(v=>mouseScore(v,[key,sym.toLowerCase()])>0)
+        .slice(0,3);
+      return {
+        text:sym+' зараз ≈ $'+Number(x.usd).toLocaleString('en-US')+
+          ' ('+(ch>=0?'+':'')+ch.toFixed(2)+'% за 24г).\n\n'+
+          'З одного руху ціни висновок не робимо — дивимось на контекст, обсяг і підтвердження.',
+        links:rel
+      };
     }
   }
+
   if(low.includes('itstatti')||low.includes('ітстат')||low.includes('пост')){
     const xs=(data.items||[]).filter(x=>x.source==='telegram_main').slice(0,3);
-    return {text:xs.length?'Останні матеріали ITstatti вже в Криптомишці. Я б дивилась на них як на контекст, а не як на готову команду. Ось найсвіжіші:':'Пости ITstatti ще не завантажились.',links:xs};
+    return {
+      text:xs.length
+        ?'Останні матеріали ITstatti вже в Криптомишці. Дивимось на них як на контекст, а не готову команду.'
+        :'Пости ITstatti ще не завантажились.',
+      links:xs
+    };
   }
+
   if(low.includes('ретро')||low.includes('airdrop')||low.includes('дроп')){
     const xs=(data.items||[]).filter(x=>x.source==='telegram_airdrop').slice(0,3);
-    return {text:xs.length?'Ось свіжі ретродроп/airdrop-матеріали. Перевіряй умови, офіційні посилання й не плати наперед за «гарантовану» винагороду.':'Свіжих ретродропів поки не бачу.',links:xs};
+    return {
+      text:xs.length
+        ?'Ось свіжі ретродроп/airdrop-матеріали. Перевіряй умови й офіційні посилання.'
+        :'Свіжих ретродропів поки не бачу.',
+      links:xs
+    };
   }
+
   if(low.includes('ризик')){
     const xs=(newsData.items||[]).filter(x=>Number(x.impact||0)>=3).slice(0,3);
-    return {text:xs.length?'Зараз найбільше уваги варто дати подіям із високим впливом. Це не означає «продавати» — просто їх треба перевірити першими.':'Високоризикових подій у радарі зараз не бачу.',links:xs};
+    return {
+      text:xs.length
+        ?'Зараз найбільше уваги варто дати подіям із високим впливом. Це не означає автоматично купувати або продавати — їх треба перевірити першими.'
+        :'Високоризикових подій у радарі зараз не бачу.',
+      links:xs
+    };
   }
+
   if(low.includes('нов')||low.includes('сьогодні')||low.includes('зараз')){
     const xs=(newsData.items||[]).slice(0,3);
-    return {text:xs.length?'Ось найсвіжіші події з JEV-радара. Спочатку дивись на ті, що підтверджені кількома джерелами.':'Радар ще оновлюється.',links:xs};
+    return {
+      text:xs.length
+        ?'Ось найсвіжіші події з JEV-радара. Насамперед дивись на ті, що підтверджені кількома джерелами.'
+        :'Радар ще оновлюється.',
+      links:xs
+    };
   }
+
   const pool=[...(newsData.items||[]),...(data.items||[])];
-  const ranked=pool.map(x=>({x,s:mouseScore(x,terms)})).filter(o=>o.s>0).sort((a,b)=>b.s-a.s).slice(0,3).map(o=>o.x);
+  const ranked=pool
+    .map(x=>({x,s:mouseScore(x,terms)}))
+    .filter(o=>o.s>0)
+    .sort((a,b)=>b.s-a.s)
+    .slice(0,3)
+    .map(o=>o.x);
+
   if(ranked.length){
     const best=ranked[0],ai=best.jev_ai||{};
     const takeaway=ai.short_conclusion||best.jev_take||best.summary||'';
-    return {text:'Знайшла релевантний матеріал. '+(takeaway?takeaway:'Перевір першоджерело та реакцію ринку перед висновком.'),links:ranked};
+    return {
+      text:'Знайшла релевантний матеріал. '+
+        (takeaway||'Перевір першоджерело та реакцію ринку перед висновком.'),
+      links:ranked
+    };
   }
-  return {text:'Я не знайшла прямої згадки в даних Криптомишки. Спробуй коротше: «BTC», «ETH», «OP», «що нового», «ITstatti», «ретродропи» або назву конкретного проєкту.',links:[]};
+
+  return {
+    text:'Я не знайшла прямої згадки в даних Криптомишки. Спробуй коротше: «BTC», «ETH», «OP», «що нового», «ITstatti», «ретродропи» або назву конкретного проєкту.',
+    links:[]
+  };
 }
+
 function mouseSend(){
-  const input=$('#mouseAiInput'),q=input.value.trim();if(!q)return;
-  mouseAdd('user',q);input.value='';
-  const a=mouseAnswer(q);mouseAdd('ai',a.text,a.links);
+  const input=$('#mouseAiInput');
+  const q=input.value.trim();
+  if(!q)return;
+  mouseAdd('user',q);
+  input.value='';
+  const a=mouseAnswer(q);
+  mouseAdd('ai',a.text,a.links);
 }
+
 $('#mouseAiBtn').onclick=()=>$('#mouseAiPanel').classList.toggle('open');
 $('#mouseAiClose').onclick=()=>$('#mouseAiPanel').classList.remove('open');
 $('#mouseAiSend').onclick=mouseSend;
-$('#mouseAiInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();mouseSend()}});
-document.querySelectorAll('.mouseAiQuick button').forEach(b=>b.onclick=()=>{$('#mouseAiInput').value=b.dataset.q;mouseSend()});
+$('#mouseAiInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){
+    e.preventDefault();
+    mouseSend();
+  }
+});
+document.querySelectorAll('.mouseAiQuick button').forEach(b=>{
+  b.onclick=()=>{
+    $('#mouseAiInput').value=b.dataset.q;
+    mouseSend();
+  };
+});
 
 Promise.all([
   fetch(FEED).then(r=>{if(!r.ok)throw Error(r.status);return r.json()}),
   fetch(NEWS).then(r=>r.ok?r.json():({items:[]}))
 ]).then(([j,n])=>{
-  data=j;newsData=n;
+  data=j;
+  newsData=n;
   $('#status').textContent='FEED · '+(j.generated_at?new Date(j.generated_at).toLocaleString('uk-UA'):'очікує запуску');
   $('#status').className='badge ok';
-  renderSources();renderMarket();renderItems();renderJournal();
-}).catch(()=>{
+  renderSources();
+  renderMarket();
+  renderItems();
+  renderJournal();
+}).catch(err=>{
+  console.error(err);
   $('#status').textContent='FEED ще оновлюється';
-  renderItems();renderJournal();
+  renderItems();
+  renderJournal();
 });
 </script>
 </body>
