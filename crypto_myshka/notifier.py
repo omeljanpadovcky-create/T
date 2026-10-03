@@ -28,12 +28,16 @@ def label(item):
 
 def short(item):
     src=item.get("source","")
-    icon={"telegram_main":"📨","telegram_airdrop":"🪂","youtube":"🎬","jev_news":"🌐"}.get(src,"🐭")
+    icon={"telegram_main":"📨","telegram_airdrop":"🪂","youtube":"🎬","jev_analysis":"🧠"}.get(src,"🐭")
     title=(item.get("title") or "Новий матеріал").strip()
     if len(title)>115: title=title[:112]+"…"
     extra=""
     if item.get("assets"):
         extra=" · "+", ".join(item["assets"][:4])
+    ai=item.get("jev_ai") or {}
+    conclusion=(ai.get("short_conclusion") or "").strip()
+    if conclusion:
+        return f"{icon} {title}\n{label(item)}{extra}\nJEV: {conclusion}\n{item.get('url','')}"
     return f"{icon} {title}\n{label(item)}{extra}\n{item.get('url','')}"
 
 def send(text):
