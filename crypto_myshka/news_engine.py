@@ -111,20 +111,42 @@ def similarity(a: dict, b: dict) -> float:
     return max(jacc, seq * 0.72) + asset_bonus + topic_bonus
 
 
+def has_keyword(text: str, keyword: str) -> bool:
+    key=(keyword or "").strip().lower()
+    if not key:
+        return False
+    # Avoid substring false positives such as SEC inside "second" or "research".
+    pattern=r"(?<![a-z0-9])" + re.escape(key).replace(r"\ ", r"\s+") + r"(?![a-z0-9])"
+    return bool(re.search(pattern, text.lower()))
+
+
+def crypto_relevant(text: str, assets: list[str], topics: list[str]) -> bool:
+    if assets:
+        return True
+    crypto_terms=[
+        "crypto","cryptocurrency","blockchain","web3","token","stablecoin","defi",
+        "bitcoin","ethereum","solana","xrp","binance","coinbase","kraken","bybit",
+        "wallet","on-chain","onchain","airdrop","launchpool","etf",
+    ]
+    if any(has_keyword(text,k) for k in crypto_terms):
+        return True
+    return bool(set(topics) & {"exchange","security","defi","stablecoin","airdrop","etf"})
+
+
 def detect(text: str):
     padded = " " + text.lower() + " "
     assets = [sym for sym, keys in ASSETS.items() if any(k in padded for k in keys)]
-    topics = [topic for topic, keys in TOPICS.items() if any(k in padded for k in keys)]
+    topics = [topic for topic, keys in TOPICS.items() if any(has_keyword(text,k) for k in keys)]
 
-    if any(k in padded for k in HIGH):
+    if any(has_keyword(text,k) for k in HIGH):
         impact, impact_label = 3, "Високий вплив"
-    elif any(k in padded for k in MED) or len(assets) >= 2:
+    elif any(has_keyword(text,k) for k in MED) or len(assets) >= 2:
         impact, impact_label = 2, "Середній вплив"
     else:
         impact, impact_label = 1, "Низький вплив"
 
-    pos = sum(1 for k in POS if k in padded)
-    neg = sum(1 for k in NEG if k in padded)
+    pos = sum(1 for k in POS if has_keyword(text,k))
+    neg = sum(1 for k in NEG if has_keyword(text,k))
     if pos > neg:
         tone = "Потенційно позитивний"
     elif neg > pos:
@@ -194,6 +216,8 @@ def read_feeds():
                 continue
             text = title + " " + summary
             assets, topics, impact, impact_label, tone = detect(text)
+            if not crypto_relevant(text, assets, topics):
+                continue
             rows.append({
                 "id": hashlib.sha1((source + link).encode()).hexdigest()[:14],
                 "source": source,
