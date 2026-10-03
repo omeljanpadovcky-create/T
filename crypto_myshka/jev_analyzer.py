@@ -9,20 +9,25 @@ ROOT = Path(__file__).resolve().parent
 NEWS = ROOT / "data" / "news.json"
 FEED = ROOT / "data" / "feed.json"
 
-TOKEN = os.getenv("GITHUB_TOKEN", "").strip()
-MODEL = os.getenv("JEV_MODEL", "openai/gpt-4.1").strip()
-ENDPOINT = "https://models.github.ai/inference/chat/completions"
+# Any OpenAI-compatible endpoint works:
+# Ollama:   http://YOUR_HOST:11434/v1/chat/completions
+# OpenAI:   https://api.openai.com/v1/chat/completions
+# Groq:     https://api.groq.com/openai/v1/chat/completions
+ENDPOINT = os.getenv("JEV_API_URL", "").strip()
+TOKEN = os.getenv("JEV_API_KEY", "").strip()
+MODEL = os.getenv("JEV_MODEL", "").strip() or "qwen2.5:7b"
 
 SYSTEM = """Ти JEV — обережний крипто-аналітик у системі Криптомишка.
-Твоє завдання: не давати команд 'купуй/продавай', а стисло аналізувати подію.
+Твоє завдання: аналізувати подію, а не копіювати чужий сигнал.
+Не давай безумовних команд "купуй/продавай".
 Відділяй факт від припущення. Не вигадуй відсутні дані.
-Якщо джерел мало або дані суперечливі — прямо скажи це.
+ITstatti використовуй як контекст/методологію, а не як істину.
+Якщо даних мало або джерела суперечать одне одному — прямо скажи це.
 Пиши українською.
 Поверни ТІЛЬКИ валідний JSON з ключами:
 what_happened, why_it_matters, market_effect, bull_case, bear_case,
 watch_next, confidence, short_conclusion.
-Кожне поле — короткий рядок, без markdown.
-confidence має бути одним із: "низька", "середня", "висока".
+confidence: "низька", "середня" або "висока".
 short_conclusion — максимум 2 короткі речення."""
 
 def load(path, default):
@@ -35,16 +40,17 @@ def save(path, data):
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 def related_context(event, feed):
-    assets = set(event.get("assets") or [])
-    topics = set(event.get("topics") or [])
+    assets = {str(a).lower() for a in (event.get("assets") or [])}
+    topics = {str(t).lower() for t in (event.get("topics") or [])}
     live, knowledge = [], []
 
     for x in feed.get("items") or []:
-        blob = (x.get("title","") + " " + x.get("summary","")).lower()
-        asset_hit = any(a.lower() in blob for a in assets)
-        topic_hit = any(t.lower() in blob for t in topics)
+        blob = (" " + x.get("title","") + " " + x.get("summary","") + " ").lower()
+        asset_hit = any((" "+a+" ") in blob or a in blob for a in assets)
+        topic_hit = any(t in blob for t in topics)
         if not (asset_hit or topic_hit):
             continue
+
         row = {
             "source": x.get("source"),
             "title": x.get("title"),
@@ -68,7 +74,7 @@ def extract_json(text):
     except Exception:
         m=re.search(r"\{.*\}", text, flags=re.S)
         if not m:
-            raise
+            raise ValueError("Model did not return JSON")
         return json.loads(m.group(0))
 
 def analyze_event(event, feed):
@@ -87,16 +93,16 @@ def analyze_event(event, feed):
         },
         "related_itstatti_live": live,
         "related_itstatti_knowledge": knowledge,
-        "instruction": "Зроби незалежний аналіз події з урахуванням контексту ITstatti лише як контексту, а не як істини.",
+        "instruction": "Дай незалежний JEV-аналіз події. Не повторюй рекламні або реферальні твердження як факт.",
     }
 
-    r = requests.post(
+    headers={"Content-Type":"application/json","Accept":"application/json"}
+    if TOKEN:
+        headers["Authorization"]=f"Bearer {TOKEN}"
+
+    r=requests.post(
         ENDPOINT,
-        headers={
-            "Authorization": f"Bearer {TOKEN}",
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        },
+        headers=headers,
         json={
             "model": MODEL,
             "messages": [
@@ -106,49 +112,64 @@ def analyze_event(event, feed):
             "temperature": 0.2,
             "max_tokens": 900,
         },
-        timeout=60,
+        timeout=75,
     )
     r.raise_for_status()
     data=r.json()
-    text=data["choices"][0]["message"]["content"]
-    return extract_json(text)
+    return extract_json(data["choices"][0]["message"]["content"])
 
 def main():
     news=load(NEWS, {"items":[]})
     feed=load(FEED, {"items":[]})
 
-    if not TOKEN:
-        print("GITHUB_TOKEN unavailable; leaving cross-source fallback only.")
+    # No reachable JEV endpoint configured: keep transparent cross-source fallback.
+    if not ENDPOINT:
+        news["jev_enabled"]=False
+        news["jev_status"]="not_configured"
+        news["jev_model"]=None
+        news["jev_analyzed_count"]=0
+        save(NEWS, news)
+        print("JEV_API_URL not configured; using cross-source fallback only.")
         return
 
     done=0
     errors=0
-    items=sorted(
+    candidates=sorted(
         news.get("items") or [],
         key=lambda x:(int(x.get("impact") or 0), x.get("published_at") or ""),
         reverse=True,
     )
 
-    for event in items:
-        if done >= 10:
+    # Keep API usage bounded: analyze up to 8 important events per run.
+    for event in candidates:
+        if done >= 8:
             break
         if int(event.get("impact") or 0) < 2:
             continue
         try:
-            event["jev_ai"] = analyze_event(event, feed)
-            event["analysis_engine"] = MODEL
-            event["analysis_level"] = "llm"
+            event["jev_ai"]=analyze_event(event, feed)
+            event["analysis_engine"]=MODEL
+            event["analysis_level"]="llm"
+            event.pop("analysis_error", None)
             done += 1
         except Exception as e:
-            event["analysis_error"] = str(e)[:260]
-            event["analysis_level"] = "cross_source_fallback"
+            event["analysis_error"]=str(e)[:260]
+            event["analysis_level"]="cross_source_fallback"
             errors += 1
 
-    news["jev_model"] = MODEL
-    news["jev_analyzed_count"] = done
-    news["jev_analysis_errors"] = errors
+    news["jev_enabled"]=True
+    news["jev_status"]="ok" if done else "configured_but_no_success"
+    news["jev_model"]=MODEL
+    news["jev_analyzed_count"]=done
+    news["jev_analysis_errors"]=errors
     save(NEWS, news)
-    print(json.dumps({"jev_analyzed":done,"errors":errors,"model":MODEL},ensure_ascii=False))
+    print(json.dumps({
+        "jev_enabled":True,
+        "jev_analyzed":done,
+        "errors":errors,
+        "model":MODEL,
+        "endpoint":ENDPOINT.split("?")[0],
+    },ensure_ascii=False))
 
 if __name__=="__main__":
     main()
