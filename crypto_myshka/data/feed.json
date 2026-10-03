@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-03T15:08:43.971763+00:00",
+  "generated_at": "2026-10-03T15:32:21.901487+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,7 +26,7 @@
       "ok": true,
       "count": 10172,
       "complete": true,
-      "updated_at": "2026-10-03T15:08:39.076994+00:00",
+      "updated_at": "2026-10-03T15:32:16.671542+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
@@ -48,36 +48,36 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 84788,
-        "usd_24h_change": -0.789924432815553
+        "usd": 84813,
+        "usd_24h_change": -0.7854504764995675
       },
       "ethereum": {
-        "usd": 2680.68,
-        "usd_24h_change": -0.7391807549489905
+        "usd": 2680.39,
+        "usd_24h_change": -0.7426792463069146
       },
       "optimism": {
-        "usd": 0.136477,
-        "usd_24h_change": 3.870398862373406
+        "usd": 0.135139,
+        "usd_24h_change": 2.217139142121895
       },
       "solana": {
-        "usd": 119.62,
-        "usd_24h_change": -0.27104167459596734
+        "usd": 119.53,
+        "usd_24h_change": -0.37401704069364666
       },
       "pendle": {
         "usd": 2.37,
-        "usd_24h_change": -2.3233545315735387
+        "usd_24h_change": -3.042253568470845
       },
       "lido-dao": {
-        "usd": 0.461028,
-        "usd_24h_change": 1.2031504885183144
+        "usd": 0.460772,
+        "usd_24h_change": 0.9177523519765072
       },
       "ethereum-name-service": {
-        "usd": 6.85,
-        "usd_24h_change": -2.713081642376882
+        "usd": 6.84,
+        "usd_24h_change": -2.870461412581005
       },
       "litecoin": {
-        "usd": 69.6,
-        "usd_24h_change": -0.1241112247871666
+        "usd": 69.42,
+        "usd_24h_change": -1.936396470417507
       }
     }
   },
@@ -5251,7 +5251,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Яку крипту купляти у 2026 році? 11 монет, які я зараз розглядаю",
+      "title": "Which Crypto to Buy in 2026? 11 Coins I'm Looking At Right Now",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=cmpvbcc27K0",
       "published_at": null,
