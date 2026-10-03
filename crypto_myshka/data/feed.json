@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "generated_at": "2026-10-03T12:39:32.276396+00:00",
+  "version": 3,
+  "generated_at": "2026-10-03T12:41:57.397740+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -21,20 +21,62 @@
       "ok": true,
       "count": 67,
       "url": "https://www.youtube.com/@it_statti"
+    },
+    "telegram_archive": {
+      "ok": false,
+      "count": 0,
+      "url": "https://t.me/it_statti"
+    },
+    "jev_news": {
+      "ok": false,
+      "count": 0,
+      "url": "https://news.google.com/search?q=crypto"
     }
   },
   "market": {
-    "bitcoin": {
-      "usd": 84865,
-      "usd_24h_change": -2.2324112322288316
-    },
-    "ethereum": {
-      "usd": 2681.84,
-      "usd_24h_change": -2.7144352593071384
-    },
-    "optimism": {
-      "usd": 0.131498,
-      "usd_24h_change": -1.5185493474438838
+    "symbols": [
+      "BTC",
+      "ETH",
+      "OP",
+      "SOL",
+      "PENDLE",
+      "LDO",
+      "ENS",
+      "LTC"
+    ],
+    "prices": {
+      "bitcoin": {
+        "usd": 84881,
+        "usd_24h_change": -2.1370573080965483
+      },
+      "ethereum": {
+        "usd": 2682.63,
+        "usd_24h_change": -2.5948002102230463
+      },
+      "optimism": {
+        "usd": 0.131373,
+        "usd_24h_change": -1.5727275387913544
+      },
+      "solana": {
+        "usd": 119.38,
+        "usd_24h_change": -2.311196971815567
+      },
+      "pendle": {
+        "usd": 2.36,
+        "usd_24h_change": -4.603837056488959
+      },
+      "lido-dao": {
+        "usd": 0.456473,
+        "usd_24h_change": -1.124594062882483
+      },
+      "ethereum-name-service": {
+        "usd": 6.79,
+        "usd_24h_change": -3.8681203091973178
+      },
+      "litecoin": {
+        "usd": 69.59,
+        "usd_24h_change": -0.3371877007497156
+      }
     }
   },
   "items": [
@@ -6093,5 +6135,7 @@
       "video_id": "W8VkrMIM1UM"
     }
   ],
+  "archive_count": 0,
+  "news_count": 0,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
