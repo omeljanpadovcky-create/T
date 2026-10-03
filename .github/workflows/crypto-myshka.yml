@@ -1,4 +1,4 @@
-name: CryptoMyshka 2.0 Feed
+name: CryptoMyshka 2.1 Live + JEV
 
 on:
   schedule:
@@ -13,15 +13,16 @@ on:
 
 permissions:
   contents: write
+  models: read
 
 concurrency:
-  group: crypto-myshka-feed
+  group: crypto-myshka-live
   cancel-in-progress: true
 
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,17 +35,17 @@ jobs:
       - name: Install collector dependencies
         run: pip install -r crypto_myshka/requirements.txt
 
-      - name: Build JEV crypto news
+      - name: Build cross-source crypto events
         run: python crypto_myshka/news_engine.py
 
-      - name: Build CryptoMyshka feed
+      - name: Build CryptoMyshka live feed
         run: python crypto_myshka/collector.py
 
-      - name: Update Telegram archive
-        run: python crypto_myshka/telegram_archive.py
-
-      - name: Rebuild feed with archive count
-        run: python crypto_myshka/collector.py
+      - name: Run JEV language-model analysis
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JEV_MODEL: openai/gpt-4.1
+        run: python crypto_myshka/jev_analyzer.py
 
       - name: Send Telegram digest
         env:
@@ -52,15 +53,15 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python crypto_myshka/notifier.py
 
-      - name: Commit refreshed data
+      - name: Commit refreshed live data
         run: |
           git config user.name "CryptoMyshka Bot"
           git config user.email "crypto-myshka@users.noreply.github.com"
-          git add crypto_myshka/data/feed.json crypto_myshka/data/news.json crypto_myshka/data/telegram_archive.json crypto_myshka/data/notify_state.json
+          git add crypto_myshka/data/feed.json crypto_myshka/data/news.json crypto_myshka/data/notify_state.json
           if git diff --cached --quiet; then
-            echo "No data changes"
+            echo "No live data changes"
             exit 0
           fi
-          git commit -m "Update CryptoMyshka data"
+          git commit -m "Update CryptoMyshka live JEV data"
           git pull --rebase origin main
           git push origin HEAD:main
