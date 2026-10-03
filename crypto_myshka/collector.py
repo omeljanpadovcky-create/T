@@ -74,23 +74,41 @@ def telegram(url: str, source: str, limit=20):
         })
     return out
 
-def site_items(limit=14):
+def site_items():
+    """Collect the full curated ITstatti trading knowledge base, not a small sample."""
     soup=BeautifulSoup(get(SOURCES["site"]),"html.parser")
     out=[]; seen=set()
-    for a in soup.select("a"):
+    for a in soup.select("a[href]"):
         title=clean(a.get_text(" ",strip=True))
         href=a.get("href")
-        if not href or len(title)<18: continue
-        url=urljoin(SOURCES["site"],href)
-        if "itstatti.in.ua" not in url or url in seen: continue
-        seen.add(url)
-        if not any(k in title.lower() for k in ["трейд","аналіз","ризик","стоп","ф'ючер","ф’ючер","маржин","плеч","портф","крипт"]):
+        if not href or len(title)<8:
             continue
+        url=urljoin(SOURCES["site"],href).split("#",1)[0]
+        if "itstatti.in.ua" not in url or url in seen:
+            continue
+
+        # ITstatti article URLs use a numeric article id in the path
+        # (e.g. /15-treidinh/969-demo-rakhunok...). This excludes menu/category links.
+        from urllib.parse import urlparse
+        path=urlparse(url).path
+        if not re.search(r"/\\d+[-/]", path):
+            continue
+
+        seen.add(url)
         mode,risk,reasons=classify(title)
-        out.append({"id":hashlib.sha1(url.encode()).hexdigest()[:14],"source":"site",
-                    "mode":mode,"risk":risk,"reasons":reasons,"title":title,
-                    "summary":"Матеріал із бази знань ITstatti.","url":url,"published_at":None})
-        if len(out)>=limit: break
+        reasons.append("матеріал з повної навчальної бази ITstatti")
+        out.append({
+            "id":hashlib.sha1(url.encode()).hexdigest()[:14],
+            "source":"site",
+            "mode":mode,
+            "risk":risk,
+            "reasons":reasons,
+            "title":title,
+            "summary":"Матеріал із повної бази знань ITstatti. Використовується як методологія/контекст, а не як торговий сигнал.",
+            "url":url,
+            "published_at":None,
+            "knowledge":True
+        })
     return out
 
 def youtube_items():
