@@ -7,6 +7,7 @@ from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
+from yt_dlp import YoutubeDL
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "data" / "feed.json"
@@ -92,20 +93,50 @@ def site_items(limit=14):
         if len(out)>=limit: break
     return out
 
-def youtube_items(limit=12):
-    raw=get(SOURCES["youtube"])
+def youtube_items():
+    """Load the whole public channel catalog. Videos are context, not auto-trade signals."""
+    opts = {
+        "quiet": True,
+        "no_warnings": True,
+        "skip_download": True,
+        "extract_flat": True,
+        "ignoreerrors": True,
+        "playlistreverse": False,
+    }
+    with YoutubeDL(opts) as ydl:
+        info = ydl.extract_info(SOURCES["youtube"], download=False) or {}
+
     out=[]; seen=set()
-    # YouTube embeds title+videoId repeatedly in page JSON.
-    for m in re.finditer(r'"videoId":"([A-Za-z0-9_-]{11})".{0,900}?"title":\{"runs":\[\{"text":"(.*?)"\}', raw):
-        vid,title=m.group(1),clean(m.group(2).encode("utf-8").decode("unicode_escape","ignore"))
-        if vid in seen or not title: continue
+    for e in info.get("entries") or []:
+        if not e: continue
+        vid=e.get("id")
+        title=clean(e.get("title") or "")
+        if not vid or not title or vid in seen: continue
         seen.add(vid)
-        url=f"https://www.youtube.com/watch?v={vid}"
+        url=e.get("webpage_url") or e.get("url") or f"https://www.youtube.com/watch?v={vid}"
+        if not str(url).startswith("http"):
+            url=f"https://www.youtube.com/watch?v={vid}"
         mode,risk,reasons=classify(title)
-        out.append({"id":hashlib.sha1(url.encode()).hexdigest()[:14],"source":"youtube",
-                    "mode":mode,"risk":risk,"reasons":reasons,"title":title,
-                    "summary":"Відео ITstatti — контекст для перевірки тези.","url":url,"published_at":None})
-        if len(out)>=limit: break
+        reasons.append("YouTube використовується як контекст/методологія, не як прямий сигнал")
+        ts=e.get("timestamp")
+        published_at=None
+        if ts:
+            try:
+                published_at=datetime.fromtimestamp(int(ts), tz=timezone.utc).isoformat()
+            except Exception:
+                published_at=None
+        out.append({
+            "id": hashlib.sha1(("youtube"+vid).encode()).hexdigest()[:14],
+            "source": "youtube",
+            "mode": mode,
+            "risk": risk,
+            "reasons": reasons,
+            "title": title,
+            "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+            "url": url,
+            "published_at": published_at,
+            "video_id": vid
+        })
     return out
 
 def market():
