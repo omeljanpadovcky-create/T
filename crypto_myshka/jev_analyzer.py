@@ -108,29 +108,50 @@ def openai_response_text(data):
                 return part["text"]
     raise ValueError("OpenAI Responses API returned no output_text")
 
+APINEX_FALLBACK_MODELS = [
+    APINEX_MODEL,
+    "free/deepseek-v4.1-flash",
+    "free/gemini-3.8-flash",
+]
+
 def analyze_apinex(event, feed):
     payload=build_payload(event, feed)
-    r=requests.post(
-        APINEX_ENDPOINT,
-        headers={
-            "Authorization": f"Bearer {APINEX_API_KEY}",
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        },
-        json={
-            "model": APINEX_MODEL,
-            "messages": [
-                {"role":"system","content":SYSTEM},
-                {"role":"user","content":json.dumps(payload, ensure_ascii=False)},
-            ],
-            "temperature": 0.2,
-            "max_tokens": 900,
-        },
-        timeout=75,
-    )
-    r.raise_for_status()
-    data=r.json()
-    return extract_json(data["choices"][0]["message"]["content"])
+    last_error=None
+
+    for model in dict.fromkeys(APINEX_FALLBACK_MODELS):
+        r=requests.post(
+            APINEX_ENDPOINT,
+            headers={
+                "Authorization": f"Bearer {APINEX_API_KEY}",
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            json={
+                "model": model,
+                "messages": [
+                    {"role":"system","content":SYSTEM},
+                    {"role":"user","content":json.dumps(payload, ensure_ascii=False)},
+                ],
+                "temperature": 0.2,
+                "max_tokens": 900,
+            },
+            timeout=75,
+        )
+
+        if r.ok:
+            data=r.json()
+            result=extract_json(data["choices"][0]["message"]["content"])
+            result["_model_used"]=model
+            return result
+
+        body=(r.text or "").strip().replace("\n"," ")[:500]
+        last_error=f"APInex {r.status_code} for {model}: {body}"
+
+        # Retry another free model only for model/not-found style errors.
+        if r.status_code not in (400, 404, 422):
+            break
+
+    raise RuntimeError(last_error or "APInex request failed")
 
 def analyze_openai(event, feed):
     payload=build_payload(event, feed)
@@ -217,7 +238,7 @@ def main():
             continue
         try:
             event["jev_ai"]=analyze(event, feed)
-            event["analysis_engine"]=model
+            event["analysis_engine"]=(event["jev_ai"].get("_model_used") if isinstance(event.get("jev_ai"),dict) else None) or model
             event["analysis_level"]="llm"
             event.pop("analysis_error", None)
             done += 1
