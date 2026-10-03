@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-03T16:56:10.043302+00:00",
+  "generated_at": "2026-10-03T18:48:44.561917+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -30,7 +30,7 @@
     "Bloomberg Crypto": {
       "url": "https://feeds.bloomberg.com/crypto/news.rss",
       "ok": true,
-      "count": 1,
+      "count": 0,
       "role": "evidence"
     },
     "FT Crypto": {
@@ -41,70 +41,48 @@
     },
     "Google News discovery": {
       "url": "https://news.google.com/rss/search?q=(bitcoin+OR+ethereum+OR+crypto+OR+blockchain+OR+stablecoin+OR+defi+OR+solana+OR+altcoin)+when:1d&hl=en-US&gl=US&ceid=US:en",
-      "ok": true,
-      "count": 100,
+      "ok": false,
+      "count": 0,
       "role": "discovery"
     }
   },
-  "raw_item_count": 194,
-  "item_count": 93,
+  "raw_item_count": 103,
+  "item_count": 92,
   "items": [
     {
-      "id": "0d309838f69900",
+      "id": "c194d038c41720",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "SEC Approves 3x Bitcoin and Ether ETFs in Major Expansion of Crypto Market Access - CryptoRank",
-      "summary": "SEC Approves 3x Bitcoin and Ether ETFs in Major Expansion of Crypto Market Access &nbsp;&nbsp; CryptoRank",
-      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQczFQSjFVQnExYUN5NkEzYmZvVzF6aDl5SlBGLVEwaXJ3Y0JQNi14WWplTldLTGpxcFhRNUdQNXI4U3hlVW9JMTZzOFNvZnhTWFBPaFo5cU9wOXNYYWpad0ItcUpmSE4wX2xoSTVsYTRvaTlSWmV2QS0wTXhJSXdpTHYzT1hERnlXZmRJT1Qtd3B5eF9Odk9GVTFkWkhiNWNjVjJuNl9XNm96ZENya2ZFcEdpT254Qy1COEMw?oc=5",
-      "published_at": "2026-10-03T13:45:33+00:00",
-      "assets": [
-        "BTC",
-        "ETH"
-      ],
+      "title": "Chainalysis Used AI to Trace the $387M Bitget Hack Back to North Korea",
+      "summary": "The firm says the Sept. 24 breach pushed North Korea's 2026 crypto haul past $1 billion, and detailed how it used in-house AI to trace the stolen funds across four blockchains in a race against the attackers.",
+      "url": "https://decrypt.co/380005/chainalysis-ai-87m-bitget-hack-north-korea",
+      "published_at": "2026-10-03T17:01:03+00:00",
+      "assets": [],
       "topics": [
-        "regulation"
+        "security"
       ],
       "impact": 3,
       "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
+      "tone": "Потенційно негативний",
       "source_count": 1,
       "publishers": [
-        "Google News discovery"
+        "Decrypt"
       ],
       "links": [
         {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQczFQSjFVQnExYUN5NkEzYmZvVzF6aDl5SlBGLVEwaXJ3Y0JQNi14WWplTldLTGpxcFhRNUdQNXI4U3hlVW9JMTZzOFNvZnhTWFBPaFo5cU9wOXNYYWpad0ItcUpmSE4wX2xoSTVsYTRvaTlSWmV2QS0wTXhJSXdpTHYzT1hERnlXZmRJT1Qtd3B5eF9Odk9GVTFkWkhiNWNjVjJuNl9XNm96ZENya2ZFcEdpT254Qy1COEMw?oc=5"
-        },
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxONUQ2WGhIUkQ1RW44Sjg2UFY5TlpmWXJ3TXVGRE1ibE1PSEpYR0daV3JMOHJMYWp3LUJnMWtTSnZIeW5zTFBNcmY4aTd3TUtkNC1nRlEwZW9nZklKU1J5dE11WFBHUmFQSzdRU3dzQWZzcE1xME5hSFJPQVpqeGVTdmpMTVVMVEdoRkxSV1N3eEJkWUpnNDNqQQ?oc=5"
+          "publisher": "Decrypt",
+          "url": "https://decrypt.co/380005/chainalysis-ai-87m-bitget-hack-north-korea"
         }
       ],
-      "confidence_label": "Discovery: потребує підтвердження",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
+      "watch_for": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
-        "Google News використано лише як радар теми",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_level": "llm",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-03T16:56:19Z",
-      "jev_ai": {
-        "what_happened": "CryptoRank / Google News discovery пише, що SEC затвердила 3x Bitcoin та Ether ETF. Джерело одне (source_count: 1), сама стрічка позначена як 'Discovery: потребує підтвердження'. Деталі (емітенти, терміни, структури) відсутні.",
-        "why_it_matters": "Якщо підтвердиться — розширення доступу до кредитованого криптоекспозиції, але 3x левериджовані продукти мають складну ризик-природу та історично під підвищеним регуляторним скринінгом.",
-        "market_effect": "Наразі немає підтвердження — ймовірно шум. Реакція ринку можлива лише після офіційних даних; інакше ризик різкого розвороту при спростуванні.",
-        "bull_case": "Інституційний доступ до левериджу, потенційні потоки якщо продукти добре структуровані та ліквідні.",
-        "bear_case": "SEC історично обережний з леверидженими крипто-ETF; одиничне джерело + прапорець 'needs confirmation' — високий ризик фейку або передчасного заголовка.",
-        "watch_next": "Офіційний прес-реліз SEC, записи в EDGAR, підтвердження Reuters/Bloomberg/Coindesk. Без цього — не вважати фактом.",
-        "confidence": "низька",
-        "short_conclusion": "Не підтверджено — джерело одиничне і позначено як 'потребує підтвердження'. Чекати офіційних повідомлень SEC до будь-якої ринкової реакції.",
-        "_model_used": "free/deepseek-v4.1-flash"
-      },
-      "analysis_engine": "free/deepseek-v4.1-flash"
+        "Поки одне джерело",
+        "Ринковий тон: Потенційно негативний",
+        "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
+      ]
     },
     {
       "id": "89660531956ebe",
@@ -189,8 +167,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-03T16:56:28Z",
       "jev_ai": {
         "what_happened": "З'явилися повідомлення (CoinDesk), що Трамп розглядає Jay Clayton — колишнього голову SEC (2017–2020), який ініціював ключові крипто-прискорення (Coinbase, Ripple) — на посаду AI czar. Офіційного підтвердження поки немає.",
         "why_it_matters": "Clayton — архітект SEC-крекдауну на крипту. Його призначення на AI-пост може означати як 'переведення тиску з крипти на AI', так і нову хвию регулювання AI+crypto перетину. Ринок грає на 'м'якший підхід', але факт — він досвідчений регулятор-hawk.",
@@ -203,7 +179,9 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_level": "llm",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-03T16:56:28Z"
     },
     {
       "id": "8f930505834b07",
@@ -554,8 +532,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-03T17:01:06Z",
       "jev_ai": {
         "what_happened": "Керівник криптонапрямку Robinhood Johann Kerbrat заявив, що новий п'ятирічний експериментальний режим SEC (Innovation Exemption) створює обмеження для запуску токенізованих акцій у США. SEC дозволяє справжні американські акції з правами голосування та дивідендів через блокчейн-інфраструктуру з permissioned AMM-пулами, але з регуляторними обмеженнями.",
         "why_it_matters": "Robinhood Chain (L2 на Arbitrum) вже працює з Stock Tokens, але головний дохід і активність дотепер йдуть від мемкоїнів та Uniswap. SEC exemption — це ключ до перетворення Robinhood на «власника нової фінансової інфраструктури», а не просто брокера з blockchain. Обмеження можуть уповільнити цей перехід.",
@@ -568,7 +544,9 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_level": "llm",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-03T17:01:06Z"
     },
     {
       "id": "2cf6b19fd05aef",
@@ -1062,9 +1040,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
       ],
-      "analysis_level": "llm",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-03T16:57:36Z",
       "jev_ai": {
         "what_happened": "Ethereum Foundation запустила zkAPI — користувачі депозитують ETH у vault і авторизують витрати через zero-knowledge proofs, щоб провайдер AI-моделі не міг прив'язати запит до платника.",
         "why_it_matters": "Поєднання privacy + AI + onchain payments збільшує utility ETH поза DeFi/NFT. Те, що в topics вказано 'stablecoin', суперечить суті події — ймовірно, помилка тегування.",
@@ -1076,7 +1051,10 @@
         "short_conclusion": "Подія реальна і цікава з технологічної точки зору, але раннювати її як каталізатор ціни ETH ще рано — потрібні метрики використання.",
         "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "free/deepseek-v4.1-flash"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-03T16:57:36Z"
     },
     {
       "id": "1cbc6de01ca661",
@@ -1161,9 +1139,6 @@
         "Ринковий тон: Потенційно позитивний",
         "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
       ],
-      "analysis_level": "llm",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-03T16:57:44Z",
       "jev_ai": {
         "what_happened": "BNY (Bank of New York Mellon) і Payward (материнська компанія Kraken) за даними CoinDesk ведуть переговори про інфраструктурне партнерство. Деталі угоди, масштаб і відповідальність сторін не розкриті.",
         "why_it_matters": "Традиційний банк + великий крипто-обмін — потенційний сигнал інституціоналізації інфраструктури, але «infrastructure partnership» занадто загальне, щоб оцінити реальний вплив.",
@@ -1175,7 +1150,10 @@
         "short_conclusion": "Поки лише непідтверджений сигнал від одного джерела. Чекати офіційних деталей про масштаб і відповідальність сторін.",
         "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "free/deepseek-v4.1-flash"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-03T16:57:44Z"
     },
     {
       "id": "2e07fa540643af",
@@ -1211,9 +1189,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
-      "analysis_level": "cross_source_fallback",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-03T17:03:10Z",
       "jev_ai": {
         "what_happened": "Kalshi seeks a $40 billion valuation, while Blockchain.com targets an IPO and crypto treasury companies struggle to maintain their once-high valuations.",
         "why_it_matters": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
@@ -1228,7 +1203,10 @@
         "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
-      "analysis_error": "Model returned empty content"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-03T17:03:10Z"
     },
     {
       "id": "b723156b16345a",
@@ -1380,8 +1358,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-03T16:58:38Z",
       "jev_ai": {
         "what_happened": "Hyperliquid Policy Center просить класифікувати perpetuals під MiFID II (а не MiCA), Circle у своїх filingах до Єврокомісії критикує мінімум банківських депозитів для stablecoin-reserve в рамках MiCA. Джерела: The Block, Cointelegraph.",
         "why_it_matters": "MiCA визначить, як інституційний DeFi доступиться в ЄС. Perps під MiFID II = більше традиційного нагляду, але легітимність для інституцій. Reserve-floor для stablecoin впливає на ліквідність та маржинальні вимоги до USDC/євростейблів.",
@@ -1394,7 +1370,9 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_level": "llm",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-03T16:58:38Z"
     },
     {
       "id": "684814993e15b9",
@@ -1430,8 +1408,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-03T17:01:47Z",
       "jev_ai": {
         "what_happened": "Мінфіна США пропонує визнати мережу A7 РФ транснаціональною організованою злочинною групою та відcutити її фронт-компанії від американської фінансової системи, включно з крипто — її рублевий токен провів $179 млрд.",
         "why_it_matters": "Это сигнал про посилення санкційного тиску на крипто-канали для РФ, але джерело лише одне (Decrypt) — деталі та масштаб впливу потрібно верифікувати.",
@@ -1444,7 +1420,9 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_level": "llm",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-03T17:01:47Z"
     },
     {
       "id": "d7cb6787693d1a",
@@ -1482,8 +1460,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-03T16:58:58Z",
       "jev_ai": {
         "what_happened": "Saifedean Ammous (автор «The Bitcoin Standard») заявив, що Strategy має перевагу перед іншими BTC-treasury компаніями завдяки масштабу та касовим резервам, і що решта ринку з цим важко змагатиметься.",
         "why_it_matters": "Підкреслює концентрацію «інституційного» BTC-холдингу в одній компанії та потенційний бар'єр для нових entrants. Не є новиною про BTC-прайс, а про структуру ринку казначейських активів.",
@@ -1496,7 +1472,9 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_level": "llm",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-03T16:58:58Z"
     },
     {
       "id": "fc42588ae2ef17",
@@ -1533,8 +1511,6 @@
         "Ринковий тон: Потенційно позитивний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-03T16:59:08Z",
       "jev_ai": {
         "what_happened": "Bitcoin ETFs зафіксували $103M нетто-інфлюсів, Ether-фонди — третій день поспіль на відтоку. Джерело одне (Cointelegraph).",
         "why_it_matters": "Інфлюси в BTC-ETF — це інституційний попит, але розбіжність з ETH вказує на rotation всередині крипти, а не на широке перетікання ліквідності.",
@@ -1547,7 +1523,9 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_level": "llm",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-03T16:59:08Z"
     },
     {
       "id": "708eeea3e0936c",
@@ -1591,9 +1569,6 @@
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-03T17:03:30Z",
-      "analysis_error": "Model returned empty content",
       "jev_ai": {
         "what_happened": "Armada Acquisition Corp. II shareholders approved the Evernorth merger. The XRP treasury company expects to hold ~473M XRP.",
         "why_it_matters": "Це макро-фактор для XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
@@ -1608,7 +1583,10 @@
         "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-03T17:03:30Z"
     },
     {
       "id": "90102ad4dc0766",
@@ -1646,8 +1624,6 @@
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-03T17:02:09Z",
       "jev_ai": {
         "what_happened": "Акціонери Evernorth схвалили злиття з Armada Acquisition Corp II; компанія, пов'язана з Ripple, почне торгів 8 жовтня з казною ~473 млн XRP. Джерело одне — Decrypt.",
         "why_it_matters": "Найбільша чиста XRP-казна публічного компанії збільшує інституційну видимість активу, але одночасно концентрує ризик продажу з боку treasury.",
@@ -1660,7 +1636,9 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_level": "llm",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-03T17:02:09Z"
     },
     {
       "id": "dc2df309bc160e",
@@ -1696,8 +1674,6 @@
         "Ринковий тон: Потенційно позитивний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-03T16:59:39Z",
       "jev_ai": {
         "what_happened": "EIP-8363 (згорання нагород за стейкінг ETH) було відкликано з апгрейду Hegeta. Співавтор Jérôme de Tychey зазначив, що учасники індустрії та core contributors переконали його, що scoping process — неправильне місце для зміни issuance.",
         "why_it_matters": "Згорання нагород зменшувало чисту інфляцію ETH. Відмова означає, що поточний schedule issuance зберігається, а deflationary narrative ETH не отримує цього конкретного підсилення.",
@@ -1710,7 +1686,9 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_level": "llm",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-03T16:59:39Z"
     },
     {
       "id": "04227119ddf53c",
@@ -1749,8 +1727,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
       ],
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-03T17:02:18Z",
       "jev_ai": {
         "what_happened": "Citi підвищив 12-місячну цінову мету для BTC до $113K (з $82K) та ETH до $3K. Джерело — один Decrypt, без посилання на сам нот Citigroup. Поточна ціна BTC ~$84.6K, ETH невідомо з контексту, але ринок боковить.",
         "why_it_matters": "Інституційні цілі можуть впливати на наратив і потік коштів, але одна преса-реліз без верифікації нот — слабке підґрунтя. Citi часто виставляє амбітні цілі з довгим горизонтом, які не є сигналом до дії.",
@@ -1763,7 +1739,9 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_level": "llm",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-03T17:02:18Z"
     },
     {
       "id": "15d623127fbc06",
@@ -1802,9 +1780,6 @@
         "Ринковий тон: Потенційно позитивний",
         "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
       ],
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-03T17:02:27Z",
-      "analysis_error": "Model returned empty content",
       "jev_ai": {
         "what_happened": "Meanwhile, U.S. spot Ethereum ETFs saw $59.6 million in net outflows on Wednesday, led by $26.6 million exiting Fidelity's FETH fund.",
         "why_it_matters": "Інституційний інтерес до BTC, ETH важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
@@ -1819,7 +1794,10 @@
         "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-03T17:02:27Z"
     },
     {
       "id": "630ad426bb44ed",
@@ -1853,8 +1831,6 @@
         "Ринковий тон: Потенційно позитивний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-03T17:00:15Z",
       "jev_ai": {
         "what_happened": "Мемкоїн $LAPTOP, названий на честь ноутбука, пов'язаного зі справами проти сина колишнього президента США, вибухнув після запуску й обвалився. Джерело одне — FT Crypto.",
         "why_it_matters": "Політичні мемкоїни тягнуть регуляторну та репутаційну вагу; ім'я з кримінальним контекстом підвищує увагу регуляторів і волатильність.",
@@ -1867,7 +1843,9 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_level": "llm",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-03T17:00:15Z"
     },
     {
       "id": "4dd4bb68bff04f",
@@ -1903,8 +1881,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-03T17:00:27Z",
       "jev_ai": {
         "what_happened": "Tether запустив приватний кредитний фонд із метою збільшення використання stablecoin. Подія описана одним джерелом (FT Crypto), деталі структури, розміру та цільових позичальників відсутні.",
         "why_it_matters": "Якщо підтвердиться, це зсув Tether від емісії USDT до активного credit/asset management — потенційно створює реальний on-chain попит для stablecoin поза спекуляцією. Але одноджерелова інформація не дозволяє оцінити масштаб.",
@@ -1917,7 +1893,9 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_level": "llm",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-03T17:00:27Z"
     },
     {
       "id": "f2c8cf8d19a1d0",
@@ -1953,8 +1931,6 @@
         "Ринковий тон: Потенційно позитивний",
         "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-03T17:00:36Z",
       "jev_ai": {
         "what_happened": "LSE готує запуск токенізованих акцій у партнерстві з матір'ю Kraken (Payward) як частина британської стратегії стати хабом криптоактивів.",
         "why_it_matters": "Поєднання традиційної біржі з криптоінфраструктурою може знизити бар'єри для інституційного входу в RWA/tokenized equities і підсилити лондонську конкуренцію з Нью-Йорком/Сінгапуром.",
@@ -1967,7 +1943,9 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_level": "llm",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-03T17:00:36Z"
     },
     {
       "id": "6221a49c39451a",
@@ -2005,8 +1983,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-03T17:02:37Z",
       "jev_ai": {
         "what_happened": "Bitcoin treasury-компанії втратили $80 млрд ринкової капіталізації та почали продавати BTC, повертаючись до колишньої діяльності. Джерело одне — FT Crypto.",
         "why_it_matters": "Це розворот моделі 'BTC-склад', яка була ключовим драйвером попиту 2024–2025. Продажі корпоративних трезорів стискують ліквідність і підсилюють інерцію понизу.",
@@ -2019,7 +1995,9 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
+      "analysis_level": "llm",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-03T17:02:37Z"
     },
     {
       "id": "80cba6b419c3be",
@@ -2630,43 +2608,6 @@
       "analysis_engine": "free/deepseek-v4.1-flash",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "Model returned empty content"
-    },
-    {
-      "id": "78d23583cf0dc8",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Bitcoin on Pace for Third Straight Weekly Gain on ETF Demand",
-      "summary": "Bitcoin briefly climbed above $87,000 on Friday, extending its rebound into a third straight week as investors returned to risk assets heading into October.",
-      "url": "https://www.bloomberg.com/news/articles/2026-10-02/bitcoin-rises-for-third-straight-week-on-strong-etf-demand",
-      "published_at": "2026-10-02T09:30:57+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [
-        "etf"
-      ],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Bloomberg Crypto"
-      ],
-      "links": [
-        {
-          "publisher": "Bloomberg Crypto",
-          "url": "https://www.bloomberg.com/news/articles/2026-10-02/bitcoin-rises-for-third-straight-week-on-strong-etf-demand"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
     },
     {
       "id": "2faef614ac7c8a",
@@ -4049,14 +3990,5 @@
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     }
-  ],
-  "jev_enabled": true,
-  "jev_status": "complete",
-  "jev_provider": "apinex",
-  "jev_model": "free/gpt-5.6-luna",
-  "jev_analyzed_count": 41,
-  "jev_analyzed_this_run": 3,
-  "jev_pending_count": 0,
-  "jev_llm_pending_count": 4,
-  "jev_analysis_errors": 4
+  ]
 }
