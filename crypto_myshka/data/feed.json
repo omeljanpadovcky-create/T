@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-03T16:46:49.622741+00:00",
+  "generated_at": "2026-10-03T16:56:15.608759+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,7 +26,7 @@
       "ok": true,
       "count": 10172,
       "complete": true,
-      "updated_at": "2026-10-03T16:46:44.474938+00:00",
+      "updated_at": "2026-10-03T16:56:11.759594+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
@@ -48,36 +48,36 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 84827,
-        "usd_24h_change": -0.5154821502422837
+        "usd": 84841,
+        "usd_24h_change": -0.38181357255045
       },
       "ethereum": {
-        "usd": 2681.69,
-        "usd_24h_change": -0.42817161077888694
+        "usd": 2680.99,
+        "usd_24h_change": -0.2990574705447479
       },
       "optimism": {
-        "usd": 0.135099,
-        "usd_24h_change": 1.2335806968486496
+        "usd": 0.135169,
+        "usd_24h_change": 2.0065534401525498
       },
       "solana": {
-        "usd": 119.76,
-        "usd_24h_change": -0.1615775654304719
+        "usd": 119.64,
+        "usd_24h_change": -0.25737797138683005
       },
       "pendle": {
-        "usd": 2.38,
-        "usd_24h_change": -1.816751939413306
+        "usd": 2.37,
+        "usd_24h_change": -2.136053231119226
       },
       "lido-dao": {
-        "usd": 0.45915,
-        "usd_24h_change": 1.3013938133410137
+        "usd": 0.460694,
+        "usd_24h_change": 1.956321233309017
       },
       "ethereum-name-service": {
         "usd": 6.84,
-        "usd_24h_change": -2.904752422704732
+        "usd_24h_change": -2.7965525434137937
       },
       "litecoin": {
-        "usd": 69.36,
-        "usd_24h_change": -1.1183328388003884
+        "usd": 69.16,
+        "usd_24h_change": -1.2184097133739722
       }
     }
   },
