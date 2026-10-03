@@ -4,11 +4,17 @@ on:
   push:
     branches: [main]
     paths:
-      - 'crypto_myshka/**'
+      - 'crypto_myshka/*.py'
+      - 'crypto_myshka/tests/**'
+      - 'crypto_myshka/db/**'
+      - 'crypto_myshka/requirements.txt'
       - '.github/workflows/crypto-myshka-tests.yml'
   pull_request:
     paths:
-      - 'crypto_myshka/**'
+      - 'crypto_myshka/*.py'
+      - 'crypto_myshka/tests/**'
+      - 'crypto_myshka/db/**'
+      - 'crypto_myshka/requirements.txt'
       - '.github/workflows/crypto-myshka-tests.yml'
   workflow_dispatch:
 
