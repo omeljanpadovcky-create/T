@@ -42,8 +42,9 @@ jobs:
 
       - name: Run JEV language-model analysis
         env:
+          APINEX_API_KEY: ${{ secrets.APINEX_API_KEY }}
+          JEV_MODEL: free/gpt-5.6-luna
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          JEV_MODEL: gpt-6-luna
           JEV_API_URL: ${{ secrets.JEV_API_URL }}
           JEV_API_KEY: ${{ secrets.JEV_API_KEY }}
           JEV_GENERIC_MODEL: ${{ secrets.JEV_GENERIC_MODEL }}
