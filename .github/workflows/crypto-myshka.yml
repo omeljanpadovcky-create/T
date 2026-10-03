@@ -13,7 +13,6 @@ on:
 
 permissions:
   contents: write
-  models: read
 
 concurrency:
   group: crypto-myshka-live
@@ -43,8 +42,9 @@ jobs:
 
       - name: Run JEV language-model analysis
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          JEV_MODEL: openai/gpt-4.1
+          JEV_API_URL: ${{ secrets.JEV_API_URL }}
+          JEV_API_KEY: ${{ secrets.JEV_API_KEY }}
+          JEV_MODEL: ${{ secrets.JEV_MODEL }}
         run: python crypto_myshka/jev_analyzer.py
 
       - name: Send Telegram digest
@@ -62,6 +62,16 @@ jobs:
             echo "No live data changes"
             exit 0
           fi
+          mkdir -p /tmp/crypto_myshka_data
+          cp crypto_myshka/data/feed.json /tmp/crypto_myshka_data/feed.json
+          cp crypto_myshka/data/news.json /tmp/crypto_myshka_data/news.json
+          cp crypto_myshka/data/notify_state.json /tmp/crypto_myshka_data/notify_state.json
+          git reset --hard
+          git fetch origin main
+          git reset --hard origin/main
+          cp /tmp/crypto_myshka_data/feed.json crypto_myshka/data/feed.json
+          cp /tmp/crypto_myshka_data/news.json crypto_myshka/data/news.json
+          cp /tmp/crypto_myshka_data/notify_state.json crypto_myshka/data/notify_state.json
+          git add crypto_myshka/data/feed.json crypto_myshka/data/news.json crypto_myshka/data/notify_state.json
           git commit -m "Update CryptoMyshka live JEV data"
-          git pull --rebase origin main
           git push origin HEAD:main
