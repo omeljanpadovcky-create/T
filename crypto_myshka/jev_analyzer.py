@@ -82,10 +82,39 @@ def extract_json(text):
             except Exception:
                 pass
 
-    # Some free models occasionally answer with useful prose instead of strict JSON.
-    # Preserve the analysis rather than dropping the event, but mark confidence low.
+    # Recover complete string fields from JSON that was cut off mid-response.
+    keys = [
+        "what_happened", "why_it_matters", "market_effect", "bull_case",
+        "bear_case", "watch_next", "confidence", "short_conclusion"
+    ]
+    partial = {}
+    for key in keys:
+        m = re.search(r'"' + re.escape(key) + r'"\s*:\s*"((?:\\.|[^"\\])*)"', text, flags=re.S)
+        if not m:
+            continue
+        try:
+            partial[key] = json.loads('"' + m.group(1) + '"')
+        except Exception:
+            partial[key] = re.sub(r"\\n", " ", m.group(1)).strip()
+
+    if partial:
+        partial.setdefault("what_happened", "Відповідь моделі була обрізана; дивись першоджерело.")
+        partial.setdefault("why_it_matters", "Частина AI-відповіді не дійшла повністю, тому висновок потребує перевірки.")
+        partial.setdefault("market_effect", "Невизначено")
+        partial.setdefault("bull_case", "Потрібне підтвердження даними та реакцією ринку.")
+        partial.setdefault("bear_case", "Неповний контекст може дати хибний висновок.")
+        partial.setdefault("watch_next", "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.")
+        partial.setdefault("confidence", "низька")
+        partial.setdefault("short_conclusion", partial.get("why_it_matters") or partial.get("what_happened"))
+        partial["_format_fallback"] = True
+        partial["_partial_json_recovered"] = True
+        return partial
+
+    # Plain non-JSON fallback. Never expose raw JSON/tool syntax in the UI.
     plain=re.sub(r"\s+"," ",text).strip()
     if plain:
+        if plain.startswith("{") or "<tool_call>" in plain or "<arg_key>" in plain:
+            plain = "AI-відповідь прийшла у пошкодженому форматі й буде автоматично перезапитана."
         return {
             "what_happened": plain[:420],
             "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
@@ -284,6 +313,8 @@ def main():
         return
 
     done=0
+    attempted=0
+    format_fallbacks=0
     errors=0
     candidates=sorted(
         news.get("items") or [],
@@ -291,22 +322,28 @@ def main():
         reverse=True,
     )
 
-    # Analyze a new batch on every run. Already analyzed events are skipped,
-    # so the archive is gradually filled instead of re-analyzing the same top 8.
+    # Analyze a new batch on every run. Finished events are preserved by
+    # news_engine.py, while malformed/failed items are retried without blocking
+    # the rest of the queue.
     for event in candidates:
-        if done >= 8:
+        if attempted >= 20:
             break
         if int(event.get("impact") or 0) < 2:
             continue
         ai=event.get("jev_ai") or {}
         if ai and not ai.get("_format_fallback"):
             continue
+        attempted += 1
         try:
             event["jev_ai"]=analyze(event, feed)
             event["analysis_engine"]=(event["jev_ai"].get("_model_used") if isinstance(event.get("jev_ai"),dict) else None) or model
-            event["analysis_level"]="llm"
             event.pop("analysis_error", None)
-            done += 1
+            if isinstance(event.get("jev_ai"), dict) and event["jev_ai"].get("_format_fallback"):
+                event["analysis_level"]="format_fallback"
+                format_fallbacks += 1
+            else:
+                event["analysis_level"]="llm"
+                done += 1
         except Exception as e:
             event["analysis_error"]=str(e)[:260]
             event["analysis_level"]="cross_source_fallback"
@@ -323,7 +360,7 @@ def main():
         )
     )
     news["jev_enabled"]=True
-    news["jev_status"]="complete" if pending_count==0 else ("ok" if done else ("degraded" if errors else "idle"))
+    news["jev_status"]="complete" if pending_count==0 else ("ok" if done else ("degraded" if (errors or format_fallbacks) else "idle"))
     news["jev_provider"]=provider
     news["jev_model"]=model
     news["jev_analyzed_count"]=analyzed_count
@@ -334,6 +371,8 @@ def main():
     print(json.dumps({
         "provider":provider,
         "jev_analyzed":done,
+        "attempted":attempted,
+        "format_fallbacks":format_fallbacks,
         "errors":errors,
         "model":model,
     }, ensure_ascii=False))
