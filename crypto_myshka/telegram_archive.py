@@ -170,7 +170,6 @@ def main():
         "version":2,
         "updated_at":datetime.now(timezone.utc).isoformat(),
         "channels":stats,
-        "postgres":db_count,
         "post_count":len(posts),
         "complete":all(bool((stats.get(k) or {}).get("complete")) for k in CHANNELS),
         "posts":posts,
@@ -182,6 +181,7 @@ def main():
         "post_count":len(posts),
         "complete":payload["complete"],
         "channels":stats,
+        "postgres":db_count,
     },ensure_ascii=False))
 
 if __name__=="__main__":
