@@ -34,13 +34,16 @@ jobs:
       - name: Install collector dependencies
         run: pip install -r crypto_myshka/requirements.txt
 
-      - name: Update Telegram archive
-        run: python crypto_myshka/telegram_archive.py
-
       - name: Build JEV crypto news
         run: python crypto_myshka/news_engine.py
 
       - name: Build CryptoMyshka feed
+        run: python crypto_myshka/collector.py
+
+      - name: Update Telegram archive
+        run: python crypto_myshka/telegram_archive.py
+
+      - name: Rebuild feed with archive count
         run: python crypto_myshka/collector.py
 
       - name: Send Telegram digest

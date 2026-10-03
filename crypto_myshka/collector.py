@@ -224,7 +224,7 @@ def main():
     status["jev_news"]={
         "ok":bool(news.get("item_count",0)),
         "count":news.get("item_count",0),
-        "url":"https://news.google.com/search?q=crypto"
+        "url":"crypto_myshka/data/news.json"
     }
 
     payload={
