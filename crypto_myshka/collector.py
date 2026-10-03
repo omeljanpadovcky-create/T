@@ -91,7 +91,7 @@ def site_items():
         # (e.g. /15-treidinh/969-demo-rakhunok...). This excludes menu/category links.
         from urllib.parse import urlparse
         path=urlparse(url).path
-        if not re.search(r"/\\d+[-/]", path):
+        if not re.search(r"/\d+[-/]", path):
             continue
 
         seen.add(url)
