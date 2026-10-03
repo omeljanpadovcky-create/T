@@ -5,6 +5,23 @@ from pathlib import Path
 
 import requests
 
+try:
+    from storage import (
+        enabled as db_enabled,
+        load_notification_state,
+        save_notification_state,
+        delivered_notification_ids,
+        mark_notification_delivered,
+    )
+except ImportError:
+    from crypto_myshka.storage import (
+        enabled as db_enabled,
+        load_notification_state,
+        save_notification_state,
+        delivered_notification_ids,
+        mark_notification_delivered,
+    )
+
 ROOT=Path(__file__).resolve().parent
 FEED=ROOT/"data"/"feed.json"
 NEWS=ROOT/"data"/"news.json"
@@ -18,7 +35,23 @@ def load(path, default):
     except Exception: return default
 
 def save(state):
+    # Keep JSON as a portable fallback/export, but PostgreSQL becomes the
+    # authoritative notification memory when DATABASE_URL is configured.
     STATE.write_text(json.dumps(state,ensure_ascii=False,indent=2),encoding="utf-8")
+    if db_enabled():
+        save_notification_state(state)
+
+def load_state(default):
+    file_state=load(STATE,default)
+    if not db_enabled():
+        return file_state
+    db_state=load_notification_state({})
+    if db_state:
+        return db_state
+    # First PostgreSQL run: migrate the existing JSON state so old items are
+    # not re-sent as a giant backlog.
+    save_notification_state(file_state)
+    return file_state
 
 def label(item):
     risk=item.get("risk")
@@ -60,15 +93,20 @@ def main():
             current.append(x)
 
     ids=[x.get("id") for x in current if x.get("id")]
-    state=load(STATE,{"initialized":False,"seen":[],"telegram_ready":False})
+    state=load_state({"initialized":False,"seen":[],"telegram_ready":False})
     seen=set(state.get("seen") or [])
+    if db_enabled():
+        seen.update(delivered_notification_ids(ids))
 
     configured=bool(TOKEN and CHAT_ID)
 
     if not state.get("initialized"):
+        initialized_seen=ids[-3000:]
+        if db_enabled():
+            mark_notification_delivered(initialized_seen)
         save({
             "initialized":True,
-            "seen":ids[-3000:],
+            "seen":initialized_seen,
             "telegram_ready":False
         })
         print(f"Notification state initialized with {len(ids)} existing items; no old spam sent.")
@@ -86,20 +124,23 @@ def main():
     # oldest first for a readable digest, max 6 to avoid spam
     fresh=list(reversed(fresh[:6]))
 
-    sent=False
+    sent_ids=[]
     if fresh and configured:
         body="🐭 Криптомишка: нове\n\n"+"\n\n".join(short(x) for x in fresh)
         send(body)
-        sent=True
+        sent_ids=[x.get("id") for x in fresh if x.get("id")]
+        if db_enabled():
+            mark_notification_delivered(sent_ids)
         print(f"Sent {len(fresh)} new items")
     elif fresh:
         print(f"{len(fresh)} new items found, but TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID are not configured. Keeping them unseen.")
     else:
         print("No new notification-worthy items.")
 
-    # Never mark fresh items as seen if Telegram is not configured or sending failed.
-    if configured:
-        seen.update(ids)
+    # Mark only successfully delivered items. This prevents a broken Telegram
+    # connection from silently losing alerts.
+    if sent_ids:
+        seen.update(sent_ids)
     save({
         "initialized":True,
         "seen":list(seen)[-5000:],
