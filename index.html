@@ -71,7 +71,13 @@ function renderSources(){
   const labels={telegram_main:'Telegram · live',telegram_airdrop:'Retrodrop · live',telegram_archive:'Telegram · архів',site:'База знань',youtube:'YouTube',jev_news:'JEV радар'};
   Object.entries(data.sources||{}).forEach(([k,v])=>{
     const d=document.createElement('div');d.className='source';
-    const state=v.ok?'online · '+(v.count||0)+' матеріалів':(k==='telegram_archive'?'архів ще наповнюється':'тимчасова помилка');
+    let state;
+    if(v.ok){
+      state='online · '+(v.count||0)+' матеріалів';
+      if(k==='telegram_archive' && v.complete===false) state+=' · архів доповнюється';
+    }else{
+      state=(k==='telegram_archive'?'архів запускається':'тимчасова помилка');
+    }
     d.innerHTML='<div><b>'+esc(labels[k]||k)+'</b><br><small>'+esc(state)+'</small></div><a target="_blank" rel="noopener" href="'+esc(v.url||'#')+'">Відкрити ↗</a>';
     box.appendChild(d);
   });
