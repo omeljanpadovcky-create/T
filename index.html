@@ -93,7 +93,7 @@ function renderSources(){
     }else{
       state=(k==='telegram_archive'?'архів запускається':'тимчасова помилка');
     }
-    d.innerHTML='<div><b>'+esc(labels[k]||k)+'</b><br><small>'+esc(state)+'</small></div><a target="_blank" rel="noopener" href="'+esc(v.url||'#')+'">Відкрити ↗</a>';
+    d.innerHTML='<div><b>'+esc(labels[k]||k)+'</b><br><small>'+esc(state)+'</small></div>';
     box.appendChild(d);
   });
 }
