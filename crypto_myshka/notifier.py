@@ -82,6 +82,26 @@ def send(text):
     )
     r.raise_for_status()
 
+def send_items(items, max_chars=3800):
+    sent_ids=[]
+    group=[]
+    size=len("🐭 Криптомишка: нове\n\n")
+    for item in items:
+        block=short(item)
+        extra=len(block)+(2 if group else 0)
+        if group and size+extra>max_chars:
+            send("🐭 Криптомишка: нове\n\n"+"\n\n".join(short(x) for x in group))
+            sent_ids.extend(x.get("id") for x in group if x.get("id"))
+            group=[]
+            size=len("🐭 Криптомишка: нове\n\n")
+        group.append(item)
+        size+=extra
+    if group:
+        send("🐭 Криптомишка: нове\n\n"+"\n\n".join(short(x) for x in group))
+        sent_ids.extend(x.get("id") for x in group if x.get("id"))
+    return sent_ids
+
+
 def main():
     feed=load(FEED,{"items":[]})
     news=load(NEWS,{"items":[]})
@@ -139,12 +159,10 @@ def main():
 
     sent_ids=[]
     if fresh and configured:
-        body="🐭 Криптомишка: нове\n\n"+"\n\n".join(short(x) for x in fresh)
-        send(body)
-        sent_ids=[x.get("id") for x in fresh if x.get("id")]
+        sent_ids=send_items(fresh)
         if db_enabled():
             mark_notification_delivered(sent_ids)
-        print(f"Sent {len(fresh)} new items")
+        print(f"Sent {len(sent_ids)} new items")
     elif fresh:
         print(f"{len(fresh)} new items found, but TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID are not configured. Keeping them unseen.")
     else:
