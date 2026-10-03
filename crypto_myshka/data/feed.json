@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-03T16:29:48.875401+00:00",
+  "generated_at": "2026-10-03T16:46:49.622741+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,12 +26,12 @@
       "ok": true,
       "count": 10172,
       "complete": true,
-      "updated_at": "2026-10-03T16:29:44.881449+00:00",
+      "updated_at": "2026-10-03T16:46:44.474938+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 151,
+      "count": 93,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -43,41 +43,41 @@
       "SOL",
       "PENDLE",
       "LDO",
-      "ICP",
-      "ENS"
+      "ENS",
+      "LTC"
     ],
     "prices": {
       "bitcoin": {
-        "usd": 84781,
-        "usd_24h_change": -0.4950905276088045
+        "usd": 84827,
+        "usd_24h_change": -0.5154821502422837
       },
       "ethereum": {
-        "usd": 2678.93,
-        "usd_24h_change": -0.5155948284532967
+        "usd": 2681.69,
+        "usd_24h_change": -0.42817161077888694
       },
       "optimism": {
-        "usd": 0.135817,
-        "usd_24h_change": 1.2494234767794865
+        "usd": 0.135099,
+        "usd_24h_change": 1.2335806968486496
       },
       "solana": {
-        "usd": 119.54,
-        "usd_24h_change": -0.34728177460617826
+        "usd": 119.76,
+        "usd_24h_change": -0.1615775654304719
       },
       "pendle": {
-        "usd": 2.37,
-        "usd_24h_change": -2.439372932868789
+        "usd": 2.38,
+        "usd_24h_change": -1.816751939413306
       },
       "lido-dao": {
-        "usd": 0.460467,
-        "usd_24h_change": 1.424377761674392
-      },
-      "internet-computer": {
-        "usd": 3.28,
-        "usd_24h_change": 0.1767682664401407
+        "usd": 0.45915,
+        "usd_24h_change": 1.3013938133410137
       },
       "ethereum-name-service": {
-        "usd": 6.83,
-        "usd_24h_change": -3.071922623627558
+        "usd": 6.84,
+        "usd_24h_change": -2.904752422704732
+      },
+      "litecoin": {
+        "usd": 69.36,
+        "usd_24h_change": -1.1183328388003884
       }
     }
   },
@@ -4981,21 +4981,6 @@
       "knowledge": true
     },
     {
-      "id": "d68379dae18342",
-      "source": "site",
-      "mode": "speculation",
-      "risk": 65,
-      "reasons": [
-        "криптоідея без чіткої портфельної рамки",
-        "матеріал з повної навчальної бази ITstatti"
-      ],
-      "title": "Як заробити гроші в Телеграм (Telegram) без вкладень - 10 актуальних, легких і прибуткових способів + більше 20 корисних ботів",
-      "summary": "Матеріал із повної бази знань ITstatti. Використовується як методологія/контекст, а не як торговий сигнал.",
-      "url": "https://itstatti.in.ua/zarobitok-v-interneti/595-zarobitok-v-telegrami.html",
-      "published_at": null,
-      "knowledge": true
-    },
-    {
       "id": "9d69995e1232f3",
       "source": "site",
       "mode": "speculation",
@@ -5007,6 +4992,21 @@
       "title": "Як заробити в інтернеті без вкладень новачкові від 300$: 20 крутих способів",
       "summary": "Матеріал із повної бази знань ITstatti. Використовується як методологія/контекст, а не як торговий сигнал.",
       "url": "https://itstatti.in.ua/zarobitok-v-interneti/380-yak-zarobiti-v-interneti.html",
+      "published_at": null,
+      "knowledge": true
+    },
+    {
+      "id": "d68379dae18342",
+      "source": "site",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "матеріал з повної навчальної бази ITstatti"
+      ],
+      "title": "Як заробити гроші в Телеграм (Telegram) без вкладень - 10 актуальних, легких і прибуткових способів + більше 20 корисних ботів",
+      "summary": "Матеріал із повної бази знань ITstatti. Використовується як методологія/контекст, а не як торговий сигнал.",
+      "url": "https://itstatti.in.ua/zarobitok-v-interneti/595-zarobitok-v-telegrami.html",
       "published_at": null,
       "knowledge": true
     },
@@ -6205,6 +6205,6 @@
     }
   ],
   "archive_count": 10172,
-  "news_count": 151,
+  "news_count": 93,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
