@@ -8,6 +8,11 @@ from urllib.parse import urlencode
 import requests
 from bs4 import BeautifulSoup
 
+try:
+    from storage import sync_archive
+except ImportError:
+    from crypto_myshka.storage import sync_archive
+
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/"data"/"telegram_archive.json"
 UA={"User-Agent":"Mozilla/5.0 CryptoMyshka/2.1"}
@@ -165,12 +170,14 @@ def main():
         "version":2,
         "updated_at":datetime.now(timezone.utc).isoformat(),
         "channels":stats,
+        "postgres":db_count,
         "post_count":len(posts),
         "complete":all(bool((stats.get(k) or {}).get("complete")) for k in CHANNELS),
         "posts":posts,
     }
     OUT.parent.mkdir(parents=True,exist_ok=True)
     OUT.write_text(json.dumps(payload,ensure_ascii=False,indent=2),encoding="utf-8")
+    db_count=sync_archive(payload)
     print(json.dumps({
         "post_count":len(posts),
         "complete":payload["complete"],
