@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-03T12:26:54.908606+00:00",
+  "generated_at": "2026-10-03T12:30:46.602788+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -19,22 +19,22 @@
     },
     "youtube": {
       "ok": true,
-      "count": 0,
+      "count": 67,
       "url": "https://www.youtube.com/@it_statti"
     }
   },
   "market": {
     "bitcoin": {
-      "usd": 84864,
-      "usd_24h_change": -2.015135080982131
+      "usd": 84847,
+      "usd_24h_change": -2.245083872744721
     },
     "ethereum": {
-      "usd": 2686.18,
-      "usd_24h_change": -2.205801156871429
+      "usd": 2683.58,
+      "usd_24h_change": -2.529716909424778
     },
     "optimism": {
-      "usd": 0.131803,
-      "usd_24h_change": -0.6211936553768971
+      "usd": 0.131361,
+      "usd_24h_change": -1.1695602240759237
     }
   },
   "items": [
@@ -722,6 +722,1012 @@
       "summary": "Матеріал із бази знань ITstatti.",
       "url": "https://itstatti.in.ua/15-treidinh/945-trejling-stop.html",
       "published_at": null
+    },
+    {
+      "id": "9b817a6b1e7efc",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "OKX vs Bybit: Which Crypto Card Is More Profitable in Ukraine? 6 Purchases + ATM",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=rWtey4NibPU",
+      "published_at": null,
+      "video_id": "rWtey4NibPU"
+    },
+    {
+      "id": "3844140acf5cd0",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "OKX Registration 2026: How to Create an Account + 30 Days of VIP1",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=CxNvknaqIME",
+      "published_at": null,
+      "video_id": "CxNvknaqIME"
+    },
+    {
+      "id": "eb88c3dd7d8d07",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "How to earn on cryptocurrency in 2026 — passive income on Binance",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=seFNnvpftz4",
+      "published_at": null,
+      "video_id": "seFNnvpftz4"
+    },
+    {
+      "id": "bc4936e03893e5",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "What are options and how to buy them on Binance in 2026?",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=vQw_-w1Dy7o",
+      "published_at": null,
+      "video_id": "vQw_-w1Dy7o"
+    },
+    {
+      "id": "56c391fc6f4cf6",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "How to Buy Stocks in Ukraine in 2026? A Step-by-Step Guide",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=RSdKKuXNZ5k",
+      "published_at": null,
+      "video_id": "RSdKKuXNZ5k"
+    },
+    {
+      "id": "efbfe2084a782f",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "How to Earn Crypto on OKX — Passive Income for Beginners",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=RGbcPPKIW5E",
+      "published_at": null,
+      "video_id": "RGbcPPKIW5E"
+    },
+    {
+      "id": "bb4c8ba76ab160",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "How to Make from $15 to $100 on Binance Out of Nowhere!",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=rmrkuRMutF0",
+      "published_at": null,
+      "video_id": "rmrkuRMutF0"
+    },
+    {
+      "id": "9262214004cf03",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Which Crypto to Buy in 2026? 11 Coins I'm Looking At Right Now",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=cmpvbcc27K0",
+      "published_at": null,
+      "video_id": "cmpvbcc27K0"
+    },
+    {
+      "id": "c588d93a0a25ba",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "How to Buy S&P 500 on Binance | bStocks — A Simple Guide",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=6oL0a355KgI",
+      "published_at": null,
+      "video_id": "6oL0a355KgI"
+    },
+    {
+      "id": "667d35d767f610",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Bitcoin 2026 Review: Price and Market Updates",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=4QoyO40jff4",
+      "published_at": null,
+      "video_id": "4QoyO40jff4"
+    },
+    {
+      "id": "94f61cabffceae",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Bitcoin predictions for 2026. Where to expect and where will it go?",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=5ynu9H81pww",
+      "published_at": null,
+      "video_id": "5ynu9H81pww"
+    },
+    {
+      "id": "b9913866498b33",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Binance for beginners or how to earn from $60 to $7,000 upon registration",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=bYCRLR5t6aU",
+      "published_at": null,
+      "video_id": "bYCRLR5t6aU"
+    },
+    {
+      "id": "82f3d253bc1611",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Training video on trading using the example of analyzing HYPE, HBAR, IO, IMX, NEAR coins",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=Xrup8HvN2JI",
+      "published_at": null,
+      "video_id": "Xrup8HvN2JI"
+    },
+    {
+      "id": "0091566c13f8e3",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Cryptocurrency overview WLD, STRK, APT, SOL, TWT, 5IRE, MYX, ALEX, VANA, FLIP, PUFFER - What to c...",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=FHdXLcNg6N8",
+      "published_at": null,
+      "video_id": "FHdXLcNg6N8"
+    },
+    {
+      "id": "e576692176aea3",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Register on Binance from your phone in 5 minutes and get a $50 bonus!",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=XoKZS7pyxUQ",
+      "published_at": null,
+      "video_id": "XoKZS7pyxUQ"
+    },
+    {
+      "id": "57bd24d050346d",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Earn money online without investment that even a schoolkid can handle",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=KQd67gY-fi0",
+      "published_at": null,
+      "video_id": "KQd67gY-fi0"
+    },
+    {
+      "id": "bdede194b61443",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "LESSON 3️⃣ - Beginner Trading Course 🟢 Support and resistance levels in technical analysis",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=STbHImOioJI",
+      "published_at": null,
+      "video_id": "STbHImOioJI"
+    },
+    {
+      "id": "a7f0f9c1a2e35e",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "LESSON 2️⃣ - Beginner Trading Course 🟢 Trend Movement, Market Structure and Market Structure Brea...",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=mgrv4cMisOw",
+      "published_at": null,
+      "video_id": "mgrv4cMisOw"
+    },
+    {
+      "id": "82249768578ed7",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "LESSON 1️⃣ - Beginner Course 🟢 Trading Course from Scratch: Japanese Candlesticks, Timeframes, an...",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=vC0Bzc8LQf0",
+      "published_at": null,
+      "video_id": "vC0Bzc8LQf0"
+    },
+    {
+      "id": "a89f4b8d032f28",
+      "source": "youtube",
+      "mode": "opportunities",
+      "risk": 35,
+      "reasons": [
+        "подія/активність, а не ринкова ставка",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Заробіток на BingX Launchpool 🚀 Скільки можна заробити на біржі BingX в пулі?!",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=V3I1oyZcTZA",
+      "published_at": null,
+      "video_id": "V3I1oyZcTZA"
+    },
+    {
+      "id": "539eb2de9fe21b",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Заробіток на криптовалюті без вкладень - Як заробити на тапалці OKX Racer від ТОП біржі",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=XaxoY3PP65A",
+      "published_at": null,
+      "video_id": "XaxoY3PP65A"
+    },
+    {
+      "id": "41dce647bfa5f9",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "ТОП-9 способів: Як заробити на біржі ByBit для Новачків БЕЗ Фʼючерсів",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=jc2dpurZYr0",
+      "published_at": null,
+      "video_id": "jc2dpurZYr0"
+    },
+    {
+      "id": "274b1a93223079",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Легкий Заробіток в Крипті для підлітків | HEXACORE новий Гем Проект",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=cyocx8-QZgs",
+      "published_at": null,
+      "video_id": "cyocx8-QZgs"
+    },
+    {
+      "id": "3d2407a1488695",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "NOTCOIN ВСЕ - Нові ТОП-2 Проекти | Аналоги НОТКОІН для Заробітку Грошей",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=wfR6ZiqfYP4",
+      "published_at": null,
+      "video_id": "wfR6ZiqfYP4"
+    },
+    {
+      "id": "91b5485cbb9ad2",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Коли продавати криптовалюту, щоб заробити Новачку?",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=Pk5Xz4_0IpI",
+      "published_at": null,
+      "video_id": "Pk5Xz4_0IpI"
+    },
+    {
+      "id": "dc12ba2b91bdc1",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як придбати криптовалюту до лістингу на премаркеті | Торгівля на Премаркеті Байбіт - Як Заробити?",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=Fo40gtwzJcc",
+      "published_at": null,
+      "video_id": "Fo40gtwzJcc"
+    },
+    {
+      "id": "52bcea737da165",
+      "source": "youtube",
+      "mode": "trading",
+      "risk": 80,
+      "reasons": [
+        "активна торгівля/позиція",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Стейкінг криптовалюти на біржі Бінанс | Як заробити на стейкінгу для Новачків - Пасивний Дохід",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=1X3Eqjd6DNU",
+      "published_at": null,
+      "video_id": "1X3Eqjd6DNU"
+    },
+    {
+      "id": "19a45a1ca5017f",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Earnings on Crypto | How to make money on spot in cryptocurrency without risks: TOP-2 strategies",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=nuMrH-sUlM8",
+      "published_at": null,
+      "video_id": "nuMrH-sUlM8"
+    },
+    {
+      "id": "8193160b850764",
+      "source": "youtube",
+      "mode": "opportunities",
+      "risk": 35,
+      "reasons": [
+        "подія/активність, а не ринкова ставка",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Фармінг безкоштовних монет на Бінанс - Новий Binance Лаунчпул ENA (Ethena) | Скільки дасть іксів?🚀",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=yTNHF-LisCk",
+      "published_at": null,
+      "video_id": "yTNHF-LisCk"
+    },
+    {
+      "id": "943c95440d5000",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як заробити на біржі OKX новачкові без торгівлі | Як отримати крипту безкоштовно у Jumpstart OKX",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=aq9zT8JOx60",
+      "published_at": null,
+      "video_id": "aq9zT8JOx60"
+    },
+    {
+      "id": "bd01920bb0b76d",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як заробити на Бінанс Новачкові Без Ризиків на бичачому ринку | Додаткова схема заробітку на Binance",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=1KrPswcqvRg",
+      "published_at": null,
+      "video_id": "1KrPswcqvRg"
+    },
+    {
+      "id": "ba730cd87c0e51",
+      "source": "youtube",
+      "mode": "opportunities",
+      "risk": 35,
+      "reasons": [
+        "подія/активність, а не ринкова ставка",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як заробити на Binance Launchpool | Гарантований додатковий заробіток на криптовалюті без ризиків",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=acZDee_60Fs",
+      "published_at": null,
+      "video_id": "acZDee_60Fs"
+    },
+    {
+      "id": "6ef1e1d6129e6c",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Чи може Гаманець Заблокувати Крипту? | Та що Робити, якщо Trust Wallet Заблокують?",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=63QNVN7nlCE",
+      "published_at": null,
+      "video_id": "63QNVN7nlCE"
+    },
+    {
+      "id": "3ea08cf306cc4d",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як вивести БЕЗПЕЧНО криптовалюту в ГОТІВКУ в будь-якій точці світу без KYC",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=sooossToAIs",
+      "published_at": null,
+      "video_id": "sooossToAIs"
+    },
+    {
+      "id": "4803e5047d51cf",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 55,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "є згадка ризик-менеджменту",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Управління Капіталом в Крипті | Правильний Мані та Ризик Менеджмент",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=50n1gEceUuQ",
+      "published_at": null,
+      "video_id": "50n1gEceUuQ"
+    },
+    {
+      "id": "06bd8ce16424e0",
+      "source": "youtube",
+      "mode": "portfolio",
+      "risk": 55,
+      "reasons": [
+        "портфельна/довша теза",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Заробіток в інтернеті | Купуємо разом з «ФОНДАМИ» - Інвестиції в Криптовалюту",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=4MdsC8boOd0",
+      "published_at": null,
+      "video_id": "4MdsC8boOd0"
+    },
+    {
+      "id": "cc5ec91c79d0e0",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як заробляти на криптовалюті без ризиків | Купуємо разом з «Китами»",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=GH1x7ST2oHc",
+      "published_at": null,
+      "video_id": "GH1x7ST2oHc"
+    },
+    {
+      "id": "5b38f2101c829a",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "The Best Crypto Wallet: Trust Wallet | How to Use Trust Wallet",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=LgGh09un7Xk",
+      "published_at": null,
+      "video_id": "LgGh09un7Xk"
+    },
+    {
+      "id": "f7c88853c3b587",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Metamask Complete Instructions on How to SAFELY Store Crypto | Metamask How to Use",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=NIA4LdYEMzI",
+      "published_at": null,
+      "video_id": "NIA4LdYEMzI"
+    },
+    {
+      "id": "b93d68f0a3b958",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як вивести Гроші з Бінанс на карту | Вивід коштів з Binance через P2P",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=61f9YLRWcOw",
+      "published_at": null,
+      "video_id": "61f9YLRWcOw"
+    },
+    {
+      "id": "4f0aa6f8bfe8b8",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як поповнити Бінанс з картки БЕЗ КОМІСІЇ | Всі методи - Повний Гайд",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=JDSyi0jeZLM",
+      "published_at": null,
+      "video_id": "JDSyi0jeZLM"
+    },
+    {
+      "id": "3673099bffca95",
+      "source": "youtube",
+      "mode": "trading",
+      "risk": 80,
+      "reasons": [
+        "активна торгівля/позиція",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як купувати та продавати криптовалюту | Типи ордерів на біржі: Ліміт, Маркет, Стоп, Трейлінг, OCO",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=3E7L4AgEQ5Y",
+      "published_at": null,
+      "video_id": "3E7L4AgEQ5Y"
+    },
+    {
+      "id": "9591f5ebbe1bde",
+      "source": "youtube",
+      "mode": "portfolio",
+      "risk": 55,
+      "reasons": [
+        "портфельна/довша теза",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як заробити на інвестиціях у криптовалюті? | \"Палю\" схему вибору альткоїнів",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=IbULUTgQzG8",
+      "published_at": null,
+      "video_id": "IbULUTgQzG8"
+    },
+    {
+      "id": "548dad6d39c4c1",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як Заробити на Крипті БЕЗ Ризику | Заробіток в IDO на ByBit",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=Q-u0phvg6oU",
+      "published_at": null,
+      "video_id": "Q-u0phvg6oU"
+    },
+    {
+      "id": "d974a2c9d51655",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "7 Способів Заробітку Криптовалюти поки ринок стоїть",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=R1vCF-kTn80",
+      "published_at": null,
+      "video_id": "R1vCF-kTn80"
+    },
+    {
+      "id": "f4b80ec07a4a35",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Пасивний Дохід в Інтернеті на Крипті | Додатковий Заробіток БЕЗ Ризиків",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=k3D4jJWv8UQ",
+      "published_at": null,
+      "video_id": "k3D4jJWv8UQ"
+    },
+    {
+      "id": "f412aaee9de91b",
+      "source": "youtube",
+      "mode": "portfolio",
+      "risk": 55,
+      "reasons": [
+        "портфельна/довша теза",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Інвестиції для Початківців в Криптовалюту | 4 Закони для Заробітку на Крипті",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=vurvUt2A6jw",
+      "published_at": null,
+      "video_id": "vurvUt2A6jw"
+    },
+    {
+      "id": "c7993b5a2e0616",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як заробити на ChatGPT та інших Нейромережах | MidJourney, Dalle 2",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=U4IKileQvmQ",
+      "published_at": null,
+      "video_id": "U4IKileQvmQ"
+    },
+    {
+      "id": "2fb8c965ff0e98",
+      "source": "youtube",
+      "mode": "opportunities",
+      "risk": 35,
+      "reasons": [
+        "подія/активність, а не ринкова ставка",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як Отримувати КРИПТУ БЕЗКОШТОВНО? Ретродропи / Аірдропи Криптовалют",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=5KU-bYMVRAI",
+      "published_at": null,
+      "video_id": "5KU-bYMVRAI"
+    },
+    {
+      "id": "e0441985c95c56",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як Заробити на Криптовалюті Новачку? [повний туторіал для початківців]",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=Cc_iQXlpLEY",
+      "published_at": null,
+      "video_id": "Cc_iQXlpLEY"
+    },
+    {
+      "id": "8ce3ffa58990ef",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Реєстрація на Бінанс для Новачків | Binance Реєстрація",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=anVFQBqYb-w",
+      "published_at": null,
+      "video_id": "anVFQBqYb-w"
+    },
+    {
+      "id": "d411fccd0b2c8d",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "З Чого Почати Новачкові в Криптовалюті | Як Купити та Заробити на Крипті",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=44JTlkuHoPE",
+      "published_at": null,
+      "video_id": "44JTlkuHoPE"
+    },
+    {
+      "id": "0528bfa6990607",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Яку Криптовалюту Купити Сьогодні в 2025 з Великим Потенціалом Зростання",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=dAU-l91XWnM",
+      "published_at": null,
+      "video_id": "dAU-l91XWnM"
+    },
+    {
+      "id": "5b5e4082f4d593",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Де та Як Зберігати Криптовалюту Правильно | Гаманці для Криптовалют",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=U62i9V82sgs",
+      "published_at": null,
+      "video_id": "U62i9V82sgs"
+    },
+    {
+      "id": "cddf07e982798d",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Cryptocurrency for Beginners | How to Start Making Money in Crypto",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=Gb9dyJuo32s",
+      "published_at": null,
+      "video_id": "Gb9dyJuo32s"
+    },
+    {
+      "id": "1862f170c62fcf",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Робота в інтернеті - ТОП-5 професій на дому для новачків в 2025 році",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=FCkyRrXMSiw",
+      "published_at": null,
+      "video_id": "FCkyRrXMSiw"
+    },
+    {
+      "id": "d55e9dca012825",
+      "source": "youtube",
+      "mode": "trading",
+      "risk": 80,
+      "reasons": [
+        "активна торгівля/позиція",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як Заробити Гроші в Інтернеті на американському YouTube Shorts",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=pAng4xhrPeA",
+      "published_at": null,
+      "video_id": "pAng4xhrPeA"
+    },
+    {
+      "id": "b2e70028085b56",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як Заробити 100€ в День в Інтернеті | Заробіток на Штучному Інтелекті",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=33fMyAaj25k",
+      "published_at": null,
+      "video_id": "33fMyAaj25k"
+    },
+    {
+      "id": "20eb802e4b1dcf",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як Заробити Гроші Школяреві | Заробіток На Простих Завданнях в Інтернеті",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=gcCxAGdl6lA",
+      "published_at": null,
+      "video_id": "gcCxAGdl6lA"
+    },
+    {
+      "id": "fc5eb89bd422e7",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як Заробити Гроші в Тік Ток $6000 на місяць ★ Тренди #ТікТок. Заробіток в Інтернеті",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=jwX77FH_PTw",
+      "published_at": null,
+      "video_id": "jwX77FH_PTw"
+    },
+    {
+      "id": "d88e10e8c33c6c",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Як Заробити на Ютубі з Нуля за 30 Днів | Покроковий План",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=Qz3ARQZaodo",
+      "published_at": null,
+      "video_id": "Qz3ARQZaodo"
+    },
+    {
+      "id": "eef2f7f55bf2ea",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Work from home or remote work from home without experience vacancies (remote work on the Internet)",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=_S0NDuurrpE",
+      "published_at": null,
+      "video_id": "_S0NDuurrpE"
+    },
+    {
+      "id": "7c6b8c0a370be1",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Всі Способи Заробітку в Тік Tок | Монетизація Тік Ток, Партнерки та Арбітраж трафіку в Tik Tok",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=T9oWd9R9ueA",
+      "published_at": null,
+      "video_id": "T9oWd9R9ueA"
+    },
+    {
+      "id": "9b0b39ab60e753",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Сайти які Платять Гроші за Перегляд Реклами",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=rGLmED7nMLE",
+      "published_at": null,
+      "video_id": "rGLmED7nMLE"
+    },
+    {
+      "id": "2713e7ae626878",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Заробіток в Інтернеті на Перегляді Відео у Ютуб",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=J5XWSWZ67ns",
+      "published_at": null,
+      "video_id": "J5XWSWZ67ns"
+    },
+    {
+      "id": "30fd27fcccadaa",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Арбітраж трафіку. Схема Заробітоку в Інтернеті Без Вкладень",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=UJkxLIC4FHI",
+      "published_at": null,
+      "video_id": "UJkxLIC4FHI"
+    },
+    {
+      "id": "689c4e961a7397",
+      "source": "youtube",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки",
+        "YouTube використовується як контекст/методологія, не як прямий сигнал"
+      ],
+      "title": "Заробіток на Ютубі Без Монетизації на Безкоштовній Музиці",
+      "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
+      "url": "https://www.youtube.com/watch?v=W8VkrMIM1UM",
+      "published_at": null,
+      "video_id": "W8VkrMIM1UM"
     }
   ],
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
