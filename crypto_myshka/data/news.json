@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-03T14:34:37.408035+00:00",
+  "generated_at": "2026-10-03T15:08:00.913080+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -30,7 +30,7 @@
     "Bloomberg Crypto": {
       "url": "https://feeds.bloomberg.com/crypto/news.rss",
       "ok": true,
-      "count": 2,
+      "count": 1,
       "role": "evidence"
     },
     "FT Crypto": {
@@ -46,8 +46,8 @@
       "role": "discovery"
     }
   },
-  "raw_item_count": 240,
-  "item_count": 130,
+  "raw_item_count": 239,
+  "item_count": 131,
   "items": [
     {
       "id": "3ab9ec40083bca",
@@ -88,20 +88,20 @@
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
       "jev_ai": {
-        "what_happened": "{ \"what_happened\": \"Google News discovery повідомляє про оновлення hacked Bitget із залученням XRP, BTC, LINK і можливим зв'язком із Північною Кореєю. Джерело одне, статус — 'потребує підтвердження'.\", \"why_it_matters\": \"Біржа середньої ліквідності; якщо втрати реальні, це ризик контагіону та регуляторного тиску. Північнокорейський ланцюг підвищує санкційні ризики.\", \"market_effect\": \"Короткочасний ризік-оф для XRP, ",
-        "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
-        "market_effect": "Невизначено",
-        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
-        "bear_case": "Непідтверджений або неповний контекст може дати хибний висновок.",
-        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+        "what_happened": "Оновлення щодо інциденту на Bitget: згадка XRP, Bitcoin і Північної Кореї. Джерело одне — Google News discovery / Yahoo Finance, статус «потребує підтвердження». Факти про обсяги втрат, адреси гаку та докази仍 відсутні.",
+        "why_it_matters": "Біржа середньої лідерської позиції + зв'язок із NK може означати державну атаку, санкційні ризики та регуляторне тиск. Ринкова реакція залежить від реальних втрат, а не від заголовка.",
+        "market_effect": "Короткочасний страх, потенційний відтік з BTC/XRP. Але без даних про розмір збитків і ліквідність біржі — ефект гіпотетичний.",
+        "bull_case": "Інцидент локалізовано, страховий/резервний фонд покриває втрати, ринок уже заклав ризик. BTC тримає 84-85к як підтримку за ITstatti.",
+        "bear_case": "Значні витоки, регуляторні зачинення рахунків/активів, паніка на альтах, BTC тестує 82600.",
+        "watch_next": "Офіційна заява Bitget, proof-of-reserves, реакція регуляторів, динаміка BTC/XRP у перші 24-48 год.",
         "confidence": "низька",
-        "short_conclusion": "{ \"what_happened\": \"Google News discovery повідомляє про оновлення hacked Bitget із залученням XRP, BTC, LINK і можливим зв'язком із Північною Кореєю. Джерело одне, статус — 'потребує підтвердження'.\", \"why_it_matters\": \"Біржа середньої ліквідності; якщо втрат",
+        "short_conclusion": "Біржа середньої лідерської позиції + зв'язок із NK може означати державну атаку, санкційні ризики та регуляторне тиск. Ринкова реакція залежить від реальних втрат, а не від заголовка.",
         "_format_fallback": true,
+        "_partial_json_recovered": true,
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content"
+      "analysis_level": "format_fallback"
     },
     {
       "id": "9d665cdd859369",
@@ -152,7 +152,44 @@
       "analysis_level": "llm"
     },
     {
-      "id": "b4b66b183c9611",
+      "id": "c3a305c956c7be",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Fed finds a silver lining as China sells U.S. Treasuries - thestreet.com",
+      "summary": "Fed finds a silver lining as China sells U.S. Treasuries &nbsp;&nbsp; thestreet.com",
+      "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQSEZ2V2NUR2F3YmplQWRBQXNwblFHcnZ6bHBMYkFNckluaXZoNk1yRWNzUTlRTWhGTnhwX0lMaW9sZWFHYUh1cWRTY29ZdlRFQ2U5d01kSGU5TTIzR2tPVEhsS1Y0amtyNE8xZC1vU1MxenljMDAxY3dOdi1wcXVkYmhoTkh1eGFRZzFNb0pBS3lWcmhvZUxGT1V6VnY?oc=5",
+      "published_at": "2026-10-03T11:33:00+00:00",
+      "assets": [],
+      "topics": [
+        "macro"
+      ],
+      "impact": 3,
+      "impact_label": "Високий вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Google News discovery"
+      ],
+      "links": [
+        {
+          "publisher": "Google News discovery",
+          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQSEZ2V2NUR2F3YmplQWRBQXNwblFHcnZ6bHBMYkFNckluaXZoNk1yRWNzUTlRTWhGTnhwX0lMaW9sZWFHYUh1cWRTY29ZdlRFQ2U5d01kSGU5TTIzR2tPVEhsS1Y0amtyNE8xZC1vU1MxenljMDAxY3dOdi1wcXVkYmhoTkh1eGFRZzFNb0pBS3lWcmhvZUxGT1V6VnY?oc=5"
+        }
+      ],
+      "confidence_label": "Discovery: потребує підтвердження",
+      "jev_take": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Google News використано лише як радар теми",
+        "Ринковий тон: Невизначений / змішаний",
+        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
+      ],
+      "analysis_error": "Model returned empty content",
+      "analysis_level": "cross_source_fallback"
+    },
+    {
+      "id": "b6893f6c5be774",
       "source": "jev_analysis",
       "mode": "news",
       "title": "SEC approves 3x leveraged Bitcoin and Ether ETPs, but trading has to wait - TradingView",
@@ -181,6 +218,10 @@
         },
         {
           "publisher": "Google News discovery",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQbkV3eVJoa3pnUWh6Q3VQbG5peWZ1WVVnUFI2QXJRZU5pbWZRdERFNDFESGJoeDlUWFZweFNoRi1TdzRYZmY2WU9DaGh4Z0QzdE1xUFFKLWZyb0t3UkRNbm83WS1BaXBJREs3cVk5QWFXZl91NTdLUmNhclBtandZcWlMXzhlb1FJRFY5SmQwaktsazE0T2tyeFZMZC1LZlhFblFtZlJ2Yw?oc=5"
+        },
+        {
+          "publisher": "Google News discovery",
           "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQczFQSjFVQnExYUN5NkEzYmZvVzF6aDl5SlBGLVEwaXJ3Y0JQNi14WWplTldLTGpxcFhRNUdQNXI4U3hlVW9JMTZzOFNvZnhTWFBPaFo5cU9wOXNYYWpad0ItcUpmSE4wX2xoSTVsYTRvaTlSWmV2QS0wTXhJSXdpTHYzT1hERnlXZmRJT1Qtd3B5eF9Odk9GVTFkWkhiNWNjVjJuNl9XNm96ZENya2ZFcEdpT254Qy1COEMw?oc=5"
         }
       ],
@@ -193,7 +234,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_level": "llm",
       "jev_ai": {
         "what_happened": "SEC схвалив 3x левереджовані BTC та ETH ETP, але торгівля ще не розпочата — продукт очікує запуску.",
         "why_it_matters": "З'являється інституційний інструмент для ставки на 3x рух без прямого ф'ючерсу, але це збільшує системні ризики при корекції.",
@@ -205,7 +245,8 @@
         "short_conclusion": "Схвалення — регуляторний плюс, але не сигнал до покупки. BTC повинен спочатку закріпитися вище 85.5k, інакше левереджовані продукти лише збільшать волатильність.",
         "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "free/deepseek-v4.1-flash"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "89660531956ebe",
@@ -290,7 +331,6 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_level": "format_fallback",
       "jev_ai": {
         "what_happened": "AI-відповідь прийшла у пошкодженому форматі й буде автоматично перезапитана.",
         "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
@@ -303,7 +343,9 @@
         "_format_fallback": true,
         "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "free/deepseek-v4.1-flash"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content"
     },
     {
       "id": "c5ba51b1caa64e",
@@ -668,14 +710,14 @@
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
       "jev_ai": {
-        "what_happened": "BTC спробував вийти на 87k, але не закрив денний бар вище зони 85200-85600 (закриття 84518). NFP слабкий (29k проти 90k), PCE нижче очікувань — ФРС, ймовірно, тримає ставки.",
-        "why_it_matters": "Uptober — історично сильний місяць, але без підтвердження закриттям вище ключового супротиву рух ризикує повторити вересневий відскок.",
-        "market_effect": "Макро на боці булів (пауза ФРС), техніка — бічник/корекція. Домінація BTC ~59.5%, альти слабші.",
-        "bull_case": "Слабкий NFP + м'який PCE = відкладення хайків, стримення доходності, потік у ризик-активи.",
-        "bear_case": "Відсутність щоденних закриттів вище 85.5k, 5.3% доходність по-прежньому стискує мультиплікатори, джерело лише одне.",
+        "what_happened": "Bitcoin входить у «Uptober» — історично найсильніший місяць — після вересня рекордного темпу. Але ціна не може закрити денний бар вище зони 85200–85600 (закриття 03.10 на 84518). Паралельно вихід NFP (29K проти 90K) і PCE (core 3.0% проти 3.7%) знизили ймовірність жовтневого підвищення ставки ФРС, але 10Y Treasury тримається на 5.3%.",
+        "why_it_matters": "Слабкі макродані — це паливо для ризик-активів, але BTC вже «загрив» цю новину до релізу. Реальний тест — чи вдасться закріпити 85.5K денним баром, інакше рух залишається внутрішньоденним і відкатним.",
+        "market_effect": "Короткотерміново — підтримка 84–86K, але без закриття вище 85.5K тиск на 83K. Домінація BTC 59.55%, капіталізація без BTC/ETH $0.827T — альти ще не підтягнулися.",
+        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
+        "bear_case": "Неповний контекст може дати хибний висновок.",
         "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
         "confidence": "низька",
-        "short_conclusion": "Uptober — історично сильний місяць, але без підтвердження закриттям вище ключового супротиву рух ризикує повторити вересневий відскок.",
+        "short_conclusion": "Слабкі макродані — це паливо для ризик-активів, але BTC вже «загрив» цю новину до релізу. Реальний тест — чи вдасться закріпити 85.5K денним баром, інакше рух залишається внутрішньоденним і відкатним.",
         "_format_fallback": true,
         "_partial_json_recovered": true,
         "_model_used": "free/deepseek-v4.1-flash"
@@ -717,8 +759,19 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "Model returned empty content",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "llm",
+      "jev_ai": {
+        "what_happened": "Протокол NEAR Intents зазнав атаки на $3.8M. За даними Decrypt, команда відреагувала швидко: компенсувала користувачам втрати та виправила ваду за ~1 год.",
+        "why_it_matters": "Швидка компенсація та короткий час відновлення — рідкісний патерн серед хаків, що може знизити репутаційні ризики. Але сам факт крадіжки на $3.8M підтверджує серйозні вади в логіці intents.",
+        "market_effect": "Короткочасний негативний імпульс на NEAR та пов'язані токени, ймовірно стриманий швидкою реакцією команди. Масовий продаж малоймовірний за відсутності чорного списку адрес.",
+        "bull_case": "Швидке відшкодування користувачам + 1-годинне вирішення сигналізує про зрілу інцидент-менеджмент культуру, що для ранкового хаку — позитивний відхил.",
+        "bear_case": "Сума $3.8M суттєва; якщо вада в логіці intents, повторні атаки можливі. Єдиний джерело (Decrypt) — немає незалежного підтвердження обсягу та умов компенсації.",
+        "watch_next": "Офіційний пост NEAR Intents з деталями вади, спискок скомпрометованих адрес, оновлення контрактів та реальні транзакції компенсацій на блокчейні.",
+        "confidence": "низька",
+        "short_conclusion": "Хак підтверджений одним джерелом, реакція команди — найкраща з можливих, але деталей недостатньо для висновків. Чекаю офіційного звіту та on-chain доказів компенсацій.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash"
     },
     {
       "id": "8855fbd6542ca5",
@@ -764,8 +817,21 @@
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
-      "analysis_error": "Model returned empty content",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "format_fallback",
+      "jev_ai": {
+        "what_happened": "Біткоін рухається в діапазоні 84.5–86.4к після слабкого NFP (+29к проти очікуваних ~90к) та м'якого PCE (Core 3.0% р/р). ФРС жовтневе підвищення ставки ймовірно скасує. Але BTC не закрив денний бар вище 85.5к, хоча інтрадей йшов до 87.2к.",
+        "why_it_matters": "Слабкий NFP + PCE підтверджують зміцнення медвежого сценарію для ФРС, що historically підтримує BTC. Однак ITstatti зазначає: BTC зростав ще до NFP, тому макро — каталізатор, а не єдина причина. Невдача з закріпленням денним баром вище 85.5к ставить під сумнів ланцюг.",
+        "market_effect": "Короткотерміновий позитивний макрофон, але технічно BTC у бічнику. Домінація 59.55%, капіталізація $2.85–2.91трлн. Індекс страху/жадібності 67–72 — надмірний оптимизм без підтвердження закриттям.",
+        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
+        "bear_case": "Неповний контекст може дати хибний висновок.",
+        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+        "confidence": "низька",
+        "short_conclusion": "Слабкий NFP + PCE підтверджують зміцнення медвежого сценарію для ФРС, що historically підтримує BTC. Однак ITstatti зазначає: BTC зростав ще до NFP, тому макро — каталізатор, а не єдина причина. Невдача з закріпленням денним баром вище 85.5к ставить під сумнів ланцюг.",
+        "_format_fallback": true,
+        "_partial_json_recovered": true,
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash"
     },
     {
       "id": "5e39bc27debd2e",
@@ -803,8 +869,21 @@
         "Ринковий тон: Невизначений / змішаний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ],
-      "analysis_error": "Model returned empty content",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "format_fallback",
+      "jev_ai": {
+        "what_happened": "BTC спробував новий жовтневий максимум біля $87,8K з ліквідацією шортів >$120M, але за даними ITstatti рух відбився від зони 87,2K і відступив до ~84,6K — джерела суперечать.",
+        "why_it_matters": "Частина AI-відповіді не дійшла повністю, тому висновок потребує перевірки.",
+        "market_effect": "Невизначено",
+        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
+        "bear_case": "Неповний контекст може дати хибний висновок.",
+        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+        "confidence": "низька",
+        "short_conclusion": "Частина AI-відповіді не дійшла повністю, тому висновок потребує перевірки.",
+        "_format_fallback": true,
+        "_partial_json_recovered": true,
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash"
     },
     {
       "id": "9b740803d60c3b",
@@ -902,7 +981,8 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "format_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content"
     },
     {
       "id": "0c443dc1429c2e",
@@ -938,8 +1018,8 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "Model returned empty content",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content"
     },
     {
       "id": "b06d3b63cf360f",
@@ -1024,8 +1104,19 @@
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_error": "Model returned empty content",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "llm",
+      "jev_ai": {
+        "what_happened": "SEC пропонує зняти вимоги до custody, які заважали деяким інвестрадникам пропонувати клієнтам певні криптоактиви.",
+        "why_it_matters": "Знижує бар'єр для інституційного входу — потенційно більше капіталу через регульовані канали.",
+        "market_effect": "Нейтрально-позитивний для крипти загалом, особливо для активів, які тепер можуть бути в custody у рамках adviser-структур.",
+        "bull_case": "Більше інституційної участі, ліквідності та легітимізації ринку.",
+        "bear_case": "Спрощення custody може знизити стандарти безпеки; джерело одне — твердження не підтверджено.",
+        "watch_next": "Офіційний filing SEC, період коментарів, фінальне правило, перелік конкретних активів.",
+        "confidence": "низька",
+        "short_conclusion": "Пропозиція знижує бар'єр для інституцій, але ще не прийнята — очікувати фінального правила та деталей.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash"
     },
     {
       "id": "f9f6f7ec2b73e3",
@@ -1120,8 +1211,8 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_error": "Model returned empty content",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content"
     },
     {
       "id": "6e76591a81280c",
@@ -1157,8 +1248,8 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_error": "Model returned empty content",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content"
     },
     {
       "id": "f10f21b774010b",
@@ -1242,8 +1333,20 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_error": "Model returned empty content",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "format_fallback",
+      "jev_ai": {
+        "what_happened": "AI-відповідь прийшла у пошкодженому форматі й буде автоматично перезапитана.",
+        "why_it_matters": "Модель повернула неструктурований висновок; першоджерело треба перевірити вручну.",
+        "market_effect": "Невизначено",
+        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
+        "bear_case": "Непідтверджений або неповний контекст може дати хибний висновок.",
+        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+        "confidence": "низька",
+        "short_conclusion": "AI-відповідь прийшла у пошкодженому форматі й буде автоматично перезапитана.",
+        "_format_fallback": true,
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash"
     },
     {
       "id": "dc1bd9510e1b85",
@@ -1329,7 +1432,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "Model returned empty content",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "74d391650648ee",
@@ -1364,7 +1469,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_error": "Model returned empty content",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "8a8f939ff809ef",
@@ -1400,7 +1507,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_error": "Model returned empty content",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "b5ac9e41e1a1e1",
@@ -1435,7 +1544,22 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "jev_ai": {
+        "what_happened": "Атакувач Bitget ($387.5M) спробував свапнути ~$50M через Near Intents — відхилено. Тепер шукає приховання ~$3.8M ZEC у Zcash Ironwood pool.",
+        "why_it_matters": "Хакер мігрує до privacy-інфраструктури; ефективність Ironwood ще не доведена. Near відхилив — ймовірно, через ризики AML/підозрілі патерни.",
+        "market_effect": "Прямий вплив на ціни мінімальний ($3.8M). Косвено — тиск на репутацію privacy-пулів та підвищення уваги регуляторів.",
+        "bull_case": "ZEC отримує використання shielded pool; Near демонструє фільтрацію ризиків, що зміцнює довіру інституцій.",
+        "bear_case": "Неповний контекст може дати хибний висновок.",
+        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+        "confidence": "низька",
+        "short_conclusion": "Хакер мігрує до privacy-інфраструктури; ефективність Ironwood ще не доведена. Near відхилив — ймовірно, через ризики AML/підозрілі патерни.",
+        "_format_fallback": true,
+        "_partial_json_recovered": true,
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "format_fallback"
     },
     {
       "id": "1ebda8c8f725a4",
@@ -1471,7 +1595,22 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "jev_ai": {
+        "what_happened": "Bitget повідомив про втрату ~$390M у хакерській атаці. Компанія стверджує, що методи 'високою мірою сумісні' з Північною Кореєю. Джерело лише одне — FT Crypto.",
+        "why_it_matters": "Крупний біржовий інцидент підриває довіру до централізованих платформ, може спровокувати регуляторну реакцію та перевірки резервів у всій галузі.",
+        "market_effect": "Тиск на токени біржі, короткочасний негативний настрої на ринку, потенційний відтік активів у cold-storage та децентралізовані протоколи.",
+        "bull_case": "Швидке відновлення коштів, страхове покриття, посилення безпеки як конкурентна перевага, імпульс для self-custody.",
+        "bear_case": "Замороження виведень, регуляторні санкції, контагіон на інші біржі, використання похищених активів у mixers/tumblers.",
+        "watch_next": "Офіційний розслідувальний звіт, статус повернення коштів, реакція регуляторів (SEC, FCA, HK SFC), proof-of-reserves.",
+        "confidence": "низька",
+        "short_conclusion": "Крупний біржовий інцидент підриває довіру до централізованих платформ, може спровокувати регуляторну реакцію та перевірки резервів у всій галузі.",
+        "_format_fallback": true,
+        "_partial_json_recovered": true,
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "format_fallback"
     },
     {
       "id": "3c7dbac99ce032",
@@ -2566,6 +2705,72 @@
       ]
     },
     {
+      "id": "35fc8e2f32e1ea",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Trump Is Hosting Yet Another Meme Coin Dinner: Here Are the Details",
+      "summary": "The TRUMP meme coin project is inviting its top 185 holders to a Nov. 22 gala dinner with President Trump two weeks after ethics disputes over his crypto interests helped stall the Clarity Act in the Senate.",
+      "url": "https://decrypt.co/380002/trump-third-meme-coin-dinner-details",
+      "published_at": "2026-10-03T15:01:03+00:00",
+      "assets": [],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Decrypt"
+      ],
+      "links": [
+        {
+          "publisher": "Decrypt",
+          "url": "https://decrypt.co/380002/trump-third-meme-coin-dinner-details"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "b5c61d1c97f9e4",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Cathie Wood says smart investors need to start watching where AI agents spend money",
+      "summary": "",
+      "url": "https://www.coindesk.com/markets/2026/10/01/cathie-wood-says-smart-investors-need-to-start-watching-where-ai-agents-spend-money",
+      "published_at": "2026-10-03T15:00:00+00:00",
+      "assets": [],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/markets/2026/10/01/cathie-wood-says-smart-investors-need-to-start-watching-where-ai-agents-spend-money"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
       "id": "879d78ac6de9dd",
       "source": "jev_analysis",
       "mode": "news",
@@ -2952,41 +3157,6 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "4a16c8e6c29408",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "SEC’s Hester Peirce Departs After Shaping US Crypto Policy for Eight Years",
-      "summary": "Hester Peirce was at times a lonely voice pushing for an embrace of digital assets from the inside of Washington’s foremost markets regulator.",
-      "url": "https://www.bloomberg.com/news/articles/2026-10-02/crypto-s-longtime-washington-advocate-departs-sec",
-      "published_at": "2026-10-02T15:00:43+00:00",
-      "assets": [],
-      "topics": [
-        "regulation"
-      ],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Bloomberg Crypto"
-      ],
-      "links": [
-        {
-          "publisher": "Bloomberg Crypto",
-          "url": "https://www.bloomberg.com/news/articles/2026-10-02/crypto-s-longtime-washington-advocate-departs-sec"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ]
     },
     {
@@ -4023,12 +4193,12 @@
       ]
     },
     {
-      "id": "eba3ad93fdf0d1",
+      "id": "03d77fe6cba2e1",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "MetaMask security incident forces Ethereum staking exits, no funds at risk",
-      "summary": "",
-      "url": "https://www.coindesk.com/tech/2026/10/01/metamask-security-incident-forces-ethereum-staking-exits-with-lido-warning-of-lost-rewards",
+      "title": "MetaMask Exits Lido Validators Amid Infrastructure ‘Security Incident’",
+      "summary": "The wallet says it has found no immediate threat to user wallets, but the ETH it is pulling out of Lido could take 45 days to return.",
+      "url": "https://decrypt.co/379800/metamask-exits-lido-validators-amid-infrastructure-security-incident",
       "published_at": "2026-10-01T09:38:06+00:00",
       "assets": [
         "ETH"
@@ -4039,27 +4209,22 @@
       "impact": 1,
       "impact_label": "Низький вплив",
       "tone": "Невизначений / змішаний",
-      "source_count": 2,
+      "source_count": 1,
       "publishers": [
-        "CoinDesk",
         "Decrypt"
       ],
       "links": [
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/tech/2026/10/01/metamask-security-incident-forces-ethereum-staking-exits-with-lido-warning-of-lost-rewards"
-        },
         {
           "publisher": "Decrypt",
           "url": "https://decrypt.co/379800/metamask-exits-lido-validators-amid-infrastructure-security-incident"
         }
       ],
-      "confidence_label": "Є незалежне підтвердження",
+      "confidence_label": "Поки одне джерело",
       "jev_take": "Регуляторний фактор може змінити доступ або попит на ETH; заголовок треба звіряти з офіційним рішенням/файлінгом.",
       "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
-        "Є незалежне підтвердження",
+        "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ]
@@ -4461,43 +4626,6 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
-      "id": "04b8865099dcaa",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Ex-NCA Officer Must Repay $2.4M for Bitcoin He Stole When It Was Worth $77K",
-      "summary": "Paul Chowles took 50 BTC from a Silk Road 2.0 seizure in 2017. Prosecutors have now valued the theft at more than 30 times that.",
-      "url": "https://decrypt.co/379702/ex-nca-officer-must-repay-2-4m-for-bitcoin-he-stole-when-it-was-worth-77k",
-      "published_at": "2026-09-30T15:17:45+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [
-        "regulation"
-      ],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/379702/ex-nca-officer-must-repay-2-4m-for-bitcoin-he-stole-when-it-was-worth-77k"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ]
     },
     {
@@ -4984,8 +5112,8 @@
   "jev_status": "ok",
   "jev_provider": "apinex",
   "jev_model": "free/gpt-5.6-luna",
-  "jev_analyzed_count": 13,
-  "jev_analyzed_this_run": 6,
-  "jev_pending_count": 48,
+  "jev_analyzed_count": 15,
+  "jev_analyzed_this_run": 2,
+  "jev_pending_count": 47,
   "jev_analysis_errors": 11
 }
