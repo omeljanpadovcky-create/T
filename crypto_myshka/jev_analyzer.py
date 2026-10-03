@@ -383,7 +383,7 @@ def main():
     errors=0
     candidates=sorted(
         news.get("items") or [],
-        key=lambda x:(int(x.get("impact") or 0), x.get("published_at") or ""),
+        key=lambda x:(-int(x.get("analysis_retry_count") or 0), int(x.get("impact") or 0), x.get("published_at") or ""),
         reverse=True,
     )
 
@@ -399,6 +399,8 @@ def main():
         if ai and event.get("analysis_level")=="llm" and not ai.get("_format_fallback"):
             continue
         attempted += 1
+        event["analysis_retry_count"]=int(event.get("analysis_retry_count") or 0)+1
+        event["analysis_last_attempt_at"]=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         try:
             event["jev_ai"]=analyze(event, feed)
             event["analysis_engine"]=(event["jev_ai"].get("_model_used") if isinstance(event.get("jev_ai"),dict) else None) or model
