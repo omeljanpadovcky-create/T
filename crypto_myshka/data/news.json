@@ -82,7 +82,22 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-03T18:48:54Z",
+      "jev_ai": {
+        "what_happened": "Chainalysis опублікувала аналіз, де стверджує, що використала власний AI для відстеження $387M викрадених з Bitget 24 вересня коштів через 4 блокчейни та зв'язала викрадення з Північною Кореєю. За їхніми даними, це підняло загальний 2026 збір NK понад $1 млрд у крипті.",
+        "why_it_matters": "Подія підтверджує, що державні хакерські програми продовжують масово експлуатувати централізовані біржі, а AI-інструменти ланцюга слідства стають ключовим аргументом у регуляторних та санкційних розслідуваннях.",
+        "market_effect": "Короткостроково негативний для сектору CEX безпеки та довіри; потенційне посилення вимог KYC/Travel Rule та витоків активів з NK-сумнівних гаманців може створити ліквідністьне тиск на BTC/ETH у вихідні.",
+        "bull_case": "Ефективна атрибуція відрізняє крипто-екосистему від традиційних фінансів у боротьбі з відмиванням; підвищує цінність on-chain аналітики та стимулює інвестиції в безпеку.",
+        "bear_case": "$1 млрд+ викрадень у 2026 руйнує наратив безпечних ринків; ризик санкційних ударів по біржах, які не фільтрують NK-токени, зростає; можливість нових атак на CEX залишається високою.",
+        "watch_next": "Офіційна відповідь Bitget, рух коштів із підозрюваних NK-гаманців, санкційні заяви Мінфіну/ОФІК, оновлення Chainalysis по інших інцидентах вересня.",
+        "confidence": "середня",
+        "short_conclusion": "Факт атрибуції — ще не доказ судової вини, але серйозний сигнал для регуляторів. Біржам варто очікувати тиску на підвищення стандартів фільтрації, а ринок — волатильності через санкційні ризики.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "89660531956ebe",
@@ -339,8 +354,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-03T17:02:49Z"
+      "analysis_retry_count": 6,
+      "analysis_last_attempt_at": "2026-10-03T18:50:26Z"
     },
     {
       "id": "852f2dd37c9b25",
@@ -1190,23 +1205,20 @@
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
       "jev_ai": {
-        "what_happened": "Kalshi seeks a $40 billion valuation, while Blockchain.com targets an IPO and crypto treasury companies struggle to maintain their once-high valuations.",
-        "why_it_matters": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-        "market_effect": "Невизначений / змішаний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
+        "what_happened": "Каліші (Kalshi) претендує на оцінку $40 млрд, Blockchain.com готує IPO, але компанії з крипто-скарбницями втрачають премію до NAV. Ринок праці США слабкий (NFP 29К проти 90К), PCE м'який (3,4% р/р), підвищення ставки ФРС у жовтні малоймовірне — макро supportive, але премії до BTC/ETH не відновлюються.",
+        "why_it_matters": "Розбіжність між «гроями на столі» та реальною оцінкою проєктів свідчить про те, що ринок відрізняє ліквідні інструменти (прогнозові ринки, биржі) від ризикованих скарбничних стратегій з левериджем. Слабкі NFP/PCE можуть тримати BTC уповільненому ринку, але не компенсують фундаментальні ризики treasury-компаній.",
+        "market_effect": "BTC/ETH — боковик з упором на нижчу границю; treasury-токени (SBET, BTCS тощо) під тиском дисконту; Kalshi/Blockchain.com — окремий позитивний потік для prediction market та exchange-токенів.",
+        "bull_case": "М'яка інфляція + слабкий NFP = відкладене підвищення ставки, дешевший капітал для ризику, Kalshi реально масштабує prediction market як альтернативу деривативам.",
+        "bear_case": "Treasury-компанії продовжать скидати премію через маржин-колати та BTC-девальвацію; IPO Blockchain.com може провалитися на слабкому ринку; $40 млрд для Kalshi — завищено без прозорості доходів.",
+        "watch_next": "Відкриті позиції treasury-компаній, динаміка BTC premium/discount на treasury-tokens, реакція ринку на IPO Blockchain.com, звіт PCE перед жовтневим FOMC.",
         "confidence": "низька",
-        "short_conclusion": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "short_conclusion": "Гроші повертаються, але премії — ні: ринок капітулює над ризиками treasury-стратегій і відокремлює ліквідні проєкти від левериджених. Макро сприяє, але довіри до оцінок поки недостатньо.",
+        "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-03T17:03:10Z"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 5,
+      "analysis_last_attempt_at": "2026-10-03T18:50:01Z"
     },
     {
       "id": "b723156b16345a",
@@ -1570,23 +1582,20 @@
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
       "jev_ai": {
-        "what_happened": "Armada Acquisition Corp. II shareholders approved the Evernorth merger. The XRP treasury company expects to hold ~473M XRP.",
-        "why_it_matters": "Це макро-фактор для XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-        "market_effect": "Потенційно позитивний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-        "confidence": "низька",
-        "short_conclusion": "Це макро-фактор для XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "what_happened": "Armada Acquisition Corp. II shareholders approved the Evernorth merger. The XRP treasury company plans to hold ~473M XRP and aims for Nasdaq debut.",
+        "why_it_matters": "Corporate treasury adoption of XRP via a listed SPAC vehicle creates a regulated on-ramp for institutional exposure. However, this is a structural/vehicle event, not direct XRP utility demand.",
+        "market_effect": "Short-term sentiment boost for XRP; limited immediate supply impact since treasury accumulation is gradual. Nasdaq listing could attract traditional finance flows over time.",
+        "bull_case": "Weak US NFP (29k vs 90k) and softer PCE (3.4% vs 3.7%) reduce October hike odds — dovish macro environment favors risk assets including XRP. Treasury vehicle may draw institutional capital.",
+        "bear_case": "SPAC-to-Nasdaq path still faces regulatory scrutiny and execution risk. 473M XRP treasury is concentrated in one corporate entity — governance/trust risk. Macro relief rally could reverse if data reverses.",
+        "watch_next": "Actual Nasdaq listing date, treasury deployment schedule, XRP custody arrangements, and whether Armada/ Evernorth file S-1 or proxy details with SEC.",
+        "confidence": "середня",
+        "short_conclusion": "Подія підтверджена незалежно, але реальний вплив залежить від Nasdaq дебюту та розподілу казни. Макро довкола слабке — це підтримує, але не гарантує руху.",
+        "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-03T17:03:30Z"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 5,
+      "analysis_last_attempt_at": "2026-10-03T18:50:07Z"
     },
     {
       "id": "90102ad4dc0766",
@@ -1781,23 +1790,20 @@
         "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
       ],
       "jev_ai": {
-        "what_happened": "Meanwhile, U.S. spot Ethereum ETFs saw $59.6 million in net outflows on Wednesday, led by $26.6 million exiting Fidelity's FETH fund.",
-        "why_it_matters": "Інституційний інтерес до BTC, ETH важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
-        "market_effect": "Потенційно позитивний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу.",
-        "confidence": "низька",
-        "short_conclusion": "Інституційний інтерес до BTC, ETH важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "what_happened": "Біткоін-ETF завершили 9-денну серію притоків на $3 млрд відтоком $149 млн; спотові ETH-ETF вирвали $59,6 млн нетто, лідер відтоків — Fidelity FETH (-$26,6 млн).",
+        "why_it_matters": "Перервати довгу серію притоків може сигналізувати про зменшення інституційного bid або початок profit-taking; FETH-відтоки підсилюють ризик короткого корекції ETH відносно BTC.",
+        "market_effect": "Короткочасний тиск на ціни BTC/ETH, можливе зростання волатильності; якщо відтоки продовжаться — ризик повернення до діапазонних торгів.",
+        "bull_case": "9-денна серія була рекордною, тому пауза очікувана; BTC тримає ключову зону $84,5–85,5 тис., ETH-ETF досі мають позитивний баланс з початку року.",
+        "bear_case": "Перші суттєві відтоки після стріки можуть запустити momentum-продажі; слабкість FETH вказує на rotation з альтів/ETH назад у BTC або готівку.",
+        "watch_next": "Притоки/відтоки ETF на 1–3 дні, тест підтримки BTC $84,5 тис. та ETH $2,5 тис., динаміка DXY/10Y та макродані (NFP).",
+        "confidence": "середня",
+        "short_conclusion": "Серія приток завершилася відтоком — час перевіряти підтримки, а не інтерпретувати як розворот. Без підтвердження новими даними та закриття денних барів вище опірів — обережність.",
+        "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-03T17:02:27Z"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 5,
+      "analysis_last_attempt_at": "2026-10-03T18:50:15Z"
     },
     {
       "id": "630ad426bb44ed",
@@ -3990,5 +3996,14 @@
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     }
-  ]
+  ],
+  "jev_enabled": true,
+  "jev_status": "complete",
+  "jev_provider": "apinex",
+  "jev_model": "free/gpt-5.6-luna",
+  "jev_analyzed_count": 44,
+  "jev_analyzed_this_run": 1,
+  "jev_pending_count": 0,
+  "jev_llm_pending_count": 1,
+  "jev_analysis_errors": 1
 }
