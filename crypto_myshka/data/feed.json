@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-03T12:30:46.602788+00:00",
+  "generated_at": "2026-10-03T12:33:12.139852+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -14,7 +14,7 @@
     },
     "site": {
       "ok": true,
-      "count": 14,
+      "count": 0,
       "url": "https://itstatti.in.ua/treidinh.html"
     },
     "youtube": {
@@ -25,16 +25,16 @@
   },
   "market": {
     "bitcoin": {
-      "usd": 84847,
-      "usd_24h_change": -2.245083872744721
+      "usd": 84841,
+      "usd_24h_change": -2.2436250988422066
     },
     "ethereum": {
-      "usd": 2683.58,
-      "usd_24h_change": -2.529716909424778
+      "usd": 2683.07,
+      "usd_24h_change": -2.6344626513243483
     },
     "optimism": {
-      "usd": 0.131361,
-      "usd_24h_change": -1.1695602240759237
+      "usd": 0.131358,
+      "usd_24h_change": -1.446033372842792
     }
   },
   "items": [
@@ -540,190 +540,6 @@
       "published_at": "2026-09-21T10:17:43+00:00"
     },
     {
-      "id": "03e89b64dba8f9",
-      "source": "site",
-      "mode": "speculation",
-      "risk": 65,
-      "reasons": [
-        "криптоідея без чіткої портфельної рамки"
-      ],
-      "title": "2. Технічний аналіз",
-      "summary": "Матеріал із бази знань ITstatti.",
-      "url": "https://itstatti.in.ua/treidinh.html#h2-tekhnichnyi-analiz",
-      "published_at": null
-    },
-    {
-      "id": "7e651f24a38ea2",
-      "source": "site",
-      "mode": "speculation",
-      "risk": 65,
-      "reasons": [
-        "криптоідея без чіткої портфельної рамки"
-      ],
-      "title": "6. Три види аналізу",
-      "summary": "Матеріал із бази знань ITstatti.",
-      "url": "https://itstatti.in.ua/treidinh.html#h6-try-vydy-analizu",
-      "published_at": null
-    },
-    {
-      "id": "48ab29397d45b1",
-      "source": "site",
-      "mode": "speculation",
-      "risk": 65,
-      "reasons": [
-        "криптоідея без чіткої портфельної рамки"
-      ],
-      "title": "13. Безкоштовні курси з трейдингу",
-      "summary": "Матеріал із бази знань ITstatti.",
-      "url": "https://itstatti.in.ua/treidinh.html#h13-bezkoshtovni-kursy-z-treidynhu",
-      "published_at": null
-    },
-    {
-      "id": "aa469c42c4893d",
-      "source": "site",
-      "mode": "speculation",
-      "risk": 65,
-      "reasons": [
-        "криптоідея без чіткої портфельної рамки"
-      ],
-      "title": "Трейдинг — це бізнес",
-      "summary": "Матеріал із бази знань ITstatti.",
-      "url": "https://itstatti.in.ua/15-treidinh/735-trejding-tse-biznes.html",
-      "published_at": null
-    },
-    {
-      "id": "c6bed569521f53",
-      "source": "site",
-      "mode": "speculation",
-      "risk": 65,
-      "reasons": [
-        "криптоідея без чіткої портфельної рамки"
-      ],
-      "title": "Що таке технічний аналіз 🔥",
-      "summary": "Матеріал із бази знань ITstatti.",
-      "url": "https://itstatti.in.ua/15-treidinh/926-tekhnichnij-analiz.html",
-      "published_at": null
-    },
-    {
-      "id": "18c6dd4ac724dd",
-      "source": "site",
-      "mode": "speculation",
-      "risk": 65,
-      "reasons": [
-        "криптоідея без чіткої портфельної рамки"
-      ],
-      "title": "Що таке фундаментальний аналіз 🔥",
-      "summary": "Матеріал із бази знань ITstatti.",
-      "url": "https://itstatti.in.ua/15-treidinh/930-fundamentalnij-analiz.html",
-      "published_at": null
-    },
-    {
-      "id": "033350aa351c7a",
-      "source": "site",
-      "mode": "speculation",
-      "risk": 65,
-      "reasons": [
-        "криптоідея без чіткої портфельної рамки"
-      ],
-      "title": "Фундаментальний або технічний аналіз – що краще?",
-      "summary": "Матеріал із бази знань ITstatti.",
-      "url": "https://itstatti.in.ua/15-treidinh/355-fundamentalnij-abo-tekhnichnij-analiz.html",
-      "published_at": null
-    },
-    {
-      "id": "f9b1a0c6624bb8",
-      "source": "site",
-      "mode": "speculation",
-      "risk": 65,
-      "reasons": [
-        "криптоідея без чіткої портфельної рамки"
-      ],
-      "title": "Як заробити на трейдингу? Наскільки це реально?",
-      "summary": "Матеріал із бази знань ITstatti.",
-      "url": "https://itstatti.in.ua/15-treidinh/932-yak-zarobiti-na-trejdingu.html",
-      "published_at": null
-    },
-    {
-      "id": "53045408d1fcbd",
-      "source": "site",
-      "mode": "speculation",
-      "risk": 65,
-      "reasons": [
-        "криптоідея без чіткої портфельної рамки"
-      ],
-      "title": "Денний таймфрейм у трейдингу: його особливості, плюси і мінуси",
-      "summary": "Матеріал із бази знань ITstatti.",
-      "url": "https://itstatti.in.ua/15-treidinh/948-dennij-tajmfrejm-u-trejdingu.html",
-      "published_at": null
-    },
-    {
-      "id": "8d59fd07b4dabc",
-      "source": "site",
-      "mode": "speculation",
-      "risk": 65,
-      "reasons": [
-        "криптоідея без чіткої портфельної рамки"
-      ],
-      "title": "Аналіз кількох таймфреймів для кращих результатів у трейдингу🔥",
-      "summary": "Матеріал із бази знань ITstatti.",
-      "url": "https://itstatti.in.ua/15-treidinh/956-analiz-kilkokh-tajmfrejmiv.html",
-      "published_at": null
-    },
-    {
-      "id": "1060c8c443a86e",
-      "source": "site",
-      "mode": "speculation",
-      "risk": 65,
-      "reasons": [
-        "криптоідея без чіткої портфельної рамки"
-      ],
-      "title": "Денний графік та його переваги в трейдингу",
-      "summary": "Матеріал із бази знань ITstatti.",
-      "url": "https://itstatti.in.ua/15-treidinh/955-dennij-grafik.html",
-      "published_at": null
-    },
-    {
-      "id": "b4be7f542f7b1e",
-      "source": "site",
-      "mode": "trading",
-      "risk": 70,
-      "reasons": [
-        "активна торгівля/позиція",
-        "є згадка ризик-менеджменту"
-      ],
-      "title": "Що таке стоп лосс і тейк-профіт? Як поставити стоп лосс і тейк-профіт?",
-      "summary": "Матеріал із бази знань ITstatti.",
-      "url": "https://itstatti.in.ua/15-treidinh/454-shcho-take-stop-loss-i-tejk-profit.html",
-      "published_at": null
-    },
-    {
-      "id": "d1dbf5d699e99e",
-      "source": "site",
-      "mode": "trading",
-      "risk": 70,
-      "reasons": [
-        "активна торгівля/позиція",
-        "є згадка ризик-менеджменту"
-      ],
-      "title": "Стоп-лосс у трейдингу: комплексне керівництво",
-      "summary": "Матеріал із бази знань ITstatti.",
-      "url": "https://itstatti.in.ua/15-treidinh/944-stop-loss.html",
-      "published_at": null
-    },
-    {
-      "id": "9d88ccbcfa9bca",
-      "source": "site",
-      "mode": "trading",
-      "risk": 80,
-      "reasons": [
-        "активна торгівля/позиція"
-      ],
-      "title": "Трейлінг стоп: як правильно його використовувати в трейдингу?",
-      "summary": "Матеріал із бази знань ITstatti.",
-      "url": "https://itstatti.in.ua/15-treidinh/945-trejling-stop.html",
-      "published_at": null
-    },
-    {
       "id": "9b817a6b1e7efc",
       "source": "youtube",
       "mode": "speculation",
@@ -852,7 +668,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "How to Buy S&P 500 on Binance | bStocks — A Simple Guide",
+      "title": "Як купити S&P 500 на Binance | bStocks — проста інструкція",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=6oL0a355KgI",
       "published_at": null,
