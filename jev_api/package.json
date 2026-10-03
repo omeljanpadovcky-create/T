@@ -1,0 +1,8 @@
+{
+  "name": "crypto-myshka-jev-api",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  }
+}
