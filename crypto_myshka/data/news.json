@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-03T16:06:43.491887+00:00",
+  "generated_at": "2026-10-03T16:19:28.074164+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -50,12 +50,12 @@
   "item_count": 132,
   "items": [
     {
-      "id": "f967ec483129d9",
+      "id": "0d309838f69900",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "SEC approves 3x leveraged Bitcoin and Ether ETPs, but trading has to wait - tradingview.com",
-      "summary": "SEC approves 3x leveraged Bitcoin and Ether ETPs, but trading has to wait &nbsp;&nbsp; tradingview.com",
-      "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNRXVPdjVvdE1LdWlWOHE3X0QtejBvVXNRMHlOVDVHclhjdGwzOGk2dnNkT1FrZUN6OE5zNHpJNHk3N0ZkVHlWRmlidmlqSkd0dGs3T213bzhlZTRVZVIwRk91R2xROWNFR0FMc3B2ZVlkSnNuLXI2R2I2c1U4QmxxZ3BqX2tyS2pzbW03MGpmNXBxTmlGVGJoek9DZU9fTU50aWlNbS1EcV9JcXlRXzN5QjkwQy13NUdOOEZ1eDFhWWVXdzd5aFIzUXpVNXUwRnpoVnVz?oc=5",
+      "title": "SEC Approves 3x Bitcoin and Ether ETFs in Major Expansion of Crypto Market Access - CryptoRank",
+      "summary": "SEC Approves 3x Bitcoin and Ether ETFs in Major Expansion of Crypto Market Access &nbsp;&nbsp; CryptoRank",
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQczFQSjFVQnExYUN5NkEzYmZvVzF6aDl5SlBGLVEwaXJ3Y0JQNi14WWplTldLTGpxcFhRNUdQNXI4U3hlVW9JMTZzOFNvZnhTWFBPaFo5cU9wOXNYYWpad0ItcUpmSE4wX2xoSTVsYTRvaTlSWmV2QS0wTXhJSXdpTHYzT1hERnlXZmRJT1Qtd3B5eF9Odk9GVTFkWkhiNWNjVjJuNl9XNm96ZENya2ZFcEdpT254Qy1COEMw?oc=5",
       "published_at": "2026-10-03T13:45:33+00:00",
       "assets": [
         "BTC",
@@ -73,10 +73,6 @@
         "Google News discovery"
       ],
       "links": [
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNRXVPdjVvdE1LdWlWOHE3X0QtejBvVXNRMHlOVDVHclhjdGwzOGk2dnNkT1FrZUN6OE5zNHpJNHk3N0ZkVHlWRmlidmlqSkd0dGs3T213bzhlZTRVZVIwRk91R2xROWNFR0FMc3B2ZVlkSnNuLXI2R2I2c1U4QmxxZ3BqX2tyS2pzbW03MGpmNXBxTmlGVGJoek9DZU9fTU50aWlNbS1EcV9JcXlRXzN5QjkwQy13NUdOOEZ1eDFhWWVXdzd5aFIzUXpVNXUwRnpoVnVz?oc=5"
-        },
         {
           "publisher": "Google News discovery",
           "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQczFQSjFVQnExYUN5NkEzYmZvVzF6aDl5SlBGLVEwaXJ3Y0JQNi14WWplTldLTGpxcFhRNUdQNXI4U3hlVW9JMTZzOFNvZnhTWFBPaFo5cU9wOXNYYWpad0ItcUpmSE4wX2xoSTVsYTRvaTlSWmV2QS0wTXhJSXdpTHYzT1hERnlXZmRJT1Qtd3B5eF9Odk9GVTFkWkhiNWNjVjJuNl9XNm96ZENya2ZFcEdpT254Qy1COEMw?oc=5"
@@ -335,7 +331,7 @@
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}"
+      "analysis_error": "Model returned empty content"
     },
     {
       "id": "c5ba51b1caa64e",
@@ -677,7 +673,8 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "format_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content"
     },
     {
       "id": "852f2dd37c9b25",
@@ -785,7 +782,8 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "format_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content"
     },
     {
       "id": "5e39bc27debd2e",
@@ -837,7 +835,8 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "format_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content"
     },
     {
       "id": "9b740803d60c3b",
@@ -1697,7 +1696,6 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
-      "analysis_level": "format_fallback",
       "jev_ai": {
         "what_happened": "Мін'юст США подав позов про конфіскацію $61 млн, які, за його словами, були відмиті через Binance китайськими групами, пов'язаними з іранськими нафтопродажами.",
         "why_it_matters": "Підсилює ризики санкційних порушень для криптобірж; може стати прецедентом для подальших позовів проти платформ за обслуговування ізольованих юрисдикцій.",
@@ -1711,7 +1709,9 @@
         "_partial_json_recovered": true,
         "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "free/deepseek-v4.1-flash"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content"
     },
     {
       "id": "9d67cfc5430332",
@@ -1763,7 +1763,8 @@
         "_model_used": "free/deepseek-v4.1-flash"
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "format_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content"
     },
     {
       "id": "64242829eb454b",
@@ -1845,8 +1846,21 @@
         "Ринковий тон: Невизначений / змішаний",
         "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
       ],
-      "analysis_error": "Model returned empty content",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "format_fallback",
+      "jev_ai": {
+        "what_happened": "Папа Римський висловив критику AI-мистецтва, назвавши алгоритми позбавленими 'іскри людства', і закликав відновити союз з реальними художниками та культурними інституціями.",
+        "why_it_matters": "Подія регулює тон у інституційному дискурсі: Ватикан — один із небагатьох глобальних гравців, хто відкрито розмежовує 'людське творіння' та 'генерацію'. Це може вплинути на регуляторну етику та корпоративні PR навколо генеративного ІІ.",
+        "market_effect": "Прямого впливу на крипторинок немає — жоден акт у повідомленні не фігурує. Косвенно: негативний наратив навколо AI-арт може тимчасово тискнути на токени AI-проєктів та NFT-генераторів, але ефект слабкий та короткочасний.",
+        "bull_case": "Захист 'людського мистецтва' може підсилити попит на ориджінальні NFT, колаборації людина+AI та платформи, що позиціонують себе як інструменти художника, а не замінника.",
+        "bear_case": "Ростеризація AI-арт може прискорити регуляторні ризики для проєктів, що генерують контент без чіткого human-in-the-loop, та послабити наратив 'AI як творчий партнер'.",
+        "watch_next": "Реакція AI-проєктів (SingularityNET, Fetch.ai, RENDER) та позиція ЄС/UNESCO з приводу авторського права на AI-контент.",
+        "confidence": "низька",
+        "short_conclusion": "Подія регулює тон у інституційному дискурсі: Ватикан — один із небагатьох глобальних гравців, хто відкрито розмежовує 'людське творіння' та 'генерацію'. Це може вплинути на регуляторну етику та корпоративні PR навколо генеративного ІІ.",
+        "_format_fallback": true,
+        "_partial_json_recovered": true,
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash"
     },
     {
       "id": "7b30d4f86b2b8c",
@@ -1890,8 +1904,8 @@
         "Ринковий тон: Потенційно позитивний",
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
       ],
-      "analysis_error": "Model returned empty content",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content"
     },
     {
       "id": "5dc52a640b3218",
@@ -1928,7 +1942,20 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "jev_ai": {
+        "what_happened": "Circle (емітент USDC) відкритно виступив проти вимог MiCA щодо банків-складів і лімітів концентрації, аргументуючи, що вони виводять найбільші стейблкоїни за межі Європи, і приєднався до позиції ECB.",
+        "why_it_matters": "Фінальна форма MiCA визначить умови роботи стейблкоїнів у EU; тиск видавців може смягчити правила, але не гарантує цього.",
+        "market_effect": "Короткостроково — нейтрально/слабко позитивно для USDC (шукають ясності), але невизначеність зберігається; EUR-стейблкоїни можуть постраждати від обмежень концентрації.",
+        "bull_case": "Гнучкіші правила дозволять USDC конкурувати в ЄС, а ясність регульованого режиму підтягне інституційний попит.",
+        "bear_case": "Якщо правила залишаться суворими, витрати на комплаєнс зростуть, а ліміти концентрації змусять змінити структуру резервів.",
+        "watch_next": "Відповідь Єврокомісії, заяви ECB, позиції інших емітентів (Tether, Ethena), фінальні делеговані акти MiCA.",
+        "confidence": "низька",
+        "short_conclusion": "Circle підняв галас навколо MiCA, але рішення за регулятором; джерело одне, тому висновки попередні.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "1cbc6de01ca661",
@@ -1965,7 +1992,20 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "jev_ai": {
+        "what_happened": "Anchorage Digital (бізнес-оцінка ~$4.2B) скоротила 17% персоналу за даними Cointelegraph. Компанія одночасно розширює інституційний напрямок, стейблкоїн-видання та отримала $100M від Tether.",
+        "why_it_matters": "Anchorage — один із небагатьох US-регульованих крипто-банків (місцевий депозитарій, custody). Скорочення в період експансії свідчить або про передбачуване зменшення операційних витрат, або про перерозподіл капіталу. Стейблкоїн-напрямок пов'язаний з регуляторними ризиками USD-стейблів у США.",
+        "market_effect": "Невеликий негативний сигнал для інституційного сегменту crypto custody, але Anchorage не є системно важливим для ліквідності ринку. Більший вплив — на довіру до US-регульованих гравців загалом.",
+        "bull_case": "Скорочення — оптимізація перед новим циклом зростання; Tether-інвестиція підтверджує потребу ринку в інституційних стейблах; Anchorage може стати сильнішим після «худження».",
+        "bear_case": "17% звільнень під час «розширення» вказують на перевитрати або замововлення про зростання; регуляторний тиск на custody + stablecoin у США посилився; залежність від одного джерела фінансування (Tether) — концентрація ризику.",
+        "watch_next": "Офіційний коментар Anchorage, деталізація стейблкоїн-проєкту, реакція регуляторів (OCC/FDIC), динаміка TVL на платформі.",
+        "confidence": "низька",
+        "short_conclusion": "Одне джерело, тому факт потребує підтвердження. Зворотний зв'язок «скорочення + експансія» типовий для реструктуризації, але не для паніки. Слідкувати за офіційним заявленням Anchorage та регуляторним контекстом.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
     },
     {
       "id": "fa1f4f9305265c",
@@ -2000,7 +2040,9 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
-      ]
+      ],
+      "analysis_error": "Model returned empty content",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "2e07fa540643af",
@@ -2035,7 +2077,9 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_error": "Model returned empty content",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "b723156b16345a",
@@ -2078,7 +2122,22 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "jev_ai": {
+        "what_happened": "BTC відскочив від $85k після очищення стінки продажів (Glassnode), торгувався біля $87k. Паралельно вийшов слабкий NFP: +29k проти очікуваних ~90k, безробіття зросло до 4,2%. PCE також м'якший за прогноз.",
+        "why_it_matters": "Слабкі макродані знижують ймовірність жовтневого підняття ставок ФРС, що підтримує ризиковані активи. Але BTC почав рости ще до NFP — макро стало каталізатором, а не причиною. Для альтів цього недостатньо.",
+        "market_effect": "Короткотерміновий ризик-он у BTC та ETH. Продовження руху залежить від DXY, 10Y та здатності BTC закрити денний бар вище $85.5k.",
+        "bull_case": "NFP + PCE підтвердили зниження інфляції, ставка ФРС стабілізується, ліквідність перетікає з долара на крипту. BTC домінує 59.5%, ринок росте.",
+        "bear_case": "BTC не закрив день вище $85.5k, ITstatti бачить зону супротиву 85200-85600 непідтвердженою. Перегляд липня вниз до -10k свідчить про нестабільність ринку праці.",
+        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+        "confidence": "низька",
+        "short_conclusion": "Слабкі макродані знижують ймовірність жовтневого підняття ставок ФРС, що підтримує ризиковані активи. Але BTC почав рости ще до NFP — макро стало каталізатором, а не причиною. Для альтів цього недостатньо.",
+        "_format_fallback": true,
+        "_partial_json_recovered": true,
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "format_fallback"
     },
     {
       "id": "98736b289a333e",
@@ -2115,7 +2174,22 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "jev_ai": {
+        "what_happened": "Європейські емітенти стверджують, що євро-стейблкоїнів недостатньо для потреб бізнесу в доларовій ліквідності для глобальних платежів і розрахунків, і вимагають можливості випуску USD-токенів у EU.",
+        "why_it_matters": "Конфлікт між суверенітетом євро та реальним попитом ринку на доларову розрахункову інфраструктуру; якщо EU обмежить USD-токени, це може фрагментувати платіжні шляхи та змусити бізнес використовувати офшорні рішення.",
+        "market_effect": "Короткочасно нейтрально: сам по собі лист не двигун ціни, але підсилює наратив про поділ ліквідності на доларову та єврову зони. При м'якій макростатиці США (слабкий NFP, м'який PCE) премія за ризик USD може знижуватися, що зменшує стимул для USD-стейблкоїнів як високодоходного інструменту.",
+        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
+        "bear_case": "Неповний контекст може дати хибний висновок.",
+        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+        "confidence": "низька",
+        "short_conclusion": "Конфлікт між суверенітетом євро та реальним попитом ринку на доларову розрахункову інфраструктуру; якщо EU обмежить USD-токени, це може фрагментувати платіжні шляхи та змусити бізнес використовувати офшорні рішення.",
+        "_format_fallback": true,
+        "_partial_json_recovered": true,
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "format_fallback"
     },
     {
       "id": "6ccc4dba345097",
@@ -5227,8 +5301,8 @@
   "jev_status": "ok",
   "jev_provider": "apinex",
   "jev_model": "free/gpt-5.6-luna",
-  "jev_analyzed_count": 24,
-  "jev_analyzed_this_run": 6,
-  "jev_pending_count": 38,
-  "jev_analysis_errors": 9
+  "jev_analyzed_count": 26,
+  "jev_analyzed_this_run": 2,
+  "jev_pending_count": 36,
+  "jev_analysis_errors": 15
 }
