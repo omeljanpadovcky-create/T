@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-03T13:27:46.207277+00:00",
+  "generated_at": "2026-10-03T13:40:34.139763+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -23,13 +23,15 @@
       "url": "https://www.youtube.com/@it_statti"
     },
     "telegram_archive": {
-      "ok": false,
-      "count": 0,
+      "ok": true,
+      "count": 3043,
+      "complete": false,
+      "updated_at": "2026-10-03T13:40:30.541316+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 130,
+      "count": 125,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -46,36 +48,36 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 84802,
-        "usd_24h_change": -2.102723007379016
+        "usd": 84896,
+        "usd_24h_change": -2.5028171007007898
       },
       "ethereum": {
-        "usd": 2678.49,
-        "usd_24h_change": -2.6108257789242293
+        "usd": 2680.95,
+        "usd_24h_change": -3.075193838480373
       },
       "optimism": {
-        "usd": 0.132649,
-        "usd_24h_change": -0.36078402458851877
+        "usd": 0.132851,
+        "usd_24h_change": -1.407482099538193
       },
       "solana": {
-        "usd": 119.39,
-        "usd_24h_change": -2.4018949684972486
+        "usd": 119.46,
+        "usd_24h_change": -2.966890154895204
       },
       "pendle": {
-        "usd": 2.35,
-        "usd_24h_change": -5.254115950482401
+        "usd": 2.36,
+        "usd_24h_change": -5.754479062096085
       },
       "lido-dao": {
-        "usd": 0.457677,
-        "usd_24h_change": -1.6268832154575412
+        "usd": 0.461147,
+        "usd_24h_change": -1.7657320108317949
       },
       "ethereum-name-service": {
-        "usd": 6.79,
-        "usd_24h_change": -5.910514295923689
+        "usd": 6.81,
+        "usd_24h_change": -5.720875682041085
       },
       "litecoin": {
-        "usd": 69.37,
-        "usd_24h_change": -1.1366385074350651
+        "usd": 69.58,
+        "usd_24h_change": -1.0215165330218594
       }
     }
   },
@@ -6202,7 +6204,7 @@
       "knowledge": true
     }
   ],
-  "archive_count": 0,
-  "news_count": 130,
+  "archive_count": 3043,
+  "news_count": 125,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
