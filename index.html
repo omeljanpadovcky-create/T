@@ -311,11 +311,7 @@ function mouseSend(){
   mouseAdd('ai',a.text,a.links);
 }
 
-const mouseBtn=$('#mouseAiBtn');
-const mouseClose=$('#mouseAiClose');
 const mouseSendBtn=$('#mouseAiSend');
-if(mouseBtn) mouseBtn.addEventListener('pointerup',e=>{ if(e.pointerType==='touch') toggleMouseAi(e); });
-if(mouseClose) mouseClose.addEventListener('pointerup',e=>{ if(e.pointerType==='touch') closeMouseAi(e); });
 if(mouseSendBtn) mouseSendBtn.onclick=mouseSend;
 $('#mouseAiInput').addEventListener('keydown',e=>{
   if(e.key==='Enter'){
