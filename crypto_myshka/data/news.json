@@ -110,8 +110,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-04T00:11:21Z"
+      "analysis_retry_count": 6,
+      "analysis_last_attempt_at": "2026-10-04T05:48:13Z"
     },
     {
       "id": "cfc2ca64396800",
@@ -168,8 +168,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-04T00:11:15Z"
+      "analysis_retry_count": 6,
+      "analysis_last_attempt_at": "2026-10-04T05:48:18Z"
     },
     {
       "id": "c194d038c41720",
@@ -476,8 +476,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 11,
-      "analysis_last_attempt_at": "2026-10-04T00:12:09Z"
+      "analysis_retry_count": 14,
+      "analysis_last_attempt_at": "2026-10-04T05:48:25Z"
     },
     {
       "id": "852f2dd37c9b25",
@@ -4118,5 +4118,14 @@
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     }
-  ]
+  ],
+  "jev_enabled": true,
+  "jev_status": "complete",
+  "jev_provider": "apinex",
+  "jev_model": "free/gpt-5.6-luna",
+  "jev_analyzed_count": 44,
+  "jev_analyzed_this_run": 0,
+  "jev_pending_count": 0,
+  "jev_llm_pending_count": 3,
+  "jev_analysis_errors": 3
 }
