@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-04T00:08:53.750758+00:00",
+  "generated_at": "2026-10-04T05:47:32.125662+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,12 +26,12 @@
       "ok": true,
       "count": 10172,
       "complete": true,
-      "updated_at": "2026-10-04T00:08:47.323333+00:00",
+      "updated_at": "2026-10-04T05:47:26.490237+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 114,
+      "count": 94,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -43,41 +43,41 @@
       "SOL",
       "PENDLE",
       "LDO",
-      "ICP",
-      "ENS"
+      "ENS",
+      "LTC"
     ],
     "prices": {
       "bitcoin": {
-        "usd": 84811,
-        "usd_24h_change": 0.4319030977704848
+        "usd": 84908,
+        "usd_24h_change": 0.3373327077995349
       },
       "ethereum": {
-        "usd": 2687.08,
-        "usd_24h_change": 0.798120615718834
+        "usd": 2696.73,
+        "usd_24h_change": 0.7509013347679523
       },
       "optimism": {
-        "usd": 0.136053,
-        "usd_24h_change": 6.994765407335203
+        "usd": 0.135475,
+        "usd_24h_change": 3.0424481557751246
       },
       "solana": {
-        "usd": 119.68,
-        "usd_24h_change": 0.9510074127507835
+        "usd": 120.99,
+        "usd_24h_change": 1.19227973770873
       },
       "pendle": {
-        "usd": 2.41,
-        "usd_24h_change": 2.662039417901348
+        "usd": 2.48,
+        "usd_24h_change": 5.765963505033932
       },
       "lido-dao": {
-        "usd": 0.466479,
-        "usd_24h_change": 6.294989198483096
-      },
-      "internet-computer": {
-        "usd": 3.37,
-        "usd_24h_change": 1.7975884013376489
+        "usd": 0.460894,
+        "usd_24h_change": 3.8160942663595563
       },
       "ethereum-name-service": {
-        "usd": 6.86,
-        "usd_24h_change": 1.2060739855466172
+        "usd": 6.88,
+        "usd_24h_change": 1.1324873588812063
+      },
+      "litecoin": {
+        "usd": 70.72,
+        "usd_24h_change": 2.2683698391347047
       }
     }
   },
@@ -5251,7 +5251,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Яку крипту купляти у 2026 році? 11 монет, які я зараз розглядаю",
+      "title": "Which Crypto to Buy in 2026? 11 Coins I'm Looking At Right Now",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=cmpvbcc27K0",
       "published_at": null,
@@ -5283,7 +5283,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Огляд біткоіна 2026: оновлення цін і ринку",
+      "title": "Bitcoin 2026 Review: Price and Market Updates",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=4QoyO40jff4",
       "published_at": null,
@@ -5299,7 +5299,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Bitcoin predictions for 2026. Where to expect and where will it go?",
+      "title": "Біткоін прогнози на 2026 рік. Куди чекати та куди піде?",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=5ynu9H81pww",
       "published_at": null,
@@ -5331,7 +5331,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Training video on trading using the example of analyzing HYPE, HBAR, IO, IMX, NEAR coins",
+      "title": "Навчальний ролик з трейдингу на прикладі розбору монет HYPE, HBAR, IO, IMX, NEAR",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=Xrup8HvN2JI",
       "published_at": null,
@@ -6205,6 +6205,6 @@
     }
   ],
   "archive_count": 10172,
-  "news_count": 114,
+  "news_count": 94,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
