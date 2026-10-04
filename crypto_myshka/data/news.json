@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-04T18:52:41.161458+00:00",
+  "generated_at": "2026-10-04T22:04:53.469923+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -46,23 +46,21 @@
       "role": "discovery"
     }
   },
-  "raw_item_count": 197,
-  "item_count": 99,
+  "raw_item_count": 200,
+  "item_count": 98,
   "items": [
     {
-      "id": "f42c8ba7b72051",
+      "id": "c000f70dc4679a",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "SEC approves 3x leveraged Bitcoin futures ETF f... - Pluang",
-      "summary": "SEC approves 3x leveraged Bitcoin futures ETF f... &nbsp;&nbsp; Pluang",
-      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPa1pvREhucm1namN1Qm9ucXdXX29nUWxRR3ZGM3JvUmZESm5qUGpNWkg1OXFpSlVETkNVZVJCNGJkNEw2TFhIRHQ1aER1aXdQdWZ4TXBpUFc2ZVh0QzcxWTZRaFVIYktBOVY2aXNHMTU5WEsxTy1ZWGtDcWVvNW0yV190U1lOeWNvZ1NUcXpzRTVfd0JkSGktcFEwS0lLalZ2?oc=5",
-      "published_at": "2026-10-04T18:15:11+00:00",
-      "assets": [
-        "BTC"
-      ],
+      "title": "Fed Rate Decision Odds: Oct. 28 FOMC Hike or Hold - DeFi Rate",
+      "summary": "Fed Rate Decision Odds: Oct. 28 FOMC Hike or Hold &nbsp;&nbsp; DeFi Rate",
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE4zNDBSUXRBcXNVV29wd3FvZGFkUXdlQW5Hck1LX045aENFbktiV3B0WWVqMVFzY1U0QWhDWEZDMlFjN2tRYmdOTERtODNQUUdR?oc=5",
+      "published_at": "2026-10-04T18:56:00+00:00",
+      "assets": [],
       "topics": [
-        "regulation",
-        "etf"
+        "macro",
+        "defi"
       ],
       "impact": 3,
       "impact_label": "Високий вплив",
@@ -74,17 +72,17 @@
       "links": [
         {
           "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPa1pvREhucm1namN1Qm9ucXdXX29nUWxRR3ZGM3JvUmZESm5qUGpNWkg1OXFpSlVETkNVZVJCNGJkNEw2TFhIRHQ1aER1aXdQdWZ4TXBpUFc2ZVh0QzcxWTZRaFVIYktBOVY2aXNHMTU5WEsxTy1ZWGtDcWVvNW0yV190U1lOeWNvZ1NUcXpzRTVfd0JkSGktcFEwS0lLalZ2?oc=5"
+          "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE4zNDBSUXRBcXNVV29wd3FvZGFkUXdlQW5Hck1LX045aENFbktiV3B0WWVqMVFzY1U0QWhDWEZDMlFjN2tRYmdOTERtODNQUUdR?oc=5"
         }
       ],
       "confidence_label": "Discovery: потребує підтвердження",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+      "jev_take": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
         "Google News використано лише як радар теми",
         "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
+        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ]
     },
     {
@@ -153,47 +151,6 @@
         {
           "publisher": "Google News discovery",
           "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNYWZ4VGF5VzNpamYwNFBlZnBIb0tnWFgyZjJEUXBpS3Q5YU42WXhkSGxLU0FSLTB5elNHUEhLenhnVWIzcjZ4RkxjTlFPMmIxQzk4b1VvbXFqSzc3bzBUelQ3aXBrU3gwR2VLQjBMZVNmc1FjTGlVakJYZUQ2ZUZxUkpSa2FlcXFpUlM2MUQ5QWlOdzNrMEtndm5VWmpfWnJVMC1iczRBVG1WWm1wX1VIeE1SRXVIUQ?oc=5"
-        }
-      ],
-      "confidence_label": "Discovery: потребує підтвердження",
-      "jev_take": "Це макро-фактор для BTC: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Google News використано лише як радар теми",
-        "Ринковий тон: Невизначений / змішаний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
-      "id": "53bb1ed3721733",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "U.S. Bitcoin ETFs see $134M inflows in early Oc... - Pluang",
-      "summary": "U.S. Bitcoin ETFs see $134M inflows in early Oc... &nbsp;&nbsp; Pluang",
-      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNNWtBdjFyYnU2ZFgxTVhlWlNKY09IYTJGU2VtYkR1dXVUTkdSdVRuRVByem90QWxwWkNqMF9vY3RtX1VVX1JkNHlmNkVMSDBfMTBwbGpPRnZtUFdfekhZSEY5bEJPRUc1amxZVW5yNjJ6bzk4VmlMUHE1cDRFRVc0aEEtRjJBUzRTZnpldF9B?oc=5",
-      "published_at": "2026-10-04T15:24:47+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [
-        "macro"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Google News discovery"
-      ],
-      "links": [
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNNWtBdjFyYnU2ZFgxTVhlWlNKY09IYTJGU2VtYkR1dXVUTkdSdVRuRVByem90QWxwWkNqMF9vY3RtX1VVX1JkNHlmNkVMSDBfMTBwbGpPRnZtUFdfekhZSEY5bEJPRUc1amxZVW5yNjJ6bzk4VmlMUHE1cDRFRVc0aEEtRjJBUzRTZnpldF9B?oc=5"
-        },
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOdVpUcDBhZ1VBR1YxYVZXZ1pGZGQ4OWdTX0dKZ3o4Y25qLUY1ZTdPNVlBUjc3ZWtvUmozQVBCN0t4dFItTHBsLWxQV3N6ZjRxNVFONXl6UmZHMGZUVjRhbDNuLTNVS29xcVU4ckstZzhpWmY2UTlrNjFWUUlkcTN2QUV3M01sQmFK?oc=5"
         }
       ],
       "confidence_label": "Discovery: потребує підтвердження",
@@ -2367,6 +2324,44 @@
       "analysis_last_attempt_at": "2026-10-03T17:02:37Z"
     },
     {
+      "id": "72730c037408af",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Here’s what happened in crypto today",
+      "summary": "Need to know what happened in crypto today? Here is the latest news on daily trends and events impacting Bitcoin price, blockchain, DeFi, Web3 and crypto regulation.",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "published_at": "2026-10-04T18:51:50+00:00",
+      "assets": [
+        "BTC"
+      ],
+      "topics": [
+        "regulation",
+        "defi"
+      ],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Cointelegraph"
+      ],
+      "links": [
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
+      ]
+    },
+    {
       "id": "ac1b85923f6eaf",
       "source": "jev_analysis",
       "mode": "news",
@@ -2595,44 +2590,6 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "72730c037408af",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Here’s what happened in crypto today",
-      "summary": "Need to know what happened in crypto today? Here is the latest news on daily trends and events impacting Bitcoin price, blockchain, DeFi, Web3 and crypto regulation.",
-      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "published_at": "2026-10-03T12:20:00+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [
-        "regulation",
-        "defi"
-      ],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Cointelegraph"
-      ],
-      "links": [
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ]
     },
     {
