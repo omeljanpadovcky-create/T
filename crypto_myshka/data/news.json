@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-04T05:47:24.817167+00:00",
+  "generated_at": "2026-10-04T11:21:44.705560+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -46,17 +46,179 @@
       "role": "discovery"
     }
   },
-  "raw_item_count": 202,
-  "item_count": 94,
+  "raw_item_count": 198,
+  "item_count": 97,
   "items": [
     {
-      "id": "a19698138319f1",
+      "id": "b10b3d73620140",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "SEC Approves First 3x Leveraged Bitcoin and Ether ETPs - CryptoRank",
-      "summary": "SEC Approves First 3x Leveraged Bitcoin and Ether ETPs &nbsp;&nbsp; CryptoRank",
-      "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPSm02Z25COE9HV2JqOGpFeG04RHMwcHFhRlBoaDdQOU5wbk9KMHpuQ1I3WWcyRGpYQjMwcElfU0tiUG5MZjg1c0JaVFY1WXliSEVXOGt0ZmlweVhFQW1DTEIxWUI1TFlYTlVJa09ZV3ZBT09KWXJYeDZOTXZXbDVXSS1VMXktb2d1R3c?oc=5",
-      "published_at": "2026-10-04T05:36:28+00:00",
+      "title": "SEC Approves First 3x Leveraged Crypto ETPs - Altcoin Buzz",
+      "summary": "SEC Approves First 3x Leveraged Crypto ETPs &nbsp;&nbsp; Altcoin Buzz",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQRE1udlJvenpId3A3ZGkzUk5VZmVUNHZOTTB0YzJxenkyWVc4a0ZpY0NGODAtUGhhX253UEE5ZzlyaEk2eldkd252aEhXVEZKaEdiSFlsWWRLZ3R5emtxbXROWnJPM1VlR3ZSWW1Hek5LSDR2aTlLVUtIdXZQX3hvSnkxVFE1UGJaMnVfOHBIRGpFanQ5?oc=5",
+      "published_at": "2026-10-04T11:04:29+00:00",
+      "assets": [],
+      "topics": [
+        "regulation"
+      ],
+      "impact": 3,
+      "impact_label": "Високий вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Google News discovery"
+      ],
+      "links": [
+        {
+          "publisher": "Google News discovery",
+          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQRE1udlJvenpId3A3ZGkzUk5VZmVUNHZOTTB0YzJxenkyWVc4a0ZpY0NGODAtUGhhX253UEE5ZzlyaEk2eldkd252aEhXVEZKaEdiSFlsWWRLZ3R5emtxbXROWnJPM1VlR3ZSWW1Hek5LSDR2aTlLVUtIdXZQX3hvSnkxVFE1UGJaMnVfOHBIRGpFanQ5?oc=5"
+        }
+      ],
+      "confidence_label": "Discovery: потребує підтвердження",
+      "jev_take": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Google News використано лише як радар теми",
+        "Ринковий тон: Невизначений / змішаний",
+        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
+      ]
+    },
+    {
+      "id": "86f799ab2a44db",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Hargreaves Lansdown offers crypto ETNs nearly a year after ban was lifted",
+      "summary": "Investment platform previously told customers ‘bitcoin is not an asset class’",
+      "url": "https://www.ft.com/content/a0d34842-a49c-47ae-b1cc-3fadd8af9d43?syn-25a6b1a6=1",
+      "published_at": "2026-10-04T09:39:51+00:00",
+      "assets": [
+        "BTC"
+      ],
+      "topics": [
+        "regulation"
+      ],
+      "impact": 3,
+      "impact_label": "Високий вплив",
+      "tone": "Потенційно негативний",
+      "source_count": 2,
+      "publishers": [
+        "FT Crypto",
+        "Cointelegraph"
+      ],
+      "links": [
+        {
+          "publisher": "FT Crypto",
+          "url": "https://www.ft.com/content/a0d34842-a49c-47ae-b1cc-3fadd8af9d43?syn-25a6b1a6=1"
+        },
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/el-salvador-receives-138-million-from-imf-after-bitcoin-waivers-granted?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        }
+      ],
+      "confidence_label": "Є незалежне підтвердження",
+      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Є незалежне підтвердження",
+        "Ринковий тон: Потенційно негативний",
+        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
+      ],
+      "jev_ai": {
+        "what_happened": "Hargreaves Lansdown (Велика Британія) почав пропонувати крипто-ETN після зняття заборони близько рік тому. Платформа раніше публіко стверджувала, що «bitcoin не є класом активів» — тепер пропонує продукт з цифровим активом.",
+        "why_it_matters": "Розворот великого роздрібного платформи в UK — сигнал зміни ставлення регульованого ринку. Але ETN ≠ ETF: це боргові зобов'язання емітента, а не прямий бекинг активом.",
+        "market_effect": "Помірно позитивний для BTC (легітимізація), але ETN нестиме масивних потоків порівняно з спотовими ETF. Ризик контрагента емітента залишається.",
+        "bull_case": "Розширення доступу для роздрібних інвесторів UK, зростення інституційної впевненості, потенційні поступові потоки.",
+        "bear_case": "Обмежений запуск, ETN мають контрагентський ризик, платформа раніше скептично ставилася до BTC — можливо, це обережний тест ринку.",
+        "watch_next": "Обсяги ETN на HL, чи BTC проб'є 85.5–86k, чи інші UK-платформи наслідують.",
+        "confidence": "середня",
+        "short_conclusion": "Сигнал позитивний, але ETN — не ETF. Стежити за реальними потоками, а не за оголошеннями.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm"
+    },
+    {
+      "id": "d19bfb078b46ae",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Bitcoin holds near $85,000 as SEC clears first 3x leveraged crypto ETPs - Investing.com",
+      "summary": "Bitcoin holds near $85,000 as SEC clears first 3x leveraged crypto ETPs &nbsp;&nbsp; Investing.com",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxOaDlCbmRqaTVkc2daeW9tX3JXYWZpUlJWYzIxQUl0Y3NaOXJEM1J6MjVhMncyZVFJOFdua3pFWnpKT3YxYTNFUFdIRC1NWW1DR3lBQ2hJMU9wZFd5LUc1Vi1CQVdkX0t2R0E1d21sX2pnckh4cEpFM3lIc3lpN09Va0pKWjRYQTh6Rk1FdHNDWDAzS005WXlUck94VVpmalRlbVcxZWVSVG5SY0R0T0RJR0w0SmgwVWVCQzZOcEY5aWg3WlFrOG1V?oc=5",
+      "published_at": "2026-10-04T09:33:58+00:00",
+      "assets": [
+        "BTC"
+      ],
+      "topics": [
+        "regulation"
+      ],
+      "impact": 3,
+      "impact_label": "Високий вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Google News discovery"
+      ],
+      "links": [
+        {
+          "publisher": "Google News discovery",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxOaDlCbmRqaTVkc2daeW9tX3JXYWZpUlJWYzIxQUl0Y3NaOXJEM1J6MjVhMncyZVFJOFdua3pFWnpKT3YxYTNFUFdIRC1NWW1DR3lBQ2hJMU9wZFd5LUc1Vi1CQVdkX0t2R0E1d21sX2pnckh4cEpFM3lIc3lpN09Va0pKWjRYQTh6Rk1FdHNDWDAzS005WXlUck94VVpmalRlbVcxZWVSVG5SY0R0T0RJR0w0SmgwVWVCQzZOcEY5aWg3WlFrOG1V?oc=5"
+        }
+      ],
+      "confidence_label": "Discovery: потребує підтвердження",
+      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Google News використано лише як радар теми",
+        "Ринковий тон: Невизначений / змішаний",
+        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
+      ]
+    },
+    {
+      "id": "ca80816053b48d",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "CASE STUDY | This Hack Has Exposed Crypto’s Permissionless Idealism - BitKE",
+      "summary": "CASE STUDY | This Hack Has Exposed Crypto’s Permissionless Idealism &nbsp;&nbsp; BitKE",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE40WnhuSDJhNnZWRjloRHJ6d2lNNXp5alFwZG9qWS1yeGtYb3ktVGtoQU82TkhKSFh6X0p2UEY4c2NJWlBhekEzS2thaEVTMEFBeVllcURiWi1xMkN4b3pSblNZUzZSMVgtMVVkQUNxcW5UTjA?oc=5",
+      "published_at": "2026-10-04T06:00:03+00:00",
+      "assets": [],
+      "topics": [
+        "security"
+      ],
+      "impact": 3,
+      "impact_label": "Високий вплив",
+      "tone": "Потенційно негативний",
+      "source_count": 1,
+      "publishers": [
+        "Google News discovery"
+      ],
+      "links": [
+        {
+          "publisher": "Google News discovery",
+          "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE40WnhuSDJhNnZWRjloRHJ6d2lNNXp5alFwZG9qWS1yeGtYb3ktVGtoQU82TkhKSFh6X0p2UEY4c2NJWlBhekEzS2thaEVTMEFBeVllcURiWi1xMkN4b3pSblNZUzZSMVgtMVVkQUNxcW5UTjA?oc=5"
+        }
+      ],
+      "confidence_label": "Discovery: потребує підтвердження",
+      "jev_take": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
+      "watch_for": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Google News використано лише як радар теми",
+        "Ринковий тон: Потенційно негативний",
+        "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
+      ]
+    },
+    {
+      "id": "65dee578ab6dc0",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "SEC clears six 3x leveraged Bitcoin and Ether ETPs: how to check the daily math - cryptoticker.io",
+      "summary": "SEC clears six 3x leveraged Bitcoin and Ether ETPs: how to check the daily math &nbsp;&nbsp; cryptoticker.io",
+      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1KRThDQVVPdmlrcEdsUjJIMFNqeHc5VmlKaU9lcHJnSHF4MGxJN2N6TEJaWDFNbEZzdnlENk9QTjFDREU4bUVfbHF1M2EzOVFSSjAxU3p5aWVobkloRk5BZHVCMmFEX0lp?oc=5",
+      "published_at": "2026-10-04T03:15:42+00:00",
       "assets": [
         "BTC",
         "ETH"
@@ -74,15 +236,7 @@
       "links": [
         {
           "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPSm02Z25COE9HV2JqOGpFeG04RHMwcHFhRlBoaDdQOU5wbk9KMHpuQ1I3WWcyRGpYQjMwcElfU0tiUG5MZjg1c0JaVFY1WXliSEVXOGt0ZmlweVhFQW1DTEIxWUI1TFlYTlVJa09ZV3ZBT09KWXJYeDZOTXZXbDVXSS1VMXktb2d1R3c?oc=5"
-        },
-        {
-          "publisher": "Google News discovery",
           "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1KRThDQVVPdmlrcEdsUjJIMFNqeHc5VmlKaU9lcHJnSHF4MGxJN2N6TEJaWDFNbEZzdnlENk9QTjFDREU4bUVfbHF1M2EzOVFSSjAxU3p5aWVobkloRk5BZHVCMmFEX0lp?oc=5"
-        },
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxOaDlCbmRqaTVkc2daeW9tX3JXYWZpUlJWYzIxQUl0Y3NaOXJEM1J6MjVhMncyZVFJOFdua3pFWnpKT3YxYTNFUFdIRC1NWW1DR3lBQ2hJMU9wZFd5LUc1Vi1CQVdkX0t2R0E1d21sX2pnckh4cEpFM3lIc3lpN09Va0pKWjRYQTh6Rk1FdHNDWDAzS005WXlUck94VVpmalRlbVcxZWVSVG5SY0R0T0RJR0w0SmgwVWVCQzZOcEY5aWg3WlFrOG1V?oc=5"
         }
       ],
       "confidence_label": "Discovery: потребує підтвердження",
@@ -93,34 +247,16 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "jev_ai": {
-        "what_happened": "SEC Approves First 3x Leveraged Bitcoin and Ether ETPs &nbsp;&nbsp; CryptoRank",
-        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на BTC, ETH; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-        "market_effect": "Невизначений / змішаний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-        "confidence": "низька",
-        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на BTC, ETH; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
-      },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 6,
-      "analysis_last_attempt_at": "2026-10-04T05:48:13Z"
+      ]
     },
     {
-      "id": "cfc2ca64396800",
+      "id": "d669546ab02b82",
       "source": "jev_analysis",
       "mode": "news",
       "title": "Bitget Rebuilt a $309 Million Protection Fund After a $388 Million Hack. Is Your Crypto Safe on an Exchange? - 24/7 Wall St.",
       "summary": "Bitget Rebuilt a $309 Million Protection Fund After a $388 Million Hack. Is Your Crypto Safe on an Exchange? &nbsp;&nbsp; 24/7 Wall St.",
       "url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxNS3l5anJ5aWstWjVXSTlwbTRjQ2FNWmd4eEJOUk55em5fZ0hwVHU0QlJqck5pOFBzbE4wTGdMeGhSTHBlcHJyd3ZJT1lNMTNZVUllRDhiYnFVLVlPdERrY2lkZmwzRFl3YXNjanJlRUgxdWRYOFJub01VUEtsdzZ4di1xcEdNcy1zX296MXVkV3JyaUdWVEp0V0VYQnYwU25lZGVfdEw4cDJ4cU80WXhEZUhrYTQxdkxfRHl4amhUcERyeFk5SVJNVnlndzNPcERvbnVGaTFlWm5iNWkyUW1UZjRNaTJOVURGc1l3N3QzYjhHYk5xWGc?oc=5",
-      "published_at": "2026-10-03T22:27:34+00:00",
+      "published_at": "2026-10-03T22:27:00+00:00",
       "assets": [],
       "topics": [
         "exchange",
@@ -137,10 +273,6 @@
         {
           "publisher": "Google News discovery",
           "url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxNS3l5anJ5aWstWjVXSTlwbTRjQ2FNWmd4eEJOUk55em5fZ0hwVHU0QlJqck5pOFBzbE4wTGdMeGhSTHBlcHJyd3ZJT1lNMTNZVUllRDhiYnFVLVlPdERrY2lkZmwzRFl3YXNjanJlRUgxdWRYOFJub01VUEtsdzZ4di1xcEdNcy1zX296MXVkV3JyaUdWVEp0V0VYQnYwU25lZGVfdEw4cDJ4cU80WXhEZUhrYTQxdkxfRHl4amhUcERyeFk5SVJNVnlndzNPcERvbnVGaTFlWm5iNWkyUW1UZjRNaTJOVURGc1l3N3QzYjhHYk5xWGc?oc=5"
-        },
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPbjNvTXNnWU55QnN2RFVLUURjYnQtcXlhcmU2bWh4cHlKc2NrVnJCcFFlWFZWMXk5dFlVQTY1VjhvWXBQUlZ2cGFibkVwTTc2amhHRzhMOXhXYXlHWk1pR3NoTWFzbWFwTDBHQjJBeXBhbWprQ0t6TVdmNEtid1V6Z1pZSmlvc0RGdERmZndraGxua3g4aEtrYk5FOFlIRElwUTAtZg?oc=5"
         }
       ],
       "confidence_label": "Discovery: потребує підтвердження",
@@ -1086,56 +1218,6 @@
       "analysis_last_attempt_at": "2026-10-03T17:03:02Z"
     },
     {
-      "id": "9d67cfc5430332",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Hargreaves Lansdown offers crypto ETNs nearly a year after ban was lifted",
-      "summary": "Investment platform previously told customers ‘bitcoin is not an asset class’",
-      "url": "https://www.ft.com/content/a0d34842-a49c-47ae-b1cc-3fadd8af9d43?syn-25a6b1a6=1",
-      "published_at": "2026-09-03T10:24:18+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [
-        "regulation"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Потенційно негативний",
-      "source_count": 1,
-      "publishers": [
-        "FT Crypto"
-      ],
-      "links": [
-        {
-          "publisher": "FT Crypto",
-          "url": "https://www.ft.com/content/a0d34842-a49c-47ae-b1cc-3fadd8af9d43?syn-25a6b1a6=1"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно негативний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "jev_ai": {
-        "what_happened": "Hargreaves Lansdown (Велика Британія) почав пропонувати крипто-ETN після зняття заборони близько рік тому. Платформа раніше публіко стверджувала, що «bitcoin не є класом активів» — тепер пропонує продукт з цифровим активом.",
-        "why_it_matters": "Розворот великого роздрібного платформи в UK — сигнал зміни ставлення регульованого ринку. Але ETN ≠ ETF: це боргові зобов'язання емітента, а не прямий бекинг активом.",
-        "market_effect": "Помірно позитивний для BTC (легітимізація), але ETN нестиме масивних потоків порівняно з спотовими ETF. Ризик контрагента емітента залишається.",
-        "bull_case": "Розширення доступу для роздрібних інвесторів UK, зростення інституційної впевненості, потенційні поступові потоки.",
-        "bear_case": "Обмежений запуск, ETN мають контрагентський ризик, платформа раніше скептично ставилася до BTC — можливо, це обережний тест ринку.",
-        "watch_next": "Обсяги ETN на HL, чи BTC проб'є 85.5–86k, чи інші UK-платформи наслідують.",
-        "confidence": "середня",
-        "short_conclusion": "Сигнал позитивний, але ETN — не ETF. Стежити за реальними потоками, а не за оголошеннями.",
-        "_model_used": "free/deepseek-v4.1-flash"
-      },
-      "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm"
-    },
-    {
       "id": "7b30d4f86b2b8c",
       "source": "jev_analysis",
       "mode": "news",
@@ -1662,64 +1744,6 @@
       "analysis_last_attempt_at": "2026-10-03T16:59:08Z"
     },
     {
-      "id": "708eeea3e0936c",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Evernorth shareholders approve $1 billion XRP treasury deal, clearing path to Nasdaq debut",
-      "summary": "Armada Acquisition Corp. II shareholders approved the Evernorth merger. The XRP treasury company expects to hold ~473M XRP.",
-      "url": "https://www.theblock.co/news/deals/2026-10-01-evernorth-xrpn-nasdaq-armada-shareholders-approve-417413",
-      "published_at": "2026-10-01T21:07:45+00:00",
-      "assets": [
-        "XRP"
-      ],
-      "topics": [
-        "macro",
-        "institutional"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 2,
-      "publishers": [
-        "The Block",
-        "Cointelegraph"
-      ],
-      "links": [
-        {
-          "publisher": "The Block",
-          "url": "https://www.theblock.co/news/deals/2026-10-01-evernorth-xrpn-nasdaq-armada-shareholders-approve-417413"
-        },
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/news/evernorth-clears-shareholder-vote-ahead-nasdaq-debut-473m-xrp-treasury?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
-        }
-      ],
-      "confidence_label": "Є незалежне підтвердження",
-      "jev_take": "Це макро-фактор для XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Є незалежне підтвердження",
-        "Ринковий тон: Потенційно позитивний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "jev_ai": {
-        "what_happened": "Armada Acquisition Corp. II shareholders approved the Evernorth merger. The XRP treasury company plans to hold ~473M XRP and aims for Nasdaq debut.",
-        "why_it_matters": "Corporate treasury adoption of XRP via a listed SPAC vehicle creates a regulated on-ramp for institutional exposure. However, this is a structural/vehicle event, not direct XRP utility demand.",
-        "market_effect": "Short-term sentiment boost for XRP; limited immediate supply impact since treasury accumulation is gradual. Nasdaq listing could attract traditional finance flows over time.",
-        "bull_case": "Weak US NFP (29k vs 90k) and softer PCE (3.4% vs 3.7%) reduce October hike odds — dovish macro environment favors risk assets including XRP. Treasury vehicle may draw institutional capital.",
-        "bear_case": "SPAC-to-Nasdaq path still faces regulatory scrutiny and execution risk. 473M XRP treasury is concentrated in one corporate entity — governance/trust risk. Macro relief rally could reverse if data reverses.",
-        "watch_next": "Actual Nasdaq listing date, treasury deployment schedule, XRP custody arrangements, and whether Armada/ Evernorth file S-1 or proxy details with SEC.",
-        "confidence": "середня",
-        "short_conclusion": "Подія підтверджена незалежно, але реальний вплив залежить від Nasdaq дебюту та розподілу казни. Макро довкола слабке — це підтримує, але не гарантує руху.",
-        "_model_used": "free/deepseek-v4.1-flash"
-      },
-      "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm",
-      "analysis_retry_count": 5,
-      "analysis_last_attempt_at": "2026-10-03T18:50:07Z"
-    },
-    {
       "id": "90102ad4dc0766",
       "source": "jev_analysis",
       "mode": "news",
@@ -1820,6 +1844,59 @@
       "analysis_level": "llm",
       "analysis_retry_count": 1,
       "analysis_last_attempt_at": "2026-10-03T16:59:39Z"
+    },
+    {
+      "id": "28bf849b0875f1",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Evernorth shareholders approve $1 billion XRP treasury deal, clearing path to Nasdaq debut",
+      "summary": "Armada Acquisition Corp. II shareholders approved the Evernorth merger. The XRP treasury company expects to hold ~473M XRP.",
+      "url": "https://www.theblock.co/news/deals/2026-10-01-evernorth-xrpn-nasdaq-armada-shareholders-approve-417413",
+      "published_at": "2026-10-01T15:17:11+00:00",
+      "assets": [
+        "XRP"
+      ],
+      "topics": [
+        "macro",
+        "institutional"
+      ],
+      "impact": 2,
+      "impact_label": "Середній вплив",
+      "tone": "Потенційно позитивний",
+      "source_count": 1,
+      "publishers": [
+        "The Block"
+      ],
+      "links": [
+        {
+          "publisher": "The Block",
+          "url": "https://www.theblock.co/news/deals/2026-10-01-evernorth-xrpn-nasdaq-armada-shareholders-approve-417413"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Це макро-фактор для XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Потенційно позитивний",
+        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
+      ],
+      "jev_ai": {
+        "what_happened": "Armada Acquisition Corp. II shareholders approved the Evernorth merger. The XRP treasury company plans to hold ~473M XRP and aims for Nasdaq debut.",
+        "why_it_matters": "Corporate treasury adoption of XRP via a listed SPAC vehicle creates a regulated on-ramp for institutional exposure. However, this is a structural/vehicle event, not direct XRP utility demand.",
+        "market_effect": "Short-term sentiment boost for XRP; limited immediate supply impact since treasury accumulation is gradual. Nasdaq listing could attract traditional finance flows over time.",
+        "bull_case": "Weak US NFP (29k vs 90k) and softer PCE (3.4% vs 3.7%) reduce October hike odds — dovish macro environment favors risk assets including XRP. Treasury vehicle may draw institutional capital.",
+        "bear_case": "SPAC-to-Nasdaq path still faces regulatory scrutiny and execution risk. 473M XRP treasury is concentrated in one corporate entity — governance/trust risk. Macro relief rally could reverse if data reverses.",
+        "watch_next": "Actual Nasdaq listing date, treasury deployment schedule, XRP custody arrangements, and whether Armada/ Evernorth file S-1 or proxy details with SEC.",
+        "confidence": "середня",
+        "short_conclusion": "Подія підтверджена незалежно, але реальний вплив залежить від Nasdaq дебюту та розподілу казни. Макро довкола слабке — це підтримує, але не гарантує руху.",
+        "_model_used": "free/deepseek-v4.1-flash"
+      },
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 5,
+      "analysis_last_attempt_at": "2026-10-03T18:50:07Z"
     },
     {
       "id": "04227119ddf53c",
@@ -4118,14 +4195,5 @@
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     }
-  ],
-  "jev_enabled": true,
-  "jev_status": "complete",
-  "jev_provider": "apinex",
-  "jev_model": "free/gpt-5.6-luna",
-  "jev_analyzed_count": 44,
-  "jev_analyzed_this_run": 0,
-  "jev_pending_count": 0,
-  "jev_llm_pending_count": 3,
-  "jev_analysis_errors": 3
+  ]
 }
