@@ -84,7 +84,25 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-04T00:11:10Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "SEC Just Clarified Something Big for XRP and Crypto &nbsp;&nbsp; Bitget",
+        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "market_effect": "Невизначений / змішаний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+        "confidence": "низька",
+        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "d669546ab02b82",
@@ -120,7 +138,25 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-04T00:11:15Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "Bitget Rebuilt a $309 Million Protection Fund After a $388 Million Hack. Is Your Crypto Safe on an Exchange? &nbsp;&nbsp; 24/7 Wall St.",
+        "why_it_matters": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
+        "market_effect": "Потенційно негативний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
+        "confidence": "низька",
+        "short_conclusion": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "91ef9ac9095267",
@@ -158,7 +194,25 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-04T00:11:21Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "SEC Approves First 3x Leveraged Bitcoin and Ether ETPs &nbsp;&nbsp; CryptoRank",
+        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на BTC, ETH; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "market_effect": "Невизначений / змішаний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+        "confidence": "низька",
+        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на BTC, ETH; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "c194d038c41720",
@@ -460,13 +514,13 @@
         "short_conclusion": "Це макро-фактор для BTC: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 8,
-      "analysis_last_attempt_at": "2026-10-03T21:58:05Z"
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 11,
+      "analysis_last_attempt_at": "2026-10-04T00:12:09Z"
     },
     {
       "id": "852f2dd37c9b25",
@@ -1176,13 +1230,13 @@
         "short_conclusion": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-03T21:56:52Z"
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 6,
+      "analysis_last_attempt_at": "2026-10-04T00:11:28Z"
     },
     {
       "id": "febaf99cab0d0f",
@@ -1228,22 +1282,23 @@
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
       "jev_ai": {
-        "what_happened": "BTC +1.5% до $92k, ETH $3,130, SOL $142, XRP $2.06. XMR +13%, новий ATH $680 (відкат до $640), DASH +60%, IP +30%. Золото та срібло — ATH. Сенат випустив draft Crypto Market Clarity Act з обмеженнями stablecoin rewards. Warren тисне на SEC щодо 401k. Vitalik про децентралізовані stablecoins. World Liberty Financial запустив lend.",
-        "why_it_matters": "Слабкий NFP (29k vs 90k) знижує ймовірність жовтневого хабу ФРС — макро tailwind. XMR ATH підтверджує обертання в приватність. CLARITY Act ще не закон — голосування cloture 15 вересня, потрібно 60 голосів. ATH золота/срібла = hedge demand.",
-        "market_effect": "Короткий термін: ризик-on, альти можуть підрости при обертанні ліквідності з BTC. Але BTC не закрив денний бар вище 85.6k — супротив непідтверджений. XMR вже відкатив 680→640 — моментум слабший. Обмеження stablecoin rewards у CLARITY може тиснути DeFi yield.",
-        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
-        "bear_case": "Неповний контекст може дати хибний висновок.",
-        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+        "what_happened": "Crypto majors are green; BTC +1.5% at $92,000; ETH +1% at $3,130, SOL +2% at $142; XRP +1% to $2.06. DASH (+60%), IP (+30%) and XMR (+13%) led top movers; XMR hit another new ATH at $680 (now $640). Gold and Silver hit new ATHs again in the wake of the Powell investigation. The US Senate released the draft Crypto Market Clarity Act, including limits on stablecoin rewards. Senator Warren pressed the SEC over inclusion of crypto in 401ks arguing they expose retirees to too much risk. Vitalik Buterin warned crypto needs better decentralized stablecoins, citing governance capture and inflation risks. World Liberty Financial launched a crypto lend",
+        "why_it_matters": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "market_effect": "Потенційно негативний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
         "confidence": "низька",
-        "short_conclusion": "Слабкий NFP (29k vs 90k) знижує ймовірність жовтневого хабу ФРС — макро tailwind. XMR ATH підтверджує обертання в приватність. CLARITY Act ще не закон — голосування cloture 15 вересня, потрібно 60 голосів. ATH золота/срібла = hedge demand.",
-        "_format_fallback": true,
-        "_partial_json_recovered": true,
-        "_model_used": "free/deepseek-v4.1-flash"
+        "short_conclusion": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
-      "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "format_fallback",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-03T21:57:04Z"
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback",
+      "analysis_retry_count": 6,
+      "analysis_last_attempt_at": "2026-10-04T00:11:35Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}"
     },
     {
       "id": "c4e61a1e9ac88f",
@@ -1289,22 +1344,23 @@
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
       "jev_ai": {
-        "what_happened": "Заголовок говорить про зелений ринок: BTC $92k, ETH $3,130, SOL $142, XRP $2.06, PsyopAnime +30X, XMR ATH $680. Але ITstatti live показує іншу картину: BTC торгується ~84,642, вчора пробував 87,220 але закрився на 84,518, не закріпивши денним баром вище зони 85,200–85,600. NFP вийшов слабким (29K vs 90K очікувань), безробіття 4.1→4.2%. Сенат випустив draft CLARITY Act з обмеженнями нагород stablecoin. Warren тисне на SEC щодо crypto в 401k. Vitalik попередив про governance capture в decentralized stablecoins. World Liberty Financial запустив crypto lend.",
-        "why_it_matters": "Конфлікт між 'BTC $92k' у заголовку та реальною ціною ~84,6k свідчить або про неточність джерела, або про сильний intraday розворот — обидва треба перевіряти, а не віритись заголовку. Слабкий NFP знижує ймовірність жовтневого хайку ФРС — це ліквідністьний каталізатор, але ринок його не використав для пробою сопротивлення. CLARITY Act + Warren тиск = регуляторний ризик для інституційного входу.",
-        "market_effect": "Невизначено",
-        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
-        "bear_case": "Неповний контекст може дати хибний висновок.",
-        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+        "what_happened": "Crypto majors are green; BTC +1.5% at $92,000; ETH +1% at $3,130, SOL +2% at $142; XRP +1% to $2.06. DASH (+60%), IP (+30%) and XMR (+13%) led top movers; XMR hit another new ATH at $680 (now $640). Gold and Silver hit new ATHs again in the wake of the Powell investigation. The US Senate released the draft Crypto Market Clarity Act, including limits on stablecoin rewards. Senator Warren pressed the SEC over inclusion of crypto in 401ks arguing they expose retirees to too much risk. Vitalik Buterin warned crypto needs better decentralized stablecoins, citing governance capture and inflation risks. World Liberty Financial launched a crypto lend",
+        "why_it_matters": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "market_effect": "Потенційно негативний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
         "confidence": "низька",
-        "short_conclusion": "Конфлікт між 'BTC $92k' у заголовку та реальною ціною ~84,6k свідчить або про неточність джерела, або про сильний intraday розворот — обидва треба перевіряти, а не віритись заголовку. Слабкий NFP знижує ймовірність жовтневого хайку ФРС — це ліквідністьний каталізатор, але ринок його не використав для пробою сопротивлення. CLARITY Act + Warren тиск = регуляторний ризик для інституційного входу.",
-        "_format_fallback": true,
-        "_partial_json_recovered": true,
-        "_model_used": "free/deepseek-v4.1-flash"
+        "short_conclusion": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
-      "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "format_fallback",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-03T21:57:16Z"
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback",
+      "analysis_retry_count": 6,
+      "analysis_last_attempt_at": "2026-10-04T00:11:42Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}"
     },
     {
       "id": "0a53daff32de0f",
@@ -1347,22 +1403,23 @@
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ],
       "jev_ai": {
-        "what_happened": "A16z зібрав $15B; Пауелл звинуватив Трампа в політичних переслідуваннях за непідкорення ставкам; BTC у джерелі $90.6k, але ITstatti показує ~$84.6k — конфлікт даних; XMR новий ATH $590; X планує smart cashtags; VanEck прогнозує BTC $53m до 2050.",
-        "why_it_matters": "Інституційний капітал продовжує流入; слабкий NFP (29k замість 90k) робить жовтневе підняття ставок малоймовірним — це підтримує ризикові активи; напруга Пауелл-Трамп створює регуляторну невизначеність.",
-        "market_effect": "Невизначено",
-        "bull_case": "Потрібне підтвердження даними та реакцією ринку.",
-        "bear_case": "Неповний контекст може дати хибний висновок.",
-        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+        "what_happened": "Crypto majors are mostly flat headed into Monday open; btc even at $90,600; eth +1% at $3,110, sol +2% at $140; xrp -2% to $2.04. Ip (+20%) and xmr (+15%) led top movers; xmr hit a new ath at $590. Fed chair Jerome Powell released a video message claiming that the criminal charges he faces are due to his not cutting interest rates in line with Trump’s wishes. X (twitter) announced plans for “smart cashtags” to show crypto and stock prices live next to tickers. Vaneck projected bitcoin could reach $53m by 2050, outlining long-term adoption, trade settlement and store-of-value assumptions driving 29% annual growth. Andreessen Horowitz (a16z) ra",
+        "why_it_matters": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "market_effect": "Потенційно позитивний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
         "confidence": "низька",
-        "short_conclusion": "Інституційний капітал продовжує流入; слабкий NFP (29k замість 90k) робить жовтневе підняття ставок малоймовірним — це підтримує ризикові активи; напруга Пауелл-Трамп створює регуляторну невизначеність.",
-        "_format_fallback": true,
-        "_partial_json_recovered": true,
-        "_model_used": "free/deepseek-v4.1-flash"
+        "short_conclusion": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
-      "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "format_fallback",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-03T21:57:28Z"
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback",
+      "analysis_retry_count": 6,
+      "analysis_last_attempt_at": "2026-10-04T00:11:48Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}"
     },
     {
       "id": "66eea8df8b9da4",
@@ -2908,22 +2965,23 @@
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
       "jev_ai": {
-        "what_happened": "BTC близько 95k (+3%), ETH +6%, SOL +2%, BNB +3%. Найбільші ETF-інфлузи за 3 місяці: BTC +$754m, ETH +$130m. Senate committee голосує 27 січня. Polygon Labs купує Coinme+Sequence за $250m. Monero ATH, PUMP/PEPE/ENA в топі гейнерів.",
-        "why_it_matters": "ETF-потік показує інституційне повернення, але BTC.D лише 59.2% — альти беруть участь. Polygon-придбання підсилює POL-наратив. Однак джерело одне (Decrypt), а stablecoin-білля ще не прийнято.",
-        "market_effect": "Короткотерміновий ризик-он, але технічно BTC не закрив денний бар вище 85.5-85.6k. Низьколіквідні альти (PUMP, PEPE) ралять — ознака спекулятивної ротації, а не широкого ліквіднісного перетоку.",
-        "bull_case": "ETF-інфлузи продовжаться, голосування 27 січня може дати регуляторну ясність, Polygon-acquisition створює реальний fee-burn механізм, SOL ETF AUM зростає інституційно.",
-        "bear_case": "Неповний контекст може дати хибний висновок.",
-        "watch_next": "Перевірити першоджерело, додаткове незалежне джерело та реакцію ціни/обсягу.",
+        "what_happened": "BTC: 95k (+3%) | BTC.D: 59.2% (-0.1%). ETH: 3313 (+6%) | BNB: 936 (+3%) | SOL: 145 (+2%). Top Gainers: IP, ICP, PUMP, PEPE, ENA. BTC ETFs: +$754m | ETH ETFs: +$130m. Crypto rallies on largest ETF inflow in 3 months. Senate committee to vote on crypto bill on Jan 27. Stablecoin issues with bill still being fought over. Ethena Labs makes USDe free from gas fees. Bitdeer overtakes MARA on ‘managed hashrate’. Polygon Labs to buy Coinme, Sequence for $250m. BitPanda eyes Frankfurt IPO in 1H26. CZ invests in perp trading platform Genius Terminal. Coingecko eyes sales at $500m valuation. Russia to open crypto markets more for payments. Crypto wrench",
+        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, BNB; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "market_effect": "Потенційно позитивний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
         "confidence": "низька",
-        "short_conclusion": "ETF-потік показує інституційне повернення, але BTC.D лише 59.2% — альти беруть участь. Polygon-придбання підсилює POL-наратив. Однак джерело одне (Decrypt), а stablecoin-білля ще не прийнято.",
-        "_format_fallback": true,
-        "_partial_json_recovered": true,
-        "_model_used": "free/deepseek-v4.1-flash"
+        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, BNB; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
-      "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "format_fallback",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-03T21:57:39Z"
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback",
+      "analysis_retry_count": 6,
+      "analysis_last_attempt_at": "2026-10-04T00:11:55Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}"
     },
     {
       "id": "a2c8730342eddf",
@@ -3088,13 +3146,13 @@
         "short_conclusion": "Це радше можливість/активність, а не торговий сигнал. Ключове — дедлайн, умови, KYC, gas і ризик фішингу.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-03T21:57:54Z"
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 6,
+      "analysis_last_attempt_at": "2026-10-04T00:12:02Z"
     },
     {
       "id": "fc5cb46b5736eb",
@@ -5170,5 +5228,14 @@
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     }
-  ]
+  ],
+  "jev_enabled": true,
+  "jev_status": "complete",
+  "jev_provider": "apinex",
+  "jev_model": "free/gpt-5.6-luna",
+  "jev_analyzed_count": 56,
+  "jev_analyzed_this_run": 0,
+  "jev_pending_count": 0,
+  "jev_llm_pending_count": 10,
+  "jev_analysis_errors": 10
 }
