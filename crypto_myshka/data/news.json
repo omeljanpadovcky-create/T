@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-04T22:04:53.469923+00:00",
+  "generated_at": "2026-10-05T00:53:50.579865+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -50,17 +50,56 @@
   "item_count": 98,
   "items": [
     {
-      "id": "c000f70dc4679a",
+      "id": "8b6a9ce101a6ed",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "Fed Rate Decision Odds: Oct. 28 FOMC Hike or Hold - DeFi Rate",
-      "summary": "Fed Rate Decision Odds: Oct. 28 FOMC Hike or Hold &nbsp;&nbsp; DeFi Rate",
-      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE4zNDBSUXRBcXNVV29wd3FvZGFkUXdlQW5Hck1LX045aENFbktiV3B0WWVqMVFzY1U0QWhDWEZDMlFjN2tRYmdOTERtODNQUUdR?oc=5",
-      "published_at": "2026-10-04T18:56:00+00:00",
-      "assets": [],
+      "title": "Former SEC boss made AI Czar, Bitcoin may hit $600K this cycle: Hodler’s Digest",
+      "summary": "Roman Storm and the XRP army aren’t happy former SEC boss Jay Clayton is Trump’s new AI czar, Peter Brandt flips bullish and says Bitcoin may reach as high as $600K by 2029.",
+      "url": "https://cointelegraph.com/magazine/former-sec-boss-made-ai-czar-bitcoin-may-hit-600k-this-cycle-hodlers-digest?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "published_at": "2026-10-04T22:31:12+00:00",
+      "assets": [
+        "BTC",
+        "XRP"
+      ],
       "topics": [
-        "macro",
-        "defi"
+        "regulation"
+      ],
+      "impact": 3,
+      "impact_label": "Високий вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Cointelegraph"
+      ],
+      "links": [
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/magazine/former-sec-boss-made-ai-czar-bitcoin-may-hit-600k-this-cycle-hodlers-digest?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
+      ]
+    },
+    {
+      "id": "631792c938591e",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Bitcoin holds near $85,000 as SEC clears first 3x leveraged crypto ETPs - Yahoo Finance",
+      "summary": "Bitcoin holds near $85,000 as SEC clears first 3x leveraged crypto ETPs &nbsp;&nbsp; Yahoo Finance",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNZUdWOTdMdE1ESjZtLUgzZmdsaWV0eVhyZEtuQVlnZV9qallORkRocGxjWHh6RTNabWFlbEw0YzBaUTVJLWUtbzJSMHEtVnhEMzF2TmxrbGw5eTNfVUZ3MzFpLTVTX3M4TmMyVEcwM1BkYlRPRFBPWEZsVktFZWJPREgzaFpTcVhLczFHV0dhLU5fMUpS?oc=5",
+      "published_at": "2026-10-04T21:55:11+00:00",
+      "assets": [
+        "BTC"
+      ],
+      "topics": [
+        "regulation"
       ],
       "impact": 3,
       "impact_label": "Високий вплив",
@@ -72,17 +111,59 @@
       "links": [
         {
           "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE4zNDBSUXRBcXNVV29wd3FvZGFkUXdlQW5Hck1LX045aENFbktiV3B0WWVqMVFzY1U0QWhDWEZDMlFjN2tRYmdOTERtODNQUUdR?oc=5"
+          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNZUdWOTdMdE1ESjZtLUgzZmdsaWV0eVhyZEtuQVlnZV9qallORkRocGxjWHh6RTNabWFlbEw0YzBaUTVJLWUtbzJSMHEtVnhEMzF2TmxrbGw5eTNfVUZ3MzFpLTVTX3M4TmMyVEcwM1BkYlRPRFBPWEZsVktFZWJPREgzaFpTcVhLczFHV0dhLU5fMUpS?oc=5"
+        },
+        {
+          "publisher": "Google News discovery",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxOaDlCbmRqaTVkc2daeW9tX3JXYWZpUlJWYzIxQUl0Y3NaOXJEM1J6MjVhMncyZVFJOFdua3pFWnpKT3YxYTNFUFdIRC1NWW1DR3lBQ2hJMU9wZFd5LUc1Vi1CQVdkX0t2R0E1d21sX2pnckh4cEpFM3lIc3lpN09Va0pKWjRYQTh6Rk1FdHNDWDAzS005WXlUck94VVpmalRlbVcxZWVSVG5SY0R0T0RJR0w0SmgwVWVCQzZOcEY5aWg3WlFrOG1V?oc=5"
         }
       ],
       "confidence_label": "Discovery: потребує підтвердження",
-      "jev_take": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
+      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
         "Google News використано лише як радар теми",
         "Ринковий тон: Невизначений / змішаний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
+        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
+      ]
+    },
+    {
+      "id": "d5a87a9ccff5dc",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "SEC clears triple-leveraged Bitcoin, Ether and metals ETFs for listing - Startup Fortune",
+      "summary": "SEC clears triple-leveraged Bitcoin, Ether and metals ETFs for listing &nbsp;&nbsp; Startup Fortune",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQYVlaY1pQY29GekdJeTE1elUwa2JPUzk4SVJNQnhXNkRkcGJ1UzMxQ3FqOGFqMENKLXNHRG5XQXJBVjMyaU1RTGFXZ0VKUzZiSDhmb2pkcFlwYTAxZUNHZWxrWThhTVZHWjFfRExqUTE2SDc2eDBJYnpWaVMxSFV2dFlrc2xEYV9lQVBJbm1mY00yclFiZUNMcDVBMVpCUQ?oc=5",
+      "published_at": "2026-10-04T19:18:55+00:00",
+      "assets": [
+        "BTC",
+        "ETH"
+      ],
+      "topics": [
+        "regulation"
+      ],
+      "impact": 3,
+      "impact_label": "Високий вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Google News discovery"
+      ],
+      "links": [
+        {
+          "publisher": "Google News discovery",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQYVlaY1pQY29GekdJeTE1elUwa2JPUzk4SVJNQnhXNkRkcGJ1UzMxQ3FqOGFqMENKLXNHRG5XQXJBVjMyaU1RTGFXZ0VKUzZiSDhmb2pkcFlwYTAxZUNHZWxrWThhTVZHWjFfRExqUTE2SDc2eDBJYnpWaVMxSFV2dFlrc2xEYV9lQVBJbm1mY00yclFiZUNMcDVBMVpCUQ?oc=5"
+        }
+      ],
+      "confidence_label": "Discovery: потребує підтвердження",
+      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Google News використано лише як радар теми",
+        "Ринковий тон: Невизначений / змішаний",
+        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ]
     },
     {
@@ -120,47 +201,6 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "e55fd02ea83d5b",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "What Could Decide Bitcoin’s Q4? The Fed, Bond Yields, and One Crucial Price Level - CryptoPotato",
-      "summary": "What Could Decide Bitcoin’s Q4? The Fed, Bond Yields, and One Crucial Price Level &nbsp;&nbsp; CryptoPotato",
-      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxONDVCa1NjTFBrcGw2M2VtYWk4d3RSTFlSaVBDbFJ0RlRka1FjN2FtUUxqT2JobjNXTDk2dlVJRE9GeVZEWmF4czV4OXpxaTliWVRqcWVTSms4ckhYSlNZSVpZM0hsT1pTeG9vM3hnWGRBWkQxSEVoMkVtRlJiREZxTGJHTHdMTnJIOUE1bjJFckJNdkJ3eVZMd3YybzlBZi1mMlhSNzZn?oc=5",
-      "published_at": "2026-10-04T16:22:49+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [
-        "macro"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Google News discovery"
-      ],
-      "links": [
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxONDVCa1NjTFBrcGw2M2VtYWk4d3RSTFlSaVBDbFJ0RlRka1FjN2FtUUxqT2JobjNXTDk2dlVJRE9GeVZEWmF4czV4OXpxaTliWVRqcWVTSms4ckhYSlNZSVpZM0hsT1pTeG9vM3hnWGRBWkQxSEVoMkVtRlJiREZxTGJHTHdMTnJIOUE1bjJFckJNdkJ3eVZMd3YybzlBZi1mMlhSNzZn?oc=5"
-        },
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNYWZ4VGF5VzNpamYwNFBlZnBIb0tnWFgyZjJEUXBpS3Q5YU42WXhkSGxLU0FSLTB5elNHUEhLenhnVWIzcjZ4RkxjTlFPMmIxQzk4b1VvbXFqSzc3bzBUelQ3aXBrU3gwR2VLQjBMZVNmc1FjTGlVakJYZUQ2ZUZxUkpSa2FlcXFpUlM2MUQ5QWlOdzNrMEtndm5VWmpfWnJVMC1iczRBVG1WWm1wX1VIeE1SRXVIUQ?oc=5"
-        }
-      ],
-      "confidence_label": "Discovery: потребує підтвердження",
-      "jev_take": "Це макро-фактор для BTC: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Google News використано лише як радар теми",
-        "Ринковий тон: Невизначений / змішаний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
       ]
     },
     {
@@ -309,66 +349,11 @@
       "analysis_last_attempt_at": "2026-10-04T15:58:59Z"
     },
     {
-      "id": "6049c5d0362b29",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Trump, Bitcoin, The SEC and $8 Million In Crypto Lobbying: This Week In Crypto - Benzinga",
-      "summary": "Trump, Bitcoin, The SEC and $8 Million In Crypto Lobbying: This Week In Crypto &nbsp;&nbsp; Benzinga",
-      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNME5GR0h6NVlFMUpyRkZHTC1BNzdJRmpoSUVxeXY2eUxnSC0wdUdSd3g2Vk9zb2RLY2V0Rnc0ZF9MbHkwR1NQVS1uOHYzc1dkQlJvRm1oNnZKd0VsVXZaVW1vdU5RYTQzcHc1TUxFaGpIQTEtTFZkem5nOFBiaXJHVlZCem9majgyTWtneXI4ZGVHUGRsZnJKc1h1R3J2dGRtR0d6eU5CTkludFIyMXB2ajFSRFJaVjhzSF9iREFB?oc=5",
-      "published_at": "2026-10-04T12:00:06+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [
-        "regulation"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Google News discovery"
-      ],
-      "links": [
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNME5GR0h6NVlFMUpyRkZHTC1BNzdJRmpoSUVxeXY2eUxnSC0wdUdSd3g2Vk9zb2RLY2V0Rnc0ZF9MbHkwR1NQVS1uOHYzc1dkQlJvRm1oNnZKd0VsVXZaVW1vdU5RYTQzcHc1TUxFaGpIQTEtTFZkem5nOFBiaXJHVlZCem9majgyTWtneXI4ZGVHUGRsZnJKc1h1R3J2dGRtR0d6eU5CTkludFIyMXB2ajFSRFJaVjhzSF9iREFB?oc=5"
-        }
-      ],
-      "confidence_label": "Discovery: потребує підтвердження",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Google News використано лише як радар теми",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "jev_ai": {
-        "what_happened": "Trump, Bitcoin, The SEC and $8 Million In Crypto Lobbying: This Week In Crypto &nbsp;&nbsp; Benzinga",
-        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-        "market_effect": "Невизначений / змішаний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-        "confidence": "низька",
-        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
-      },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-04T15:59:06Z"
-    },
-    {
       "id": "b10b3d73620140",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "SEC Clears First 3x Leveraged Crypto ETPs, but Trading Must Wait - Altcoin Buzz",
-      "summary": "SEC Clears First 3x Leveraged Crypto ETPs, but Trading Must Wait &nbsp;&nbsp; Altcoin Buzz",
+      "title": "SEC Clears First 3x Leveraged Crypto ETPs, but Trading Must Wait - altcoinbuzz.io",
+      "summary": "SEC Clears First 3x Leveraged Crypto ETPs, but Trading Must Wait &nbsp;&nbsp; altcoinbuzz.io",
       "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQRE1udlJvenpId3A3ZGkzUk5VZmVUNHZOTTB0YzJxenkyWVc4a0ZpY0NGODAtUGhhX253UEE5ZzlyaEk2eldkd252aEhXVEZKaEdiSFlsWWRLZ3R5emtxbXROWnJPM1VlR3ZSWW1Hek5LSDR2aTlLVUtIdXZQX3hvSnkxVFE1UGJaMnVfOHBIRGpFanQ5?oc=5",
       "published_at": "2026-10-04T11:04:29+00:00",
       "assets": [],
@@ -2324,6 +2309,39 @@
       "analysis_last_attempt_at": "2026-10-03T17:02:37Z"
     },
     {
+      "id": "5cd9b1e42b38cd",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Zcash gets a Washington lobbyist to push crypto policy",
+      "summary": "The newly registered lobbying operation lists the CLARITY Act and two digital asset tax proposals among the issues it plans to lobby on in Washington.",
+      "url": "https://cointelegraph.com/news/zcash-gets-a-washington-lobbyist-to-push-crypto-policy?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "published_at": "2026-10-05T00:35:34+00:00",
+      "assets": [],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Cointelegraph"
+      ],
+      "links": [
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/zcash-gets-a-washington-lobbyist-to-push-crypto-policy?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
       "id": "72730c037408af",
       "source": "jev_analysis",
       "mode": "news",
@@ -3333,41 +3351,6 @@
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
       "analysis_level": "llm"
-    },
-    {
-      "id": "2f2020341926c4",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Ethereum’s zkAPI brings privacy-preserving API payments to mainnet",
-      "summary": "Ethereum’s zkAPI is now live on mainnet, turning an earlier zero-knowledge API payment proposal into a working implementation for private, prepaid access.",
-      "url": "https://cointelegraph.com/news/ethereum-zkapi-private-api-payments-mainnet?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "published_at": "2026-10-02T03:34:25+00:00",
-      "assets": [
-        "ETH"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Cointelegraph"
-      ],
-      "links": [
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/news/ethereum-zkapi-private-api-payments-mainnet?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
     },
     {
       "id": "17d675650ec559",
