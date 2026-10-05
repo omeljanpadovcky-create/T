@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-05T09:11:25.257845+00:00",
+  "generated_at": "2026-10-05T15:18:26.140515+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -24,14 +24,14 @@
     },
     "telegram_archive": {
       "ok": true,
-      "count": 10182,
+      "count": 10185,
       "complete": true,
-      "updated_at": "2026-10-05T09:11:21.007634+00:00",
+      "updated_at": "2026-10-05T15:18:20.635095+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 99,
+      "count": 107,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -41,47 +41,86 @@
       "ETH",
       "OP",
       "SOL",
-      "PENDLE",
       "LDO",
-      "ENS",
-      "LTC"
+      "XRP",
+      "BNB",
+      "DOGE"
     ],
     "prices": {
       "bitcoin": {
-        "usd": 86086,
-        "usd_24h_change": 1.141918589002092
+        "usd": 85537,
+        "usd_24h_change": 0.2386017081145953
       },
       "ethereum": {
-        "usd": 2720.7,
-        "usd_24h_change": 0.8256227087045135
+        "usd": 2701.71,
+        "usd_24h_change": 0.10256245693298298
       },
       "optimism": {
-        "usd": 0.135331,
-        "usd_24h_change": 1.3470061455611497
+        "usd": 0.133504,
+        "usd_24h_change": -0.8352697141005563
       },
       "solana": {
-        "usd": 121.04,
-        "usd_24h_change": 0.1459698252388876
-      },
-      "pendle": {
-        "usd": 2.47,
-        "usd_24h_change": 0.5719371564324527
+        "usd": 119.64,
+        "usd_24h_change": -1.8237255647693333
       },
       "lido-dao": {
-        "usd": 0.470689,
-        "usd_24h_change": 3.4114132677134776
+        "usd": 0.461552,
+        "usd_24h_change": 1.3706235945776142
       },
-      "ethereum-name-service": {
-        "usd": 6.95,
-        "usd_24h_change": 1.934969188863941
+      "ripple": {
+        "usd": 1.5,
+        "usd_24h_change": -0.40452602021830525
       },
-      "litecoin": {
-        "usd": 70.17,
-        "usd_24h_change": -0.6250018903390328
+      "binancecoin": {
+        "usd": 788.54,
+        "usd_24h_change": 0.14142948786214127
+      },
+      "dogecoin": {
+        "usd": 0.094739,
+        "usd_24h_change": 0.44603852450779213
       }
     }
   },
   "items": [
+    {
+      "id": "f40693565183a9",
+      "source": "telegram_main",
+      "mode": "trading",
+      "risk": 80,
+      "reasons": [
+        "активна торгівля/позиція"
+      ],
+      "title": "🔶 Активності / Як заробити: Основний native use case — delegated staking. Protocol reward rate: ~2,6% річних. Але yield …",
+      "summary": "🔶 Активності / Як заробити: Основний native use case — delegated staking. Protocol reward rate: ~2,6% річних. Але yield фінансується переважно новими APT. Тому: staking APY ≠ business cash flow. Для staker це часткова компенсація dilution. Для non-staker — dilution. Liquid staking додає smart-contract і depeg risk. У lending/LP yield може йти від: borrowers trading fees emissions external incentives. Тому APY кожного протоколу треба дивитися окремо. 🔶 Мій вердикт: APT реально став сильнішим як token thesis. Раніше було: сильний L1 → великі institutional integrations → висока емісія → довгі insider unlocks → слабкий holder value. Зараз уже маємо: hard cap 2,1B staking rewards скорочені вдвічі",
+      "url": "https://t.me/it_statti/7344",
+      "published_at": "2026-10-05T11:22:39+00:00"
+    },
+    {
+      "id": "19b7ed8d9e25f3",
+      "source": "telegram_main",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки"
+      ],
+      "title": "🔶 Зв’язок продукту і токена / Value accrual: Ось тут одночасно головний плюс і головна проблема APT. Механічний зв’язок …",
+      "summary": "🔶 Зв’язок продукту і токена / Value accrual: Ось тут одночасно головний плюс і головна проблема APT. Механічний зв’язок уже є: network activity → gas в APT → burn APT. Це реальний working mechanism. APT також потрібен для: staking governance network security. Але власник APT не отримує автоматичну частку revenue: Aptos Labs Decibel stablecoin issuers RWA funds. Тобто: $760M RWA ≠ holder revenue. $1B stablecoins ≠ автоматичний value accrual. Зараз офіційні дані показують приблизно: staking emissions ≈1,6M APT/місяць проти burn ≈168K APT/30d. Тобто burn перекриває лише: ~10,5% emissions. Щоб просто досягти emission-neutral рівня при нинішній емісії, burn має зрости приблизно: у 9,5 раза. Тому ",
+      "url": "https://t.me/it_statti/7343",
+      "published_at": "2026-10-05T11:22:37+00:00"
+    },
+    {
+      "id": "7061086f598ee2",
+      "source": "telegram_main",
+      "mode": "trading",
+      "risk": 80,
+      "reasons": [
+        "активна торгівля/позиція"
+      ],
+      "title": "Огляд проекту Aptos (APT) — tokenomics стали кращими. Але чи достатньо цього, щоб APT став сильним активом? #оглядкрипто…",
+      "summary": "Огляд проекту Aptos (APT) — tokenomics стали кращими. Але чи достатньо цього, щоб APT став сильним активом? #оглядкриптопроектів 🔶 Про що проєкт: Aptos — високопродуктивний Layer-1 від колишніх розробників Meta/Diem, побудований навколо мови Move та parallel execution. Основна ставка мережі вже не просто «ще один швидкий L1». Aptos активно рухається в: stablecoins payments RWA/tokenization institutional settlement fully onchain trading. На мережі вже близько: $1,06B stablecoins та ~$760M RWA AUM. Працюють інституційні продукти через Securitize, Franklin Templeton та інших великих гравців, а Decibel будує повністю onchain trading infrastructure. Тобто продуктова база серйозна. Але для APT важ",
+      "url": "https://t.me/it_statti/7342",
+      "published_at": "2026-10-05T11:22:35+00:00"
+    },
     {
       "id": "cb7d1ed006831a",
       "source": "telegram_main",
@@ -297,48 +336,6 @@
       "summary": "🇺🇸 NFP США ВИЙШОВ ЗНАЧНО СЛАБШИМ ЗА ОЧІКУВАННЯ. ЖОВТНЕВЕ ПІДВИЩЕННЯ СТАВКИ ФРС ТЕПЕР ВИГЛЯДАЄ МАЛОЙМОВІРНИМ #Macro Сьогодні вийшов один із найважливіших звітів перед жовтневим засіданням ФРС — дані по ринку праці США за вересень. І реліз виявився слабким. Американська економіка створила лише 29 тис. нових робочих місць проти очікуваних приблизно 90 тис. Безробіття зросло з 4,1% до 4,2% . Але ще важливіша деталь — попередні місяці знову переглянули вниз. Липень був переглянутий з +21 тис. до -10 тис. Серпень — з +162 тис. до +133 тис. Разом це ще мінус 60 тис. робочих місць від попередніх оцінок. Тобто проблема не тільки в слабкому вересні. Виявляється, що і попередні місяці були слабшими, ні",
       "url": "https://t.me/it_statti/7325",
       "published_at": "2026-10-02T13:29:41+00:00"
-    },
-    {
-      "id": "ec1b99b9a5772f",
-      "source": "telegram_main",
-      "mode": "portfolio",
-      "risk": 55,
-      "reasons": [
-        "портфельна/довша теза",
-        "автор позначає матеріал як не фінансову пораду"
-      ],
-      "title": "🟡 Експериментальний портфель 🟡 #криптопортфель Вирішив ENS перелити в PENDLE . Там на 71$ вийшло долити. Не фінансова по…",
-      "summary": "🟡 Експериментальний портфель 🟡 #криптопортфель Вирішив ENS перелити в PENDLE . Там на 71$ вийшло долити. Не фінансова порада! Всі активи портфелю за посиланням - https://dropstab.com/p/eksperimentalnij-portfel-jsmoxg204r Біржа №1 - Binance 🎰 ТОП біржі - ByBit 📈 , OKX 📈 Криптокартки - ТУТ 💳 🌐 База знань трейдингу | 🎞 YouTube | ✉️ Crypto Проекти",
-      "url": "https://t.me/it_statti/7324",
-      "published_at": "2026-10-02T12:57:13+00:00"
-    },
-    {
-      "id": "f36f00309cbe3f",
-      "source": "telegram_main",
-      "mode": "portfolio",
-      "risk": 55,
-      "reasons": [
-        "портфельна/довша теза",
-        "автор позначає матеріал як не фінансову пораду"
-      ],
-      "title": "🟡 Експериментальний портфель 🟡 #криптопортфель Вирішив LTC перелити в SOL . Так, капа в солани більша, але чисто інститу…",
-      "summary": "🟡 Експериментальний портфель 🟡 #криптопортфель Вирішив LTC перелити в SOL . Так, капа в солани більша, але чисто інституційно по ресерчам солана трохи перспективніша. Не фінансова порада! Всі активи портфелю за посиланням - https://dropstab.com/p/eksperimentalnij-portfel-jsmoxg204r Біржа №1 - Binance 🎰 ТОП біржі - ByBit 📈 , OKX 📈 Криптокартки - ТУТ 💳 🌐 База знань трейдингу | 🎞 YouTube | ✉️ Crypto Проекти",
-      "url": "https://t.me/it_statti/7323",
-      "published_at": "2026-10-02T11:43:08+00:00"
-    },
-    {
-      "id": "33cb4ec7b75ccb",
-      "source": "telegram_main",
-      "mode": "portfolio",
-      "risk": 55,
-      "reasons": [
-        "портфельна/довша теза",
-        "автор позначає матеріал як не фінансову пораду"
-      ],
-      "title": "🟡 Експериментальний портфель 🟡 #криптопортфель Проект створений суто для новачків. Які не розуміють як треба інвестувати…",
-      "summary": "🟡 Експериментальний портфель 🟡 #криптопортфель Проект створений суто для новачків. Які не розуміють як треба інвестувати з мінімальними сумами. Сюди будемо купувати або кожного дня або через день, мінімальна сума в місяць витрачатиметься від 150 до максимум 300 доларів. Дедлайн планується з прицілом щоб продати його на майбутньому булрані. Буду робити постійно скріни самої угоди на Байбіті ( https://partner.bybit.com/b/66102 ) та в dropstab створю портфель для зручності. Загальна сума інвестиції - 13280$ Купівля 1328 Сума інвестиції на данний момент 10028$ Сьогодні придбав в портфель на 10$ - CC Не фінансова порада! Всі активи портфелю за посиланням - https://dropstab.com/p/eksperimentalnij-",
-      "url": "https://t.me/it_statti/7322",
-      "published_at": "2026-10-02T11:21:43+00:00"
     },
     {
       "id": "3a1f17fe17e2d8",
@@ -5220,7 +5217,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "How to Buy Stocks in Ukraine in 2026? A Step-by-Step Guide",
+      "title": "Як купити акції в Україні у 2026 році? Покрокова інструкція",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=RSdKKuXNZ5k",
       "published_at": null,
@@ -5284,7 +5281,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "How to Buy S&P 500 on Binance | bStocks — A Simple Guide",
+      "title": "Як купити S&P 500 на Binance | bStocks — проста інструкція",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=6oL0a355KgI",
       "published_at": null,
@@ -5364,7 +5361,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Cryptocurrency overview WLD, STRK, APT, SOL, TWT, 5IRE, MYX, ALEX, VANA, FLIP, PUFFER - What to c...",
+      "title": "Огляд критовалют WLD, STRK, APT, SOL, TWT, 5IRE, MYX, ALEX, VANA, FLIP, PUFFER - Що вибрати?",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=FHdXLcNg6N8",
       "published_at": null,
@@ -5380,7 +5377,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Реєстрація на Binance з телефону за 5 хвилин та бонус 50$!",
+      "title": "Register on Binance from your phone in 5 minutes and get a $50 bonus!",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=XoKZS7pyxUQ",
       "published_at": null,
@@ -6221,7 +6218,7 @@
       "knowledge": true
     }
   ],
-  "archive_count": 10182,
-  "news_count": 99,
+  "archive_count": 10185,
+  "news_count": 107,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
