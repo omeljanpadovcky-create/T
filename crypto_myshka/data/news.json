@@ -82,7 +82,25 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-06T09:14:35Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "Better Markets said the CFTC’s proposed framework to bring certain cryptocurrency transactions and exchanges under its oversight will leave investors less protected than under the SEC.",
+        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "market_effect": "Невизначений / змішаний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+        "confidence": "низька",
+        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "5117f459828f5e",
@@ -118,7 +136,25 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-06T09:15:25Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "NYSE’s Parent Just Filed to Tokenize 63 US Stocks on a Crypto-Native Exchange — And the SEC Already Gave It Permission &nbsp;&nbsp; Yahoo Finance",
+        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "market_effect": "Невизначений / змішаний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+        "confidence": "низька",
+        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "8b47bfc4b98168",
@@ -171,8 +207,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-06T02:22:16Z"
+      "analysis_retry_count": 6,
+      "analysis_last_attempt_at": "2026-10-06T09:16:24Z"
     },
     {
       "id": "605d20f1c40de7",
@@ -596,8 +632,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 6,
-      "analysis_last_attempt_at": "2026-10-06T02:23:11Z"
+      "analysis_retry_count": 9,
+      "analysis_last_attempt_at": "2026-10-06T09:16:37Z"
     },
     {
       "id": "b37d40463d410a",
@@ -927,8 +963,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 6,
-      "analysis_last_attempt_at": "2026-10-06T02:23:18Z"
+      "analysis_retry_count": 9,
+      "analysis_last_attempt_at": "2026-10-06T09:17:26Z"
     },
     {
       "id": "082a2f2072eeb7",
@@ -980,8 +1016,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 11,
-      "analysis_last_attempt_at": "2026-10-06T02:24:24Z"
+      "analysis_retry_count": 14,
+      "analysis_last_attempt_at": "2026-10-06T09:18:32Z"
     },
     {
       "id": "c194d038c41720",
@@ -1468,7 +1504,25 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-06T09:15:31Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "OKX Money lets users hold, send and spend dollar-backed stablecoins, with qualifying USDG balances earning up to 10% APY.",
+        "why_it_matters": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "market_effect": "Невизначений / змішаний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
+        "confidence": "низька",
+        "short_conclusion": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "ae33cd5ed92bb7",
@@ -1528,8 +1582,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-06T02:22:20Z"
+      "analysis_retry_count": 6,
+      "analysis_last_attempt_at": "2026-10-06T09:16:30Z"
     },
     {
       "id": "30c9b0c6732500",
@@ -1689,8 +1743,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 6,
-      "analysis_last_attempt_at": "2026-10-06T02:24:10Z"
+      "analysis_retry_count": 9,
+      "analysis_last_attempt_at": "2026-10-06T09:17:33Z"
     },
     {
       "id": "178e5250c1bc93",
@@ -2043,8 +2097,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 9,
-      "analysis_last_attempt_at": "2026-10-06T02:24:17Z"
+      "analysis_retry_count": 12,
+      "analysis_last_attempt_at": "2026-10-06T09:18:25Z"
     },
     {
       "id": "4c940020b4f6d8",
@@ -5023,5 +5077,14 @@
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     }
-  ]
+  ],
+  "jev_enabled": true,
+  "jev_status": "complete",
+  "jev_provider": "apinex",
+  "jev_model": "free/gpt-5.6-luna",
+  "jev_analyzed_count": 42,
+  "jev_analyzed_this_run": 0,
+  "jev_pending_count": 0,
+  "jev_llm_pending_count": 10,
+  "jev_analysis_errors": 10
 }
