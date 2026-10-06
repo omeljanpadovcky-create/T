@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-06T09:04:41.721307+00:00",
+  "generated_at": "2026-10-06T09:07:05.427050+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,12 +26,12 @@
       "ok": true,
       "count": 10189,
       "complete": true,
-      "updated_at": "2026-10-06T09:04:37.466624+00:00",
+      "updated_at": "2026-10-06T09:07:01.214557+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 112,
+      "count": 118,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -48,36 +48,36 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 86034,
-        "usd_24h_change": -0.12485151976909846
+        "usd": 85997,
+        "usd_24h_change": -0.13073943735429394
       },
       "ethereum": {
-        "usd": 2716.8,
-        "usd_24h_change": -0.13364063312448662
+        "usd": 2716.14,
+        "usd_24h_change": -0.17014527503831686
       },
       "optimism": {
-        "usd": 0.135266,
-        "usd_24h_change": -0.010552636598390988
+        "usd": 0.135221,
+        "usd_24h_change": -0.10504404746037611
       },
       "solana": {
-        "usd": 120.59,
-        "usd_24h_change": -0.34107948754038525
+        "usd": 120.52,
+        "usd_24h_change": -0.3975443403864988
       },
       "lido-dao": {
-        "usd": 0.469055,
-        "usd_24h_change": -0.5606666219878689
+        "usd": 0.468581,
+        "usd_24h_change": -0.540825216418975
       },
       "ripple": {
         "usd": 1.51,
-        "usd_24h_change": -0.5814561601879973
+        "usd_24h_change": -0.6544477804253793
       },
       "binancecoin": {
-        "usd": 783.17,
-        "usd_24h_change": -0.6968965873454769
+        "usd": 783.14,
+        "usd_24h_change": -0.6981038264402426
       },
       "dogecoin": {
-        "usd": 0.094995,
-        "usd_24h_change": -1.8645359866288884
+        "usd": 0.094959,
+        "usd_24h_change": -1.920913043964655
       }
     }
   },
@@ -5201,7 +5201,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "What are options and how to buy them on Binance in 2026?",
+      "title": "Що таке опціони та як їх купити на Binance у 2026 році?",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=vQw_-w1Dy7o",
       "published_at": null,
@@ -5265,7 +5265,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Which Crypto to Buy in 2026? 11 Coins I'm Looking At Right Now",
+      "title": "Яку крипту купляти у 2026 році? 11 монет, які я зараз розглядаю",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=cmpvbcc27K0",
       "published_at": null,
@@ -5313,7 +5313,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Bitcoin predictions for 2026. Where to expect and where will it go?",
+      "title": "Біткоін прогнози на 2026 рік. Куди чекати та куди піде?",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=5ynu9H81pww",
       "published_at": null,
@@ -5345,7 +5345,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Training video on trading using the example of analyzing HYPE, HBAR, IO, IMX, NEAR coins",
+      "title": "Навчальний ролик з трейдингу на прикладі розбору монет HYPE, HBAR, IO, IMX, NEAR",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=Xrup8HvN2JI",
       "published_at": null,
@@ -5361,7 +5361,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Cryptocurrency overview WLD, STRK, APT, SOL, TWT, 5IRE, MYX, ALEX, VANA, FLIP, PUFFER - What to c...",
+      "title": "Огляд критовалют WLD, STRK, APT, SOL, TWT, 5IRE, MYX, ALEX, VANA, FLIP, PUFFER - Що вибрати?",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=FHdXLcNg6N8",
       "published_at": null,
@@ -5377,7 +5377,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Register on Binance from your phone in 5 minutes and get a $50 bonus!",
+      "title": "Реєстрація на Binance з телефону за 5 хвилин та бонус 50$!",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=XoKZS7pyxUQ",
       "published_at": null,
@@ -5425,7 +5425,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "LESSON 2️⃣ - Beginner Trading Course 🟢 Trend Movement, Market Structure and Market Structure Brea...",
+      "title": "УРОК 2️⃣ - Курс з Трейдингу «Новачок» 🟢 Трендовий рух, Структура ринку та Злам Ринкової Структури",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=mgrv4cMisOw",
       "published_at": null,
@@ -6219,6 +6219,6 @@
     }
   ],
   "archive_count": 10189,
-  "news_count": 112,
+  "news_count": 118,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
