@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-05T22:04:42.386747+00:00",
+  "generated_at": "2026-10-06T02:16:58.850980+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,12 +26,12 @@
       "ok": true,
       "count": 10186,
       "complete": true,
-      "updated_at": "2026-10-05T22:04:37.617778+00:00",
+      "updated_at": "2026-10-06T02:16:54.702920+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 111,
+      "count": 112,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -48,36 +48,36 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 85962,
-        "usd_24h_change": -0.22747430743589406
+        "usd": 85453,
+        "usd_24h_change": -1.395654663921965
       },
       "ethereum": {
-        "usd": 2718.72,
-        "usd_24h_change": 0.29622760421515976
+        "usd": 2702.22,
+        "usd_24h_change": -1.1515462647416996
       },
       "optimism": {
-        "usd": 0.140137,
-        "usd_24h_change": 4.3604561443313505
+        "usd": 0.133876,
+        "usd_24h_change": -1.4208768530775193
       },
       "solana": {
-        "usd": 121.04,
-        "usd_24h_change": -0.7678005278296773
+        "usd": 120.39,
+        "usd_24h_change": -1.0063223929007403
       },
       "lido-dao": {
-        "usd": 0.475153,
-        "usd_24h_change": 3.1726417341127444
+        "usd": 0.459131,
+        "usd_24h_change": -2.252741944587195
       },
       "ripple": {
-        "usd": 1.51,
-        "usd_24h_change": -0.311930778693217
+        "usd": 1.5,
+        "usd_24h_change": -1.9710831582430077
       },
       "binancecoin": {
-        "usd": 787.65,
-        "usd_24h_change": -0.8906592076796831
+        "usd": 780.32,
+        "usd_24h_change": -3.4101490012214066
       },
       "dogecoin": {
-        "usd": 0.095933,
-        "usd_24h_change": -1.1492998401040488
+        "usd": 0.094696,
+        "usd_24h_change": -2.11744625830095
       }
     }
   },
@@ -5185,7 +5185,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "How to earn on cryptocurrency in 2026 — passive income on Binance",
+      "title": "Як заробляти на криптовалюті у 2026 році — пасивний дохід на Binance",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=seFNnvpftz4",
       "published_at": null,
@@ -5265,7 +5265,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Which Crypto to Buy in 2026? 11 Coins I'm Looking At Right Now",
+      "title": "Яку крипту купляти у 2026 році? 11 монет, які я зараз розглядаю",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=cmpvbcc27K0",
       "published_at": null,
@@ -5393,7 +5393,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Earn money online without investment that even a schoolkid can handle",
+      "title": "Заробіток без вкладень в інтернеті з яким впорається навіть школяр",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=KQd67gY-fi0",
       "published_at": null,
@@ -5409,7 +5409,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "УРОК 3️⃣ - Курс з Трейдингу «Новачок» 🟢 Рівні підтримки та опору в технічному аналізі",
+      "title": "LESSON 3️⃣ - Beginner Trading Course 🟢 Support and resistance levels in technical analysis",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=STbHImOioJI",
       "published_at": null,
@@ -5425,7 +5425,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "LESSON 2️⃣ - Beginner Trading Course 🟢 Trend Movement, Market Structure and Market Structure Brea...",
+      "title": "УРОК 2️⃣ - Курс з Трейдингу «Новачок» 🟢 Трендовий рух, Структура ринку та Злам Ринкової Структури",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=mgrv4cMisOw",
       "published_at": null,
@@ -6130,7 +6130,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Work from home or remote work from home without experience vacancies (remote work on the Internet)",
+      "title": "Робота на дому або віддалена робота на дому без досвіду вакансії (віддалена робота в інтернеті)",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=_S0NDuurrpE",
       "published_at": null,
@@ -6219,6 +6219,6 @@
     }
   ],
   "archive_count": 10186,
-  "news_count": 111,
+  "news_count": 112,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
