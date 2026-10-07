@@ -97,12 +97,27 @@ function riskLabel(n){return n<45?'Низький ризик':n<70?'Середн
 function executionGuard(x){
   const txt=((x.title||'')+' '+(x.summary||'')+' '+((x.reasons||[]).join(' '))).toLowerCase();
   const leveraged=/\b(cfd|perp|perpetual|futures?|ф'ючерс|фʼючерс|фючерс|опціон|options?|leverage|плеч|lot\b|марж)/i.test(txt);
+  const launchpool=/\blaunchpool\b|лаунчпул|\bpoolx\b/i.test(txt);
   const directTrade=/\b(відкрити|угод|лонг|шорт|long|short|buy|sell|торгів)/i.test(txt);
   const risky=Number(x.risk||65)>=70 || x.mode==='trading' || leveraged || directTrade;
   let verdict='ПОТРІБНА ПЕРЕВІРКА', cls='hold';
   if(leveraged || x.mode==='trading'){verdict='ТІЛЬКИ АНАЛІЗ',cls='stop'}
   else if(!risky && Number(x.risk||65)<45){verdict='МОЖНА ПЕРЕВІРИТИ',cls='ok'}
   const leverage=leveraged?'є / можливе — перевірити умови':'не виявлено у тексті';
+
+  if(launchpool){
+    return '<div class="guard">'+
+      '<div class="guardHead"><b>🐭 Launchpool-перевірка</b><span class="guardVerdict '+cls+'">'+verdict+'</span></div>'+
+      '<div class="guardGrid">'+
+        '<div class="guardCell"><small>Stablecoin-пул</small><span>USDT/USDC мають нижчий price risk, але лишається ризик платформи й умов</span></div>'+
+        '<div class="guardCell"><small>Токен-пули</small><span>BLKHION / MAG7XON / XAUT / GT та інші можуть падати в ціні під час стейкінгу</span></div>'+
+        '<div class="guardCell"><small>Плече</small><span>'+leverage+'</span></div>'+
+        '<div class="guardCell"><small>APR</small><span>річний і плаваючий; не дорівнює прибутку за весь період акції</span></div>'+
+      '</div>'+
+      '<div class="guardRule"><strong>Оцінюй кожен пул окремо.</strong> Низький ризик stablecoin-пулу не означає, що весь Launchpool автоматично низькоризиковий.</div>'+
+    '</div>';
+  }
+
   return '<div class="guard">'+
     '<div class="guardHead"><b>🐭 Перевірка перед дією</b><span class="guardVerdict '+cls+'">'+verdict+'</span></div>'+
     '<div class="guardGrid">'+
