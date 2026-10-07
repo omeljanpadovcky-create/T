@@ -47,29 +47,55 @@ def classify(text: str) -> tuple[str, int, list[str]]:
         "leverage", "плеч", "margin", "марж", "xauusd", " lot"
     ]
     opportunity_terms = [
-        "airdrop","аірдроп","ретродроп","launchpool","лаунчпул","launchpad",
-        "токенсейл","testnet","тестнет","ноди","promo","промк"
+        "airdrop","аірдроп","ретродроп","launchpad","токенсейл",
+        "testnet","тестнет","ноди","promo","промк"
     ]
+    launchpool_terms = ["launchpool","лаунчпул","poolx"]
     trade_required_terms = [
         "spot-трейд", "spot trade", "торговий обсяг", "торгівельний обсяг",
         "торгуємо", "зробити перший", "trade ", "трейд"
     ]
+    stable_assets = {"usdt","usdc","dai","fdusd","usde","usds","tusd"}
 
     if any(k in t for k in derivative_terms):
         mode="trading"; risk=90
         reasons.append("деривативи/плече: потрібна перевірка max loss, margin і ліквідації")
+
+    elif any(k in t for k in launchpool_terms):
+        mode="opportunities"
+        pool_assets = re.findall(r"(?:пул|pool)\s+([a-z0-9]{2,15})", t)
+        nonstable_pools = [x.upper() for x in pool_assets if x not in stable_assets]
+
+        if nonstable_pools:
+            risk=55
+            reasons.append("Launchpool із кількома пулами: stablecoin-пул має нижчий price risk, токен-пули — вищий")
+            reasons.append("ризик ціни застейканого активу: " + ", ".join(nonstable_pools[:4]))
+        else:
+            risk=35
+            reasons.append("Launchpool/staking без плеча; перевірити умови та доступний пул")
+
+        if "apr" in t:
+            reasons.append("APR річний і плаваючий; це не гарантований прибуток за період акції")
+
+        if any(k in t for k in trade_required_terms):
+            risk=max(risk,55)
+            reasons.append("для участі/ліміту може вимагатися торговий обсяг")
+
     elif any(k in t for k in opportunity_terms):
         mode="opportunities"; risk=35
         reasons.append("подія/активність, а не пряма ринкова ставка")
         if any(k in t for k in trade_required_terms):
             risk=55
             reasons.append("промо вимагає торгівлі/обсягу; винагорода не гарантована")
+
     elif any(k in t for k in ["ф'ючерс","ф’ючерс","long","short","лонг","шорт","стоп","тейк","памп","позиці"]):
         mode="trading"; risk=80
         reasons.append("активна торгівля/позиція")
+
     elif any(k in t for k in ["портфель","інвест","докуп","купівля","булран","dca"]):
         mode="portfolio"; risk=55
         reasons.append("портфельна/довша теза")
+
     else:
         mode="speculation"; risk=65
         reasons.append("криптоідея без чіткої портфельної рамки")
