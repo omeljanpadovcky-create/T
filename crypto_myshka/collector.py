@@ -38,9 +38,32 @@ def clean(s: str) -> str:
 def classify(text: str) -> tuple[str, int, list[str]]:
     t = text.lower()
     reasons=[]
-    if any(k in t for k in ["airdrop","аірдроп","ретродроп","launchpool","лаунчпул","launchpad","токенсейл","testnet","тестнет","ноди","promo","промк"]):
+
+    # Safety priority: derivatives/leverage must never be downgraded merely
+    # because the same post also contains the words promo/airdrop.
+    derivative_terms = [
+        "cfd", "perp option", "perp options", "perpetual", "options", "option",
+        "опціон", "ф'ючерс", "ф’ючерс", "фючерс", "futures", "future",
+        "leverage", "плеч", "margin", "марж", "xauusd", " lot"
+    ]
+    opportunity_terms = [
+        "airdrop","аірдроп","ретродроп","launchpool","лаунчпул","launchpad",
+        "токенсейл","testnet","тестнет","ноди","promo","промк"
+    ]
+    trade_required_terms = [
+        "spot-трейд", "spot trade", "торговий обсяг", "торгівельний обсяг",
+        "торгуємо", "зробити перший", "trade ", "трейд"
+    ]
+
+    if any(k in t for k in derivative_terms):
+        mode="trading"; risk=90
+        reasons.append("деривативи/плече: потрібна перевірка max loss, margin і ліквідації")
+    elif any(k in t for k in opportunity_terms):
         mode="opportunities"; risk=35
-        reasons.append("подія/активність, а не ринкова ставка")
+        reasons.append("подія/активність, а не пряма ринкова ставка")
+        if any(k in t for k in trade_required_terms):
+            risk=55
+            reasons.append("промо вимагає торгівлі/обсягу; винагорода не гарантована")
     elif any(k in t for k in ["ф'ючерс","ф’ючерс","long","short","лонг","шорт","стоп","тейк","памп","позиці"]):
         mode="trading"; risk=80
         reasons.append("активна торгівля/позиція")
