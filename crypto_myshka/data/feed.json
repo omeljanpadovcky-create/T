@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-07T19:21:26.334493+00:00",
+  "generated_at": "2026-10-07T23:38:21.295315+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,12 +26,12 @@
       "ok": true,
       "count": 10199,
       "complete": true,
-      "updated_at": "2026-10-07T19:21:20.950761+00:00",
+      "updated_at": "2026-10-07T23:38:16.217802+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 128,
+      "count": 106,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -43,41 +43,41 @@
       "PENDLE",
       "ARB",
       "LDO",
-      "ICP",
-      "XRP"
+      "BNB",
+      "DOGE"
     ],
     "prices": {
       "bitcoin": {
-        "usd": 83375,
-        "usd_24h_change": -2.4588936277492692
+        "usd": 83363,
+        "usd_24h_change": -2.4559829067629098
       },
       "ethereum": {
-        "usd": 2561.21,
-        "usd_24h_change": -4.6229414240525095
+        "usd": 2576.73,
+        "usd_24h_change": -4.440282878145199
       },
       "solana": {
-        "usd": 116.03,
-        "usd_24h_change": -3.659681863737896
+        "usd": 116.3,
+        "usd_24h_change": -3.5003462698890773
       },
       "pendle": {
-        "usd": 2.21,
-        "usd_24h_change": -6.556788557889259
+        "usd": 2.25,
+        "usd_24h_change": -5.422540114616703
       },
       "arbitrum": {
-        "usd": 0.182147,
-        "usd_24h_change": -10.318813217116832
+        "usd": 0.185349,
+        "usd_24h_change": -7.775951071956742
       },
       "lido-dao": {
-        "usd": 0.434343,
-        "usd_24h_change": -7.081760530241316
+        "usd": 0.459527,
+        "usd_24h_change": -3.1139548328582407
       },
-      "internet-computer": {
-        "usd": 3.16,
-        "usd_24h_change": -7.2252198817850815
+      "binancecoin": {
+        "usd": 773.4,
+        "usd_24h_change": -0.7283725383014574
       },
-      "ripple": {
-        "usd": 1.43,
-        "usd_24h_change": -4.815024910392467
+      "dogecoin": {
+        "usd": 0.088885,
+        "usd_24h_change": -5.111181424781874
       }
     }
   },
@@ -5188,7 +5188,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "OKX Registration 2026: How to Create an Account + 30 Days of VIP1",
+      "title": "OKX реєстрація 2026: як створити акаунт + VIP1 на 30 днів",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=CxNvknaqIME",
       "published_at": null,
@@ -5236,7 +5236,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "How to Buy Stocks in Ukraine in 2026? A Step-by-Step Guide",
+      "title": "Як купити акції в Україні у 2026 році? Покрокова інструкція",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=RSdKKuXNZ5k",
       "published_at": null,
@@ -5300,7 +5300,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "How to Buy S&P 500 on Binance | bStocks — A Simple Guide",
+      "title": "Як купити S&P 500 на Binance | bStocks — проста інструкція",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=6oL0a355KgI",
       "published_at": null,
@@ -5396,7 +5396,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Register on Binance from your phone in 5 minutes and get a $50 bonus!",
+      "title": "Реєстрація на Binance з телефону за 5 хвилин та бонус 50$!",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=XoKZS7pyxUQ",
       "published_at": null,
@@ -6239,6 +6239,6 @@
     }
   ],
   "archive_count": 10199,
-  "news_count": 128,
+  "news_count": 106,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
