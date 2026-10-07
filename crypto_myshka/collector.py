@@ -64,7 +64,9 @@ def classify(text: str) -> tuple[str, int, list[str]]:
     elif any(k in t for k in launchpool_terms):
         mode="opportunities"
         pool_assets = re.findall(r"(?:пул|pool)\s+([a-z0-9]{2,15})", t)
-        nonstable_pools = [x.upper() for x in pool_assets if x not in stable_assets]
+        stake_assets = re.findall(r"(?:розміщуючи|закидаємо|стейка(?:ємо|ти)?|stake|staking)\s+([a-z0-9]{2,15})", t)
+        detected_assets = pool_assets + stake_assets
+        nonstable_pools = sorted({x.upper() for x in detected_assets if x not in stable_assets})
 
         if nonstable_pools:
             risk=55
