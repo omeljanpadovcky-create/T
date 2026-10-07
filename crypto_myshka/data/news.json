@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-07T16:50:47.929030+00:00",
+  "generated_at": "2026-10-07T17:06:04.999964+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -46,17 +46,17 @@
       "role": "discovery"
     }
   },
-  "raw_item_count": 208,
-  "item_count": 111,
+  "raw_item_count": 206,
+  "item_count": 110,
   "items": [
     {
-      "id": "9da8700e2fa48a",
+      "id": "98ac3a391b80df",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "Jonathan Spalletta convicted in $55 million crypto hack - Yahoo",
-      "summary": "Jonathan Spalletta convicted in $55 million crypto hack &nbsp;&nbsp; Yahoo",
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPMHlYSmc1TzNFeUdPWmpZanNRZmE1U3dXZmRWQW05WS1IY1lvWEZ1bmtpOXlHN2ZWRjR0LUdaeGdwMkxFQWc4UUZEOE01T0hTUlExU2RfUi1fMUhuamR1dnFvZWpCYVhyZXFCemhDT0ZlalR6TUlFeXZER0JFVW54MlFZOGNKWGlZdUdwdWdibHM1ZlJoa2ZuVQ?oc=5",
-      "published_at": "2026-10-07T16:20:43+00:00",
+      "title": "Jonathan Spalletta convicted in $55 million crypto hack - Quartz",
+      "summary": "Jonathan Spalletta convicted in $55 million crypto hack &nbsp;&nbsp; Quartz",
+      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPOHJycmpKQlFoWkdMNm9lX1gyQWhwTGU3cnJkQ1IxN29GRVJjUHlXeElLSjdQLUhYa3lGMnY3cDJTaHVFMHBtUHJaQ05FSmJQa1gwVFlLYXBrd1pxX2QxNGZNU2J2b205N2lDS05URFI3RGxTbTdEb29hUHVkcWpsdGtkYmF4bDQtZ1BkMzZ1dTM?oc=5",
+      "published_at": "2026-10-07T16:26:28+00:00",
       "assets": [],
       "topics": [
         "security"
@@ -71,7 +71,7 @@
       "links": [
         {
           "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPMHlYSmc1TzNFeUdPWmpZanNRZmE1U3dXZmRWQW05WS1IY1lvWEZ1bmtpOXlHN2ZWRjR0LUdaeGdwMkxFQWc4UUZEOE01T0hTUlExU2RfUi1fMUhuamR1dnFvZWpCYVhyZXFCemhDT0ZlalR6TUlFeXZER0JFVW54MlFZOGNKWGlZdUdwdWdibHM1ZlJoa2ZuVQ?oc=5"
+          "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPOHJycmpKQlFoWkdMNm9lX1gyQWhwTGU3cnJkQ1IxN29GRVJjUHlXeElLSjdQLUhYa3lGMnY3cDJTaHVFMHBtUHJaQ05FSmJQa1gwVFlLYXBrd1pxX2QxNGZNU2J2b205N2lDS05URFI3RGxTbTdEb29hUHVkcWpsdGtkYmF4bDQtZ1BkMzZ1dTM?oc=5"
         }
       ],
       "confidence_label": "Discovery: потребує підтвердження",
@@ -633,6 +633,49 @@
       "analysis_level": "llm"
     },
     {
+      "id": "7bc8189e501176",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "U.S. government moves over $100 million in BTC and BNB. A sale hasn't been confirmed",
+      "summary": "",
+      "url": "https://www.coindesk.com/markets/2026/10/07/u-s-government-moves-over-usd100-million-in-btc-and-bnb-a-sale-hasn-t-been-confirmed",
+      "published_at": "2026-10-07T16:56:56+00:00",
+      "assets": [
+        "BTC",
+        "BNB"
+      ],
+      "topics": [
+        "exchange"
+      ],
+      "impact": 2,
+      "impact_label": "Середній вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 2,
+      "publishers": [
+        "CoinDesk",
+        "Decrypt"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/markets/2026/10/07/u-s-government-moves-over-usd100-million-in-btc-and-bnb-a-sale-hasn-t-been-confirmed"
+        },
+        {
+          "publisher": "Decrypt",
+          "url": "https://decrypt.co/380313/us-government-moves-103-million-seized-bitcoin-bnb"
+        }
+      ],
+      "confidence_label": "Є незалежне підтвердження",
+      "jev_take": "Біржова новина може впливати на ліквідність і доступність BTC, BNB; важливо відділити операційне оновлення від системного ризику.",
+      "watch_for": "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Є незалежне підтвердження",
+        "Ринковий тон: Невизначений / змішаний",
+        "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
+      ]
+    },
+    {
       "id": "b4651e975bfb36",
       "source": "jev_analysis",
       "mode": "news",
@@ -928,42 +971,6 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "5016a3699444fd",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "U.S. government moves over $100 million in BTC and BNB. A sale hasn't been confirmed",
-      "summary": "",
-      "url": "https://www.coindesk.com/markets/2026/10/07/u-s-government-moves-over-usd100-million-in-btc-and-bnb-a-sale-hasn-t-been-confirmed",
-      "published_at": "2026-10-07T05:58:25+00:00",
-      "assets": [
-        "BTC",
-        "BNB"
-      ],
-      "topics": [],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "CoinDesk"
-      ],
-      "links": [
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/markets/2026/10/07/u-s-government-moves-over-usd100-million-in-btc-and-bnb-a-sale-hasn-t-been-confirmed"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується BTC, BNB, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     },
     {
@@ -3653,39 +3660,6 @@
         {
           "publisher": "Decrypt",
           "url": "https://decrypt.co/380050/morning-minute-uptober-off-to-a-green-start"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "b51bb872bd306c",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Greek Soldiers Among Alleged Leaders of $8M Crypto Pyramid Scheme",
-      "summary": "An association for AI enthusiasts was allegedly the recruiting vehicle, and two anonymous tips to a government portal started the case.",
-      "url": "https://decrypt.co/380040/greek-soldiers-among-alleged-leaders-of-8m-crypto-pyramid-scheme",
-      "published_at": "2026-10-05T11:18:01+00:00",
-      "assets": [],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/380040/greek-soldiers-among-alleged-leaders-of-8m-crypto-pyramid-scheme"
         }
       ],
       "confidence_label": "Поки одне джерело",

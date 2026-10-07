@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-07T16:50:54.155472+00:00",
+  "generated_at": "2026-10-07T17:06:11.608522+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,12 +26,12 @@
       "ok": true,
       "count": 10199,
       "complete": true,
-      "updated_at": "2026-10-07T16:50:49.852325+00:00",
+      "updated_at": "2026-10-07T17:06:07.256476+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 111,
+      "count": 110,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -48,36 +48,36 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 83370,
-        "usd_24h_change": -2.684265363714285
+        "usd": 83489,
+        "usd_24h_change": -2.4342893558077425
       },
       "ethereum": {
-        "usd": 2565.71,
-        "usd_24h_change": -4.943350324394944
+        "usd": 2569.75,
+        "usd_24h_change": -4.6721109537978975
       },
       "solana": {
-        "usd": 116.8,
-        "usd_24h_change": -3.0205087315415273
+        "usd": 116.92,
+        "usd_24h_change": -2.8518294796389734
       },
       "pendle": {
         "usd": 2.25,
-        "usd_24h_change": -6.769278117096023
+        "usd_24h_change": -6.020594224331551
       },
       "arbitrum": {
-        "usd": 0.183499,
-        "usd_24h_change": -8.661279881050788
+        "usd": 0.184033,
+        "usd_24h_change": -8.486972027584567
       },
       "lido-dao": {
-        "usd": 0.430818,
-        "usd_24h_change": -7.258527695715804
+        "usd": 0.433465,
+        "usd_24h_change": -6.486452288402356
       },
       "binancecoin": {
-        "usd": 770.85,
-        "usd_24h_change": -1.5601284950635332
+        "usd": 771.72,
+        "usd_24h_change": -1.1315301281734484
       },
       "dogecoin": {
-        "usd": 0.088648,
-        "usd_24h_change": -6.931044729840664
+        "usd": 0.088857,
+        "usd_24h_change": -6.5282370996759695
       }
     }
   },
@@ -382,7 +382,7 @@
       "mode": "opportunities",
       "risk": 55,
       "reasons": [
-        "Launchpool із кількома/ризиковими пулами: stablecoin-пул має нижчий price risk, токен-пули — вищий",
+        "Launchpool із кількома пулами: stablecoin-пул має нижчий price risk, токен-пули — вищий",
         "ризик ціни застейканого активу: BLKHION, MAG7XON",
         "APR річний і плаваючий; це не гарантований прибуток за період акції"
       ],
@@ -463,7 +463,7 @@
       "mode": "opportunities",
       "risk": 55,
       "reasons": [
-        "Launchpool із кількома/ризиковими пулами: stablecoin-пул має нижчий price risk, токен-пули — вищий",
+        "Launchpool із кількома пулами: stablecoin-пул має нижчий price risk, токен-пули — вищий",
         "ризик ціни застейканого активу: ETH"
       ],
       "title": "📈 Новий PoolX Bitget - Роздача від проекту USDT Заробляйте USDT, розміщуючи ETH у Launchpool. Якщо у вас є ця криптовалю…",
@@ -581,7 +581,7 @@
       "mode": "opportunities",
       "risk": 55,
       "reasons": [
-        "Launchpool із кількома/ризиковими пулами: stablecoin-пул має нижчий price risk, токен-пули — вищий",
+        "Launchpool із кількома пулами: stablecoin-пул має нижчий price risk, токен-пули — вищий",
         "ризик ціни застейканого активу: GT, XAUT",
         "APR річний і плаваючий; це не гарантований прибуток за період акції"
       ],
@@ -5204,7 +5204,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Як заробляти на криптовалюті у 2026 році — пасивний дохід на Binance",
+      "title": "How to earn on cryptocurrency in 2026 — passive income on Binance",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=seFNnvpftz4",
       "published_at": null,
@@ -5220,7 +5220,7 @@
         "деривативи/плече: потрібна перевірка max loss, margin і ліквідації",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Що таке опціони та як їх купити на Binance у 2026 році?",
+      "title": "What are options and how to buy them on Binance in 2026?",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=vQw_-w1Dy7o",
       "published_at": null,
@@ -5236,7 +5236,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Як купити акції в Україні у 2026 році? Покрокова інструкція",
+      "title": "How to Buy Stocks in Ukraine in 2026? A Step-by-Step Guide",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=RSdKKuXNZ5k",
       "published_at": null,
@@ -5252,7 +5252,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Як заробляти на криптовалюті на OKX — пасивний дохід для новачків",
+      "title": "How to Earn Crypto on OKX — Passive Income for Beginners",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=RGbcPPKIW5E",
       "published_at": null,
@@ -5268,7 +5268,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Як заробити на Binance від $15 до $100 на рівному місці!",
+      "title": "How to Make from $15 to $100 on Binance Out of Nowhere!",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=rmrkuRMutF0",
       "published_at": null,
@@ -5284,7 +5284,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Яку крипту купляти у 2026 році? 11 монет, які я зараз розглядаю",
+      "title": "Which Crypto to Buy in 2026? 11 Coins I'm Looking At Right Now",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=cmpvbcc27K0",
       "published_at": null,
@@ -5348,7 +5348,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Бінанс для новачків або як при реєстрації заробити від 60$ до 7000$",
+      "title": "Binance for beginners or how to earn from $60 to $7,000 upon registration",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=bYCRLR5t6aU",
       "published_at": null,
@@ -5380,7 +5380,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Огляд критовалют WLD, STRK, APT, SOL, TWT, 5IRE, MYX, ALEX, VANA, FLIP, PUFFER - Що вибрати?",
+      "title": "Cryptocurrency overview WLD, STRK, APT, SOL, TWT, 5IRE, MYX, ALEX, VANA, FLIP, PUFFER - What to c...",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=FHdXLcNg6N8",
       "published_at": null,
@@ -5396,7 +5396,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Реєстрація на Binance з телефону за 5 хвилин та бонус 50$!",
+      "title": "Register on Binance from your phone in 5 minutes and get a $50 bonus!",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=XoKZS7pyxUQ",
       "published_at": null,
@@ -5412,7 +5412,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Заробіток без вкладень в інтернеті з яким впорається навіть школяр",
+      "title": "Earn money online without investment that even a schoolkid can handle",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=KQd67gY-fi0",
       "published_at": null,
@@ -5473,7 +5473,7 @@
       "mode": "opportunities",
       "risk": 35,
       "reasons": [
-        "подія/активність, а не пряма ринкова ставка",
+        "Launchpool/staking без плеча; перевірити умови та доступний пул",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
       "title": "Заробіток на BingX Launchpool 🚀 Скільки можна заробити на біржі BingX в пулі?!",
@@ -5615,9 +5615,10 @@
       "id": "8193160b850764",
       "source": "youtube",
       "mode": "opportunities",
-      "risk": 35,
+      "risk": 55,
       "reasons": [
-        "подія/активність, а не пряма ринкова ставка",
+        "Launchpool із кількома пулами: stablecoin-пул має нижчий price risk, токен-пули — вищий",
+        "ризик ціни застейканого активу: ENA",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
       "title": "Фармінг безкоштовних монет на Бінанс - Новий Binance Лаунчпул ENA (Ethena) | Скільки дасть іксів?🚀",
@@ -5665,7 +5666,7 @@
       "mode": "opportunities",
       "risk": 35,
       "reasons": [
-        "подія/активність, а не пряма ринкова ставка",
+        "Launchpool/staking без плеча; перевірити умови та доступний пул",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
       "title": "Як заробити на Binance Launchpool | Гарантований додатковий заробіток на криптовалюті без ризиків",
@@ -6238,6 +6239,6 @@
     }
   ],
   "archive_count": 10199,
-  "news_count": 111,
+  "news_count": 110,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
