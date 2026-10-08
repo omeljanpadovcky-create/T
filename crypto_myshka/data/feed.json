@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-08T17:26:45.233194+00:00",
+  "generated_at": "2026-10-08T22:19:49.808565+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -24,14 +24,14 @@
     },
     "telegram_archive": {
       "ok": true,
-      "count": 10208,
+      "count": 10211,
       "complete": true,
-      "updated_at": "2026-10-08T17:26:40.342366+00:00",
+      "updated_at": "2026-10-08T22:19:45.469006+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 105,
+      "count": 103,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -43,45 +43,79 @@
       "PENDLE",
       "XRP",
       "BNB",
-      "DOGE",
-      "ADA"
+      "DOGE"
     ],
     "prices": {
       "bitcoin": {
-        "usd": 80524,
-        "usd_24h_change": -3.3093576759065955
+        "usd": 81784,
+        "usd_24h_change": -1.695663991741607
       },
       "ethereum": {
-        "usd": 2411.61,
-        "usd_24h_change": -5.885349920817173
+        "usd": 2477.36,
+        "usd_24h_change": -3.427173704250296
       },
       "solana": {
-        "usd": 106.42,
-        "usd_24h_change": -8.591809151363226
+        "usd": 110.5,
+        "usd_24h_change": -4.485957665364022
       },
       "pendle": {
-        "usd": 2.02,
-        "usd_24h_change": -9.76139460273234
+        "usd": 2.1,
+        "usd_24h_change": -5.209891995380493
       },
       "ripple": {
-        "usd": 1.32,
-        "usd_24h_change": -6.712214417481201
+        "usd": 1.38,
+        "usd_24h_change": -2.374046767811102
       },
       "binancecoin": {
-        "usd": 719.2,
-        "usd_24h_change": -6.660990794995866
+        "usd": 735.14,
+        "usd_24h_change": -4.491897233757168
       },
       "dogecoin": {
-        "usd": 0.081411,
-        "usd_24h_change": -7.848010800761636
-      },
-      "cardano": {
-        "usd": 0.225519,
-        "usd_24h_change": -11.572476581050092
+        "usd": 0.084437,
+        "usd_24h_change": -4.7312211037425564
       }
     }
   },
   "items": [
+    {
+      "id": "03ce21c2b23bfa",
+      "source": "telegram_main",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки"
+      ],
+      "title": "Пріорітет звісно я б хоті би бачити, що від 80200, або від 79400 ми розвернемося та підемо на зростання",
+      "summary": "Пріорітет звісно я б хоті би бачити, що від 80200, або від 79400 ми розвернемося та підемо на зростання",
+      "url": "https://t.me/it_statti/7366",
+      "published_at": "2026-10-08T19:14:43+00:00"
+    },
+    {
+      "id": "139629f5cbed36",
+      "source": "telegram_main",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки"
+      ],
+      "title": "я про цілі які я зазначав вище по альті 24 серпня",
+      "summary": "я про цілі які я зазначав вище по альті 24 серпня",
+      "url": "https://t.me/it_statti/7365",
+      "published_at": "2026-10-08T19:07:37+00:00"
+    },
+    {
+      "id": "54209f798bec2e",
+      "source": "telegram_main",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки"
+      ],
+      "title": "🎥 Яку крипту купляти у 2026 році? 11 монет, які я зараз розглядаю #відео 💎 Відео на Ютуб за посиланням 👉 https://youtu.b…",
+      "summary": "🎥 Яку крипту купляти у 2026 році? 11 монет, які я зараз розглядаю #відео 💎 Відео на Ютуб за посиланням 👉 https://youtu.be/cmpvbcc27K0 У цьому відео розбираємо, яку крипту купляти зараз, на що я дивлюся при виборі альткоїнів і чому хороший криптопроєкт далеко…",
+      "url": "https://t.me/it_statti/7364",
+      "published_at": "2026-10-08T17:44:33+00:00"
+    },
     {
       "id": "2d3652585e67a5",
       "source": "telegram_main",
@@ -293,45 +327,6 @@
       "summary": "📊 Огляд ринку на 06.10.2026 Біткоін вчора спускався до 84972, але закрив денний бар на позначці 85766. Зараз в моменті торгуєтсья на позначці 85495. Індекс страху та жадібності - 73 Капіталізація крипторинка - $2,89 трлн. Капіталізація крипторинка без BTC, ETH - $0,838 трлн. Домінація біткоїну - 59.51% Біткоін останній період ходить по лезу та постійсно то закріпляється то провалюєть від значущої зони 85200-85600. Але поки ще слава богу нижче денним баром не закріплялися позначки 84400. Хоча чесно кажучи виглядає дуже слабко. Тому нам залишається тільки чекати. Або підтвердження розвитку подій зі зниженням, або ж підтвердження та закриття тижневим баром вище 87к. Але якщо втратим поточну зон",
       "url": "https://t.me/it_statti/7346",
       "published_at": "2026-10-06T08:14:01+00:00"
-    },
-    {
-      "id": "c11116bed62e43",
-      "source": "telegram_main",
-      "mode": "speculation",
-      "risk": 65,
-      "reasons": [
-        "криптоідея без чіткої портфельної рамки"
-      ],
-      "title": "А те що ми пройшли зону 85200-85600",
-      "summary": "А те що ми пройшли зону 85200-85600",
-      "url": "https://t.me/it_statti/7345",
-      "published_at": "2026-10-05T16:46:49+00:00"
-    },
-    {
-      "id": "f40693565183a9",
-      "source": "telegram_main",
-      "mode": "trading",
-      "risk": 80,
-      "reasons": [
-        "активна торгівля/позиція"
-      ],
-      "title": "🔶 Активності / Як заробити: Основний native use case — delegated staking. Protocol reward rate: ~2,6% річних. Але yield …",
-      "summary": "🔶 Активності / Як заробити: Основний native use case — delegated staking. Protocol reward rate: ~2,6% річних. Але yield фінансується переважно новими APT. Тому: staking APY ≠ business cash flow. Для staker це часткова компенсація dilution. Для non-staker — dilution. Liquid staking додає smart-contract і depeg risk. У lending/LP yield може йти від: borrowers trading fees emissions external incentives. Тому APY кожного протоколу треба дивитися окремо. 🔶 Мій вердикт: APT реально став сильнішим як token thesis. Раніше було: сильний L1 → великі institutional integrations → висока емісія → довгі insider unlocks → слабкий holder value. Зараз уже маємо: hard cap 2,1B staking rewards скорочені вдвічі",
-      "url": "https://t.me/it_statti/7344",
-      "published_at": "2026-10-05T11:22:39+00:00"
-    },
-    {
-      "id": "19b7ed8d9e25f3",
-      "source": "telegram_main",
-      "mode": "speculation",
-      "risk": 65,
-      "reasons": [
-        "криптоідея без чіткої портфельної рамки"
-      ],
-      "title": "🔶 Зв’язок продукту і токена / Value accrual: Ось тут одночасно головний плюс і головна проблема APT. Механічний зв’язок …",
-      "summary": "🔶 Зв’язок продукту і токена / Value accrual: Ось тут одночасно головний плюс і головна проблема APT. Механічний зв’язок уже є: network activity → gas в APT → burn APT. Це реальний working mechanism. APT також потрібен для: staking governance network security. Але власник APT не отримує автоматичну частку revenue: Aptos Labs Decibel stablecoin issuers RWA funds. Тобто: $760M RWA ≠ holder revenue. $1B stablecoins ≠ автоматичний value accrual. Зараз офіційні дані показують приблизно: staking emissions ≈1,6M APT/місяць проти burn ≈168K APT/30d. Тобто burn перекриває лише: ~10,5% emissions. Щоб просто досягти emission-neutral рівня при нинішній емісії, burn має зрости приблизно: у 9,5 раза. Тому ",
-      "url": "https://t.me/it_statti/7343",
-      "published_at": "2026-10-05T11:22:37+00:00"
     },
     {
       "id": "12ffedbcfe53d3",
@@ -5203,7 +5198,7 @@
         "деривативи/плече: потрібна перевірка max loss, margin і ліквідації",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Що таке опціони та як їх купити на Binance у 2026 році?",
+      "title": "What are options and how to buy them on Binance in 2026?",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=vQw_-w1Dy7o",
       "published_at": null,
@@ -5235,7 +5230,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Як заробляти на криптовалюті на OKX — пасивний дохід для новачків",
+      "title": "How to Earn Crypto on OKX — Passive Income for Beginners",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=RGbcPPKIW5E",
       "published_at": null,
@@ -5251,7 +5246,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Як заробити на Binance від $15 до $100 на рівному місці!",
+      "title": "How to Make from $15 to $100 on Binance Out of Nowhere!",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=rmrkuRMutF0",
       "published_at": null,
@@ -5331,7 +5326,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Бінанс для новачків або як при реєстрації заробити від 60$ до 7000$",
+      "title": "Binance for beginners or how to earn from $60 to $7,000 upon registration",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=bYCRLR5t6aU",
       "published_at": null,
@@ -6221,7 +6216,7 @@
       "knowledge": true
     }
   ],
-  "archive_count": 10208,
-  "news_count": 105,
+  "archive_count": 10211,
+  "news_count": 103,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
