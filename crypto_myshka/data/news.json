@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-07T23:38:13.994654+00:00",
+  "generated_at": "2026-10-08T02:55:12.192772+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -46,9 +46,46 @@
       "role": "discovery"
     }
   },
-  "raw_item_count": 207,
-  "item_count": 106,
+  "raw_item_count": 213,
+  "item_count": 110,
   "items": [
+    {
+      "id": "ed81ddee404188",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Bitcoin falls to $83k amid pressure from Fed minutes, oil prices, and yields - Investing.com",
+      "summary": "Bitcoin falls to $83k amid pressure from Fed minutes, oil prices, and yields &nbsp;&nbsp; Investing.com",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNQjZWd3JMYXpSVnVDVkJOMFBmQ2Q5Q0llbl9lTWxBN0s4RVJyZEMxSnIxLXo3cm0zZnZjVDdsdnQ1bTNxS29FaG16b1ZBNWlMTzViWmlDYkF2WVBjTS1nc2I0Tzk3dGFicXo0ako2UjBFWm8yXzN3ZWtFNHF0aGZqVVNTX2wxZENWSkJoSGdRM3g4eE9BOXM0ZzVhdU8yNmNVNV8wS2FsdVFfc0d3WDdxNV80N3lwb3BrVjJ2ajBGSzU?oc=5",
+      "published_at": "2026-10-07T22:24:13+00:00",
+      "assets": [
+        "BTC"
+      ],
+      "topics": [
+        "macro"
+      ],
+      "impact": 3,
+      "impact_label": "Високий вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Google News discovery"
+      ],
+      "links": [
+        {
+          "publisher": "Google News discovery",
+          "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNQjZWd3JMYXpSVnVDVkJOMFBmQ2Q5Q0llbl9lTWxBN0s4RVJyZEMxSnIxLXo3cm0zZnZjVDdsdnQ1bTNxS29FaG16b1ZBNWlMTzViWmlDYkF2WVBjTS1nc2I0Tzk3dGFicXo0ako2UjBFWm8yXzN3ZWtFNHF0aGZqVVNTX2wxZENWSkJoSGdRM3g4eE9BOXM0ZzVhdU8yNmNVNV8wS2FsdVFfc0d3WDdxNV80N3lwb3BrVjJ2ajBGSzU?oc=5"
+        }
+      ],
+      "confidence_label": "Discovery: потребує підтвердження",
+      "jev_take": "Це макро-фактор для BTC: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Google News використано лише як радар теми",
+        "Ринковий тон: Невизначений / змішаний",
+        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
+      ]
+    },
     {
       "id": "41393d0eb9d662",
       "source": "jev_analysis",
@@ -676,6 +713,43 @@
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
       "analysis_level": "llm"
+    },
+    {
+      "id": "1260b23d993dc9",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Samsung to launch USDC transfers on Solana for US Galaxy users",
+      "summary": "The South Korean tech giant said the feature is built into Samsung Wallet, with fiat on- and off-ramps, rather than a separate crypto app.",
+      "url": "https://www.theblock.co/news/business/2026-10-07-samsung-to-launch-usdc-transfers-on-solana-for-us-galaxy-users-418004",
+      "published_at": "2026-10-08T02:50:01+00:00",
+      "assets": [
+        "SOL"
+      ],
+      "topics": [
+        "stablecoin"
+      ],
+      "impact": 2,
+      "impact_label": "Середній вплив",
+      "tone": "Потенційно позитивний",
+      "source_count": 1,
+      "publishers": [
+        "The Block"
+      ],
+      "links": [
+        {
+          "publisher": "The Block",
+          "url": "https://www.theblock.co/news/business/2026-10-07-samsung-to-launch-usdc-transfers-on-solana-for-us-galaxy-users-418004"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
+      "watch_for": "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Потенційно позитивний",
+        "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
+      ]
     },
     {
       "id": "5d5b398ccf9bf3",
@@ -1561,6 +1635,74 @@
       "analysis_level": "llm",
       "analysis_retry_count": 2,
       "analysis_last_attempt_at": "2026-10-03T17:02:37Z"
+    },
+    {
+      "id": "d878672e55737e",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Crypto news site Cointelegraph seeks buyer after web traffic plunges",
+      "summary": "",
+      "url": "https://www.coindesk.com/business/2026/10/07/crypto-news-site-cointelegraph-seeks-buyer-after-web-traffic-plunges",
+      "published_at": "2026-10-08T00:35:24+00:00",
+      "assets": [],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/business/2026/10/07/crypto-news-site-cointelegraph-seeks-buyer-after-web-traffic-plunges"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "a9f324608ef636",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Vitalik Buterin backs crypto ‘bunker mode’ amid rapid AI math advances",
+      "summary": "Ethereum researchers say crypto users should consider an orderly migration of funds to fresh addresses, warning AI could threaten private-key security before quantum computers do.",
+      "url": "https://cointelegraph.com/news/justin-drake-urges-crypto-bunker-mode-as-ai-could-break-wallet-security-within-months?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "published_at": "2026-10-08T00:04:32+00:00",
+      "assets": [
+        "ETH"
+      ],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Cointelegraph"
+      ],
+      "links": [
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/justin-drake-urges-crypto-bunker-mode-as-ai-could-break-wallet-security-within-months?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
     },
     {
       "id": "9c46085ae045ad",

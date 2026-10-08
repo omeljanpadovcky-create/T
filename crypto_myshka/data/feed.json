@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-07T23:38:21.295315+00:00",
+  "generated_at": "2026-10-08T02:55:18.699141+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,12 +26,12 @@
       "ok": true,
       "count": 10199,
       "complete": true,
-      "updated_at": "2026-10-07T23:38:16.217802+00:00",
+      "updated_at": "2026-10-08T02:55:14.140392+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 106,
+      "count": 110,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -48,36 +48,36 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 83363,
-        "usd_24h_change": -2.4559829067629098
+        "usd": 83125,
+        "usd_24h_change": -0.8512461848949625
       },
       "ethereum": {
-        "usd": 2576.73,
-        "usd_24h_change": -4.440282878145199
+        "usd": 2579.39,
+        "usd_24h_change": -1.305837031471124
       },
       "solana": {
-        "usd": 116.3,
-        "usd_24h_change": -3.5003462698890773
+        "usd": 116.45,
+        "usd_24h_change": -1.5516168095784129
       },
       "pendle": {
-        "usd": 2.25,
-        "usd_24h_change": -5.422540114616703
+        "usd": 2.26,
+        "usd_24h_change": 0.30634670912785655
       },
       "arbitrum": {
-        "usd": 0.185349,
-        "usd_24h_change": -7.775951071956742
+        "usd": 0.187114,
+        "usd_24h_change": 0.9480562715046499
       },
       "lido-dao": {
-        "usd": 0.459527,
-        "usd_24h_change": -3.1139548328582407
+        "usd": 0.470107,
+        "usd_24h_change": 6.907494338354765
       },
       "binancecoin": {
-        "usd": 773.4,
-        "usd_24h_change": -0.7283725383014574
+        "usd": 772.79,
+        "usd_24h_change": 0.9689769042499494
       },
       "dogecoin": {
-        "usd": 0.088885,
-        "usd_24h_change": -5.111181424781874
+        "usd": 0.089048,
+        "usd_24h_change": -1.147545047392897
       }
     }
   },
@@ -5204,7 +5204,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "How to earn on cryptocurrency in 2026 — passive income on Binance",
+      "title": "Як заробляти на криптовалюті у 2026 році — пасивний дохід на Binance",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=seFNnvpftz4",
       "published_at": null,
@@ -5268,7 +5268,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Як заробити на Binance від $15 до $100 на рівному місці!",
+      "title": "How to Make from $15 to $100 on Binance Out of Nowhere!",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=rmrkuRMutF0",
       "published_at": null,
@@ -5316,7 +5316,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Огляд біткоіна 2026: оновлення цін і ринку",
+      "title": "Bitcoin 2026 Review: Price and Market Updates",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=4QoyO40jff4",
       "published_at": null,
@@ -5444,7 +5444,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "LESSON 2️⃣ - Beginner Trading Course 🟢 Trend Movement, Market Structure and Market Structure Brea...",
+      "title": "УРОК 2️⃣ - Курс з Трейдингу «Новачок» 🟢 Трендовий рух, Структура ринку та Злам Ринкової Структури",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=mgrv4cMisOw",
       "published_at": null,
@@ -6239,6 +6239,6 @@
     }
   ],
   "archive_count": 10199,
-  "news_count": 106,
+  "news_count": 110,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
