@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-08T09:05:43.332625+00:00",
+  "generated_at": "2026-10-08T10:15:29.675379+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,12 +26,12 @@
       "ok": true,
       "count": 10202,
       "complete": true,
-      "updated_at": "2026-10-08T09:05:37.930838+00:00",
+      "updated_at": "2026-10-08T10:15:25.331626+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 110,
+      "count": 128,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -41,43 +41,43 @@
       "ETH",
       "SOL",
       "PENDLE",
-      "ARB",
+      "ICP",
+      "XRP",
       "BNB",
-      "DOGE",
-      "ADA"
+      "DOGE"
     ],
     "prices": {
       "bitcoin": {
-        "usd": 82913,
-        "usd_24h_change": -1.2547887326629261
+        "usd": 83034,
+        "usd_24h_change": -0.9259588214640979
       },
       "ethereum": {
-        "usd": 2562.23,
-        "usd_24h_change": -1.8491194438817367
+        "usd": 2562.89,
+        "usd_24h_change": -0.9121563910783866
       },
       "solana": {
-        "usd": 115.02,
-        "usd_24h_change": -2.657859963296434
+        "usd": 114.97,
+        "usd_24h_change": -2.1974025564334294
       },
       "pendle": {
-        "usd": 2.28,
-        "usd_24h_change": 1.038263388687105
+        "usd": 2.3,
+        "usd_24h_change": 2.235394121012627
       },
-      "arbitrum": {
-        "usd": 0.186337,
-        "usd_24h_change": -0.11657702497768756
+      "internet-computer": {
+        "usd": 3.16,
+        "usd_24h_change": -1.024782226221766
+      },
+      "ripple": {
+        "usd": 1.41,
+        "usd_24h_change": -2.7294800180543906
       },
       "binancecoin": {
-        "usd": 767.94,
-        "usd_24h_change": -0.6027766389500046
+        "usd": 769.09,
+        "usd_24h_change": 0.0599501732749261
       },
       "dogecoin": {
-        "usd": 0.087906,
-        "usd_24h_change": -2.736810088590232
-      },
-      "cardano": {
-        "usd": 0.253018,
-        "usd_24h_change": -1.207712396165792
+        "usd": 0.088219,
+        "usd_24h_change": -1.208376849149076
       }
     }
   },
@@ -5251,7 +5251,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Як заробляти на криптовалюті на OKX — пасивний дохід для новачків",
+      "title": "How to Earn Crypto on OKX — Passive Income for Beginners",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=RGbcPPKIW5E",
       "published_at": null,
@@ -5283,7 +5283,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Which Crypto to Buy in 2026? 11 Coins I'm Looking At Right Now",
+      "title": "Яку крипту купляти у 2026 році? 11 монет, які я зараз розглядаю",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=cmpvbcc27K0",
       "published_at": null,
@@ -5363,7 +5363,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Навчальний ролик з трейдингу на прикладі розбору монет HYPE, HBAR, IO, IMX, NEAR",
+      "title": "Training video on trading using the example of analyzing HYPE, HBAR, IO, IMX, NEAR coins",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=Xrup8HvN2JI",
       "published_at": null,
@@ -5443,7 +5443,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "УРОК 2️⃣ - Курс з Трейдингу «Новачок» 🟢 Трендовий рух, Структура ринку та Злам Ринкової Структури",
+      "title": "LESSON 2️⃣ - Beginner Trading Course 🟢 Trend Movement, Market Structure and Market Structure Brea...",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=mgrv4cMisOw",
       "published_at": null,
@@ -5781,7 +5781,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Metamask Complete Instructions on How to SAFELY Store Crypto | Metamask How to Use",
+      "title": "Метамаск повна Інструкція як БЕЗПЕЧНО зберігати Крипту | Metamask як користуватися",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=NIA4LdYEMzI",
       "published_at": null,
@@ -6238,6 +6238,6 @@
     }
   ],
   "archive_count": 10202,
-  "news_count": 110,
+  "news_count": 128,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
