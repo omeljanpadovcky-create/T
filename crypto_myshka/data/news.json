@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-08T10:15:23.420199+00:00",
+  "generated_at": "2026-10-08T17:26:38.552018+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -18,7 +18,7 @@
     "Decrypt": {
       "url": "https://decrypt.co/feed",
       "ok": true,
-      "count": 56,
+      "count": 36,
       "role": "evidence"
     },
     "The Block": {
@@ -30,7 +30,7 @@
     "Bloomberg Crypto": {
       "url": "https://feeds.bloomberg.com/crypto/news.rss",
       "ok": true,
-      "count": 3,
+      "count": 1,
       "role": "evidence"
     },
     "FT Crypto": {
@@ -46,9 +46,67 @@
       "role": "discovery"
     }
   },
-  "raw_item_count": 237,
-  "item_count": 128,
+  "raw_item_count": 215,
+  "item_count": 105,
   "items": [
+    {
+      "id": "50f2934f2868bb",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "US Government Moves $103 Million in Seized Bitcoin and BNB, But Hasn't Said Why",
+      "summary": "Government-labeled wallets sent 833.6 BTC to Coinbase Prime deposit addresses and shuffled 40,285 BNB. No sale is confirmed, but the stash behind it is the largest any government holds in Arkham's ranking.",
+      "url": "https://decrypt.co/380313/us-government-moves-103-million-seized-bitcoin-bnb",
+      "published_at": "2026-10-08T16:44:20+00:00",
+      "assets": [
+        "BTC",
+        "BNB"
+      ],
+      "topics": [
+        "regulation",
+        "exchange",
+        "security"
+      ],
+      "impact": 3,
+      "impact_label": "Високий вплив",
+      "tone": "Потенційно негативний",
+      "source_count": 3,
+      "publishers": [
+        "Decrypt",
+        "Cointelegraph",
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "Decrypt",
+          "url": "https://decrypt.co/380313/us-government-moves-103-million-seized-bitcoin-bnb"
+        },
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/us-government-moves-770m-seized-bitcoin-coinbase?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        },
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/us-government-seized-bitcoin-moved-one-transaction?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        },
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/business/2026/10/08/u-s-government-moves-usd1-billion-in-bitcoin-from-bitfinex-hack-wallet-no-sale-indicated"
+        },
+        {
+          "publisher": "Decrypt",
+          "url": "https://decrypt.co/380504/us-government-moves-1-billion-bitcoin-bitfinex"
+        }
+      ],
+      "confidence_label": "Підтверджено кількома джерелами",
+      "jev_take": "Інцидент може тиснути на BTC, BNB, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
+      "watch_for": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Підтверджено кількома джерелами",
+        "Ринковий тон: Потенційно негативний",
+        "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
+      ]
+    },
     {
       "id": "d63fb58cb29e3e",
       "source": "jev_analysis",
@@ -158,41 +216,6 @@
       ]
     },
     {
-      "id": "89cf98eb5c2769",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Pokemon Collector Found Guilty in $55 Million Crypto Hack Case",
-      "summary": "A cybersecurity consultant was found guilty of stealing nearly $55 million in cryptocurrency, some of which was spent to acquire rare Pokemon cards and other collectibles.",
-      "url": "https://www.bloomberg.com/news/articles/2026-10-07/pokemon-collector-found-guilty-in-55-million-crypto-hack-case",
-      "published_at": "2026-10-07T15:50:57+00:00",
-      "assets": [],
-      "topics": [
-        "security"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Потенційно негативний",
-      "source_count": 1,
-      "publishers": [
-        "Bloomberg Crypto"
-      ],
-      "links": [
-        {
-          "publisher": "Bloomberg Crypto",
-          "url": "https://www.bloomberg.com/news/articles/2026-10-07/pokemon-collector-found-guilty-in-55-million-crypto-hack-case"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
-      "watch_for": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно негативний",
-        "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
-    },
-    {
       "id": "afad971d3d104e",
       "source": "jev_analysis",
       "mode": "news",
@@ -263,44 +286,6 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
-      "id": "64c65be8f8c899",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "DeFi Development Corp Adds $3 Million in Solana as SOL Buys Slow",
-      "summary": "Nasdaq-listed DeFi Development Corp's latest SEC filing shows its Solana stash grew 1%, to about 2.56 million SOL and SOL equivalents—roughly half the prior week's gain and well below mid-September's pace.",
-      "url": "https://decrypt.co/380125/defi-development-corp-adds-3m-solana",
-      "published_at": "2026-10-05T21:48:03+00:00",
-      "assets": [
-        "SOL"
-      ],
-      "topics": [
-        "regulation",
-        "defi"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/380125/defi-development-corp-adds-3m-solana"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на SOL; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ]
     },
     {
@@ -454,342 +439,149 @@
       "analysis_level": "llm"
     },
     {
-      "id": "f0585ed4fbfdbf",
+      "id": "b4e31b6883d086",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "Massive Coinbase News! Bitcoin Rips to $96,750! Football.Fun TGE Interview with Founder!",
-      "summary": "Crypto majors are very green with Bitcoin making a new another 2-month high; BTC +2% at $96,7500; ETH +2% at $3,360, SOL even at $145; XRP -1% to $2.11. DCR (+30%), DASH (+10%), ICP (+10%) and ZEC (+7%) led top movers; XMR hit another new ATH at $800 before retracing to $725. Coinbase pulled support for the Senate’s crypto market structure bill ahead of a key vote, citing major concerns with the latest draft, leading to the Senate delaying the bill. Zcash avoided SEC action after the Zcash Foundation said the agency’s investigation has concluded. Ripple secured a Luxembourg license as its European expansion continued. Pakistan teamed with Wor",
-      "url": "https://decrypt.co/videos/interviews/9g4stfJX/massive-coinbase-news-bitcoin-rips-to-96-750-footballfun-tge-interview-with-founder",
-      "published_at": "2026-01-15T16:49:34+00:00",
+      "title": "Bitwise CEO says ‘tragic’ Dogecoin ETF failure shows gap between ETF buyers and crypto-app users",
+      "summary": "Alongside its recent spot NEAR ETF launch, Bitwise is prioritizing AI and intends to do more in that area.",
+      "url": "https://www.theblock.co/news/business/2026-10-08-bitwise-ceo-dogecoin-etf-failure-hunter-horsley-418070",
+      "published_at": "2026-10-08T16:43:47+00:00",
       "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
+        "DOGE"
       ],
       "topics": [
-        "regulation",
-        "exchange",
-        "stablecoin"
+        "etf"
       ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Потенційно негативний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/9g4stfJX/massive-coinbase-news-bitcoin-rips-to-96-750-footballfun-tge-interview-with-founder"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно негативний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "febaf99cab0d0f",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Pump & Memes HEATING up! XMR vs ZEC! How important are these rate cuts? - Under Exposed",
-      "summary": "Crypto majors are green; BTC +1.5% at $92,000; ETH +1% at $3,130, SOL +2% at $142; XRP +1% to $2.06. DASH (+60%), IP (+30%) and XMR (+13%) led top movers; XMR hit another new ATH at $680 (now $640). Gold and Silver hit new ATHs again in the wake of the Powell investigation. The US Senate released the draft Crypto Market Clarity Act, including limits on stablecoin rewards. Senator Warren pressed the SEC over inclusion of crypto in 401ks arguing they expose retirees to too much risk. Vitalik Buterin warned crypto needs better decentralized stablecoins, citing governance capture and inflation risks. World Liberty Financial launched a crypto lend",
-      "url": "https://decrypt.co/videos/interviews/IuLdmgP6/pump-memes-heating-up-xmr-vs-zec-how-important-are-these-rate-cuts-under-exposed",
-      "published_at": "2026-01-14T16:01:53+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "macro",
-        "regulation",
-        "defi",
-        "stablecoin",
-        "institutional"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Потенційно негативний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/IuLdmgP6/pump-memes-heating-up-xmr-vs-zec-how-important-are-these-rate-cuts-under-exposed"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно негативний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
-      "id": "c4e61a1e9ac88f",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "PsyopAnime Meme up 30X! Are Memes back? Monero ATH! Interview W/ Joseph Chalom, CEO of Sharplink",
-      "summary": "Crypto majors are green; BTC +1.5% at $92,000; ETH +1% at $3,130, SOL +2% at $142; XRP +1% to $2.06. DASH (+60%), IP (+30%) and XMR (+13%) led top movers; XMR hit another new ATH at $680 (now $640). Gold and Silver hit new ATHs again in the wake of the Powell investigation. The US Senate released the draft Crypto Market Clarity Act, including limits on stablecoin rewards. Senator Warren pressed the SEC over inclusion of crypto in 401ks arguing they expose retirees to too much risk. Vitalik Buterin warned crypto needs better decentralized stablecoins, citing governance capture and inflation risks. World Liberty Financial launched a crypto lend",
-      "url": "https://decrypt.co/videos/interviews/mefbKZgQ/psyopanime-meme-up-30x-are-memes-back-monero-ath-interview-w-joseph-chalom-ceo-of-sharplink",
-      "published_at": "2026-01-13T18:12:27+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "macro",
-        "regulation",
-        "defi",
-        "stablecoin",
-        "institutional"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Потенційно негативний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/mefbKZgQ/psyopanime-meme-up-30x-are-memes-back-monero-ath-interview-w-joseph-chalom-ceo-of-sharplink"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно негативний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
-      "id": "0a53daff32de0f",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "A16z raise $15B! Jerome Powell vs Trump! Crypto remains flat! Special Guest: Dudas!",
-      "summary": "Crypto majors are mostly flat headed into Monday open; btc even at $90,600; eth +1% at $3,110, sol +2% at $140; xrp -2% to $2.04. Ip (+20%) and xmr (+15%) led top movers; xmr hit a new ath at $590. Fed chair Jerome Powell released a video message claiming that the criminal charges he faces are due to his not cutting interest rates in line with Trump’s wishes. X (twitter) announced plans for “smart cashtags” to show crypto and stock prices live next to tickers. Vaneck projected bitcoin could reach $53m by 2050, outlining long-term adoption, trade settlement and store-of-value assumptions driving 29% annual growth. Andreessen Horowitz (a16z) ra",
-      "url": "https://decrypt.co/videos/interviews/0y90noNs/a16z-raise-15b-jerome-powell-vs-trump-crypto-remains-flat-special-guest-dudas",
-      "published_at": "2026-01-12T17:15:46+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "macro",
-        "regulation"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
+      "impact": 2,
+      "impact_label": "Середній вплив",
       "tone": "Потенційно позитивний",
       "source_count": 1,
       "publishers": [
-        "Decrypt"
+        "The Block"
       ],
       "links": [
         {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/0y90noNs/a16z-raise-15b-jerome-powell-vs-trump-crypto-remains-flat-special-guest-dudas"
+          "publisher": "The Block",
+          "url": "https://www.theblock.co/news/business/2026-10-08-bitwise-ceo-dogecoin-etf-failure-hunter-horsley-418070"
         }
       ],
       "confidence_label": "Поки одне джерело",
-      "jev_take": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
+      "jev_take": "Регуляторний фактор може змінити доступ або попит на DOGE; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
-      "id": "66eea8df8b9da4",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Crypto starts 2026 STRONG! Venezuela Impacts on the market! Lighter TGE reactions!",
-      "summary": "The global crypto market cap pushed another 2% to $3.22T as majors continue to grind up; BTC +1% at $93,780; ETH +2% at $3,240, SOL +3% at $139; XRP led up 12% to $2.37 RENDER (+18%), SUI (+18%) and LIT (+15%) led top movers. Bank of America formally launched its crypto recommendations for wealth clients with up to 4% portfolio allocation. Morgan Stanley filed for a Solana Trust with the SEC. Goldman Sachs upgraded Coinbase to a ‘Buy’ rating today while simultaneously downgrading eToro. Japan’s finance minister endorsed deeper crypto integration, including lower taxes and exchange-level reforms. Vitalik Buterin claimed Ethereum has effectivel",
-      "url": "https://decrypt.co/videos/interviews/XjhRjGIk/crypto-starts-2026-strong-venezuela-impacts-on-the-market-lighter-tge-reactions",
-      "published_at": "2026-01-06T18:16:42+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "regulation",
-        "exchange",
-        "security",
-        "institutional"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/XjhRjGIk/crypto-starts-2026-strong-venezuela-impacts-on-the-market-lighter-tge-reactions"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Інцидент може тиснути на BTC, ETH, SOL, XRP, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
-      "watch_for": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
-    },
-    {
-      "id": "bf18225643d1db",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Global Crypto MCap up to $3.22 Trillion! XRP up 12%! Japan Endorse Crypto! Fear & Greed back to Neutral!",
-      "summary": "The global crypto market cap pushed another 2% to $3.22T as majors continue to grind up; BTC +1% at $93,780; ETH +2% at $3,240, SOL +3% at $139; XRP led up 12% to $2.37 RENDER (+18%), SUI (+18%) and LIT (+15%) led top movers. Bank of America formally launched its crypto recommendations for wealth clients with up to 4% portfolio allocation. Morgan Stanley filed for a Solana Trust with the SEC. Goldman Sachs upgraded Coinbase to a ‘Buy’ rating today while simultaneously downgrading eToro. Japan’s finance minister endorsed deeper crypto integration, including lower taxes and exchange-level reforms. Vitalik Buterin claimed Ethereum has effectivel",
-      "url": "https://decrypt.co/videos/interviews/OS1PGiAq/global-crypto-mcap-up-to-322-trillion-xrp-up-12-japan-endorse-crypto-fear-greed-back-to-neutral",
-      "published_at": "2026-01-06T16:13:32+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "regulation",
-        "exchange",
-        "security",
-        "institutional"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/OS1PGiAq/global-crypto-mcap-up-to-322-trillion-xrp-up-12-japan-endorse-crypto-fear-greed-back-to-neutral"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Інцидент може тиснути на BTC, ETH, SOL, XRP, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
-      "watch_for": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
-    },
-    {
-      "id": "6bb8558ba43813",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Crypto is Green! Up 6-9%! Memes outperform! Pepe up 67%! Infinex Founder Interview!",
-      "summary": "The global crypto market cap hit $3.16t (+1.5%) with majors trading higher; btc +2% at $93,000; eth +1% at $3,175, bnb +2.5% at $906, sol +1% at $135. Virtuals (+24%), render (_17%), btt (+11%) and fet (+11%) led top movers. The btc etfs saw $471m in net inflows on the first trading day of 2026, the highest single-day total since nov 11. Sec commissioner caroline crenshaw officially departed the agency on jan 2nd, leaving behind an all-republican commission. Big 4 firm pwc announced it will go deeper into crypto with a focus on stablecoins and payments.",
-      "url": "https://decrypt.co/videos/interviews/EmmJkWJn/crypto-is-green-up-6-9-memes-outperform-pepe-up-67-infinex-founder-interview",
-      "published_at": "2026-01-05T16:28:36+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "BNB"
-      ],
-      "topics": [
-        "regulation"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/EmmJkWJn/crypto-is-green-up-6-9-memes-outperform-pepe-up-67-infinex-founder-interview"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, BNB; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ]
     },
     {
-      "id": "0d090010941183",
+      "id": "4c5c44a7fe6301",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "2026 Crypto Predictions! Tom Lee still buying ETH! Rekt tease WorldStar collab!",
-      "summary": "Btc: 87k (0%) | btc.D: 59.0% (0%). Eth: 2975 (1%) | bnb: 855 (+1%) | sol: 124 (0%). Tom Lee bought another $130M in ETH for Christmas, and still holds $1B in cash heading into the new year. REKT drinks and WorldStarHipHop tease collab. BlackRock’s BUIDL hits $100M million in dividends and passes $2 billion in assets. Metaplanet buys 4,279 bitcoin, lifts total holdings to 35,102 BTC. Unleash Protocol hit by $3.9 million exploit with funds routed through Tornado Cash. Onchain Perpetuals Top $1T Monthly Volume as Crypto Traders Chase Leverage. South Korea’s Crypto Regulation Delayed as Stablecoin Rules Face Deadlock. Abundant Mining CEO says Bit",
-      "url": "https://decrypt.co/videos/interviews/dBDZqp65/2026-crypto-predictions-tom-lee-still-buying-eth-rekt-tease-worldstar-collab",
-      "published_at": "2025-12-30T16:29:12+00:00",
+      "title": "Sui’s Hashi to launch with $500M in Bitcoin finance commitments",
+      "summary": "Hashi has more than $500M in commitments ahead of mainnet launch, while Anchorage offers institutions settlement and self-custody.",
+      "url": "https://cointelegraph.com/news/sui-hashi-bitcoin-finance-commitments?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "published_at": "2026-10-08T12:03:28+00:00",
       "assets": [
-        "BTC",
-        "ETH",
-        "BNB"
+        "BTC"
       ],
       "topics": [
-        "regulation",
-        "security",
-        "stablecoin",
         "institutional"
       ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
+      "impact": 2,
+      "impact_label": "Середній вплив",
+      "tone": "Потенційно позитивний",
       "source_count": 1,
       "publishers": [
-        "Decrypt"
+        "Cointelegraph"
       ],
       "links": [
         {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/dBDZqp65/2026-crypto-predictions-tom-lee-still-buying-eth-rekt-tease-worldstar-collab"
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/sui-hashi-bitcoin-finance-commitments?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         }
       ],
       "confidence_label": "Поки одне джерело",
-      "jev_take": "Інцидент може тиснути на BTC, ETH, BNB, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
-      "watch_for": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
+      "jev_take": "Інституційний інтерес до BTC важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
+      "watch_for": "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Потенційно позитивний",
+        "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
+      ]
+    },
+    {
+      "id": "5ce188193e9978",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Bitcoin and ether holders urged to enter ‘bunker mode’ against possible AI attacks",
+      "summary": "",
+      "url": "https://www.coindesk.com/tech/2026/10/08/bitcoin-and-ether-holders-urged-to-prepare-bunker-mode-against-possible-ai-attacks",
+      "published_at": "2026-10-08T11:47:16+00:00",
+      "assets": [
+        "BTC",
+        "ETH"
+      ],
+      "topics": [],
+      "impact": 2,
+      "impact_label": "Середній вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/tech/2026/10/08/bitcoin-and-ether-holders-urged-to-prepare-bunker-mode-against-possible-ai-attacks"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується BTC, ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
-        "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "01390074e803a5",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Bitcoin slips below $83,000 as Ethereum researcher's 'bunker mode' call divides crypto",
+      "summary": "",
+      "url": "https://www.coindesk.com/markets/2026/10/08/bitcoin-slips-below-usd83-000-as-ethereum-researcher-s-bunker-mode-call-divides-crypto",
+      "published_at": "2026-10-08T10:30:41+00:00",
+      "assets": [
+        "BTC",
+        "ETH"
+      ],
+      "topics": [],
+      "impact": 2,
+      "impact_label": "Середній вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/markets/2026/10/08/bitcoin-slips-below-usd83-000-as-ethereum-researcher-s-bunker-mode-call-divides-crypto"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується BTC, ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     },
     {
@@ -947,12 +739,12 @@
       ]
     },
     {
-      "id": "010a071c2fde62",
+      "id": "fbcdc98b5f67d0",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "Tether tapped by Kazakhstan’s central bank to explore stablecoin and tokenization",
-      "summary": "",
-      "url": "https://www.coindesk.com/business/2026/10/07/tether-tapped-by-kazakhstan-s-central-bank-to-explore-stablecoin-and-tokenization",
+      "title": "Tether, Kazakhstan cenbank mull tenge stablecoin and asset tokenization",
+      "summary": "The agreement will explore a tenge-backed stablecoin pilot and a framework for tokenizing real-world assets as Kazakhstan expands its digital asset industry.",
+      "url": "https://cointelegraph.com/news/tether-kazakhstan-central-bank-to-explore-tenge-stablecoin-and-asset-tokenization?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
       "published_at": "2026-10-07T19:46:04+00:00",
       "assets": [],
       "topics": [
@@ -962,17 +754,12 @@
       "impact": 2,
       "impact_label": "Середній вплив",
       "tone": "Невизначений / змішаний",
-      "source_count": 3,
+      "source_count": 2,
       "publishers": [
-        "CoinDesk",
         "Cointelegraph",
         "Decrypt"
       ],
       "links": [
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/business/2026/10/07/tether-tapped-by-kazakhstan-s-central-bank-to-explore-stablecoin-and-tokenization"
-        },
         {
           "publisher": "Cointelegraph",
           "url": "https://cointelegraph.com/news/tether-kazakhstan-central-bank-to-explore-tenge-stablecoin-and-asset-tokenization?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
@@ -982,12 +769,12 @@
           "url": "https://decrypt.co/380347/tether-kazakhstan-central-bank-stablecoin-tokenized-assets"
         }
       ],
-      "confidence_label": "Підтверджено кількома джерелами",
+      "confidence_label": "Є незалежне підтвердження",
       "jev_take": "Інституційний інтерес до крипторинок важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
       "watch_for": "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
-        "Підтверджено кількома джерелами",
+        "Є незалежне підтвердження",
         "Ринковий тон: Невизначений / змішаний",
         "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
       ]
@@ -1023,44 +810,6 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "766f35ab5b00c7",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "US Government Moves $103 Million in Seized Bitcoin and BNB, But Hasn't Said Why",
-      "summary": "Government-labeled wallets sent 833.6 BTC to Coinbase Prime deposit addresses and shuffled 40,285 BNB. No sale is confirmed, but the stash behind it is the largest any government holds in Arkham's ranking.",
-      "url": "https://decrypt.co/380313/us-government-moves-103-million-seized-bitcoin-bnb",
-      "published_at": "2026-10-07T16:56:56+00:00",
-      "assets": [
-        "BTC",
-        "BNB"
-      ],
-      "topics": [
-        "exchange"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/380313/us-government-moves-103-million-seized-bitcoin-bnb"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Біржова новина може впливати на ліквідність і доступність BTC, BNB; важливо відділити операційне оновлення від системного ризику.",
-      "watch_for": "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
       ]
     },
     {
@@ -1244,149 +993,6 @@
       ]
     },
     {
-      "id": "a03d6c8617efaa",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Bitcoin ETFs rebound with $119M inflow as Ether extends losses",
-      "summary": "Bitcoin ETFs returned to net inflows with $119 million on Tuesday despite falling prices, while Ether funds reached a six-session outflow streak totaling $408 million.",
-      "url": "https://cointelegraph.com/markets/bitcoin-etf-rebound-119m-inflow-ether-extend-losses?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "published_at": "2026-10-07T09:03:38+00:00",
-      "assets": [
-        "BTC",
-        "ETH"
-      ],
-      "topics": [],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Cointelegraph"
-      ],
-      "links": [
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/markets/bitcoin-etf-rebound-119m-inflow-ether-extend-losses?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується BTC, ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "3f8d444d36b62f",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Russia clears first crypto exchanges, custodians under new law",
-      "summary": "Russia registered its first crypto exchanges and custodians, including its largest bank, Sberbank, which plans to launch crypto products on Dec. 1.",
-      "url": "https://cointelegraph.com/news/russia-first-crypto-platforms-register-new-law?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "published_at": "2026-10-07T08:06:35+00:00",
-      "assets": [],
-      "topics": [
-        "regulation",
-        "institutional"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Cointelegraph"
-      ],
-      "links": [
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/news/russia-first-crypto-platforms-register-new-law?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "7869d264c46a34",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Kalshi’s 15-min gold markets overtake Ether just weeks after launch",
-      "summary": "Gold recorded 542 million contracts and an estimated $5 million in fees in September, surpassing Ether’s 318 million contracts and $2.6 million, though Bitcoin remained far ahead.",
-      "url": "https://cointelegraph.com/news/kalshis-15-min-gold-markets-overtake-ether-just-weeks-after-launch?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "published_at": "2026-10-07T04:57:54+00:00",
-      "assets": [
-        "BTC",
-        "ETH"
-      ],
-      "topics": [],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Cointelegraph"
-      ],
-      "links": [
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/news/kalshis-15-min-gold-markets-overtake-ether-just-weeks-after-launch?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується BTC, ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "fea8ed73e2b2c9",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Winklevoss group seeks to launch Zcash ETF with 0.25% fee, proposed WINK ticker",
-      "summary": "Winklevoss Asset Services filed for a spot Zcash ETF under ticker WINK, with Gemini as custodian and a 0.25% fee, rivaling Grayscale's ZCSH.",
-      "url": "https://www.theblock.co/news/markets/2026-10-06-winklevoss-files-spot-zcash-etf-wink-417826",
-      "published_at": "2026-10-06T16:43:41+00:00",
-      "assets": [],
-      "topics": [
-        "etf"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "The Block"
-      ],
-      "links": [
-        {
-          "publisher": "The Block",
-          "url": "https://www.theblock.co/news/markets/2026-10-06-winklevoss-files-spot-zcash-etf-wink-417826"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
       "id": "ccc1a65b14da17",
       "source": "jev_analysis",
       "mode": "news",
@@ -1421,132 +1027,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
-    },
-    {
-      "id": "d9509a60bd044e",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Solana treasury DeFi Development authorizes CHAD preferred stock buyback program",
-      "summary": "Solana treasury firm DeFi Development approved an open-ended program to repurchase CHAD preferred stock if it trades below its $10 par value.",
-      "url": "https://www.theblock.co/news/markets/2026-10-06-defi-development-chad-preferred-stock-repurchase-program-417819",
-      "published_at": "2026-10-06T15:09:41+00:00",
-      "assets": [
-        "SOL"
-      ],
-      "topics": [
-        "macro",
-        "defi"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "The Block"
-      ],
-      "links": [
-        {
-          "publisher": "The Block",
-          "url": "https://www.theblock.co/news/markets/2026-10-06-defi-development-chad-preferred-stock-repurchase-program-417819"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Це макро-фактор для SOL: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
-      "id": "2365b1021cf327",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Strive Adds $169M Bitcoin in Its Biggest Buy in Four Months",
-      "summary": "The Nasdaq-listed bitcoin treasury company, co-founded by Vivek Ramaswamy, paid roughly $169 million for 2,000 coins last week and now holds 29,462 BTC.",
-      "url": "https://decrypt.co/380129/strive-adds-169m-bitcoin-biggest-buy-four-months",
-      "published_at": "2026-10-05T22:30:20+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [
-        "macro",
-        "institutional"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/380129/strive-adds-169m-bitcoin-biggest-buy-four-months"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Це макро-фактор для BTC: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
-      "id": "d13e23f9f59170",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Treasury Kills Crypto 'Unhosted Wallet' and Mixer Surveillance Rules",
-      "summary": "FinCEN withdrew a 2020 proposal to track transactions with self-custodial crypto wallets and a 2023 plan to designate crypto mixing as a primary money laundering concern.",
-      "url": "https://decrypt.co/380120/treasury-kills-crypto-unhosted-wallet-mixer-surveillance-rules",
-      "published_at": "2026-10-05T20:19:38+00:00",
-      "assets": [],
-      "topics": [
-        "macro"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/380120/treasury-kills-crypto-unhosted-wallet-mixer-surveillance-rules"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ],
-      "jev_ai": {
-        "what_happened": "Міністерство фінансів США (FinCEN) офіційно скасувало дві пропозиції: 2020 року — правило щодо відстеження транзакцій із самокерованими (unhosted) криптогаманцями, і 2023 року — план визначити крипто-міксери як пріоритетний ризик відмивання грошей. Це скасування стосується саме регуляторних пропозицій, а не чинних законів.",
-        "why_it_matters": "Це змінює регуляторний ландшафт для криптоіндустрії США: зменшується тиск на приватність користувачів і розробників інструментів конфіденційності. Однак це не скасовує загальних AML-зобов'язань для централізованих бірж та провайдерів послуг. Важливо розрізняти: скасовано пропозиції, а не чинні норми.",
-        "market_effect": "Ймовірно позитивний короткостроковий настрій для сектору приватності (міксери, приватні гаманці, ZK-рішення) та децентралізованих платформ. Проте вплив на ціни активів обмежений, оскільки це регуляторна новина, а не фундаментальна зміна в економіці чи технології. Дані про рух цін відсутні.",
-        "bull_case": "Зниження регуляторного ризику може стимулювати інвестиції в приватні крипто-рішення та розширення функціоналу самокерованих гаманців. Компанії, які раніше обмежували сервіси через регуляторні побоювання, можуть розширити пропозицію.",
-        "bear_case": "Ефект може бути тимчасовим — регулятори можуть повернутися до теми пізніше. Скасування не гарантує відсутності інших регуляторних викликів (SEC, CFTC, законодавство Конгресу). Також не змінює глобальні AML-стандарти FATF.",
-        "watch_next": "Чи будуть подані офіційні документи у Federal Register; реакція інших регуляторів (SEC, CFTC); чи повернеться тема міксера у законодавчих пропозиціях Конгресу; як ринки реагують на новину у найближчі дні (обсяги, волатильність).",
-        "confidence": "середня",
-        "short_conclusion": "FinCEN скасував пропозиції щодо нагляду за unhosted-гаманцями та міксерами — це позитивний регуляторний сигнал, але лише для пропозицій, а не чинних законів. Аналіз базується на одному джерелі (Decrypt), тому підтвердження з інших джерел бажане.",
-        "_model_used": "free/deepseek-v4.1-flash"
-      },
-      "analysis_engine": "free/deepseek-v4.1-flash",
-      "analysis_level": "llm",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-05T22:07:05Z"
     },
     {
       "id": "630ad426bb44ed",
@@ -1749,75 +1229,32 @@
       "analysis_last_attempt_at": "2026-10-03T17:02:37Z"
     },
     {
-      "id": "d18a29778aaf03",
+      "id": "f2f448118d20e4",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "Trump sues JPMorgan for $5B! Ledger prepares for $4B IPO! “Crypto Adoption is no longer reversible” says PWC!",
-      "summary": "Crypto majors are red while Gold nears $5,000 and Silver closes in on $100; BTC -1% at $89,100; ETH -2% at $2,925, SOL -2% at $127; XRP -2% to $1.90. ZRO (+15%), AXS (+10%) and DASH (+8%) led top movers. Ledger is preparing for a $4B IPO, enlisting Goldman Sachs, Jefferies and Barclays for support. Ripple CEO Brad Garlinghouse predicted crypto could hit new highs in 2026, pointing to regulatory momentum and institutional participation as key drivers. President Trump sued JPMorgan for $5 billion, alleging politically motivated “debanking”. BitGo briefly surged in its stock market debut before finishing its first day of trading just over its $1",
-      "url": "https://decrypt.co/videos/interviews/VpBdSuOE/trump-sues-jpmorgan-for-5b-ledger-prepares-for-4b-ipo-crypto-adoption-is-no-longer-reversible-says-pwc",
-      "published_at": "2026-01-23T16:40:55+00:00",
+      "title": "Strategy shareholders face dilution drag despite brighter bitcoin forecasts, TD Cowen says",
+      "summary": "TD Cowen kept its $260 price target on Strategy (MSTR) as dilution limits the benefit of higher bitcoin forecasts.",
+      "url": "https://www.theblock.co/news/markets/2026-10-08-strategy-shareholders-face-dilution-drag-despite-brighter-bitcoin-forecasts-td-cowen-418066",
+      "published_at": "2026-10-08T17:18:24+00:00",
       "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "institutional"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/VpBdSuOE/trump-sues-jpmorgan-for-5b-ledger-prepares-for-4b-ipo-crypto-adoption-is-no-longer-reversible-says-pwc"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Інституційний інтерес до BTC, ETH, SOL, XRP важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
-      "watch_for": "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
-      ]
-    },
-    {
-      "id": "590f90819598ea",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Crypto rebounds after Trump TACO’s on Tariffs! BitGo $2.1B IPO! Solana’s SKR token soars 250% FDV!",
-      "summary": "Crypto majors are green and rebounding after Trump pivoted on EU tariffs; BTC +2% at $89,900; ETH +2% at $2,995, SOL +2% at $130; XRP +3% to $1.94. CC (+15%), SKY (+11%) and SAND (+10%) led top movers. Crypto markets saw more than $1B in liquidations as Bitcoin rebounded sharply after President Trump signaled a retreat from proposed tariff measures. Vitalik Buterin proposed native DVT staking to strengthen Ethereum security and decentralization, signaling continued protocol-level experimentation. Bitgo announced its IPO at $18 per share, valuing it at ~$2B. The Senate Ag Committee confirmed that its version of the Clarity Act will move forwar",
-      "url": "https://decrypt.co/videos/interviews/MqZOhomP/crypto-rebounds-after-trump-tacos-on-tariffs-bitgo-21b-ipo-solanas-skr-token-soars-250-fdv",
-      "published_at": "2026-01-22T16:14:50+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
+        "BTC"
       ],
       "topics": [],
-      "impact": 2,
-      "impact_label": "Середній вплив",
+      "impact": 1,
+      "impact_label": "Низький вплив",
       "tone": "Невизначений / змішаний",
       "source_count": 1,
       "publishers": [
-        "Decrypt"
+        "The Block"
       ],
       "links": [
         {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/MqZOhomP/crypto-rebounds-after-trump-tacos-on-tariffs-bitgo-21b-ipo-solanas-skr-token-soars-250-fdv"
+          "publisher": "The Block",
+          "url": "https://www.theblock.co/news/markets/2026-10-08-strategy-shareholders-face-dilution-drag-despite-brighter-bitcoin-forecasts-td-cowen-418066"
         }
       ],
       "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується BTC, ETH, SOL, XRP, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
       "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
@@ -1827,278 +1264,52 @@
       ]
     },
     {
-      "id": "665ddfdd5bcddf",
+      "id": "f68a36f28a20c7",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "Trump’s speech at Davos gives small boost to Crypto! Saylor buys $2.13B BTC! Blondish Interview!",
-      "summary": "Crypto majors are very red following a red Tuesday across markets; BTC -3% at $88,200; ETH -6% at $2,905, SOL -2% at $127; XRP -2% to $1.88. MYX (+11%) and ZRO (+10%) led top movers. Bitcoin and Solana both fell below key technical support levels as selling pressure accelerated. Over $1B in longs were liquidated during Bitcoin’s slide below $88k. Delaware Life added Bitcoin exposure to a fixed indexed annuity by linking performance to BlackRock’s spot BTC ETF, one of the first big moves to expand crypto access inside traditional insurance products. Trump Media announced plans to airdrop crypto tokens to shareholders in February, marking its f",
-      "url": "https://decrypt.co/videos/interviews/nWmEOl4c/trumps-speech-at-davos-gives-small-boost-to-crypto-saylor-buys-213b-btc-blondish-interview",
-      "published_at": "2026-01-21T16:17:26+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "regulation",
-        "etf",
-        "exchange",
-        "airdrop",
-        "institutional"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
+      "title": "The Block GCCI 2026 Country Profile: Inside Korea’s Crypto Market",
+      "summary": "Section 1: The Block’s Global Crypto Competitiveness Index Crypto markets have historically been measured on their trading volume, ownership, or adoption. While these metrics remain important, they speak to demand-side factors rather than the environment in which crypto companies and capital can operate. A country can have large trading volume while having a restrictive domestic […]",
+      "url": "https://www.theblock.co/research/institutional/block-gcci-2026-country-profile-korea-crypto-market-418081",
+      "published_at": "2026-10-08T17:16:23+00:00",
+      "assets": [],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
       "tone": "Потенційно позитивний",
       "source_count": 1,
       "publishers": [
-        "Decrypt"
+        "The Block"
       ],
       "links": [
         {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/nWmEOl4c/trumps-speech-at-davos-gives-small-boost-to-crypto-saylor-buys-213b-btc-blondish-interview"
+          "publisher": "The Block",
+          "url": "https://www.theblock.co/research/institutional/block-gcci-2026-country-profile-korea-crypto-market-418081"
         }
       ],
       "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     },
     {
-      "id": "6e3a1ab64869d0",
+      "id": "db5c497bd401a6",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "Trump Tariffs 3: Return of the Bull Market! NYSE Tokenising, what that means for $Hype! Claude Meme Meta!",
-      "summary": "Crypto majors are red following Trump’s tariff turmoil; BTC -2% at $91,100; ETH -4% at $3,105, SOL -3% at $129; XRP -2% to $1.93. CC (+12%), MYX (+5%) and SYRUP (+4%) led top movers. The NYSE began preparations for 24/7 tokenized stock and ETF trading. Steak ’n Shake revealed roughly $10M in Bitcoin exposure alongside the creation of a corporate BTC strategic reserve. Vitalik Buterin called for more sophisticated DAO governance models to improve accountability, coordination, and long-term sustainability. Bermuda outlined plans for a fully onchain national economy, working with Coinbase and Circle on payments, identity, and tokenized financial",
-      "url": "https://decrypt.co/videos/interviews/O1HZN4PH/trump-tariffs-3-return-of-the-bull-market-nyse-tokenising-what-that-means-for-hype-claude-meme-meta",
-      "published_at": "2026-01-20T18:12:06+00:00",
+      "title": "Will AI Break Crypto Encryption? Ethereum’s Vitalik Buterin Weighs In on 'Bunker Mode' Shift",
+      "summary": "Ethereum co-founder Vitalik Buterin thinks the crypto industry needs to make sure encryption is both quantum and AI-resistant.",
+      "url": "https://decrypt.co/380503/ai-break-crypto-encryption-ethereum-vitalik-buterin-bunker-mode",
+      "published_at": "2026-10-08T17:07:48+00:00",
       "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP",
-        "DOGE"
+        "ETH"
       ],
-      "topics": [
-        "etf",
-        "exchange",
-        "stablecoin"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/O1HZN4PH/trump-tariffs-3-return-of-the-bull-market-nyse-tokenising-what-that-means-for-hype-claude-meme-meta"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "90d485cf5dfdb3",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Crypto sells off amidst Trump Tariff Turmoil! $Trove falls 90% in awful TGE! Pump Fund announced!",
-      "summary": "Crypto majors are red following Trump’s tariff turmoil; BTC -2% at $91,100; ETH -4% at $3,105, SOL -3% at $129; XRP -2% to $1.93. CC (+12%), MYX (+5%) and SYRUP (+4%) led top movers. The NYSE began preparations for 24/7 tokenized stock and ETF trading. Steak ’n Shake revealed roughly $10M in Bitcoin exposure alongside the creation of a corporate BTC strategic reserve. Vitalik Buterin called for more sophisticated DAO governance models to improve accountability, coordination, and long-term sustainability. Bermuda outlined plans for a fully onchain national economy, working with Coinbase and Circle on payments, identity, and tokenized financial",
-      "url": "https://decrypt.co/videos/interviews/lokwS0bc/crypto-sells-off-amidst-trump-tariff-turmoil-trove-falls-90-in-awful-tge-pump-fund-announced",
-      "published_at": "2026-01-20T16:07:15+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP",
-        "DOGE"
-      ],
-      "topics": [
-        "etf",
-        "exchange",
-        "stablecoin"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/lokwS0bc/crypto-sells-off-amidst-trump-tariff-turmoil-trove-falls-90-in-awful-tge-pump-fund-announced"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "b830d8776faf78",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Are we back? Crypto is Green! Solana Intern goes rogue! Pump up 13%! Monero hits another ATH!",
-      "summary": "BTC: 95k (+3%) | BTC.D: 59.2% (-0.1%). ETH: 3313 (+6%) | BNB: 936 (+3%) | SOL: 145 (+2%). Top Gainers: IP, ICP, PUMP, PEPE, ENA. BTC ETFs: +$754m | ETH ETFs: +$130m. Crypto rallies on largest ETF inflow in 3 months. Senate committee to vote on crypto bill on Jan 27. Stablecoin issues with bill still being fought over. Ethena Labs makes USDe free from gas fees. Bitdeer overtakes MARA on ‘managed hashrate’. Polygon Labs to buy Coinme, Sequence for $250m. BitPanda eyes Frankfurt IPO in 1H26. CZ invests in perp trading platform Genius Terminal. Coingecko eyes sales at $500m valuation. Russia to open crypto markets more for payments. Crypto wrench",
-      "url": "https://decrypt.co/videos/interviews/Iv1NIhI4/are-we-back-crypto-is-green-solana-intern-goes-rogue-pump-up-13-monero-hits-another-ath",
-      "published_at": "2026-01-14T16:38:32+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "BNB"
-      ],
-      "topics": [
-        "etf",
-        "stablecoin"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/Iv1NIhI4/are-we-back-crypto-is-green-solana-intern-goes-rogue-pump-up-13-monero-hits-another-ath"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, BNB; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "a2c8730342eddf",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "ZEC Rebounds 11%! Trump says he won’t pardon Sam Bankman-Fried! Florida revisits it’s Strategic Bitcoin Reserve!",
-      "summary": "Crypto majors are mostly flat ahead of today’s supreme court opinion on the trump tariffs; btc +1% at $90,300; eth 13% at $3,090, sol +3% at $138; xrp +1% to $2.10. Polygon (+11%), zec (+11%) and syrup (+7%) led top movers. Jpmorgan said the recent bitcoin and ethereum sell-off may be bottoming, pointing to improving positioning and easing downside pressure after early-year weakness. Bank of america analysts upgraded coinbase to buy, citing improved regulatory clarity, growing institutional adoption, and stronger long-term earnings visibility. Morgan stanley is planning to launch a digital wallet later this year that could support tokenized a",
-      "url": "https://decrypt.co/videos/interviews/72tPnqPX/zec-rebounds-11-trump-says-he-wont-pardon-sam-bankman-fried-florida-revisits-its-strategic-bitcoin-reserve",
-      "published_at": "2026-01-09T17:17:12+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "regulation",
-        "exchange",
-        "institutional"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/72tPnqPX/zec-rebounds-11-trump-says-he-wont-pardon-sam-bankman-fried-florida-revisits-its-strategic-bitcoin-reserve"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "13b9bd56f68a71",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "The ZCash situation explained! Interview with ZEC bull Mert! BTC below $90K! ZEC falls 19%!",
-      "summary": "Crypto majors fell again yesterday as btc lost $90k; btc -2% at $89,900; eth -3% at $3,100, sol -3% at $134; xrp -7% to $2.08. Lit (+3%), wlfi (+3%) and xmr (+3%) led top movers. Zec fell 19% after the developer team resigned following a dispute with the board; the team has promised to form a new company and continue the mission. Jpmorgan announced plans to launch its jpm coin on the canton network. Barclays invested in ubyx, a u.S. Stablecoin settlement startup, backing infrastructure that would let regulated institutions move digital money across issuers and wallets. The senate banking committee faces mounting pressure ahead of a key vote o",
-      "url": "https://decrypt.co/videos/interviews/wmsgKRFW/the-zcash-situation-explained-interview-with-zec-bull-mert-btc-below-90k-zec-falls-19",
-      "published_at": "2026-01-08T17:04:56+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "stablecoin",
-        "institutional"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/wmsgKRFW/the-zcash-situation-explained-interview-with-zec-bull-mert-btc-below-90k-zec-falls-19"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Інституційний інтерес до BTC, ETH, SOL, XRP важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
-      "watch_for": "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
-      ]
-    },
-    {
-      "id": "c5cf92667b46f7",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "First 2026 Dip! BTC at 92K! Morgan Stanley file for BTC, ETH & SOL ETFs! Hyperliquid Airdrop Speculation!",
-      "summary": "Crypto majors fall for first time in 2026; BTC at $92k. Morgan Stanley files for BTC, ETH and SOL ETFs. US Senate schedules key vote for crypto market structure bill for next week. Hyperliquid releases progress map, leads to speculation of next airdrop. Nike announced it has sold off RTFKT; Clone X jump 250%. Crypto majors fell yesterday for the first time in 2026; BTC 2% at $92,000; ETH -1% at $3,210, SOL -1% at $138; XRP. 5% to $2.24. The U.S. Senate Banking Committee scheduled a key vote on the crypto market-structure bill next week. Ethereum network usage hit record daily transactions (2M+). Telegram shared that it sold $450M of its TON o",
-      "url": "https://decrypt.co/videos/interviews/GVQVX2ND/first-2026-dip-btc-at-92k-morgan-stanley-file-for-btc-eth-sol-etfs-hyperliquid-airdrop-speculation",
-      "published_at": "2026-01-07T16:14:54+00:00",
-      "assets": [
-        "BTC",
-        "ETH",
-        "SOL",
-        "XRP"
-      ],
-      "topics": [
-        "airdrop"
-      ],
-      "impact": 2,
-      "impact_label": "Середній вплив",
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
       "tone": "Невизначений / змішаний",
       "source_count": 1,
       "publishers": [
@@ -2107,34 +1318,36 @@
       "links": [
         {
           "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/GVQVX2ND/first-2026-dip-btc-at-92k-morgan-stanley-file-for-btc-eth-sol-etfs-hyperliquid-airdrop-speculation"
+          "url": "https://decrypt.co/380503/ai-break-crypto-encryption-ethereum-vitalik-buterin-bunker-mode"
         }
       ],
       "confidence_label": "Поки одне джерело",
-      "jev_take": "Це радше можливість/активність, а не торговий сигнал. Ключове — дедлайн, умови, KYC, gas і ризик фішингу.",
-      "watch_for": "Офіційний домен, дедлайн, eligibility, витрати gas/fees та підтвердження команди.",
+      "jev_take": "Новина стосується ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
-        "Офіційний домен, дедлайн, eligibility, витрати gas/fees та підтвердження команди."
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     },
     {
-      "id": "fc5cb46b5736eb",
+      "id": "4f88341b5a8c0a",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "The White Whale up 10x in a week! Lighter TGE! Saylor buys $109M BTC!",
-      "summary": "Btc: 87k (-1%) | btc.D: 59.0% (0%). Eth: 2953 (-3%) | bnb: 853 (-1%) | sol: 124 (-3%). The White Whale goes almost 15x in a week, from $5m to $71m mcap. Lighter TGE rumours stirring. YouTuber Nick Shirley reveals mass fraud in Minnesota daycare system. Gold & Silver prices see huge dump",
-      "url": "https://decrypt.co/videos/interviews/50vopyFa/the-white-whale-up-10x-in-a-week-lighter-tge-saylor-buys-109m-btc",
-      "published_at": "2025-12-29T16:10:19+00:00",
+      "title": "From Uptober to Spooky Szn? Bitcoin Cuts September Gains in Half",
+      "summary": "Day traders are selling, leveraged longs are getting flushed and ETF money is heading for the door. The daily chart still holds the line, but its cushion is shrinking.",
+      "url": "https://decrypt.co/380462/uptober-spooky-szn-bitcoin-cuts-september-gains",
+      "published_at": "2026-10-08T16:14:46+00:00",
       "assets": [
-        "BNB"
+        "BTC"
       ],
-      "topics": [],
-      "impact": 2,
-      "impact_label": "Середній вплив",
-      "tone": "Потенційно позитивний",
+      "topics": [
+        "etf"
+      ],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
       "source_count": 1,
       "publishers": [
         "Decrypt"
@@ -2142,16 +1355,801 @@
       "links": [
         {
           "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/50vopyFa/the-white-whale-up-10x-in-a-week-lighter-tge-saylor-buys-109m-btc"
+          "url": "https://decrypt.co/380462/uptober-spooky-szn-bitcoin-cuts-september-gains"
         }
       ],
       "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується BNB, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
+      ]
+    },
+    {
+      "id": "a5ae41c1b2269d",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Bitcoin nears 3-week low as oil heads higher on Iran strike woes",
+      "summary": "Bitcoin dipped below $81,000 and oil prices gained after reports that military confrontation between the US and Iran could return.",
+      "url": "https://cointelegraph.com/markets/bitcoin-nears-3-week-low-as-oil-heads-higher-on-iran-strike-woes?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "published_at": "2026-10-08T15:55:55+00:00",
+      "assets": [
+        "BTC"
+      ],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Cointelegraph"
+      ],
+      "links": [
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/markets/bitcoin-nears-3-week-low-as-oil-heads-higher-on-iran-strike-woes?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
       "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
         "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "c896562d29be2f",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Decrypt Money Accounts on Solana to Power The Information Exchange",
+      "summary": "One self-custodial platform to power Earn, Swaps, Predictions and Perps on Decrypt, as it builds out its financial and intelligence market.",
+      "url": "https://decrypt.co/380436/decrypt-money-accounts-on-solana-to-power-the-information-exchange",
+      "published_at": "2026-10-08T15:42:16+00:00",
+      "assets": [
+        "SOL"
+      ],
+      "topics": [
+        "exchange"
+      ],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Decrypt"
+      ],
+      "links": [
+        {
+          "publisher": "Decrypt",
+          "url": "https://decrypt.co/380436/decrypt-money-accounts-on-solana-to-power-the-information-exchange"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Біржова новина може впливати на ліквідність і доступність SOL; важливо відділити операційне оновлення від системного ризику.",
+      "watch_for": "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
+      ]
+    },
+    {
+      "id": "811e58977c2cc0",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "EU securities regulator gives crypto platforms 3 months to remove unauthorized stablecoins",
+      "summary": "",
+      "url": "https://www.coindesk.com/policy/2026/10/08/eu-securities-regulator-gives-crypto-platforms-3-months-to-remove-unauthorized-stablecoins",
+      "published_at": "2026-10-08T15:23:26+00:00",
+      "assets": [],
+      "topics": [
+        "regulation"
+      ],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/policy/2026/10/08/eu-securities-regulator-gives-crypto-platforms-3-months-to-remove-unauthorized-stablecoins"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
+      ]
+    },
+    {
+      "id": "d0f0ccf1e9b0b3",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Crypto for Advisors: Digital assets outran stocks and gold in Q3",
+      "summary": "",
+      "url": "https://www.coindesk.com/coindesk-indices/2026/10/08/crypto-for-advisors-digital-assets-outran-stocks-and-gold-in-q3",
+      "published_at": "2026-10-08T15:11:15+00:00",
+      "assets": [],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/coindesk-indices/2026/10/08/crypto-for-advisors-digital-assets-outran-stocks-and-gold-in-q3"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "8f778ae41386b0",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Securitize Brings Nvidia, Apple and Amazon Onchain With Tokenized Stocks on Solana",
+      "summary": "The new Securitize Stocks product launches with 12 names backed one-to-one by real shares—preserving dividends and voting rights—trading first on Solana, with NYSE and OKX-ICE venues planned.",
+      "url": "https://decrypt.co/380458/securitize-nvidia-apple-amazon-tokenized-stocks-solana",
+      "published_at": "2026-10-08T15:10:49+00:00",
+      "assets": [
+        "SOL"
+      ],
+      "topics": [
+        "exchange"
+      ],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Decrypt"
+      ],
+      "links": [
+        {
+          "publisher": "Decrypt",
+          "url": "https://decrypt.co/380458/securitize-nvidia-apple-amazon-tokenized-stocks-solana"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Біржова новина може впливати на ліквідність і доступність SOL; важливо відділити операційне оновлення від системного ризику.",
+      "watch_for": "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
+      ]
+    },
+    {
+      "id": "51d6d66fcef022",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Bitcoin pulls back as analysts forecast $80,000-$90,000 Q4 trading range",
+      "summary": "Bitcoin traded near $82,000 on Thursday, with analysts at QCP expecting a fourth-quarter range of $80,000 to $90,000.",
+      "url": "https://www.theblock.co/news/markets/2026-10-08-bitcoin-q4-forecast-418052",
+      "published_at": "2026-10-08T14:52:27+00:00",
+      "assets": [
+        "BTC"
+      ],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "The Block"
+      ],
+      "links": [
+        {
+          "publisher": "The Block",
+          "url": "https://www.theblock.co/news/markets/2026-10-08-bitcoin-q4-forecast-418052"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "883da027d90921",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "‘Bunker mode’ is a far greater challenge for institutions than individual crypto holders",
+      "summary": "",
+      "url": "https://www.coindesk.com/tech/2026/10/08/bunker-mode-is-a-far-greater-challenge-for-institutions-than-individual-crypto-holders",
+      "published_at": "2026-10-08T14:39:48+00:00",
+      "assets": [],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/tech/2026/10/08/bunker-mode-is-a-far-greater-challenge-for-institutions-than-individual-crypto-holders"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "88ea04684a894c",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Cardano Foundation spins out Veridian, tokenizes its shares on new standard",
+      "summary": "",
+      "url": "https://www.coindesk.com/business/2026/10/08/cardano-foundation-spins-out-veridian-tokenizes-its-shares-on-new-standard",
+      "published_at": "2026-10-08T14:24:24+00:00",
+      "assets": [
+        "ADA"
+      ],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/business/2026/10/08/cardano-foundation-spins-out-veridian-tokenizes-its-shares-on-new-standard"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується ADA, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "2010f9b4da8f7e",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Securitize launches 1:1-backed tokenized stocks, starting with Apple, Nvidia, Strategy and more",
+      "summary": "Securitize launches tokenized US stocks on Solana, backed 1:1 by real shares with dividends and USDC settlement.",
+      "url": "https://www.theblock.co/news/markets/2026-10-08-securitize-launches-tokenized-us-stocks-solana-418043",
+      "published_at": "2026-10-08T14:04:39+00:00",
+      "assets": [
+        "SOL"
+      ],
+      "topics": [
+        "stablecoin"
+      ],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "The Block"
+      ],
+      "links": [
+        {
+          "publisher": "The Block",
+          "url": "https://www.theblock.co/news/markets/2026-10-08-securitize-launches-tokenized-us-stocks-solana-418043"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
+      "watch_for": "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
+      ]
+    },
+    {
+      "id": "64d552628e8c9f",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Over 6 million bitcoin sit behind exposed public keys as AI warnings mount",
+      "summary": "",
+      "url": "https://www.coindesk.com/markets/2026/10/08/over-6-million-bitcoin-sit-behind-exposed-public-keys-as-ai-warnings-mount",
+      "published_at": "2026-10-08T14:03:20+00:00",
+      "assets": [
+        "BTC"
+      ],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/markets/2026/10/08/over-6-million-bitcoin-sit-behind-exposed-public-keys-as-ai-warnings-mount"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "6b6c7699e8769a",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "‘No going back’ for institutions moving toward tokenized onchain future, says Fidelity",
+      "summary": "Tokenization offers structural advantages to financial institutions and helps asset managers reach new markets, according to Fidelity’s head of digital asset strategists.",
+      "url": "https://cointelegraph.com/news/institutions-tokenized-onchain-future-no-going-back-fidelity?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "published_at": "2026-10-08T13:42:27+00:00",
+      "assets": [],
+      "topics": [
+        "institutional"
+      ],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Cointelegraph"
+      ],
+      "links": [
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/institutions-tokenized-onchain-future-no-going-back-fidelity?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Інституційний інтерес до крипторинок важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
+      "watch_for": "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
+      ]
+    },
+    {
+      "id": "47b5f94124c927",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Crypto lending rises again… but have they solved the risks?",
+      "summary": "Crypto lending has risen by 55% since July, but now has to deal with the dangers of AI assisted hacks, and risks cascading through interlinked protocols. Here’s how to stay safe.",
+      "url": "https://cointelegraph.com/magazine/crypto-lending-rises-again-but-have-they-solved-the-risks?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "published_at": "2026-10-08T13:30:00+00:00",
+      "assets": [],
+      "topics": [
+        "defi"
+      ],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Cointelegraph"
+      ],
+      "links": [
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/magazine/crypto-lending-rises-again-but-have-they-solved-the-risks?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "77f7bc39669731",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Securitize brings Apple, Nvidia and Tesla to Solana, with NYSE trading in the works",
+      "summary": "",
+      "url": "https://www.coindesk.com/business/2026/10/08/securitize-brings-apple-nvidia-and-tesla-to-solana-with-nyse-trading-in-the-works",
+      "published_at": "2026-10-08T13:06:24+00:00",
+      "assets": [
+        "SOL"
+      ],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/business/2026/10/08/securitize-brings-apple-nvidia-and-tesla-to-solana-with-nyse-trading-in-the-works"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується SOL, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "72730c037408af",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Here’s what happened in crypto today",
+      "summary": "Need to know what happened in crypto today? Here is the latest news on daily trends and events impacting Bitcoin price, blockchain, DeFi, Web3 and crypto regulation.",
+      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "published_at": "2026-10-08T12:58:01+00:00",
+      "assets": [
+        "BTC"
+      ],
+      "topics": [
+        "regulation",
+        "defi"
+      ],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Cointelegraph"
+      ],
+      "links": [
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
+      ]
+    },
+    {
+      "id": "8485d822955706",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "EU lawmakers push crypto onto anti-corruption agenda",
+      "summary": "MEPs also called for stronger asset recovery, while the Commission plans to adopt its first anti-corruption strategy by the end of this year.",
+      "url": "https://cointelegraph.com/news/eu-lawmakers-crypto-anti-corruption?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "published_at": "2026-10-08T12:54:21+00:00",
+      "assets": [],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Cointelegraph"
+      ],
+      "links": [
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/eu-lawmakers-crypto-anti-corruption?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "4dd5a85a7a4df4",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Ethereum Researcher Says AI May Break Encryption Before Quantum Does",
+      "summary": "Ethereum Foundation researcher Justin Drake urged holders to calmly move funds to unused addresses, warning that AI-driven math could break crypto signatures before quantum computers do.",
+      "url": "https://decrypt.co/380363/ethereum-researcher-ai-break-encryption-before-quantum",
+      "published_at": "2026-10-08T11:48:13+00:00",
+      "assets": [
+        "ETH"
+      ],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Decrypt"
+      ],
+      "links": [
+        {
+          "publisher": "Decrypt",
+          "url": "https://decrypt.co/380363/ethereum-researcher-ai-break-encryption-before-quantum"
+        },
+        {
+          "publisher": "Decrypt",
+          "url": "https://decrypt.co/380402/morning-minute-ethereum-researcher-says-ai-may-break-crypto-encryption-before-quantum"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "555cfa8043f8fc",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Uranium Finance Hacker Who Bought Pokémon and Magic Cards Convicted Over $50M Theft",
+      "summary": "Jonathan Spalletta also spent stolen crypto on a Roman coin marking Julius Caesar's assassination and moon-flown Wright brothers fabric.",
+      "url": "https://decrypt.co/380401/uranium-finance-hacker-who-bought-pokemon-and-magic-cards-convicted-over-50m-theft",
+      "published_at": "2026-10-08T11:37:17+00:00",
+      "assets": [],
+      "topics": [
+        "security"
+      ],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Потенційно негативний",
+      "source_count": 1,
+      "publishers": [
+        "Decrypt"
+      ],
+      "links": [
+        {
+          "publisher": "Decrypt",
+          "url": "https://decrypt.co/380401/uranium-finance-hacker-who-bought-pokemon-and-magic-cards-convicted-over-50m-theft"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
+      "watch_for": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Потенційно негативний",
+        "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
+      ]
+    },
+    {
+      "id": "b555cdd63f40e2",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Bitcoin mined for pennies in 2010 moves after 16 years, now worth $8.5 million",
+      "summary": "",
+      "url": "https://www.coindesk.com/tech/2026/10/08/bitcoin-mined-for-pennies-in-2010-moves-after-16-years-now-worth-usd8-5-million",
+      "published_at": "2026-10-08T11:30:19+00:00",
+      "assets": [
+        "BTC"
+      ],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/tech/2026/10/08/bitcoin-mined-for-pennies-in-2010-moves-after-16-years-now-worth-usd8-5-million"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "904b6a1f1db7c9",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Bitcoin ETF investors head for the exit, and it's the biggest rush in months",
+      "summary": "",
+      "url": "https://www.coindesk.com/daybook-us/2026/10/08/bitcoin-etf-investors-head-for-the-exit-and-it-s-the-biggest-rush-in-months",
+      "published_at": "2026-10-08T11:15:00+00:00",
+      "assets": [
+        "BTC"
+      ],
+      "topics": [
+        "etf"
+      ],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/daybook-us/2026/10/08/bitcoin-etf-investors-head-for-the-exit-and-it-s-the-biggest-rush-in-months"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
+      ]
+    },
+    {
+      "id": "7bd86641957c74",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Live updates: Bitcoin breaks lower from recent trading range, sliding back to $81,000",
+      "summary": "",
+      "url": "https://www.coindesk.com/markets/2026/10/08/live-news-risk-assets-under-pressure-as-bond-selloff-and-oil-rally-intensify",
+      "published_at": "2026-10-08T10:44:47+00:00",
+      "assets": [
+        "BTC"
+      ],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "CoinDesk"
+      ],
+      "links": [
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/markets/2026/10/08/live-news-risk-assets-under-pressure-as-bond-selloff-and-oil-rally-intensify"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "6fb1dfffeedc3b",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Greece plans 10% capital gains tax on cryptocurrencies",
+      "summary": "Greece’s draft bill proposes a 10% tax on crypto capital gains, with exemptions for annual gains of up to 500 euros and crypto-to-crypto swaps.",
+      "url": "https://cointelegraph.com/news/greece-capital-gains-tax-cryptocurrencies?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "published_at": "2026-10-08T10:32:52+00:00",
+      "assets": [],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 3,
+      "publishers": [
+        "Cointelegraph",
+        "CoinDesk",
+        "Decrypt"
+      ],
+      "links": [
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/greece-capital-gains-tax-cryptocurrencies?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        },
+        {
+          "publisher": "CoinDesk",
+          "url": "https://www.coindesk.com/policy/2026/10/08/greece-prepares-to-levy-10-capital-gains-tax-on-cryptocurrency"
+        },
+        {
+          "publisher": "Decrypt",
+          "url": "https://decrypt.co/380385/greece-plans-10-crypto-capital-gains-tax-down-from-15-floated-in-june"
+        }
+      ],
+      "confidence_label": "Підтверджено кількома джерелами",
+      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Підтверджено кількома джерелами",
+        "Ринковий тон: Невизначений / змішаний",
+        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
+      ]
+    },
+    {
+      "id": "7abd59bab265f0",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "Crypto industry split over Justin Drake’s AI warning",
+      "summary": "Crypto players disagree over Justin Drake’s AI cryptography warning, with some dismissing it while others urge proactive preparation.",
+      "url": "https://www.theblock.co/news/defi/2026-10-08-crypto-industry-split-over-justin-drakes-ai-warning-418021",
+      "published_at": "2026-10-08T10:20:00+00:00",
+      "assets": [],
+      "topics": [],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "The Block"
+      ],
+      "links": [
+        {
+          "publisher": "The Block",
+          "url": "https://www.theblock.co/news/defi/2026-10-08-crypto-industry-split-over-justin-drakes-ai-warning-418021"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
+      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     },
@@ -2195,7 +2193,7 @@
       "source": "jev_analysis",
       "mode": "news",
       "title": "ESMA gives crypto firms 3 months to exit non-compliant stablecoins",
-      "summary": "ESMA urged EU crypto firms to halt services involving non-MiCA-compliant stablecoins, giving regulators three months to address existing exposures.",
+      "summary": "ESMA said EU crypto firms should halt services involving non-MiCA-compliant stablecoins, giving regulators three months to address existing exposures.",
       "url": "https://cointelegraph.com/news/esma-unauthorised-stablecoins-three-month-deadline?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
       "published_at": "2026-10-08T09:42:04+00:00",
       "assets": [],
@@ -2266,44 +2264,6 @@
         "Підтверджено кількома джерелами",
         "Ринковий тон: Невизначений / змішаний",
         "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
-      ]
-    },
-    {
-      "id": "3493bad6a8ef0f",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Greece plans 10% capital gains tax on cryptocurrencies",
-      "summary": "Greece’s draft bill proposes a 10% tax on crypto capital gains, with exemptions for annual gains of up to 500 euros and crypto-to-crypto swaps.",
-      "url": "https://cointelegraph.com/news/greece-capital-gains-tax-cryptocurrencies?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "published_at": "2026-10-08T09:17:18+00:00",
-      "assets": [],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 2,
-      "publishers": [
-        "Cointelegraph",
-        "CoinDesk"
-      ],
-      "links": [
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/news/greece-capital-gains-tax-cryptocurrencies?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
-        },
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/policy/2026/10/08/greece-prepares-to-levy-10-capital-gains-tax-on-cryptocurrency"
-        }
-      ],
-      "confidence_label": "Є незалежне підтвердження",
-      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Є незалежне підтвердження",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     },
     {
@@ -2411,7 +2371,7 @@
       "id": "ac3d7006efbdcf",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "Coinbase Bets Banks Will Be Bigger Customers as Well as Rivals",
+      "title": "Coinbase Bets Banks Will Be Big Customers as Well as Rivals",
       "summary": "Coinbase Global Inc. is seeking to benefit from growing institutional adoption of cryptocurrencies by broadening its services for traditional financial firms.",
       "url": "https://www.bloomberg.com/news/articles/2026-10-08/coinbase-bets-banks-will-be-bigger-customers-as-well-as-rivals",
       "published_at": "2026-10-08T06:37:51+00:00",
@@ -2475,44 +2435,6 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "72730c037408af",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Here’s what happened in crypto today",
-      "summary": "Need to know what happened in crypto today? Here is the latest news on daily trends and events impacting Bitcoin price, blockchain, DeFi, Web3 and crypto regulation.",
-      "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "published_at": "2026-10-08T06:00:00+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [
-        "regulation",
-        "defi"
-      ],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Cointelegraph"
-      ],
-      "links": [
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/news/what-happened-in-crypto-today?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ]
     },
     {
@@ -2797,41 +2719,6 @@
       ]
     },
     {
-      "id": "f641944b809bc1",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Ethereum Researcher Says AI May Break Encryption Before Quantum Does",
-      "summary": "Ethereum Foundation researcher Justin Drake urged holders to calmly move funds to unused addresses, warning that AI-driven math could break crypto signatures before quantum computers do.",
-      "url": "https://decrypt.co/380363/ethereum-researcher-ai-break-encryption-before-quantum",
-      "published_at": "2026-10-07T21:16:03+00:00",
-      "assets": [
-        "ETH"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/380363/ethereum-researcher-ai-break-encryption-before-quantum"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
       "id": "153e80de795c12",
       "source": "jev_analysis",
       "mode": "news",
@@ -3075,74 +2962,6 @@
       ]
     },
     {
-      "id": "af8330b5fd9522",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Crypto Long & Short: Zcash and the case for privacy in the age of AI",
-      "summary": "",
-      "url": "https://www.coindesk.com/coindesk-indices/2026/10/07/crypto-long-and-short-zcash-and-the-case-for-privacy-in-the-age-of-ai",
-      "published_at": "2026-10-07T15:03:54+00:00",
-      "assets": [],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "CoinDesk"
-      ],
-      "links": [
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/coindesk-indices/2026/10/07/crypto-long-and-short-zcash-and-the-case-for-privacy-in-the-age-of-ai"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "c0be4a7f85d505",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Ether is about to lose a steady buyer as Tom Lee says Bitmine will stop token purchases",
-      "summary": "",
-      "url": "https://www.coindesk.com/markets/2026/10/07/ether-is-about-to-lose-a-steady-buyer-as-tom-lee-says-bitmine-will-stop-token-purchases",
-      "published_at": "2026-10-07T12:40:31+00:00",
-      "assets": [
-        "ETH"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "CoinDesk"
-      ],
-      "links": [
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/markets/2026/10/07/ether-is-about-to-lose-a-steady-buyer-as-tom-lee-says-bitmine-will-stop-token-purchases"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
       "id": "8807c90dd009be",
       "source": "jev_analysis",
       "mode": "news",
@@ -3169,39 +2988,6 @@
       ],
       "confidence_label": "Поки одне джерело",
       "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "6a6cc881fbe420",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Crypto trading giant GSR's new vault business is a $100M bet on onchain credit",
-      "summary": "",
-      "url": "https://www.coindesk.com/business/2026/10/07/crypto-trading-giant-gsr-s-new-vault-business-is-a-usd100m-bet-on-onchain-credit",
-      "published_at": "2026-10-07T12:34:13+00:00",
-      "assets": [],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "CoinDesk"
-      ],
-      "links": [
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/business/2026/10/07/crypto-trading-giant-gsr-s-new-vault-business-is-a-usd100m-bet-on-onchain-credit"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
       "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
@@ -3249,39 +3035,6 @@
       ]
     },
     {
-      "id": "a5abaac91871c4",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Swift blockchain ledger requires key internal layers, Taurus co-founder says",
-      "summary": "",
-      "url": "https://www.coindesk.com/business/2026/10/07/swift-blockchain-ledger-requires-key-internal-layers-taurus-co-founder-warns",
-      "published_at": "2026-10-07T11:59:24+00:00",
-      "assets": [],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "CoinDesk"
-      ],
-      "links": [
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/business/2026/10/07/swift-blockchain-ledger-requires-key-internal-layers-taurus-co-founder-warns"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
       "id": "86c72a58a49b6c",
       "source": "jev_analysis",
       "mode": "news",
@@ -3306,41 +3059,6 @@
       ],
       "confidence_label": "Поки одне джерело",
       "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "ac8266ccca1707",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Here’s what bitcoin needs to break above $87,000",
-      "summary": "",
-      "url": "https://www.coindesk.com/daybook-us/2026/10/07/here-s-what-bitcoin-needs-to-break-above-usd87-000",
-      "published_at": "2026-10-07T11:30:00+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "CoinDesk"
-      ],
-      "links": [
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/daybook-us/2026/10/07/here-s-what-bitcoin-needs-to-break-above-usd87-000"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
       "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
@@ -3383,79 +3101,6 @@
       ]
     },
     {
-      "id": "6a006f4cb5556c",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Live updates: Bitcoin edges up from worst levels as yields pull back",
-      "summary": "",
-      "url": "https://www.coindesk.com/business/2026/10/07/live-updates-bitcoin-slides-under-usd84-000-as-usd550-million-in-bets-get-liquidated",
-      "published_at": "2026-10-07T11:09:50+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "CoinDesk"
-      ],
-      "links": [
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/business/2026/10/07/live-updates-bitcoin-slides-under-usd84-000-as-usd550-million-in-bets-get-liquidated"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "608c754ce61a01",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Winklevoss Twins Prep Zcash ETFs as Privacy-Coin Trade Surges",
-      "summary": "Crypto entrepreneurs Tyler and Cameron Winklevoss used the opening day of the Token2049 conference to make the case for their proposed Zcash exchange-traded fund, touting the privacy-preserving features of the Bitcoin offshoot.",
-      "url": "https://www.bloomberg.com/news/articles/2026-10-07/winklevoss-twins-prepare-zcash-etfs-after-token-s-stellar-year",
-      "published_at": "2026-10-07T10:55:51+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [
-        "etf",
-        "exchange"
-      ],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Bloomberg Crypto"
-      ],
-      "links": [
-        {
-          "publisher": "Bloomberg Crypto",
-          "url": "https://www.bloomberg.com/news/articles/2026-10-07/winklevoss-twins-prepare-zcash-etfs-after-token-s-stellar-year"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
       "id": "fc6caff39c260f",
       "source": "jev_analysis",
       "mode": "news",
@@ -3491,74 +3136,6 @@
       ]
     },
     {
-      "id": "0b352784e67337",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Bitcoin’s recovery stalls just short of rescuing its last underwater cohort",
-      "summary": "",
-      "url": "https://www.coindesk.com/markets/2026/10/07/bitcoin-s-recovery-stalls-just-short-of-rescuing-its-last-underwater-cohort",
-      "published_at": "2026-10-07T10:38:23+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "CoinDesk"
-      ],
-      "links": [
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/markets/2026/10/07/bitcoin-s-recovery-stalls-just-short-of-rescuing-its-last-underwater-cohort"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "bfa326cfa4a870",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Liquidations jump to $547 million as oil rally hits crypto market",
-      "summary": "",
-      "url": "https://www.coindesk.com/markets/2026/10/07/liquidations-jump-to-usd547-million-as-oil-rally-drags-bitcoin-below-usd84-000",
-      "published_at": "2026-10-07T10:35:09+00:00",
-      "assets": [],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "CoinDesk"
-      ],
-      "links": [
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/markets/2026/10/07/liquidations-jump-to-usd547-million-as-oil-rally-drags-bitcoin-below-usd84-000"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
       "id": "6a830c81d07842",
       "source": "jev_analysis",
       "mode": "news",
@@ -3581,41 +3158,6 @@
         {
           "publisher": "Decrypt",
           "url": "https://decrypt.co/380260/prosecutors-cite-bitcoin-fog-ruling-against-roman-storms-venue-challenge"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "7ea42703425169",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "‘Old money’ has stronger Bitcoin ‘diamond hands,’ says BingX exec",
-      "summary": "BingX strategy chief Kevin Lee says wealthy investors are taking a longer-term approach to Bitcoin, though family-office crypto exposure remains limited.",
-      "url": "https://cointelegraph.com/news/bingx-old-money-bitcoin-diamond-hands-token2049?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "published_at": "2026-10-07T09:57:19+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Cointelegraph"
-      ],
-      "links": [
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/news/bingx-old-money-bitcoin-diamond-hands-token2049?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         }
       ],
       "confidence_label": "Поки одне джерело",
@@ -3664,41 +3206,6 @@
       ]
     },
     {
-      "id": "7e9697eb8f8673",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Crypto liquidations hit $550M as Bitcoin price dips below $84K",
-      "summary": "Bitcoin fell 2.3% in two hours amid suspicion over the appearance of leveraged BTC short positions on Hyperliquid.",
-      "url": "https://cointelegraph.com/markets/crypto-liquidations-hit-550m-as-bitcoin-price-dips-below-84k?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "published_at": "2026-10-07T09:45:35+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Cointelegraph"
-      ],
-      "links": [
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/markets/crypto-liquidations-hit-550m-as-bitcoin-price-dips-below-84k?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
       "id": "b6b66ec7b3a683",
       "source": "jev_analysis",
       "mode": "news",
@@ -3733,81 +3240,6 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "2108e4ca1a5970",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Robinhood adds $25 million worth of bitcoin to balance sheet as it deepens crypto push",
-      "summary": "Robinhood SVP Johann Kerbrat says the purchase was intended to signal the company's commitment to the crypto sector.",
-      "url": "https://www.theblock.co/news/business/2026-10-07-robinhood-adds-25-million-bitcoin-balance-sheet-417890",
-      "published_at": "2026-10-07T08:53:27+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 2,
-      "publishers": [
-        "The Block",
-        "CoinDesk"
-      ],
-      "links": [
-        {
-          "publisher": "The Block",
-          "url": "https://www.theblock.co/news/business/2026-10-07-robinhood-adds-25-million-bitcoin-balance-sheet-417890"
-        },
-        {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/markets/2026/10/07/robinhood-adds-bitcoin-worth-usd25-million-to-its-balance-sheet-report"
-        }
-      ],
-      "confidence_label": "Є незалежне підтвердження",
-      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Є незалежне підтвердження",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "29566aa6faa8d1",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Bitmine sets 5% Ether supply ‘hard cap’ as accumulation target nears",
-      "summary": "Tom Lee said Bitmine will not accumulate Ether past 5% of the supply, turning the company’s target into a ceiling.",
-      "url": "https://cointelegraph.com/news/bitmine-ether-5-percent-supply-hard-cap?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "published_at": "2026-10-07T08:50:02+00:00",
-      "assets": [
-        "ETH"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Cointelegraph"
-      ],
-      "links": [
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/news/bitmine-ether-5-percent-supply-hard-cap?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     },
     {
@@ -3846,13 +3278,13 @@
       ]
     },
     {
-      "id": "e07a4aeec39661",
+      "id": "7a94cfe119b54e",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "Down but not out. Bitcoin's stair-step bullish trajectory is still intact",
-      "summary": "",
-      "url": "https://www.coindesk.com/markets/2026/10/07/down-but-not-out-bitcoin-s-stair-step-bullish-trajectory-is-still-intact",
-      "published_at": "2026-10-07T07:52:22+00:00",
+      "title": "Robinhood adds $25 million worth of bitcoin to balance sheet as it deepens crypto push",
+      "summary": "Robinhood SVP Johann Kerbrat says the purchase was intended to signal the company's commitment to the crypto sector.",
+      "url": "https://www.theblock.co/news/business/2026-10-07-robinhood-adds-25-million-bitcoin-balance-sheet-417890",
+      "published_at": "2026-10-07T07:08:36+00:00",
       "assets": [
         "BTC"
       ],
@@ -3862,12 +3294,12 @@
       "tone": "Невизначений / змішаний",
       "source_count": 1,
       "publishers": [
-        "CoinDesk"
+        "The Block"
       ],
       "links": [
         {
-          "publisher": "CoinDesk",
-          "url": "https://www.coindesk.com/markets/2026/10/07/down-but-not-out-bitcoin-s-stair-step-bullish-trajectory-is-still-intact"
+          "publisher": "The Block",
+          "url": "https://www.theblock.co/news/business/2026-10-07-robinhood-adds-25-million-bitcoin-balance-sheet-417890"
         }
       ],
       "confidence_label": "Поки одне джерело",
@@ -3878,43 +3310,6 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "4667f7622da2f7",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "DOJ invokes Bitcoin Fog ruling in potential blow to Roman Storm acquittal bid",
-      "summary": "Prosecutors say a recent Bitcoin Fog appeals court ruling supports their argument that Tornado Cash activity in Manhattan was enough to establish venue for parts of Roman Storm’s case in New York.",
-      "url": "https://cointelegraph.com/news/roman-storm-bitcoin-fog-doj-acquittal-bid?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "published_at": "2026-10-07T07:10:59+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [
-        "regulation"
-      ],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Cointelegraph"
-      ],
-      "links": [
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/news/roman-storm-bitcoin-fog-doj-acquittal-bid?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ]
     },
     {
@@ -3953,43 +3348,6 @@
       ]
     },
     {
-      "id": "60d6645c326463",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Bitcoin.de trading remains halted as German regulator rejects MiCA application",
-      "summary": "Trading on the platform has largely been suspended since June as its operator awaited MiCA authorization, with the company now looking to regulated partners to restart services.",
-      "url": "https://cointelegraph.com/news/bitcoinde-trading-remains-halted-as-german-regulator-rejects-mica-application?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "published_at": "2026-10-07T01:48:53+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [
-        "regulation"
-      ],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Cointelegraph"
-      ],
-      "links": [
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/news/bitcoinde-trading-remains-halted-as-german-regulator-rejects-mica-application?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на BTC; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
       "id": "19752c68bb6411",
       "source": "jev_analysis",
       "mode": "news",
@@ -4023,12 +3381,12 @@
       ]
     },
     {
-      "id": "9cb9d563d6055a",
+      "id": "acdeca9cf8b246",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "Pudgy Penguins-backed Ethereum L2 Abstract to shut down after losing ‘tens of millions’",
-      "summary": "Abstract, the Pudgy Penguins-backed Ethereum L2, will shut down on Dec. 15. Users must bridge assets off before then.",
-      "url": "https://www.theblock.co/news/ecosystems/2026-10-06-abstract-ethereum-layer-2-shutting-down-pudgy-penguins-igloo-417855",
+      "title": "Pudgy Penguins' Ethereum Layer-2 Abstract Is Shutting Down",
+      "summary": "Abstract will shut down Dec. 15, saying a chain focused solely on consumer crypto proved unsustainable, and is urging users to bridge their assets off before then.",
+      "url": "https://decrypt.co/380225/pudgy-penguin-ethereum-layer-2-abstract-shutting-down",
       "published_at": "2026-10-06T20:28:53+00:00",
       "assets": [
         "ETH"
@@ -4037,27 +3395,22 @@
       "impact": 1,
       "impact_label": "Низький вплив",
       "tone": "Невизначений / змішаний",
-      "source_count": 2,
+      "source_count": 1,
       "publishers": [
-        "The Block",
         "Decrypt"
       ],
       "links": [
-        {
-          "publisher": "The Block",
-          "url": "https://www.theblock.co/news/ecosystems/2026-10-06-abstract-ethereum-layer-2-shutting-down-pudgy-penguins-igloo-417855"
-        },
         {
           "publisher": "Decrypt",
           "url": "https://decrypt.co/380225/pudgy-penguin-ethereum-layer-2-abstract-shutting-down"
         }
       ],
-      "confidence_label": "Є незалежне підтвердження",
+      "confidence_label": "Поки одне джерело",
       "jev_take": "Новина стосується ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
       "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
-        "Є незалежне підтвердження",
+        "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
@@ -4098,42 +3451,6 @@
       ]
     },
     {
-      "id": "3c3c201a2584eb",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Conduit sues Tether over $2.76 million freeze, says it has ‘no legal entitlement’ to funds",
-      "summary": "Conduit is suing Tether in NY federal court, alleging the USDT issuer froze $2.76 million of its funds for over a year without explanation.",
-      "url": "https://www.theblock.co/news/regulation/2026-10-06-conduit-sues-tether-usdt-freeze-417831",
-      "published_at": "2026-10-06T17:54:00+00:00",
-      "assets": [],
-      "topics": [
-        "regulation",
-        "stablecoin"
-      ],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "The Block"
-      ],
-      "links": [
-        {
-          "publisher": "The Block",
-          "url": "https://www.theblock.co/news/regulation/2026-10-06-conduit-sues-tether-usdt-freeze-417831"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
       "id": "be413c0ed93e03",
       "source": "jev_analysis",
       "mode": "news",
@@ -4160,217 +3477,6 @@
       ],
       "confidence_label": "Поки одне джерело",
       "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "5129e9d9c16017",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Brevan Howard to use Ripple Prime for multi-asset brokerage, clearing and financing",
-      "summary": "Ripple Prime will provide prime brokerage, clearing and financing to Brevan Howard, deepening a tie that began with its Ripple investment.",
-      "url": "https://www.theblock.co/news/business/2026-10-06-ripple-prime-brevan-howard-prime-brokerage-clearing-financing-417801",
-      "published_at": "2026-10-06T14:36:08+00:00",
-      "assets": [
-        "XRP"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "The Block"
-      ],
-      "links": [
-        {
-          "publisher": "The Block",
-          "url": "https://www.theblock.co/news/business/2026-10-06-ripple-prime-brevan-howard-prime-brokerage-clearing-financing-417801"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується XRP, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "9eba2bd449218b",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Circle, Ripple and Standard Chartered Back OKX at Flat $25B Valuation",
-      "summary": "A London quantitative hedge fund joins the round too, seven months after the NYSE's owner bought in at exactly the same price.",
-      "url": "https://decrypt.co/380157/circle-ripple-and-standard-chartered-back-okx-at-flat-25b-valuation",
-      "published_at": "2026-10-06T12:53:04+00:00",
-      "assets": [
-        "XRP"
-      ],
-      "topics": [
-        "exchange",
-        "stablecoin"
-      ],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/380157/circle-ripple-and-standard-chartered-back-okx-at-flat-25b-valuation"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Біржова новина може впливати на ліквідність і доступність XRP; важливо відділити операційне оновлення від системного ризику.",
-      "watch_for": "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
-      ]
-    },
-    {
-      "id": "1f5104e5701c7b",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Morning Minute: The CFTC Reveals Plan to Regulate Crypto Exchanges",
-      "summary": "Clear rules of the road are here. So what does it all mean and what is the overall impact?",
-      "url": "https://decrypt.co/380146/morning-minute-the-cftc-reveals-plan-to-regulate-crypto-exchanges",
-      "published_at": "2026-10-06T12:27:11+00:00",
-      "assets": [],
-      "topics": [
-        "regulation"
-      ],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/380146/morning-minute-the-cftc-reveals-plan-to-regulate-crypto-exchanges"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "1d2c07cc0e3270",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Crypto 'Godfather' Gets Six Years for Hiring Sheriff's Deputies, $37M Meta Fraud",
-      "summary": "Adam Iza used off-duty LA deputies to pull warrants and personal data on his rivals, then moved the proceeds through crypto custodians.",
-      "url": "https://decrypt.co/380138/crypto-godfather-gets-six-years-for-hiring-sheriffs-deputies-37m-meta-fraud",
-      "published_at": "2026-10-06T10:36:57+00:00",
-      "assets": [],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/380138/crypto-godfather-gets-six-years-for-hiring-sheriffs-deputies-37m-meta-fraud"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "f02a7db11c362a",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Solana Debuts Institutional Settlement Standard With J.P. Morgan Input",
-      "summary": "Built with input from J.P. Morgan, the open-source \"DvP\" program lets institutions settle trades atomically on Solana with finality in seconds instead of days.",
-      "url": "https://decrypt.co/380126/solana-institutional-settlement-standard-jp-morgan",
-      "published_at": "2026-10-06T02:01:03+00:00",
-      "assets": [
-        "SOL"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/380126/solana-institutional-settlement-standard-jp-morgan"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується SOL, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "29023ef5f2243c",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Why a 4chan Bitcoin Prophecy Says Today Is the End of Crypto Winter",
-      "summary": "An anonymous 4chan user called Bitcoin's October 2025 peak to the day way back in 2023. Could they be right again?",
-      "url": "https://decrypt.co/380113/4chan-bitcoin-prophecy-end-crypto-winter",
-      "published_at": "2026-10-05T20:46:03+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/380113/4chan-bitcoin-prophecy-end-crypto-winter"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
       "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
@@ -4803,39 +3909,6 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
-    },
-    {
-      "id": "19e0bd80230233",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Crypto Wallets Can ‘Directly Compete With Neobanks'",
-      "summary": "Bitget Wallet CMO Jamie Elkaleh tells Decrypt how the platform is evolving from a crypto wallet to a everyday finance app that seamlessly integrates crypto with TradFi, building on its vision of \"Crypto for Everyone.\" - (Sponsored post by Bitget Wallet)",
-      "url": "https://decrypt.co/videos/interviews/WsvLVFlp/crypto-wallets-can-directly-compete-with-neobanks",
-      "published_at": "2026-01-05T13:44:47+00:00",
-      "assets": [],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Потенційно позитивний",
-      "source_count": 1,
-      "publishers": [
-        "Decrypt"
-      ],
-      "links": [
-        {
-          "publisher": "Decrypt",
-          "url": "https://decrypt.co/videos/interviews/WsvLVFlp/crypto-wallets-can-directly-compete-with-neobanks"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Потенційно позитивний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     }
   ]
