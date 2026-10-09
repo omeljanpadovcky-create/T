@@ -33,8 +33,8 @@ jobs:
 
       - name: Install independent watcher packages
         run: |
-          python -m pip install --disable-pip-version-check requests==2.32.5 yt-dlp
-          ffmpeg -version | head -1
+          python -m pip install --disable-pip-version-check requests==2.32.5 yt-dlp imageio-ffmpeg
+          python -c "import imageio_ffmpeg; print('ffmpeg: ', imageio_ffmpeg.get_ffmpeg_exe())"
 
       - name: Compile isolated live observer
         run: python -m py_compile crypto_myshka/live_monitor.py
@@ -47,21 +47,24 @@ jobs:
           LIVE_MAX_SNAPSHOTS: '2'
         run: python crypto_myshka/live_monitor.py
 
-      - name: Publish only LIVE snapshot
+      - name: Publish only LIVE snapshot (safe concurrent writers)
         run: |
           git config user.name "CryptoMyshka LIVE Observer"
           git config user.email "crypto-myshka@users.noreply.github.com"
-          git add crypto_myshka/data/youtube_live.json
-          if git diff --cached --quiet; then
-            echo "No LIVE changes"
-            exit 0
-          fi
-          git commit -m "Update separate CryptoMyshka LIVE status"
-          for attempt in 1 2 3 4; do
-            git pull --rebase origin main
+          cp crypto_myshka/data/youtube_live.json /tmp/youtube_live_snapshot.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/youtube_live_snapshot.json crypto_myshka/data/youtube_live.json
+            git add crypto_myshka/data/youtube_live.json
+            if git diff --cached --quiet; then
+              echo "No LIVE status changes"
+              exit 0
+            fi
+            git commit -m "Update separate CryptoMyshka LIVE status"
             if git push origin HEAD:main; then
               exit 0
             fi
-            sleep 4
+            sleep 3
           done
           exit 1
