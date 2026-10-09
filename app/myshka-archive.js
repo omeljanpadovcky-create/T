@@ -113,6 +113,11 @@
     const count=raw.length;
     $('archive-count').textContent=String(count);
     $('archive-gemini-count').textContent=String(raw.filter(x=>x.gemini?.status==='gemini_video_summary').length);
+    $('archive-gemini-status').textContent=(d.gemini_configured===true
+      ? '🟢 Gemini Video API підключено в останньому зборі. Звіти з’являються поступово з урахуванням квот.'
+      : d.gemini_configured===false
+      ? '🟠 Gemini Video API ще не підключено. Додай GEMINI_API_KEY у секрети GitHub Actions (інструкція нижче).'
+      : 'ℹ️ Очікується підтвердження налаштувань Gemini від наступного запуску архіватора.');
     $('archive-caption-count').textContent=String(raw.filter(x=>x.caption_status==='available').length);
     $('archive-jev-count').textContent=String(raw.filter(x=>x.jev&&x.jev.status==='model_summary').length);
     $('archive-index-status').textContent=d.updated_at
