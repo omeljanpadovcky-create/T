@@ -477,7 +477,7 @@
         const localServer=['localhost','127.0.0.1'].includes(location.hostname);
         if (!localServer) {
           aiButton.disabled=true;
-          aiResult.textContent='Справжній AI потребує локального сервера Ollama. На GitHub Pages зараз працює тільки оцінка кольорів. Запусти START_MYSHKA_AI.ps1 через PowerShell та відкрий http://127.0.0.1:8765/myshka-app.html#analysis.';
+          aiResult.textContent='Справжній AI потребує локального сервера Ollama. На GitHub Pages зараз працює тільки оцінка кольорів. Запусти START_MYSHKA_AI.ps1 через PowerShell та відкрий http://127.0.0.1:18765/myshka-app.html#analysis.';
         } else {
           aiResult.textContent='AI аналізує фото локально, без надсилання в хмару. Це не підтверджені котирування чи торговий сигнал.';
           aiButton.addEventListener('click', async () => {
