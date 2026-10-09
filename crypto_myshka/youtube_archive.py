@@ -514,7 +514,7 @@ def main() -> None:
     temporary.write_text(json.dumps(archive, ensure_ascii=False, separators=(",", ":"))+"\n", encoding="utf-8")
     temporary.replace(ARCHIVE_FILE)
     feed = knowledge_feed(archive["videos"])
-    (ROOT / "data" / "jev_video_knowledge.json").write_text(json.dumps(feed, ensure_ascii=False, separators=(",", ":"))+"\\n", encoding="utf-8")
+    (ROOT / "data" / "jev_video_knowledge.json").write_text(json.dumps(feed, ensure_ascii=False, separators=(",", ":"))+"\n", encoding="utf-8")
     print(json.dumps({"indexed": archive["video_count"],
                       "new": archive["newly_discovered"],
                       "gemini_connected":archive["gemini_configured"],
