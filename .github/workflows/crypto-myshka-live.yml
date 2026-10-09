@@ -1,21 +1,8 @@
-name: CryptoMyshka LIVE Broadcast Monitor
+name: CryptoMyshka LIVE (manual only)
 
 on:
-  schedule:
-    # Best-effort polling. GitHub schedule may be delayed or dropped at busy times.
-    - cron: '*/5 * * * *'
+  # No automatic watching. Explicit manual diagnostics only.
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'crypto_myshka/live_monitor.py'
-      - 'crypto_myshka/pair_reports.py'
-      - 'crypto_myshka/pair_jev.py'
-      - 'crypto_myshka/tests/test_apinex_providers.py'
-      - 'crypto_myshka/tests/test_pair_jev.py'
-      - 'crypto_myshka/tests/test_pair_reports.py'
-      - 'youtube-analysts.html'
-      - '.github/workflows/crypto-myshka-live.yml'
 
 permissions:
   contents: write
