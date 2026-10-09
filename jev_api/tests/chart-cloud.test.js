@@ -20,11 +20,13 @@ function request(method, body, headers={}) {
   return {method,body,headers:{origin,'x-jev-access':access,...headers}};
 }
 function withSecrets(fn) {
-  const old={gemini:process.env.GEMINI_API_KEY,access:process.env.JEV_ACCESS_TOKEN};
+  const old={gemini:process.env.GEMINI_API_KEY,apinex:process.env.APINEX_API_KEY,access:process.env.JEV_ACCESS_TOKEN};
+  delete process.env.APINEX_API_KEY;
   process.env.GEMINI_API_KEY='fake-private-gemini-key';
   process.env.JEV_ACCESS_TOKEN=access;
   return Promise.resolve().then(fn).finally(()=>{
     if(old.gemini===undefined) delete process.env.GEMINI_API_KEY; else process.env.GEMINI_API_KEY=old.gemini;
+    if(old.apinex===undefined) delete process.env.APINEX_API_KEY; else process.env.APINEX_API_KEY=old.apinex;
     if(old.access===undefined) delete process.env.JEV_ACCESS_TOKEN; else process.env.JEV_ACCESS_TOKEN=old.access;
   });
 }
@@ -110,6 +112,55 @@ test('cloud screenshot calls Gemini server-side and returns bounded demo result'
       assert.equal(res.body.source,'cloud_gemini');
       assert.equal(res.body.expiry_validated,false);
       assert.equal(res.body.model,'gemini-2.5-flash');
+    }finally{globalThis.fetch=old;}
+  });
+});
+
+test('APInex health uses GitHub-compatible env key only inside the server and never exposes it',async()=>{
+  await withSecrets(async()=>{
+    process.env.APINEX_API_KEY='fake-apinex-secret-keep-private';
+    const old=globalThis.fetch;
+    globalThis.fetch=async (url,opts)=>{
+      assert.equal(url,'https://api.apinex.bond/v1/models');
+      assert.equal(opts.headers.Authorization,'Bearer fake-apinex-secret-keep-private');
+      return {ok:true,status:200};
+    };
+    try {
+      const ok=response();await health(request('GET'),ok);
+      assert.equal(ok.code,200);
+      assert.equal(ok.body.provider,'apinex');
+      assert.equal(ok.body.model,'gemini-3.8-flash');
+      assert.ok(!JSON.stringify(ok.body).includes(process.env.APINEX_API_KEY));
+      const bad=response();await health(request('GET',null,{'x-jev-access':'not-valid'}),bad);
+      assert.equal(bad.code,401);
+    }finally{globalThis.fetch=old;}
+  });
+});
+
+test('APInex vision uses authenticated OpenAI-compatible image_url format',async()=>{
+  await withSecrets(async()=>{
+    process.env.APINEX_API_KEY='fake-apinex-secret-keep-private';
+    const old=globalThis.fetch;
+    globalThis.fetch=async (url,opts)=>{
+      assert.equal(url,'https://api.apinex.bond/v1/chat/completions');
+      assert.equal(opts.headers.Authorization,'Bearer fake-apinex-secret-keep-private');
+      const payload=JSON.parse(opts.body);
+      assert.equal(payload.model,'gemini-3.8-flash');
+      assert.match(payload.messages[1].content[1].image_url.url,/^data:image\/png;base64,/);
+      assert.ok(payload.messages[1].content[1].image_url.url.endsWith(fakePng));
+      return {ok:true,status:200,json:async()=>({choices:[{message:{content:JSON.stringify({
+        direction:'ВНИЗ',readable:true,chart_timeframe:'1m',
+        test_expiry_seconds:60,evidence:'На кадрі видно кілька нижчих максимумів.'
+      })}}]})};
+    };
+    try {
+      const res=response();await vision(request('POST',{image:fakePng,chart_timeframe:'1m'}),res);
+      assert.equal(res.code,200);
+      assert.equal(res.body.provider,'apinex');
+      assert.equal(res.body.source,'cloud_apinex');
+      assert.equal(res.body.signal_validated,false);
+      assert.equal(res.body.expiry_validated,false);
+      assert.ok(!JSON.stringify(res.body).includes(process.env.APINEX_API_KEY));
     }finally{globalThis.fetch=old;}
   });
 });
