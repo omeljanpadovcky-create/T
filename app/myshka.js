@@ -513,8 +513,8 @@
       const act = e.target.closest('button[data-act]');
       if (act) { reportAction(act.dataset.act, act.dataset.id, act.dataset.vote); }
     });
-    // A screenshot is not a price feed. The browser keeps its full-resolution
-    // image and sends it only to the user's same-origin local Ollama bridge.
+    // Screenshot analysis is local by default. Cloud mode is opt-in with a private
+    // Vercel backend and a session-only access code; no API keys in this browser.
     let imageRequestId = 0;
     const analyzeChartImage = file => {
       if (!file) return;
@@ -556,7 +556,7 @@
           heading.textContent = '📷 Скріншот графіка';
           const note = document.createElement('p');
           note.className = 'report-notice';
-          note.textContent = 'Оригінальна роздільність збережена. Зі скріншота не можна підтвердити майбутню ціну чи результат угоди.';
+          note.textContent = 'Оригінальна роздільність збережена. Хмарний режим передає фото на твій сервер та до Gemini. Зі скріншота не можна підтвердити майбутню ціну чи результат угоди.';
           const aiArea = document.createElement('div');
           aiArea.className = 'jev-image-area';
           const aiButton = document.createElement('button');
@@ -568,30 +568,38 @@
           aiResult.setAttribute('role', 'status');
           aiResult.setAttribute('aria-live', 'polite');
           const localServer = ['localhost', '127.0.0.1'].includes(location.hostname);
-          if (!localServer) {
+          if (!localServer && !(state.cloudEndpoint && state.cloudAccess)) {
             aiButton.disabled = true;
-            aiResult.textContent = '⛔ AI не підключений на GitHub Pages. Для аналізу відкрий локальну Мишку через START_MYSHKA_AI.ps1: http://127.0.0.1:18765/myshka-app.html#analysis';
+            aiResult.textContent = '⛔ Хмарний JEV ще не підключено. Відкрий Налаштування → Хмарний JEV. Або скористайся локальною Ollama.';
           } else {
-            aiResult.textContent = 'Перевіряємо локальну Ollama…';
+            aiResult.textContent = 'Перевіряємо доступність JEV…';
             aiButton.addEventListener('click', async () => {
               if (requestId !== imageRequestId) return;
               aiButton.disabled = true;
               const analysisStartedAt = Date.now();
               aiResult.className = 'jev-image-result';
-              aiResult.textContent = '⏳ Перевіряємо Ollama…';
+              aiResult.textContent = '⏳ Перевіряємо AI-сервер…';
               try {
-                const healthResponse = await fetch('./api/chart-health', {cache: 'no-store'});
-                if (!healthResponse.ok) throw new Error('Локальний AI-сервер недоступний (HTTP ' + healthResponse.status + '). Перезапусти START_MYSHKA_AI.ps1.');
+                const useCloud = state.visionSource === 'cloud' ||
+                  (!localServer && !!state.cloudEndpoint);
+                if (useCloud && !state.cloudAccess) throw new Error('Введи код доступу до хмарного JEV у Налаштуваннях.');
+                if (useCloud && file.size > 2 * 1024 * 1024) throw new Error('Хмарний JEV приймає фото до 2 МБ. Обріж або стисни скріншот.');
+                const apiRoot = useCloud ? state.cloudEndpoint : '.';
+                const authHeaders = useCloud ? {'X-JEV-Access':state.cloudAccess} : {};
+                const healthResponse = await fetch(apiRoot + '/api/chart-health', {
+                  cache:'no-store', headers:authHeaders
+                });
                 const health = await healthResponse.json();
-                if (!health.ready) {
+                if (!healthResponse.ok || !health.ready) {
+                  if (useCloud) throw new Error(health.error || 'Хмарний JEV недоступний. Перевір Vercel та код доступу.');
                   if (!health.ollama) throw new Error('Ollama не відповідає. Запусти Ollama або ollama serve.');
                   throw new Error('Модель не встановлена. Виконай: ollama pull ' + (health.model || 'qwen2.5vl:3b'));
                 }
                 if (requestId !== imageRequestId) return;
                 aiResult.textContent = '⏳ JEV читає свічки на скріншоті…';
-                const response = await fetch('./api/chart-analysis', {
+                const response = await fetch(apiRoot + '/api/chart-analysis', {
                   method: 'POST',
-                  headers: {'Content-Type': 'application/json'},
+                  headers: {'Content-Type': 'application/json', ...authHeaders},
                   body: JSON.stringify({image: dataUrl.split(',')[1], chart_timeframe: $('chart-timeframe').value})
                 });
                 const result = await response.json();
@@ -636,7 +644,8 @@
                   'Обробка: ' + elapsed + ' с. Фото не є живим потоком котирувань.');
                 const warning = makeLine('p', 'report-notice',
                   tooLate ? '⛔ Аналіз тривав довше за тестову експірацію. Пропустити.' :
-                    '⚠️ Це неперевірена гіпотеза для демо, а не команда на ставку. OTC-котирування не звірені.');
+                    '⚠️ Це неперевірена гіпотеза для демо, а не команда на ставку. OTC-котирування не звірені.' +
+                    (useCloud ? ' Фото оброблено хмарним AI.' : ' Фото оброблено локально.'));
                 aiResult.replaceChildren(title, visible, timeframe, testTime, reason, latency, warning);
                 if (action !== 'SKIP') {
                   const outcomeId = imageFingerprint(dataUrl, action, expiry, result.chart_timeframe);
@@ -716,6 +725,32 @@
       state.selectedPair = null;
       renderAnalysis();
     });
+    $('cloud-connect').addEventListener('click', async () => {
+      const endpoint = validCloudEndpoint($('cloud-endpoint').value);
+      const access = $('cloud-access').value.trim();
+      if (!endpoint || access.length < 24) {
+        $('cloud-connection-status').textContent = 'Потрібна коректна HTTPS-адреса без шляху та код доступу не коротший за 24 символи.';
+        return;
+      }
+      state.cloudEndpoint = endpoint;
+      state.cloudAccess = access;
+      try {
+        localStorage.setItem(CLOUD_URL_KEY, endpoint);
+        sessionStorage.setItem(CLOUD_ACCESS_KEY, access);
+      } catch { toast('Сховище браузера недоступне. Параметри діють лише до оновлення.'); }
+      await checkVisionHealth();
+      if (state.visionSource === 'cloud' && state.visionStatus === 'ready') toast('Хмарний JEV підключено.');
+      else toast('Хмарний JEV не підтверджено. Перевір адресу, код і секрети сервера.');
+    });
+    $('cloud-disconnect').addEventListener('click', () => {
+      state.cloudEndpoint = '';
+      state.cloudAccess = '';
+      $('cloud-endpoint').value = '';
+      $('cloud-access').value = '';
+      try { localStorage.removeItem(CLOUD_URL_KEY); sessionStorage.removeItem(CLOUD_ACCESS_KEY); } catch {}
+      checkVisionHealth();
+      toast('Хмарний JEV від’єднано.');
+    });
     $('theme-select').addEventListener('change', e => {
       if (allowedTheme.has(e.target.value)) { state.prefs.theme = e.target.value; persist(); applyTheme(); }
     });
@@ -736,6 +771,7 @@
   }
   function boot() {
     loadPrefs();
+    loadCloudSettings();
     applyTheme();
     installInteractions();
     navigate(routeView(), { fromHash: true, noScroll: true });
