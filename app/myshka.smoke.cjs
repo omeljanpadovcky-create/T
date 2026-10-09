@@ -116,6 +116,15 @@ const { JSDOM } = require('jsdom');
   assert.match(preview.alt, /market-chart.png/);
   assert.match(doc.querySelector('#photo-analysis').textContent, /1281 × 602/);
   assert.match(doc.querySelector('#vision-status').textContent, /локальний JEV доступний лише|Локальний JEV доступний лише/);
+  const modeOnPublic = doc.querySelector('#vision-mode-select');
+  modeOnPublic.value = 'local';
+  modeOnPublic.dispatchEvent(new win.Event('change', {bubbles: true}));
+  await new Promise(resolve => setTimeout(resolve, 30));
+  assert.equal(doc.querySelector('#local-mode-warning').hidden, false, 'public GitHub Pages explains that Ollama cannot be used here');
+  assert.match(doc.querySelector('#connection-pill').textContent, /Ollama: відкрий локальну Мишку/);
+  modeOnPublic.value = 'auto';
+  modeOnPublic.dispatchEvent(new win.Event('change', {bubbles: true}));
+  await new Promise(resolve => setTimeout(resolve, 30));
   assert.equal(doc.querySelector('.jev-image-area button').disabled, true, 'GitHub Pages must not fake AI');
 
   // Local app: probe Ollama, send the full screenshot and show direction only.
