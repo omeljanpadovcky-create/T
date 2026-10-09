@@ -11,6 +11,8 @@ import json
 import os
 import urllib.error
 import urllib.request
+import webbrowser
+from urllib.parse import unquote, urlsplit
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -19,6 +21,8 @@ HOST = "127.0.0.1"
 PORT = int(os.environ.get("MYSHKA_AI_PORT", "8765"))
 MODEL = os.environ.get("MYSHKA_VISION_MODEL", "qwen2.5vl:3b")
 OLLAMA = os.environ.get("MYSHKA_OLLAMA_URL", "http://127.0.0.1:11434").rstrip("/")
+if urlsplit(OLLAMA).hostname not in ("localhost", "127.0.0.1", "::1"):
+    raise SystemExit("Для захисту фото Ollama повинна працювати лише на localhost.")
 MAX_BYTES = 8 * 1024 * 1024
 SYSTEM = """Ти JEV — обережний аналітик скріншотів торгових графіків.
 Пиши українською, конкретно та стисло. Спочатку прочитай, якщо видно, назву
@@ -61,7 +65,10 @@ class Handler(SimpleHTTPRequestHandler):
         self.wfile.write(raw)
 
     def do_GET(self):
-        requested = self.path.split("?")[0]
+        requested = unquote(self.path.split("?")[0])
+        if ".." in requested.split("/") or "\\\\" in requested:
+            self.send_error(404, "Not found")
+            return
         if requested == "/":
             self.send_response(302)
             self.send_header("Location", "/myshka-app.html#analysis")
@@ -139,4 +146,6 @@ class Handler(SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     print("Crypto Myshka AI — локально: http://127.0.0.1:%s/myshka-app.html#analysis" % PORT)
     print("Ollama:", OLLAMA, "| Модель:", MODEL, "| Фото не передаються в хмару")
-    ThreadingHTTPServer((HOST, PORT), Handler).serve_forever()
+    server = ThreadingHTTPServer((HOST, PORT), Handler)
+    webbrowser.open("http://127.0.0.1:%s/myshka-app.html#analysis" % PORT)
+    server.serve_forever()
