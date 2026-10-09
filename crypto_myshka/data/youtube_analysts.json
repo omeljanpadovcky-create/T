@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-09T19:37:10.531329+00:00",
+  "updated_at": "2026-10-09T20:28:05.973400+00:00",
   "mode": "read_only",
   "channels": [
     {
@@ -277,7 +277,7 @@
         },
         {
           "id": "fzVB8L6GQRM",
-          "title": "Review of \"The Fortress\": Our Private Trading Community",
+          "title": "Обзор на \" Крепость Борщева \" | Наше закрытое комьюнити трейдеров",
           "url": "https://www.youtube.com/watch?v=fzVB8L6GQRM",
           "upload_date": null,
           "analysis": {
@@ -295,6 +295,16 @@
           }
         }
       ],
+      "reviewed": 0
+    },
+    {
+      "id": "nikolai",
+      "name": "Николай (зі скріншота)",
+      "handle": null,
+      "url": null,
+      "confirmed": false,
+      "status": "need_channel_url",
+      "videos": [],
       "reviewed": 0
     }
   ],
