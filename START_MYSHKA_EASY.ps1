@@ -1,6 +1,9 @@
 # Crypto Myshka local AI: one PowerShell command, isolated copy, no secrets.
 # Installs nothing without confirmation. Does not modify an existing T repository.
-param([switch]$SkipDownload)
+param(
+    [switch]$SkipDownload,
+    [string]$PythonExe = ''
+)
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -115,6 +118,25 @@ function Get-OllamaTags {
     } catch { return $null }
 }
 function Ensure-Python {
+    if ($PythonExe) {
+        if (-not (Test-Path -LiteralPath $PythonExe -PathType Leaf)) {
+            Fail ('Specified Python executable does not exist: ' + $PythonExe)
+        }
+        try {
+            $pythonVersion = & $PythonExe -c 'import sys; print(sys.version_info.major, sys.version_info.minor)' 2>$null
+            if ($LASTEXITCODE -ne 0 -or -not $pythonVersion) {
+                Fail ('Specified Python executable cannot run: ' + $PythonExe)
+            }
+            $versionParts = ([string]$pythonVersion).Trim().Split(' ')
+            if ([int]$versionParts[0] -lt 3 -or ([int]$versionParts[0] -eq 3 -and [int]$versionParts[1] -lt 10)) {
+                Fail ('Python 3.10+ required; got ' + $pythonVersion)
+            }
+            Write-Host ('Using explicit Python: ' + $PythonExe) -ForegroundColor Green
+            return $PythonExe
+        } catch {
+            Fail ('Unable to launch specified Python executable: ' + $_.Exception.Message)
+        }
+    }
     $found = Lookup-Python
     if ($found) { return $found }
     Write-Host 'Python 3.10+ not found.' -ForegroundColor Yellow
