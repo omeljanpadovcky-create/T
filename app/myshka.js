@@ -231,6 +231,15 @@
     const levelHtml = level('Підтримка', su) + level('Опір', re) ||
       '<span class="level-tag">Рівні не підтверджено</span>';
     const limit = arr(r.limitations);
+    const gate = r.signal_gate && typeof r.signal_gate === 'object' ? r.signal_gate : null;
+    const review = gate && gate.decision === 'REVIEW_ONLY' && gate.eligible_for_human_review === true;
+    const gateReasons = gate ? arr(gate.reasons) : ['Фільтр підтверджень для цього звіту ще не виконувався'];
+    const gateHtml = '<div class="report-label">🛡 Перевірка сигналу · JEV Safety Gate</div>' +
+      '<p class="report-notice">' + (review ? 'REVIEW ONLY · Потрібна перевірка людиною, автоматична торгівля вимкнена.' :
+        'NO SIGNAL · Умови для обґрунтованого сигналу не виконані.') + '</p>' +
+      '<details><summary>Чому Мишка пропускає угоду?</summary><p>' +
+      safe(gateReasons.length ? gateReasons.join(' • ') : 'Формальні перевірки пройдено; це не гарантія результату.') +
+      '</p></details>';
     const video = link(r.video_url, 'Джерело на YouTube');
     const type = sourceType(r);
     const sentiment = str(r.sentiment) === 'bearish' ? 'bear' : str(r.sentiment) === 'bullish' ? 'bull' : '';
@@ -258,7 +267,7 @@
       safe(limit.join(' • ') || 'Без незалежної перевірки котирувань.') +
       '</p><p>' + (source ? 'JEV пояснив саме дані з кадру; це не означає незалежного підтвердження угоди.' :
         'Окремий AI-висновок JEV ще не отриманий; показано лише пояснення витягнутого кадру.') +
-      '</p></details><p class="report-notice">⚠ WAIT / OBSERVE · Інформаційний аналіз, не підтверджений торговий сигнал.</p>' +
+      '</p></details>' + gateHtml + '<p class="report-notice">⚠ WAIT / OBSERVE · Інформаційний аналіз, не підтверджений торговий сигнал.</p>' +
       '<div class="report-actions">' +
       '<button type="button" data-act="vote" data-vote="good" data-id="' + safe(rid) + '" class="' + (vote === 'good' ? 'on' : '') + '">👍 Корисно</button>' +
       '<button type="button" data-act="vote" data-vote="bad" data-id="' + safe(rid) + '" class="' + (vote === 'bad' ? 'on' : '') + '">👎 Не корисно</button>' +
