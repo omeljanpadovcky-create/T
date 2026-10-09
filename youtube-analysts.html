@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#06111d">
+<title>YouTube-аналітики | КриптоМишка</title>
+<style>
+:root{color-scheme:dark;--bg:#06101b;--panel:#0c1b2a;--edge:#244665;--text:#ebf4ff;--muted:#94abc3;--blue:#48aefc;--gold:#ffd166;--red:#ff8997;--green:#49dbb0}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(700px 350px at 65% -10%,#17416477,transparent),linear-gradient(#06121f,#040810);color:var(--text);font:14px system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:1180px;margin:auto;padding:18px 16px 50px}
+a{color:inherit}a:hover{color:#fff}
+.top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.back{display:inline-flex;text-decoration:none;align-items:center;gap:6px;color:#b8d6f2;border:1px solid var(--edge);background:#0e2033;padding:10px 13px;border-radius:12px;font-weight:750}
+.tag{font-size:11px;padding:8px 12px;color:var(--gold);background:#33280f;border:1px solid #6a5528;border-radius:999px}
+.hero{margin-top:15px;padding:24px;border:1px solid #315476;border-radius:24px;background:linear-gradient(140deg,#102941,#0a1828 65%);box-shadow:0 22px 50px #0004;display:grid;grid-template-columns:1fr auto;gap:18px}
+.kicker{color:var(--green);text-transform:uppercase;letter-spacing:.18em;font-size:11px;font-weight:800}
+h1{font-size:clamp(28px,5vw,46px);letter-spacing:-.035em;margin:9px 0}
+h1 em{color:var(--gold);font-style:normal}p{line-height:1.65;color:#acbed0}
+.hero p{margin:0;max-width:720px}
+.mouse{font-size:75px;align-self:center;filter:drop-shadow(0 9px 15px #0008)}
+.flow{margin-top:14px;display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:8px}
+.node{border:1px solid #305779;background:#0d2337;color:#c6e3ff;border-radius:13px;padding:12px;text-align:center;font-weight:800;min-width:0}
+.node.strong{background:#113a31;color:#9bfad0;border-color:#29785f}.arrow{color:var(--gold);font-size:22px;text-align:center}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:13px}.metric{padding:13px 16px;border:1px solid #294562;background:var(--panel);border-radius:16px}.metric small{display:block;color:var(--muted)}.metric b{display:block;font-size:22px;margin-top:5px}
+.box{border:1px solid #234361;background:linear-gradient(#0d1b29,#081421);border-radius:18px;padding:18px}
+.safe{margin-top:14px;border-color:#664b32;background:linear-gradient(130deg,#271b18,#121c25)}
+.safe h2{margin:0;color:#ffd2a1;font-size:20px}.safe p{margin:8px 0 0}
+.safe strong{color:#fff}.section{margin-top:22px}.section h2{margin:0 0 6px;font-size:23px}.section>p{margin:0 0 13px}
+.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:14px 0}
+.filter{cursor:pointer;background:#0e2234;color:#bbd0e7;border:1px solid #31506d;border-radius:999px;padding:9px 14px;font-weight:750}
+.filter.active{background:#15405e;color:#fff;border-color:#4d97c8}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:linear-gradient(145deg,#101e30,#0a1522);border:1px solid #2b4565;border-radius:19px;padding:18px;min-width:0}
+.cardHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.cardHead h3{margin:0;font-size:17px}.handle{font-size:12px;color:#8fb3d4;margin-top:4px}
+.status{display:inline-block;font-size:10px;border-radius:9px;border:1px solid #48637c;color:#d0e1f3;padding:6px 8px;white-space:nowrap}
+.status.warn{border-color:#74543c;color:#ffc388;background:#32231b}
+.blurb{font-size:12px;color:#97abc0;margin:9px 0}
+.buttons{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.action{display:inline-flex;align-items:center;text-decoration:none;background:#12364f;border:1px solid #3376a0;border-radius:11px;padding:9px 12px;font-size:12px;font-weight:800;color:#d5efff}
+.action.disabled{background:#182333;border-color:#2b3d51;color:#7b8fa4;cursor:default}
+.video{margin-top:8px;border:1px solid #244159;background:#081523;border-radius:11px;padding:11px}
+.video a{font-weight:780;font-size:12px;text-decoration:none;color:#badcff;line-height:1.5}.video a:hover{text-decoration:underline}
+.video small{display:block;color:#849bb4;margin:6px 0}
+.flags{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+.flag{font-size:10px;border:1px solid #3b5369;color:#a5c3de;border-radius:7px;padding:4px 6px}
+.flag.risk{border-color:#855044;color:#ffb8a7}
+.empty{color:#7f99b2;font-size:12px;border:1px dashed #3c5267;padding:16px;border-radius:12px;margin-top:12px}
+.footer{color:#7189a0;font-size:12px;margin-top:24px;line-height:1.7}
+@media(max-width:720px){.hero{grid-template-columns:1fr}.mouse{display:none}.metrics{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<div class="top"><a class="back" href="./index.html">← КриптоМишка 2.1</a><span class="tag">🔎 READ ONLY · NO AUTO-TRADE</span></div>
+<header class="hero"><div>
+<div class="kicker">🐭 Нова незалежна лабораторія</div>
+<h1>YouTube-<em>аналітики</em></h1>
+<p>5 джерел → перевірка публічних відео → висновок JEV. Не копіюємо ставки зі стрімів: відокремлюємо навчальний теханаліз, рекламу та OTC від перевірених фактів про крипторинок.</p>
+</div><div class="mouse" aria-hidden="true">🐭</div></header>
+<div class="flow">
+<div class="node">5 каналів<br><small>публічні відео</small></div><span class="arrow">➜</span>
+<div class="node">Порівняння<br><small>ризики, джерела, дата</small></div><span class="arrow">➜</span>
+<div class="node strong">JEV: <span id="decision">SKIP</span><br><small>лише після незалежної перевірки</small></div>
+</div>
+<div class="metrics">
+<div class="metric"><small>Канали зі скріншотів</small><b id="channelCount">5</b></div>
+<div class="metric"><small>Підтверджені посилання</small><b id="confirmedCount">4/5</b></div>
+<div class="metric"><small>Знайдено відео</small><b id="videoCount">—</b></div>
+<div class="metric"><small>Оновлено (UTC)</small><b id="updatedAt" style="font-size:13px">Очікується</b></div>
+</div>
+<div class="box safe">
+<h2>🛡️ Фінальне рішення: <strong>SKIP</strong></h2>
+<p id="decisionReason">Поки сигнали з відео не звірені з незалежними котируваннями, часом входу та історією результатів, вони не можуть запускати угоди. Стрім і красиві відсотки — не підтверджена статистика.</p>
+</div>
+<section class="section">
+<h2>Джерела та їхні відео</h2>
+<p>Збір метаданих виконує окремий процес приблизно раз на дві години. Позначка «проаналізовано» означає аналіз доступної назви, опису й іноді субтитрів, а не перевірку кожної угоди на стрімі.</p>
+<div class="row" role="group" aria-label="Фільтрувати відео">
+<button class="filter active" data-filter="all">Усі</button>
+<button class="filter" data-filter="otc">OTC / бінарні</button>
+<button class="filter" data-filter="crypto">Криптовалюта</button>
+<button class="filter" data-filter="promo">Маркетинг</button>
+</div>
+<div id="cards" class="cards"><div class="empty">Завантаження даних…</div></div>
+</section>
+<footer class="footer">CryptoMyshka YouTube Lab — ізольований інформаційний модуль. Не змінює радар, Telegram, JEV-аналіз новин і не відкриває ордерів. Окремі відео не підтверджують заявлений відсоток успіху.</footer>
+</main>
+<script>
+const DATA='./crypto_myshka/data/youtube_analysts.json?v='+Date.now();
+let snapshot={channels:[]}, selected='all';
+const el=id=>document.getElementById(id);
+const esc=x=>String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function statusLabel(x){
+if(!x.confirmed)return ['Не підтверджено','warn'];
+if(x.status==='ok')return ['Збір успішний',''];
+if(x.status==='pending_first_scan')return ['Очікує сканування',''];
+return ['Немає актуальних даних','warn'];
+}
+function visible(v){
+const a=v.analysis||{};
+return selected==='all'||(selected==='otc'&&a.otc_flag)||(selected==='crypto'&&a.pairs&&a.pairs.length&&!a.otc_flag)||(selected==='promo'&&a.promotion_flag);
+}
+function render(){
+const channels=snapshot.channels||[], all=channels.flatMap(x=>x.videos||[]);
+el('channelCount').textContent=channels.length;
+el('confirmedCount').textContent=channels.filter(x=>x.confirmed).length+'/'+channels.length;
+el('videoCount').textContent=all.length||'—';
+el('decision').textContent=snapshot.final_signal||'SKIP';
+el('decisionReason').textContent=snapshot.reason||'Непідтверджені сигнали зі стрімів не використовуємо для угод.';
+const date=snapshot.updated_at?new Date(snapshot.updated_at):null;
+el('updatedAt').textContent=date&&!isNaN(date.getTime())?date.toLocaleString('uk-UA',{timeZone:'UTC',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'Очікується';
+el('cards').innerHTML=channels.map(x=>{
+const st=statusLabel(x);
+const vids=(x.videos||[]).filter(visible);
+let body=vids.slice(0,8).map(v=>{
+const a=v.analysis||{},parts=[];
+if(a.otc_flag)parts.push('<span class="flag risk">OTC / binary</span>');
+if(a.promotion_flag)parts.push('<span class="flag risk">реклама / просування</span>');
+if(a.pairs&&a.pairs.length)parts.push('<span class="flag">'+esc(a.pairs.join(', '))+'</span>');
+parts.push('<span class="flag">'+esc(a.evidence||'тільки метадані')+'</span>');
+let date=v.upload_date||'';
+date=/^\d{8}$/.test(date)?date.slice(6,8)+'.'+date.slice(4,6)+'.'+date.slice(0,4):'Дата не визначена';
+return '<div class="video"><a target="_blank" rel="noopener noreferrer" href="'+esc(v.url)+'">'+esc(v.title)+' ↗</a><small>'+esc(date)+' · '+esc(a.direction_claim||'напрямок невідомий')+'</small><div class="flags">'+parts.join('')+'</div></div>';
+}).join('');
+if(!vids.length)body='<div class="empty">'+(x.status==='need_channel_url'?'Потрібне пряме посилання на п’ятий YouTube-канал.':x.status==='pending_first_scan'?'Перше сканування ще не виконано.':selected==='all'?'Немає доступних відео (або YouTube тимчасово недоступний).':'Немає відео за цим фільтром.')+'</div>';
+return '<article class="card"><div class="cardHead"><div><h3>'+esc(x.name)+'</h3><div class="handle">'+esc(x.handle||'YouTube-адреса невідома')+'</div></div><span class="status '+st[1]+'">'+st[0]+'</span></div>'+
+'<div class="blurb">Огляд відео: '+(x.videos||[]).length+' · розширені метадані: '+(x.reviewed||0)+'</div>'+
+'<div class="buttons">'+(x.url?'<a class="action" target="_blank" rel="noopener noreferrer" href="'+esc(x.url)+'">Відкрити YouTube ↗</a>':'<span class="action disabled">Посилання ще не підтверджено</span>')+'</div>'+body+'</article>';
+}).join('')||'<div class="empty">Немає даних джерел.</div>';
+}
+document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{
+document.querySelectorAll('[data-filter]').forEach(b=>b.classList.remove('active'));
+button.classList.add('active');selected=button.dataset.filter;render();
+}));
+fetch(DATA,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(x=>{snapshot=x;render()}).catch(()=>{el('cards').innerHTML='<div class="empty">Файл звіту ще не опубліковано. Існуючі функції сайту працюють окремо.</div>'});
+</script>
+</body>
+</html>
