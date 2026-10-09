@@ -49,3 +49,14 @@ main{width:100%;max-width:1120px;margin:0 auto;flex:1;min-width:0}h1,h2,h3,h4{fo
 
 .vision-help{margin:-5px 0 14px;font-size:12px;color:var(--blue)}
 .vision-help a{text-decoration:underline;text-underline-offset:3px}
+
+/* Experimental demo expiry lab. Candle timeframe != broker order expiry. */
+.expiry-lab-controls{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:12px 0;padding:12px 15px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+.expiry-lab-controls label{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--ink)}
+.expiry-lab-controls label small{font-size:12px;color:var(--muted)}
+.expiry-lab-controls select{max-width:100%;min-width:210px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);padding:10px 12px;font:inherit}
+.jev-image-expiry{font-size:16px;font-weight:700;margin:9px 0}
+.jev-image-meta{font-size:12px;color:var(--muted);margin:6px 0}
+.jev-image-reason{font-size:14px;color:var(--ink);margin:9px 0;line-height:1.5}
+.jev-image-result .direction-result{font-size:clamp(20px,4vw,29px)}
+@media(max-width:650px){.expiry-lab-controls{align-items:stretch}.expiry-lab-controls select{width:100%}}
