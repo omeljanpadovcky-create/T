@@ -96,18 +96,17 @@ const { JSDOM } = require('jsdom');
   assert.equal(doc.querySelector('#analysis-list .report-actions'), null, 'demo must not offer to save or rate a fake report');
   click('#demo-button');
   assert.match(doc.querySelector('#analysis-list').textContent, /Очікуємо перший LIVE-аналіз/);
-  // A chart photo should be visibly rendered, not only counted as red/green pixels.
-  win.URL.createObjectURL = () => 'blob:chart-test';
-  win.URL.revokeObjectURL = () => {};
+  // A chart photo must remain at full resolution and be shown before analysis.
+  win.FileReader = class {
+    readAsDataURL(_file) {
+      this.result = 'data:image/png;base64,aGVsbG8=';
+      this.onload();
+    }
+  };
   win.Image = class {
-    constructor() { this.width = 942; this.height = 657; }
+    constructor() { this.width = 1281; this.height = 602; }
     set src(_value) { this.onload(); }
   };
-  win.HTMLCanvasElement.prototype.getContext = () => ({
-    drawImage() {},
-    getImageData() { return { data: new Uint8ClampedArray([0, 190, 0, 255, 220, 0, 0, 255]) }; }
-  });
-  win.HTMLCanvasElement.prototype.toDataURL = () => 'data:image/png;base64,aGVsbG8=';
   const input = doc.querySelector('#chart-photo');
   Object.defineProperty(input, 'files', { configurable: true, value: [
     { name: 'market-chart.png', type: 'image/png', size: 1000 }
@@ -115,9 +114,63 @@ const { JSDOM } = require('jsdom');
   input.dispatchEvent(new win.Event('change', { bubbles: true }));
   const preview = doc.querySelector('#photo-analysis img.chart-photo-preview');
   assert.ok(preview, 'uploaded chart must be visible in analysis result');
-  assert.match(preview.src, /^data:image\/png;base64,/);
+  assert.equal(preview.src, 'data:image/png;base64,aGVsbG8=');
   assert.match(preview.alt, /market-chart.png/);
-  assert.match(doc.querySelector('#photo-analysis').textContent, /market-chart.png/);
+  assert.match(doc.querySelector('#photo-analysis').textContent, /1281 × 602/);
+  assert.match(doc.querySelector('#vision-status').textContent, /Хмарна сторінка/);
+  assert.equal(doc.querySelector('.jev-image-area button').disabled, true, 'GitHub Pages must not fake AI');
+
+  // Local app: probe Ollama, send the full screenshot and show direction only.
+  const localDom = new JSDOM(html, {
+    url: 'http://127.0.0.1:18765/myshka-app.html#analysis',
+    pretendToBeVisual: true, runScripts: 'outside-only'
+  });
+  const localWin = localDom.window;
+  localWin.scrollTo = () => {};
+  localWin.FileReader = win.FileReader;
+  localWin.Image = win.Image;
+  let healthChecks = 0, imageCalls = 0;
+  localWin.fetch = async (url, opts) => {
+    if (String(url).includes('/api/chart-health')) {
+      healthChecks++;
+      return {ok: true, json: async () => ({ready: true, ollama: true, model: 'qwen2.5vl:3b'})};
+    }
+    if (String(url).includes('/api/chart-analysis')) {
+      imageCalls++;
+      assert.equal(opts.method, 'POST');
+      assert.equal(JSON.parse(opts.body).image, 'aGVsbG8=', 'full original image is sent');
+      return {ok: true, json: async () => ({analysis: 'ВГОРУ', direction: 'ВГОРУ', model: 'qwen2.5vl:3b'})};
+    }
+    const filename = String(url).split('/').pop().split('?')[0];
+    if (!data[filename]) throw Error('Unexpected resource: ' + url);
+    return {ok: true, json: async () => data[filename]};
+  };
+  localWin.eval(js);
+  await new Promise(resolve => setTimeout(resolve, 180));
+  const localDoc = localWin.document;
+  assert.match(localDoc.querySelector('#vision-status').textContent, /JEV готовий/);
+  const localInput = localDoc.querySelector('#chart-photo');
+  Object.defineProperty(localInput, 'files', { configurable: true, value: [
+    { name: 'paste.png', type: 'image/png', size: 1000 }
+  ] });
+  localInput.dispatchEvent(new localWin.Event('change', {bubbles: true}));
+  await new Promise(resolve => setTimeout(resolve, 30));
+  assert.equal(imageCalls, 1, 'local image should be analyzed once');
+  assert.ok(healthChecks >= 2, 'local health checked at startup and before inference');
+  assert.match(localDoc.querySelector('#photo-analysis .jev-image-result').textContent, /ВГОРУ/);
+  assert.doesNotMatch(localDoc.querySelector('#photo-analysis').textContent, /червоних ділянок/);
+
+  // Paste from the Windows Snipping Tool must also trigger analysis.
+  const paste = new localWin.Event('paste', {bubbles: true, cancelable: true});
+  Object.defineProperty(paste, 'clipboardData', {value: {
+    items: [{kind: 'file', type: 'image/png', getAsFile: () => ({name: 'clip.png', type: 'image/png', size: 1000})}],
+    files: []
+  }});
+  localDoc.dispatchEvent(paste);
+  await new Promise(resolve => setTimeout(resolve, 30));
+  assert.equal(imageCalls, 2, 'Ctrl+V screenshot should be analyzed');
+  assert.equal(paste.defaultPrevented, true);
+  localWin.close();
   win.close();
-  console.log('✅ Crypto Myshka app: 5 screens, LIVE, JEV detail, saved history, photo preview, settings & empty state passed');
+  console.log('✅ Crypto Myshka: all screens, LIVE, saved history, original photo, Ctrl+V, Ollama health, direction and cloud fallback passed');
 })().catch(error => { console.error(error); process.exit(1); });
