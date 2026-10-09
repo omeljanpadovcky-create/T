@@ -123,3 +123,10 @@ main{width:100%;max-width:1120px;margin:0 auto;flex:1;min-width:0}h1,h2,h3,h4{fo
 .archive-more[hidden]{display:none!important}
 @media(max-width:760px){.archive-stats{gap:7px}.archive-stats .stat{padding:11px}.archive-stats .stat strong{font-size:20px}.archive-selectrow{grid-template-columns:1fr 1fr}.archive-selectrow label:first-child{grid-column:1/-1}.archive-card{grid-template-columns:123px minmax(0,1fr);gap:11px;padding:12px}.archive-body h3{font-size:14px}.archive-cover{min-height:69px}}
 @media(max-width:420px){.archive-card{display:block}.archive-cover{max-width:220px;min-height:0;margin-bottom:12px}.archive-selectrow{grid-template-columns:1fr}.archive-selectrow label:first-child{grid-column:auto}}
+
+/* Gemini audiovisual archive badges and fourth dashboard counter. */
+.archive-stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+.archive-warning{font-size:11px!important;color:var(--orange)}
+.archive-jev ul{padding-left:20px;margin:7px 0}
+.archive-jev li{font-size:11px;line-height:1.65;margin-bottom:5px}
+@media(max-width:760px){.archive-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
