@@ -10,7 +10,7 @@
     analysts: './crypto_myshka/data/youtube_analysts.json'
   };
   const STORE = 'crypto-myshka-app-v1';
-  const VIEWS = new Set(['home', 'live', 'analysis', 'history', 'settings']);
+  const VIEWS = new Set(['home', 'analysis', 'history', 'settings']);
   const allowedTheme = new Set(['light', 'dark']);
   const allowedRefresh = new Set([15, 30, 60, 120]);
   const I18N = {
@@ -88,7 +88,7 @@
   }
   function routeView() {
     const hash = location.hash.replace(/^#/, '').toLowerCase();
-    return VIEWS.has(hash) ? hash : 'home';
+    return hash === 'live' ? 'analysis' : VIEWS.has(hash) ? hash : 'home';
   }
   function navigate(to, options = {}) {
     if (!VIEWS.has(to)) return;
@@ -106,7 +106,7 @@
         else el.removeAttribute('aria-current');
       }
     });
-    const names = { home: 'AI Chart Observer', live: 'LIVE Monitor', analysis: 'Fast Analysis', history: 'Збережене', settings: 'Налаштування' };
+    const names = { home: 'AI Chart Observer', analysis: 'Fast Analysis', history: 'Збережене', settings: 'Налаштування' };
     $('top-context').textContent = names[to];
     document.title = names[to] + ' · Crypto Myshka';
     if (!options.fromHash) history.replaceState(null, '', location.pathname + location.search + '#' + to);
@@ -168,11 +168,6 @@
       (ok && upToDate ? 'Дані отримано' : ok ? 'Архівні дані' : 'Немає зв’язку з джерелами');
   }
   function renderHome() {
-    const live = state.live || {};
-    const channels = arr(live.channels);
-    const recent = fresh(live.updated_at);
-    $('stat-channels').textContent = channels.length ? String(channels.length) : '—';
-    $('stat-live').textContent = recent ? String(channels.filter(x => x.live === true && x.status === 'LIVE' && fresh(x.checked_at, 3)).length) : '—';
     const reports = findReports();
     $('stat-pairs').textContent = String(reports.length);
     const engines = reports.filter(r => r.jev && r.jev.engine === 'separate_ai_explainer' && r.jev.status === 'model');
@@ -182,53 +177,10 @@
     if (errors) {
       notice.textContent = 'Не всі джерела завантажилися. Перевір інтернет, потім натисни ↻. Старий сайт працює окремо.';
     } else if (!reports.length) {
-      notice.textContent = 'Поки немає прочитаних LIVE-графіків. Сторінка не створюватиме вигаданих прогнозів, навіть коли YouTube недоступний.';
+      notice.textContent = 'Поки немає опублікованих звітів за парами. Для власного графіка відкрий Fast Analysis та встав скріншот.';
     } else {
       notice.textContent = 'Дані графіків — спостереження, а не перевірені угоди. Для OTC потрібна особлива обережність із котируваннями.';
     }
-  }
-  function renderLive() {
-    const live = state.live || {};
-    const channels = arr(live.channels);
-    const recent = fresh(live.updated_at);
-    const confirmedLive = recent ? channels.filter(x => x.live === true && x.status === 'LIVE' && fresh(x.checked_at, 3)).length : 0;
-    $('live-cadence').textContent = live.scan_interval_seconds ? 'Сканування ' + live.scan_interval_seconds + ' с (локально)' : '~5 хв у GitHub';
-    $('live-summary').textContent = recent ? (confirmedLive ? 'Підтверджено LIVE: ' + confirmedLive : 'Активний LIVE не підтверджено') : 'Немає актуального підтвердження LIVE';
-    $('live-timestamp').textContent = live.updated_at ? 'Дані: ' + formatted(live.updated_at) : 'Перший звіт очікується';
-    const box = $('live-list');
-    if (!channels.length) {
-      box.innerHTML = empty('📡', 'Канали поки не завантажені', 'Знайдені канали з’являться тут, коли монітор опублікує звіт.');
-      return;
-    }
-    box.innerHTML = channels.map(channel => {
-      const online = recent && channel.live === true && channel.status === 'LIVE' && fresh(channel.checked_at, 3);
-      const unverified = channel.status === 'source_unverified';
-      const blocked = channel.status === 'access_blocked' || channel.status === 'check_error';
-      const label = online ? '🔴 LIVE' : blocked ? '⚠ Недоступний' : unverified ? 'Потрібен URL' :
-        channel.status === 'not_detected' ? 'LIVE не підтверджено' : 'Немає актуальних даних';
-      const pill = online ? 'live' : unverified ? 'off' : '';
-      const stream = channel.stream || {};
-      const url = stream.url || channel.live_page ||
-        (channel.handle ? 'https://www.youtube.com/' + channel.handle + '/live' : null);
-      const recentObservations = arr(live.observations).filter(x => x.channel_id === channel.id);
-      const lastObservation = recentObservations[recentObservations.length - 1];
-      const pair = lastObservation && lastObservation.observation && lastObservation.observation.asset;
-      const checked = channel.checked_at ? formatted(channel.checked_at) : 'Невідомо';
-      const details = channel.observation_status === 'visual_claim_reviewed' ? 'Кадр розпізнано' :
-        channel.observation_status === 'requires_OPENAI_API_KEY_or_local_OLLAMA' ? 'AI-читання не налаштовано' :
-        channel.observation_status === 'frame_unavailable' ? 'Кадр не вдалося отримати' :
-        channel.observation_status === 'media_unavailable' ? 'Відеопотік недоступний' :
-        channel.observation_status === 'analysis_unavailable' ? 'AI-аналіз не відповів' :
-        'Немає підтвердженого аналізу кадру';
-      return '<article class="stream-card"><div class="stream-main"><h3>' + safe(channel.name || 'Невідомий канал') +
-        '</h3><small>' + safe(channel.handle || 'Без підтвердженого посилання') +
-        '</small></div><span class="stream-status ' + pill + '">' + label +
-        '</span><div class="stream-detail"><span>Остання перевірка: <b>' + safe(checked) +
-        '</b></span><span>Пара: <b>' + safe(pair && fresh(lastObservation.observed_at, 15) ? pair : 'Не визначено') +
-        '</b></span><span>AI: <b>' + safe(details) +
-        '</b></span></div><div class="stream-actions">' + link(url, online ? 'Дивитись LIVE' : 'Перевірити канал', 'primary-link') +
-        '<button type="button" class="small-button" data-go="analysis">Перейти до аналізу →</button></div></article>';
-    }).join('');
   }
   function sourceType(r) {
     if (str(r.pair).toUpperCase().endsWith(' OTC')) return 'OTC';
@@ -330,10 +282,10 @@
       ? renderDemo()
       : filtered.length
         ? filtered.map(x => reportMarkup(x)).join('')
-        : empty('📈', reports.length ? 'Не знайдено відповідної пари' : 'Очікуємо перший LIVE-аналіз',
+        : empty('📈', reports.length ? 'Не знайдено відповідної пари' : 'Немає опублікованих звітів',
           reports.length ? 'Зміни назву в пошуку або прибери фільтр.' :
           'Мишка поки не отримала доступних для читання кадрів. Без них неможливо обґрунтувати тренд, рівні чи прогноз.',
-          reports.length ? null : 'live');
+          null);
   }
   function renderHistory() {
     const saved = Object.entries(state.prefs.saved).map(([id, report]) => ({ id, report }))
@@ -369,7 +321,6 @@
   }
   function renderView() {
     if (state.view === 'home') renderHome();
-    else if (state.view === 'live') renderLive();
     else if (state.view === 'analysis') renderAnalysis();
     else if (state.view === 'history') renderHistory();
     else renderSettings();
