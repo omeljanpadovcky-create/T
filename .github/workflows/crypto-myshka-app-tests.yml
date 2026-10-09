@@ -1,0 +1,58 @@
+name: Crypto Myshka App UI Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'myshka-app.html'
+      - 'myshka.webmanifest'
+      - 'myshka-sw.js'
+      - 'app/myshka.css'
+      - 'app/myshka.js'
+      - 'app/myshka-icon.svg'
+      - 'app/myshka.smoke.cjs'
+      - '.github/workflows/crypto-myshka-app-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-mobile-app:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: |
+          node --check app/myshka.js
+          node --check myshka-sw.js
+          node --check app/myshka.smoke.cjs
+      - name: Validate install manifest and icon
+        run: |
+          python3 - <<'PY'
+          import json
+          from html.parser import HTMLParser
+          from xml.etree import ElementTree as ET
+          from pathlib import Path
+          data=json.loads(Path('myshka.webmanifest').read_text())
+          assert data['display']=='standalone'
+          assert data['start_url']=='./myshka-app.html'
+          ET.parse('app/myshka-icon.svg')
+          class Inspect(HTMLParser):
+              def __init__(self):
+                  super().__init__();self.ids=set()
+              def handle_starttag(self,tag,attrs):
+                  self.ids.update(v for k,v in attrs if k=='id')
+          ins=Inspect();ins.feed(Path('myshka-app.html').read_text())
+          required=['screen-home','screen-live','screen-analysis','screen-history','screen-settings','analysis-list','history-list','live-list']
+          assert all(k in ins.ids for k in required)
+          print('Manifest, SVG, and 5-screen DOM structure OK')
+          PY
+      - name: Install DOM test dependency
+        run: npm install --no-save --ignore-scripts jsdom@26.1.0
+      - name: Exercise live statuses, JEV report cards, history and settings
+        run: node app/myshka.smoke.cjs
