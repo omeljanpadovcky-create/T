@@ -115,7 +115,7 @@ const { JSDOM } = require('jsdom');
   assert.equal(preview.src, 'data:image/png;base64,aGVsbG8=');
   assert.match(preview.alt, /market-chart.png/);
   assert.match(doc.querySelector('#photo-analysis').textContent, /1281 × 602/);
-  assert.match(doc.querySelector('#vision-status').textContent, /Хмарний JEV не підключено/);
+  assert.match(doc.querySelector('#vision-status').textContent, /локальний JEV доступний лише|Локальний JEV доступний лише/);
   assert.equal(doc.querySelector('.jev-image-area button').disabled, true, 'GitHub Pages must not fake AI');
 
   // Local app: probe Ollama, send the full screenshot and show direction only.
@@ -204,6 +204,9 @@ const { JSDOM } = require('jsdom');
   cloudWin.scrollTo = () => {};
   cloudWin.FileReader = win.FileReader;
   cloudWin.Image = win.Image;
+  cloudWin.localStorage.setItem('crypto-myshka-app-v1', JSON.stringify({
+    theme:'light', refresh:15, visionMode:'cloud', cloudFallback:false, saved:{},votes:{}
+  }));
   cloudWin.localStorage.setItem('crypto-myshka-cloud-endpoint-v1', 'https://myshka-ai.vercel.app');
   cloudWin.sessionStorage.setItem('crypto-myshka-cloud-access-session-v1', 'abcdefghijklmnopqrstuvwxyz123456');
   let cloudHealth = 0, cloudImages = 0;
@@ -232,7 +235,7 @@ const { JSDOM } = require('jsdom');
   await new Promise(resolve => setTimeout(resolve, 180));
   const cloudDoc = cloudWin.document;
   assert.match(cloudDoc.querySelector('#connection-pill').textContent, /JEV хмарний готовий/);
-  assert.match(cloudDoc.querySelector('#vision-status').textContent, /хмарний сервер/);
+  assert.match(cloudDoc.querySelector('#vision-status').textContent, /хмарний Gemini/);
   cloudDoc.querySelector('#chart-timeframe').value = '1m';
   const cloudInput = cloudDoc.querySelector('#chart-photo');
   Object.defineProperty(cloudInput, 'files', {configurable:true,value:[
