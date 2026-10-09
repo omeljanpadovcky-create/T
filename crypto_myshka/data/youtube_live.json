@@ -51,18 +51,6 @@
       "checked_at": "2026-10-09T19:37:13.889465+00:00",
       "stream": null,
       "last_visual_check": null
-    },
-    {
-      "id": "nikolai",
-      "name": "Николай (зі скріншота)",
-      "handle": null,
-      "url": null,
-      "live_page": null,
-      "status": "source_unverified",
-      "live": false,
-      "checked_at": "2026-10-09T19:37:14.768728+00:00",
-      "stream": null,
-      "last_visual_check": null
     }
   ],
   "observations": [],
