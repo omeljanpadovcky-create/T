@@ -2,6 +2,12 @@ name: CryptoMyshka YouTube Analysts (isolated)
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'crypto_myshka/youtube_analysts.py'
+      - 'youtube-analysts.html'
+      - '.github/workflows/crypto-myshka-youtube.yml'
   schedule:
     - cron: '31 */2 * * *'
 
