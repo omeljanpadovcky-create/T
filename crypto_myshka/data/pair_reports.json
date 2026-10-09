@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "updated_at": null,
+  "source": "youtube_live.json / timestamped screenshot observations",
+  "analysis_mode": "limited_single_frame_evidence",
+  "status": "waiting_for_readable_live_chart",
+  "reports": [],
+  "independently_verified": false,
+  "automatic_trading": false,
+  "disclaimer": "Поки немає успішно прочитаних LIVE-графіків. Жодних вигаданих торгових сигналів чи впевненості."
+}
