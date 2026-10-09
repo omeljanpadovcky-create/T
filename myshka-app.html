@@ -21,6 +21,7 @@
       <nav class="side-nav" aria-label="Основна навігація">
         <button data-go="home" class="nav-link active" type="button"><span aria-hidden="true">⌂</span> Головна</button>
         <button data-go="analysis" class="nav-link" type="button"><span aria-hidden="true">▥</span> Fast Analysis</button>
+        <button data-go="archive" class="nav-link" type="button"><span aria-hidden="true">▤</span> Архів YouTube</button>
         <button data-go="history" class="nav-link" type="button"><span aria-hidden="true">◷</span> Історія</button>
         <button data-go="settings" class="nav-link" type="button"><span aria-hidden="true">⚙</span> Налаштування</button>
       </nav>
@@ -67,6 +68,7 @@
           <div class="section-heading"><h2>Швидкий доступ</h2><span class="muted">Усе під рукою</span></div>
           <div class="quick-grid">
             <button class="quick-card" data-go="analysis" type="button"><span class="quick-icon mint">▥</span><span><strong>Fast Analysis</strong><small>Тренд, рівні, висновок JEV</small></span><span class="arrow">↗</span></button>
+            <button class="quick-card" data-go="archive" type="button"><span class="quick-icon cobalt">▤</span><span><strong>Архів роликів</strong><small>Усі доступні відео трейдерів та пояснення JEV</small></span><span class="arrow">↗</span></button>
             <button class="quick-card" data-go="history" type="button"><span class="quick-icon peach">◷</span><span><strong>Збережене</strong><small>Твої звіти й оцінки</small></span><span class="arrow">↗</span></button>
           </div>
           <div id="home-notice" class="notice"><span aria-hidden="true">ⓘ</span><p>Чекаємо на перші перевірені спостереження. Старі модулі та сайт працюють окремо.</p></div>
@@ -114,6 +116,38 @@
           </div>
           <div class="demo-controls"><button id="demo-button" class="small-button" type="button">◈ Показати приклад звіту</button><span>Приклад із наданого скріншота · не LIVE</span></div>
           <div id="analysis-list" class="stack" aria-live="polite"><div class="empty-state">Шукаємо звіти з реальних кадрів…</div></div>
+        </section>
+
+        <section class="screen" id="screen-archive" data-screen="archive" aria-labelledby="archive-title" hidden>
+          <div class="section-heading top-heading">
+            <div><div class="eyebrow">YOUTUBE CONTENT KNOWLEDGE BASE</div><h1 id="archive-title">📚 Архів роликів</h1></div>
+            <span id="archive-index-status" class="outline-pill">Індекс завантажується…</span>
+          </div>
+          <p class="intro">Мишка поступово індексує доступні відео, Shorts і записи ефірів трейдерів. Зберігаються посилання та витягнуті факти — не самі відеофайли. JEV готує конспект <strong>лише якщо доступні субтитри та AI</strong>; чужі заяви про прибутки не перевірені.</p>
+          <div class="archive-stats">
+            <div class="stat"><span>Роликів в архіві</span><strong id="archive-count">—</strong><small>Знайдених, не всіх на YouTube</small></div>
+            <div class="stat"><span>Із прочитаними субтитрами</span><strong id="archive-caption-count">—</strong><small>Без аналізу кадрів</small></div>
+            <div class="stat"><span>Конспектів JEV</span><strong id="archive-jev-count">—</strong><small>Підтверджених викликів AI</small></div>
+          </div>
+          <div class="archive-filterbox">
+            <label for="archive-query">🔎 Шукати відео, пару або індикатор</label>
+            <input id="archive-query" type="search" placeholder="Наприклад, RSI, BTC/USDT або стратегія…" autocomplete="off">
+            <div class="archive-selectrow">
+              <label for="archive-channel">Автор
+                <select id="archive-channel"><option value="">Усі канали</option></select>
+              </label>
+              <label for="archive-kind">Тип
+                <select id="archive-kind"><option value="">Усі ролики</option><option value="videos">Відео</option><option value="streams">Записи ефірів</option><option value="shorts">Shorts</option></select>
+              </label>
+              <label for="archive-evidence">Аналіз
+                <select id="archive-evidence"><option value="">Будь-який</option><option value="subtitles">Є субтитри</option><option value="jev">Є висновок JEV</option><option value="metadata">Лише метадані</option></select>
+              </label>
+            </div>
+          </div>
+          <div class="archive-meta"><span id="archive-coverage">Архів доповнюється.</span><span id="archive-matches">—</span></div>
+          <div id="archive-list" class="archive-list" aria-live="polite"><div class="empty-state">Завантаження відеотеки…</div></div>
+          <button id="archive-more" type="button" class="small-button archive-more" hidden>Показати ще ролики ↓</button>
+          <div class="notice"><span aria-hidden="true">ⓘ</span><p>Повнота архіву залежить від YouTube: недоступні, приватні або видалені відео не можна гарантувати. Розпізнавання назв, описів і субтитрів не дорівнює перегляду всього відеоряду чи підтвердженню угоди.</p></div>
         </section>
 
         <section class="screen" id="screen-history" data-screen="history" aria-labelledby="history-title" hidden>
@@ -185,10 +219,12 @@
   <nav class="bottom-nav" aria-label="Мобільне меню">
     <button type="button" data-go="home" class="active"><span aria-hidden="true">⌂</span><small>Головна</small></button>
     <button type="button" data-go="analysis"><span aria-hidden="true">▥</span><small>Аналіз</small></button>
+    <button type="button" data-go="archive"><span aria-hidden="true">▤</span><small>Архів</small></button>
     <button type="button" data-go="history"><span aria-hidden="true">◷</span><small>Історія</small></button>
     <button type="button" data-go="settings"><span aria-hidden="true">⚙</span><small>Опції</small></button>
   </nav>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script defer src="./app/myshka-archive.js"></script>
   <script defer src="./app/myshka.js"></script>
 </body>
 </html>
