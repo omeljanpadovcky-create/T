@@ -75,3 +75,16 @@ main{width:100%;max-width:1120px;margin:0 auto;flex:1;min-width:0}h1,h2,h3,h4{fo
 .cloud-settings-fields input:focus{outline:2px solid var(--blue);outline-offset:2px}
 .cloud-settings-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
 #cloud-connection-status{color:var(--muted);font-size:13px;overflow-wrap:anywhere;margin:4px 0}
+
+/* JEV dual-engine controls: local Ollama and opt-in APInex failover */
+.vision-mode-inline{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:13px 17px;margin:14px 0;border:1px solid var(--line);background:var(--panel);border-radius:16px;flex-wrap:wrap}
+.vision-mode-inline label{font-size:13px}
+.vision-mode-inline select,.setting-item #vision-mode-select{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--ink);max-width:100%;font-size:13px}
+.vision-mode-inline select{min-width:195px;flex:1;max-width:380px}
+.jev-fallback-choice{display:flex;align-items:flex-start;gap:13px;padding:18px 3px;border-bottom:1px solid var(--line);cursor:pointer}
+.jev-fallback-choice input{accent-color:var(--blue);margin:4px 0 0;min-width:18px;min-height:18px}
+.jev-fallback-choice strong,.jev-fallback-choice small{display:block}
+.jev-fallback-choice small{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.6}
+.jev-fallback-choice:has(input:disabled){opacity:.64;cursor:default}
+#vision-mode-info{margin:14px 0;line-height:1.65}
+@media(max-width:760px){.vision-mode-inline{display:block;padding:13px}.vision-mode-inline select{display:block;width:100%;margin-top:10px;max-width:100%}}
