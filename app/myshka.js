@@ -23,7 +23,7 @@
     view: 'home', live: null, pairs: null, analysts: null,
     statuses: { live: 'loading', pairs: 'loading', analysts: 'loading' },
     lastSuccessfulFetch: {}, filter: 'all', query: '',
-    selectedPair: null, refreshing: false, sequence: 0,
+    selectedPair: null, demo: false, refreshing: false, sequence: 0,
     prefs: { theme: 'light', refresh: 15, saved: {}, votes: {} },
     pollTimer: null
   };
@@ -280,6 +280,37 @@
       (savedMode ? '<button type="button" data-act="delete" data-id="' + safe(rid) + '">✕ Видалити</button>' : '') +
       video + '</div></article>';
   }
+  function demoReport() {
+    // The user's supplied screenshot is illustrative, not current market data.
+    return {
+      pair:'AUD/CNY OTC',
+      instrument_type:'OTC (приклад зі скріншота)',
+      observed_at:'2026-10-09T19:16:00+00:00',
+      channel:'Демонстраційний приклад ChartLens',
+      trend:'downtrend',volatility:'normal',volume:'unknown',
+      sentiment:'bearish',confidence:'low',
+      support_levels:['1.84200'],resistance_levels:['1.84400'],
+      observations_count:1,
+      visual_evidence:'Приклад спирається на текст зі скріншота користувача, а не на трансляцію, яку прочитала Мишка.',
+      price_action:'У наданому прикладі йдеться про нижчі максимуми та мінімуми.',
+      limitations:['Демо з чужого звіту, не LIVE','Поточні ціни та обсяг не перевірено','Не використовувати рівні для угоди'],
+      jev:{
+        engine:'demo_reference_only',status:'demo',
+        why:'На демонстраційному звіті зазначено спадний рух і нижчі максимуми. JEV цього графіка самостійно не перевіряв.',
+        key_levels:'1.84200 та 1.84400 — цифри з наданого прикладу, не актуальні котирування.',
+        watch_next:'Для справжнього аналізу потрібен доступний LIVE-кадр, читабельна пара й незалежна перевірка рівнів.'
+      }
+    };
+  }
+  function renderDemo() {
+    const node=document.createElement('div');
+    node.innerHTML=reportMarkup(demoReport());
+    const actions=node.querySelector('.report-actions');
+    if(actions)actions.remove();
+    const source=node.querySelector('.origin-pill');
+    if(source)source.textContent='DEMO · OTC';
+    return '<div class="demo-banner">◈ ДЕМОНСТРАЦІЯ ІНТЕРФЕЙСУ · НЕ РЕАЛЬНИЙ LIVE-АНАЛІЗ І НЕ ТОРГОВИЙ СИГНАЛ</div>'+node.innerHTML;
+  }
   function renderAnalysis() {
     const reports = findReports();
     const search = state.query.toLowerCase();
@@ -293,12 +324,15 @@
       '" data-pair="all">Усі (' + reports.length + ')</button>' +
       names.map(x => '<button type="button" class="chip ' + (state.selectedPair === x ? 'selected' : '') +
         '" data-pair="' + safe(x) + '">' + safe(x) + '</button>').join('') : '';
-    $('analysis-list').innerHTML = filtered.length
-      ? filtered.map(x => reportMarkup(x)).join('')
-      : empty('📈', reports.length ? 'Не знайдено відповідної пари' : 'Очікуємо перший LIVE-аналіз',
-        reports.length ? 'Зміни назву в пошуку або прибери фільтр.' :
-        'Мишка поки не отримала доступних для читання кадрів. Без них неможливо обґрунтувати тренд, рівні чи прогноз.',
-        reports.length ? null : 'live');
+    $('demo-button').textContent = state.demo ? '✕ Приховати приклад' : '◈ Показати приклад звіту';
+    $('analysis-list').innerHTML = state.demo
+      ? renderDemo()
+      : filtered.length
+        ? filtered.map(x => reportMarkup(x)).join('')
+        : empty('📈', reports.length ? 'Не знайдено відповідної пари' : 'Очікуємо перший LIVE-аналіз',
+          reports.length ? 'Зміни назву в пошуку або прибери фільтр.' :
+          'Мишка поки не отримала доступних для читання кадрів. Без них неможливо обґрунтувати тренд, рівні чи прогноз.',
+          reports.length ? null : 'live');
   }
   function renderHistory() {
     const saved = Object.entries(state.prefs.saved).map(([id, report]) => ({ id, report }))
@@ -390,6 +424,10 @@
       if (act) { reportAction(act.dataset.act, act.dataset.id, act.dataset.vote); }
     });
     $('refresh-button').addEventListener('click', () => refreshAll(true));
+    $('demo-button').addEventListener('click', () => {
+      state.demo = !state.demo;
+      renderAnalysis();
+    });
     $('pair-search').addEventListener('input', e => {
       state.query = e.target.value.trim();
       state.selectedPair = null;
