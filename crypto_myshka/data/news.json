@@ -806,13 +806,13 @@
         "short_conclusion": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 29s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 29s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T22:58:51Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:23:17Z"
     },
     {
       "id": "fb8612a1141d75",
@@ -904,23 +904,20 @@
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ],
       "jev_ai": {
-        "what_happened": "Sam Altman-backed bitcoin insurer Meanwhile secures $37.5 million in Bain Capital Crypto-led round",
-        "why_it_matters": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-        "market_effect": "Невизначений / змішаний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-        "confidence": "низька",
-        "short_conclusion": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "what_happened": "Компанія Meanwhile, страховик біткоїну (біткоїн-страхування життя), залучила $37.5 млн у раунді, який очолив Bain Capital Crypto. Сам Алтман виступає бекером проєкту. Новину опублікували CoinDesk та The Block 09.10.2026.",
+        "why_it_matters": "Це сигнал зростання інтересу інституцій до інфраструктури захисту біткоїну. Страхові продукти — один із бар'єрів для входу великого капіталу (пенсійні фонди, сімейні офіси). Участь Bain Capital Crypto підтверджує, що сектор біткоїн-страхування розглядається як серйозна ніша, а не піар-проект.",
+        "market_effect": "Прямого впливу на ціну BTC не очікується: це невеликий раунд порівняно з розміром ринку ($2.77 трлн). Сигнал скоріше структурний (довгостроковий), ніж каталізатор ціни. На фоні поточного тижневого ведмежого наративу (BTC ~82,593, денний ведмежий імбаланс) новина не змінює технічну картину.",
+        "bull_case": "Більше страхових продуктів = нижчі бар'єри для інституційного капіталу → потенційний притік у BTC у довгостроковій перспективі. Підтвердження життєздатності ніші біткоїн-страхування з боку відомого венчурного фонду.",
+        "bear_case": "Фінансування страхової компанії не означає зростання попиту на сам біткоїн — це може бути хеджуванням ризиків, а не накопиченням. Невеликий розмір раунду не змінює баланс попиту/пропозиції. Поточний технічний наратив (зниження, індекс страху та жадібності 59) домінує над новинним фоном.",
+        "watch_next": "Чи отримає Meanwhile регуляторне ліцензування та чи почне реально підписувати поліси. Чи зросте кількість подібних раундів у секторі. Динаміка BTC навколо 82,500 (підтримка) та 83,300 (опір) — чи новина допоможе закріпитися вище.",
+        "confidence": "середня",
+        "short_conclusion": "Це позитивний структурний сигнал для інституціоналізації біткоїну, але без прямого впливу на ціну в найближчому часі. На фоні поточного тижневого зниження новина не змінює технічну картину.",
+        "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:01:42Z"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:23:27Z"
     },
     {
       "id": "b0b22e17f4c5dd",
@@ -957,23 +954,20 @@
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
       ],
       "jev_ai": {
-        "what_happened": "France’s Finance Committee backed taxes on stablecoin swaps, as well as unrealized crypto gains when households with more than 800,000 euros move abroad.",
-        "why_it_matters": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
-        "market_effect": "Невизначений / змішаний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента.",
+        "what_happened": "Фінансовий комітет Франції підтримав пропозицію оподаткувати обміни стейблкоїнів у бюджетному законі на 2027 рік, а також оподаткувати нереалізовані прибутки з криптоактивів для домогосподарств із капіталом понад 800 000 євро, які переїжджають за кордон.",
+        "why_it_matters": "Франція — одна з найбільш просунутих юрисдикцій ЄС щодо крипторегулювання. Податок саме на обміни стейблкоїнів (а не лише на прибуток) є нетиповим кроком: стейблкоїни часто використовуються як пара для торгівлі та як місток між фіатом і криптою. Це може вплинути на ліквідність та поведінку трейдерів у Франції.",
+        "market_effect": "Ймовірне скорочення обсягів обмінів стейблкоїнів на французьких платформах та частковий переніс активності в інші юрисдикції. Прямий вплив на ціни активів малоймовірний — це податкова, а не заборонна міра. Позначено як середній вплив, але це залежить від фінальних деталей.",
+        "bull_case": "Регуляторна визначеність може зміцнити позицію Франції як комплаєнс-орієнтованого хабу; легалізація та оподаткування стейблкоїнів може підвищити довіру інституційних учасників до ринку.",
+        "bear_case": "Податок на обміни зменшує прибутковість короткострокової торгівлі стейблкоїнами, що може відштовхнути трейдерів до офшорних платформ; додатковий податок на нереалізовані прибутки при еміграції може спровокувати відтік капіталу.",
+        "watch_next": "Фінальне голосування в парламенті та затвердження бюджету на 2027 рік; деталі ставки податку та механіки обчислення; як міра узгоджується з європейською рамкою MiCA; реакція французьких криптоплатформ та об'єднань.",
         "confidence": "низька",
-        "short_conclusion": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "short_conclusion": "Це поки лише підтримка комітету, а не закон — джерело одне (Cointelegraph), деталі невідомі. Податок на обміни стейблкоїнів може скоротити французьку ліквідність, але вплив на глобальні ціни малоймовірний.",
+        "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:01:49Z"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:23:33Z"
     },
     {
       "id": "18695b478f5f00",
@@ -1026,8 +1020,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:02:05Z"
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:23:40Z"
     },
     {
       "id": "db7396c3648183",
@@ -4038,13 +4032,13 @@
   "jev_status": "ok",
   "jev_provider": "apinex",
   "jev_model": "free/deepseek-v4.1-flash",
-  "jev_analyzed_count": 13,
+  "jev_analyzed_count": 15,
   "jev_analyzed_this_run": 2,
   "jev_pending_count": 0,
-  "jev_llm_pending_count": 16,
+  "jev_llm_pending_count": 14,
   "jev_analysis_errors": 2,
   "jev_error_codes": {
     "ValueError": 2
   },
-  "jev_last_run_at": "2026-10-09T23:21:03Z"
+  "jev_last_run_at": "2026-10-09T23:23:46Z"
 }
