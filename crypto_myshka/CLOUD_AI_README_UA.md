@@ -1,51 +1,51 @@
 # ☁️ Crypto Myshka — хмарний JEV із APInex або Gemini
 
-**GitHub Actions Secrets не є змінними середовища Vercel.** Якщо \`APINEX_API_KEY\` вже є в секретах GitHub, новинний JEV може його використовувати, але вебсторінка GitHub Pages не отримує цей секрет і не може напряму звертатися до платного API.
+**GitHub Actions Secrets не є змінними середовища Vercel.** Якщо `APINEX_API_KEY` вже є в секретах GitHub, новинний JEV може його використовувати, але вебсторінка GitHub Pages не отримує цей секрет і не може напряму звертатися до платного API.
 
 ## Що підключено в коді
 
 - Статична сторінка: https://omeljanpadovcky-create.github.io/T/myshka-app.html#analysis
-- Хмарний backend: Vercel Functions \`/api/chart-health\` та \`/api/chart-analysis\`, файли є в \`api/\` і \`jev_api/api/\`.
-- Якщо на **самому Vercel** задано \`APINEX_API_KEY\`, сервер використовує [APInex OpenAI-compatible API](https://apinex.bond/developers/models/chat), стандартний мультимодальний ID \`gemini-3.8-flash\`.
-- Якщо APInex не налаштований, а \`GEMINI_API_KEY\` є — сервер застосовує Google Gemini (\`gemini-2.5-flash\`).
-- У браузері зберігається тільки адреса backend-сервера та окремий \`JEV_ACCESS_TOKEN\` у **сесії**. Справжні ключі APInex/Gemini на клієнтську сторінку **ніколи не вставляються**.
+- Хмарний backend: Vercel Functions `/api/chart-health` та `/api/chart-analysis`, файли є в `api/` і `jev_api/api/`.
+- Якщо на **самому Vercel** задано `APINEX_API_KEY`, сервер використовує [APInex OpenAI-compatible API](https://apinex.bond/developers/models/chat), стандартний мультимодальний ID `gemini-3.8-flash`.
+- Якщо APInex не налаштований, а `GEMINI_API_KEY` є — сервер застосовує Google Gemini (`gemini-2.5-flash`).
+- У браузері зберігається тільки адреса backend-сервера та окремий `JEV_ACCESS_TOKEN` у **сесії**. Справжні ключі APInex/Gemini на клієнтську сторінку **ніколи не вставляються**.
 
 ## Один раз налаштувати Vercel
 
-1. Відкрий https://vercel.com/dashboard та знайди свій проєкт, підключений до \`omeljanpadovcky-create/T\`. Якщо Root Directory = \`jev_api\`, використовуються файли \`jev_api/api/\`; якщо корінь репозиторію — \`api/\`.
+1. Відкрий https://vercel.com/dashboard та знайди свій проєкт, підключений до `omeljanpadovcky-create/T`. Якщо Root Directory = `jev_api`, використовуються файли `jev_api/api/`; якщо корінь репозиторію — `api/`.
 2. Vercel → Project → Settings → Environment Variables → Production. Створи:
-   - \`APINEX_API_KEY\` — **фактичний ключ із твого APInex Dashboard**. GitHub не дозволяє прочитати значення збереженого секрету і не синхронізує його у Vercel.
-   - \`JEV_ACCESS_TOKEN\` — **новий окремий** випадковий код щонайменше 24 символи. Це не ключ APInex.
-   - Необов'язково \`JEV_APINEX_MODEL\` = \`gemini-3.8-flash\` (можна обрати іншу мультимодальну модель із каталогу).
-   - Якщо замість APInex використовуєш Gemini: \`GEMINI_API_KEY\` та необов'язково \`JEV_CLOUD_MODEL\` = \`gemini-2.5-flash\`.
-3. Новий \`JEV_ACCESS_TOKEN\` можна створити в PowerShell, не передаючи в чат:
-   \`\`\`powershell
+   - `APINEX_API_KEY` — **фактичний ключ із твого APInex Dashboard**. GitHub не дозволяє прочитати значення збереженого секрету і не синхронізує його у Vercel.
+   - `JEV_ACCESS_TOKEN` — **новий окремий** випадковий код щонайменше 24 символи. Це не ключ APInex.
+   - Необов'язково `JEV_APINEX_MODEL` = `gemini-3.8-flash` (можна обрати іншу мультимодальну модель із каталогу).
+   - Якщо замість APInex використовуєш Gemini: `GEMINI_API_KEY` та необов'язково `JEV_CLOUD_MODEL` = `gemini-2.5-flash`.
+3. Новий `JEV_ACCESS_TOKEN` можна створити в PowerShell, не передаючи в чат:
+   ```powershell
    $bytes = New-Object byte[] 32
    [System.Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($bytes)
    [BitConverter]::ToString($bytes).Replace('-', '')
-   \`\`\`
+   ```
 4. Натисни **Redeploy** (Production) після встановлення змінних. Переконайся, що сервер доступний за HTTPS, Vercel Deployment Protection не блокує звернення до API.
-5. На Crypto Myshka відкрий **Налаштування → Хмарний JEV**; встав **адресу Vercel-проєкту без \`/api\`** та **лише \`JEV_ACCESS_TOKEN\`**.
+5. На Crypto Myshka відкрий **Налаштування → Хмарний JEV**; встав **адресу Vercel-проєкту без `/api`** та **лише `JEV_ACCESS_TOKEN`**.
 6. Після кнопки **«Підключити хмарний JEV»** має з'явитися зелений статус з назвою моделі. Це перевіряє доступність API, **не точність прогнозу**.
 7. Зайди у Fast Analysis, обери JPG/PNG/WebP до 2 МБ. Фото з твого браузера йде до **твого Vercel backend та APInex**. У локальному Ollama-режимі фото надсилається лише на комп'ютер.
 
 ## GitHub Actions: новини та LIVE
 
-- Новинний JEV **вже** читає \`APINEX_API_KEY\` із GitHub Actions у \`.github/workflows/crypto-myshka.yml\`.
-- У LIVE-сканер \`APINEX_API_KEY\` передається у \`.github/workflows/crypto-myshka-live.yml\`, але платний аналіз кадрів **за замовчуванням вимкнений**.
-- Щоб його увімкнути, у GitHub → Settings → Secrets and variables → Actions → **Variables** додай \`LIVE_APINEX_ENABLED\` = \`true\`. Можна додати \`LIVE_APINEX_VISION_MODEL\` = \`gemini-3.8-flash\`.
+- Новинний JEV **вже** читає `APINEX_API_KEY` із GitHub Actions у `.github/workflows/crypto-myshka.yml`.
+- У LIVE-сканер `APINEX_API_KEY` передається у `.github/workflows/crypto-myshka-live.yml`, але платний аналіз кадрів **за замовчуванням вимкнений**.
+- Щоб його увімкнути, у GitHub → Settings → Secrets and variables → Actions → **Variables** додай `LIVE_APINEX_ENABLED` = `true`. Можна додати `LIVE_APINEX_VISION_MODEL` = `gemini-3.8-flash`.
 - У GitHub Actions LIVE максимум **1 кадр за запуск**, частота запуску приблизно кожні 5 хвилин, не кожні 15 секунд. Через обмеження YouTube навіть підтверджений LIVE може бути недоступний для автоматичного аналізу.
 - Локальний швидкий монітор лишається окремим. Інтервал сканування 15 секунд не означає 15-секундної точності прогнозів або суцільного аналізу відео.
 - [Перевірити GitHub APInex secret без платного AI-запиту](https://github.com/omeljanpadovcky-create/T/actions/workflows/myshka-apinex-connection-test.yml).
 
 ## Якщо показує «JEV не підключено»
 
-- На GitHub Pages немає власного AI-сервера. Вкажи Vercel URL і код доступу, або запусти локальну Ollama через \`START_MYSHKA_EASY.ps1\`.
-- HTTP 401: неправильний \`JEV_ACCESS_TOKEN\` або APInex відхилив свій ключ.
+- На GitHub Pages немає власного AI-сервера. Вкажи Vercel URL і код доступу, або запусти локальну Ollama через `START_MYSHKA_EASY.ps1`.
+- HTTP 401: неправильний `JEV_ACCESS_TOKEN` або APInex відхилив свій ключ.
 - HTTP 403: заборонений origin, заблокований доступ до Vercel-проєкту чи відсутні необхідні права.
 - HTTP 404: неправильний Root Directory / API endpoints не потрапили в деплой.
 - HTTP 429: ліміт APInex/Gemini вичерпано.
 - HTTP 503: не вистачає конфігурації бекенду або сервіс недоступний.
 - Запит до /api/chart-health підтверджує доступність провайдера, а не обов'язково працездатність саме обраної мультимодальної моделі.
 
-**Безпека:** не публікуй \`APINEX_API_KEY\` та \`JEV_ACCESS_TOKEN\` у повідомленнях, скріншотах, frontend або git. APInex — сторонній провайдер, який отримуватиме надіслані фото; не відправляй приватні дані. Обмеж витрати й ліміти API. Жоден кадр і жодна модель не гарантують точність. Результат BUY/SELL/WAIT стосується лише **неперевіреної демо-гіпотези**, автоматичні реальні угоди вимкнені.
+**Безпека:** не публікуй `APINEX_API_KEY` та `JEV_ACCESS_TOKEN` у повідомленнях, скріншотах, frontend або git. APInex — сторонній провайдер, який отримуватиме надіслані фото; не відправляй приватні дані. Обмеж витрати й ліміти API. Жоден кадр і жодна модель не гарантують точність. Результат BUY/SELL/WAIT стосується лише **неперевіреної демо-гіпотези**, автоматичні реальні угоди вимкнені.
