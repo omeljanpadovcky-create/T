@@ -649,10 +649,10 @@
           aiResult.className = 'jev-image-result';
           aiResult.setAttribute('role', 'status');
           aiResult.setAttribute('aria-live', 'polite');
-          const localServer = ['localhost', '127.0.0.1'].includes(location.hostname);
-          if (!localServer && !(state.cloudEndpoint && state.cloudAccess)) {
+          const destinations = visionTargets();
+          if (!destinations.length) {
             aiButton.disabled = true;
-            aiResult.textContent = '⛔ Хмарний JEV ще не підключено. Відкрий Налаштування → Хмарний JEV. Або скористайся локальною Ollama.';
+            aiResult.textContent = '⛔ Немає дозволеного AI-сервера. Для локального JEV відкрий 127.0.0.1:18765; для хмарного обери режим «Хмарний» у Налаштуваннях, або увімкни дозволений резервний хмарний аналіз.';
           } else {
             aiResult.textContent = 'Перевіряємо доступність JEV…';
             aiButton.addEventListener('click', async () => {
@@ -662,41 +662,79 @@
               aiResult.className = 'jev-image-result';
               aiResult.textContent = '⏳ Перевіряємо AI-сервер…';
               try {
-                const useCloud = state.visionSource === 'cloud' ||
-                  (!localServer && !!state.cloudEndpoint);
-                if (useCloud && !state.cloudAccess) throw new Error('Введи код доступу до хмарного JEV у Налаштуваннях.');
-                if (useCloud && file.size > 2 * 1024 * 1024) throw new Error('Хмарний JEV приймає фото до 2 МБ. Обріж або стисни скріншот.');
-                const apiRoot = useCloud ? state.cloudEndpoint : '.';
-                const authHeaders = useCloud ? {'X-JEV-Access':state.cloudAccess} : {};
-                const healthResponse = await fetch(apiRoot + '/api/chart-health', {
-                  cache:'no-store', headers:authHeaders
-                });
-                const health = await healthResponse.json();
-                if (!healthResponse.ok || !health.ready) {
-                  if (useCloud) throw new Error(health.error || 'Хмарний JEV недоступний. Перевір Vercel та код доступу.');
-                  if (!health.ollama) throw new Error('Ollama не відповідає. Запусти Ollama або ollama serve.');
-                  throw new Error('Модель не встановлена. Виконай: ollama pull ' + (health.model || 'qwen2.5vl:3b'));
-                }
-                if (requestId !== imageRequestId) return;
-                aiResult.textContent = '⏳ JEV читає свічки на скріншоті…';
-                const response = await fetch(apiRoot + '/api/chart-analysis', {
-                  method: 'POST',
-                  headers: {'Content-Type': 'application/json', ...authHeaders},
-                  body: JSON.stringify({image: dataUrl.split(',')[1], chart_timeframe: $('chart-timeframe').value})
-                });
-                const result = await response.json();
-                if (!response.ok) throw new Error(result.error || 'Помилка AI-сервера (HTTP ' + response.status + ')');
-                if (requestId !== imageRequestId) return;
-                if (useCloud && state.visionStatus === 'provisional') {
-                  state.visionStatus = 'ready';
-                  statusPill();
-                  updateCloudSettings();
-                  const note = $('vision-status');
-                  if (note) {
-                    note.dataset.ready = 'true';
-                    note.textContent = '🟢 Хмарний JEV реально відповів на аналіз фото (' +
-                      (result.provider === 'apinex' ? 'APInex' : 'AI') + ')';
+                // Priorities are determined solely by explicit user preferences.
+                // In AUTO, a screenshot can go to the cloud only when cloudFallback
+                // is enabled. Health checks never grant consent.
+                const ordered = visionTargets();
+                if (!ordered.length) throw new Error('Обери доступний режим JEV у Налаштуваннях.');
+                let result = null;
+                let successfulTarget = null;
+                let lastFailure = null;
+                for (let index = 0; index < ordered.length; index++) {
+                  const target = ordered[index];
+                  const cloud = target === 'cloud';
+                  if (cloud && file.size > 2 * 1024 * 1024) {
+                    lastFailure = new Error('Хмарний JEV приймає фото до 2 МБ. Стисни або обріж скріншот.');
+                    continue;
                   }
+                  const apiRoot = cloud ? state.cloudEndpoint : '.';
+                  const authHeaders = cloud ? {'X-JEV-Access': state.cloudAccess} : {};
+                  try {
+                    aiResult.textContent = cloud
+                      ? '⏳ Хмарний JEV аналізує фото через APInex / Gemini…'
+                      : '⏳ Локальний JEV читає свічки через Ollama…';
+                    const healthResponse = await fetch(apiRoot + '/api/chart-health', {
+                      cache: 'no-store', headers: authHeaders, signal: AbortSignal.timeout(10000)
+                    });
+                    const health = await healthResponse.json().catch(() => ({}));
+                    if (!healthResponse.ok || health.ready !== true) {
+                      if (!cloud && health.ollama) {
+                        throw new Error('Модель Ollama відсутня: ollama pull ' + (health.model || 'qwen2.5vl:3b'));
+                      }
+                      throw new Error(String(health.error || 'AI-сервер не готовий (HTTP ' + healthResponse.status + ')').slice(0,160));
+                    }
+                    if (requestId !== imageRequestId) return;
+                    const response = await fetch(apiRoot + '/api/chart-analysis', {
+                      method: 'POST',
+                      headers: {'Content-Type': 'application/json', ...authHeaders},
+                      body: JSON.stringify({image: dataUrl.split(',')[1], chart_timeframe: $('chart-timeframe').value}),
+                      signal: AbortSignal.timeout(cloud ? 38000 : 125000)
+                    });
+                    const answer = await response.json().catch(() => ({}));
+                    if (!response.ok) {
+                      throw new Error(String(answer.error || 'Помилка AI-сервера (HTTP ' + response.status + ')').slice(0,160));
+                    }
+                    if (!answer || typeof answer !== 'object' || !['ВГОРУ', 'ВНИЗ', 'НЕВИЗНАЧЕНО'].includes(answer.direction)) {
+                      throw new Error('JEV не повернув коректний аналіз.');
+                    }
+                    result = answer;
+                    successfulTarget = target;
+                    break;
+                  } catch (error) {
+                    if (requestId !== imageRequestId) return;
+                    lastFailure = error;
+                    if (target === 'local' && ordered[index + 1] === 'cloud') {
+                      aiResult.textContent = '🟠 Ollama недоступна. Ти дозволив резервний хмарний аналіз — пробуємо APInex / Gemini…';
+                    }
+                  }
+                }
+                if (!result || !successfulTarget) {
+                  throw lastFailure || new Error('Усі дозволені сервери JEV недоступні.');
+                }
+                const useCloud = successfulTarget === 'cloud';
+                if (requestId !== imageRequestId) return;
+                state.visionSource = successfulTarget;
+                state.visionStatus = 'ready';
+                statusPill();
+                updateCloudSettings();
+                const status = $('vision-status');
+                if (status) {
+                  status.dataset.ready = 'true';
+                  status.textContent = useCloud
+                    ? '🟢 Аналіз виконано хмарним JEV (' +
+                        (result.provider === 'apinex' ? 'APInex' : result.provider === 'gemini' ? 'Gemini' : 'AI') +
+                        ')' + (ordered[0] === 'local' ? ' · резервний режим' : '')
+                    : '🟢 Аналіз виконано локальним JEV (Ollama)';
                 }
                 const direction = ['ВГОРУ', 'ВНИЗ', 'НЕВИЗНАЧЕНО'].includes(result.direction)
                   ? result.direction : 'НЕВИЗНАЧЕНО';
@@ -782,7 +820,7 @@
           aiArea.append(aiButton, aiResult);
           info.append(preview, fileLabel, heading, note, aiArea);
           box.replaceChildren(info);
-          if (localServer || (state.cloudEndpoint && state.cloudAccess)) aiButton.click();
+          if (visionTargets().length) aiButton.click();
         };
         image.src = dataUrl;
       };
