@@ -123,11 +123,11 @@
           </div>
           <div class="settings-card" id="cloud-settings">
             <h3>☁️ Хмарний JEV — аналіз без увімкненого ПК</h3>
-            <p class="report-notice">Потрібен власний сервер Vercel з налаштованими секретами. Не вводь сюди ключ Gemini API: тільки адресу свого сервера та окремий код доступу JEV.</p>
+            <p class="report-notice">APInex-ключ із GitHub Secrets вже використовується фоновим JEV, але для аналізу фото на сайті потрібен окремо налаштований сервер Vercel. На Vercel додай APINEX_API_KEY і JEV_ACCESS_TOKEN, а сюди встав тільки адресу свого сервера та окремий код доступу.</p>
             <div class="cloud-settings-fields">
               <label for="cloud-endpoint">Адреса сервера (HTTPS)</label>
               <input id="cloud-endpoint" type="url" inputmode="url" spellcheck="false" placeholder="https://your-project.vercel.app" autocomplete="url">
-              <label for="cloud-access">Код доступу JEV (не Gemini API-ключ)</label>
+              <label for="cloud-access">Код доступу JEV (не APInex/Gemini API-ключ)</label>
               <input id="cloud-access" type="password" autocomplete="off" placeholder="Введи окремий код доступу">
               <div class="cloud-settings-actions">
                 <button id="cloud-connect" class="small-button" type="button">Підключити хмарний JEV</button>
@@ -135,7 +135,7 @@
               </div>
               <p id="cloud-connection-status" role="status" aria-live="polite">Хмарний сервер не налаштовано.</p>
             </div>
-            <a class="text-link" href="./crypto_myshka/CLOUD_AI_README_UA.md" target="_blank" rel="noopener noreferrer">Як увімкнути JEV 24/7 через Vercel ↗</a>
+            <a class="text-link" href="./crypto_myshka/CLOUD_AI_README_UA.md" target="_blank" rel="noopener noreferrer">Підключення APInex через Vercel — інструкція ↗</a>
           </div>
           <div class="settings-card">
             <h3>Джерела даних</h3>
@@ -143,7 +143,7 @@
             
             <a class="text-link" href="./crypto_myshka/LIVE_README_UA.md" target="_blank" rel="noopener noreferrer">Інструкція запуску ↗</a>
           </div>
-          <div class="notice"><span aria-hidden="true">🔒</span><p>JEV пояснює обмежені дані спостережень, а не гарантує результат. Автоматичні угоди й копіювання ставок вимкнені. Не вводь ключі Gemini API на цій сторінці. Код доступу JEV зберігається лише в сесії браузера.</p></div>
+          <div class="notice"><span aria-hidden="true">🔒</span><p>JEV пояснює обмежені дані спостережень, а не гарантує результат. Автоматичні угоди й копіювання ставок вимкнені. Не вводь API-ключі APInex або Gemini на цій сторінці. Код доступу JEV зберігається лише в сесії браузера.</p></div>
         </section>
       </main>
 
