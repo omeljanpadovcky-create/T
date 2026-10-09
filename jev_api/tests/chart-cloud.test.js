@@ -133,6 +133,13 @@ test('APInex health uses GitHub-compatible env key only inside the server and ne
       assert.ok(!JSON.stringify(ok.body).includes(process.env.APINEX_API_KEY));
       const bad=response();await health(request('GET',null,{'x-jev-access':'not-valid'}),bad);
       assert.equal(bad.code,401);
+      globalThis.fetch=async()=>({ok:false,status:403});
+      const catalogBlocked=response();await health(request('GET'),catalogBlocked);
+      assert.equal(catalogBlocked.code,200);
+      assert.equal(catalogBlocked.body.provider,'apinex');
+      assert.equal(catalogBlocked.body.ready,true);
+      assert.equal(catalogBlocked.body.verified,false);
+      assert.equal(catalogBlocked.body.probe,'model_catalog_denied');
     }finally{globalThis.fetch=old;}
   });
 });
