@@ -166,14 +166,14 @@ function renderLive(status){
     '<span class="flag">🧠 Аналіз кадрів: '+(status.ai_enabled?'увімкнений':'не налаштований або недоступний')+'</span>'+
     '<span class="flag">Спостережень: '+observations.length+'</span>';
   el('liveChannels').innerHTML=channels.map(c=>{
-    let state=(c.status==='LIVE'&&recent)?'🔴 LIVE':c.status==='offline'&&recent?'⚪ Не в ефірі':
+    let state=(c.status==='LIVE'&&recent)?'🔴 LIVE':c.status==='not_detected'&&recent?'⚪ LIVE не підтверджено':
       c.status==='check_error'?'⚠️ YouTube недоступний':
       c.status==='source_unverified'?'⚠️ Потрібне посилання':
       c.status==='pending_first_scan'?'⏳ Очікує першої перевірки':'⚪ Не підтверджено';
     let cls=(c.status==='LIVE'&&recent)?'status':'status warn';
     let heading=c.stream&&c.stream.title?c.stream.title:'Трансляцію ще не визначено';
     let details=c.observation_status==='visual_claim_reviewed'?'🧠 Кадр переглянуто':
-      c.observation_status==='requires_OPENAI_API_KEY'?'🔐 Потрібен AI-ключ для аналізу екрану':
+      c.observation_status==='requires_OPENAI_API_KEY_or_local_OLLAMA'?'🔐 Для читання екрану потрібні OpenAI або локальна Ollama':
       c.observation_status==='frame_unavailable'?'⚠️ Не вдалося прочитати кадр':
       c.observation_status==='analysis_unavailable'?'⚠️ AI-аналіз недоступний':
       c.observation_status==='media_unavailable'?'⚠️ Відеопотік недоступний':
