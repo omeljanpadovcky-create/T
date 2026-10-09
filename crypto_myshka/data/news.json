@@ -810,7 +810,25 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T21:13:44Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "Crypto majors are very green with Bitcoin making a new another 2-month high; BTC +2% at $96,7500; ETH +2% at $3,360, SOL even at $145; XRP -1% to $2.11. DCR (+30%), DASH (+10%), ICP (+10%) and ZEC (+7%) led top movers; XMR hit another new ATH at $800 before retracing to $725. Coinbase pulled support for the Senate’s crypto market structure bill ahead of a key vote, citing major concerns with the latest draft, leading to the Senate delaying the bill. Zcash avoided SEC action after the Zcash Foundation said the agency’s investigation has concluded. Ripple secured a Luxembourg license as its European expansion continued. Pakistan teamed with Wor",
+        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "market_effect": "Потенційно негативний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+        "confidence": "низька",
+        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на BTC, ETH, SOL, XRP; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "febaf99cab0d0f",
@@ -854,7 +872,25 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T21:13:49Z",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "Crypto majors are green; BTC +1.5% at $92,000; ETH +1% at $3,130, SOL +2% at $142; XRP +1% to $2.06. DASH (+60%), IP (+30%) and XMR (+13%) led top movers; XMR hit another new ATH at $680 (now $640). Gold and Silver hit new ATHs again in the wake of the Powell investigation. The US Senate released the draft Crypto Market Clarity Act, including limits on stablecoin rewards. Senator Warren pressed the SEC over inclusion of crypto in 401ks arguing they expose retirees to too much risk. Vitalik Buterin warned crypto needs better decentralized stablecoins, citing governance capture and inflation risks. World Liberty Financial launched a crypto lend",
+        "why_it_matters": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "market_effect": "Потенційно негативний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
+        "confidence": "низька",
+        "short_conclusion": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "c4e61a1e9ac88f",
@@ -898,7 +934,25 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T21:13:56Z",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "Crypto majors are green; BTC +1.5% at $92,000; ETH +1% at $3,130, SOL +2% at $142; XRP +1% to $2.06. DASH (+60%), IP (+30%) and XMR (+13%) led top movers; XMR hit another new ATH at $680 (now $640). Gold and Silver hit new ATHs again in the wake of the Powell investigation. The US Senate released the draft Crypto Market Clarity Act, including limits on stablecoin rewards. Senator Warren pressed the SEC over inclusion of crypto in 401ks arguing they expose retirees to too much risk. Vitalik Buterin warned crypto needs better decentralized stablecoins, citing governance capture and inflation risks. World Liberty Financial launched a crypto lend",
+        "why_it_matters": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "market_effect": "Потенційно негативний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
+        "confidence": "низька",
+        "short_conclusion": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "0a53daff32de0f",
@@ -939,7 +993,25 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T21:14:02Z",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "Crypto majors are mostly flat headed into Monday open; btc even at $90,600; eth +1% at $3,110, sol +2% at $140; xrp -2% to $2.04. Ip (+20%) and xmr (+15%) led top movers; xmr hit a new ath at $590. Fed chair Jerome Powell released a video message claiming that the criminal charges he faces are due to his not cutting interest rates in line with Trump’s wishes. X (twitter) announced plans for “smart cashtags” to show crypto and stock prices live next to tickers. Vaneck projected bitcoin could reach $53m by 2050, outlining long-term adoption, trade settlement and store-of-value assumptions driving 29% annual growth. Andreessen Horowitz (a16z) ra",
+        "why_it_matters": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "market_effect": "Потенційно позитивний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
+        "confidence": "низька",
+        "short_conclusion": "Це макро-фактор для BTC, ETH, SOL, XRP: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "66eea8df8b9da4",
@@ -4867,12 +4939,12 @@
   "jev_model": "free/deepseek-v4.1-flash",
   "jev_analyzed_count": 8,
   "jev_analyzed_this_run": 0,
-  "jev_pending_count": 0,
-  "jev_llm_pending_count": 21,
+  "jev_pending_count": 14,
+  "jev_llm_pending_count": 39,
   "jev_analysis_errors": 4,
   "jev_error_codes": {
     "http_402": 1,
     "http_429": 3
   },
-  "jev_last_run_at": "2026-10-09T21:03:14Z"
+  "jev_last_run_at": "2026-10-09T21:14:09Z"
 }
