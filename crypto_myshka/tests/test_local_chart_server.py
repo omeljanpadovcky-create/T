@@ -35,13 +35,20 @@ class LocalChartServerTests(unittest.TestCase):
 
     def test_png_is_sent_to_local_vision_model(self):
         png = base64.b64encode(b"\x89PNG\r\n\x1a\nexample").decode("ascii")
-        with patch.object(chart, "api_post", return_value={"message": {"content": "Ціна зростає, але даних мало."}}) as mock:
+        with patch.object(chart, "api_post", return_value={"message": {"content": "ВГОРУ"}}) as mock:
             status, data = self.request({"image": png})
         self.assertEqual(status, 200)
-        self.assertIn("Ціна зростає", data["analysis"])
+        self.assertEqual("ВГОРУ", data["analysis"])
         self.assertEqual(data["source"], "local_ollama")
         self.assertEqual(mock.call_args.args[0], "/api/chat")
         self.assertEqual(mock.call_args.args[1]["messages"][1]["images"], [png])
+
+    def test_ambiguous_model_output_becomes_unclear(self):
+        png = base64.b64encode(bytes([137, 80, 78, 71, 13, 10, 26, 10]) + b"example").decode("ascii")
+        with patch.object(chart, "api_post", return_value={"message": {"content": "Купуйте негайно!"}}):
+            status, data = self.request({"image": png})
+        self.assertEqual(status, 200)
+        self.assertEqual(data["direction"], "НЕВИЗНАЧЕНО")
 
     def test_reject_foreign_origin(self):
         png = base64.b64encode(bytes([137, 80, 78, 71, 13, 10, 26, 10]) + b"example").decode("ascii")
