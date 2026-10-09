@@ -374,6 +374,53 @@
     } else { return; }
     renderAnalysis(); renderHistory();
   }
+  const DEMO_OUTCOMES_KEY = 'crypto-myshka-demo-expiry-v1';
+  function demoOutcomes() {
+    try {
+      const records = JSON.parse(localStorage.getItem(DEMO_OUTCOMES_KEY) || '[]');
+      return arr(records).filter(r => r && [30, 60, 300].includes(r.expiry) &&
+        typeof r.correct === 'boolean' && typeof r.id === 'string').slice(-500);
+    } catch { return []; }
+  }
+  function updateDemoJournal() {
+    const summary = $('expiry-journal-summary');
+    if (!summary) return;
+    const records = demoOutcomes();
+    if (!records.length) {
+      summary.textContent = 'Поки немає позначених деморезультатів.';
+      return;
+    }
+    const buckets = [30, 60, 300].map(expiry => {
+      const subset = records.filter(r => r.expiry === expiry);
+      const hits = subset.filter(r => r.correct).length;
+      const label = expiry === 30 ? '30 с' : expiry === 60 ? '1 хв' : '5 хв';
+      return label + ': ' + hits + '/' + subset.length +
+        (subset.length >= 30 ? ' (' + Math.round(100 * hits / subset.length) + '%)' : ' (мала вибірка)');
+    });
+    summary.textContent = 'Демо, позначено вручну: ' + records.length + ' · ' + buckets.join(' · ');
+  }
+  function recordDemoOutcome(id, expiry, action, correct) {
+    const records = demoOutcomes();
+    if (records.some(r => r.id === id)) return false;
+    records.push({id, expiry, action, correct, at: new Date().toISOString()});
+    try {
+      localStorage.setItem(DEMO_OUTCOMES_KEY, JSON.stringify(records.slice(-500)));
+      updateDemoJournal();
+      return true;
+    } catch {
+      toast('Браузер не дозволив зберегти деморезультат.');
+      return false;
+    }
+  }
+  function imageFingerprint(dataUrl, action, expiry, timeframe) {
+    // Privacy: persist only a short fingerprint, never screenshot bytes.
+    let hash = 2166136261;
+    const step = Math.max(1, Math.floor(dataUrl.length / 1024));
+    for (let i = 0; i < dataUrl.length; i += step) {
+      hash = Math.imul(hash ^ dataUrl.charCodeAt(i), 16777619);
+    }
+    return [hash >>> 0, dataUrl.length, action, expiry, timeframe].join(':');
+  }
   async function checkVisionHealth() {
     const status = $('vision-status');
     if (!status) return;
@@ -544,6 +591,35 @@
                   tooLate ? '⛔ Аналіз тривав довше за тестову експірацію. Пропустити.' :
                     '⚠️ Це неперевірена гіпотеза для демо, а не команда на ставку. OTC-котирування не звірені.');
                 aiResult.replaceChildren(title, visible, timeframe, testTime, reason, latency, warning);
+                if (action !== 'SKIP') {
+                  const outcomeId = imageFingerprint(dataUrl, action, expiry, result.chart_timeframe);
+                  const outcomeRow = document.createElement('div');
+                  outcomeRow.className = 'expiry-outcome-row';
+                  const outcomeTitle = makeLine('span', 'jev-image-meta',
+                    'Після завершення демоугоди познач результат вручну:');
+                  const hit = makeLine('button', 'small-button', '✓ Демо: влучив');
+                  const miss = makeLine('button', 'small-button', '✕ Демо: помилився');
+                  hit.type = 'button';
+                  miss.type = 'button';
+                  const save = correct => {
+                    if (!recordDemoOutcome(outcomeId, expiry, action, correct)) {
+                      toast('Цей скріншот уже є в деможурналі або запис недоступний.');
+                      return;
+                    }
+                    hit.disabled = true;
+                    miss.disabled = true;
+                    outcomeTitle.textContent = 'Деморезультат записано локально (без перевірки брокером).';
+                  };
+                  hit.addEventListener('click', () => save(true));
+                  miss.addEventListener('click', () => save(false));
+                  if (demoOutcomes().some(r => r.id === outcomeId)) {
+                    hit.disabled = true;
+                    miss.disabled = true;
+                    outcomeTitle.textContent = 'Цей скріншот уже позначено в деможурналі.';
+                  }
+                  outcomeRow.append(outcomeTitle, hit, miss);
+                  aiResult.append(outcomeRow);
+                }
               } catch (error) {
                 if (requestId === imageRequestId) {
                   aiResult.className = 'jev-image-result';
@@ -618,6 +694,7 @@
     navigate(routeView(), { fromHash: true, noScroll: true });
     refreshAll();
     checkVisionHealth();
+    updateDemoJournal();
     startPolling();
     if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
       if (['localhost', '127.0.0.1'].includes(location.hostname)) {
