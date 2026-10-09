@@ -103,6 +103,8 @@
     else if (!state.cloudAccess) label.textContent = 'Введи окремий код доступу JEV.';
     else if (state.visionSource === 'cloud' && state.visionStatus === 'ready')
       label.textContent = '🟢 Хмарний JEV підключено. Фото надсилатиметься на твій сервер і до обраного AI-провайдера (APInex або Gemini).';
+    else if (state.visionSource === 'cloud' && state.visionStatus === 'provisional')
+      label.textContent = '🟠 APInex налаштовано, але доступність моделі перевірить перший запит фото.';
     else label.textContent = 'Адресу збережено. Перевірка хмарного JEV: ' +
       (state.visionStatus === 'checking' ? 'очікування…' : 'не готовий або працює локальний JEV.');
   }
@@ -197,6 +199,7 @@
     const local = ['localhost', '127.0.0.1'].includes(location.hostname);
     const ready = state.visionStatus === 'ready';
     const label = ready ? (state.visionSource === 'cloud' ? 'JEV хмарний готовий' : 'JEV готовий · локально') :
+      state.visionStatus === 'provisional' ? 'JEV: перевірити фото' :
       state.visionStatus === 'checking' ? 'Перевіряємо JEV' :
       state.visionStatus === 'missing_model' ? 'Потрібна модель Ollama' :
       state.cloudEndpoint ? 'Хмарний JEV не відповідає' :
@@ -497,10 +500,14 @@
         });
         const result = await response.json();
         if (!response.ok || !result.ready) throw new Error(result.error || 'HTTP ' + response.status);
-        state.visionStatus = 'ready';
+        const provisionallyAvailable = result.verified === false;
+        state.visionStatus = provisionallyAvailable ? 'provisional' : 'ready';
         state.visionSource = 'cloud';
-        status.dataset.ready = 'true';
-        status.textContent = '🟢 JEV готовий · ' + (result.provider === 'apinex' ? 'APInex / ' : '') + (result.model || 'AI') + ' · хмарний сервер';
+        status.dataset.ready = provisionallyAvailable ? 'provisional' : 'true';
+        status.textContent = provisionallyAvailable
+          ? '🟠 APInex налаштовано · каталог моделей недоступний · перевіримо при аналізі фото'
+          : '🟢 JEV готовий · ' + (result.provider === 'apinex' ? 'APInex / ' : '') +
+              (result.model || 'AI') + ' · хмарний сервер';
       } catch (error) {
         state.visionStatus = 'offline';
         status.textContent = '🔴 Хмарний JEV не готовий: ' + (error.message || 'Перевір URL, код і секрети Vercel.');
@@ -621,6 +628,17 @@
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.error || 'Помилка AI-сервера (HTTP ' + response.status + ')');
                 if (requestId !== imageRequestId) return;
+                if (useCloud && state.visionStatus === 'provisional') {
+                  state.visionStatus = 'ready';
+                  statusPill();
+                  updateCloudSettings();
+                  const note = $('vision-status');
+                  if (note) {
+                    note.dataset.ready = 'true';
+                    note.textContent = '🟢 Хмарний JEV реально відповів на аналіз фото (' +
+                      (result.provider === 'apinex' ? 'APInex' : 'AI') + ')';
+                  }
+                }
                 const direction = ['ВГОРУ', 'ВНИЗ', 'НЕВИЗНАЧЕНО'].includes(result.direction)
                   ? result.direction : 'НЕВИЗНАЧЕНО';
                 const proposedAction = ['BUY', 'SELL'].includes(result.action) ? result.action : 'SKIP';
