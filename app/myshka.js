@@ -116,6 +116,9 @@
     $('vision-mode-quick').value = mode;
     $('vision-cloud-fallback').checked = !!state.prefs.cloudFallback;
     $('vision-cloud-fallback').disabled = mode !== 'auto';
+    const warning = $('local-mode-warning');
+    if (warning) warning.hidden = isLocalPage() || mode === 'cloud' ||
+      (mode === 'auto' && state.prefs.cloudFallback && isCloudConfigured());
     const info = $('vision-mode-info');
     if (mode === 'local') info.textContent = isLocalPage()
       ? 'Локально: використовується Ollama на цьому комп’ютері. Фото не надсилається в хмару.'
@@ -249,6 +252,7 @@
       state.visionStatus === 'provisional' ? 'JEV: перевірити фото' :
       state.visionStatus === 'checking' ? 'Перевіряємо JEV' :
       state.visionStatus === 'missing_model' ? 'Потрібна модель Ollama' :
+      !local && state.prefs.visionMode === 'local' ? 'Ollama: відкрий локальну Мишку' :
       state.cloudEndpoint ? 'Хмарний JEV не відповідає' :
       local ? 'JEV не відповідає' : 'Підключи хмарний JEV';
     node.className = 'connection-pill ' + (ready ? 'good' : 'warn');
@@ -845,6 +849,14 @@
       if (!file) return;
       event.preventDefault();
       analyzeChartImage(file);
+    });
+    $('copy-local-mode-command').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(LOCAL_START_COMMAND);
+        toast('Скопійовано команду запуску Ollama/JEV');
+      } catch {
+        window.prompt('Команда запуску локального JEV:', LOCAL_START_COMMAND);
+      }
     });
     $('copy-local-start').addEventListener('click', async () => {
       try {
