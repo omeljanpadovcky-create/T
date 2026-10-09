@@ -24,16 +24,17 @@ OLLAMA = os.environ.get("MYSHKA_OLLAMA_URL", "http://127.0.0.1:11434").rstrip("/
 if urlsplit(OLLAMA).hostname not in ("localhost", "127.0.0.1", "::1"):
     raise SystemExit("Для захисту фото Ollama повинна працювати лише на localhost.")
 MAX_BYTES = 8 * 1024 * 1024
-SYSTEM = """Ти JEV — обережний аналітик скріншотів торгових графіків.
-Пиши українською, конкретно та стисло. Спочатку прочитай, якщо видно, назву
-інструмента, таймфрейм і останню ціну. Якщо не видно — напиши «не видно».
-Опиши останні свічки, структуру ціни, напрямок і показники на зображенні.
-Вказуй приблизні рівні підтримки/опору ЛИШЕ коли числа читаються на графіку.
-Поясни два можливі сценарії з умовами підтвердження і ризики.
-Відділяй спостереження від гіпотез; не вигадуй обсяги, точні ціни чи winrate.
-Зображення може бути застарілим, OTC-ціни не верифіковані.
-Не обіцяй прогнозу наступної свічки, не наказуй купувати/продавати,
-не вказуй розмір ставки. Жодних угод не відкривай."""
+SYSTEM = """Ти JEV. Дивишся лише на скріншот графіка і визначаєш
+напрямок ВИДИМОГО короткострокового руху, а не гарантований прогноз.
+Відповідай РІВНО одним із трьох слів українською, без жодного іншого тексту:
+ВГОРУ
+ВНИЗ
+НЕВИЗНАЧЕНО
+ВГОРУ — лише якщо видимий висхідний рух чіткий.
+ВНИЗ — лише якщо видимий спадний рух чіткий.
+НЕВИЗНАЧЕНО — коли графік нечіткий, рух змішаний або недостатньо даних.
+Не вигадуй сигналів, не давай команд на купівлю чи продаж.
+OTC котирування і майбутні свічки неможливо підтвердити зі скріншота."""
 
 
 def api_post(path, payload, timeout=100):
@@ -119,18 +120,23 @@ class Handler(SimpleHTTPRequestHandler):
         try:
             result = api_post("/api/chat", {
                 "model": MODEL, "stream": False,
-                "options": {"temperature": 0.1, "num_predict": 850},
+                "options": {"temperature": 0, "num_predict": 24},
                 "messages": [
                     {"role": "system", "content": SYSTEM},
-                    {"role": "user", "content": "Проаналізуй саме цей скріншот, не вигадуй прихованих даних.",
+                    {"role": "user", "content": "Куди рухається видимий графік? Відповідай лише ВГОРУ, ВНИЗ або НЕВИЗНАЧЕНО.",
                      "images": [image64]}
                 ]
             })
             analysis = (result.get("message") or {}).get("content", "").strip()
             if not analysis:
                 return self.json_response(502, {"error": "JEV не повернув текст аналізу."})
-            return self.json_response(200, {"analysis": analysis, "model": MODEL,
-                                            "source": "local_ollama", "verified_quotes": False})
+            # Never present free-form AI prose as a trade instruction.
+            # Ambiguous responses fall back to the safe neutral state.
+            token = analysis.upper().strip().strip(".! ")
+            direction = token if token in ("ВГОРУ", "ВНИЗ", "НЕВИЗНАЧЕНО") else "НЕВИЗНАЧЕНО"
+            return self.json_response(200, {"analysis": direction, "direction": direction,
+                                            "model": MODEL, "source": "local_ollama",
+                                            "verified_quotes": False})
         except urllib.error.HTTPError as exc:
             if exc.code == 404:
                 return self.json_response(503, {"error": "Модель " + MODEL +
