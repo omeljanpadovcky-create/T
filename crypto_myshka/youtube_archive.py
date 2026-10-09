@@ -18,6 +18,11 @@ import requests
 from yt_dlp import YoutubeDL
 
 try:
+    from video_jev import summarize as jev_summarize, API_KEY as JEV_KEY, ENABLED as JEV_ENABLED
+except ImportError:
+    from crypto_myshka.video_jev import summarize as jev_summarize, API_KEY as JEV_KEY, ENABLED as JEV_ENABLED
+
+try:
     from youtube_analysts import (
         CHANNELS, INSTRUMENT_RE, TIMEFRAME_RE, INDICATOR_RE,
         classify, normalize,
@@ -36,6 +41,8 @@ RECENT_COUNT = max(5, min(30, int(os.getenv("VIDEO_ARCHIVE_RECENT", "12"))))
 BACKFILL_PAGE = max(10, min(100, int(os.getenv("VIDEO_ARCHIVE_PAGE", "45"))))
 DETAIL_LIMIT = max(0, min(12, int(os.getenv("VIDEO_ARCHIVE_DETAILS", "5"))))
 MAX_ENTRIES = max(50, min(12000, int(os.getenv("VIDEO_ARCHIVE_MAX_ENTRIES", "5000"))))
+JEV_MAX_PER_RUN = max(0, min(5, int(os.getenv("YOUTUBE_JEV_MAX_PER_RUN", "2"))))
+_jev_used = 0
 VID_ID = re.compile(r"^[A-Za-z0-9_-]{11}$")
 YT = "https://www.youtube.com/watch?v="
 ISOTIME = lambda: datetime.now(timezone.utc).isoformat()
@@ -209,6 +216,21 @@ def enrich(video: dict) -> dict:
         output["caption_events_processed"] = captions.get("events_processed", 0)
         output["captions_truncated"] = captions.get("truncated", False)
         output["analysis"] = facts_from_text(title, description, captions)
+        global _jev_used
+        if captions["status"] == "available" and JEV_ENABLED and JEV_KEY and _jev_used < JEV_MAX_PER_RUN:
+            _jev_used += 1
+            output["jev"] = jev_summarize(
+                title=title, description=description,
+                subtitles=captions["full_text"],
+                instruments=output["analysis"]["mentioned_instruments"],
+                indicators=output["analysis"]["mentioned_indicators"],
+            )
+        else:
+            output["jev"] = {
+                "status":"not_analyzed",
+                "reason": ("No public captions" if captions["status"] != "available" else
+                           "JEV key missing, disabled, or per-run budget reached"),
+            }
         output["content_status"] = ("captions_scanned" if captions["status"] == "available"
                                     else "title_description_only")
         output["video_reviewed"] = False  # Audio/video was NOT sampled.
