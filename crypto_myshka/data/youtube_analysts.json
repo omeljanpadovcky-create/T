@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-09T22:58:32.436995+00:00",
+  "updated_at": "2026-10-09T22:59:58.319070+00:00",
   "mode": "educational_video_context",
   "channels": [
     {
@@ -247,7 +247,9 @@
           "analysis": {
             "mentioned_instruments": [],
             "mentioned_timeframes": [],
-            "mentioned_indicators": [],
+            "mentioned_indicators": [
+              "STOCHASTIC"
+            ],
             "content_excerpt": "",
             "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
             "instrument": "Не визначено",
