@@ -423,6 +423,45 @@
       const act = e.target.closest('button[data-act]');
       if (act) { reportAction(act.dataset.act, act.dataset.id, act.dataset.vote); }
     });
+    $('chart-photo').addEventListener('change', event => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const box = $('photo-analysis');
+      if (!['image/jpeg','image/png','image/webp'].includes(file.type) || file.size > 8 * 1024 * 1024) {
+        box.textContent = 'Потрібен JPG, PNG або WebP до 8 МБ.'; return;
+      }
+      const image = new Image();
+      const url = URL.createObjectURL(file);
+      image.onload = () => {
+        const canvas = document.createElement('canvas');
+        const scale = Math.min(1, 900 / Math.max(image.width, image.height));
+        canvas.width = Math.max(1, Math.round(image.width * scale));
+        canvas.height = Math.max(1, Math.round(image.height * scale));
+        const ctx = canvas.getContext('2d');
+        if (!ctx) { box.textContent = 'Браузер не підтримує аналіз зображення.'; URL.revokeObjectURL(url); return; }
+        ctx.drawImage(image,0,0,canvas.width,canvas.height);
+        URL.revokeObjectURL(url);
+        const pixels = ctx.getImageData(0,0,canvas.width,canvas.height).data;
+        let green = 0, red = 0;
+        // Estimate dominant red/green candle pixels only; this is NOT trend prediction or OCR.
+        for (let i=0;i<pixels.length;i+=4) {
+          const r=pixels[i],g=pixels[i+1],b=pixels[i+2];
+          if (g>r*1.35 && g>b*1.2 && g>95) green++;
+          if (r>g*1.4 && r>b*1.3 && r>110) red++;
+        }
+        const dominant=green>red*1.3?'зелених':red>green*1.3?'червоних':'приблизно порівну червоних і зелених';
+        const info=document.createElement('div');
+        info.className='report-card';
+        const heading=document.createElement('h3');heading.textContent='📷 Попередній аналіз фото';
+        const desc=document.createElement('p');
+        desc.textContent='Розмір: '+image.width+' × '+image.height+' px. За кольорами на зображенні '+(dominant.includes('порівну')?dominant:'більше '+dominant)+' ділянок. Це не визначає напрямок наступної свічки.';
+        const caution=document.createElement('p');caution.className='report-notice';
+        caution.textContent='Локальна оцінка пікселів — не повноцінний AI/JEV. Пару, таймфрейм, котирування, рівні та обсяг автоматично не підтверджено. Фото нікуди не надсилається.';
+        info.append(heading,desc,caution);box.replaceChildren(info);
+      };
+      image.onerror = () => { URL.revokeObjectURL(url);box.textContent='Не вдалося прочитати фото.'; };
+      image.src=url;
+    });
     $('refresh-button').addEventListener('click', () => refreshAll(true));
     $('demo-button').addEventListener('click', () => {
       state.demo = !state.demo;
