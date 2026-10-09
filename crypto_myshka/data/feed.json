@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-09T21:02:44.788063+00:00",
+  "generated_at": "2026-10-09T21:13:39.253957+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,12 +26,12 @@
       "ok": true,
       "count": 10218,
       "complete": true,
-      "updated_at": "2026-10-09T21:02:39.609646+00:00",
+      "updated_at": "2026-10-09T21:13:34.513221+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 99,
+      "count": 118,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -41,38 +41,43 @@
       "ETH",
       "SOL",
       "PENDLE",
+      "ICP",
       "XRP",
       "BNB",
       "DOGE"
     ],
     "prices": {
       "bitcoin": {
-        "usd": 82445,
-        "usd_24h_change": 0.9214796601634012
+        "usd": 82509,
+        "usd_24h_change": 1.0345594808736063
       },
       "ethereum": {
-        "usd": 2481.23,
-        "usd_24h_change": 0.36083602886216254
+        "usd": 2481.61,
+        "usd_24h_change": 0.4414876678382623
       },
       "solana": {
-        "usd": 108.96,
-        "usd_24h_change": -0.6901394339002287
+        "usd": 108.98,
+        "usd_24h_change": -0.7484558452182811
       },
       "pendle": {
         "usd": 2.08,
-        "usd_24h_change": -1.102155647121957
+        "usd_24h_change": -1.012259928043347
+      },
+      "internet-computer": {
+        "usd": 3.02,
+        "usd_24h_change": 2.557293990721933
       },
       "ripple": {
         "usd": 1.39,
-        "usd_24h_change": 0.8047286740009046
+        "usd_24h_change": 0.9967963872541369
       },
       "binancecoin": {
-        "usd": 740.05,
-        "usd_24h_change": 0.8597243797473249
+        "usd": 741.21,
+        "usd_24h_change": 1.0601266453603102
       },
       "dogecoin": {
-        "usd": 0.084785,
-        "usd_24h_change": 0.6857240333009331
+        "usd": 0.084996,
+        "usd_24h_change": 0.932296884964531
       }
     }
   },
@@ -6214,6 +6219,6 @@
     }
   ],
   "archive_count": 10218,
-  "news_count": 99,
+  "news_count": 118,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
