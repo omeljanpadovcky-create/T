@@ -30,6 +30,12 @@ LONG_RE = re.compile(r"\b(long|buy|call|bullish|лонг|купить|покуп
 SHORT_RE = re.compile(r"\b(short|sell|put|bearish|шорт|продать|продажа|падінн|падени|вниз)\b", re.I)
 OTC_RE = re.compile(r"\b(otc|pocket\s*option|quotex|binarn|binary|бинарн|бінарн|экспирац|експіраці)\b", re.I)
 PROMO_RE = re.compile(r"\b(100%|без\s*проигрыш|гарантир|гарантов|vip|промокод|реферал|удвой|копитрейдинг|copy\s*trading|winrate)\b", re.I)
+TRADING_RE = re.compile(r"(trading|trade|trader|трейд|торгов|strategy|стратег|отс|otc|pocket.?option|option|crypt|крипт|forex|binanc|btc|eth|сигнал|копитрейд|сделк|угод)", re.I)
+VERIFIED_EXAMPLES = {
+    "nikolas": ("g5sXQlvCPVo", "I'm Trading LIVE — Watch What Happens | Pocket Option LIVE"),
+    "mark": ("L31S4DgpEIo", "ОНЛАЙН СТРИМ. КОПИРОВАНИЕ СДЕЛОК 7.10 ВЕЧЕРНИЙ ЭФИР"),
+}
+
 
 def normalize(text: str) -> str:
     return re.sub(r"\s+", " ", str(text or "")).strip()
@@ -121,6 +127,9 @@ def collect(channel: dict) -> dict:
                     details = {}
             title = normalize(details.get("title") or item.get("title") or "Без назви")
             description = normalize(details.get("description") or item.get("description") or "")
+            # Do not attribute unrelated channel or old entertainment videos as trade analysis.
+            if not TRADING_RE.search(title):
+                continue
             excerpt = caption_excerpt(details) if details else ""
             date = details.get("upload_date") or item.get("upload_date") or ""
             verdict = classify(title, description, excerpt)
@@ -135,6 +144,19 @@ def collect(channel: dict) -> dict:
     except Exception as exc:
         result["status"] = "source_unavailable"
         result["error"] = normalize(str(exc))[:180]
+    # A verified public video example is safer than inventing a channel catalogue.
+    if not result["videos"] and channel["id"] in VERIFIED_EXAMPLES:
+        vid, title = VERIFIED_EXAMPLES[channel["id"]]
+        result["videos"].append({
+            "id": vid, "title": title,
+            "url": "https://www.youtube.com/watch?v=" + vid,
+            "upload_date": None,
+            "analysis": classify(title),
+            "sample_only": True,
+        })
+        result["status"] = "example_only"
+    elif not result["videos"] and result["status"] == "ok":
+        result["status"] = "no_relevant_videos"
     return result
 
 def main():
