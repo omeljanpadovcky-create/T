@@ -362,7 +362,25 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T20:17:51Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "The SEC Just Broke the 2x Ceiling on Leveraged Crypto ETFs — and the First 3x Products Are One Form Away From Trading &nbsp;&nbsp; Yahoo Finance",
+        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "market_effect": "Невизначений / змішаний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+        "confidence": "низька",
+        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "f2146ba6b342c1",
@@ -1334,7 +1352,25 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T20:17:56Z",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "Alongside its recent spot NEAR ETF launch, Bitwise is prioritizing AI and intends to do more in that area.",
+        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на DOGE; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "market_effect": "Потенційно позитивний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+        "confidence": "низька",
+        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на DOGE; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "4c5c44a7fe6301",
@@ -1371,7 +1407,25 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно позитивний",
         "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T20:18:03Z",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "Hashi has more than $500M in commitments ahead of mainnet launch, while Anchorage offers institutions settlement and self-custody.",
+        "why_it_matters": "Інституційний інтерес до BTC важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
+        "market_effect": "Потенційно позитивний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу.",
+        "confidence": "низька",
+        "short_conclusion": "Інституційний інтерес до BTC важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "2263ca375d33a1",
@@ -1413,7 +1467,25 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Потенційно позитивний",
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T20:18:09Z",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "The South Korean tech giant said the feature is built into Samsung Wallet, with fiat on- and off-ramps, rather than a separate crypto app.",
+        "why_it_matters": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
+        "market_effect": "Потенційно позитивний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента.",
+        "confidence": "низька",
+        "short_conclusion": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "487a91e92562e2",
@@ -4146,12 +4218,12 @@
   "jev_model": "free/deepseek-v4.1-flash",
   "jev_analyzed_count": 8,
   "jev_analyzed_this_run": 0,
-  "jev_pending_count": 4,
-  "jev_llm_pending_count": 22,
+  "jev_pending_count": 1,
+  "jev_llm_pending_count": 23,
   "jev_analysis_errors": 4,
   "jev_error_codes": {
     "http_402": 1,
     "http_429": 3
   },
-  "jev_last_run_at": "2026-10-09T20:09:23Z"
+  "jev_last_run_at": "2026-10-09T20:18:16Z"
 }
