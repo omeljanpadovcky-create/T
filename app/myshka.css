@@ -67,3 +67,11 @@ main{width:100%;max-width:1120px;margin:0 auto;flex:1;min-width:0}h1,h2,h3,h4{fo
 .expiry-journal small{color:var(--muted);font-size:12px;line-height:1.5}
 .expiry-outcome-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line);margin-top:10px}
 .expiry-outcome-row .small-button:disabled{opacity:.5;cursor:default}
+
+/* Optional authenticated cloud JEV configuration. */
+.cloud-settings-fields{display:flex;flex-direction:column;gap:9px;margin:12px 0 18px;max-width:720px}
+.cloud-settings-fields label{font-size:13px;font-weight:700;color:var(--ink)}
+.cloud-settings-fields input{width:100%;min-width:0;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font:inherit;color:var(--ink);background:var(--bg)}
+.cloud-settings-fields input:focus{outline:2px solid var(--blue);outline-offset:2px}
+.cloud-settings-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+#cloud-connection-status{color:var(--muted);font-size:13px;overflow-wrap:anywhere;margin:4px 0}
