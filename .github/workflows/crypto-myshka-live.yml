@@ -1,0 +1,67 @@
+name: CryptoMyshka LIVE Broadcast Monitor
+
+on:
+  schedule:
+    # Best-effort polling. GitHub schedule may be delayed or dropped at busy times.
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'crypto_myshka/live_monitor.py'
+      - '.github/workflows/crypto-myshka-live.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: crypto-myshka-stream-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install independent watcher packages
+        run: |
+          python -m pip install --disable-pip-version-check requests==2.32.5 yt-dlp
+          ffmpeg -version | head -1
+
+      - name: Compile isolated live observer
+        run: python -m py_compile crypto_myshka/live_monitor.py
+
+      - name: Check LIVE channels and inspect temporary frames when available
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          LIVE_VISION_MODEL: gpt-4.1-mini
+          LIVE_CAPTURE_INTERVAL: '300'
+          LIVE_MAX_SNAPSHOTS: '2'
+        run: python crypto_myshka/live_monitor.py
+
+      - name: Publish only LIVE snapshot
+        run: |
+          git config user.name "CryptoMyshka LIVE Observer"
+          git config user.email "crypto-myshka@users.noreply.github.com"
+          git add crypto_myshka/data/youtube_live.json
+          if git diff --cached --quiet; then
+            echo "No LIVE changes"
+            exit 0
+          fi
+          git commit -m "Update separate CryptoMyshka LIVE status"
+          for attempt in 1 2 3 4; do
+            git pull --rebase origin main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 4
+          done
+          exit 1
