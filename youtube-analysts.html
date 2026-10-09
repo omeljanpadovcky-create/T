@@ -71,6 +71,17 @@ h1 em{color:var(--gold);font-style:normal}p{line-height:1.65;color:#acbed0}
 <div class="metric"><small>Знайдено відео</small><b id="videoCount">—</b></div>
 <div class="metric"><small>Оновлено (UTC)</small><b id="updatedAt" style="font-size:13px">Очікується</b></div>
 </div>
+<section class="section" id="liveMonitor" aria-labelledby="liveMonitorTitle">
+  <div class="box" style="border-color:#704252;background:linear-gradient(140deg,#251628,#0a1925)">
+    <div class="top"><h2 id="liveMonitorTitle" style="margin:0;color:#ffb2be">🔴 LIVE — Мишка на трансляціях</h2><span class="tag" id="liveMeta">Перший запуск…</span></div>
+    <p>Перевірка прямих ефірів приблизно кожні 5 хвилин. Коли публічний потік доступний та налаштовано AI-ключ, Мишка аналізує знімок торгового екрана і коротку озвучку. Це спостереження, не підтвердження виконання угод.</p>
+    <div class="row" id="liveCounts" style="margin-bottom:9px"><span class="flag">🔴 LIVE: —</span><span class="flag">🧠 Розпізнавання: —</span></div>
+    <div id="liveChannels" class="cards"><div class="empty">Статус прямих ефірів завантажується…</div></div>
+    <h3 style="margin:18px 0 8px">Журнал спостережень</h3>
+    <div id="liveEvents"><div class="empty">Поки немає перевірених кадрів прямих ефірів.</div></div>
+    <p style="font-size:11px;color:#b6a3af;margin:12px 0 0">Для безперервного режиму без пауз потрібен постійно увімкнений сервер або комп’ютер; GitHub Actions робить періодичні перевірки і може запускатися із затримкою.</p>
+  </div>
+</section>
 <div class="box safe">
 <h2>🛡️ Фінальне рішення: <strong>SKIP</strong></h2>
 <p id="decisionReason">Поки сигнали з відео не звірені з незалежними котируваннями, часом входу та історією результатів, вони не можуть запускати угоди. Стрім і красиві відсотки — не підтверджена статистика.</p>
@@ -139,6 +150,62 @@ document.querySelectorAll('[data-filter]').forEach(b=>b.classList.remove('active
 button.classList.add('active');selected=button.dataset.filter;render();
 }));
 fetch(DATA,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(x=>{snapshot=x;render()}).catch(()=>{el('cards').innerHTML='<div class="empty">Файл звіту ще не опубліковано. Існуючі функції сайту працюють окремо.</div>'});
+
+const LIVE_DATA='./crypto_myshka/data/youtube_live.json';
+function renderLive(status){
+  const updated=status.updated_at?new Date(status.updated_at):null;
+  const age=updated?Date.now()-updated.getTime():Infinity;
+  const recent=Number.isFinite(age)&&age<20*60*1000;
+  const channels=status.channels||[];
+  const observations=(status.observations||[]).slice().reverse();
+  el('liveMeta').textContent=updated&&Number.isFinite(age)
+    ?(recent?'Оновлено: ':'Дані застаріли: ')+updated.toLocaleString('uk-UA',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})
+    :'Перший збір очікується';
+  el('liveCounts').innerHTML=
+    '<span class="flag">🔴 Ефірів зараз: '+(recent?Number(status.live_count||0):'не підтверджено')+'</span>'+
+    '<span class="flag">🧠 Аналіз кадрів: '+(status.ai_enabled?'увімкнений':'не налаштований або недоступний')+'</span>'+
+    '<span class="flag">Спостережень: '+observations.length+'</span>';
+  el('liveChannels').innerHTML=channels.map(c=>{
+    let state=(c.status==='LIVE'&&recent)?'🔴 LIVE':c.status==='offline'&&recent?'⚪ Не в ефірі':
+      c.status==='check_error'?'⚠️ YouTube недоступний':
+      c.status==='source_unverified'?'⚠️ Потрібне посилання':
+      c.status==='pending_first_scan'?'⏳ Очікує першої перевірки':'⚪ Не підтверджено';
+    let cls=(c.status==='LIVE'&&recent)?'status':'status warn';
+    let heading=c.stream&&c.stream.title?c.stream.title:'Трансляцію ще не визначено';
+    let details=c.observation_status==='visual_claim_reviewed'?'🧠 Кадр переглянуто':
+      c.observation_status==='requires_OPENAI_API_KEY'?'🔐 Потрібен AI-ключ для аналізу екрану':
+      c.observation_status==='frame_unavailable'?'⚠️ Не вдалося прочитати кадр':
+      c.observation_status==='analysis_unavailable'?'⚠️ AI-аналіз недоступний':
+      c.observation_status==='media_unavailable'?'⚠️ Відеопотік недоступний':
+      c.observation_status==='next_capture_pending'?'Наступне зчитування заплановане':'Тільки статус трансляції';
+    let link=c.stream&&c.stream.url?'<a class="action" href="'+esc(c.stream.url)+'" target="_blank" rel="noopener noreferrer">Дивитись LIVE ↗</a>':
+      c.url?'<a class="action" href="'+esc(c.url.replace(/\/videos$/,'/live'))+'" target="_blank" rel="noopener noreferrer">Канал ↗</a>':'';
+    return '<article class="card"><div class="cardHead"><div><h3>'+esc(c.name)+'</h3><div class="handle">'+esc(c.handle||'Адреса відсутня')+'</div></div><span class="'+cls+'">'+state+'</span></div>'+
+      '<div class="blurb">'+esc(heading)+'</div><div class="blurb">'+esc(details)+'</div>'+
+      '<div class="buttons">'+link+'</div></article>';
+  }).join('')||'<div class="empty">Немає інформації про канали.</div>';
+  el('liveEvents').innerHTML=observations.slice(0,15).map(v=>{
+    const d=v.observation||{},time=new Date(v.observed_at);
+    const when=Number.isFinite(time.getTime())?time.toLocaleString('uk-UA'):'час невідомий';
+    const description=d.visual_evidence||'Без підтверджених деталей';
+    const pair=d.asset||'Пара невідома',action=d.action||'unknown';
+    return '<div class="video"><b>'+esc(v.channel_name)+' · '+esc(when)+'</b>'+
+      '<div class="flags"><span class="flag">'+esc(action)+'</span><span class="flag">'+esc(pair)+'</span><span class="flag risk">Тільки твердження/кадр, не підтверджений результат</span></div>'+
+      '<p style="margin:8px 0">'+esc(description)+'</p>'+
+      (d.speaker_claim?'<small>Зі слів ведучого: '+esc(d.speaker_claim)+'</small>':'')+
+      (v.url?'<a target="_blank" rel="noopener noreferrer" href="'+esc(v.url)+'">Відкрити ефір ↗</a>':'')+
+      '</div>';
+  }).join('')||'<div class="empty">Поки жодного кадру ефіру не проаналізовано. Немає підстав говорити про їхні угоди.</div>';
+}
+function loadLive(){
+  fetch(LIVE_DATA+'?v='+Date.now(),{cache:'no-store'})
+    .then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()})
+    .then(renderLive)
+    .catch(()=>{el('liveChannels').innerHTML='<div class="empty">Статус LIVE поки недоступний; записані відео й старі розділи працюють окремо.</div>'});
+}
+loadLive();
+setInterval(loadLive,60000);
+
 </script>
 </body>
 </html>
