@@ -89,6 +89,14 @@
             </select>
           </div>
           <p class="report-notice">JEV порівнює напрямок і пропонує лише <strong>тестову експірацію 30 с, 1 хв або 5 хв</strong> для демо. Без читабельного графіка — «ПРОПУСТИТИ». Це не перевірений прогноз чи порада робити ставку.</p>
+          <div class="vision-mode-inline">
+            <label for="vision-mode-quick"><strong>🤖 Де працює JEV?</strong></label>
+            <select id="vision-mode-quick" aria-label="Режим JEV для аналізу фото">
+              <option value="auto">Автоматично (локально → хмарно з дозволом)</option>
+              <option value="local">Локальний · Ollama</option>
+              <option value="cloud">Хмарний · APInex / Gemini</option>
+            </select>
+          </div>
           <p id="vision-status" class="vision-status" role="status" aria-live="polite">Перевіряємо підключення AI…</p>
           <div id="local-quickstart" class="settings-card" style="display:none">
             <h3>🛠 Запустити справжній JEV на Windows</h3>
@@ -120,6 +128,23 @@
           <div class="settings-card">
             <div class="setting-item"><div><strong>Тема інтерфейсу</strong><small>Світла або темна</small></div><select id="theme-select" aria-label="Тема"><option value="light">Світла</option><option value="dark">Темна</option></select></div>
             <div class="setting-item"><div><strong>Оновлення сторінки</strong><small>Це не частота зчитування відео</small></div><select id="refresh-select" aria-label="Частота оновлення"><option value="15">15 с</option><option value="30">30 с</option><option value="60">60 с</option><option value="120">120 с</option></select></div>
+          </div>
+          <div class="settings-card" id="dual-jev-settings">
+            <h3>🧠 JEV: локальний + хмарний</h3>
+            <div class="setting-item">
+              <div><strong>Режим аналізу</strong><small>Локальний використовує Ollama на цьому ПК; хмарний — захищений Vercel API</small></div>
+              <select id="vision-mode-select" aria-label="Режим роботи JEV">
+                <option value="auto">Автоматично</option>
+                <option value="local">Тільки локально</option>
+                <option value="cloud">Тільки хмарно</option>
+              </select>
+            </div>
+            <label class="jev-fallback-choice" for="vision-cloud-fallback">
+              <input id="vision-cloud-fallback" type="checkbox">
+              <span><strong>Дозволити резервний хмарний аналіз</strong><small>Лише в автоматичному режимі. Якщо Ollama недоступна, фото буде передано на Vercel та до обраного AI-провайдера. Можливі витрати API.</small></span>
+            </label>
+            <p id="vision-mode-info" class="muted" role="status">Перевіряємо джерело аналізу…</p>
+            <p class="report-notice">Локальний режим працює на сторінці http://127.0.0.1:18765/myshka-app.html. Публічна GitHub Pages не запускає локальну Ollama. Без дозволу автоматичного передавання фото в хмару не буде.</p>
           </div>
           <div class="settings-card" id="cloud-settings">
             <h3>☁️ Хмарний JEV — аналіз без увімкненого ПК</h3>
