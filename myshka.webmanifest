@@ -1,0 +1,21 @@
+{
+  "id": "./myshka-app.html",
+  "name": "Crypto Myshka · JEV Analyzer",
+  "short_name": "Crypto Myshka",
+  "description": "Пояснюваний аналіз LIVE-графіків та валютних пар. Без автоматичної торгівлі.",
+  "start_url": "./myshka-app.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f8fc",
+  "theme_color": "#f6f8fc",
+  "lang": "uk",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./app/myshka-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
