@@ -470,7 +470,7 @@
         const aiButton=document.createElement('button');
         aiButton.type='button';
         aiButton.className='small-button';
-        aiButton.textContent='🤖 JEV: проаналізувати свічки та рівні';
+        aiButton.textContent='🤖 JEV: напрямок ринку';
         const aiResult=document.createElement('div');
         aiResult.className='jev-image-result';
         aiResult.setAttribute('aria-live','polite');
@@ -491,8 +491,8 @@
               });
               const result=await response.json();
               if (!response.ok || !result.analysis) throw new Error(result.error || 'AI не відповідає');
-              aiResult.textContent='🤖 JEV ('+result.model+'):\n\n'+result.analysis+
-                '\n\n⚠️ Скріншот не підтверджує актуальні котирування або майбутній напрямок.';
+              const dir=['ВГОРУ','ВНИЗ','НЕВИЗНАЧЕНО'].includes(result.direction) ? result.direction : 'НЕВИЗНАЧЕНО';
+              aiResult.textContent=dir==='ВГОРУ' ? '↑ ВГОРУ' : dir==='ВНИЗ' ? '↓ ВНИЗ' : '— НЕВИЗНАЧЕНО';
             } catch (error) {
               aiResult.textContent='AI-аналіз не вдався: '+(error && error.message ? error.message : 'невідома помилка')+
                 '. Перевір, чи запущена Ollama та встановлена vision-модель.';
