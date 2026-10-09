@@ -43,6 +43,24 @@ class LocalChartServerTests(unittest.TestCase):
         self.assertEqual(mock.call_args.args[0], "/api/chat")
         self.assertEqual(mock.call_args.args[1]["messages"][1]["images"], [png])
 
+    def test_reject_foreign_origin(self):
+        png = base64.b64encode(bytes([137, 80, 78, 71, 13, 10, 26, 10]) + b"example").decode("ascii")
+        conn = http.client.HTTPConnection("127.0.0.1", self.server.server_port, timeout=5)
+        conn.request("POST", "/api/chart-analysis", body=json.dumps({"image": png}),
+                     headers={"Content-Type": "application/json", "Origin": "https://evil.example"})
+        response = conn.getresponse()
+        self.assertEqual(response.status, 403)
+        response.read()
+        conn.close()
+
+    def test_hidden_repo_file_not_served(self):
+        conn = http.client.HTTPConnection("127.0.0.1", self.server.server_port, timeout=5)
+        conn.request("GET", "/crypto_myshka/local_chart_server.py")
+        response = conn.getresponse()
+        self.assertEqual(response.status, 404)
+        response.read()
+        conn.close()
+
     def test_reject_nonimage(self):
         status, data = self.request({"image": base64.b64encode(b"not a chart").decode("ascii")})
         self.assertEqual(status, 400)
