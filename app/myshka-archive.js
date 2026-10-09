@@ -20,7 +20,7 @@
     metadata_only: 'Метадані',
   };
   const state = {data:null, busy:false, loadedAt:0, failedAt:0,
-    limit:12, query:'', channel:'', kind:'', evidence:'', initialized:false, error:null};
+    limit:12, query:'', channel:'', kind:'', evidence:'', listenersReady:false, channelsReady:false, error:null};
   const niceDate = x => {
     if (!/^\d{8}$/.test(String(x||''))) return 'Дата публікації невідома';
     return x.slice(6,8)+'.'+x.slice(4,6)+'.'+x.slice(0,4);
@@ -103,7 +103,7 @@
     $('archive-coverage').textContent='Архів поповнюється: '+count+' доступних роликів. '+
       (sources?('Переглянуто до кінця каталогів: '+completed+'/'+sources+'. '):'Обхід старих відео ще не починався. ')+
       'Повноту YouTube не гарантовано.';
-    if (!state.initialized) {
+    if (!state.channelsReady) {
       const select=$('archive-channel');
       for(const ch of arr(d.channels)){
         if(!ch||!ch.id)continue;
@@ -112,7 +112,7 @@
         option.textContent=String(ch.name||ch.handle||ch.id);
         select.append(option);
       }
-      state.initialized=true;
+      state.channelsReady=true;
     }
     const found=raw.filter(filters);
     $('archive-matches').textContent='Знайдено: '+found.length;
@@ -152,7 +152,7 @@
   }
   function render() {
     if(!$('archive-list'))return;
-    if(!state.initialized){
+    if(!state.listenersReady){
       $('archive-query').addEventListener('input', e=>{
         state.query=e.target.value.trim().toLocaleLowerCase('uk-UA');state.limit=12;draw();
       });
@@ -161,7 +161,7 @@
       $('archive-evidence').addEventListener('change',e=>{state.evidence=e.target.value;state.limit=12;draw();});
       $('archive-more').addEventListener('click',()=>{state.limit+=12;draw();});
       // Mark listeners as ready; channel <option> population may wait for data.
-      state.initialized='listeners';
+      state.listenersReady=true;
     }
     if(!state.busy && Date.now()-(state.loadedAt||state.failedAt)>180000)update();
     else if(state.data)draw();
