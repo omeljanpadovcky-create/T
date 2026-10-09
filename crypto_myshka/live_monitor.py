@@ -31,6 +31,10 @@ ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "data" / "youtube_live.json"
 MODEL = os.getenv("LIVE_VISION_MODEL", "gpt-4.1-mini")
 API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
+OLLAMA_URL = os.getenv("MYSHKA_OLLAMA_URL", "").strip().rstrip("/")
+OLLAMA_MODEL = os.getenv("MYSHKA_OLLAMA_MODEL", "qwen2.5vl:3b").strip()
+BROWSER = os.getenv("MYSHKA_YOUTUBE_BROWSER", "").strip().lower()
+AI_AVAILABLE = bool(API_KEY or OLLAMA_URL)
 CAPTURE_INTERVAL = max(60, int(os.getenv("LIVE_CAPTURE_INTERVAL", "300")))
 MAX_FRAMES_PER_RUN = max(1, min(5, int(os.getenv("LIVE_MAX_SNAPSHOTS", "3"))))
 
@@ -76,6 +80,8 @@ def ydl_options(flat=False) -> dict:
         "extract_flat": flat, "noplaylist": not flat,
         "youtube_include_dash_manifest": False,
     }
+    if BROWSER in {"chrome", "edge", "firefox", "brave"}:
+        result["cookiesfrombrowser"] = (BROWSER,)
     if flat:
         result["playlistend"] = 12
     return result
@@ -185,6 +191,20 @@ def transcribe(audio: Path | None) -> str:
 
 def vision(image: Path, transcript: str) -> dict:
     encoded = base64.b64encode(image.read_bytes()).decode("ascii")
+    if not API_KEY and OLLAMA_URL:
+        if not (OLLAMA_URL.startswith("http://127.0.0.1:") or OLLAMA_URL.startswith("http://localhost:")):
+            raise ValueError("Local Ollama must use localhost, not a public endpoint")
+        response = requests.post(
+            OLLAMA_URL + "/api/generate",
+            json={"model": OLLAMA_MODEL, "prompt": PROMPT + "\nUTC: " + now(),
+                  "images": [encoded], "stream": False, "format": "json"},
+            timeout=95,
+        )
+        response.raise_for_status()
+        parsed = json.loads(response.json().get("response") or "{}")
+        if not isinstance(parsed, dict):
+            raise ValueError("Local vision response not JSON object")
+        return normalize_observation(parsed)
     r = requests.post(
         "https://api.openai.com/v1/chat/completions",
         headers={"Authorization": "Bearer " + API_KEY, "Content-Type": "application/json"},
@@ -206,6 +226,9 @@ def vision(image: Path, transcript: str) -> dict:
     )
     r.raise_for_status()
     parsed = json.loads(r.json()["choices"][0]["message"]["content"])
+    return normalize_observation(parsed)
+
+def normalize_observation(parsed: dict) -> dict:
     if not isinstance(parsed, dict):
         raise ValueError("Vision response is not an object")
     allowed = {"claimed_entry", "claimed_exit", "commentary", "unknown"}
@@ -253,8 +276,8 @@ def process_once() -> dict:
             row["observation_status"] = "next_capture_pending"
             channels.append(row)
             continue
-        if not API_KEY:
-            row["observation_status"] = "requires_OPENAI_API_KEY"
+        if not AI_AVAILABLE:
+            row["observation_status"] = "requires_OPENAI_API_KEY_or_local_OLLAMA"
             channels.append(row)
             continue
         src = choose_stream_url(stream.get("_formats") or [])
@@ -299,7 +322,8 @@ def process_once() -> dict:
         "final_signal": "SKIP",
         "auto_trade": False,
         "notice": "Single LIVE screenshots and streamer statements are not independently verified fills or profit statistics.",
-        "ai_enabled": bool(API_KEY),
+        "ai_enabled": AI_AVAILABLE,
+        "ai_provider": "openai" if API_KEY else ("local_ollama" if OLLAMA_URL else "none"),
     }
     save(updated)
     return updated
