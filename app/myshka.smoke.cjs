@@ -8,6 +8,7 @@ const { JSDOM } = require('jsdom');
   const root = path.resolve(__dirname, '..');
   const html = fs.readFileSync(path.join(root, 'myshka-app.html'), 'utf8');
   const js = fs.readFileSync(path.join(root, 'app/myshka.js'), 'utf8');
+  const archiveScript=fs.readFileSync(path.join(root, 'app/myshka-archive.js'), 'utf8');
   const live = {
     updated_at: new Date().toISOString(), scan_interval_seconds: 15,
     channels: [
@@ -38,7 +39,23 @@ const { JSDOM } = require('jsdom');
     { name: 'НИКОЛАС | ТРЕЙДЕР', confirmed: true },
     { name: 'Невизначений канал', confirmed: false }
   ] };
-  const data = { 'youtube_live.json': live, 'pair_reports.json': reports, 'youtube_analysts.json': analysts };
+  const library = {
+    updated_at: new Date().toISOString(), status: 'partial_or_growing', progress: {},
+    channels: [{id:'backstage',name:'Закулисье Трейдера'},{id:'alexey',name:'Алексей Борщев'}],
+    videos:[
+      {id:'Z4HMrRpKcV4',channel_id:'backstage',channel_name:'Закулисье Трейдера',
+       title:'BTC trading RSI tutorial', kind:'videos', upload_date:'20261009',
+       caption_status:'available',content_status:'captions_scanned',
+       jev:{status:'model_summary',summary:'Пояснює роботу RSI.',strategy:'RSI',risk:'Торгові результати не перевірено.'},
+       analysis:{mentioned_instruments:['BTC/USDT'],mentioned_indicators:['RSI']}},
+      {id:'bpQLYZM2FfE',channel_id:'alexey',channel_name:'Алексей Борщев',
+       title:'Forex short lesson',kind:'videos',upload_date:null,
+       caption_status:'unavailable',content_status:'title_description_only',
+       jev:{status:'not_analyzed'},analysis:{}}
+    ]
+  };
+  const data = { 'youtube_live.json': live, 'pair_reports.json': reports, 'youtube_analysts.json': analysts,
+    'youtube_archive.json': library };
   const dom = new JSDOM(html, {
     url: 'https://example.org/T/myshka-app.html',
     pretendToBeVisual: true, runScripts: 'outside-only'
@@ -50,6 +67,7 @@ const { JSDOM } = require('jsdom');
     if (!data[filename]) throw Error('Unexpected resource: ' + url);
     return { ok: true, json: async () => data[filename] };
   };
+  win.eval(archiveScript);
   win.eval(js);
   await new Promise(resolve => setTimeout(resolve, 180));
   const doc = win.document;
@@ -59,10 +77,31 @@ const { JSDOM } = require('jsdom');
     el.click();
     return el;
   };
-  assert.equal(doc.querySelectorAll('.bottom-nav button').length, 4, 'four remaining mobile screens');
+  assert.equal(doc.querySelectorAll('.bottom-nav button').length, 5, 'archive is fifth mobile screen');
   assert.equal(doc.querySelector('#screen-live'), null, 'LIVE Monitor screen must be removed');
   assert.equal(doc.querySelector('[data-go="live"]'), null, 'LIVE Monitor links must be removed');
   assert.doesNotMatch(doc.querySelector('#screen-home').textContent, /НИКОЛАС|LIVE Monitor/);
+  click('.bottom-nav [data-go="archive"]');
+  await new Promise(resolve => setTimeout(resolve, 160));
+  assert.equal(doc.querySelector('#screen-archive').hidden, false, 'video archive tab visible');
+  assert.match(doc.querySelector('#archive-list').textContent, /BTC trading RSI tutorial/);
+  assert.match(doc.querySelector('#archive-list').textContent, /JEV: конспект субтитрів/);
+  assert.equal(doc.querySelector('#archive-count').textContent, '2');
+  assert.equal(doc.querySelector('#archive-caption-count').textContent, '1');
+  assert.equal(doc.querySelector('#archive-jev-count').textContent, '1');
+  const archiveInput=doc.querySelector('#archive-query');
+  archiveInput.value='RSI';
+  archiveInput.dispatchEvent(new win.Event('input',{bubbles:true}));
+  assert.equal(doc.querySelectorAll('#archive-list .archive-card').length,1);
+  archiveInput.value='';
+  archiveInput.dispatchEvent(new win.Event('input',{bubbles:true}));
+  const authorFilter=doc.querySelector('#archive-channel');
+  authorFilter.value='alexey';
+  authorFilter.dispatchEvent(new win.Event('change',{bubbles:true}));
+  assert.match(doc.querySelector('#archive-list').textContent,/Forex short lesson/);
+  assert.doesNotMatch(doc.querySelector('#archive-list').textContent,/BTC trading RSI tutorial/);
+  authorFilter.value='';
+  authorFilter.dispatchEvent(new win.Event('change',{bubbles:true}));
   assert.equal(doc.querySelector('#stat-pairs').textContent, '1');
   assert.match(doc.querySelector('#connection-pill').textContent, /Підключи хмарний JEV/, 'cloud without a backend must not fake readiness');
   click('.bottom-nav [data-go="analysis"]');
