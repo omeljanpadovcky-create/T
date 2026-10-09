@@ -87,30 +87,17 @@ jobs:
         run: python crypto_myshka/notifier.py
 
       - name: Run JEV language-model analysis
+        timeout-minutes: 9
         env:
           APINEX_API_KEY: ${{ secrets.APINEX_API_KEY }}
-          JEV_MODEL: free/gpt-5.6-luna
+          JEV_MODEL: free/deepseek-v4.1-flash
+          JEV_MAX_EVENTS: '4'
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           JEV_API_URL: ${{ secrets.JEV_API_URL }}
           JEV_API_KEY: ${{ secrets.JEV_API_KEY }}
           JEV_GENERIC_MODEL: ${{ secrets.JEV_GENERIC_MODEL }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: |
-          for pass in 1 2 3; do
-            echo "JEV pass $pass/3"
-            python crypto_myshka/jev_analyzer.py
-            pending=$(python - <<'PY'
-          import json
-          from pathlib import Path
-          data=json.loads(Path("crypto_myshka/data/news.json").read_text(encoding="utf-8"))
-          print(int(data.get("jev_llm_pending_count") or 0))
-          PY
-            )
-            echo "JEV LLM backlog: $pending"
-            if [ "$pending" -eq 0 ]; then
-              break
-            fi
-          done
+        run: python crypto_myshka/jev_analyzer.py
 
       - name: Send Telegram digest
         env:
