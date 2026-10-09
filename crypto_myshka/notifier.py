@@ -193,27 +193,35 @@ def main():
                 "impact_label":"; ".join(description)[:280],
             })
 
-    # Send only ACTUAL completed JEV video summaries from the growing archive.
-    # Do not spam previously indexed old videos, and never call metadata a
-    # confirmed trading signal or validated profit.
+    # Only actually completed AI analyses, not thumbnails/metadata or fake
+    # 100% win-rate claims. Send each video once per method via existing dedupe.
     library=load(VIDEO_LIBRARY,{"videos":[]})
     for video in (library.get("videos") or []):
         if not isinstance(video,dict):
             continue
-        vjev=video.get("jev") or {}
-        if not isinstance(vjev,dict) or vjev.get("status")!="model_summary":
-            continue
         vid=str(video.get("id") or "")
         if not re.fullmatch(r"[A-Za-z0-9_-]{11}",vid):
             continue
-        current.append({
-            "id":"youtube_jev:"+vid,
-            "source":"youtube",
-            "title":"🧠 JEV розібрав ролик: "+str(video.get("title") or "")[:100],
-            "url":"https://www.youtube.com/watch?v="+vid,
-            "impact_label":"Конспект доступних субтитрів; не підтверджує прибутковість",
-            "jev_ai":{"short_conclusion":str(vjev.get("summary") or "")[:285]},
-        })
+        vgem=video.get("gemini") or {}
+        if isinstance(vgem,dict) and vgem.get("status")=="gemini_video_summary":
+            current.append({
+                "id":"youtube_gemini_video:"+vid,
+                "source":"youtube",
+                "title":"✦ Gemini розібрав ВІДЕО: "+str(video.get("title") or "")[:96],
+                "url":"https://www.youtube.com/watch?v="+vid,
+                "impact_label":"Аналіз кадрів і звуку. Висновки AI, не перевірений сигнал",
+                "jev_ai":{"short_conclusion":str(vgem.get("summary") or "")[:285]},
+            })
+        vjev=video.get("jev") or {}
+        if isinstance(vjev,dict) and vjev.get("status")=="model_summary":
+            current.append({
+                "id":"youtube_jev:"+vid,
+                "source":"youtube",
+                "title":"🧠 JEV розібрав субтитри: "+str(video.get("title") or "")[:100],
+                "url":"https://www.youtube.com/watch?v="+vid,
+                "impact_label":"Конспект доступних субтитрів; не підтверджує прибутковість",
+                "jev_ai":{"short_conclusion":str(vjev.get("summary") or "")[:285]},
+            })
 
     ids=[x.get("id") for x in current if x.get("id")]
     state=load_state({"initialized":False,"seen":[],"telegram_ready":False})
