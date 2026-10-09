@@ -64,6 +64,7 @@ const { JSDOM } = require('jsdom');
   assert.equal(doc.querySelector('[data-go="live"]'), null, 'LIVE Monitor links must be removed');
   assert.doesNotMatch(doc.querySelector('#screen-home').textContent, /НИКОЛАС|LIVE Monitor/);
   assert.equal(doc.querySelector('#stat-pairs').textContent, '1');
+  assert.match(doc.querySelector('#connection-pill').textContent, /JEV тільки локально/, 'cloud header must not claim missing sources');
   click('.bottom-nav [data-go="analysis"]');
   assert.equal(doc.querySelector('#screen-analysis').hidden, false);
   assert.match(doc.querySelector('#analysis-list').textContent, /AUD\/CNY OTC/);
@@ -146,6 +147,7 @@ const { JSDOM } = require('jsdom');
   await new Promise(resolve => setTimeout(resolve, 180));
   const localDoc = localWin.document;
   assert.match(localDoc.querySelector('#vision-status').textContent, /JEV готовий/);
+  assert.match(localDoc.querySelector('#connection-pill').textContent, /JEV готовий/, 'local header reflects Ollama, not archive feeds');
   const localInput = localDoc.querySelector('#chart-photo');
   Object.defineProperty(localInput, 'files', { configurable: true, value: [
     { name: 'paste.png', type: 'image/png', size: 1000 }
