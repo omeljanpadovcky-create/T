@@ -82,6 +82,7 @@ function Lookup-Python {
     return $null
 }
 function Lookup-Ollama {
+    Refresh-SessionPath
     $found = Get-Command ollama.exe -ErrorAction SilentlyContinue
     if ($found) { return $found.Source }
     foreach ($exe in @(
@@ -122,8 +123,9 @@ function Ensure-Ollama {
     if (-not $wg) { Fail 'winget not found. Install Ollama manually and retry.' }
     & $wg.Source install --exact --id Ollama.Ollama --accept-source-agreements --accept-package-agreements
     if ($LASTEXITCODE -ne 0) { Fail 'Ollama installation failed. Check winget output.' }
+    Refresh-SessionPath
     $found = Lookup-Ollama
-    if (-not $found) { Fail 'Ollama installed but executable is not visible yet. Reopen PowerShell and rerun.' }
+    if (-not $found) { Fail 'Ollama installer finished, but executable is not yet visible. Reopen PowerShell and rerun the command.' }
     return $found
 }
 
