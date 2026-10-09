@@ -427,23 +427,20 @@
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
       "jev_ai": {
-        "what_happened": "Thailand opens door to locally listed bitcoin and ether ETFs",
-        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на BTC, ETH; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-        "market_effect": "Невизначений / змішаний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-        "confidence": "низька",
-        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на BTC, ETH; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "what_happened": "Комісія з цінних паперів Таїланду (SEC) затвердила правила для локальних спотових ETF на біткоїн та ефір, які мають набрати чинності 16 жовтня 2026 року. Подія підтверджена двома незалежними виданнями (CoinDesk, The Block). Це регуляторний дозвіл на запуск крипто-ETF на внутрішньому тайському ринку, а не запуск продукту конкретною компанією.",
+        "why_it_matters": "Це розширення легального інвестиційного доступу до криптоактивів у Південно-Східній Азії — ще один крок до глобальної інституційної інтеграції. Однак це локальний ринок, а не США, тому вплив на глобальну ліквідність обмежений порівняно з американськими ETF.",
+        "market_effect": "Короткостроково — позитивний наратив для BTC/ETH, але реальний вплив на ціну залежатиме від обсягів запуску продуктів та попиту. На фоні локального тижневого шортового наративу (BTC торгується ~82 593, індекс страху й жадібності 59, домінація 59,95%) новина може пом'якшити падіння, але не змінить його автоматично.",
+        "bull_case": "Регуляторний дозвіл створює новий канал попиту в Азії; може стати прецедентом для інших країн регіону; покращує сприйняття крипто як легального інструменту; притік локальних інвесторів у BTC/ETH через зручні інструменти.",
+        "bear_case": "Ринок Таїланду малий порівняно з глобальним крипторинком ($2,77 трлн); реальні інвестиції почнуться лише після запуску продуктів (не одразу 16 жовтня); новина може бути вже відображена в ціні; локальна валютна та регуляторна невизначеність.",
+        "watch_next": "1) Чи з'являться конкретні пропозиції від тайських брокерів/емітентів після 16 жовтня; 2) Обсяги торгів та перші притоки в нові ETF; 3) Чи зміниться поведінка BTC біля рівня 82 500–83 300; 4) Реакція альткоїнів на новину.",
+        "confidence": "середня",
+        "short_conclusion": "Таїланд легалізував локальні BTC/ETH ETF з 16 жовтня — це позитивний регуляторний сигнал, але ринок країни малий, тому глобального впливу на ціну очікувати не варто. Новина може підтримати наратив, але не змінить поточний локальний шортовий тренд без підтвердження реальними притоками.",
+        "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:23:06Z"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T22:57:19Z"
     },
     {
       "id": "d0bf4eb3b1012d",
@@ -559,13 +556,13 @@
         "short_conclusion": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T20:46:33Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T22:57:25Z"
     },
     {
       "id": "d63fb58cb29e3e",
@@ -602,23 +599,20 @@
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
       "jev_ai": {
-        "what_happened": "The House Financial Services chairman credited the SEC and CFTC for stepping in after the Clarity Act's collapse but said only \"permanent law change\" can secure U.S. leadership.",
-        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-        "market_effect": "Невизначений / змішаний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+        "what_happened": "Голова Комітету з фінансових служб Палати представників Реп. Френч Гілл заявив, що криптоправила SEC і CFTC «не досягають чіткості». Він похвалив агентства за те, що вони втрутилися після провалу CLARITY Act, але наголосив, що лише «постійна зміна закону» може забезпечити лідерство США.",
+        "why_it_matters": "Це оцінка ключової законодавчої фігури щодо поточної регуляторної архітектури США. Оскільки CLARITY Act не став законом, агентства використовують rulemaking (наприклад, ANPRM CFTC CTX/CAM) як тимчасовий маршрут. Заява підкреслює розрив між тимчасовими правилами та необхідністю постійного законодавства.",
+        "market_effect": "Короткостроково — нейтрально-негативний сигнал невизначеності: інституційний капітал часто чекає на чіткі правила перед масштабуванням. Водночас визнання того, що агентства «втрутилися», може сприйматися як поступовий прогрес. Ефект залежить від того, чи послідує конкретна законодавча ініціатива.",
+        "bull_case": "Агентства активно розробляють фреймворки (CFTC CTX/CAM для маржинальних продуктів). Визнання Конгресом, що саморегулювання недостатнє, може прискорити реальне законодавство. США зберігають наратив лідерства в крипторегуляції.",
+        "bear_case": "Одне джерело (Decrypt) — недостатньо для висновків. Формулювання «fall short» сигналізує про тривалу невизначеність. ANPRM — це лише пропозиція, не діючі правила. Без постійного закону інституційна експансія може гальмуватися.",
+        "watch_next": "Наступні заяви Френча Гілла, прогрес rulemaking CFTC (CTX/CAM), спроби відновлення законодавства в Конгресі, реакція SEC/CFTC на коментарі.",
         "confidence": "низька",
-        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+        "short_conclusion": "Заява підкреслює, що тимчасові правила агентств недостатні без постійного законодавства. Через одне джерело та політичний характер твердження висновки залишаються обережними.",
+        "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:26:40Z"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T22:57:37Z"
     },
     {
       "id": "1ebda8c8f725a4",
@@ -815,13 +809,13 @@
         "short_conclusion": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T21:02:49Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T22:57:46Z"
     },
     {
       "id": "fb8612a1141d75",
@@ -4053,13 +4047,13 @@
   "jev_status": "ok",
   "jev_provider": "apinex",
   "jev_model": "free/deepseek-v4.1-flash",
-  "jev_analyzed_count": 9,
-  "jev_analyzed_this_run": 1,
-  "jev_pending_count": 14,
-  "jev_llm_pending_count": 38,
-  "jev_analysis_errors": 1,
+  "jev_analyzed_count": 10,
+  "jev_analyzed_this_run": 2,
+  "jev_pending_count": 0,
+  "jev_llm_pending_count": 19,
+  "jev_analysis_errors": 2,
   "jev_error_codes": {
-    "http_429": 1
+    "ValueError": 2
   },
-  "jev_last_run_at": "2026-10-09T21:52:10Z"
+  "jev_last_run_at": "2026-10-09T22:57:52Z"
 }
