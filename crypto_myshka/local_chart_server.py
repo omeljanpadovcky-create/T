@@ -37,7 +37,7 @@ SYSTEM = """Ти JEV. Дивишся лише на скріншот графік
 OTC котирування і майбутні свічки неможливо підтвердити зі скріншота."""
 
 
-def api_post(path, payload, timeout=100):
+def api_post(path, payload, timeout=180):
     body = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(
         OLLAMA + path, data=body, method="POST",
@@ -53,6 +53,11 @@ def has_image_signature(raw):
 
 
 class Handler(SimpleHTTPRequestHandler):
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        super().end_headers()
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(ROOT), **kwargs)
 
@@ -67,7 +72,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         requested = unquote(self.path.split("?")[0])
-        if ".." in requested.split("/") or "\\\\" in requested:
+        if ".." in requested.split("/") or chr(92) in requested:
             self.send_error(404, "Not found")
             return
         if requested == "/":
@@ -104,7 +109,10 @@ class Handler(SimpleHTTPRequestHandler):
             return self.json_response(403, {"error": "Лише локальний застосунок може надсилати фото."})
         if self.headers.get("Content-Type", "").split(";")[0].strip() != "application/json":
             return self.json_response(415, {"error": "Потрібен application/json."})
-        length = int(self.headers.get("Content-Length", "0"))
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+        except (TypeError, ValueError):
+            return self.json_response(400, {"error": "Неправильний розмір запиту."})
         if length < 1 or length > MAX_BYTES * 1.45:
             return self.json_response(413, {"error": "Фото завелике (до 8 МБ)."})
         try:
@@ -142,7 +150,9 @@ class Handler(SimpleHTTPRequestHandler):
                 return self.json_response(503, {"error": "Модель " + MODEL +
                     " не знайдена. Виконай: ollama pull " + MODEL})
             return self.json_response(502, {"error": "Ollama повернула HTTP " + str(exc.code)})
-        except (urllib.error.URLError, TimeoutError, OSError):
+        except TimeoutError:
+            return self.json_response(504, {"error": "Ollama не встигла завершити аналіз. Спробуй ще раз або вибери меншу vision-модель."})
+        except (urllib.error.URLError, OSError):
             return self.json_response(503, {"error": "Ollama недоступна. Запусти ollama serve та перевір модель " + MODEL})
 
     def log_message(self, fmt, *args):
@@ -152,6 +162,9 @@ class Handler(SimpleHTTPRequestHandler):
 if __name__ == "__main__":
     print("Crypto Myshka AI — локально: http://127.0.0.1:%s/myshka-app.html#analysis" % PORT)
     print("Ollama:", OLLAMA, "| Модель:", MODEL, "| Фото не передаються в хмару")
-    server = ThreadingHTTPServer((HOST, PORT), Handler)
+    try:
+        server = ThreadingHTTPServer((HOST, PORT), Handler)
+    except OSError as exc:
+        raise SystemExit("Port %s is busy. Close the old Myshka server or change MYSHKA_AI_PORT. (%s)" % (PORT, exc))
     webbrowser.open("http://127.0.0.1:%s/myshka-app.html#analysis" % PORT)
     server.serve_forever()
