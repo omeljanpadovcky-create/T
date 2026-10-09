@@ -857,23 +857,20 @@
         "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
       ],
       "jev_ai": {
-        "what_happened": "Wealthy investors are embracing crypto faster than their advisers, while OKX attracts new funding and Strategy shifts more capital toward preferred stock buybacks.",
-        "why_it_matters": "Біржова новина може впливати на ліквідність і доступність крипторинок; важливо відділити операційне оновлення від системного ризику.",
-        "market_effect": "Невизначений / змішаний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни.",
+        "what_happened": "Cointelegraph повідомляє, що заможні інвестори швидше за своїх фінансових радників приймають криптоактиви. У тій самій публікації згадуються нове фінансування OKX та перенаправлення частини капіталу MicroStrategy на викуп преференційних акцій. Усі тези базуються на одному джерелі — деталі не підтверджені.",
+        "why_it_matters": "Розрив між поведінкою заможних інвесторів та їхніх радників — класичний індикатор фази циклу прийняття. Фінансування біржі OKX свідчить про продовження інвестицій у інфраструктуру, а викуп акцій MicroStrategy може означати зміну стратегії корпоративної скарбниці.",
+        "market_effect": "Середній потенційний вплив на настрій ринку, особливо щодо біржових токенів та BTC. Однак через одне джерело реальний ефект неможливо оцінити достовірно.",
+        "bull_case": "Раннє прийняття крипто заможними інвесторами часто передувало ширшим ралі. Нове фінансування OKX зміцнює глибину ринку та довіру до інфраструктури.",
+        "bear_case": "Опір радників може гальмувати масове надходження коштів. MicroStrategy може скоротити накопичення BTC на користь викупу акцій. Одне джерело — ризик неповної або упередженої інформації.",
+        "watch_next": "Перевірити тезу про заможних інвесторів у додаткових джерелах. Очікувати деталі фінансування OKX. Моніторити рухи скарбниці MicroStrategy. Слідкувати за трендами прийняття крипто радниками.",
         "confidence": "низька",
-        "short_conclusion": "Біржова новина може впливати на ліквідність і доступність крипторинок; важливо відділити операційне оновлення від системного ризику.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "short_conclusion": "Подія має середній потенційний вплив, але базується лише на одному джерелі — потрібна перевірка. Співвідношення «багаті інвестори vs радники» може бути сигналом циклу, але це поки припущення.",
+        "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:26:45Z"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T23:00:29Z"
     },
     {
       "id": "4b0f9d92fb38d4",
@@ -925,13 +922,13 @@
         "short_conclusion": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:26:52Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T23:00:34Z"
     },
     {
       "id": "b0b22e17f4c5dd",
@@ -968,23 +965,20 @@
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
       ],
       "jev_ai": {
-        "what_happened": "France’s Finance Committee backed taxes on stablecoin swaps, as well as unrealized crypto gains when households with more than 800,000 euros move abroad.",
-        "why_it_matters": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
-        "market_effect": "Невизначений / змішаний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента.",
+        "what_happened": "Фінансовий комітет французького парламенту підтримав пропозицію оподаткувати обміни стейблкоїнів у бюджетному законі на 2027 рік, а також оподаткувати нереалізовані прибутки від криптовалют для домогосподарств із капіталом понад 800 000 євро, які переїжджають за кордон.",
+        "why_it_matters": "Франція — одна з найбільших економік ЄС із розвиненим крипторинком. Податок на стейблкоїн-свопи може змінити поведінку трейдерів та вплинути на ліквідність у юрисдикції. Це також може стати прецедентом для інших країн ЄС.",
+        "market_effect": "Короткостроково — тиск на стейблкоїни (USDT, USDC, EURC тощо) та об'єми торгів у Франції. Можливий відтік активності в інші юрисдикції. На загальний ринок вплив обмежений, але може посилити негативний настрій.",
+        "bull_case": "Регуляторна визначеність може покращити довгострокову привабливість Франції для інституційних учасників. Чіткі правила зменшують ризики для банків та платіжних провайдерів.",
+        "bear_case": "Податок на обміни може змусити трейдерів та бізнеси мігрувати в більш прихильні юрисдикції, зменшивши ліквідність. Інші країни ЄС можуть скопіювати підхід, посиливши тиск на стейблкоїн-сектор.",
+        "watch_next": "Остаточне голосування в Національних зборах, деталі впровадження, реакція бірж та регуляторів інших країн ЄС, обсяги торгів стейблкоїнами після оголошення.",
         "confidence": "низька",
-        "short_conclusion": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "short_conclusion": "Ініціатива перебуває на стадії комітету, а не затвердженого закону — джерело одне, деталі неповні. Найімовірніший ефект — тимчасове зростання невизначеності та відтік частини стейблкоїн-активності з Франції.",
+        "_model_used": "free/gpt-6-luna"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:26:59Z"
+      "analysis_engine": "free/gpt-6-luna",
+      "analysis_level": "llm",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T23:00:41Z"
     },
     {
       "id": "18695b478f5f00",
@@ -1032,13 +1026,13 @@
         "short_conclusion": "Новина стосується BTC, ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:55:21Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T23:00:53Z"
     },
     {
       "id": "db7396c3648183",
@@ -4049,17 +4043,16 @@
     }
   ],
   "jev_enabled": true,
-  "jev_status": "degraded",
+  "jev_status": "ok",
   "jev_provider": "apinex",
   "jev_model": "free/deepseek-v4.1-flash",
-  "jev_analyzed_count": 8,
-  "jev_analyzed_this_run": 0,
+  "jev_analyzed_count": 10,
+  "jev_analyzed_this_run": 2,
   "jev_pending_count": 0,
-  "jev_llm_pending_count": 21,
-  "jev_analysis_errors": 3,
+  "jev_llm_pending_count": 19,
+  "jev_analysis_errors": 2,
   "jev_error_codes": {
-    "ValueError": 2,
-    "http_429": 1
+    "ValueError": 2
   },
-  "jev_last_run_at": "2026-10-09T22:58:57Z"
+  "jev_last_run_at": "2026-10-09T23:01:00Z"
 }
