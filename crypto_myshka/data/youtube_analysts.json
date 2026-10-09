@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-09T18:21:24.729515+00:00",
+  "updated_at": "2026-10-09T18:22:53.790199+00:00",
   "mode": "read_only",
   "channels": [
     {
@@ -9,8 +9,30 @@
       "handle": "@NikolasTradin",
       "url": "https://www.youtube.com/@NikolasTradin/videos",
       "confirmed": true,
-      "status": "empty_or_unavailable",
-      "videos": [],
+      "status": "example_only",
+      "videos": [
+        {
+          "id": "g5sXQlvCPVo",
+          "title": "I'm Trading LIVE — Watch What Happens | Pocket Option LIVE",
+          "url": "https://www.youtube.com/watch?v=g5sXQlvCPVo",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "OTC / binary",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": true,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "OTC/бінарні опціони: не переносити сигнал на BTC/ETH/SOL",
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          },
+          "sample_only": true
+        }
+      ],
       "reviewed": 0
     },
     {
@@ -87,12 +109,12 @@
       "handle": "@Mark_champs_trader",
       "url": "https://www.youtube.com/@Mark_champs_trader/videos",
       "confirmed": true,
-      "status": "ok",
+      "status": "example_only",
       "videos": [
         {
-          "id": "HvfyqUtPCkw",
-          "title": "peluca el groso 2.3gp",
-          "url": "https://www.youtube.com/watch?v=HvfyqUtPCkw",
+          "id": "L31S4DgpEIo",
+          "title": "ОНЛАЙН СТРИМ. КОПИРОВАНИЕ СДЕЛОК 7.10 ВЕЧЕРНИЙ ЭФИР",
+          "url": "https://www.youtube.com/watch?v=L31S4DgpEIo",
           "upload_date": null,
           "analysis": {
             "instrument": "Не визначено",
@@ -106,140 +128,8 @@
               "Повний зміст відео не підтверджений субтитрами"
             ],
             "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
-          }
-        },
-        {
-          "id": "xqWfqK6MyOM",
-          "title": "el borracho willy5.3gp",
-          "url": "https://www.youtube.com/watch?v=xqWfqK6MyOM",
-          "upload_date": null,
-          "analysis": {
-            "instrument": "Не визначено",
-            "pairs": [],
-            "direction_claim": "НЕВІДОМО",
-            "promotion_flag": false,
-            "otc_flag": false,
-            "evidence": "назва та опис (без перевіреного відеотексту)",
-            "notes": [
-              "У доступному описі немає чіткої криптовалютної пари",
-              "Повний зміст відео не підтверджений субтитрами"
-            ],
-            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
-          }
-        },
-        {
-          "id": "8XntFDFsrws",
-          "title": "el borracho willy4.3gp",
-          "url": "https://www.youtube.com/watch?v=8XntFDFsrws",
-          "upload_date": null,
-          "analysis": {
-            "instrument": "Не визначено",
-            "pairs": [],
-            "direction_claim": "НЕВІДОМО",
-            "promotion_flag": false,
-            "otc_flag": false,
-            "evidence": "назва та опис (без перевіреного відеотексту)",
-            "notes": [
-              "У доступному описі немає чіткої криптовалютної пари",
-              "Повний зміст відео не підтверджений субтитрами"
-            ],
-            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
-          }
-        },
-        {
-          "id": "GjgVzFMb3ko",
-          "title": "el borracho willy2.3gp",
-          "url": "https://www.youtube.com/watch?v=GjgVzFMb3ko",
-          "upload_date": null,
-          "analysis": {
-            "instrument": "Не визначено",
-            "pairs": [],
-            "direction_claim": "НЕВІДОМО",
-            "promotion_flag": false,
-            "otc_flag": false,
-            "evidence": "назва та опис (без перевіреного відеотексту)",
-            "notes": [
-              "У доступному описі немає чіткої криптовалютної пари",
-              "Повний зміст відео не підтверджений субтитрами"
-            ],
-            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
-          }
-        },
-        {
-          "id": "MA2ao0m5QLo",
-          "title": "el borracho willy3.3gp",
-          "url": "https://www.youtube.com/watch?v=MA2ao0m5QLo",
-          "upload_date": null,
-          "analysis": {
-            "instrument": "Не визначено",
-            "pairs": [],
-            "direction_claim": "НЕВІДОМО",
-            "promotion_flag": false,
-            "otc_flag": false,
-            "evidence": "назва та опис (без перевіреного відеотексту)",
-            "notes": [
-              "У доступному описі немає чіткої криптовалютної пари",
-              "Повний зміст відео не підтверджений субтитрами"
-            ],
-            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
-          }
-        },
-        {
-          "id": "9cFPm9Dm2ZU",
-          "title": "el borracho willy1.3gp",
-          "url": "https://www.youtube.com/watch?v=9cFPm9Dm2ZU",
-          "upload_date": null,
-          "analysis": {
-            "instrument": "Не визначено",
-            "pairs": [],
-            "direction_claim": "НЕВІДОМО",
-            "promotion_flag": false,
-            "otc_flag": false,
-            "evidence": "назва та опис (без перевіреного відеотексту)",
-            "notes": [
-              "У доступному описі немає чіткої криптовалютної пари",
-              "Повний зміст відео не підтверджений субтитрами"
-            ],
-            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
-          }
-        },
-        {
-          "id": "htVENWcUKpE",
-          "title": "el vuelo del peluca",
-          "url": "https://www.youtube.com/watch?v=htVENWcUKpE",
-          "upload_date": null,
-          "analysis": {
-            "instrument": "Не визначено",
-            "pairs": [],
-            "direction_claim": "НЕВІДОМО",
-            "promotion_flag": false,
-            "otc_flag": false,
-            "evidence": "назва та опис (без перевіреного відеотексту)",
-            "notes": [
-              "У доступному описі немає чіткої криптовалютної пари",
-              "Повний зміст відео не підтверджений субтитрами"
-            ],
-            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
-          }
-        },
-        {
-          "id": "KHymQb1olO0",
-          "title": "peluca el groso",
-          "url": "https://www.youtube.com/watch?v=KHymQb1olO0",
-          "upload_date": null,
-          "analysis": {
-            "instrument": "Не визначено",
-            "pairs": [],
-            "direction_claim": "НЕВІДОМО",
-            "promotion_flag": false,
-            "otc_flag": false,
-            "evidence": "назва та опис (без перевіреного відеотексту)",
-            "notes": [
-              "У доступному описі немає чіткої криптовалютної пари",
-              "Повний зміст відео не підтверджений субтитрами"
-            ],
-            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
-          }
+          },
+          "sample_only": true
         }
       ],
       "reviewed": 0
