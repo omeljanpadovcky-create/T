@@ -18,6 +18,23 @@ import requests
 from yt_dlp import YoutubeDL
 
 try:
+    from video_gemini import (
+        analyze_public_youtube as gemini_analyze,
+        available as gemini_available,
+        MAX_PER_RUN as GEMINI_MAX_PER_RUN,
+        DAILY_VIDEO_BUDGET as GEMINI_DAILY_BUDGET,
+        UNSIZED_RESERVATION as GEMINI_UNSIZED_RESERVATION,
+    )
+except ImportError:
+    from crypto_myshka.video_gemini import (
+        analyze_public_youtube as gemini_analyze,
+        available as gemini_available,
+        MAX_PER_RUN as GEMINI_MAX_PER_RUN,
+        DAILY_VIDEO_BUDGET as GEMINI_DAILY_BUDGET,
+        UNSIZED_RESERVATION as GEMINI_UNSIZED_RESERVATION,
+    )
+
+try:
     from video_jev import summarize as jev_summarize, API_KEY as JEV_KEY, ENABLED as JEV_ENABLED
 except ImportError:
     from crypto_myshka.video_jev import summarize as jev_summarize, API_KEY as JEV_KEY, ENABLED as JEV_ENABLED
@@ -86,6 +103,7 @@ def make_entry(video_id: str, channel: dict, kind: str, title: str = "",
         "analysis": classify(title),
         "video_reviewed": False,
         "market_quotes_verified": False,
+        "gemini": {"status": "not_analyzed", "reason": "Gemini has not been called"},
         "jev": {"status": "not_analyzed", "reason": "Only metadata have been collected"},
     }
 
@@ -264,8 +282,83 @@ def seed_older_records(entries: dict, source: dict) -> int:
     return seeded
 
 
+def run_gemini_video_batch(existing: dict, previous: dict, processor=gemini_analyze,
+                           *, enabled: bool = True) -> dict:
+    """Process video directly: does not depend on subtitles or yt-dlp details.
+
+    Persist conservative UTC daily processing budget. Retry failing videos
+    on a future day, not every run. A disabled API never marks them analyzed.
+    """
+    today = datetime.now(timezone.utc).date().isoformat()
+    old_budget = previous.get("gemini_budget") or {}
+    if not isinstance(old_budget, dict) or old_budget.get("utc_date") != today:
+        budget = {"utc_date": today, "reserved_seconds": 0, "requests_attempted": 0}
+    else:
+        budget = {
+            "utc_date": today,
+            "reserved_seconds": max(0, int(old_budget.get("reserved_seconds") or 0)),
+            "requests_attempted": max(0, int(old_budget.get("requests_attempted") or 0)),
+        }
+    if not enabled or GEMINI_MAX_PER_RUN <= 0:
+        return budget
+    used = 0
+    # Prioritize affordable Shorts, then recent videos, then long replays.
+    # Never guarantee full archive analysis or exceed configured free-tier cap.
+    priority = {"shorts": 0, "videos": 1, "streams": 2}
+    due = sorted(existing.values(), key=lambda v: (
+        priority.get(v.get("kind"), 3),
+        -(int(v.get("upload_date")) if str(v.get("upload_date") or "").isdigit() else 0),
+        str(v.get("id") or ""),
+    ))
+    for entry in due:
+        if used >= GEMINI_MAX_PER_RUN:
+            break
+        if not VALID_ID.fullmatch(str(entry.get("id") or "")):  # checked by archive IDs
+            continue
+        info = entry.get("gemini") or {}
+        if isinstance(info, dict) and info.get("status") == "gemini_video_summary":
+            continue
+        # Wait 24 hours between failed attempts (provider quota, access errors).
+        checked = entry.get("gemini_checked_at")
+        if isinstance(checked, str):
+            try:
+                if datetime.fromisoformat(checked.replace("Z", "+00:00")).date().isoformat() == today:
+                    continue
+            except ValueError:
+                pass
+        duration = entry.get("duration_seconds")
+        if isinstance(duration, (int, float)) and not isinstance(duration, bool) and duration > 0:
+            seconds = max(1, int(duration))
+        else:
+            seconds = 120 if entry.get("kind") == "shorts" else GEMINI_UNSIZED_RESERVATION
+        if seconds > GEMINI_DAILY_BUDGET or budget["reserved_seconds"] + seconds > GEMINI_DAILY_BUDGET:
+            continue
+        budget["reserved_seconds"] += seconds
+        budget["requests_attempted"] += 1
+        used += 1
+        entry["gemini_checked_at"] = datetime.now(timezone.utc).isoformat()
+        try:
+            result = processor(str(entry["id"]), title=str(entry.get("title") or ""))
+            if not isinstance(result, dict):
+                result = {"status": "unavailable", "reason": "Non-object Gemini response"}
+        except Exception as exc:
+            result = {"status": "unavailable", "error_type": type(exc).__name__}
+        entry["gemini"] = result
+        if result.get("status") == "gemini_video_summary":
+            entry["content_status"] = "gemini_video_analyzed"
+            entry["ai_video_processed"] = True
+            # This remains an unverified model interpretation, not a verified trade.
+            entry["market_quotes_verified"] = False
+            entry["video_reviewed"] = False
+        if result.get("http_status") in (401, 402, 429):
+            # Stop after a key/quota/billing error, do not repeatedly query it.
+            break
+    return budget
+
+
 def build(previous: dict, seed: dict, fetcher=list_segment, detailer=enrich,
-          include_enrichment: bool = True) -> dict:
+          include_enrichment: bool = True,
+          gemini_processor=gemini_analyze, use_gemini: bool | None = None) -> dict:
     existing = {str(x.get("id")): dict(x) for x in previous.get("videos") or []
                 if isinstance(x, dict) and VID_ID.fullmatch(str(x.get("id") or ""))}
     seeded = seed_older_records(existing, seed)
@@ -335,6 +428,12 @@ def build(previous: dict, seed: dict, fetcher=list_segment, detailer=enrich,
         for item in due[:DETAIL_LIMIT]:
             existing[item["id"]] = detailer(item)
 
+    gemini_budget = run_gemini_video_batch(
+        existing, previous, gemini_processor,
+        enabled=(gemini_available() if use_gemini is None else use_gemini)
+                and include_enrichment,
+    )
+
     # Keep a deterministic bounded published JSON file, while recording count;
     # once the configured safety maximum is reached, output is explicitly partial.
     ordered = sorted(existing.values(),key=lambda v: (v.get("upload_date") or "",
@@ -354,6 +453,8 @@ def build(previous: dict, seed: dict, fetcher=list_segment, detailer=enrich,
         "full_video_content_reviewed": False,
         "market_quotes_verified": False,
         "video_count": len(ordered),
+        "gemini_analyzed_count": sum(1 for row in ordered if (row.get("gemini") or {}).get("status") == "gemini_video_summary"),
+        "gemini_budget": gemini_budget,
         "newly_discovered": newly_found,
         "legacy_entries_seeded": seeded,
         "scan_calls": scans,
