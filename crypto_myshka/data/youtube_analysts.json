@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": null,
+  "updated_at": "2026-10-09T18:21:24.729515+00:00",
   "mode": "read_only",
   "channels": [
     {
@@ -9,7 +9,7 @@
       "handle": "@NikolasTradin",
       "url": "https://www.youtube.com/@NikolasTradin/videos",
       "confirmed": true,
-      "status": "pending_first_scan",
+      "status": "empty_or_unavailable",
       "videos": [],
       "reviewed": 0
     },
@@ -19,8 +19,66 @@
       "handle": "@artemtraderr",
       "url": "https://www.youtube.com/@artemtraderr/videos",
       "confirmed": true,
-      "status": "pending_first_scan",
-      "videos": [],
+      "status": "ok",
+      "videos": [
+        {
+          "id": "Z4HMrRpKcV4",
+          "title": "ТРЕЙДИНГ С НУЛЯ 2026: Как торговать в ПЛЮС каждый день? Лучшая Стратегия в Трейдинге 2026",
+          "url": "https://www.youtube.com/watch?v=Z4HMrRpKcV4",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "IEn3UX3mfGM",
+          "title": "Трейдинг для ТУПЫХ: Самая ПРОСТАЯ СТРАТЕГИЯ для начинающих в 2026. Трейдинг для Новичков! Обучение!",
+          "url": "https://www.youtube.com/watch?v=IEn3UX3mfGM",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "dphISIyvH94",
+          "title": "С 5$ до 1735$ за 16 МИНУТ! Разгон Депозита для Новичков! Лучшая Стратегия в Трейдинге 2026",
+          "url": "https://www.youtube.com/watch?v=dphISIyvH94",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        }
+      ],
       "reviewed": 0
     },
     {
@@ -29,8 +87,161 @@
       "handle": "@Mark_champs_trader",
       "url": "https://www.youtube.com/@Mark_champs_trader/videos",
       "confirmed": true,
-      "status": "pending_first_scan",
-      "videos": [],
+      "status": "ok",
+      "videos": [
+        {
+          "id": "HvfyqUtPCkw",
+          "title": "peluca el groso 2.3gp",
+          "url": "https://www.youtube.com/watch?v=HvfyqUtPCkw",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "xqWfqK6MyOM",
+          "title": "el borracho willy5.3gp",
+          "url": "https://www.youtube.com/watch?v=xqWfqK6MyOM",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "8XntFDFsrws",
+          "title": "el borracho willy4.3gp",
+          "url": "https://www.youtube.com/watch?v=8XntFDFsrws",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "GjgVzFMb3ko",
+          "title": "el borracho willy2.3gp",
+          "url": "https://www.youtube.com/watch?v=GjgVzFMb3ko",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "MA2ao0m5QLo",
+          "title": "el borracho willy3.3gp",
+          "url": "https://www.youtube.com/watch?v=MA2ao0m5QLo",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "9cFPm9Dm2ZU",
+          "title": "el borracho willy1.3gp",
+          "url": "https://www.youtube.com/watch?v=9cFPm9Dm2ZU",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "htVENWcUKpE",
+          "title": "el vuelo del peluca",
+          "url": "https://www.youtube.com/watch?v=htVENWcUKpE",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "KHymQb1olO0",
+          "title": "peluca el groso",
+          "url": "https://www.youtube.com/watch?v=KHymQb1olO0",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        }
+      ],
       "reviewed": 0
     },
     {
@@ -39,8 +250,161 @@
       "handle": "@alexeyborshev1",
       "url": "https://www.youtube.com/@alexeyborshev1/videos",
       "confirmed": true,
-      "status": "pending_first_scan",
-      "videos": [],
+      "status": "ok",
+      "videos": [
+        {
+          "id": "bpQLYZM2FfE",
+          "title": "How I Made 100,000₽ Trading in 30 Minutes. A Simple Strategy for One-Minute Trades",
+          "url": "https://www.youtube.com/watch?v=bpQLYZM2FfE",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "e9_ai0mgpts",
+          "title": "Compound Interest in Trading: How It Works and Why Traders Blow Their Accounts | Trading Psychology",
+          "url": "https://www.youtube.com/watch?v=e9_ai0mgpts",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "maXN3sHs2FA",
+          "title": "BOUGHT A BMW F10 IN 2 WEEKS VIA TRADE-IN | My new car review",
+          "url": "https://www.youtube.com/watch?v=maXN3sHs2FA",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "ElfSeIVxRH8",
+          "title": "+134,000₽ in One Trading Session | Trading with Technical Analysis + STOCHASTIC | Training for Be...",
+          "url": "https://www.youtube.com/watch?v=ElfSeIVxRH8",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "7bkdptaLxA0",
+          "title": "From 5,000 to 100,000 without a single loss in one session! Trading with Technical Analysis 2026",
+          "url": "https://www.youtube.com/watch?v=7bkdptaLxA0",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "uFGHNKVd4zk",
+          "title": "Trading from Scratch in 2026! Technical Analysis Tutorial for Beginners | Live Trading",
+          "url": "https://www.youtube.com/watch?v=uFGHNKVd4zk",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "2JGhrD2ZzeY",
+          "title": "THE BEST ANALYSIS SYSTEM! Technical analysis for beginners in 2026 | Real-time trading",
+          "url": "https://www.youtube.com/watch?v=2JGhrD2ZzeY",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "fzVB8L6GQRM",
+          "title": "Обзор на \" Крепость Борщева \" | Наше закрытое комьюнити трейдеров",
+          "url": "https://www.youtube.com/watch?v=fzVB8L6GQRM",
+          "upload_date": null,
+          "analysis": {
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        }
+      ],
       "reviewed": 0
     },
     {
@@ -55,7 +419,7 @@
     }
   ],
   "final_signal": "SKIP",
-  "reason": "Немає незалежно перевірених торгових сигналів. Відеоконтент не замінює ринкові котирування й перевірку статистики.",
-  "method": "Публічні назви/описи відео та доступні субтитри; не є доказом результативності.",
+  "reason": "Відео не є незалежно перевіреними ринковими сигналами. Немає підтвердження котируваннями, часом входу та результатами.",
+  "method": "Аналіз публічних назв/описів і доступних субтитрів; це не перевірка прибутковості, не транскрипція відеопотоків і не рекомендація угод.",
   "automatic_orders": false
 }
