@@ -437,13 +437,13 @@
         "short_conclusion": "Регуляторний фактор може змінити доступ або попит на BTC, ETH; заголовок треба звіряти з офіційним рішенням/файлінгом.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:23:06Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T22:58:25Z"
     },
     {
       "id": "d0bf4eb3b1012d",
@@ -559,13 +559,13 @@
         "short_conclusion": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T20:46:33Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T22:58:32Z"
     },
     {
       "id": "d63fb58cb29e3e",
@@ -602,23 +602,22 @@
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
       "jev_ai": {
-        "what_happened": "The House Financial Services chairman credited the SEC and CFTC for stepping in after the Clarity Act's collapse but said only \"permanent law change\" can secure U.S. leadership.",
-        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-        "market_effect": "Невизначений / змішаний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-        "confidence": "низька",
-        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+        "what_happened": "Представник Конгресу США Rep. French Hill, голова House Financial Services, заявив, що поточні регуляторні правила SEC та CFTC у сфері крипто «не досягають» необхідної ясності. Він подякував агентствам за дії після провалу CLARITY Act, але наголосив, що лише «постійна зміна закону» (permanent law change) може забезпечити лідерство США.",
+        "why_it_matters": "Хілл — впливовий законодавець, який контролює фінансові послуги. Його слова підтверджують, що регуляторний шлях через rulemaking (наприклад, CTX/CAM CFTC) сприймається як тимчасовий, а не остаточний. Це впливає на очікування ринку щодо класифікації активів та інституційного входження.",
+        "market_effect": "Невизначеність регуляторного статусу може стримувати інституційний притік капіталу. Короткостроково — нейтрально/волатильно, оскільки це очікувана позиція, а не несподіваний шок.",
+        "bull_case": "Якщо конгрес прийме постійний закон, це дасть чіткість, що може прискорити інституційне входження та легалізувати leverage для ритейл-клієнтів (як пропонує CFTC у CTX/CAM).",
+        "bear_case": "Якщо закон не приймуть, регуляторна невизначеність триватиме, що стримує розвиток ринку та може змусити платформи працювати в «сірій зоні» без повного захисту клієнтів.",
+        "watch_next": "Голосування Senate cloture (15 вересня 2026), фінальні правила CFTC CTX/CAM (зараз ANPRM — лише пропозиція, не активні правила), позиція SEC щодо spot-класифікації активів.",
+        "confidence": "середня",
+        "short_conclusion": "Хілл — впливовий законодавець, який контролює фінансові послуги. Його слова підтверджують, що регуляторний шлях через rulemaking (наприклад, CTX/CAM CFTC) сприймається як тимчасовий, а не остаточний. Це впливає на очікування ринку щодо класифікації активів та інституційного входження.",
+        "_format_fallback": true,
+        "_partial_json_recovered": true,
+        "_model_used": "free/gpt-6-luna"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:26:40Z"
+      "analysis_engine": "free/gpt-6-luna",
+      "analysis_level": "format_fallback",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T22:58:39Z"
     },
     {
       "id": "1ebda8c8f725a4",
@@ -815,13 +814,13 @@
         "short_conclusion": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 29s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T21:02:49Z"
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 29s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T22:58:51Z"
     },
     {
       "id": "fb8612a1141d75",
@@ -4050,16 +4049,17 @@
     }
   ],
   "jev_enabled": true,
-  "jev_status": "ok",
+  "jev_status": "degraded",
   "jev_provider": "apinex",
   "jev_model": "free/deepseek-v4.1-flash",
-  "jev_analyzed_count": 9,
-  "jev_analyzed_this_run": 1,
-  "jev_pending_count": 14,
-  "jev_llm_pending_count": 38,
-  "jev_analysis_errors": 1,
+  "jev_analyzed_count": 8,
+  "jev_analyzed_this_run": 0,
+  "jev_pending_count": 0,
+  "jev_llm_pending_count": 21,
+  "jev_analysis_errors": 3,
   "jev_error_codes": {
+    "ValueError": 2,
     "http_429": 1
   },
-  "jev_last_run_at": "2026-10-09T21:52:10Z"
+  "jev_last_run_at": "2026-10-09T22:58:57Z"
 }
