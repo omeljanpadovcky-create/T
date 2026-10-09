@@ -5,7 +5,7 @@ const ALLOWED_ORIGINS = new Set([
   'http://127.0.0.1:18765',
   'http://localhost:18765'
 ]);
-export default function handler(req,res) {
+export default async function handler(req,res) {
   const origin = req.headers.origin;
   if (ALLOWED_ORIGINS.has(origin)) res.setHeader('Access-Control-Allow-Origin',origin);
   res.setHeader('Vary','Origin');
@@ -22,5 +22,18 @@ export default function handler(req,res) {
   if (typeof supplied!=='string'||supplied.length!==expected.length||
       !timingSafeEqual(Buffer.from(supplied),Buffer.from(expected)))
     return res.status(401).json({ready:false,error:'Неправильний код доступу.'});
-  return res.status(200).json({ready:true,provider:'gemini',model:process.env.JEV_CLOUD_MODEL||'gemini-2.5-flash',cloud:true});
+  const model = process.env.JEV_CLOUD_MODEL || 'gemini-2.5-flash';
+  try {
+    const upstream = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' +
+      encodeURIComponent(model), {
+      headers:{'x-goog-api-key':process.env.GEMINI_API_KEY},
+      signal:AbortSignal.timeout(6000)
+    });
+    if (!upstream.ok) return res.status(503).json({
+      ready:false,error:upstream.status===429?'Ліміт Gemini вичерпано.':'Gemini API-ключ або модель недоступні.'
+    });
+    return res.status(200).json({ready:true,provider:'gemini',model,cloud:true});
+  } catch {
+    return res.status(503).json({ready:false,error:'Немає зв’язку з Gemini. Спробуй пізніше.'});
+  }
 }
