@@ -15,6 +15,9 @@ import time
 import requests
 
 OPENAI_KEY = os.getenv("OPENAI_API_KEY", "").strip()
+APINEX_KEY = os.getenv("APINEX_API_KEY", "").strip()
+APINEX_ENABLED = os.getenv("LIVE_APINEX_ENABLED", "").strip().lower() in {"1", "true", "yes"}
+APINEX_MODEL = os.getenv("JEV_APINEX_TEXT_MODEL", "free/deepseek-v4.1-flash").strip()
 OLLAMA_URL = os.getenv("MYSHKA_OLLAMA_URL", "").strip().rstrip("/")
 OPENAI_MODEL = os.getenv("JEV_PAIR_MODEL", "gpt-4.1-mini")
 OLLAMA_MODEL = os.getenv("MYSHKA_JEV_MODEL") or os.getenv("MYSHKA_OLLAMA_MODEL", "qwen2.5vl:3b")
@@ -62,6 +65,8 @@ def parse_response(value: object) -> dict:
 
 
 def provider() -> str | None:
+    if APINEX_KEY and APINEX_ENABLED:
+        return "apinex"
     if OPENAI_KEY:
         return "openai"
     if OLLAMA_URL:
@@ -107,10 +112,14 @@ def analyze(obs: dict) -> dict:
             r.raise_for_status()
             explanation = parse_response(r.json().get("response"))
         else:
+            endpoint = ("https://api.apinex.bond/v1/chat/completions"
+                        if active == "apinex" else "https://api.openai.com/v1/chat/completions")
+            model = APINEX_MODEL if active == "apinex" else OPENAI_MODEL
+            secret = APINEX_KEY if active == "apinex" else OPENAI_KEY
             r = requests.post(
-                "https://api.openai.com/v1/chat/completions",
-                headers={"Authorization": "Bearer " + OPENAI_KEY, "Content-Type": "application/json"},
-                json={"model": OPENAI_MODEL, "temperature": 0.1, "max_tokens": 480,
+                endpoint,
+                headers={"Authorization": "Bearer " + secret, "Content-Type": "application/json"},
+                json={"model": model, "temperature": 0.1, "max_tokens": 480,
                       "response_format": {"type": "json_object"},
                       "messages": [
                           {"role": "system", "content": PROMPT},
