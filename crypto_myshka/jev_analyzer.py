@@ -16,7 +16,7 @@ FEED = ROOT / "data" / "feed.json"
 ARCHIVE = ROOT / "data" / "telegram_archive.json"
 
 APINEX_API_KEY = os.getenv("APINEX_API_KEY", "").strip()
-APINEX_MODEL = os.getenv("JEV_MODEL", "").strip() or "free/gpt-5.6-luna"
+APINEX_MODEL = os.getenv("JEV_MODEL", "").strip() or "free/deepseek-v4.1-flash"
 APINEX_ENDPOINT = "https://api.apinex.bond/v1/chat/completions"
 
 # Optional fallbacks.
@@ -254,13 +254,14 @@ def openai_response_text(data):
 
 APINEX_FALLBACK_MODELS = [
     APINEX_MODEL,
-    "free/deepseek-v4.1-flash",
+    "free/gpt-6-luna",
     "free/gemini-3.8-flash",
 ]
 
 # Free tier is 30 RPM per IP. Keep our own ceiling below that.
 APINEX_MIN_INTERVAL_SECONDS = 2.25
-APINEX_MAX_ATTEMPTS_PER_MODEL = 3
+APINEX_MAX_ATTEMPTS_PER_MODEL = 1
+JEV_MAX_EVENTS = max(1, min(5, int(os.getenv('JEV_MAX_EVENTS', '4'))))
 _last_apinex_request_at = 0.0
 
 def apinex_wait_slot():
@@ -307,7 +308,7 @@ def analyze_apinex(event, feed, archive=None):
                     "temperature": 0.2,
                     "max_tokens": 1400,
                 },
-                timeout=75,
+                timeout=25,
             )
 
             if r.ok:
@@ -422,6 +423,7 @@ def main():
     attempted=0
     format_fallbacks=0
     errors=0
+    error_codes={}
     candidates=sorted(
         news.get("items") or [],
         key=lambda x:(-int(x.get("analysis_retry_count") or 0), int(x.get("impact") or 0), x.get("published_at") or ""),
@@ -432,7 +434,7 @@ def main():
     # news_engine.py, while malformed/failed items are retried without blocking
     # the rest of the queue.
     for event in candidates:
-        if attempted >= 20:
+        if attempted >= JEV_MAX_EVENTS:
             break
         if int(event.get("impact") or 0) < 2:
             continue
@@ -458,6 +460,9 @@ def main():
             event["analysis_engine"]="cross_source"
             event["analysis_level"]="cross_source_fallback"
             errors += 1
+            match=re.search(r"APInex (\\d{3})", str(e))
+            code=("http_"+match.group(1)) if match else type(e).__name__
+            error_codes[code]=error_codes.get(code, 0)+1
 
     analyzed_count=sum(
         1 for x in (news.get("items") or [])
@@ -472,7 +477,7 @@ def main():
         if int(x.get("impact") or 0) >= 2 and x.get("analysis_level")!="llm"
     )
     news["jev_enabled"]=True
-    news["jev_status"]="complete" if coverage_pending_count==0 else ("ok" if done else "degraded")
+    news["jev_status"]="complete" if llm_pending_count==0 else ("ok" if done else "degraded")
     news["jev_provider"]=provider
     news["jev_model"]=model
     news["jev_analyzed_count"]=analyzed_count
@@ -480,6 +485,8 @@ def main():
     news["jev_pending_count"]=coverage_pending_count
     news["jev_llm_pending_count"]=llm_pending_count
     news["jev_analysis_errors"]=errors
+    news["jev_error_codes"]=error_codes
+    news["jev_last_run_at"]=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     save(NEWS, news)
     db_count=sync_news(news)
     print(json.dumps({
@@ -488,6 +495,7 @@ def main():
         "attempted":attempted,
         "format_fallbacks":format_fallbacks,
         "errors":errors,
+        "error_codes":error_codes,
         "model":model,
         "postgres":db_count,
     }, ensure_ascii=False))
