@@ -186,6 +186,12 @@
     state.refreshing = false;
     $('refresh-button').disabled = false;
   }
+  const LOCAL_START_COMMAND = "$u='https://raw.githubusercontent.com/omeljanpadovcky-create/T/main/START_MYSHKA_EASY.ps1'; Invoke-WebRequest -Uri $u -OutFile \"$env:TEMP\\myshka_easy.ps1\"; powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"$env:TEMP\\myshka_easy.ps1\"";
+  function showLocalStart() {
+    const panel = $('local-quickstart');
+    if (!panel) return;
+    panel.style.display = ['localhost', '127.0.0.1'].includes(location.hostname) ? 'none' : 'block';
+  }
   function statusPill() {
     const node = $('connection-pill');
     const local = ['localhost', '127.0.0.1'].includes(location.hostname);
@@ -509,6 +515,7 @@
       status.textContent = '🔴 Локальна Ollama не відповідає. Запусти START_MYSHKA_AI.ps1 або підключи хмарний JEV.';
     }
     statusPill();
+    showLocalStart();
     updateCloudSettings();
     if (state.view === 'home') renderHome();
   }
@@ -724,6 +731,14 @@
       event.preventDefault();
       analyzeChartImage(file);
     });
+    $('copy-local-start').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(LOCAL_START_COMMAND);
+        toast('Команду PowerShell скопійовано');
+      } catch {
+        window.prompt('Скопіюй команду PowerShell:', LOCAL_START_COMMAND);
+      }
+    });
     $('refresh-button').addEventListener('click', () => { refreshAll(true); checkVisionHealth(); });
     $('demo-button').addEventListener('click', () => {
       state.demo = !state.demo;
@@ -782,6 +797,7 @@
     loadPrefs();
     loadCloudSettings();
     applyTheme();
+    showLocalStart();
     installInteractions();
     navigate(routeView(), { fromHash: true, noScroll: true });
     refreshAll();
