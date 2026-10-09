@@ -50,7 +50,25 @@ PROMPT = """Ти незалежний спостерігач публічної 
   "asset": null, "direction": null, "stake": null,
   "expiry": null, "outcome": null, "platform": null,
   "speaker_claim": null, "visual_evidence": "короткий опис фактично видимого",
-  "confidence": "low|medium" }.
+  "confidence": "low|medium",
+  "chart": {
+    "trend": "uptrend|downtrend|sideways|unknown",
+    "volatility": "high|normal|low|unknown",
+    "volume": "high|normal|low|unknown",
+    "sentiment": "bullish|bearish|neutral|unknown",
+    "support_levels": [],
+    "resistance_levels": [],
+    "price_action": null,
+    "trend_reason": null
+  }
+}.
+Назва інструмента — рівно як видно на екрані: AUD/CNY OTC, AUD/JPY, BTC/USDT.
+НЕ називай AUD/CNY OTC криптовалютою. НЕ домислюй рівні чи обсяг.
+Підтримка/опір — лише розбірливі числові значення з графіка.
+Якщо чогось не видно, поверни unknown/null/порожній список.
+Поясни українською, ЧОМУ ти визначив тренд (розпізнані свічки, максимум/мінімум), а не просто напрямок.
+Не пропонуй реальну угоду без незалежних цін і часових даних.
+Це один кадр; не заявляй winrate або підтверджене закриття ставки.
 Без команд купувати чи продавати. Пиши українською.
 """
 
@@ -247,6 +265,29 @@ def normalize_observation(parsed: dict) -> dict:
     for field in ("asset", "direction", "stake", "expiry", "outcome", "platform", "speaker_claim", "visual_evidence"):
         value = parsed.get(field)
         parsed[field] = str(value)[:260] if value is not None else None
+    raw_chart = parsed.get("chart")
+    raw_chart = raw_chart if isinstance(raw_chart, dict) else {}
+    fields = {
+        "trend": {"uptrend", "downtrend", "sideways", "unknown"},
+        "volatility": {"high", "normal", "low", "unknown"},
+        "volume": {"high", "normal", "low", "unknown"},
+        "sentiment": {"bullish", "bearish", "neutral", "unknown"},
+    }
+    chart = {}
+    for field, allowed_values in fields.items():
+        value = str(raw_chart.get(field) or "").lower()
+        chart[field] = value if value in allowed_values else "unknown"
+    for field in ("price_action", "trend_reason"):
+        value = raw_chart.get(field)
+        chart[field] = str(value)[:600] if isinstance(value, str) and value.strip() else None
+    for field in ("support_levels", "resistance_levels"):
+        raw_levels = raw_chart.get(field)
+        chart[field] = [
+            str(num) for num in raw_levels[:4]
+            if isinstance(num, (str, int, float)) and not isinstance(num, bool)
+            and re.fullmatch(r"-?\\d{1,10}(?:\\.\\d{1,9})?", str(num).strip())
+        ][:3] if isinstance(raw_levels, list) else []
+    parsed["chart"] = chart
     return parsed
 
 def process_once() -> dict:
@@ -339,6 +380,11 @@ def process_once() -> dict:
         "ai_provider": "openai" if API_KEY else ("local_ollama" if OLLAMA_URL else "none"),
     }
     save(updated)
+    try:
+        from pair_reports import update_from_live
+        update_from_live(updated)
+    except Exception as exc:
+        print("Pair report generation failed:", str(exc)[:200])
     return updated
 
 def main() -> None:
