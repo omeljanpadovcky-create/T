@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-09T16:20:59.948161+00:00",
+  "generated_at": "2026-10-09T18:19:34.868279+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,12 +26,12 @@
       "ok": true,
       "count": 10218,
       "complete": true,
-      "updated_at": "2026-10-09T16:20:55.873813+00:00",
+      "updated_at": "2026-10-09T18:19:30.112086+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 124,
+      "count": 102,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -41,43 +41,38 @@
       "ETH",
       "SOL",
       "PENDLE",
-      "ICP",
       "XRP",
       "BNB",
       "DOGE"
     ],
     "prices": {
       "bitcoin": {
-        "usd": 82865,
-        "usd_24h_change": 1.890034172170223
+        "usd": 82590,
+        "usd_24h_change": 2.0623709132820576
       },
       "ethereum": {
-        "usd": 2494.69,
-        "usd_24h_change": 2.419754016719234
+        "usd": 2485.72,
+        "usd_24h_change": 2.6090827177875746
       },
       "solana": {
-        "usd": 109.88,
-        "usd_24h_change": 0.9099667089864834
+        "usd": 109.72,
+        "usd_24h_change": 2.762285228326829
       },
       "pendle": {
         "usd": 2.13,
-        "usd_24h_change": 1.796152970102376
-      },
-      "internet-computer": {
-        "usd": 3.06,
-        "usd_24h_change": 2.7385224954175995
+        "usd_24h_change": 5.377551655595945
       },
       "ripple": {
         "usd": 1.39,
-        "usd_24h_change": 1.994435175836879
+        "usd_24h_change": 3.8202302818258325
       },
       "binancecoin": {
-        "usd": 741.62,
-        "usd_24h_change": 1.0873602690009725
+        "usd": 740.62,
+        "usd_24h_change": 2.3494215010287838
       },
       "dogecoin": {
-        "usd": 0.084891,
-        "usd_24h_change": 1.8081678027207153
+        "usd": 0.084857,
+        "usd_24h_change": 3.3795944821119903
       }
     }
   },
@@ -5296,7 +5291,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Bitcoin 2026 Review: Price and Market Updates",
+      "title": "Огляд біткоіна 2026: оновлення цін і ринку",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=4QoyO40jff4",
       "published_at": null,
@@ -6219,6 +6214,6 @@
     }
   ],
   "archive_count": 10218,
-  "news_count": 124,
+  "news_count": 102,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
