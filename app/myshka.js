@@ -13,6 +13,7 @@
   const VIEWS = new Set(['home', 'analysis', 'history', 'settings']);
   const allowedTheme = new Set(['light', 'dark']);
   const allowedRefresh = new Set([15, 30, 60, 120]);
+  const allowedVisionModes = new Set(['auto', 'local', 'cloud']);
   const I18N = {
     trend: { uptrend: 'Висхідний', downtrend: 'Спадний', sideways: 'Боковий', unknown: 'Невідомо' },
     volume: { high: 'Високий', normal: 'Нормальний', low: 'Низький', unknown: 'Невідомо' },
@@ -25,7 +26,8 @@
     lastSuccessfulFetch: {}, filter: 'all', query: '',
     selectedPair: null, demo: false, refreshing: false, sequence: 0,
     visionStatus: 'checking', visionSource: null, cloudEndpoint: '', cloudAccess: '',
-    prefs: { theme: 'light', refresh: 15, saved: {}, votes: {} },
+    visionCheckSeq: 0,
+    prefs: { theme: 'light', refresh: 15, visionMode: 'auto', cloudFallback: false, saved: {}, votes: {} },
     pollTimer: null
   };
   const $ = id => document.getElementById(id);
@@ -66,6 +68,8 @@
       if (raw && typeof raw === 'object') {
         if (allowedTheme.has(raw.theme)) state.prefs.theme = raw.theme;
         if (allowedRefresh.has(Number(raw.refresh))) state.prefs.refresh = Number(raw.refresh);
+        if (allowedVisionModes.has(raw.visionMode)) state.prefs.visionMode = raw.visionMode;
+        if (typeof raw.cloudFallback === 'boolean') state.prefs.cloudFallback = raw.cloudFallback;
         if (raw.saved && typeof raw.saved === 'object' && !Array.isArray(raw.saved)) state.prefs.saved = raw.saved;
         if (raw.votes && typeof raw.votes === 'object' && !Array.isArray(raw.votes)) state.prefs.votes = raw.votes;
       }
@@ -90,11 +94,53 @@
       return url.origin;
     } catch { return null; }
   }
+  function isLocalPage() {
+    return ['localhost', '127.0.0.1'].includes(location.hostname);
+  }
+  function isCloudConfigured() {
+    return !!(state.cloudEndpoint && state.cloudAccess.length >= 24);
+  }
+  function visionTargets() {
+    const mode = state.prefs.visionMode;
+    const targets = [];
+    if (mode !== 'cloud' && isLocalPage()) targets.push('local');
+    // Selecting "cloud" is explicit consent. In "auto" mode the extra
+    // checkbox is mandatory before any screenshot can leave this device.
+    if ((mode === 'cloud' || (mode === 'auto' && state.prefs.cloudFallback))
+      && isCloudConfigured()) targets.push('cloud');
+    return targets;
+  }
+  function syncVisionModeControls() {
+    const mode = state.prefs.visionMode;
+    $('vision-mode-select').value = mode;
+    $('vision-mode-quick').value = mode;
+    $('vision-cloud-fallback').checked = !!state.prefs.cloudFallback;
+    $('vision-cloud-fallback').disabled = mode !== 'auto';
+    const info = $('vision-mode-info');
+    if (mode === 'local') info.textContent = isLocalPage()
+      ? 'Локально: використовується Ollama на цьому комп’ютері. Фото не надсилається в хмару.'
+      : 'Локальний режим потребує запуску сторінки на 127.0.0.1:18765. На GitHub Pages Ollama недоступна.';
+    else if (mode === 'cloud') info.textContent = isCloudConfigured()
+      ? 'Хмарний режим: фото надсилатимуться через твій Vercel API до APInex / Gemini.'
+      : 'Хмарний режим вибрано. Налаштуй адресу Vercel та окремий код доступу.';
+    else info.textContent = (state.prefs.cloudFallback
+      ? 'Автоматично: спочатку Ollama, а за її недоступності — хмарний JEV із передаванням фото.'
+      : 'Автоматично: Ollama, якщо відкрито локальну сторінку. Перехід у хмару заборонено.') +
+      (!isLocalPage() ? ' Тут відкрита публічна сторінка, локальний JEV недоступний.' : '');
+  }
+  function setVisionMode(mode) {
+    if (!allowedVisionModes.has(mode)) return;
+    state.prefs.visionMode = mode;
+    persist();
+    syncVisionModeControls();
+    checkVisionHealth();
+  }
   function loadCloudSettings() {
     try { state.cloudEndpoint = validCloudEndpoint(localStorage.getItem(CLOUD_URL_KEY)) || ''; } catch {}
     try { state.cloudAccess = sessionStorage.getItem(CLOUD_ACCESS_KEY) || ''; } catch {}
     $('cloud-endpoint').value = state.cloudEndpoint;
     $('cloud-access').value = state.cloudAccess;
+    syncVisionModeControls();
   }
   function updateCloudSettings() {
     const label = $('cloud-connection-status');
@@ -114,6 +160,7 @@
       state.prefs.theme === 'dark' ? '#0b111d' : '#f6f8fc';
     $('theme-select').value = state.prefs.theme;
     $('refresh-select').value = String(state.prefs.refresh);
+    syncVisionModeControls();
   }
   function routeView() {
     const hash = location.hash.replace(/^#/, '').toLowerCase();
