@@ -90,11 +90,13 @@ jobs:
           git config user.name "CryptoMyshka Video Archive"
           git config user.email "crypto-myshka@users.noreply.github.com"
           cp crypto_myshka/data/youtube_archive.json /tmp/myshka_video_archive.json
+          cp crypto_myshka/data/jev_video_knowledge.json /tmp/myshka_jev_video_knowledge.json
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             git reset --hard origin/main
             cp /tmp/myshka_video_archive.json crypto_myshka/data/youtube_archive.json
-            git add crypto_myshka/data/youtube_archive.json
+            cp /tmp/myshka_jev_video_knowledge.json crypto_myshka/data/jev_video_knowledge.json
+            git add crypto_myshka/data/youtube_archive.json crypto_myshka/data/jev_video_knowledge.json
             if git diff --cached --quiet; then
               echo "No new or enriched videos"
               exit 0
