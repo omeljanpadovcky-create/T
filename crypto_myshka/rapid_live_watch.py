@@ -77,6 +77,8 @@ def inspect_frame(channel_id: str, channel_name: str, stream: dict) -> tuple[str
                 return "frame_unavailable", None
             spoken = transcribe(audio) if API_KEY else ""
             analysis = vision(frame, spoken)
+            from pair_jev import analyze as jev_explain
+            analysis["jev"] = jev_explain(analysis)
         return "visual_claim_reviewed", {
             "observed_at": now(),
             "channel_id": channel_id,
