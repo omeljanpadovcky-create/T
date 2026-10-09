@@ -96,6 +96,8 @@ const esc=x=>String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 function statusLabel(x){
 if(!x.confirmed)return ['Не підтверджено','warn'];
 if(x.status==='ok')return ['Збір успішний',''];
+if(x.status==='example_only')return ['Публічний приклад · збір обмежено','warn'];
+if(x.status==='no_relevant_videos')return ['Релевантні відео не знайдено','warn'];
 if(x.status==='pending_first_scan')return ['Очікує сканування',''];
 return ['Немає актуальних даних','warn'];
 }
@@ -119,6 +121,7 @@ let body=vids.slice(0,8).map(v=>{
 const a=v.analysis||{},parts=[];
 if(a.otc_flag)parts.push('<span class="flag risk">OTC / binary</span>');
 if(a.promotion_flag)parts.push('<span class="flag risk">реклама / просування</span>');
+if(v.sample_only)parts.push('<span class="flag risk">приклад із пошуку · не повний архів</span>');
 if(a.pairs&&a.pairs.length)parts.push('<span class="flag">'+esc(a.pairs.join(', '))+'</span>');
 parts.push('<span class="flag">'+esc(a.evidence||'тільки метадані')+'</span>');
 let date=v.upload_date||'';
