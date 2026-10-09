@@ -1,0 +1,51 @@
+name: Test TradeMyshka Telegram Connection
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  telegram-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check required secrets
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python - <<'PY'
+          import os
+          missing=[name for name in ("TELEGRAM_BOT_TOKEN","TELEGRAM_CHAT_ID") if not os.getenv(name)]
+          if missing:
+              raise SystemExit("Missing GitHub Actions secrets: "+", ".join(missing))
+          print("Telegram credentials are configured (values hidden).")
+          PY
+      - name: Send one Telegram test message
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python - <<'PY'
+          import os, json, urllib.request, urllib.error
+          token=os.environ["TELEGRAM_BOT_TOKEN"]
+          chat_id=os.environ["TELEGRAM_CHAT_ID"]
+          url="https://api.telegram.org/bot"+token+"/sendMessage"
+          body=json.dumps({"chat_id":chat_id,"text":"🐭 ТрейдМишка: тест підключення успішний! Telegram-канал сповіщень працює. Це не торговий сигнал.","disable_web_page_preview":True}).encode()
+          req=urllib.request.Request(url,data=body,headers={"Content-Type":"application/json"},method="POST")
+          try:
+              with urllib.request.urlopen(req,timeout=20) as response:
+                  result=json.load(response)
+              if not result.get("ok"):
+                  raise SystemExit("Telegram rejected the message.")
+              print("Telegram test message sent successfully.")
+          except urllib.error.HTTPError as e:
+              print("Telegram API rejected the request. Check bot permissions and chat ID; HTTP",e.code)
+              raise SystemExit(1)
+          PY
