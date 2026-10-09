@@ -59,14 +59,11 @@ const { JSDOM } = require('jsdom');
     el.click();
     return el;
   };
-  assert.equal(doc.querySelectorAll('.bottom-nav button').length, 5, 'all five screens must have mobile navigation');
-  assert.equal(doc.querySelector('#stat-channels').textContent, '2');
-  assert.equal(doc.querySelector('#stat-live').textContent, '0', 'offline cannot be presented as LIVE');
+  assert.equal(doc.querySelectorAll('.bottom-nav button').length, 4, 'four remaining mobile screens');
+  assert.equal(doc.querySelector('#screen-live'), null, 'LIVE Monitor screen must be removed');
+  assert.equal(doc.querySelector('[data-go="live"]'), null, 'LIVE Monitor links must be removed');
+  assert.doesNotMatch(doc.querySelector('#screen-home').textContent, /НИКОЛАС|LIVE Monitor/);
   assert.equal(doc.querySelector('#stat-pairs').textContent, '1');
-  click('.bottom-nav [data-go="live"]');
-  assert.equal(doc.querySelector('#screen-live').hidden, false);
-  assert.match(doc.querySelector('#live-list').textContent, /НИКОЛАС/);
-  assert.match(doc.querySelector('#live-list').textContent, /LIVE не підтверджено/);
   click('.bottom-nav [data-go="analysis"]');
   assert.equal(doc.querySelector('#screen-analysis').hidden, false);
   assert.match(doc.querySelector('#analysis-list').textContent, /AUD\/CNY OTC/);
@@ -89,13 +86,13 @@ const { JSDOM } = require('jsdom');
   click('#refresh-button');
   await new Promise(resolve => setTimeout(resolve, 150));
   click('.bottom-nav [data-go="analysis"]');
-  assert.match(doc.querySelector('#analysis-list').textContent, /Очікуємо перший LIVE-аналіз/);
+  assert.match(doc.querySelector('#analysis-list').textContent, /Немає опублікованих звітів/);
   click('#demo-button');
   assert.match(doc.querySelector('#analysis-list').textContent, /ДЕМОНСТРАЦІЯ ІНТЕРФЕЙСУ/);
   assert.match(doc.querySelector('#analysis-list').textContent, /AUD\/CNY OTC/);
   assert.equal(doc.querySelector('#analysis-list .report-actions'), null, 'demo must not offer to save or rate a fake report');
   click('#demo-button');
-  assert.match(doc.querySelector('#analysis-list').textContent, /Очікуємо перший LIVE-аналіз/);
+  assert.match(doc.querySelector('#analysis-list').textContent, /Немає опублікованих звітів/);
   // A chart photo must remain at full resolution and be shown before analysis.
   win.FileReader = class {
     readAsDataURL(_file) {
