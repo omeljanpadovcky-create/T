@@ -33,5 +33,8 @@ if not defined MYSHKA_YOUTUBE_BROWSER (
   echo to your local browser name: chrome, edge or firefox.
 )
 echo.
+if not defined LIVE_CAPTURE_INTERVAL set "LIVE_CAPTURE_INTERVAL=60"
+echo Live frame sampling interval: %LIVE_CAPTURE_INTERVAL% sec
+echo Caution: using paid OpenAI vision may incur repeated API charges.
 %PYTHON_CMD% crypto_myshka\live_monitor.py --watch --interval 45
 pause
