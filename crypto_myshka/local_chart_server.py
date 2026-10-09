@@ -61,6 +61,19 @@ class Handler(SimpleHTTPRequestHandler):
         self.wfile.write(raw)
 
     def do_GET(self):
+        requested = self.path.split("?")[0]
+        if requested == "/":
+            self.send_response(302)
+            self.send_header("Location", "/myshka-app.html#analysis")
+            self.end_headers()
+            return
+        # Never expose repository secrets, source files, .env, or local journals.
+        allowed = (requested in ("/myshka-app.html", "/myshka.webmanifest", "/myshka-sw.js")
+                   or (requested.startswith("/app/") and requested.endswith((".js", ".css", ".svg", ".png", ".webp")))
+                   or (requested.startswith("/crypto_myshka/data/") and requested.endswith(".json")))
+        if requested != "/api/chart-health" and not allowed:
+            self.send_error(404, "Not found")
+            return
         if self.path.split("?")[0] == "/api/chart-health":
             try:
                 req = urllib.request.Request(OLLAMA + "/api/tags")
@@ -78,6 +91,11 @@ class Handler(SimpleHTTPRequestHandler):
     def do_POST(self):
         if self.path != "/api/chart-analysis":
             return self.json_response(404, {"error": "Unknown API route"})
+        origin = self.headers.get("Origin")
+        if origin and origin not in ("http://127.0.0.1:" + str(PORT), "http://localhost:" + str(PORT)):
+            return self.json_response(403, {"error": "Лише локальний застосунок може надсилати фото."})
+        if self.headers.get("Content-Type", "").split(";")[0].strip() != "application/json":
+            return self.json_response(415, {"error": "Потрібен application/json."})
         length = int(self.headers.get("Content-Length", "0"))
         if length < 1 or length > MAX_BYTES * 1.45:
             return self.json_response(413, {"error": "Фото завелике (до 8 МБ)."})
