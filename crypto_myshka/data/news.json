@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-09T23:24:15.576845+00:00",
+  "generated_at": "2026-10-09T23:27:58.061151+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -46,7 +46,7 @@
       "role": "discovery"
     }
   },
-  "raw_item_count": 205,
+  "raw_item_count": 206,
   "item_count": 98,
   "items": [
     {
