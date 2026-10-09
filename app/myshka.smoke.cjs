@@ -96,6 +96,28 @@ const { JSDOM } = require('jsdom');
   assert.equal(doc.querySelector('#analysis-list .report-actions'), null, 'demo must not offer to save or rate a fake report');
   click('#demo-button');
   assert.match(doc.querySelector('#analysis-list').textContent, /Очікуємо перший LIVE-аналіз/);
+  // A chart photo should be visibly rendered, not only counted as red/green pixels.
+  win.URL.createObjectURL = () => 'blob:chart-test';
+  win.URL.revokeObjectURL = () => {};
+  win.Image = class {
+    constructor() { this.width = 942; this.height = 657; }
+    set src(_value) { this.onload(); }
+  };
+  win.HTMLCanvasElement.prototype.getContext = () => ({
+    drawImage() {},
+    getImageData() { return { data: new Uint8ClampedArray([0, 190, 0, 255, 220, 0, 0, 255]) }; }
+  });
+  win.HTMLCanvasElement.prototype.toDataURL = () => 'data:image/png;base64,aGVsbG8=';
+  const input = doc.querySelector('#chart-photo');
+  Object.defineProperty(input, 'files', { configurable: true, value: [
+    { name: 'market-chart.png', type: 'image/png', size: 1000 }
+  ] });
+  input.dispatchEvent(new win.Event('change', { bubbles: true }));
+  const preview = doc.querySelector('#photo-analysis img.chart-photo-preview');
+  assert.ok(preview, 'uploaded chart must be visible in analysis result');
+  assert.match(preview.src, /^data:image\/png;base64,/);
+  assert.match(preview.alt, /market-chart.png/);
+  assert.match(doc.querySelector('#photo-analysis').textContent, /market-chart.png/);
   win.close();
-  console.log('✅ Crypto Myshka app: 5 screens, LIVE, JEV detail, saved history, settings & empty state passed');
+  console.log('✅ Crypto Myshka app: 5 screens, LIVE, JEV detail, saved history, photo preview, settings & empty state passed');
 })().catch(error => { console.error(error); process.exit(1); });
