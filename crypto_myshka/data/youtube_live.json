@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-09T18:35:34.660271+00:00",
+  "updated_at": "2026-10-09T18:46:51.914551+00:00",
   "mode": "LIVE public streams monitoring",
   "polling": "Every 5 minutes on scheduled GitHub Actions (may be delayed); --watch for persistent host",
   "channels": [
@@ -9,9 +9,10 @@
       "name": "НИКОЛАС | ТРЕЙДЕР",
       "handle": "@NikolasTradin",
       "url": "https://www.youtube.com/@NikolasTradin/videos",
+      "live_page": "https://www.youtube.com/@NikolasTradin/live",
       "status": "not_detected",
       "live": false,
-      "checked_at": "2026-10-09T18:35:25.284926+00:00",
+      "checked_at": "2026-10-09T18:46:46.503593+00:00",
       "stream": null,
       "last_visual_check": null
     },
@@ -20,9 +21,10 @@
       "name": "Закулисье Трейдера",
       "handle": "@artemtraderr",
       "url": "https://www.youtube.com/@artemtraderr/videos",
+      "live_page": "https://www.youtube.com/@artemtraderr/live",
       "status": "not_detected",
       "live": false,
-      "checked_at": "2026-10-09T18:35:28.690043+00:00",
+      "checked_at": "2026-10-09T18:46:49.409011+00:00",
       "stream": null,
       "last_visual_check": null
     },
@@ -31,9 +33,10 @@
       "name": "Mark Champs Trader",
       "handle": "@Mark_champs_trader",
       "url": "https://www.youtube.com/@Mark_champs_trader/videos",
+      "live_page": "https://www.youtube.com/@Mark_champs_trader/live",
       "status": "not_detected",
       "live": false,
-      "checked_at": "2026-10-09T18:35:29.270764+00:00",
+      "checked_at": "2026-10-09T18:46:50.113550+00:00",
       "stream": null,
       "last_visual_check": null
     },
@@ -42,9 +45,10 @@
       "name": "Алексей Борщев",
       "handle": "@alexeyborshev1",
       "url": "https://www.youtube.com/@alexeyborshev1/videos",
+      "live_page": "https://www.youtube.com/@alexeyborshev1/live",
       "status": "not_detected",
       "live": false,
-      "checked_at": "2026-10-09T18:35:31.900990+00:00",
+      "checked_at": "2026-10-09T18:46:50.883275+00:00",
       "stream": null,
       "last_visual_check": null
     },
@@ -53,9 +57,10 @@
       "name": "Николай (зі скріншота)",
       "handle": null,
       "url": null,
+      "live_page": null,
       "status": "source_unverified",
       "live": false,
-      "checked_at": "2026-10-09T18:35:34.660254+00:00",
+      "checked_at": "2026-10-09T18:46:51.914535+00:00",
       "stream": null,
       "last_visual_check": null
     }
