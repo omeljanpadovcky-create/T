@@ -349,6 +349,8 @@ def process_once() -> dict:
                 else:
                     words = transcribe(audio)
                     read = vision(frame, words)
+                    from pair_jev import analyze as jev_explain
+                    read["jev"] = jev_explain(read)
                     event = {
                         "observed_at": now(),
                         "channel_id": channel["id"],
