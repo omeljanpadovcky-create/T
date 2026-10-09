@@ -16,24 +16,69 @@ function Fail($message) {
     Write-Host ('ERROR: ' + $message) -ForegroundColor Red
     throw $message
 }
+function Refresh-SessionPath {
+    # winget installers update user/machine PATH on disk, not in an existing PS session.
+    $machine = [Environment]::GetEnvironmentVariable('Path','Machine')
+    $user = [Environment]::GetEnvironmentVariable('Path','User')
+    $segments = @($env:Path, $machine, $user) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    $env:Path = $segments -join ';'
+}
 function Lookup-Python {
-    foreach ($exe in @(
-        (Join-Path $env:LOCALAPPDATA 'Programs\Python\Python312\python.exe'),
-        (Join-Path $env:LOCALAPPDATA 'Programs\Python\Python313\python.exe'),
-        (Join-Path $env:LOCALAPPDATA 'Programs\Python\Python314\python.exe'),
-        'python.exe'
-    )) {
-        try {
-            $resolved = (Get-Command $exe -ErrorAction Stop).Source
-            $out = & $resolved -c 'import sys; print(sys.executable if sys.version_info >= (3,10) else "")' 2>$null
-            if ($LASTEXITCODE -eq 0 -and $out -and (Test-Path $out.Trim())) { return $out.Trim() }
-        } catch {}
+    Refresh-SessionPath
+    $candidates = New-Object 'System.Collections.Generic.List[string]'
+
+    # Search installed interpreters directly, without trusting Windows Store app aliases.
+    $baseDirs = @(
+        (Join-Path $env:LOCALAPPDATA 'Programs\Python'),
+        (Join-Path $env:ProgramFiles 'Python'),
+        (Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Links')
+    )
+    if ($env:ProgramFiles) {
+        $baseDirs += $env:ProgramFiles
     }
-    try {
-        $py = (Get-Command py.exe -ErrorAction Stop).Source
-        $out = & $py -3 -c 'import sys; print(sys.executable if sys.version_info >= (3,10) else "")' 2>$null
-        if ($LASTEXITCODE -eq 0 -and $out -and (Test-Path $out.Trim())) { return $out.Trim() }
-    } catch {}
+    foreach ($base in $baseDirs) {
+        if (-not (Test-Path -LiteralPath $base -PathType Container)) { continue }
+        if ($base -eq $env:ProgramFiles) {
+            $dirs = @(Get-ChildItem -LiteralPath $base -Directory -Filter 'Python3*' -ErrorAction SilentlyContinue)
+        } else {
+            $dirs = @(Get-ChildItem -LiteralPath $base -Directory -Filter 'Python*' -ErrorAction SilentlyContinue)
+        }
+        foreach ($dir in $dirs) {
+            $exe = Join-Path $dir.FullName 'python.exe'
+            if (Test-Path -LiteralPath $exe -PathType Leaf) { $candidates.Add($exe) }
+        }
+        $direct = Join-Path $base 'python.exe'
+        if (Test-Path -LiteralPath $direct -PathType Leaf) { $candidates.Add($direct) }
+    }
+    foreach ($alias in @('python.exe', 'python3.exe')) {
+        foreach ($command in @(Get-Command $alias -All -ErrorAction SilentlyContinue)) {
+            if ($command.Source) { $candidates.Add([string]$command.Source) }
+        }
+    }
+    foreach ($exe in @($candidates | Select-Object -Unique)) {
+        try {
+            # WindowsApps aliases may be executable stubs; actual interpreter must
+            # pass both the version test AND return a real executable path.
+            $out = & $exe -c 'import sys; print(sys.executable if sys.version_info >= (3,10) else "")' 2>$null
+            if ($LASTEXITCODE -eq 0 -and $out) {
+                $resolved = ([string]($out | Select-Object -First 1)).Trim()
+                if ($resolved -and (Test-Path -LiteralPath $resolved -PathType Leaf)) { return $resolved }
+            }
+        } catch { }
+    }
+    foreach ($launcher in @('py.exe','py')) {
+        $command = Get-Command $launcher -ErrorAction SilentlyContinue
+        if (-not $command) { continue }
+        foreach ($selector in @('-3.12','-3')) {
+            try {
+                $out = & $command.Source $selector -c 'import sys; print(sys.executable if sys.version_info >= (3,10) else "")' 2>$null
+                if ($LASTEXITCODE -eq 0 -and $out) {
+                    $resolved = ([string]($out | Select-Object -First 1)).Trim()
+                    if ($resolved -and (Test-Path -LiteralPath $resolved -PathType Leaf)) { return $resolved }
+                }
+            } catch { }
+        }
+    }
     return $null
 }
 function Lookup-Ollama {
@@ -62,8 +107,9 @@ function Ensure-Python {
     if (-not $wg) { Fail 'winget not available. Install Python manually and retry.' }
     & $wg.Source install --exact --id Python.Python.3.12 --scope user --accept-source-agreements --accept-package-agreements
     if ($LASTEXITCODE -ne 0) { Fail 'Python installer failed. Check winget output above.' }
+    Refresh-SessionPath
     $found = Lookup-Python
-    if (-not $found) { Fail 'Python installed but Windows terminal cannot find it yet. Reopen PowerShell and rerun the same command.' }
+    if (-not $found) { Fail 'Python installer finished, but executable is not located yet. Reopen PowerShell and rerun this script; if still missing check: py -0p or winget list --id Python.Python.3.12' }
     return $found
 }
 function Ensure-Ollama {
