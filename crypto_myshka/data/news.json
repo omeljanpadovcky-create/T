@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-09T23:04:47.141238+00:00",
+  "generated_at": "2026-10-09T23:05:51.439095+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -1082,13 +1082,13 @@
         "short_conclusion": "Новина стосується SOL, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:04:56Z"
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T20:08:58Z"
     },
     {
       "id": "13ee38e8dbdf4c",
@@ -1136,13 +1136,13 @@
         "short_conclusion": "Новина стосується BTC, ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:05:02Z"
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T20:09:03Z"
     },
     {
       "id": "e38ffe5db1d72c",
@@ -1192,13 +1192,13 @@
         "short_conclusion": "Біржова новина може впливати на ліквідність і доступність BTC, ETH; важливо відділити операційне оновлення від системного ризику.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:05:08Z"
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T20:09:09Z"
     },
     {
       "id": "370328ca5eefd2",
@@ -1245,13 +1245,13 @@
         "short_conclusion": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:05:14Z"
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T20:09:16Z"
     },
     {
       "id": "b4e31b6883d086",
@@ -4046,16 +4046,16 @@
     }
   ],
   "jev_enabled": true,
-  "jev_status": "degraded",
+  "jev_status": "ok",
   "jev_provider": "apinex",
   "jev_model": "free/deepseek-v4.1-flash",
   "jev_analyzed_count": 9,
-  "jev_analyzed_this_run": 0,
+  "jev_analyzed_this_run": 1,
   "jev_pending_count": 0,
   "jev_llm_pending_count": 20,
-  "jev_analysis_errors": 4,
+  "jev_analysis_errors": 3,
   "jev_error_codes": {
-    "ValueError": 4
+    "ValueError": 3
   },
-  "jev_last_run_at": "2026-10-09T23:05:20Z"
+  "jev_last_run_at": "2026-10-09T23:02:11Z"
 }
