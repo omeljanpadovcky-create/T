@@ -171,7 +171,14 @@ function renderItems(){
   $('#mainLayout').style.display='grid';
   $('#modeTitle').textContent=modeNames[mode];
   const arr=currentItems();
-  $('#count').textContent=arr.length+(mode==='news'?' подій':mode==='knowledge'?' матеріалів':' ідей');
+  if(mode==='news'){
+    const aiCount=arr.filter(x=>x.analysis_level==='llm'&&x.jev_ai&&!x.jev_ai._format_fallback).length;
+    const code=newsData.jev_status||'unknown';
+    const state=code==='complete'?'AI готовий':code==='ok'?'AI частково':code==='degraded'?'AI помилки':code==='not_configured'?'AI не налаштований':'AI ще не підтверджено';
+    $('#count').textContent=aiCount+'/'+arr.length+' перевірено AI · '+state;
+  }else{
+    $('#count').textContent=arr.length+(mode==='knowledge'?' матеріалів':' ідей');
+  }
   const box=$('#items');box.innerHTML='';
   if(!arr.length){box.innerHTML='<div class="empty">Тут поки немає матеріалів.</div>';return}
   arr.slice(0,60).forEach(x=>{
