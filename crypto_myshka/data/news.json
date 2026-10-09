@@ -137,23 +137,20 @@
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
       "jev_ai": {
-        "what_happened": "P7 DarkSword iOS Exploit Kit Adds Crypto Wallet Data Theft and Remote Commands &nbsp;&nbsp; The Hacker News",
-        "why_it_matters": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
-        "market_effect": "Потенційно негативний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
+        "what_happened": "З'явилася інформація (єдине джерело — Google News discovery, посилання на The Hacker News), що iOS-експлойт-кіт P7 DarkSword отримав нові функції: викрадення даних криптогаманців та віддалене виконання команд. Офіційного підтвердження від незалежних дослідників безпеки немає.",
+        "why_it_matters": "Це загроза безпеці користувачів iOS, які зберігають криптоактиви. Якщо експлойт спрацює в масовому порядку, можливі зливи гаманців. Однак це інструмент хакерів, а не атака на конкретний протокол чи токен — фундаментальні показники проектів не змінюються.",
+        "market_effect": "Ймовірно незначний короткостроковий вплив на sentiment. Немає прив'язки до конкретного токена чи мережі, тому прямого тиску на ціни очікувати не варто. Ризик — якщо підтвердяться масові атаки на конкретні гаманці.",
+        "bull_case": "Інциденти безпеки часто локальні та швидко купуються; може прискорити впровадження кращих практик безпеки; жодного впливу на токеноміку чи дохідність протоколів.",
+        "bear_case": "Якщо експлойт стане масовим — зливи гаманців знижують довіру користувачів; можливе тимчасове зростання волатильності в сегменті мобільних гаманців; регуляторна увага до безпеки iOS-додатків.",
+        "watch_next": "Підтвердження від незалежних дослідників безпеки (напр. Google Threat Analysis Group, Kaspersky, Trend Micro); які саме гаманці/додатки постраждали; чи є активні експлуатації в дикій природі; чи випустили розробники гаманців патчі.",
         "confidence": "низька",
-        "short_conclusion": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "short_conclusion": "Повідомлення про нові функції P7 DarkSword потребує підтвердження — джерело одне, статус 'потребує підтвердження'. Без доказів масових атак прямого впливу на ринки не очікується.",
+        "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T21:03:07Z"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:11:09Z"
     },
     {
       "id": "edd2450c262553",
@@ -206,13 +203,13 @@
         "short_conclusion": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T21:38:20Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:11:14Z"
     },
     {
       "id": "3f390f004120fe",
@@ -261,13 +258,13 @@
         "short_conclusion": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T21:38:25Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:11:20Z"
     },
     {
       "id": "1d226d05315623",
@@ -316,13 +313,13 @@
         "short_conclusion": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T21:38:31Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:11:26Z"
     },
     {
       "id": "5deda94f2556f4",
@@ -4046,13 +4043,13 @@
   "jev_status": "ok",
   "jev_provider": "apinex",
   "jev_model": "free/deepseek-v4.1-flash",
-  "jev_analyzed_count": 10,
+  "jev_analyzed_count": 11,
   "jev_analyzed_this_run": 1,
   "jev_pending_count": 0,
-  "jev_llm_pending_count": 19,
+  "jev_llm_pending_count": 18,
   "jev_analysis_errors": 3,
   "jev_error_codes": {
     "ValueError": 3
   },
-  "jev_last_run_at": "2026-10-09T23:07:38Z"
+  "jev_last_run_at": "2026-10-09T23:11:32Z"
 }
