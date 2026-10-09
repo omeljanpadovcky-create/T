@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-09T18:33:28.931294+00:00",
+  "updated_at": "2026-10-09T18:33:55.526793+00:00",
   "mode": "LIVE public streams monitoring",
   "polling": "Every 5 minutes on scheduled GitHub Actions (may be delayed); --watch for persistent host",
   "channels": [
@@ -11,7 +11,7 @@
       "url": "https://www.youtube.com/@NikolasTradin/videos",
       "status": "offline",
       "live": false,
-      "checked_at": "2026-10-09T18:33:18.445221+00:00",
+      "checked_at": "2026-10-09T18:33:46.216840+00:00",
       "stream": null,
       "last_visual_check": null
     },
@@ -22,7 +22,7 @@
       "url": "https://www.youtube.com/@artemtraderr/videos",
       "status": "offline",
       "live": false,
-      "checked_at": "2026-10-09T18:33:21.813452+00:00",
+      "checked_at": "2026-10-09T18:33:48.842754+00:00",
       "stream": null,
       "last_visual_check": null
     },
@@ -33,7 +33,7 @@
       "url": "https://www.youtube.com/@Mark_champs_trader/videos",
       "status": "offline",
       "live": false,
-      "checked_at": "2026-10-09T18:33:22.505972+00:00",
+      "checked_at": "2026-10-09T18:33:49.384123+00:00",
       "stream": null,
       "last_visual_check": null
     },
@@ -44,7 +44,7 @@
       "url": "https://www.youtube.com/@alexeyborshev1/videos",
       "status": "offline",
       "live": false,
-      "checked_at": "2026-10-09T18:33:25.607407+00:00",
+      "checked_at": "2026-10-09T18:33:52.343048+00:00",
       "stream": null,
       "last_visual_check": null
     },
@@ -55,7 +55,7 @@
       "url": null,
       "status": "source_unverified",
       "live": false,
-      "checked_at": "2026-10-09T18:33:28.931279+00:00",
+      "checked_at": "2026-10-09T18:33:55.526777+00:00",
       "stream": null,
       "last_visual_check": null
     }
