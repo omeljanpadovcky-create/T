@@ -423,8 +423,7 @@
       const act = e.target.closest('button[data-act]');
       if (act) { reportAction(act.dataset.act, act.dataset.id, act.dataset.vote); }
     });
-    $('chart-photo').addEventListener('change', event => {
-      const file = event.target.files && event.target.files[0];
+    const analyzeChartImage = file => {
       if (!file) return;
       const box = $('photo-analysis');
       if (!['image/jpeg','image/png','image/webp'].includes(file.type) || file.size > 8 * 1024 * 1024) {
@@ -505,6 +504,24 @@
       };
       image.onerror = () => { URL.revokeObjectURL(url);box.textContent='Не вдалося прочитати фото.'; };
       image.src=url;
+    };
+    $('chart-photo').addEventListener('change', event => {
+      const file = event.target.files && event.target.files[0];
+      analyzeChartImage(file);
+      event.target.value = '';
+    });
+    // Paste a screenshot directly on the Analysis screen (Win+Shift+S, then Ctrl+V).
+    document.addEventListener('paste', event => {
+      if (state.view !== 'analysis') return;
+      const active = document.activeElement;
+      if (active && (active.matches('input, textarea, [contenteditable="true"]'))) return;
+      const clipboard = event.clipboardData;
+      if (!clipboard) return;
+      const item = Array.from(clipboard.items || []).find(entry => entry.kind === 'file' && entry.type.startsWith('image/'));
+      const file = item ? item.getAsFile() : Array.from(clipboard.files || []).find(entry => entry.type.startsWith('image/'));
+      if (!file) return;
+      event.preventDefault();
+      analyzeChartImage(file);
     });
     $('refresh-button').addEventListener('click', () => refreshAll(true));
     $('demo-button').addEventListener('click', () => {
