@@ -64,7 +64,7 @@ const { JSDOM } = require('jsdom');
   assert.equal(doc.querySelector('[data-go="live"]'), null, 'LIVE Monitor links must be removed');
   assert.doesNotMatch(doc.querySelector('#screen-home').textContent, /НИКОЛАС|LIVE Monitor/);
   assert.equal(doc.querySelector('#stat-pairs').textContent, '1');
-  assert.match(doc.querySelector('#connection-pill').textContent, /JEV тільки локально/, 'cloud header must not claim missing sources');
+  assert.match(doc.querySelector('#connection-pill').textContent, /Підключи хмарний JEV/, 'cloud without a backend must not fake readiness');
   click('.bottom-nav [data-go="analysis"]');
   assert.equal(doc.querySelector('#screen-analysis').hidden, false);
   assert.match(doc.querySelector('#analysis-list').textContent, /AUD\/CNY OTC/);
@@ -115,7 +115,7 @@ const { JSDOM } = require('jsdom');
   assert.equal(preview.src, 'data:image/png;base64,aGVsbG8=');
   assert.match(preview.alt, /market-chart.png/);
   assert.match(doc.querySelector('#photo-analysis').textContent, /1281 × 602/);
-  assert.match(doc.querySelector('#vision-status').textContent, /Хмарна сторінка/);
+  assert.match(doc.querySelector('#vision-status').textContent, /Хмарний JEV не підключено/);
   assert.equal(doc.querySelector('.jev-image-area button').disabled, true, 'GitHub Pages must not fake AI');
 
   // Local app: probe Ollama, send the full screenshot and show direction only.
@@ -194,7 +194,62 @@ const { JSDOM } = require('jsdom');
   assert.match(localDoc.querySelector('#photo-analysis .jev-image-result').textContent, /ПРОПУСТИТИ/);
   assert.match(localDoc.querySelector('#photo-analysis .jev-image-result').textContent, /не рекомендовано/);
   assert.equal(paste.defaultPrevented, true);
+  // GitHub Pages with an explicitly configured Vercel backend uses remote
+  // health and image inference; the access code never appears in GitHub source.
+  const cloudDom = new JSDOM(html, {
+    url: 'https://omeljanpadovcky-create.github.io/T/myshka-app.html#analysis',
+    pretendToBeVisual: true, runScripts: 'outside-only'
+  });
+  const cloudWin = cloudDom.window;
+  cloudWin.scrollTo = () => {};
+  cloudWin.FileReader = win.FileReader;
+  cloudWin.Image = win.Image;
+  cloudWin.localStorage.setItem('crypto-myshka-cloud-endpoint-v1', 'https://myshka-ai.vercel.app');
+  cloudWin.sessionStorage.setItem('crypto-myshka-cloud-access-session-v1', 'abcdefghijklmnopqrstuvwxyz123456');
+  let cloudHealth = 0, cloudImages = 0;
+  cloudWin.fetch = async (url, opts = {}) => {
+    if (String(url).includes('myshka-ai.vercel.app/api/chart-health')) {
+      cloudHealth++;
+      assert.equal(opts.headers['X-JEV-Access'], 'abcdefghijklmnopqrstuvwxyz123456');
+      return {ok:true,json:async()=>({ready:true,cloud:true,model:'gemini-2.5-flash'})};
+    }
+    if (String(url).includes('myshka-ai.vercel.app/api/chart-analysis')) {
+      cloudImages++;
+      assert.equal(opts.headers['X-JEV-Access'], 'abcdefghijklmnopqrstuvwxyz123456');
+      assert.equal(opts.headers['Content-Type'], 'application/json');
+      assert.equal(JSON.parse(opts.body).chart_timeframe, '1m');
+      return {ok:true,json:async()=>({
+        direction:'ВНИЗ',action:'SELL',test_expiry_seconds:60,
+        chart_timeframe:'1m',timeframe_source:'user',
+        reason:'Видно кілька нижчих максимумів на графіку.'
+      })};
+    }
+    const filename = String(url).split('/').pop().split('?')[0];
+    if (!data[filename]) throw Error('Unexpected cloud resource: '+url);
+    return {ok:true,json:async()=>data[filename]};
+  };
+  cloudWin.eval(js);
+  await new Promise(resolve => setTimeout(resolve, 180));
+  const cloudDoc = cloudWin.document;
+  assert.match(cloudDoc.querySelector('#connection-pill').textContent, /JEV хмарний готовий/);
+  assert.match(cloudDoc.querySelector('#vision-status').textContent, /хмарний сервер/);
+  cloudDoc.querySelector('#chart-timeframe').value = '1m';
+  const cloudInput = cloudDoc.querySelector('#chart-photo');
+  Object.defineProperty(cloudInput, 'files', {configurable:true,value:[
+    {name:'cloud.png',type:'image/png',size:1000}
+  ]});
+  cloudInput.dispatchEvent(new cloudWin.Event('change',{bubbles:true}));
+  await new Promise(resolve => setTimeout(resolve, 40));
+  assert.ok(cloudHealth >= 2);
+  assert.equal(cloudImages,1);
+  assert.match(cloudDoc.querySelector('#photo-analysis .jev-image-result').textContent,/SELL/);
+  assert.match(cloudDoc.querySelector('#photo-analysis .jev-image-result').textContent,/хмарним AI/);
+  cloudDoc.querySelector('#cloud-disconnect').click();
+  await new Promise(resolve => setTimeout(resolve, 30));
+  assert.match(cloudDoc.querySelector('#connection-pill').textContent,/Підключи хмарний JEV/);
+  assert.equal(cloudWin.sessionStorage.getItem('crypto-myshka-cloud-access-session-v1'),null);
+  cloudWin.close();
   localWin.close();
   win.close();
-  console.log('Crypto Myshka: screens, saved history, full-res photo, Ctrl+V, local JEV health, demo BUY/SELL/SKIP expiry and cloud fallback passed');
+  console.log('Crypto Myshka: local Ollama, optional authenticated cloud JEV, no-backend fallback, demo expiry, screenshots, Ctrl+V and journal passed');
 })().catch(error => { console.error(error); process.exit(1); });
