@@ -612,8 +612,15 @@
     navigate(routeView(), { fromHash: true, noScroll: true });
     refreshAll();
     startPolling();
-    if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && !['localhost', '127.0.0.1'].includes(location.hostname)) {
-      navigator.serviceWorker.register('./myshka-sw.js').catch(() => {});
+    if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+      if (['localhost', '127.0.0.1'].includes(location.hostname)) {
+        // Old localhost PWA registrations may serve outdated app files.
+        navigator.serviceWorker.getRegistrations().then(registrations =>
+          Promise.all(registrations.filter(reg => reg.scope.startsWith(location.origin + '/'))
+            .map(reg => reg.unregister()))).catch(() => {});
+      } else {
+        navigator.serviceWorker.register('./myshka-sw.js').catch(() => {});
+      }
     }
   }
   boot();
