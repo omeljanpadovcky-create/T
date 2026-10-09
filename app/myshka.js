@@ -423,102 +423,129 @@
       const act = e.target.closest('button[data-act]');
       if (act) { reportAction(act.dataset.act, act.dataset.id, act.dataset.vote); }
     });
+    // A screenshot is not a price feed. The browser keeps its full-resolution
+    // image and sends it only to the user's same-origin local Ollama bridge.
+    let imageRequestId = 0;
     const analyzeChartImage = file => {
       if (!file) return;
+      const requestId = ++imageRequestId;
       const box = $('photo-analysis');
-      if (!['image/jpeg','image/png','image/webp'].includes(file.type) || file.size > 8 * 1024 * 1024) {
-        box.textContent = 'Потрібен JPG, PNG або WebP до 8 МБ.'; return;
+      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) ||
+          file.size < 1 || file.size > 8 * 1024 * 1024) {
+        box.textContent = 'Потрібен JPG, PNG або WebP до 8 МБ.';
+        return;
       }
-      const image = new Image();
-      const url = URL.createObjectURL(file);
-      image.onload = () => {
-        const canvas = document.createElement('canvas');
-        const scale = Math.min(1, 900 / Math.max(image.width, image.height));
-        canvas.width = Math.max(1, Math.round(image.width * scale));
-        canvas.height = Math.max(1, Math.round(image.height * scale));
-        const ctx = canvas.getContext('2d');
-        if (!ctx) { box.textContent = 'Браузер не підтримує аналіз зображення.'; URL.revokeObjectURL(url); return; }
-        ctx.drawImage(image,0,0,canvas.width,canvas.height);
-        URL.revokeObjectURL(url);
-        const pixels = ctx.getImageData(0,0,canvas.width,canvas.height).data;
-        let green = 0, red = 0;
-        // Estimate dominant red/green candle pixels only; this is NOT trend prediction or OCR.
-        for (let i=0;i<pixels.length;i+=4) {
-          const r=pixels[i],g=pixels[i+1],b=pixels[i+2];
-          if (g>r*1.35 && g>b*1.2 && g>95) green++;
-          if (r>g*1.4 && r>b*1.3 && r>110) red++;
-        }
-        const dominant=green>red*1.3?'зелених':red>green*1.3?'червоних':'приблизно порівну червоних і зелених';
-        const info=document.createElement('div');
-        info.className='report-card photo-report';
-        const preview=document.createElement('img');
-        preview.className='chart-photo-preview';
-        preview.alt='Завантажений графік: '+file.name;
-        preview.src=canvas.toDataURL('image/png');
-        preview.loading='eager';
-        const fileLabel=document.createElement('p');
-        fileLabel.className='chart-photo-filename';
-        fileLabel.textContent='📎 '+file.name+' · Фото графіка';
-        const heading=document.createElement('h3');heading.textContent='📷 Попередній аналіз фото';
-        const desc=document.createElement('p');
-        desc.textContent='Розмір: '+image.width+' × '+image.height+' px. За кольорами на зображенні '+(dominant.includes('порівну')?dominant:'більше '+dominant)+' ділянок. Це не визначає напрямок наступної свічки.';
-        const caution=document.createElement('p');caution.className='report-notice';
-        caution.textContent='Локальна оцінка пікселів — не повноцінний AI/JEV. Пару, таймфрейм, котирування, рівні та обсяг автоматично не підтверджено. Фото нікуди не надсилається.';
-        const aiArea=document.createElement('div');
-        aiArea.className='jev-image-area';
-        const aiButton=document.createElement('button');
-        aiButton.type='button';
-        aiButton.className='small-button';
-        aiButton.textContent='🤖 JEV: напрямок ринку';
-        const aiResult=document.createElement('div');
-        aiResult.className='jev-image-result';
-        aiResult.setAttribute('aria-live','polite');
-        const localServer=['localhost','127.0.0.1'].includes(location.hostname);
-        if (!localServer) {
-          aiButton.disabled=true;
-          aiResult.textContent='Справжній AI потребує локального сервера Ollama. На GitHub Pages зараз працює тільки оцінка кольорів. Запусти START_MYSHKA_AI.ps1 через PowerShell та відкрий http://127.0.0.1:18765/myshka-app.html#analysis.';
-        } else {
-          aiResult.textContent='AI аналізує фото локально, без надсилання в хмару. Це не підтверджені котирування чи торговий сигнал.';
-          aiButton.addEventListener('click', async () => {
-            aiButton.disabled=true;
-            aiResult.textContent='⏳ JEV аналізує скріншот через Ollama. Зачекай…';
-            try {
-              const payload={image:preview.src.split(',')[1]};
-              const response=await fetch('/api/chart-analysis', {
-                method:'POST',headers:{'Content-Type':'application/json'},
-                body:JSON.stringify(payload)
-              });
-              const result=await response.json();
-              if (!response.ok || !result.analysis) throw new Error(result.error || 'AI не відповідає');
-              const dir=['ВГОРУ','ВНИЗ','НЕВИЗНАЧЕНО'].includes(result.direction) ? result.direction : 'НЕВИЗНАЧЕНО';
-              aiResult.textContent=dir==='ВГОРУ' ? '↑ ВГОРУ' : dir==='ВНИЗ' ? '↓ ВНИЗ' : '— НЕВИЗНАЧЕНО';
-            } catch (error) {
-              aiResult.textContent='AI-аналіз не вдався: '+(error && error.message ? error.message : 'невідома помилка')+
-                '. Перевір, чи запущена Ollama та встановлена vision-модель.';
-            } finally { aiButton.disabled=false; }
-          });
-        }
-        aiArea.append(aiButton,aiResult);
-        info.append(preview,fileLabel,heading,desc,caution,aiArea);box.replaceChildren(info);
-        if (localServer) aiButton.click();
+      box.textContent = '📷 Читаємо скріншот…';
+      const reader = new FileReader();
+      reader.onerror = () => {
+        if (requestId === imageRequestId) box.textContent = 'Не вдалося прочитати файл.';
       };
-      image.onerror = () => { URL.revokeObjectURL(url);box.textContent='Не вдалося прочитати фото.'; };
-      image.src=url;
+      reader.onload = () => {
+        if (requestId !== imageRequestId) return;
+        const dataUrl = reader.result;
+        if (typeof dataUrl !== 'string' || !/^data:image\/(?:png|jpeg|webp);base64,/.test(dataUrl)) {
+          box.textContent = 'Формат фото не підтримується.';
+          return;
+        }
+        const image = new Image();
+        image.onerror = () => {
+          if (requestId === imageRequestId) box.textContent = 'Файл не є коректним зображенням.';
+        };
+        image.onload = () => {
+          if (requestId !== imageRequestId) return;
+          const info = document.createElement('div');
+          info.className = 'report-card photo-report';
+          const preview = document.createElement('img');
+          preview.className = 'chart-photo-preview';
+          preview.alt = 'Завантажений графік: ' + file.name;
+          preview.src = dataUrl;
+          const fileLabel = document.createElement('p');
+          fileLabel.className = 'chart-photo-filename';
+          fileLabel.textContent = '📎 ' + file.name + ' · ' + image.width + ' × ' + image.height + ' px';
+          const heading = document.createElement('h3');
+          heading.textContent = '📷 Скріншот графіка';
+          const note = document.createElement('p');
+          note.className = 'report-notice';
+          note.textContent = 'Оригінальна роздільність збережена. Зі скріншота не можна підтвердити майбутню ціну чи результат угоди.';
+          const aiArea = document.createElement('div');
+          aiArea.className = 'jev-image-area';
+          const aiButton = document.createElement('button');
+          aiButton.type = 'button';
+          aiButton.className = 'small-button';
+          aiButton.textContent = '🤖 Повторити аналіз JEV';
+          const aiResult = document.createElement('div');
+          aiResult.className = 'jev-image-result';
+          aiResult.setAttribute('role', 'status');
+          aiResult.setAttribute('aria-live', 'polite');
+          const localServer = ['localhost', '127.0.0.1'].includes(location.hostname);
+          if (!localServer) {
+            aiButton.disabled = true;
+            aiResult.textContent = '⛔ AI не підключений на GitHub Pages. Для аналізу відкрий локальну Мишку через START_MYSHKA_AI.ps1: http://127.0.0.1:18765/myshka-app.html#analysis';
+          } else {
+            aiResult.textContent = 'Перевіряємо локальну Ollama…';
+            aiButton.addEventListener('click', async () => {
+              if (requestId !== imageRequestId) return;
+              aiButton.disabled = true;
+              aiResult.textContent = '⏳ Перевіряємо Ollama…';
+              try {
+                const healthResponse = await fetch('./api/chart-health', {cache: 'no-store'});
+                if (!healthResponse.ok) throw new Error('Локальний AI-сервер недоступний (HTTP ' + healthResponse.status + '). Перезапусти START_MYSHKA_AI.ps1.');
+                const health = await healthResponse.json();
+                if (!health.ready) {
+                  if (!health.ollama) throw new Error('Ollama не відповідає. Запусти Ollama або ollama serve.');
+                  throw new Error('Модель не встановлена. Виконай: ollama pull ' + (health.model || 'qwen2.5vl:3b'));
+                }
+                if (requestId !== imageRequestId) return;
+                aiResult.textContent = '⏳ JEV читає свічки на скріншоті…';
+                const response = await fetch('./api/chart-analysis', {
+                  method: 'POST',
+                  headers: {'Content-Type': 'application/json'},
+                  body: JSON.stringify({image: dataUrl.split(',')[1]})
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'Помилка AI-сервера (HTTP ' + response.status + ')');
+                if (requestId !== imageRequestId) return;
+                const direction = ['ВГОРУ', 'ВНИЗ', 'НЕВИЗНАЧЕНО'].includes(result.direction)
+                  ? result.direction : 'НЕВИЗНАЧЕНО';
+                aiResult.textContent = direction === 'ВГОРУ' ? '↑ ВГОРУ' :
+                  direction === 'ВНИЗ' ? '↓ ВНИЗ' : '— НЕВИЗНАЧЕНО';
+                aiResult.className = 'jev-image-result direction-result ' +
+                  (direction === 'ВГОРУ' ? 'direction-up' : direction === 'ВНИЗ' ? 'direction-down' : 'direction-neutral');
+              } catch (error) {
+                if (requestId === imageRequestId) {
+                  aiResult.className = 'jev-image-result';
+                  aiResult.textContent = '⚠️ ' + (error && error.message ? error.message : 'Не вдалося зв’язатися з JEV.');
+                }
+              } finally {
+                if (requestId === imageRequestId) aiButton.disabled = false;
+              }
+            });
+          }
+          aiArea.append(aiButton, aiResult);
+          info.append(preview, fileLabel, heading, note, aiArea);
+          box.replaceChildren(info);
+          if (localServer) aiButton.click();
+        };
+        image.src = dataUrl;
+      };
+      reader.readAsDataURL(file);
     };
     $('chart-photo').addEventListener('change', event => {
       const file = event.target.files && event.target.files[0];
       analyzeChartImage(file);
       event.target.value = '';
     });
-    // Paste a screenshot directly on the Analysis screen (Win+Shift+S, then Ctrl+V).
+    // Windows Snipping Tool -> Ctrl+V directly on the Analysis screen.
     document.addEventListener('paste', event => {
       if (state.view !== 'analysis') return;
       const active = document.activeElement;
-      if (active && (active.matches('input, textarea, [contenteditable="true"]'))) return;
+      if (active && active.matches('input, textarea, [contenteditable="true"]')) return;
       const clipboard = event.clipboardData;
       if (!clipboard) return;
-      const item = Array.from(clipboard.items || []).find(entry => entry.kind === 'file' && entry.type.startsWith('image/'));
-      const file = item ? item.getAsFile() : Array.from(clipboard.files || []).find(entry => entry.type.startsWith('image/'));
+      const item = Array.from(clipboard.items || []).find(entry =>
+        entry.kind === 'file' && entry.type.startsWith('image/'));
+      const file = item ? item.getAsFile() :
+        Array.from(clipboard.files || []).find(entry => entry.type.startsWith('image/'));
       if (!file) return;
       event.preventDefault();
       analyzeChartImage(file);
@@ -558,7 +585,7 @@
     navigate(routeView(), { fromHash: true, noScroll: true });
     refreshAll();
     startPolling();
-    if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+    if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && !['localhost', '127.0.0.1'].includes(location.hostname)) {
       navigator.serviceWorker.register('./myshka-sw.js').catch(() => {});
     }
   }
