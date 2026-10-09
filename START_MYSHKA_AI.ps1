@@ -40,7 +40,7 @@ if ($installed -notcontains $Model) {
     if ($LASTEXITCODE -ne 0) { exit 1 }
 }
 Write-Host 'Відкриваю Crypto Myshka Fast Analysis...' -ForegroundColor Green
-Start-Process 'http://127.0.0.1:8765/myshka-app.html#analysis'
+Write-Host 'Локальний сервер сам відкриє браузер, коли буде готовий.' -ForegroundColor Cyan
 Write-Host 'Завантаж фото: JEV проаналізує його локально через Ollama.' -ForegroundColor Green
 Write-Host 'Ctrl+C зупиняє локальний сервер. Реальних угод не відкриває.' -ForegroundColor Gray
 if (Get-Command py -ErrorAction SilentlyContinue) {
