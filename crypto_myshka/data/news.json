@@ -82,7 +82,25 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T19:14:35Z",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 10s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "P7 DarkSword iOS Exploit Kit Adds Crypto Wallet Data Theft and Remote Commands &nbsp;&nbsp; The Hacker News",
+        "why_it_matters": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
+        "market_effect": "Потенційно негативний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
+        "confidence": "низька",
+        "short_conclusion": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 10s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "edd2450c262553",
@@ -123,7 +141,25 @@
         "Є незалежне підтвердження",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T19:14:40Z",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 3s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "DWF Labs subsidiaries sue BitGo for $141 million over alleged token lock-up breach",
+        "why_it_matters": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
+        "market_effect": "Потенційно негативний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
+        "confidence": "низька",
+        "short_conclusion": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 3s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "3f390f004120fe",
@@ -160,7 +196,25 @@
         "Google News використано лише як радар теми",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T19:14:47Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "Stacks Founder Warns Bitcoin Security Breach Could Hit Entire Crypto Market &nbsp;&nbsp; Yahoo Finance",
+        "why_it_matters": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
+        "market_effect": "Потенційно негативний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
+        "confidence": "низька",
+        "short_conclusion": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "1d226d05315623",
@@ -197,7 +251,25 @@
         "Поки одне джерело",
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T19:14:53Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "Bitcoin and crypto markets eyed a recovery from Thursday’s drop despite concerns of another hardware wallet exploit.",
+        "why_it_matters": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
+        "market_effect": "Потенційно негативний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
+        "confidence": "низька",
+        "short_conclusion": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "5deda94f2556f4",
@@ -3788,5 +3860,19 @@
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     }
-  ]
+  ],
+  "jev_enabled": true,
+  "jev_status": "degraded",
+  "jev_provider": "apinex",
+  "jev_model": "free/deepseek-v4.1-flash",
+  "jev_analyzed_count": 8,
+  "jev_analyzed_this_run": 0,
+  "jev_pending_count": 18,
+  "jev_llm_pending_count": 22,
+  "jev_analysis_errors": 4,
+  "jev_error_codes": {
+    "http_429": 2,
+    "http_402": 2
+  },
+  "jev_last_run_at": "2026-10-09T19:15:00Z"
 }
