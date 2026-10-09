@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-09T09:16:34.708463+00:00",
+  "generated_at": "2026-10-09T16:20:59.948161+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -24,14 +24,14 @@
     },
     "telegram_archive": {
       "ok": true,
-      "count": 10214,
+      "count": 10218,
       "complete": true,
-      "updated_at": "2026-10-09T09:16:29.365851+00:00",
+      "updated_at": "2026-10-09T16:20:55.873813+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 107,
+      "count": 124,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -41,42 +41,99 @@
       "ETH",
       "SOL",
       "PENDLE",
+      "ICP",
       "XRP",
       "BNB",
       "DOGE"
     ],
     "prices": {
       "bitcoin": {
-        "usd": 82512,
-        "usd_24h_change": -0.4422591692612579
+        "usd": 82865,
+        "usd_24h_change": 1.890034172170223
       },
       "ethereum": {
-        "usd": 2501.59,
-        "usd_24h_change": -2.1891801478203265
+        "usd": 2494.69,
+        "usd_24h_change": 2.419754016719234
       },
       "solana": {
-        "usd": 110.39,
-        "usd_24h_change": -3.884725900696945
+        "usd": 109.88,
+        "usd_24h_change": 0.9099667089864834
       },
       "pendle": {
-        "usd": 2.12,
-        "usd_24h_change": -6.295693214442206
+        "usd": 2.13,
+        "usd_24h_change": 1.796152970102376
+      },
+      "internet-computer": {
+        "usd": 3.06,
+        "usd_24h_change": 2.7385224954175995
       },
       "ripple": {
-        "usd": 1.4,
-        "usd_24h_change": -0.6251321796311764
+        "usd": 1.39,
+        "usd_24h_change": 1.994435175836879
       },
       "binancecoin": {
-        "usd": 742.31,
-        "usd_24h_change": -3.1658107419472477
+        "usd": 741.62,
+        "usd_24h_change": 1.0873602690009725
       },
       "dogecoin": {
-        "usd": 0.084925,
-        "usd_24h_change": -3.219401306537531
+        "usd": 0.084891,
+        "usd_24h_change": 1.8081678027207153
       }
     }
   },
   "items": [
+    {
+      "id": "c2570bbc8a631a",
+      "source": "telegram_main",
+      "mode": "speculation",
+      "risk": 65,
+      "reasons": [
+        "криптоідея без чіткої портфельної рамки"
+      ],
+      "title": "Бітку наприклад, якщо вдаримо в зону 83400-84000",
+      "summary": "Бітку наприклад, якщо вдаримо в зону 83400-84000",
+      "url": "https://t.me/it_statti/7372",
+      "published_at": "2026-10-09T13:38:27+00:00"
+    },
+    {
+      "id": "2a4502c45273ee",
+      "source": "telegram_main",
+      "mode": "trading",
+      "risk": 80,
+      "reasons": [
+        "активна торгівля/позиція"
+      ],
+      "title": "🔶 Активності / Як заробити: PYTH можна використовувати у governance staking. Але стару тезу: «стейкай PYTH і отримуй вис…",
+      "summary": "🔶 Активності / Як заробити: PYTH можна використовувати у governance staking. Але стару тезу: «стейкай PYTH і отримуй високий OIS yield» треба забути. У 2026 Oracle Integrity Staking rewards згортаються разом із переходом infrastructure. Тобто: emission-funded staking yield більше не є основою investment thesis. І це навіть плюс. Тепер economics PYTH дедалі більше спирається не на роздачу нових токенів, а на: реальний commercial revenue → Reserve purchases. Governance staking залишається інструментом участі в управлінні, але не гарантованим passive-income продуктом. 🔶 Мій вердикт: PYTH за останній рік дуже змінився. Раніше головна проблема була: сильний продукт → сильні institutional integrat",
+      "url": "https://t.me/it_statti/7371",
+      "published_at": "2026-10-09T10:06:01+00:00"
+    },
+    {
+      "id": "b5748b8561066e",
+      "source": "telegram_main",
+      "mode": "trading",
+      "risk": 90,
+      "reasons": [
+        "деривативи/плече: потрібна перевірка max loss, margin і ліквідації"
+      ],
+      "title": "🔶 Зв’язок продукту і токена / Value accrual: Саме тут thesis змінився найбільше. Раніше було: сильний oracle → сильні in…",
+      "summary": "🔶 Зв’язок продукту і токена / Value accrual: Саме тут thesis змінився найбільше. Раніше було: сильний oracle → сильні integrations → але слабкий прямий value accrual PYTH. Тепер: Pyth products ↓ клієнти платять ↓ DAO отримує свою частку revenue ↓ 100% DAO receipts конвертуються в PYTH ↓ PYTH надходить у Reserve. Для Pyth Pro та Indices базова модель приблизно: 60% → DAO 40% → operator. Для окремих сервісів частка DAO може бути вищою. Тому важливо: 100% Rule ≠ 100% усієї виручки Pyth. На купівлю PYTH ідуть 100% саме тієї частини, яку отримує DAO. І ще одна поправка: buyback ≠ burn. Куплені PYTH не знищуються. Вони накопичуються в DAO Reserve. Отже механізм створює: реальний open-market buy pr",
+      "url": "https://t.me/it_statti/7370",
+      "published_at": "2026-10-09T10:06:01+00:00"
+    },
+    {
+      "id": "b0803b13d1c32b",
+      "source": "telegram_main",
+      "mode": "trading",
+      "risk": 80,
+      "reasons": [
+        "активна торгівля/позиція"
+      ],
+      "title": "Огляд проекту PYTH: доходи вже працюють на токен, але великий розлок ще попереду #оглядкриптопроектів 🔶 Про що проєкт: P…",
+      "summary": "Огляд проекту PYTH: доходи вже працюють на токен, але великий розлок ще попереду #оглядкриптопроектів 🔶 Про що проєкт: Pyth Network — інфраструктура фінансових даних для DeFi, бірж і торгових платформ. Pyth передає ціни: криптовалют акцій ETF FX металів commodities та інших фінансових активів. Його ключова відмінність — дані надходять безпосередньо від професійних учасників ринку. Серед publishers: Cboe Jane Street Fidelity Coinbase Virtu Jump Trading Susquehanna та інші. Але Pyth уже виходить за межі класичного blockchain oracle. Новий напрям: Pyth Pro Pyth Indices Data Marketplace RWA prediction markets institutional market data. Тобто формується вже не просто oracle network, а платний bus",
+      "url": "https://t.me/it_statti/7369",
+      "published_at": "2026-10-09T10:06:01+00:00"
+    },
     {
       "id": "8b125375508786",
       "source": "telegram_main",
@@ -274,59 +331,6 @@
       "summary": "Бачите що з інфлами роблять рефки… 😄 Я от робив для вас пів місяця експеримент, починаючи від ідеї зі сценарієм і закінчуючи практикою: як протестувати та порівняти дві топові криптокарти, які доступні українському рітейлу. Причому абсолютно безкоштовно, затрачаючи свої кошти на порівняння. І не отримуючи реварду від біржі. тільки зарази субʼєктивності. І заспойлеривши, для тих хто не дивився ролик, карта ОКХ дійсно виявилася кращою. Але чомусь 95% каналів про цю карту не писали, бо не було особистого велью їх для себе. А потім… Настав перший день як привʼязали рефку під створення карти ОКХ, одразу всі інфли по всім каналам почали її шилити) Причому ніхто в коментах навіть не знає справжні к",
       "url": "https://t.me/it_statti/7353",
       "published_at": "2026-10-06T16:00:59+00:00"
-    },
-    {
-      "id": "30b6e73fb76265",
-      "source": "telegram_main",
-      "mode": "opportunities",
-      "risk": 55,
-      "reasons": [
-        "подія/активність, а не пряма ринкова ставка",
-        "промо вимагає торгівлі/обсягу; винагорода не гарантована"
-      ],
-      "title": "🔶 Цікаві факти / метрики: Поточний зріз: VIRTUAL ≈ $0,85 Market Cap ≈$560M FDV ≈$850M Circulating ≈658M / 1B За останні …",
-      "summary": "🔶 Цікаві факти / метрики: Поточний зріз: VIRTUAL ≈ $0,85 Market Cap ≈$560M FDV ≈$850M Circulating ≈658M / 1B За останні 30 днів приблизно: Fees ≈$529K Protocol Revenue ≈$160K Tracked Holder Revenue = $0. Annualized: Fees ≈$6,4M Protocol Revenue ≈$1,9–2,0M. Відповідно: MC / Fees ≈87× MC / Protocol Revenue ≈288×. І навіть у гіпотетичному сценарії, де 100% current protocol revenue йшло б на VIRTUAL buyback: це було б лише близько: 0,35% Market Cap/рік. Причому такого правила зараз немає. Тому VIRTUAL не можна назвати cheap cash-flow token лише тому, що він упав приблизно на 80%+ від ATH. Також не варто використовувати aGDP як revenue — ця метрика включає не лише fees, а й movement/trading value",
-      "url": "https://t.me/it_statti/7352",
-      "published_at": "2026-10-06T14:10:21+00:00"
-    },
-    {
-      "id": "3c64c6cc44b125",
-      "source": "telegram_main",
-      "mode": "opportunities",
-      "risk": 35,
-      "reasons": [
-        "подія/активність, а не пряма ринкова ставка"
-      ],
-      "title": "🔶 Зв’язок продукту і токена / Value accrual: У VIRTUAL є реальна utility. У класичному launchpad agent tokens створюють …",
-      "summary": "🔶 Зв’язок продукту і токена / Value accrual: У VIRTUAL є реальна utility. У класичному launchpad agent tokens створюють trading pairs із VIRTUAL. Тому більше launches/activity можуть створювати: попит на VIRTUAL як liquidity/base asset. Також можна lock: VIRTUAL → veVIRTUAL і отримувати governance power та ecosystem airdrops. Але тут треба дуже чітко відділяти utility від cash flow. Trading fee у launchpad-моделі: 1% з якого: 70% → creator 30% → Virtuals Treasury. Тобто зі $100 volume protocol treasury отримує приблизно: $0,30. Але: treasury revenue ≠ holder revenue. Автоматичного механізму: protocol revenue → buy VIRTUAL → burn/distribute holders я не бачу як регулярного working mechanism. ",
-      "url": "https://t.me/it_statti/7351",
-      "published_at": "2026-10-06T14:10:21+00:00"
-    },
-    {
-      "id": "18c37abc68433b",
-      "source": "telegram_main",
-      "mode": "opportunities",
-      "risk": 35,
-      "reasons": [
-        "подія/активність, а не пряма ринкова ставка"
-      ],
-      "title": "Огляд проекту Virtuals Protocol (VIRTUAL) — сильна ставка на AI-agent economy, але токен поки заробляє менше, ніж сам бі…",
-      "summary": "Огляд проекту Virtuals Protocol (VIRTUAL) — сильна ставка на AI-agent economy, але токен поки заробляє менше, ніж сам бізнес #оглядкриптопроектів 🔶 Про що проєкт: Virtuals Protocol будує інфраструктуру для автономних AI-агентів, які можуть: мати wallet та identity продавати послуги наймати інших агентів отримувати оплату випускати власні токени торгувати та працювати onchain. Основні продукти: EconomyOS — wallet, identity та інфраструктура для агентів; ACP — marketplace, escrow і розрахунки між агентами; Launchpad — tokenization і capital formation; Occupy — новий напрям із токенізованими акціями. Тобто Virtuals уже виходить за межі простого AI-token launchpad. Але бізнес має два різні типи ",
-      "url": "https://t.me/it_statti/7350",
-      "published_at": "2026-10-06T14:10:21+00:00"
-    },
-    {
-      "id": "7bc3e4e5762b0a",
-      "source": "telegram_main",
-      "mode": "trading",
-      "risk": 90,
-      "reasons": [
-        "деривативи/плече: потрібна перевірка max loss, margin і ліквідації"
-      ],
-      "title": "📊 #AlphaResearch 📌 CLARITY Act застряг — і CFTC шукає інший шлях у крипторинок На перший погляд це просто ще одна regula…",
-      "summary": "📊 #AlphaResearch 📌 CLARITY Act застряг — і CFTC шукає інший шлях у крипторинок На перший погляд це просто ще одна regulatory news. Але головне питання тут інше: ХТО ЗАРОБИТЬ, ЯКЩО США ПОВЕРНУТЬ КРИПТО-LEVERAGE У РЕГУЛЬОВАНИЙ РИНОК? 5 жовтня CFTC запустила rulemaking для двох нових режимів: CTX — Crypto Asset Transactions CAM — Crypto Asset Market Йдеться про федеральний маршрут для платформ, які хочуть пропонувати retail-клієнтам: margin leverage financed crypto trades Але важливий нюанс: це поки ANPRM , тобто: PROPOSAL / NOT ACTIVE Фінальних правил ще немає. У чому суть CFTC не може одним рішенням перевести весь американський spot-ринок під федеральну реєстрацію. Для цього все ще потрібен К",
-      "url": "https://t.me/it_statti/7349",
-      "published_at": "2026-10-06T11:50:11+00:00"
     },
     {
       "id": "3af11e378d42b5",
@@ -5164,7 +5168,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "OKX реєстрація 2026: як створити акаунт + VIP1 на 30 днів",
+      "title": "OKX Registration 2026: How to Create an Account + 30 Days of VIP1",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=CxNvknaqIME",
       "published_at": null,
@@ -5212,7 +5216,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Як купити акції в Україні у 2026 році? Покрокова інструкція",
+      "title": "How to Buy Stocks in Ukraine in 2026? A Step-by-Step Guide",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=RSdKKuXNZ5k",
       "published_at": null,
@@ -5228,7 +5232,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Як заробляти на криптовалюті на OKX — пасивний дохід для новачків",
+      "title": "How to Earn Crypto on OKX — Passive Income for Beginners",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=RGbcPPKIW5E",
       "published_at": null,
@@ -5276,7 +5280,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Як купити S&P 500 на Binance | bStocks — проста інструкція",
+      "title": "How to Buy S&P 500 on Binance | bStocks — A Simple Guide",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=6oL0a355KgI",
       "published_at": null,
@@ -5324,7 +5328,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Бінанс для новачків або як при реєстрації заробити від 60$ до 7000$",
+      "title": "Binance for beginners or how to earn from $60 to $7,000 upon registration",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=bYCRLR5t6aU",
       "published_at": null,
@@ -5356,7 +5360,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Огляд критовалют WLD, STRK, APT, SOL, TWT, 5IRE, MYX, ALEX, VANA, FLIP, PUFFER - Що вибрати?",
+      "title": "Cryptocurrency overview WLD, STRK, APT, SOL, TWT, 5IRE, MYX, ALEX, VANA, FLIP, PUFFER - What to c...",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=FHdXLcNg6N8",
       "published_at": null,
@@ -5372,7 +5376,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Реєстрація на Binance з телефону за 5 хвилин та бонус 50$!",
+      "title": "Register on Binance from your phone in 5 minutes and get a $50 bonus!",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=XoKZS7pyxUQ",
       "published_at": null,
@@ -5388,7 +5392,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Заробіток без вкладень в інтернеті з яким впорається навіть школяр",
+      "title": "Earn money online without investment that even a schoolkid can handle",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=KQd67gY-fi0",
       "published_at": null,
@@ -5580,7 +5584,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Заробіток на Крипті | Як заробити на споті в криптовалюті без ризиків: ТОП-2 стратегії",
+      "title": "Earnings on Crypto | How to make money on spot in cryptocurrency without risks: TOP-2 strategies",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=nuMrH-sUlM8",
       "published_at": null,
@@ -6214,7 +6218,7 @@
       "knowledge": true
     }
   ],
-  "archive_count": 10214,
-  "news_count": 107,
+  "archive_count": 10218,
+  "news_count": 124,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
