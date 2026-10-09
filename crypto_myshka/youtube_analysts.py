@@ -30,9 +30,9 @@ SHORT_RE = re.compile(r"\b(short|sell|put|bearish|шорт|продать|про
 OTC_RE = re.compile(r"\b(otc|pocket\s*option|quotex|binarn|binary|бинарн|бінарн|экспирац|експіраці)\b", re.I)
 PROMO_RE = re.compile(r"\b(100%|без\s*проигрыш|гарантир|гарантов|vip|промокод|реферал|удвой|копитрейдинг|copy\s*trading|winrate)\b", re.I)
 TRADING_RE = re.compile(r"(trading|trade|trader|трейд|торгов|strategy|стратег|отс|otc|pocket.?option|option|crypt|крипт|forex|binanc|btc|eth|сигнал|копитрейд|сделк|угод)", re.I)
-INSTRUMENT_RE = re.compile(r"(?<![A-Z0-9])(?:BTC|ETH|SOL|XRP|ADA|BNB|DOGE|LINK|AVAX|AUD|CHF|USD|EUR|GBP|JPY|CAD|NZD|AED|IDR|CNY|TRY)\\s*[/_-]\\s*(?:USDT|USDC|USD|BTC|ETH|AUD|CHF|EUR|GBP|JPY|CAD|NZD|AED|IDR|CNY|TRY)\\s*(?:OTC)?(?![A-Z0-9])", re.I)
+INSTRUMENT_RE = re.compile(r"(?<![A-Z0-9])(?:BTC|ETH|SOL|XRP|ADA|BNB|DOGE|LINK|AVAX|AUD|CHF|USD|EUR|GBP|JPY|CAD|NZD|AED|IDR|CNY|TRY)\s*[/_-]\s*(?:USDT|USDC|USD|BTC|ETH|AUD|CHF|EUR|GBP|JPY|CAD|NZD|AED|IDR|CNY|TRY)\s*(?:OTC)?(?![A-Z0-9])", re.I)
 TIMEFRAME_RE = re.compile(r"(?<![A-Z0-9])(?:M1|M5|M15|M30|H1|H4|D1|1m|5m|15m|1h|4h)(?![A-Z0-9])", re.I)
-INDICATOR_RE = re.compile(r"(?i)\\b(?:rsi|ema|sma|macd|stochastic|moving average|bollinger|price action|support|resistance|підтримк|опір|поддержк|сопротивлен|скользящ|середн)\\w*")
+INDICATOR_RE = re.compile(r"(?i)\b(?:rsi|ema|sma|macd|stochastic|moving average|bollinger|price action|support|resistance|підтримк|опір|поддержк|сопротивлен|скользящ|середн)\w*")
 
 VERIFIED_EXAMPLES = {
     "nikolas": ("g5sXQlvCPVo", "I'm Trading LIVE — Watch What Happens | Pocket Option LIVE"),
@@ -90,7 +90,7 @@ def classify(title: str, description: str = "", excerpt: str = "") -> dict:
     # Only excerpt, title and description are observed. Do not invent what
     # happened visually during the video or imply that a live trade was checked.
     mentioned_instruments = list(dict.fromkeys(
-        re.sub(r"\\s+", "", x.upper()).replace("_", "/").replace("-", "/")
+        re.sub(r"\s+", "", x.upper()).replace("_", "/").replace("-", "/")
         for x in INSTRUMENT_RE.findall(visible)
     ))[:10]
     timeframes = list(dict.fromkeys(x.upper() for x in TIMEFRAME_RE.findall(visible)))[:6]
