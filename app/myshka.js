@@ -102,7 +102,7 @@
     if (!state.cloudEndpoint) label.textContent = 'Хмарний сервер ще не підключено.';
     else if (!state.cloudAccess) label.textContent = 'Введи окремий код доступу JEV.';
     else if (state.visionSource === 'cloud' && state.visionStatus === 'ready')
-      label.textContent = '🟢 Хмарний JEV підключено. Фото надсилатиметься на твій сервер і до Gemini.';
+      label.textContent = '🟢 Хмарний JEV підключено. Фото надсилатиметься на твій сервер і до обраного AI-провайдера (APInex або Gemini).';
     else label.textContent = 'Адресу збережено. Перевірка хмарного JEV: ' +
       (state.visionStatus === 'checking' ? 'очікування…' : 'не готовий або працює локальний JEV.');
   }
@@ -500,7 +500,7 @@
         state.visionStatus = 'ready';
         state.visionSource = 'cloud';
         status.dataset.ready = 'true';
-        status.textContent = '🟢 JEV готовий · ' + (result.model || 'Gemini') + ' · хмарний сервер';
+        status.textContent = '🟢 JEV готовий · ' + (result.provider === 'apinex' ? 'APInex / ' : '') + (result.model || 'AI') + ' · хмарний сервер';
       } catch (error) {
         state.visionStatus = 'offline';
         status.textContent = '🔴 Хмарний JEV не готовий: ' + (error.message || 'Перевір URL, код і секрети Vercel.');
@@ -572,7 +572,7 @@
           heading.textContent = '📷 Скріншот графіка';
           const note = document.createElement('p');
           note.className = 'report-notice';
-          note.textContent = 'Оригінальна роздільність збережена. Хмарний режим передає фото на твій сервер та до Gemini. Зі скріншота не можна підтвердити майбутню ціну чи результат угоди.';
+          note.textContent = 'Оригінальна роздільність збережена. Хмарний режим передає фото на твій сервер та до обраного провайдера APInex або Gemini. Зі скріншота не можна підтвердити майбутню ціну чи результат угоди.';
           const aiArea = document.createElement('div');
           aiArea.className = 'jev-image-area';
           const aiButton = document.createElement('button');
