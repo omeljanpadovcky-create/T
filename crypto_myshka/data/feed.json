@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-09T19:54:56.319729+00:00",
+  "generated_at": "2026-10-09T20:06:47.143469+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,12 +26,12 @@
       "ok": true,
       "count": 10218,
       "complete": true,
-      "updated_at": "2026-10-09T19:54:50.144724+00:00",
+      "updated_at": "2026-10-09T20:06:43.034341+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 102,
+      "count": 101,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -47,32 +47,32 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 82262,
-        "usd_24h_change": 0.638740512064828
+        "usd": 82266,
+        "usd_24h_change": 0.6215305895464638
       },
       "ethereum": {
-        "usd": 2474.32,
-        "usd_24h_change": 0.4697703373132688
+        "usd": 2476.69,
+        "usd_24h_change": 0.4834890125038128
       },
       "solana": {
-        "usd": 108.53,
-        "usd_24h_change": -0.6322055184618295
+        "usd": 108.58,
+        "usd_24h_change": -0.4680161402515929
       },
       "pendle": {
-        "usd": 2.06,
-        "usd_24h_change": -0.999406559627332
+        "usd": 2.07,
+        "usd_24h_change": -0.8727855182990277
       },
       "ripple": {
-        "usd": 1.38,
-        "usd_24h_change": 0.4317697477285002
+        "usd": 1.39,
+        "usd_24h_change": 0.9153428760133248
       },
       "binancecoin": {
-        "usd": 737.0,
-        "usd_24h_change": 0.8385829771753753
+        "usd": 737.34,
+        "usd_24h_change": 0.9485853951517268
       },
       "dogecoin": {
-        "usd": 0.084223,
-        "usd_24h_change": 0.484663669607726
+        "usd": 0.084509,
+        "usd_24h_change": 0.8091485667986598
       }
     }
   },
@@ -6214,6 +6214,6 @@
     }
   ],
   "archive_count": 10218,
-  "news_count": 102,
+  "news_count": 101,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }

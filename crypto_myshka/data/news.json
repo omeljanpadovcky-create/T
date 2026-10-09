@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-09T19:54:47.989859+00:00",
+  "generated_at": "2026-10-09T20:06:41.116610+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -46,8 +46,8 @@
       "role": "discovery"
     }
   },
-  "raw_item_count": 206,
-  "item_count": 102,
+  "raw_item_count": 204,
+  "item_count": 101,
   "items": [
     {
       "id": "11152640688458",
@@ -330,59 +330,6 @@
       "analysis_last_attempt_at": "2026-10-09T19:23:01Z"
     },
     {
-      "id": "3d57b9e8a614a7",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "The SEC Just Broke the 2x Ceiling on Leveraged Crypto ETFs — and the First 3x Products Are One Form Away From Trading - Yahoo Finance",
-      "summary": "The SEC Just Broke the 2x Ceiling on Leveraged Crypto ETFs — and the First 3x Products Are One Form Away From Trading &nbsp;&nbsp; Yahoo Finance",
-      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxORWlBQjRKV1ZBR2NTTWRBeVRUTG4yeXVnXzBOUFdJWlNEMnBCT2kxN0RKUVg1M3luV29yNlFGNHVqZlgyTGlqOS1wbUFkYkxuNk5uczl5MkJlVXotc0VwQ0M2OGFZQkF6ZEJpa1M5THlWNGhGVk5qS3c5Z2tTOUIwY3p6T05tNjdUOGNRekN3VTkyRTVj?oc=5",
-      "published_at": "2026-10-09T10:42:56+00:00",
-      "assets": [],
-      "topics": [
-        "regulation"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Google News discovery"
-      ],
-      "links": [
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxORWlBQjRKV1ZBR2NTTWRBeVRUTG4yeXVnXzBOUFdJWlNEMnBCT2kxN0RKUVg1M3luV29yNlFGNHVqZlgyTGlqOS1wbUFkYkxuNk5uczl5MkJlVXotc0VwQ0M2OGFZQkF6ZEJpa1M5THlWNGhGVk5qS3c5Z2tTOUIwY3p6T05tNjdUOGNRekN3VTkyRTVj?oc=5"
-        }
-      ],
-      "confidence_label": "Discovery: потребує підтвердження",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Google News використано лише як радар теми",
-        "Ринковий тон: Невизначений / змішаний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:55:02Z",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "jev_ai": {
-        "what_happened": "The SEC Just Broke the 2x Ceiling on Leveraged Crypto ETFs — and the First 3x Products Are One Form Away From Trading &nbsp;&nbsp; Yahoo Finance",
-        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-        "market_effect": "Невизначений / змішаний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-        "confidence": "низька",
-        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
-      },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback"
-    },
-    {
       "id": "f2146ba6b342c1",
       "source": "jev_analysis",
       "mode": "news",
@@ -600,9 +547,6 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:55:07Z",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
       "jev_ai": {
         "what_happened": "U.S. government moves $1 billion in bitcoin tied to Bitfinex hack, with no sign of sale",
         "why_it_matters": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
@@ -617,7 +561,10 @@
         "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T19:55:07Z"
     },
     {
       "id": "be8d13f619985f",
@@ -661,9 +608,6 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:55:14Z",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
       "jev_ai": {
         "what_happened": "The US government moved 9,261 Bitcoin to Coinbase Prime, including 2,456 BTC in newly discovered funds pointing to federal law enforcement seizures.",
         "why_it_matters": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
@@ -678,7 +622,10 @@
         "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T19:55:14Z"
     },
     {
       "id": "d63fb58cb29e3e",
@@ -1082,9 +1029,6 @@
         "Ринковий тон: Потенційно негативний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:55:21Z",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
       "jev_ai": {
         "what_happened": "Bitcoin ETFs lost $244 million on Thursday, while Ether funds extended their outflow streak to eight sessions, shedding $641 million.",
         "why_it_matters": "Новина стосується BTC, ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
@@ -1099,7 +1043,10 @@
         "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T19:55:21Z"
     },
     {
       "id": "db7396c3648183",
