@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-09T23:17:16.545320+00:00",
+  "updated_at": "2026-10-09T23:17:48.645491+00:00",
   "status": "partial_or_growing",
   "scope": "Publicly accessible videos, stream replays and shorts from configured channels",
   "all_videos_guaranteed": false,
@@ -20,85 +20,85 @@
   "errors": [],
   "progress": {
     "nikolas:videos": {
-      "last_attempt": "2026-10-09T23:17:01.351263+00:00",
-      "last_successful_scan": "2026-10-09T23:17:01.721115+00:00",
+      "last_attempt": "2026-10-09T23:17:33.479748+00:00",
+      "last_successful_scan": "2026-10-09T23:17:33.917555+00:00",
       "next_start": 13,
       "backfill_complete": true,
       "status": "ok"
     },
     "nikolas:streams": {
-      "last_attempt": "2026-10-09T23:17:01.721135+00:00",
-      "last_successful_scan": "2026-10-09T23:17:03.902939+00:00",
+      "last_attempt": "2026-10-09T23:17:33.917577+00:00",
+      "last_successful_scan": "2026-10-09T23:17:35.888929+00:00",
       "next_start": 103,
       "backfill_complete": false,
       "status": "ok"
     },
     "nikolas:shorts": {
-      "last_attempt": "2026-10-09T23:17:03.902947+00:00",
-      "last_successful_scan": "2026-10-09T23:17:05.863969+00:00",
+      "last_attempt": "2026-10-09T23:17:35.888937+00:00",
+      "last_successful_scan": "2026-10-09T23:17:37.955631+00:00",
       "next_start": 103,
       "backfill_complete": false,
       "status": "ok"
     },
     "backstage:videos": {
-      "last_attempt": "2026-10-09T23:17:05.863976+00:00",
-      "last_successful_scan": "2026-10-09T23:17:06.128156+00:00",
+      "last_attempt": "2026-10-09T23:17:37.955638+00:00",
+      "last_successful_scan": "2026-10-09T23:17:38.310914+00:00",
       "next_start": 13,
       "backfill_complete": true,
       "status": "ok"
     },
     "backstage:streams": {
-      "last_attempt": "2026-10-09T23:17:06.128160+00:00",
-      "last_successful_scan": "2026-10-09T23:17:06.359580+00:00",
+      "last_attempt": "2026-10-09T23:17:38.310919+00:00",
+      "last_successful_scan": "2026-10-09T23:17:38.659902+00:00",
       "next_start": 13,
       "backfill_complete": true,
       "status": "ok"
     },
     "backstage:shorts": {
-      "last_attempt": "2026-10-09T23:17:06.359594+00:00",
-      "last_successful_scan": "2026-10-09T23:17:06.595446+00:00",
+      "last_attempt": "2026-10-09T23:17:38.659922+00:00",
+      "last_successful_scan": "2026-10-09T23:17:39.021630+00:00",
       "next_start": 13,
       "backfill_complete": true,
       "status": "ok"
     },
     "mark:videos": {
-      "last_attempt": "2026-10-09T23:17:06.595465+00:00",
-      "last_successful_scan": "2026-10-09T23:17:06.912162+00:00",
+      "last_attempt": "2026-10-09T23:17:39.021650+00:00",
+      "last_successful_scan": "2026-10-09T23:17:39.401767+00:00",
       "next_start": 13,
       "backfill_complete": true,
       "status": "ok"
     },
     "mark:streams": {
-      "last_attempt": "2026-10-09T23:17:06.912166+00:00",
-      "last_successful_scan": "2026-10-09T23:17:07.325690+00:00",
+      "last_attempt": "2026-10-09T23:17:39.401771+00:00",
+      "last_successful_scan": "2026-10-09T23:17:39.792718+00:00",
       "next_start": 18,
       "backfill_complete": true,
       "status": "ok"
     },
     "mark:shorts": {
-      "last_attempt": "2026-10-09T23:17:07.325695+00:00",
-      "last_successful_scan": "2026-10-09T23:17:07.578823+00:00",
+      "last_attempt": "2026-10-09T23:17:39.792723+00:00",
+      "last_successful_scan": "2026-10-09T23:17:40.141895+00:00",
       "next_start": 13,
       "backfill_complete": true,
       "status": "ok"
     },
     "alexey:videos": {
-      "last_attempt": "2026-10-09T23:17:07.578829+00:00",
-      "last_successful_scan": "2026-10-09T23:17:07.882736+00:00",
+      "last_attempt": "2026-10-09T23:17:40.141901+00:00",
+      "last_successful_scan": "2026-10-09T23:17:40.531992+00:00",
       "next_start": 13,
       "backfill_complete": true,
       "status": "ok"
     },
     "alexey:streams": {
-      "last_attempt": "2026-10-09T23:17:07.882742+00:00",
-      "last_successful_scan": "2026-10-09T23:17:09.861803+00:00",
+      "last_attempt": "2026-10-09T23:17:40.531997+00:00",
+      "last_successful_scan": "2026-10-09T23:17:42.504733+00:00",
       "next_start": 103,
       "backfill_complete": false,
       "status": "ok"
     },
     "alexey:shorts": {
-      "last_attempt": "2026-10-09T23:17:09.861810+00:00",
-      "last_successful_scan": "2026-10-09T23:17:11.836408+00:00",
+      "last_attempt": "2026-10-09T23:17:42.504740+00:00",
+      "last_successful_scan": "2026-10-09T23:17:44.508760+00:00",
       "next_start": 103,
       "backfill_complete": false,
       "status": "ok"
@@ -142,7 +142,7 @@
       "thumbnail": "https://i.ytimg.com/vi/WtmEb2uxmi4/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.836339+00:00",
+      "indexed_at": "2026-10-09T23:17:44.508706+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -186,7 +186,7 @@
       "thumbnail": "https://i.ytimg.com/vi/fvCwrdHgKow/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.836276+00:00",
+      "indexed_at": "2026-10-09T23:17:44.508658+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -230,7 +230,7 @@
       "thumbnail": "https://i.ytimg.com/vi/nbIbqA8-EqM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.836198+00:00",
+      "indexed_at": "2026-10-09T23:17:44.508610+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -274,7 +274,7 @@
       "thumbnail": "https://i.ytimg.com/vi/6D_om3rp-uo/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.836135+00:00",
+      "indexed_at": "2026-10-09T23:17:44.508562+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -318,7 +318,7 @@
       "thumbnail": "https://i.ytimg.com/vi/mIhbS9Q1-tc/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.836073+00:00",
+      "indexed_at": "2026-10-09T23:17:44.508515+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -362,7 +362,7 @@
       "thumbnail": "https://i.ytimg.com/vi/1qyttVkZI1Q/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.836009+00:00",
+      "indexed_at": "2026-10-09T23:17:44.508468+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -406,7 +406,7 @@
       "thumbnail": "https://i.ytimg.com/vi/nLuHtutI9-4/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835840+00:00",
+      "indexed_at": "2026-10-09T23:17:44.508320+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -450,7 +450,7 @@
       "thumbnail": "https://i.ytimg.com/vi/2Nmbz3jtCU8/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835801+00:00",
+      "indexed_at": "2026-10-09T23:17:44.508291+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -494,7 +494,7 @@
       "thumbnail": "https://i.ytimg.com/vi/jS52lzNIngo/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835763+00:00",
+      "indexed_at": "2026-10-09T23:17:44.508260+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -538,7 +538,7 @@
       "thumbnail": "https://i.ytimg.com/vi/JKYsZP20Z7k/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835724+00:00",
+      "indexed_at": "2026-10-09T23:17:44.508229+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -577,12 +577,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=p6rDXLRwuXc",
       "thumbnail": "https://i.ytimg.com/vi/p6rDXLRwuXc/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835684+00:00",
+      "indexed_at": "2026-10-09T23:17:44.508181+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -621,12 +621,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best Moment from the Stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с Эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=6kSp2Q2pbPM",
       "thumbnail": "https://i.ytimg.com/vi/6kSp2Q2pbPM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835645+00:00",
+      "indexed_at": "2026-10-09T23:17:44.508125+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -665,12 +665,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=-mugy3T-erA",
       "thumbnail": "https://i.ytimg.com/vi/-mugy3T-erA/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835605+00:00",
+      "indexed_at": "2026-10-09T23:17:44.508078+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -709,12 +709,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=HBD2pU0g4UE",
       "thumbnail": "https://i.ytimg.com/vi/HBD2pU0g4UE/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835564+00:00",
+      "indexed_at": "2026-10-09T23:17:44.508032+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -753,12 +753,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best Moment from the Stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший Момент с Эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=l_LVsBQI8gE",
       "thumbnail": "https://i.ytimg.com/vi/l_LVsBQI8gE/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835524+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507986+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -797,12 +797,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=qtiDouAzp34",
       "thumbnail": "https://i.ytimg.com/vi/qtiDouAzp34/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835485+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507939+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -841,12 +841,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=ObUlP5v2zoM",
       "thumbnail": "https://i.ytimg.com/vi/ObUlP5v2zoM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835445+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507891+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -885,12 +885,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=HffPnGSFloo",
       "thumbnail": "https://i.ytimg.com/vi/HffPnGSFloo/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835405+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507844+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -929,12 +929,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=aOEi-JQqoRg",
       "thumbnail": "https://i.ytimg.com/vi/aOEi-JQqoRg/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835364+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507798+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -978,7 +978,7 @@
       "thumbnail": "https://i.ytimg.com/vi/kj2zBXC4jeM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835302+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507751+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1022,7 +1022,7 @@
       "thumbnail": "https://i.ytimg.com/vi/5FIJGkbRrrE/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835225+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507704+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1066,7 +1066,7 @@
       "thumbnail": "https://i.ytimg.com/vi/MA3S_NyJmYY/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835164+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507657+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1110,7 +1110,7 @@
       "thumbnail": "https://i.ytimg.com/vi/mipF_aateKM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835104+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507610+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1149,12 +1149,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=rG09GOspSWU",
       "thumbnail": "https://i.ytimg.com/vi/rG09GOspSWU/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835064+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507564+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1193,12 +1193,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=mkm1Bsgd7b0",
       "thumbnail": "https://i.ytimg.com/vi/mkm1Bsgd7b0/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.835025+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507517+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1237,12 +1237,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best Moment from the Stream #Trading #TechnicalAnalysis #tradingpsychology",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #tradingpsychology",
       "url": "https://www.youtube.com/watch?v=5S1h_Qb-x80",
       "thumbnail": "https://i.ytimg.com/vi/5S1h_Qb-x80/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834984+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507469+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1281,12 +1281,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best Moment from the Stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=4KFOy7ZDyis",
       "thumbnail": "https://i.ytimg.com/vi/4KFOy7ZDyis/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834945+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507422+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1325,13 +1325,13 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=zyuh4f5ivOs",
       "thumbnail": "https://i.ytimg.com/vi/zyuh4f5ivOs/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834905+00:00",
-      "details_checked_at": "2026-10-09T23:17:11.836767+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507375+00:00",
+      "details_checked_at": "2026-10-09T23:17:44.509105+00:00",
       "content_status": "metadata_only",
       "caption_status": "not_checked",
       "analysis": {
@@ -1375,7 +1375,7 @@
       "thumbnail": "https://i.ytimg.com/vi/wQ915GreX60/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834845+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507329+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1414,12 +1414,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=a9ONVkIPT1I",
       "thumbnail": "https://i.ytimg.com/vi/a9ONVkIPT1I/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834805+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507283+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1458,12 +1458,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=euKbeNas75c",
       "thumbnail": "https://i.ytimg.com/vi/euKbeNas75c/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834767+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507216+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1502,12 +1502,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=_-pntGjhpm8",
       "thumbnail": "https://i.ytimg.com/vi/_-pntGjhpm8/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834727+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507139+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1546,12 +1546,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=h8hLEIJzujM",
       "thumbnail": "https://i.ytimg.com/vi/h8hLEIJzujM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834688+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507093+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1590,12 +1590,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=4D4lxBJGXjg",
       "thumbnail": "https://i.ytimg.com/vi/4D4lxBJGXjg/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834649+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507047+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1634,12 +1634,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=psT5sE2UGNg",
       "thumbnail": "https://i.ytimg.com/vi/psT5sE2UGNg/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834610+00:00",
+      "indexed_at": "2026-10-09T23:17:44.507000+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1678,12 +1678,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #technicalanalysis #investing #trading",
+      "title": "Лучший момент с эфира #техническийанализ #инвестиции #trading",
       "url": "https://www.youtube.com/watch?v=ZS9adkZuozo",
       "thumbnail": "https://i.ytimg.com/vi/ZS9adkZuozo/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834570+00:00",
+      "indexed_at": "2026-10-09T23:17:44.506953+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1722,12 +1722,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best Moment from the Stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=QN3_Ds0Xiu4",
       "thumbnail": "https://i.ytimg.com/vi/QN3_Ds0Xiu4/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834528+00:00",
+      "indexed_at": "2026-10-09T23:17:44.506905+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1766,13 +1766,13 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=zGi7-mYnDso",
       "thumbnail": "https://i.ytimg.com/vi/zGi7-mYnDso/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834487+00:00",
-      "details_checked_at": "2026-10-09T23:17:12.806541+00:00",
+      "indexed_at": "2026-10-09T23:17:44.506857+00:00",
+      "details_checked_at": "2026-10-09T23:17:45.317384+00:00",
       "content_status": "metadata_only",
       "caption_status": "not_checked",
       "analysis": {
@@ -1811,12 +1811,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=YFWIvgobsiE",
       "thumbnail": "https://i.ytimg.com/vi/YFWIvgobsiE/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834447+00:00",
+      "indexed_at": "2026-10-09T23:17:44.506808+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1860,7 +1860,7 @@
       "thumbnail": "https://i.ytimg.com/vi/oRzZyZ9p-k8/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834386+00:00",
+      "indexed_at": "2026-10-09T23:17:44.506760+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1899,12 +1899,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
+      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
       "url": "https://www.youtube.com/watch?v=GrQg97bThAk",
       "thumbnail": "https://i.ytimg.com/vi/GrQg97bThAk/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834323+00:00",
+      "indexed_at": "2026-10-09T23:17:44.506727+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1943,12 +1943,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=kOJSXm46B8c",
       "thumbnail": "https://i.ytimg.com/vi/kOJSXm46B8c/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834278+00:00",
+      "indexed_at": "2026-10-09T23:17:44.506674+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -1987,12 +1987,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
+      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
       "url": "https://www.youtube.com/watch?v=LqWqVL5e8iQ",
       "thumbnail": "https://i.ytimg.com/vi/LqWqVL5e8iQ/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834210+00:00",
+      "indexed_at": "2026-10-09T23:17:44.506623+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2036,7 +2036,7 @@
       "thumbnail": "https://i.ytimg.com/vi/5-X1VYj4vIo/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834143+00:00",
+      "indexed_at": "2026-10-09T23:17:44.506568+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2075,12 +2075,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Лучший момент с эфира #Трейдинг #ТехническийАнализ #Trading",
+      "title": "Best moment from the stream #Trading #TechnicalAnalysis #Trading",
       "url": "https://www.youtube.com/watch?v=eTCgoZayL60",
       "thumbnail": "https://i.ytimg.com/vi/eTCgoZayL60/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:11.834053+00:00",
+      "indexed_at": "2026-10-09T23:17:44.506508+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2119,12 +2119,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Торгуем вместе: сделки в режиме реального времени",
+      "title": "Trading Together: Real-Time Deals",
       "url": "https://www.youtube.com/watch?v=Jimsl9zdFrU",
       "thumbnail": "https://i.ytimg.com/vi/Jimsl9zdFrU/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4313,
-      "indexed_at": "2026-10-09T23:17:09.861752+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504716+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2168,7 +2168,7 @@
       "thumbnail": "https://i.ytimg.com/vi/QiL1NHzMOio/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4372,
-      "indexed_at": "2026-10-09T23:17:09.861723+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504695+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2207,12 +2207,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Торгуем вместе: сделки в режиме реального времени",
+      "title": "Trading Together: Real-Time Deals",
       "url": "https://www.youtube.com/watch?v=5vyZ_Q5cswg",
       "thumbnail": "https://i.ytimg.com/vi/5vyZ_Q5cswg/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 5200,
-      "indexed_at": "2026-10-09T23:17:09.861668+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504676+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2256,7 +2256,7 @@
       "thumbnail": "https://i.ytimg.com/vi/qN6xhKGKT50/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4032,
-      "indexed_at": "2026-10-09T23:17:09.861635+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504653+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2300,7 +2300,7 @@
       "thumbnail": "https://i.ytimg.com/vi/AXMRK2xXOJc/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3607,
-      "indexed_at": "2026-10-09T23:17:09.861580+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504610+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2344,7 +2344,7 @@
       "thumbnail": "https://i.ytimg.com/vi/5B0XxV4REDA/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 5521,
-      "indexed_at": "2026-10-09T23:17:09.861548+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504587+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2388,7 +2388,7 @@
       "thumbnail": "https://i.ytimg.com/vi/rvHgiqnxxLY/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4894,
-      "indexed_at": "2026-10-09T23:17:09.861520+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504565+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2427,12 +2427,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Trading Together: Real-Time Deals",
+      "title": "Торгуем вместе: сделки в режиме реального времени",
       "url": "https://www.youtube.com/watch?v=rDElkxSvVdk",
       "thumbnail": "https://i.ytimg.com/vi/rDElkxSvVdk/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 5142,
-      "indexed_at": "2026-10-09T23:17:09.861492+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504522+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2476,7 +2476,7 @@
       "thumbnail": "https://i.ytimg.com/vi/NJ-Lkw5CyYM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3149,
-      "indexed_at": "2026-10-09T23:17:09.861437+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504477+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2520,7 +2520,7 @@
       "thumbnail": "https://i.ytimg.com/vi/NZe_qhE7Zs4/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 5412,
-      "indexed_at": "2026-10-09T23:17:09.861405+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504454+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2564,7 +2564,7 @@
       "thumbnail": "https://i.ytimg.com/vi/jA-3iFPprwM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4641,
-      "indexed_at": "2026-10-09T23:17:09.861376+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504433+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2608,7 +2608,7 @@
       "thumbnail": "https://i.ytimg.com/vi/y79G1brRkVw/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4391,
-      "indexed_at": "2026-10-09T23:17:09.861348+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504412+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2647,12 +2647,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Торгуем вместе: сделки в режиме реального времени",
+      "title": "Trading Together: Real-Time Deals",
       "url": "https://www.youtube.com/watch?v=UuAYbsWeUNk",
       "thumbnail": "https://i.ytimg.com/vi/UuAYbsWeUNk/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3929,
-      "indexed_at": "2026-10-09T23:17:09.861291+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504392+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2696,7 +2696,7 @@
       "thumbnail": "https://i.ytimg.com/vi/OtD4J3IVEgg/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4469,
-      "indexed_at": "2026-10-09T23:17:09.861259+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504372+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2740,7 +2740,7 @@
       "thumbnail": "https://i.ytimg.com/vi/bGoenAmxVpM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 5561,
-      "indexed_at": "2026-10-09T23:17:09.861214+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504351+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2779,12 +2779,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Торгуем вместе: сделки в режиме реального времени",
+      "title": "Trading Together: Live Real-Time Trades",
       "url": "https://www.youtube.com/watch?v=hl337qIHwv4",
       "thumbnail": "https://i.ytimg.com/vi/hl337qIHwv4/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3968,
-      "indexed_at": "2026-10-09T23:17:09.861160+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504327+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2823,12 +2823,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Торгуем вместе: сделки в режиме реального времени",
+      "title": "Trading Together: Real-Time Trades",
       "url": "https://www.youtube.com/watch?v=PpzxFHTh5Uk",
       "thumbnail": "https://i.ytimg.com/vi/PpzxFHTh5Uk/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3852,
-      "indexed_at": "2026-10-09T23:17:09.861104+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504306+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2872,7 +2872,7 @@
       "thumbnail": "https://i.ytimg.com/vi/92ji_wNjIbU/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4299,
-      "indexed_at": "2026-10-09T23:17:09.861074+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504285+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2916,7 +2916,7 @@
       "thumbnail": "https://i.ytimg.com/vi/MtUK6yYlZSQ/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4209,
-      "indexed_at": "2026-10-09T23:17:09.861019+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504241+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2960,7 +2960,7 @@
       "thumbnail": "https://i.ytimg.com/vi/KrJc8u0Rhxc/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3952,
-      "indexed_at": "2026-10-09T23:17:09.860963+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504195+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -2999,12 +2999,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Торгуем вместе: сделки в режиме реального времени",
+      "title": "Trading Together: Real-Time Deals",
       "url": "https://www.youtube.com/watch?v=SCoYE0UgjIU",
       "thumbnail": "https://i.ytimg.com/vi/SCoYE0UgjIU/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3307,
-      "indexed_at": "2026-10-09T23:17:09.860907+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504165+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3048,7 +3048,7 @@
       "thumbnail": "https://i.ytimg.com/vi/9Ly5CF_0Gpc/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4976,
-      "indexed_at": "2026-10-09T23:17:09.860876+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504144+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3087,12 +3087,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Торгуем вместе: сделки в режиме реального времени",
+      "title": "Trading Together: Live Real-Time Trades",
       "url": "https://www.youtube.com/watch?v=xUYkfIMs8aM",
       "thumbnail": "https://i.ytimg.com/vi/xUYkfIMs8aM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3704,
-      "indexed_at": "2026-10-09T23:17:09.860821+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504121+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3131,12 +3131,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Торгуем вместе: сделки в режиме реального времени",
+      "title": "Trading Together: Real-Time Deals",
       "url": "https://www.youtube.com/watch?v=IdSP5U8PKOI",
       "thumbnail": "https://i.ytimg.com/vi/IdSP5U8PKOI/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3524,
-      "indexed_at": "2026-10-09T23:17:09.860765+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504097+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3175,12 +3175,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Trading Together: Live Real-Time Trades",
+      "title": "Торгуем вместе: сделки в режиме реального времени",
       "url": "https://www.youtube.com/watch?v=1jg8ErLpBP4",
       "thumbnail": "https://i.ytimg.com/vi/1jg8ErLpBP4/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 5017,
-      "indexed_at": "2026-10-09T23:17:09.860731+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504053+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3224,7 +3224,7 @@
       "thumbnail": "https://i.ytimg.com/vi/8dybpiygVqY/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 6569,
-      "indexed_at": "2026-10-09T23:17:09.860675+00:00",
+      "indexed_at": "2026-10-09T23:17:42.504009+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3263,12 +3263,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Trading Together: Real-Time Deals",
+      "title": "Торгуем вместе: сделки в режиме реального времени",
       "url": "https://www.youtube.com/watch?v=SqA6Dwss5GM",
       "thumbnail": "https://i.ytimg.com/vi/SqA6Dwss5GM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4063,
-      "indexed_at": "2026-10-09T23:17:09.860642+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503963+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3312,7 +3312,7 @@
       "thumbnail": "https://i.ytimg.com/vi/c555Y0SQrYo/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4433,
-      "indexed_at": "2026-10-09T23:17:09.860577+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503914+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3356,7 +3356,7 @@
       "thumbnail": "https://i.ytimg.com/vi/-QSemaEKiG8/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 2577,
-      "indexed_at": "2026-10-09T23:17:09.860511+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503863+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3400,7 +3400,7 @@
       "thumbnail": "https://i.ytimg.com/vi/8JW4P4p_B0w/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4149,
-      "indexed_at": "2026-10-09T23:17:09.860450+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503814+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3444,7 +3444,7 @@
       "thumbnail": "https://i.ytimg.com/vi/78VrGdzz1SY/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 5266,
-      "indexed_at": "2026-10-09T23:17:09.860372+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503753+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3488,7 +3488,7 @@
       "thumbnail": "https://i.ytimg.com/vi/YQ5rANmNlDk/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3876,
-      "indexed_at": "2026-10-09T23:17:09.860294+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503691+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3527,12 +3527,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "⚡ ПРАВИЛЬНЫЙ ТЕХАНАЛИЗ ЗА 10 МИНУТ | СТРАТЕГИЯ + ТОЧКИ ВХОДА НА ГРАФИКЕ",
+      "title": "⚡ TECHNICAL ANALYSIS DONE RIGHT IN 10 MINUTES | STRATEGY + ENTRY POINTS ON THE CHART",
       "url": "https://www.youtube.com/watch?v=CpCuvplWBq8",
       "thumbnail": "https://i.ytimg.com/vi/CpCuvplWBq8/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3906,
-      "indexed_at": "2026-10-09T23:17:09.860194+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503639+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3576,7 +3576,7 @@
       "thumbnail": "https://i.ytimg.com/vi/q3cSGp67lL8/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 5280,
-      "indexed_at": "2026-10-09T23:17:09.860114+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503575+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3615,12 +3615,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "⚡ CORRECT TECHNICAL ANALYSIS IN 10 MINUTES | STRATEGY + ENTRY POINTS ON THE CHART",
+      "title": "⚡ ПРАВИЛЬНЫЙ ТЕХАНАЛИЗ ЗА 10 МИНУТ | СТРАТЕГИЯ + ТОЧКИ ВХОДА НА ГРАФИКЕ",
       "url": "https://www.youtube.com/watch?v=3oRXwbyBGTQ",
       "thumbnail": "https://i.ytimg.com/vi/3oRXwbyBGTQ/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4601,
-      "indexed_at": "2026-10-09T23:17:09.860050+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503510+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3659,12 +3659,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Трейдинг в прямом эфире | Задержка 5 сек",
+      "title": "Live Trading | 5 sec delay",
       "url": "https://www.youtube.com/watch?v=S4epmhW1QOg",
       "thumbnail": "https://i.ytimg.com/vi/S4epmhW1QOg/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3381,
-      "indexed_at": "2026-10-09T23:17:09.859997+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503486+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3708,7 +3708,7 @@
       "thumbnail": "https://i.ytimg.com/vi/IQSFN4FvFuI/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4043,
-      "indexed_at": "2026-10-09T23:17:09.859946+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503445+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3747,12 +3747,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Трейдинг в прямом эфире | Задержка 5 сек",
+      "title": "Live Trading | 5 sec delay",
       "url": "https://www.youtube.com/watch?v=59d8gRYeG4M",
       "thumbnail": "https://i.ytimg.com/vi/59d8gRYeG4M/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4097,
-      "indexed_at": "2026-10-09T23:17:09.859895+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503422+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3796,7 +3796,7 @@
       "thumbnail": "https://i.ytimg.com/vi/XZAYKX3M0Ss/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3680,
-      "indexed_at": "2026-10-09T23:17:09.859843+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503381+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3840,7 +3840,7 @@
       "thumbnail": "https://i.ytimg.com/vi/YWDQCXvUlnQ/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4168,
-      "indexed_at": "2026-10-09T23:17:09.859790+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503339+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3884,7 +3884,7 @@
       "thumbnail": "https://i.ytimg.com/vi/Q93BZe9LZNk/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3268,
-      "indexed_at": "2026-10-09T23:17:09.859757+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503315+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3923,12 +3923,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Трейдинг в прямом эфире | Задержка 5 сек",
+      "title": "Live Trading | 5 sec delay",
       "url": "https://www.youtube.com/watch?v=kjgsBLhHkmM",
       "thumbnail": "https://i.ytimg.com/vi/kjgsBLhHkmM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3876,
-      "indexed_at": "2026-10-09T23:17:09.859701+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503289+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -3967,12 +3967,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Live Trading | 5 sec delay",
+      "title": "Трейдинг в прямом эфире | Задержка 5 сек",
       "url": "https://www.youtube.com/watch?v=FOkj2E1HNlM",
       "thumbnail": "https://i.ytimg.com/vi/FOkj2E1HNlM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 2892,
-      "indexed_at": "2026-10-09T23:17:09.859665+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503245+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4011,12 +4011,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Live Trading | 5s Delay",
+      "title": "Трейдинг в прямом эфире | Задержка 5 сек",
       "url": "https://www.youtube.com/watch?v=T1_VUV_M-vo",
       "thumbnail": "https://i.ytimg.com/vi/T1_VUV_M-vo/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4646,
-      "indexed_at": "2026-10-09T23:17:09.859632+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503196+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4055,12 +4055,12 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "streams",
-      "title": "Live Trading | 5 sec delay",
+      "title": "Трейдинг в прямом эфире | Задержка 5 сек",
       "url": "https://www.youtube.com/watch?v=7MKMDv-PDZU",
       "thumbnail": "https://i.ytimg.com/vi/7MKMDv-PDZU/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 4720,
-      "indexed_at": "2026-10-09T23:17:09.859574+00:00",
+      "indexed_at": "2026-10-09T23:17:42.503107+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4104,7 +4104,7 @@
       "thumbnail": "https://i.ytimg.com/vi/lDqhnqEvfkA/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863945+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955612+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4148,7 +4148,7 @@
       "thumbnail": "https://i.ytimg.com/vi/Wwl92uMS_d0/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863924+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955598+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4192,7 +4192,7 @@
       "thumbnail": "https://i.ytimg.com/vi/fbSdFxevo00/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863904+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955584+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4236,7 +4236,7 @@
       "thumbnail": "https://i.ytimg.com/vi/8fzInX2j64E/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863886+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955571+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4280,7 +4280,7 @@
       "thumbnail": "https://i.ytimg.com/vi/u6rRESx1T24/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863867+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955559+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4324,7 +4324,7 @@
       "thumbnail": "https://i.ytimg.com/vi/RiIAmjQJMx4/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863835+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955540+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4368,7 +4368,7 @@
       "thumbnail": "https://i.ytimg.com/vi/pWRdMUU_2w0/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863664+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955439+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4412,7 +4412,7 @@
       "thumbnail": "https://i.ytimg.com/vi/QJRGMXv5Dmk/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863644+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955423+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4456,7 +4456,7 @@
       "thumbnail": "https://i.ytimg.com/vi/5YQkkEpL8G0/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863626+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955411+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4500,7 +4500,7 @@
       "thumbnail": "https://i.ytimg.com/vi/G-xfchCjJYc/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863597+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955389+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4544,7 +4544,7 @@
       "thumbnail": "https://i.ytimg.com/vi/yBcFva-EFf8/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863576+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955373+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4588,7 +4588,7 @@
       "thumbnail": "https://i.ytimg.com/vi/1D6IxJmvr04/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863555+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955357+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4632,7 +4632,7 @@
       "thumbnail": "https://i.ytimg.com/vi/LXvgYkbNTcY/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863538+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955344+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4676,7 +4676,7 @@
       "thumbnail": "https://i.ytimg.com/vi/WpJ7WudqAjc/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863515+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955320+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4720,7 +4720,7 @@
       "thumbnail": "https://i.ytimg.com/vi/qHlCnwrKUA8/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863495+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955306+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4764,7 +4764,7 @@
       "thumbnail": "https://i.ytimg.com/vi/r_SqVf0eR8I/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863470+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955287+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4808,7 +4808,7 @@
       "thumbnail": "https://i.ytimg.com/vi/90tkqw_19t4/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863452+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955275+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4852,7 +4852,7 @@
       "thumbnail": "https://i.ytimg.com/vi/ufWfWKylc-g/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863411+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955243+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4896,7 +4896,7 @@
       "thumbnail": "https://i.ytimg.com/vi/VZsLJ3tp4Eo/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863388+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955226+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4940,7 +4940,7 @@
       "thumbnail": "https://i.ytimg.com/vi/cyg4vJ6BaCE/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863361+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955206+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -4984,7 +4984,7 @@
       "thumbnail": "https://i.ytimg.com/vi/I3kDROEo0ls/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863329+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955181+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5029,7 +5029,7 @@
       "thumbnail": "https://i.ytimg.com/vi/gFSww3mQIU8/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863296+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955145+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5074,7 +5074,7 @@
       "thumbnail": "https://i.ytimg.com/vi/6YpR9FEtCiI/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863263+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955123+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5121,7 +5121,7 @@
       "thumbnail": "https://i.ytimg.com/vi/a7TzVPchhuM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863221+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955106+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5166,7 +5166,7 @@
       "thumbnail": "https://i.ytimg.com/vi/o-Q3ol8os4s/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863203+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955093+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5210,7 +5210,7 @@
       "thumbnail": "https://i.ytimg.com/vi/ZIZDYvkV8n0/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863185+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955081+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5254,7 +5254,7 @@
       "thumbnail": "https://i.ytimg.com/vi/Hi6lCPyNu6o/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863153+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955057+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5298,7 +5298,7 @@
       "thumbnail": "https://i.ytimg.com/vi/ZKef4rSnHk0/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863133+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955043+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5343,7 +5343,7 @@
       "thumbnail": "https://i.ytimg.com/vi/qNjOBJJI0zY/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863117+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955032+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5387,7 +5387,7 @@
       "thumbnail": "https://i.ytimg.com/vi/QwCWwzESdIE/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863095+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955017+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5432,7 +5432,7 @@
       "thumbnail": "https://i.ytimg.com/vi/8DBNG_2ylm8/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863078+00:00",
+      "indexed_at": "2026-10-09T23:17:37.955005+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5476,7 +5476,7 @@
       "thumbnail": "https://i.ytimg.com/vi/k0oJ4c5gHQo/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863060+00:00",
+      "indexed_at": "2026-10-09T23:17:37.954994+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5520,7 +5520,7 @@
       "thumbnail": "https://i.ytimg.com/vi/ZfTqbxojmGs/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863043+00:00",
+      "indexed_at": "2026-10-09T23:17:37.954982+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5564,7 +5564,7 @@
       "thumbnail": "https://i.ytimg.com/vi/uusPBIW6wJA/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863026+00:00",
+      "indexed_at": "2026-10-09T23:17:37.954971+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5608,7 +5608,7 @@
       "thumbnail": "https://i.ytimg.com/vi/lFF1B3YpdGI/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.863009+00:00",
+      "indexed_at": "2026-10-09T23:17:37.954960+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5652,7 +5652,7 @@
       "thumbnail": "https://i.ytimg.com/vi/a_G0Tmcj-PI/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.862992+00:00",
+      "indexed_at": "2026-10-09T23:17:37.954948+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5696,7 +5696,7 @@
       "thumbnail": "https://i.ytimg.com/vi/UmpJ8GPybAY/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.862969+00:00",
+      "indexed_at": "2026-10-09T23:17:37.954937+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5740,7 +5740,7 @@
       "thumbnail": "https://i.ytimg.com/vi/smWKocEASdI/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.862953+00:00",
+      "indexed_at": "2026-10-09T23:17:37.954926+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5784,7 +5784,7 @@
       "thumbnail": "https://i.ytimg.com/vi/-QpRL_z9Rjk/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.862936+00:00",
+      "indexed_at": "2026-10-09T23:17:37.954915+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5828,7 +5828,7 @@
       "thumbnail": "https://i.ytimg.com/vi/J5s0LshDjPE/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.862919+00:00",
+      "indexed_at": "2026-10-09T23:17:37.954903+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5872,7 +5872,7 @@
       "thumbnail": "https://i.ytimg.com/vi/ycdQzo1PAqA/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.862896+00:00",
+      "indexed_at": "2026-10-09T23:17:37.954887+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5917,7 +5917,7 @@
       "thumbnail": "https://i.ytimg.com/vi/BppDytQg5mI/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.862876+00:00",
+      "indexed_at": "2026-10-09T23:17:37.954875+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -5961,7 +5961,7 @@
       "thumbnail": "https://i.ytimg.com/vi/6b8ysWmhoKo/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.862857+00:00",
+      "indexed_at": "2026-10-09T23:17:37.954861+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6005,7 +6005,7 @@
       "thumbnail": "https://i.ytimg.com/vi/tspH0XrNWJM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.862832+00:00",
+      "indexed_at": "2026-10-09T23:17:37.954845+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6050,7 +6050,7 @@
       "thumbnail": "https://i.ytimg.com/vi/59_FYRk1c_I/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": null,
-      "indexed_at": "2026-10-09T23:17:05.862782+00:00",
+      "indexed_at": "2026-10-09T23:17:37.954799+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6095,7 +6095,7 @@
       "thumbnail": "https://i.ytimg.com/vi/g1PPVRr14K8/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 2075,
-      "indexed_at": "2026-10-09T23:17:03.902878+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888878+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6140,7 +6140,7 @@
       "thumbnail": "https://i.ytimg.com/vi/taqwVxFcr0A/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3609,
-      "indexed_at": "2026-10-09T23:17:03.902811+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888822+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6185,7 +6185,7 @@
       "thumbnail": "https://i.ytimg.com/vi/pDV_-Z8AWvA/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 939,
-      "indexed_at": "2026-10-09T23:17:03.902744+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888768+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6230,7 +6230,7 @@
       "thumbnail": "https://i.ytimg.com/vi/jNrmouMIyvs/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3461,
-      "indexed_at": "2026-10-09T23:17:03.902678+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888712+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6275,7 +6275,7 @@
       "thumbnail": "https://i.ytimg.com/vi/Raqbm8_tfL4/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 1103,
-      "indexed_at": "2026-10-09T23:17:03.902611+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888653+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6320,7 +6320,7 @@
       "thumbnail": "https://i.ytimg.com/vi/hHDasXkQ8OY/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 2029,
-      "indexed_at": "2026-10-09T23:17:03.902572+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888604+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6366,7 +6366,7 @@
       "thumbnail": "https://i.ytimg.com/vi/OLRISdcS5d4/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 905,
-      "indexed_at": "2026-10-09T23:17:03.902511+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888556+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6412,7 +6412,7 @@
       "thumbnail": "https://i.ytimg.com/vi/RJ4aTyO7P-U/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 5741,
-      "indexed_at": "2026-10-09T23:17:03.902444+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888501+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6457,7 +6457,7 @@
       "thumbnail": "https://i.ytimg.com/vi/vQQ7VL_wi9s/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 553,
-      "indexed_at": "2026-10-09T23:17:03.902378+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888447+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6502,7 +6502,7 @@
       "thumbnail": "https://i.ytimg.com/vi/vcJu9ibldsg/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 399,
-      "indexed_at": "2026-10-09T23:17:03.902310+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888393+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6547,7 +6547,7 @@
       "thumbnail": "https://i.ytimg.com/vi/xZu_W54zjrE/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 611,
-      "indexed_at": "2026-10-09T23:17:03.902226+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888338+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6592,7 +6592,7 @@
       "thumbnail": "https://i.ytimg.com/vi/NPO6H65QfMQ/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 3667,
-      "indexed_at": "2026-10-09T23:17:03.902183+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888303+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6638,7 +6638,7 @@
       "thumbnail": "https://i.ytimg.com/vi/lBVcX9v8Uok/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 15851,
-      "indexed_at": "2026-10-09T23:17:03.902118+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888249+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6683,7 +6683,7 @@
       "thumbnail": "https://i.ytimg.com/vi/frF8Qwny8gU/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 7261,
-      "indexed_at": "2026-10-09T23:17:03.902049+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888194+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6728,7 +6728,7 @@
       "thumbnail": "https://i.ytimg.com/vi/wfmsBTr0te8/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 7391,
-      "indexed_at": "2026-10-09T23:17:03.901885+00:00",
+      "indexed_at": "2026-10-09T23:17:35.888048+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6773,7 +6773,7 @@
       "thumbnail": "https://i.ytimg.com/vi/0L7AnTI7qbw/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 6373,
-      "indexed_at": "2026-10-09T23:17:03.901818+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887994+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6818,7 +6818,7 @@
       "thumbnail": "https://i.ytimg.com/vi/kYJSZOelA3k/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 9089,
-      "indexed_at": "2026-10-09T23:17:03.901751+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887937+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6863,7 +6863,7 @@
       "thumbnail": "https://i.ytimg.com/vi/acaD7ED_wBY/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 9793,
-      "indexed_at": "2026-10-09T23:17:03.901685+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887883+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6908,7 +6908,7 @@
       "thumbnail": "https://i.ytimg.com/vi/cHTR0t4n8C4/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 5819,
-      "indexed_at": "2026-10-09T23:17:03.901619+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887830+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6953,7 +6953,7 @@
       "thumbnail": "https://i.ytimg.com/vi/F5L6WeKXBV0/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 7713,
-      "indexed_at": "2026-10-09T23:17:03.901552+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887774+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -6998,7 +6998,7 @@
       "thumbnail": "https://i.ytimg.com/vi/4AZUVVHVS_g/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 6139,
-      "indexed_at": "2026-10-09T23:17:03.901486+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887720+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7043,7 +7043,7 @@
       "thumbnail": "https://i.ytimg.com/vi/3x6QOTh_b7M/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 6069,
-      "indexed_at": "2026-10-09T23:17:03.901421+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887653+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7088,8 +7088,8 @@
       "thumbnail": "https://i.ytimg.com/vi/yhVe_ajgZEU/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 6243,
-      "indexed_at": "2026-10-09T23:17:03.901354+00:00",
-      "details_checked_at": "2026-10-09T23:17:14.688228+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887599+00:00",
+      "details_checked_at": "2026-10-09T23:17:46.853955+00:00",
       "content_status": "metadata_only",
       "caption_status": "not_checked",
       "analysis": {
@@ -7134,7 +7134,7 @@
       "thumbnail": "https://i.ytimg.com/vi/ND6jkZzGoZU/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 6749,
-      "indexed_at": "2026-10-09T23:17:03.901285+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887544+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7179,7 +7179,7 @@
       "thumbnail": "https://i.ytimg.com/vi/p6JBUtlKmpI/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 6027,
-      "indexed_at": "2026-10-09T23:17:03.901202+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887489+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7224,7 +7224,7 @@
       "thumbnail": "https://i.ytimg.com/vi/qJQbMRRwSVI/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 7041,
-      "indexed_at": "2026-10-09T23:17:03.901136+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887433+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7269,7 +7269,7 @@
       "thumbnail": "https://i.ytimg.com/vi/y5GJB4Ojq4E/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 9147,
-      "indexed_at": "2026-10-09T23:17:03.901070+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887378+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7314,7 +7314,7 @@
       "thumbnail": "https://i.ytimg.com/vi/bQFULLpN_Xg/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 6149,
-      "indexed_at": "2026-10-09T23:17:03.901005+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887323+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7359,7 +7359,7 @@
       "thumbnail": "https://i.ytimg.com/vi/YSeJX8lbKHE/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 7403,
-      "indexed_at": "2026-10-09T23:17:03.900939+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887269+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7404,7 +7404,7 @@
       "thumbnail": "https://i.ytimg.com/vi/TuqKQ7QatZk/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 8383,
-      "indexed_at": "2026-10-09T23:17:03.900873+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887213+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7449,7 +7449,7 @@
       "thumbnail": "https://i.ytimg.com/vi/WOFR5ZK7YO4/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 6125,
-      "indexed_at": "2026-10-09T23:17:03.900806+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887147+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7494,7 +7494,7 @@
       "thumbnail": "https://i.ytimg.com/vi/PGBImpm-Lpo/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 9255,
-      "indexed_at": "2026-10-09T23:17:03.900736+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887092+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7539,7 +7539,7 @@
       "thumbnail": "https://i.ytimg.com/vi/nBL4aEmfLe8/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 8583,
-      "indexed_at": "2026-10-09T23:17:03.900670+00:00",
+      "indexed_at": "2026-10-09T23:17:35.887038+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7584,7 +7584,7 @@
       "thumbnail": "https://i.ytimg.com/vi/wQM_brNYxzI/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 10204,
-      "indexed_at": "2026-10-09T23:17:03.900604+00:00",
+      "indexed_at": "2026-10-09T23:17:35.886984+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7624,12 +7624,12 @@
       "channel_name": "НИКОЛАС | ТРЕЙДЕР",
       "channel_handle": "@NikolasTradin",
       "kind": "streams",
-      "title": "🔴 LIVE Trading — See What’s Happening | Pocket Option LIVE",
+      "title": "🔴 Я Торгую В ПРЯМОМ ЭФИРЕ — Смотри Что Происходит | Pocket Option LIVE",
       "url": "https://www.youtube.com/watch?v=IL3U71XQoMg",
       "thumbnail": "https://i.ytimg.com/vi/IL3U71XQoMg/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 6209,
-      "indexed_at": "2026-10-09T23:17:03.900557+00:00",
+      "indexed_at": "2026-10-09T23:17:35.886929+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7674,7 +7674,7 @@
       "thumbnail": "https://i.ytimg.com/vi/iExwcMsUyT8/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 9053,
-      "indexed_at": "2026-10-09T23:17:03.900490+00:00",
+      "indexed_at": "2026-10-09T23:17:35.886876+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7719,7 +7719,7 @@
       "thumbnail": "https://i.ytimg.com/vi/SGPpHbEriuc/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 10273,
-      "indexed_at": "2026-10-09T23:17:03.900418+00:00",
+      "indexed_at": "2026-10-09T23:17:35.886821+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7764,7 +7764,7 @@
       "thumbnail": "https://i.ytimg.com/vi/exK4M1dpAgM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 10205,
-      "indexed_at": "2026-10-09T23:17:03.900347+00:00",
+      "indexed_at": "2026-10-09T23:17:35.886766+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7809,7 +7809,7 @@
       "thumbnail": "https://i.ytimg.com/vi/9D7Yng9FdA0/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 9783,
-      "indexed_at": "2026-10-09T23:17:03.900274+00:00",
+      "indexed_at": "2026-10-09T23:17:35.886712+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7854,7 +7854,7 @@
       "thumbnail": "https://i.ytimg.com/vi/D2deLEqj9ZI/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 5553,
-      "indexed_at": "2026-10-09T23:17:03.900181+00:00",
+      "indexed_at": "2026-10-09T23:17:35.886655+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7899,7 +7899,7 @@
       "thumbnail": "https://i.ytimg.com/vi/1QH-z5LYHCg/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 7001,
-      "indexed_at": "2026-10-09T23:17:03.900124+00:00",
+      "indexed_at": "2026-10-09T23:17:35.886615+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7944,7 +7944,7 @@
       "thumbnail": "https://i.ytimg.com/vi/YRDI57C8dv4/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 5629,
-      "indexed_at": "2026-10-09T23:17:03.900075+00:00",
+      "indexed_at": "2026-10-09T23:17:35.886575+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -7989,7 +7989,7 @@
       "thumbnail": "https://i.ytimg.com/vi/XjMv0tMBQHM/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 9163,
-      "indexed_at": "2026-10-09T23:17:03.900004+00:00",
+      "indexed_at": "2026-10-09T23:17:35.886517+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -8034,7 +8034,7 @@
       "thumbnail": "https://i.ytimg.com/vi/Gju8Xf0yhXQ/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 11335,
-      "indexed_at": "2026-10-09T23:17:03.899929+00:00",
+      "indexed_at": "2026-10-09T23:17:35.886455+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -8079,7 +8079,7 @@
       "thumbnail": "https://i.ytimg.com/vi/mI48WJ3-qiE/hqdefault.jpg",
       "upload_date": null,
       "duration_seconds": 10263,
-      "indexed_at": "2026-10-09T23:17:03.899832+00:00",
+      "indexed_at": "2026-10-09T23:17:35.886366+00:00",
       "details_checked_at": null,
       "content_status": "metadata_only",
       "caption_status": "not_checked",
@@ -8846,7 +8846,7 @@
       "upload_date": null,
       "duration_seconds": null,
       "indexed_at": "2026-10-09T23:06:29.006673+00:00",
-      "details_checked_at": "2026-10-09T23:17:13.749837+00:00",
+      "details_checked_at": "2026-10-09T23:17:46.087830+00:00",
       "content_status": "metadata_only",
       "caption_status": "not_checked",
       "analysis": {
@@ -9954,7 +9954,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:10.309334+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:43.098360+00:00"
     },
     {
       "id": "GwIcafaid4s",
@@ -9995,7 +9995,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:10.309288+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:43.098329+00:00"
     },
     {
       "id": "iNF_3kvIlJY",
@@ -10036,7 +10036,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:10.309224+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:43.098298+00:00"
     },
     {
       "id": "-p9ka2aXkxE",
@@ -10077,7 +10077,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:10.309181+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:43.098266+00:00"
     },
     {
       "id": "bIVmfWczsjw",
@@ -10118,7 +10118,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:10.309137+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:43.098234+00:00"
     },
     {
       "id": "x66i9g1n80M",
@@ -10159,7 +10159,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:10.309093+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:43.098203+00:00"
     },
     {
       "id": "IyI9Gcw_zEg",
@@ -10200,7 +10200,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:10.309049+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:43.098161+00:00"
     },
     {
       "id": "d5xDOWhDXu8",
@@ -10241,7 +10241,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:10.309005+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:43.098129+00:00"
     },
     {
       "id": "WbhxH_r-4Bk",
@@ -10282,7 +10282,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:10.308960+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:43.098097+00:00"
     },
     {
       "id": "YwFqCSr3nAY",
@@ -10323,7 +10323,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:10.308914+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:43.098063+00:00"
     },
     {
       "id": "aVvENlU3W_E",
@@ -10364,7 +10364,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:10.308866+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:43.098028+00:00"
     },
     {
       "id": "F7SO8q1QEjI",
@@ -10405,7 +10405,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:10.308810+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:43.097987+00:00"
     },
     {
       "id": "rRtzbSpm1VU",
@@ -12247,7 +12247,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:08.362318+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:41.123745+00:00"
     },
     {
       "id": "z84FIhRuwdg",
@@ -12289,7 +12289,7 @@
         "reason": "Only metadata have been collected"
       },
       "details_error": "DownloadError: ERROR: [youtube] z84FIhRuwdg: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See https://github.com/yt-dlp/yt-d",
-      "last_seen_index_at": "2026-10-09T23:17:08.362231+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:41.123701+00:00"
     },
     {
       "id": "6p41Q2oy3fY",
@@ -12330,7 +12330,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:08.362199+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:41.123678+00:00"
     },
     {
       "id": "Agea6rD5A8k",
@@ -12371,7 +12371,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:08.362167+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:41.123656+00:00"
     },
     {
       "id": "xUC1RuulgNc",
@@ -12412,7 +12412,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:08.362135+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:41.123633+00:00"
     },
     {
       "id": "dCZUZqLnr5A",
@@ -12453,7 +12453,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:08.362102+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:41.123610+00:00"
     },
     {
       "id": "23P0qnTBNd8",
@@ -12494,7 +12494,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:08.362070+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:41.123587+00:00"
     },
     {
       "id": "fWuj9-mZhaA",
@@ -12535,7 +12535,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:08.362038+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:41.123562+00:00"
     },
     {
       "id": "aR0Jh17qY8E",
@@ -12576,7 +12576,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:08.362004+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:41.123538+00:00"
     },
     {
       "id": "ZkZX0WNUEPA",
@@ -12617,7 +12617,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:08.361968+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:41.123510+00:00"
     },
     {
       "id": "CafCLhVdndA",
@@ -12658,7 +12658,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:08.361927+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:41.123480+00:00"
     },
     {
       "id": "HwZIJNbdGfU",
@@ -12699,7 +12699,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:08.361862+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:41.123429+00:00"
     },
     {
       "id": "UuWiv-Ys96Q",
@@ -12740,7 +12740,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.882734+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:40.531990+00:00"
     },
     {
       "id": "bS9VxT2Day0",
@@ -12781,7 +12781,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.882668+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:40.531940+00:00"
     },
     {
       "id": "ZmcpQMHWv1c",
@@ -12823,7 +12823,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.578820+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:40.141893+00:00"
     },
     {
       "id": "bDtE5nizk4A",
@@ -12864,7 +12864,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.578735+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:40.141827+00:00"
     },
     {
       "id": "Lkkb9KyIwc4",
@@ -13105,7 +13105,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.325688+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.792717+00:00"
     },
     {
       "id": "fGPcexUEhCM",
@@ -13146,7 +13146,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.325630+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.792671+00:00"
     },
     {
       "id": "slAJvGLdqzI",
@@ -13187,7 +13187,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.325571+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.792624+00:00"
     },
     {
       "id": "mdWBhnH81lE",
@@ -13228,7 +13228,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.325509+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.792573+00:00"
     },
     {
       "id": "lVSsgDg9v2E",
@@ -13269,7 +13269,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.325451+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.792525+00:00"
     },
     {
       "id": "L31S4DgpEIo",
@@ -13310,7 +13310,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.325393+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.792478+00:00"
     },
     {
       "id": "WRqiBgz6vhw",
@@ -13351,7 +13351,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.325329+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.792426+00:00"
     },
     {
       "id": "FiMprRk9wNg",
@@ -13392,7 +13392,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.325236+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.792369+00:00"
     },
     {
       "id": "b8W59dRBMP4",
@@ -13433,7 +13433,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.325170+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.792314+00:00"
     },
     {
       "id": "u1swiwtD3Vk",
@@ -13474,7 +13474,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.325142+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.792294+00:00"
     },
     {
       "id": "wM__58CLFOQ",
@@ -13515,7 +13515,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.325107+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.792268+00:00"
     },
     {
       "id": "Q-p7vhTE6eM",
@@ -13556,7 +13556,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.325058+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.792229+00:00"
     },
     {
       "id": "WZiWMx9bEvc",
@@ -13597,7 +13597,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:06.912160+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.401766+00:00"
     },
     {
       "id": "KHymQb1olO0",
@@ -13638,7 +13638,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:06.912135+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.401748+00:00"
     },
     {
       "id": "htVENWcUKpE",
@@ -13679,7 +13679,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:06.912109+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.401730+00:00"
     },
     {
       "id": "9cFPm9Dm2ZU",
@@ -13720,7 +13720,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:06.912080+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.401708+00:00"
     },
     {
       "id": "MA2ao0m5QLo",
@@ -13761,7 +13761,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:06.912052+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.401687+00:00"
     },
     {
       "id": "GjgVzFMb3ko",
@@ -13802,7 +13802,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:06.912023+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.401667+00:00"
     },
     {
       "id": "8XntFDFsrws",
@@ -13843,7 +13843,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:06.911993+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.401645+00:00"
     },
     {
       "id": "xqWfqK6MyOM",
@@ -13884,7 +13884,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:06.911961+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.401622+00:00"
     },
     {
       "id": "HvfyqUtPCkw",
@@ -13925,7 +13925,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:06.911922+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:39.401592+00:00"
     },
     {
       "id": "aYNrfJdVYj8",
@@ -15807,7 +15807,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:04.447186+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:36.507403+00:00"
     },
     {
       "id": "6gtzmZfy7Lk",
@@ -15849,7 +15849,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:04.447164+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:36.507388+00:00"
     },
     {
       "id": "YwVdZnJFPDs",
@@ -15891,7 +15891,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:04.447143+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:36.507373+00:00"
     },
     {
       "id": "MzAVQB5bNDk",
@@ -15933,7 +15933,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:04.447122+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:36.507359+00:00"
     },
     {
       "id": "52HPYaB2jcc",
@@ -15975,7 +15975,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:04.447101+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:36.507343+00:00"
     },
     {
       "id": "W35XmPo7me8",
@@ -16017,7 +16017,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:04.447080+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:36.507329+00:00"
     },
     {
       "id": "bqdQnMe3nu4",
@@ -16059,7 +16059,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:04.447058+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:36.507314+00:00"
     },
     {
       "id": "Ej5vPvp6Xjs",
@@ -16100,7 +16100,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:04.447035+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:36.507298+00:00"
     },
     {
       "id": "duF5MgJ3am0",
@@ -16142,7 +16142,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:04.447006+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:36.507276+00:00"
     },
     {
       "id": "S1CmsdEfVRw",
@@ -16184,7 +16184,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:04.446983+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:36.507261+00:00"
     },
     {
       "id": "Oy1RS4NE3s0",
@@ -16226,7 +16226,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:04.446957+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:36.507244+00:00"
     },
     {
       "id": "_HduV_kLmEM",
@@ -16268,7 +16268,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:04.446925+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:36.507222+00:00"
     },
     {
       "id": "9xVEEYqMcNc",
@@ -18156,7 +18156,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:02.322604+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:34.412594+00:00"
     },
     {
       "id": "37skFbZVgbU",
@@ -18198,7 +18198,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:02.322456+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:34.412537+00:00"
     },
     {
       "id": "G0Ps_zcSS4s",
@@ -18240,7 +18240,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:02.322312+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:34.412481+00:00"
     },
     {
       "id": "bpAdRa3MfAU",
@@ -18282,7 +18282,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:02.322132+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:34.412424+00:00"
     },
     {
       "id": "IhSYvlEHqng",
@@ -18324,7 +18324,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:02.321988+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:34.412367+00:00"
     },
     {
       "id": "yczyTtiNTxA",
@@ -18338,7 +18338,7 @@
       "upload_date": null,
       "duration_seconds": 11329,
       "indexed_at": "2026-10-09T23:06:19.238509+00:00",
-      "details_checked_at": "2026-10-09T23:17:15.553270+00:00",
+      "details_checked_at": "2026-10-09T23:17:47.901230+00:00",
       "content_status": "metadata_only",
       "caption_status": "not_checked",
       "analysis": {
@@ -18366,7 +18366,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:02.321840+00:00",
+      "last_seen_index_at": "2026-10-09T23:17:34.412308+00:00",
       "details_error": "DownloadError: ERROR: [youtube] yczyTtiNTxA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See https://github.com/yt-dlp/yt-d"
     },
     {
@@ -18409,7 +18409,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:02.321692+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:34.412251+00:00"
     },
     {
       "id": "F0iAb1dDFZ0",
@@ -18451,7 +18451,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:02.321548+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:34.412191+00:00"
     },
     {
       "id": "JIL275i8cBM",
@@ -18493,7 +18493,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:02.321395+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:34.412120+00:00"
     },
     {
       "id": "8-eMNoPj9Hg",
@@ -18535,7 +18535,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:02.321211+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:34.412058+00:00"
     },
     {
       "id": "lY4tMm7hNew",
@@ -18577,7 +18577,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:02.321067+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:34.412003+00:00"
     },
     {
       "id": "gtYtH747q6g",
@@ -18619,7 +18619,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:17:02.320873+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:34.411925+00:00"
     },
     {
       "id": "uFGHNKVd4zk",
@@ -18627,7 +18627,7 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "videos",
-      "title": "Трейдинг с нуля в 2026 году ! Технический анализ обучение для новчиков | Торговля в реальном времени",
+      "title": "Trading from Scratch in 2026! Technical Analysis Tutorial for Beginners | Live Trading",
       "url": "https://www.youtube.com/watch?v=uFGHNKVd4zk",
       "thumbnail": "https://i.ytimg.com/vi/uFGHNKVd4zk/hqdefault.jpg",
       "upload_date": null,
@@ -18660,7 +18660,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.882485+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:40.531802+00:00"
     },
     {
       "id": "maXN3sHs2FA",
@@ -18701,7 +18701,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.882178+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:40.531639+00:00"
     },
     {
       "id": "fzVB8L6GQRM",
@@ -18742,7 +18742,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.882592+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:40.531877+00:00"
     },
     {
       "id": "e9_ai0mgpts",
@@ -18783,7 +18783,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.882114+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:40.531591+00:00"
     },
     {
       "id": "dphISIyvH94",
@@ -18824,7 +18824,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:17:06.128153+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:38.310912+00:00"
     },
     {
       "id": "bpQLYZM2FfE",
@@ -18865,7 +18865,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.882037+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:40.531533+00:00"
     },
     {
       "id": "Z4HMrRpKcV4",
@@ -18906,7 +18906,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:17:06.127935+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:38.310734+00:00"
     },
     {
       "id": "IEn3UX3mfGM",
@@ -18947,7 +18947,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:17:06.128048+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:38.310827+00:00"
     },
     {
       "id": "ElfSeIVxRH8",
@@ -18990,7 +18990,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.882289+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:40.531704+00:00"
     },
     {
       "id": "7bkdptaLxA0",
@@ -19031,7 +19031,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.882367+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:40.531758+00:00"
     },
     {
       "id": "2JGhrD2ZzeY",
@@ -19072,7 +19072,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:17:07.882547+00:00"
+      "last_seen_index_at": "2026-10-09T23:17:40.531845+00:00"
     }
   ]
 }
