@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f6f8fc">
-  <meta name="description" content="Crypto Myshka — спостереження за LIVE та пояснюваний аналіз графіків JEV, без автоматичних угод.">
+  <meta name="description" content="Crypto Myshka — локальний аналіз скріншотів графіків через JEV та Ollama, без автоматичних угод.">
   <link rel="icon" type="image/svg+xml" href="./app/myshka-icon.svg">
   <link rel="manifest" href="./myshka.webmanifest">
   <link rel="stylesheet" href="./app/myshka.css">
@@ -20,7 +20,6 @@
       <p class="nav-caption">РОЗДІЛИ</p>
       <nav class="side-nav" aria-label="Основна навігація">
         <button data-go="home" class="nav-link active" type="button"><span aria-hidden="true">⌂</span> Головна</button>
-        <button data-go="live" class="nav-link" type="button"><span aria-hidden="true">◉</span> Трансляції</button>
         <button data-go="analysis" class="nav-link" type="button"><span aria-hidden="true">▥</span> Fast Analysis</button>
         <button data-go="history" class="nav-link" type="button"><span aria-hidden="true">◷</span> Історія</button>
         <button data-go="settings" class="nav-link" type="button"><span aria-hidden="true">⚙</span> Налаштування</button>
@@ -48,46 +47,34 @@
         <section class="screen active" id="screen-home" data-screen="home" aria-labelledby="home-title">
           <div class="eyebrow">YOUR AI TRADING OBSERVER</div>
           <h1 id="home-title">Вітаю у <span>Crypto Myshka</span><span class="wave" aria-hidden="true"> ✳</span></h1>
-          <p class="intro">Мишка стежить за трансляціями, а JEV пояснює побачене — окремо для кожної валютної чи криптовалютної пари.</p>
+          <p class="intro">Завантаж скріншот графіка, і локальний JEV допоможе оцінити видимий напрямок руху.</p>
           <div class="hero-card">
             <div class="hero-copy">
-              <div class="hero-label"><span class="soft-dot"></span> LIVE INTELLIGENCE</div>
+              <div class="hero-label"><span class="soft-dot"></span> LOCAL VISION AI</div>
               <h2>Мишка бачить.<br>JEV пояснює.</h2>
               <p>Без вигаданих прогнозів: лише те, що вдалося прочитати та перевірити.</p>
               <div class="hero-actions">
                 <button class="btn btn-white" data-go="analysis" type="button">Fast Analysis <span aria-hidden="true">↗</span></button>
-                <button class="btn btn-ghost" data-go="live" type="button">Трансляції <span aria-hidden="true">→</span></button>
               </div>
             </div>
             <div class="hero-illustration" aria-hidden="true"><div class="chart-grid"></div><span class="chart-up">⌁</span><span class="hero-mouse">🐭</span><span class="hero-chip">JEV AI</span></div>
           </div>
 
           <div class="stats-grid" aria-label="Статистика">
-            <div class="stat"><span>Канали</span><strong id="stat-channels">—</strong><small>Під наглядом</small></div>
-            <div class="stat"><span>LIVE зараз</span><strong id="stat-live">—</strong><small>Лише підтверджені</small></div>
             <div class="stat"><span>Звіти за парами</span><strong id="stat-pairs">—</strong><small>Із доступних кадрів</small></div>
             <div class="stat"><span>Режим JEV</span><strong class="stat-word" id="stat-jev">—</strong><small>Окреме пояснення AI</small></div>
           </div>
           <div class="section-heading"><h2>Швидкий доступ</h2><span class="muted">Усе під рукою</span></div>
           <div class="quick-grid">
-            <button class="quick-card" data-go="live" type="button"><span class="quick-icon cobalt">◉</span><span><strong>LIVE Monitor</strong><small>Дивитись джерела й статуси</small></span><span class="arrow">↗</span></button>
             <button class="quick-card" data-go="analysis" type="button"><span class="quick-icon mint">▥</span><span><strong>Fast Analysis</strong><small>Тренд, рівні, висновок JEV</small></span><span class="arrow">↗</span></button>
             <button class="quick-card" data-go="history" type="button"><span class="quick-icon peach">◷</span><span><strong>Збережене</strong><small>Твої звіти й оцінки</small></span><span class="arrow">↗</span></button>
           </div>
           <div id="home-notice" class="notice"><span aria-hidden="true">ⓘ</span><p>Чекаємо на перші перевірені спостереження. Старі модулі та сайт працюють окремо.</p></div>
         </section>
 
-        <section class="screen" id="screen-live" data-screen="live" aria-labelledby="live-title" hidden>
-          <div class="section-heading top-heading"><div><div class="eyebrow">MONITORING</div><h1 id="live-title">LIVE Monitor</h1></div><span class="outline-pill" id="live-cadence">Оновлення…</span></div>
-          <p class="intro">Перевірка ефірів і розпізнавання графіків — різні процеси. Статус LIVE показуємо лише за актуального підтвердження.</p>
-          <div class="inline-summary"><span class="live-bullet"></span><strong id="live-summary">Читаємо статуси каналів</strong><small id="live-timestamp">—</small></div>
-          <div id="live-list" class="stack" aria-live="polite"><div class="empty-state">Завантаження каналів…</div></div>
-          <div class="notice"><span aria-hidden="true">⚠</span><p>YouTube іноді обмежує автоматичний доступ. «Не підтверджено» не означає, що автор точно не веде ефір.</p></div>
-        </section>
-
         <section class="screen" id="screen-analysis" data-screen="analysis" aria-labelledby="analysis-title" hidden>
           <div class="section-heading top-heading"><div><div class="eyebrow">JEV EXPLAINABLE AI</div><h1 id="analysis-title">Fast Analysis</h1></div><span class="outline-pill">NO AUTO-TRADE</span></div>
-          <p class="intro">Встав скріншот через Ctrl+V або обери файл. Локальний JEV визначить видимий напрямок графіка: ВГОРУ, ВНИЗ або НЕВИЗНАЧЕНО. Окремі LIVE-звіти залишаються нижче.</p>
+          <p class="intro">Встав скріншот через Ctrl+V або обери файл. Локальний JEV визначить видимий напрямок графіка: ВГОРУ, ВНИЗ або НЕВИЗНАЧЕНО. Збережені звіти за парами залишаються нижче.</p>
           <div class="searchbar"><label class="visually-hidden" for="pair-search">Пошук пари</label><span aria-hidden="true">⌕</span><input id="pair-search" type="search" placeholder="Знайти BTC/USDT, AUD/CNY OTC…" autocomplete="off"></div>
           <div id="pair-chips" class="chips" aria-label="Доступні пари"></div>
           <div class="demo-controls"><label class="small-button" for="chart-photo">📷 Обрати фото графіка</label><input id="chart-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden><span>Або встав скріншот: Win+Shift+S → Ctrl+V. Зображення передається тільки до Ollama на твоєму комп'ютері, якщо запущено локальну версію.</span></div>
@@ -127,7 +114,6 @@
 
   <nav class="bottom-nav" aria-label="Мобільне меню">
     <button type="button" data-go="home" class="active"><span aria-hidden="true">⌂</span><small>Головна</small></button>
-    <button type="button" data-go="live"><span aria-hidden="true">◉</span><small>LIVE</small></button>
     <button type="button" data-go="analysis"><span aria-hidden="true">▥</span><small>Аналіз</small></button>
     <button type="button" data-go="history"><span aria-hidden="true">◷</span><small>Історія</small></button>
     <button type="button" data-go="settings"><span aria-hidden="true">⚙</span><small>Опції</small></button>
