@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-09T23:05:58.987467+00:00",
+  "generated_at": "2026-10-09T23:07:10.618113+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,7 +26,7 @@
       "ok": true,
       "count": 10218,
       "complete": true,
-      "updated_at": "2026-10-09T23:05:53.788548+00:00",
+      "updated_at": "2026-10-09T23:07:06.487344+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
@@ -47,32 +47,32 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 82561,
-        "usd_24h_change": 0.9193490423621461
+        "usd": 82556,
+        "usd_24h_change": 0.9344264838106418
       },
       "ethereum": {
-        "usd": 2486.72,
-        "usd_24h_change": 0.48727154627554214
+        "usd": 2486.13,
+        "usd_24h_change": 0.5187295041915705
       },
       "solana": {
-        "usd": 109.04,
-        "usd_24h_change": -1.0924156099048292
+        "usd": 109.05,
+        "usd_24h_change": -0.9985087647440047
       },
       "pendle": {
         "usd": 2.1,
-        "usd_24h_change": 0.07085182430118492
+        "usd_24h_change": 0.2193793575078472
       },
       "ripple": {
         "usd": 1.39,
-        "usd_24h_change": 0.8006991515724952
+        "usd_24h_change": 0.8367595067194975
       },
       "binancecoin": {
-        "usd": 741.76,
-        "usd_24h_change": 0.6588823287450962
+        "usd": 741.7,
+        "usd_24h_change": 0.681117468947851
       },
       "dogecoin": {
-        "usd": 0.085303,
-        "usd_24h_change": 0.9902099123753095
+        "usd": 0.085297,
+        "usd_24h_change": 1.042562005553019
       }
     }
   },
@@ -5195,7 +5195,7 @@
         "деривативи/плече: потрібна перевірка max loss, margin і ліквідації",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "What are options and how to buy them on Binance in 2026?",
+      "title": "Що таке опціони та як їх купити на Binance у 2026 році?",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=vQw_-w1Dy7o",
       "published_at": null,
@@ -5371,7 +5371,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Register on Binance from your phone in 5 minutes and get a $50 bonus!",
+      "title": "Реєстрація на Binance з телефону за 5 хвилин та бонус 50$!",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=XoKZS7pyxUQ",
       "published_at": null,
@@ -5387,7 +5387,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Earn money online without investment that even a schoolkid can handle",
+      "title": "Заробіток без вкладень в інтернеті з яким впорається навіть школяр",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=KQd67gY-fi0",
       "published_at": null,
@@ -5579,7 +5579,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Earnings on Crypto | How to make money on spot in cryptocurrency without risks: TOP-2 strategies",
+      "title": "Заробіток на Крипті | Як заробити на споті в криптовалюті без ризиків: ТОП-2 стратегії",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=nuMrH-sUlM8",
       "published_at": null,

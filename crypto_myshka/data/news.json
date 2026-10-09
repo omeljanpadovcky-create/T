@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-09T23:05:51.439095+00:00",
+  "generated_at": "2026-10-09T23:07:04.707821+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -1088,7 +1088,7 @@
       "analysis_level": "cross_source_fallback",
       "analysis_error": "Model returned empty content",
       "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:06:03Z"
+      "analysis_last_attempt_at": "2026-10-09T23:04:56Z"
     },
     {
       "id": "13ee38e8dbdf4c",
@@ -1142,7 +1142,7 @@
       "analysis_level": "cross_source_fallback",
       "analysis_error": "Model returned empty content",
       "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:06:10Z"
+      "analysis_last_attempt_at": "2026-10-09T23:05:02Z"
     },
     {
       "id": "e38ffe5db1d72c",
@@ -1198,7 +1198,7 @@
       "analysis_level": "cross_source_fallback",
       "analysis_error": "Model returned empty content",
       "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:06:16Z"
+      "analysis_last_attempt_at": "2026-10-09T23:05:08Z"
     },
     {
       "id": "370328ca5eefd2",
@@ -1235,20 +1235,23 @@
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
       ],
       "jev_ai": {
-        "what_happened": "Згідно з Cointelegraph, обсяг P2P-гаманців зі стейблкоїнами в Китаї зріс у 43 рази попри заборони, а криптоекономіка Південної Кореї оцінюється у $450 млрд — найбільша в Східній Азії.",
-        "why_it_matters": "Показує стійкий попит на стейблкоїни навіть за умов регуляторного тиску; масштаб корейського ринку свідчить про глибоку інтеграцію криптоактивів у регіональну фінансову систему.",
-        "market_effect": "Середній вплив: може підтримувати попит на стейблкоїни та стимулювати розвиток інфраструктури, але регуляторні ризики залишаються високими.",
-        "bull_case": "Структурний попит на стейблкоїни зберігається незважаючи на заборони; великий корейський ринок може прискорити впровадження інституційної інфраструктури та RWA.",
-        "bear_case": "Джерело — одне (Cointelegraph), цифри не підтверджені незалежно; регулятори можуть посилити тиск на P2P-сектор, що знизить активність; обсяги P2P важко верифікувати точно.",
-        "watch_next": "Регуляторні заяви Китаю та Кореї; додаткові джерела щодо 43x зростання; дані про обсяги торгів стейблкоїнами; реакція ринку на можливі нові обмеження.",
+        "what_happened": "Despite ongoing bans, China has seen a big surge in peer-to-peer stablecoin use. New figures show South Korea’s $450B crypto economy is the largest in East Asia.",
+        "why_it_matters": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
+        "market_effect": "Потенційно позитивний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента.",
         "confidence": "низька",
-        "short_conclusion": "Подія вказує на стійкий попит на стейблкоїни в Азії, але через одне джерело та неперевірені цифри висновки залишаються гіпотетичними. Слідкуйте за регуляторними новинами та підтвердженнями даних.",
-        "_model_used": "free/gpt-6-luna"
+        "short_conclusion": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "Model returned empty content"
       },
-      "analysis_engine": "free/gpt-6-luna",
-      "analysis_level": "llm",
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content",
       "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:06:23Z"
+      "analysis_last_attempt_at": "2026-10-09T23:05:14Z"
     },
     {
       "id": "b4e31b6883d086",
@@ -4043,16 +4046,16 @@
     }
   ],
   "jev_enabled": true,
-  "jev_status": "ok",
+  "jev_status": "degraded",
   "jev_provider": "apinex",
   "jev_model": "free/deepseek-v4.1-flash",
-  "jev_analyzed_count": 10,
-  "jev_analyzed_this_run": 1,
+  "jev_analyzed_count": 9,
+  "jev_analyzed_this_run": 0,
   "jev_pending_count": 0,
-  "jev_llm_pending_count": 19,
-  "jev_analysis_errors": 3,
+  "jev_llm_pending_count": 20,
+  "jev_analysis_errors": 4,
   "jev_error_codes": {
-    "ValueError": 3
+    "ValueError": 4
   },
-  "jev_last_run_at": "2026-10-09T23:06:36Z"
+  "jev_last_run_at": "2026-10-09T23:05:20Z"
 }
