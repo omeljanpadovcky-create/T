@@ -24,6 +24,7 @@
     statuses: { live: 'loading', pairs: 'loading', analysts: 'loading' },
     lastSuccessfulFetch: {}, filter: 'all', query: '',
     selectedPair: null, demo: false, refreshing: false, sequence: 0,
+    visionStatus: 'checking',
     prefs: { theme: 'light', refresh: 15, saved: {}, votes: {} },
     pollTimer: null
   };
@@ -161,21 +162,28 @@
   }
   function statusPill() {
     const node = $('connection-pill');
-    const ok = state.statuses.live === 'ok' && state.statuses.pairs === 'ok';
-    const upToDate = state.live && fresh(state.live.updated_at);
-    node.className = 'connection-pill ' + (ok && upToDate ? 'good' : 'warn');
+    const local = ['localhost', '127.0.0.1'].includes(location.hostname);
+    const stateLabels = {
+      ready: 'JEV готовий',
+      missing_model: 'Потрібна модель Ollama',
+      offline: 'JEV не відповідає',
+      checking: 'Перевіряємо JEV'
+    };
+    node.className = 'connection-pill ' + (local && state.visionStatus === 'ready' ? 'good' : 'warn');
     node.innerHTML = '<span class="dot"></span> ' +
-      (ok && upToDate ? 'Дані отримано' : ok ? 'Архівні дані' : 'Немає зв’язку з джерелами');
+      (local ? stateLabels[state.visionStatus] || 'Перевіряємо JEV' : 'JEV тільки локально');
+    node.title = local ? 'Статус локальної Ollama; не залежить від старих YouTube-звітів' :
+      'На GitHub Pages локальна Ollama недоступна. Відкрий локальний сервер.';
   }
   function renderHome() {
     const reports = findReports();
     $('stat-pairs').textContent = String(reports.length);
     const engines = reports.filter(r => r.jev && r.jev.engine === 'separate_ai_explainer' && r.jev.status === 'model');
-    $('stat-jev').textContent = engines.length ? 'AI ✓' : 'Очікує';
+    $('stat-jev').textContent = state.visionStatus === 'ready' ? 'AI ✓' : engines.length ? 'Звіти AI' : 'Очікує';
     const notice = $('home-notice').querySelector('p');
     const errors = Object.values(state.statuses).filter(x => x === 'error').length;
     if (errors) {
-      notice.textContent = 'Не всі джерела завантажилися. Перевір інтернет, потім натисни ↻. Старий сайт працює окремо.';
+      notice.textContent = 'Архівні звіти можуть бути недоступні. Це не впливає на локальний аналіз скріншотів через JEV.';
     } else if (!reports.length) {
       notice.textContent = 'Поки немає опублікованих звітів за парами. Для власного графіка відкрий Fast Analysis та встав скріншот.';
     } else {
@@ -370,10 +378,14 @@
     const status = $('vision-status');
     if (!status) return;
     if (!['localhost', '127.0.0.1'].includes(location.hostname)) {
+      state.visionStatus = 'offline';
+      statusPill();
       status.textContent = '🔴 Хмарна сторінка: локальний JEV тут недоступний. Запусти START_MYSHKA_AI.ps1 і відкрий http://127.0.0.1:18765/myshka-app.html#analysis';
       status.dataset.ready = 'false';
       return;
     }
+    state.visionStatus = 'checking';
+    statusPill();
     status.textContent = '⏳ Перевіряємо локальну Ollama…';
     status.dataset.ready = 'false';
     try {
@@ -381,16 +393,22 @@
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const result = await response.json();
       if (result.ready) {
+        state.visionStatus = 'ready';
         status.textContent = '🟢 JEV готовий · модель ' + result.model + ' · локально';
         status.dataset.ready = 'true';
       } else if (result.ollama) {
+        state.visionStatus = 'missing_model';
         status.textContent = '🟠 Ollama запущена, але модель відсутня. Виконай: ollama pull ' + result.model;
       } else {
+        state.visionStatus = 'offline';
         status.textContent = '🔴 Ollama не відповідає. Запусти Ollama або ollama serve.';
       }
     } catch {
+      state.visionStatus = 'offline';
       status.textContent = '🔴 AI-сервер не відповідає. Перезапусти START_MYSHKA_AI.ps1 (порт 18765).';
     }
+    statusPill();
+    if (state.view === 'home') renderHome();
   }
   function installInteractions() {
     document.body.addEventListener('click', e => {
@@ -528,7 +546,7 @@
       event.preventDefault();
       analyzeChartImage(file);
     });
-    $('refresh-button').addEventListener('click', () => refreshAll(true));
+    $('refresh-button').addEventListener('click', () => { refreshAll(true); checkVisionHealth(); });
     $('demo-button').addEventListener('click', () => {
       state.demo = !state.demo;
       renderAnalysis();
@@ -562,6 +580,7 @@
     installInteractions();
     navigate(routeView(), { fromHash: true, noScroll: true });
     refreshAll();
+    checkVisionHealth();
     startPolling();
     if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
       if (['localhost', '127.0.0.1'].includes(location.hostname)) {
