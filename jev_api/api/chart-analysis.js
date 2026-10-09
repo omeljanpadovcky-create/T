@@ -9,7 +9,13 @@ const ALLOWED_ORIGINS = new Set([
 const TIMEFRAMES = { '15s': 15, '30s': 30, '1m': 60, '5m': 300 };
 const EXPIRIES = new Set([30, 60, 300]);
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
-const MODEL = process.env.JEV_CLOUD_MODEL || 'gemini-2.5-flash';
+function modelAndProvider() {
+  const apinexKey = (process.env.APINEX_API_KEY || '').trim();
+  if (apinexKey) return {provider:'apinex',model:process.env.JEV_APINEX_MODEL || 'gemini-3.8-flash',key:apinexKey};
+  const geminiKey = (process.env.GEMINI_API_KEY || '').trim();
+  if (geminiKey) return {provider:'gemini',model:process.env.JEV_CLOUD_MODEL || 'gemini-2.5-flash',key:geminiKey};
+  return null;
+}
 
 function authOk(req) {
   const expected = process.env.JEV_ACCESS_TOKEN || '';
@@ -78,7 +84,8 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({error:'POST only'});
   if (!ALLOWED_ORIGINS.has(req.headers.origin)) return res.status(403).json({error:'Недозволений сайт.'});
-  if (!process.env.GEMINI_API_KEY || !process.env.JEV_ACCESS_TOKEN) return res.status(503).json({error:'Хмарний AI ще не налаштовано.'});
+  const provider = modelAndProvider();
+  if (!provider || !process.env.JEV_ACCESS_TOKEN) return res.status(503).json({error:'Хмарний AI ще не налаштовано (змінні APINEX_API_KEY або GEMINI_API_KEY та JEV_ACCESS_TOKEN потрібні на сервері).'});
   if (!authOk(req)) return res.status(401).json({error:'Неправильний код доступу до JEV.'});
   const body = req.body || {};
   if (!body || typeof body !== 'object' || Array.isArray(body)) return res.status(400).json({error:'Invalid JSON body'});
@@ -91,29 +98,48 @@ export default async function handler(req, res) {
   const mime = bytes.length <= MAX_IMAGE_BYTES ? imageType(bytes) : null;
   if (!mime) return res.status(400).json({error:'Непідтримуваний або завеликий файл.'});
   try {
-    const url = 'https://generativelanguage.googleapis.com/v1beta/models/' +
-      encodeURIComponent(MODEL) + ':generateContent';
-    const response = await fetch(url,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-goog-api-key':process.env.GEMINI_API_KEY},
-      body:JSON.stringify({
-        systemInstruction:{parts:[{text:SYSTEM}]},
-        contents:[{role:'user',parts:[
-          {text:'Таймфрейм свічки від користувача: '+timeframe+
-            '. Якщо auto, визначай тільки за підписом на самому графіку. Демо-експірація 30, 60 або 300 секунд або null.'},
-          {inlineData:{mimeType:mime,data:image}}
-        ]}],
-        generationConfig:{temperature:0,responseMimeType:'application/json',maxOutputTokens:450}
-      }),
+    const prompt = 'Таймфрейм свічки від користувача: ' + timeframe +
+      '. Якщо auto, визначай тільки за підписом на самому графіку. Демо-експірація 30, 60 або 300 секунд або null.';
+    const isApinex = provider.provider === 'apinex';
+    const url = isApinex
+      ? 'https://api.apinex.bond/v1/chat/completions'
+      : 'https://generativelanguage.googleapis.com/v1beta/models/' +
+        encodeURIComponent(provider.model) + ':generateContent';
+    const headers = isApinex
+      ? {'Content-Type':'application/json',Authorization:'Bearer ' + provider.key}
+      : {'Content-Type':'application/json','x-goog-api-key':provider.key};
+    const payload = isApinex ? {
+      model:provider.model,temperature:0,max_tokens:450,stream:false,
+      messages:[
+        {role:'system',content:SYSTEM},
+        {role:'user',content:[
+          {type:'text',text:prompt},
+          {type:'image_url',image_url:{url:'data:' + mime + ';base64,' + image}}
+        ]}
+      ]
+    } : {
+      systemInstruction:{parts:[{text:SYSTEM}]},
+      contents:[{role:'user',parts:[{text:prompt},{inlineData:{mimeType:mime,data:image}}]}],
+      generationConfig:{temperature:0,responseMimeType:'application/json',maxOutputTokens:450}
+    };
+    const response = await fetch(url, {
+      method:'POST',headers,body:JSON.stringify(payload),
       signal:AbortSignal.timeout(25000)
     });
     if (!response.ok) return res.status(response.status===429?429:502).json({
-      error:response.status===429?'Ліміт запитів хмарного AI. Спробуй пізніше.':'Хмарний AI не зміг обробити фото.'});
+      error:response.status===429?'Ліміт запитів хмарного AI. Спробуй пізніше.':
+        response.status===401?'APInex або Gemini відхилив API-ключ.':
+        'Хмарний AI не зміг обробити фото (HTTP ' + response.status + ').'});
     const data = await response.json();
-    const raw = data?.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('') || '';
+    const content = data?.choices?.[0]?.message?.content;
+    const raw = isApinex
+      ? (typeof content==='string' ? content :
+          Array.isArray(content) ? content.map(p=>typeof p==='string'?p:(p?.text||'')).join('') : '')
+      : (data?.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('') || '');
     const parsed = parseVision(raw,timeframe);
-    return res.status(200).json({...parsed,analysis:parsed.direction,model:MODEL,
-      source:'cloud_gemini',mode:'demo_hypothesis',verified_quotes:false});
+    return res.status(200).json({...parsed,analysis:parsed.direction,model:provider.model,
+      source:isApinex?'cloud_apinex':'cloud_gemini',provider:provider.provider,
+      mode:'demo_hypothesis',verified_quotes:false});
   } catch (err) {
     return res.status(504).json({error:err?.name==='TimeoutError'?'Хмарний AI не відповів за 25 секунд.':'Не вдалося зв’язатися з AI-провайдером.'});
   }
