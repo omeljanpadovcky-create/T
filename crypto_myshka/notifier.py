@@ -34,6 +34,7 @@ NEWS=ROOT/"data"/"news.json"
 LIVE=ROOT/"data"/"youtube_live.json"
 REPORTS=ROOT/"data"/"pair_reports.json"
 YOUTUBE_CONTEXT=ROOT/"data"/"youtube_analysts.json"
+VIDEO_LIBRARY=ROOT/"data"/"youtube_archive.json"
 STATE=ROOT/"data"/"notify_state.json"
 
 TOKEN=os.getenv("TELEGRAM_BOT_TOKEN","").strip()
@@ -191,6 +192,28 @@ def main():
                 "url":"https://www.youtube.com/watch?v="+vid,
                 "impact_label":"; ".join(description)[:280],
             })
+
+    # Send only ACTUAL completed JEV video summaries from the growing archive.
+    # Do not spam previously indexed old videos, and never call metadata a
+    # confirmed trading signal or validated profit.
+    library=load(VIDEO_LIBRARY,{"videos":[]})
+    for video in (library.get("videos") or []):
+        if not isinstance(video,dict):
+            continue
+        vjev=video.get("jev") or {}
+        if not isinstance(vjev,dict) or vjev.get("status")!="model_summary":
+            continue
+        vid=str(video.get("id") or "")
+        if not re.fullmatch(r"[A-Za-z0-9_-]{11}",vid):
+            continue
+        current.append({
+            "id":"youtube_jev:"+vid,
+            "source":"youtube",
+            "title":"🧠 JEV розібрав ролик: "+str(video.get("title") or "")[:100],
+            "url":"https://www.youtube.com/watch?v="+vid,
+            "impact_label":"Конспект доступних субтитрів; не підтверджує прибутковість",
+            "jev_ai":{"short_conclusion":str(vjev.get("summary") or "")[:285]},
+        })
 
     ids=[x.get("id") for x in current if x.get("id")]
     state=load_state({"initialized":False,"seen":[],"telegram_ready":False})
