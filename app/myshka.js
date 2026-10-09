@@ -148,7 +148,7 @@
     if (!state.cloudEndpoint) label.textContent = 'Хмарний сервер ще не підключено.';
     else if (!state.cloudAccess) label.textContent = 'Введи окремий код доступу JEV.';
     else if (state.visionSource === 'cloud' && state.visionStatus === 'ready')
-      label.textContent = '🟢 Хмарний JEV підключено. Фото надсилатиметься на твій сервер і до обраного AI-провайдера (APInex або Gemini).';
+      label.textContent = '🟢 Хмарний JEV доступний. Фото надсилатиметься лише у хмарному режимі або за дозволом автоматичного перемикання.';
     else if (state.visionSource === 'cloud' && state.visionStatus === 'provisional')
       label.textContent = '🟠 APInex налаштовано, але доступність моделі перевірить перший запит фото.';
     else label.textContent = 'Адресу збережено. Перевірка хмарного JEV: ' +
@@ -854,6 +854,14 @@
         window.prompt('Скопіюй команду PowerShell:', LOCAL_START_COMMAND);
       }
     });
+    $('vision-mode-select').addEventListener('change', event => setVisionMode(event.target.value));
+    $('vision-mode-quick').addEventListener('change', event => setVisionMode(event.target.value));
+    $('vision-cloud-fallback').addEventListener('change', event => {
+      state.prefs.cloudFallback = !!event.target.checked;
+      persist();
+      syncVisionModeControls();
+      checkVisionHealth();
+    });
     $('refresh-button').addEventListener('click', () => { refreshAll(true); checkVisionHealth(); });
     $('demo-button').addEventListener('click', () => {
       state.demo = !state.demo;
@@ -873,12 +881,17 @@
       }
       state.cloudEndpoint = endpoint;
       state.cloudAccess = access;
+      // Pressing "Connect cloud" is an explicit cloud-mode selection.
+      state.prefs.visionMode = 'cloud';
+      persist();
+      syncVisionModeControls();
       try {
         localStorage.setItem(CLOUD_URL_KEY, endpoint);
         sessionStorage.setItem(CLOUD_ACCESS_KEY, access);
       } catch { toast('Сховище браузера недоступне. Параметри діють лише до оновлення.'); }
       await checkVisionHealth();
-      if (state.visionSource === 'cloud' && state.visionStatus === 'ready') toast('Хмарний JEV підключено.');
+      if (state.visionSource === 'cloud' && ['ready', 'provisional'].includes(state.visionStatus))
+        toast('Хмарний JEV налаштовано. Перевір аналіз на одному фото.');
       else toast('Хмарний JEV не підтверджено. Перевір адресу, код і секрети сервера.');
     });
     $('cloud-disconnect').addEventListener('click', () => {
@@ -887,6 +900,9 @@
       $('cloud-endpoint').value = '';
       $('cloud-access').value = '';
       try { localStorage.removeItem(CLOUD_URL_KEY); sessionStorage.removeItem(CLOUD_ACCESS_KEY); } catch {}
+      if (state.prefs.visionMode === 'cloud') state.prefs.visionMode = 'auto';
+      persist();
+      syncVisionModeControls();
       checkVisionHealth();
       toast('Хмарний JEV від’єднано.');
     });
