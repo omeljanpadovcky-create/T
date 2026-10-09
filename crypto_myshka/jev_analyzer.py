@@ -210,43 +210,76 @@ def related_youtube_context(event, video_data, limit=3):
 
 
 def relevant_archive_video_notes(event, limit=3):
-    """Ground news analysis in ACTUALLY extracted public captions, never claims of wins."""
-    tokens=set()
-    for x in (event.get("assets") or [])[:12]:
-        name=str(x).upper().strip()
-        if len(name)>1:
-            tokens.add(name)
-    if not tokens:
+    """Use confirmed video AI summaries as unverified educational context.
+
+    Gemini examined audiovisual public-video content; JEV subtitle summaries
+    are text only. Merely having a video title/metadata is not analysis.
+    """
+    assets = {str(a).strip().upper() for a in (event.get("assets") or [])[:12] if a}
+    if not assets:
         return []
-    archive=load(VIDEO_ARCHIVE, {"videos":[]})
-    selected=[]
+    archive = load(VIDEO_ARCHIVE, {"videos": []})
+    scored = []
     for video in (archive.get("videos") or []):
-        if not isinstance(video,dict):continue
-        details=video.get("analysis") if isinstance(video.get("analysis"),dict) else {}
-        instruments={str(x).upper() for x in (details.get("mentioned_instruments") or [])}
-        coins={str(x).upper() for x in (details.get("pairs") or [])}
-        symbols=instruments|coins
-        if not any(coin==term or coin.startswith(term+"/") or coin.endswith("/"+term)
-                   or coin.startswith(term+" ") for term in tokens for coin in symbols):
+        if not isinstance(video, dict):
             continue
-        jev=video.get("jev") if isinstance(video.get("jev"),dict) else {}
-        content={
-            "channel":str(video.get("channel_name") or "")[:80],
-            "title":str(video.get("title") or "")[:130],
-            "url":str(video.get("url") or "")[:220],
-            "source_coverage":video.get("content_status"),
-            "mentioned_instruments":list(symbols)[:5],
-            "mentioned_indicators":(details.get("mentioned_indicators") or [])[:5],
-            "source_claims_not_verified":True,
-            "market_prices_verified":False,
+        gemini = video.get("gemini") if isinstance(video.get("gemini"), dict) else {}
+        textual = video.get("jev") if isinstance(video.get("jev"), dict) else {}
+        has_gemini = gemini.get("status") == "gemini_video_summary"
+        has_jev = textual.get("status") == "model_summary"
+        if not (has_gemini or has_jev):
+            continue
+        extracted = video.get("analysis") if isinstance(video.get("analysis"), dict) else {}
+        instruments = {
+            str(value).strip().upper()
+            for value in (
+                (extracted.get("mentioned_instruments") or []) +
+                (extracted.get("pairs") or []) +
+                (gemini.get("pairs") or [])
+            ) if value
         }
-        if jev.get("status")=="model_summary":
-            content["video_subtitle_summary"]=str(jev.get("summary") or "")[:350]
-            content["learning_points"]=str(jev.get("strategy") or "")[:280]
-        selected.append(content)
-        if len(selected)>=limit:
-            break
-    return selected
+        # Compare asset symbols only at pair boundaries, so ETH != BETH.
+        relevant = any(
+            symbol == asset or
+            symbol.startswith(asset + "/") or symbol.endswith("/" + asset) or
+            symbol.startswith(asset + " ") or symbol.endswith(" " + asset)
+            for asset in assets for symbol in instruments
+        )
+        if not relevant:
+            continue
+        info = {
+            "channel": str(video.get("channel_name") or "")[:80],
+            "title": str(video.get("title") or "")[:130],
+            "url": str(video.get("url") or "")[:220],
+            "mentioned_instruments": sorted(instruments)[:8],
+            "mentioned_indicators": (
+                (gemini.get("indicators") or []) if has_gemini
+                else (extracted.get("mentioned_indicators") or [])
+            )[:8],
+            "verified_market_quotes": False,
+            "trades_verified": False,
+            "source_claims_not_verified": True,
+            "analysis_coverage": "video_frames_and_audio" if has_gemini else "subtitle_text_only",
+            "analysis_model": gemini.get("model") if has_gemini else textual.get("model"),
+            "model_summary": str(
+                (gemini.get("summary") if has_gemini else textual.get("summary")) or ""
+            )[:480],
+            "strategy_explanation": str(
+                (gemini.get("strategy") if has_gemini else textual.get("strategy")) or ""
+            )[:320],
+            "risk_notes": str(
+                (gemini.get("risk") if has_gemini else textual.get("risk")) or ""
+            )[:270],
+        }
+        if has_gemini:
+            info["observed_video_moments"] = [
+                {"timestamp": str(m.get("timestamp") or "")[:12],
+                 "observation": str(m.get("observation") or "")[:170]}
+                for m in (gemini.get("moments") or [])[:3] if isinstance(m, dict)
+            ]
+        scored.append((int(has_gemini), str(video.get("upload_date") or ""), info))
+    scored.sort(key=lambda x: (x[0], x[1]), reverse=True)
+    return [record for _, _, record in scored[:limit]]
 
 
 def build_payload(event, feed, archive=None):
@@ -271,7 +304,7 @@ def build_payload(event, feed, archive=None):
         "related_itstatti_knowledge": knowledge,
         "related_trader_video_notes_unverified": video_notes,
         "related_archived_video_ideas_not_price_data": archive_notes,
-        "instruction": "Дай незалежний JEV-аналіз події. Відеозамітки — лише слова з назви, опису або доступних субтитрів. Не вигадуй кадри, угоди чи підтвердження прибутковості. Не повторюй рекламні та реферальні твердження як факт.",
+        "instruction": "Дай незалежний JEV-аналіз події. Відеозамітки позначені джерелом: Gemini бачив звук і семпльовані кадри, субтитровий JEV читав лише текст. Відділяй слова трейдера від незалежно підтверджених фактів. Не вигадуй угоди, ціни чи winrate; не сприймай модельний аналіз як доказ.",
     }
 
 def apinex_response_text(data):
