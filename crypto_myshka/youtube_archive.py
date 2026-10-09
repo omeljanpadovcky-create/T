@@ -66,7 +66,7 @@ ISOTIME = lambda: datetime.now(timezone.utc).isoformat()
 
 
 # Machine-oriented knowledge feed: reject unrelated channel uploads before AI calls.
-TOPIC_RE = re.compile(r"(?:трейд|торгов|сделк|угод|стратег|сигнал|график|графік|свеч|свіч|индикатор|індикатор|бирж|бірж|крипт|валют|форекс|forex|trading|trade\\b|market|chart|candlestick|price action|technical analysis|bitcoin|btc\\b|eth\\b|usdt|pocket option|quotex|binarn|бинар|бінар|\\botc\\b|\\brsi\\b|\\bema\\b|\\bmacd\\b|копитрейд|copytrad|live trading|три перекрытия)", re.I)
+TOPIC_RE = re.compile(r"(?:трейд|торгов|сделк|угод|стратег|сигнал|график|графік|свеч|свіч|индикатор|індикатор|бирж|бірж|крипт|валют|форекс|forex|trading|trade\\b|market|chart|candlestick|price action|technical analysis|bitcoin|btc\\b|eth\\b|usdt|pocket option|quotex|binarn|бинар|бінар|\\botc\\b|\\brsi\\b|\\bema\\b|\\bmacd\\b|копитрейд|copytrad|live trading|три перекрытия|invest|інвест|инвест|stocks?|shares?|etf|portfolio|дивіденд|дивиденд|passive income|wealth building)", re.I)
 
 def relevant(video: dict) -> bool:
     title = str(video.get("title") or "")
