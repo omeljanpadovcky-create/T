@@ -213,7 +213,7 @@ def main():
                 "jev_ai":{"short_conclusion":str(vgem.get("summary") or "")[:285]},
             })
         vjev=video.get("jev") or {}
-        if isinstance(vjev,dict) and vjev.get("status")=="model_summary":
+        if isinstance(vjev,dict) and vjev.get("status")=="model_summary" and not (isinstance(vgem,dict) and vgem.get("status")=="gemini_video_summary"):
             current.append({
                 "id":"youtube_jev:"+vid,
                 "source":"youtube",
@@ -264,8 +264,11 @@ def main():
             print(f"Telegram connection test failed: {e}")
 
     fresh=[x for x in current if x.get("id") and x.get("id") not in seen]
-    # oldest first for a readable digest, max 6 to avoid spam
-    fresh=list(reversed(fresh[:6]))
+    # Reserve room for newly completed Gemini video reports; other headlines
+    # remain in the queue if this digest reaches six items.
+    gemini_fresh=[x for x in fresh if str(x.get("id")).startswith("youtube_gemini_video:")]
+    other_fresh=[x for x in fresh if not str(x.get("id")).startswith("youtube_gemini_video:")]
+    fresh=list(reversed(gemini_fresh[:3]+other_fresh[:max(0,6-min(3,len(gemini_fresh)))]))
 
     sent_ids=[]
     if fresh and configured:
