@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-09T20:08:44.014302+00:00",
+  "generated_at": "2026-10-09T20:17:38.141525+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -47,7 +47,7 @@
     }
   },
   "raw_item_count": 205,
-  "item_count": 101,
+  "item_count": 102,
   "items": [
     {
       "id": "11152640688458",
@@ -328,6 +328,41 @@
       "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
       "analysis_retry_count": 1,
       "analysis_last_attempt_at": "2026-10-09T19:23:01Z"
+    },
+    {
+      "id": "3d57b9e8a614a7",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "The SEC Just Broke the 2x Ceiling on Leveraged Crypto ETFs — and the First 3x Products Are One Form Away From Trading - Yahoo Finance",
+      "summary": "The SEC Just Broke the 2x Ceiling on Leveraged Crypto ETFs — and the First 3x Products Are One Form Away From Trading &nbsp;&nbsp; Yahoo Finance",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxORWlBQjRKV1ZBR2NTTWRBeVRUTG4yeXVnXzBOUFdJWlNEMnBCT2kxN0RKUVg1M3luV29yNlFGNHVqZlgyTGlqOS1wbUFkYkxuNk5uczl5MkJlVXotc0VwQ0M2OGFZQkF6ZEJpa1M5THlWNGhGVk5qS3c5Z2tTOUIwY3p6T05tNjdUOGNRekN3VTkyRTVj?oc=5",
+      "published_at": "2026-10-09T10:42:56+00:00",
+      "assets": [],
+      "topics": [
+        "regulation"
+      ],
+      "impact": 3,
+      "impact_label": "Високий вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Google News discovery"
+      ],
+      "links": [
+        {
+          "publisher": "Google News discovery",
+          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxORWlBQjRKV1ZBR2NTTWRBeVRUTG4yeXVnXzBOUFdJWlNEMnBCT2kxN0RKUVg1M3luV29yNlFGNHVqZlgyTGlqOS1wbUFkYkxuNk5uczl5MkJlVXotc0VwQ0M2OGFZQkF6ZEJpa1M5THlWNGhGVk5qS3c5Z2tTOUIwY3p6T05tNjdUOGNRekN3VTkyRTVj?oc=5"
+        }
+      ],
+      "confidence_label": "Discovery: потребує підтвердження",
+      "jev_take": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Google News використано лише як радар теми",
+        "Ринковий тон: Невизначений / змішаний",
+        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
+      ]
     },
     {
       "id": "f2146ba6b342c1",
@@ -1082,9 +1117,6 @@
         "Ринковий тон: Потенційно позитивний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T20:08:58Z",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
       "jev_ai": {
         "what_happened": "Solana is about to halve its block times as final 200-millisecond upgrade nears",
         "why_it_matters": "Новина стосується SOL, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
@@ -1099,7 +1131,10 @@
         "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
       "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T20:08:58Z"
     },
     {
       "id": "13ee38e8dbdf4c",
@@ -1136,9 +1171,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T20:09:03Z",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
       "jev_ai": {
         "what_happened": "Ether bets were wiped out at six times bitcoin’s rate in crypto’s $1 billion flush",
         "why_it_matters": "Новина стосується BTC, ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
@@ -1153,7 +1185,10 @@
         "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T20:09:03Z"
     },
     {
       "id": "e38ffe5db1d72c",
@@ -1192,9 +1227,6 @@
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T20:09:09Z",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
       "jev_ai": {
         "what_happened": "The rules are set to take effect next week, allowing crypto ETFs to trade exclusively on the Stock Exchange of Thailand.",
         "why_it_matters": "Біржова новина може впливати на ліквідність і доступність BTC, ETH; важливо відділити операційне оновлення від системного ризику.",
@@ -1209,7 +1241,10 @@
         "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T20:09:09Z"
     },
     {
       "id": "370328ca5eefd2",
@@ -1245,9 +1280,6 @@
         "Ринковий тон: Потенційно позитивний",
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T20:09:16Z",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
       "jev_ai": {
         "what_happened": "Despite ongoing bans, China has seen a big surge in peer-to-peer stablecoin use. New figures show South Korea’s $450B crypto economy is the largest in East Asia.",
         "why_it_matters": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
@@ -1262,7 +1294,10 @@
         "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T20:09:16Z"
     },
     {
       "id": "b4e31b6883d086",
