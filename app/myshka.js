@@ -24,7 +24,7 @@
     statuses: { live: 'loading', pairs: 'loading', analysts: 'loading' },
     lastSuccessfulFetch: {}, filter: 'all', query: '',
     selectedPair: null, demo: false, refreshing: false, sequence: 0,
-    visionStatus: 'checking',
+    visionStatus: 'checking', visionSource: null, cloudEndpoint: '', cloudAccess: '',
     prefs: { theme: 'light', refresh: 15, saved: {}, votes: {} },
     pollTimer: null
   };
@@ -79,6 +79,32 @@
       toast('Браузер не дозволив збереження на пристрої');
       return false;
     }
+  }
+  const CLOUD_URL_KEY = 'crypto-myshka-cloud-endpoint-v1';
+  const CLOUD_ACCESS_KEY = 'crypto-myshka-cloud-access-session-v1';
+  function validCloudEndpoint(value) {
+    try {
+      const url = new URL(String(value).trim());
+      if (url.protocol !== 'https:' || !url.hostname || url.username || url.password ||
+          url.pathname !== '/' || url.search || url.hash) return null;
+      return url.origin;
+    } catch { return null; }
+  }
+  function loadCloudSettings() {
+    try { state.cloudEndpoint = validCloudEndpoint(localStorage.getItem(CLOUD_URL_KEY)) || ''; } catch {}
+    try { state.cloudAccess = sessionStorage.getItem(CLOUD_ACCESS_KEY) || ''; } catch {}
+    $('cloud-endpoint').value = state.cloudEndpoint;
+    $('cloud-access').value = state.cloudAccess;
+  }
+  function updateCloudSettings() {
+    const label = $('cloud-connection-status');
+    if (!label) return;
+    if (!state.cloudEndpoint) label.textContent = 'Хмарний сервер ще не підключено.';
+    else if (!state.cloudAccess) label.textContent = 'Введи окремий код доступу JEV.';
+    else if (state.visionSource === 'cloud' && state.visionStatus === 'ready')
+      label.textContent = '🟢 Хмарний JEV підключено. Фото надсилатиметься на твій сервер і до Gemini.';
+    else label.textContent = 'Адресу збережено. Перевірка хмарного JEV: ' +
+      (state.visionStatus === 'checking' ? 'очікування…' : 'не готовий або працює локальний JEV.');
   }
   function applyTheme() {
     document.documentElement.dataset.theme = state.prefs.theme;
@@ -163,17 +189,16 @@
   function statusPill() {
     const node = $('connection-pill');
     const local = ['localhost', '127.0.0.1'].includes(location.hostname);
-    const stateLabels = {
-      ready: 'JEV готовий',
-      missing_model: 'Потрібна модель Ollama',
-      offline: 'JEV не відповідає',
-      checking: 'Перевіряємо JEV'
-    };
-    node.className = 'connection-pill ' + (local && state.visionStatus === 'ready' ? 'good' : 'warn');
-    node.innerHTML = '<span class="dot"></span> ' +
-      (local ? stateLabels[state.visionStatus] || 'Перевіряємо JEV' : 'JEV тільки локально');
-    node.title = local ? 'Статус локальної Ollama; не залежить від старих YouTube-звітів' :
-      'На GitHub Pages локальна Ollama недоступна. Відкрий локальний сервер.';
+    const ready = state.visionStatus === 'ready';
+    const label = ready ? (state.visionSource === 'cloud' ? 'JEV хмарний готовий' : 'JEV готовий · локально') :
+      state.visionStatus === 'checking' ? 'Перевіряємо JEV' :
+      state.visionStatus === 'missing_model' ? 'Потрібна модель Ollama' :
+      state.cloudEndpoint ? 'Хмарний JEV не відповідає' :
+      local ? 'JEV не відповідає' : 'Підключи хмарний JEV';
+    node.className = 'connection-pill ' + (ready ? 'good' : 'warn');
+    node.innerHTML = '<span class="dot"></span> ' + label;
+    node.title = ready ? 'AI-сервер відповідає. Це не гарантує правильності прогнозу.' :
+      'Перевір налаштування JEV і статус сервера.';
   }
   function renderHome() {
     const reports = findReports();
@@ -424,39 +449,61 @@
   async function checkVisionHealth() {
     const status = $('vision-status');
     if (!status) return;
-    if (!['localhost', '127.0.0.1'].includes(location.hostname)) {
-      state.visionStatus = 'offline';
-      statusPill();
-      status.textContent = '🔴 Хмарна сторінка: локальний JEV тут недоступний. Запусти START_MYSHKA_AI.ps1 і відкрий http://127.0.0.1:18765/myshka-app.html#analysis';
-      status.dataset.ready = 'false';
-      return;
-    }
+    const local = ['localhost', '127.0.0.1'].includes(location.hostname);
     state.visionStatus = 'checking';
-    statusPill();
-    status.textContent = '⏳ Перевіряємо локальну Ollama…';
+    state.visionSource = null;
     status.dataset.ready = 'false';
-    try {
-      const response = await fetch('./api/chart-health', {cache: 'no-store'});
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      const result = await response.json();
-      if (result.ready) {
+    status.textContent = '⏳ Перевіряємо JEV…';
+    statusPill();
+    if (local) {
+      try {
+        const response = await fetch('./api/chart-health', {cache:'no-store'});
+        const result = response.ok ? await response.json() : {};
+        if (result.ready) {
+          state.visionStatus = 'ready';
+          state.visionSource = 'local';
+          status.dataset.ready = 'true';
+          status.textContent = '🟢 JEV готовий · модель ' + result.model + ' · локальна Ollama';
+          statusPill();
+          updateCloudSettings();
+          if (state.view === 'home') renderHome();
+          return;
+        }
+        if (result.ollama && !state.cloudEndpoint) {
+          state.visionStatus = 'missing_model';
+          status.textContent = '🟠 Ollama працює, але модель відсутня: ollama pull ' + result.model;
+        }
+      } catch { /* Cloud may still be configured as a fallback. */ }
+    }
+    if (state.cloudEndpoint && state.cloudAccess) {
+      try {
+        const response = await fetch(state.cloudEndpoint + '/api/chart-health', {
+          cache:'no-store', headers:{'X-JEV-Access':state.cloudAccess}
+        });
+        const result = await response.json();
+        if (!response.ok || !result.ready) throw new Error(result.error || 'HTTP ' + response.status);
         state.visionStatus = 'ready';
-        status.textContent = '🟢 JEV готовий · модель ' + result.model + ' · локально';
+        state.visionSource = 'cloud';
         status.dataset.ready = 'true';
-      } else if (result.ollama) {
-        state.visionStatus = 'missing_model';
-        status.textContent = '🟠 Ollama запущена, але модель відсутня. Виконай: ollama pull ' + result.model;
-      } else {
+        status.textContent = '🟢 JEV готовий · ' + (result.model || 'Gemini') + ' · хмарний сервер';
+      } catch (error) {
         state.visionStatus = 'offline';
-        status.textContent = '🔴 Ollama не відповідає. Запусти Ollama або ollama serve.';
+        status.textContent = '🔴 Хмарний JEV не готовий: ' + (error.message || 'Перевір URL, код і секрети Vercel.');
       }
-    } catch {
+    } else if (!local) {
       state.visionStatus = 'offline';
-      status.textContent = '🔴 AI-сервер не відповідає. Перезапусти START_MYSHKA_AI.ps1 (порт 18765).';
+      status.textContent = state.cloudEndpoint ?
+        '🟠 Введи код доступу в Налаштуваннях для хмарного JEV.' :
+        '🟠 Хмарний JEV не підключено. Відкрий Налаштування → Хмарний JEV.';
+    } else if (state.visionStatus === 'checking') {
+      state.visionStatus = 'offline';
+      status.textContent = '🔴 Локальна Ollama не відповідає. Запусти START_MYSHKA_AI.ps1 або підключи хмарний JEV.';
     }
     statusPill();
+    updateCloudSettings();
     if (state.view === 'home') renderHome();
   }
+
   function installInteractions() {
     document.body.addEventListener('click', e => {
       const go = e.target.closest('button[data-go]');
