@@ -17,13 +17,15 @@ self.addEventListener('fetch',event=>{
   const allowed=[...STATIC,...JSON_FEEDS].some(relative=>pathname.endsWith('/'+relative.replace(/^\.\//,'')));
   if(!allowed)return;
   const feed=JSON_FEEDS.some(name=>pathname.endsWith('/'+name));
+  // Keep only one cached version per URL. The UI uses ?t= on each poll.
+  const cacheKey=new Request(url.origin+url.pathname);
   event.respondWith(
     fetch(request,{cache:'no-store'}).then(response=>{
-      if(response.ok){const copy=response.clone();event.waitUntil(caches.open(VERSION).then(cache=>cache.put(request,copy)).catch(()=>{}));}
+      if(response.ok){const copy=response.clone();event.waitUntil(caches.open(VERSION).then(cache=>cache.put(cacheKey,copy)).catch(()=>{}));}
       return response;
     }).catch(async()=>{
       const cache=await caches.open(VERSION);
-      const fallback=await cache.match(request,{ignoreSearch:true});
+      const fallback=await cache.match(cacheKey);
       if(fallback)return fallback;
       if(feed)return new Response('{}',{status:503,headers:{'Content-Type':'application/json'}});
       return Response.error();
