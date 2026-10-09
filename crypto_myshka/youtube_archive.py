@@ -65,6 +65,41 @@ YT = "https://www.youtube.com/watch?v="
 ISOTIME = lambda: datetime.now(timezone.utc).isoformat()
 
 
+# Machine-oriented knowledge feed: reject unrelated channel uploads before AI calls.
+TOPIC_RE = re.compile(r"(?:трейд|торгов|сделк|угод|стратег|сигнал|график|графік|свеч|свіч|индикатор|індикатор|бирж|бірж|крипт|валют|форекс|forex|trading|trade\\b|market|chart|candlestick|price action|technical analysis|bitcoin|btc\\b|eth\\b|usdt|pocket option|quotex|binarn|бинар|бінар|\\botc\\b|\\brsi\\b|\\bema\\b|\\bmacd\\b|копитрейд|copytrad|live trading|три перекрытия)", re.I)
+
+def relevant(video: dict) -> bool:
+    title = str(video.get("title") or "")
+    g = video.get("gemini") or {}
+    if isinstance(g, dict) and g.get("status") == "gemini_video_summary":
+        return bool(TOPIC_RE.search(" ".join(str(g.get(k) or "") for k in ("summary", "strategy", "visual_context"))))
+    return bool(TOPIC_RE.search(title))
+
+def knowledge_feed(videos: list[dict]) -> dict:
+    # Only actual model output enters JEV knowledge. Metadata is discovery, not learning.
+    items = []
+    for row in videos:
+        if not relevant(row):
+            continue
+        g, j = row.get("gemini") or {}, row.get("jev") or {}
+        if not isinstance(g, dict) or not isinstance(j, dict):
+            continue
+        source = g if g.get("status") == "gemini_video_summary" else j if j.get("status") == "model_summary" else None
+        if not source:
+            continue
+        items.append({
+            "video_id": row["id"], "url": row["url"], "channel": row.get("channel_name"),
+            "source": "gemini_video" if source is g else "jev_subtitles",
+            "summary": safe_text(source.get("summary"), 650),
+            "strategy": safe_text(source.get("strategy"), 650),
+            "risk": safe_text(source.get("risk"), 650),
+            "pairs": source.get("pairs", []) if source is g else (row.get("analysis") or {}).get("mentioned_instruments", []),
+            "indicators": source.get("indicators", []) if source is g else (row.get("analysis") or {}).get("mentioned_indicators", []),
+            "verified_market_signal": False,
+        })
+    return {"updated_at": ISOTIME(), "purpose": "JEV background research only; never trade from video claims",
+            "items_count": len(items), "items": items}
+
 def load(path: Path, fallback: dict) -> dict:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -311,6 +346,8 @@ def run_gemini_video_batch(existing: dict, previous: dict, processor=gemini_anal
         str(v.get("id") or ""),
     ))
     for entry in due:
+        if not relevant(entry):
+            continue
         if used >= GEMINI_MAX_PER_RUN:
             break
         if not VID_ID.fullmatch(str(entry.get("id") or "")):  # checked by archive IDs
@@ -421,7 +458,7 @@ def build(previous: dict, seed: dict, fetcher=list_segment, detailer=enrich,
     if include_enrichment:
         # Retry previously inaccessible videos on later runs but never claim
         # their metadata confirms the underlying chart.
-        due = [v for v in existing.values() if
+        due = [v for v in existing.values() if relevant(v) and
                v.get("content_status") in ("metadata_only", "legacy_metadata_only")
                and not v.get("details_checked_at")]
         due.sort(key=lambda v: (v.get("upload_date") or "", v["id"]), reverse=True)
@@ -476,6 +513,8 @@ def main() -> None:
     temporary = ARCHIVE_FILE.with_suffix(".tmp")
     temporary.write_text(json.dumps(archive, ensure_ascii=False, separators=(",", ":"))+"\n", encoding="utf-8")
     temporary.replace(ARCHIVE_FILE)
+    feed = knowledge_feed(archive["videos"])
+    (ROOT / "data" / "jev_video_knowledge.json").write_text(json.dumps(feed, ensure_ascii=False, separators=(",", ":"))+"\\n", encoding="utf-8")
     print(json.dumps({"indexed": archive["video_count"],
                       "new": archive["newly_discovered"],
                       "gemini_connected":archive["gemini_configured"],
