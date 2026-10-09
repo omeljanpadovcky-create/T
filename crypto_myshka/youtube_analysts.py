@@ -90,7 +90,7 @@ def classify(title: str, description: str = "", excerpt: str = "") -> dict:
     # Only excerpt, title and description are observed. Do not invent what
     # happened visually during the video or imply that a live trade was checked.
     mentioned_instruments = list(dict.fromkeys(
-        re.sub(r"\s+", "", x.upper()).replace("_", "/").replace("-", "/")
+        re.sub(r"\s+", " ", x.upper()).strip().replace("_", "/").replace("-", "/")
         for x in INSTRUMENT_RE.findall(visible)
     ))[:10]
     timeframes = list(dict.fromkeys(x.upper() for x in TIMEFRAME_RE.findall(visible)))[:6]
