@@ -94,13 +94,13 @@
         "short_conclusion": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T21:03:01Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:07:32Z"
     },
     {
       "id": "11152640688458",
@@ -1290,23 +1290,20 @@
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ],
       "jev_ai": {
-        "what_happened": "Alongside its recent spot NEAR ETF launch, Bitwise is prioritizing AI and intends to do more in that area.",
-        "why_it_matters": "Регуляторний фактор може змінити доступ або попит на DOGE; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-        "market_effect": "Потенційно позитивний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
+        "what_happened": "CEO Bitwise Гантер Хорслі прокоментував провал спотового ETF на Dogecoin, назвавши його «трагічним» і вказавши на розрив між покупцями ETF та реальними користувачами крипто-додатків. На тлі недавнього запуску спотового ETF на NEAR компанія оголосила про пріоритетний розвиток AI-напряму.",
+        "why_it_matters": "Це визнання від великого емітента ETF впливає на наратив про те, що традиційні ETF-продукти не обов'язково стимулюють реальне використання криптовалют кінцевими користувачами. Заява може вплинути на оцінку перспектив альткоїн-ETF та стратегію інших емітентів.",
+        "market_effect": "Короткостроковий вплив на ціну DOGE малоймовірний — це коментар, а не новина про лістинг чи обсяги. Ефект обмежений через одне джерело та відсутність конкретних даних про обсяги або лістинг.",
+        "bull_case": "ETF-продукти створюють інституційну інфраструктуру та легітимність для крипторинку, навіть якщо роздрібні користувачі ними не користуються. Пілот Bitwise в AI може відкрити нові джерела зростання для компанії.",
+        "bear_case": "Одне джерело (The Block), деталі не підтверджені іншими публікаціями. Заява може бути PR-позиціонуванням для просування AI-ініціативи. Відсутність попиту на DOGE-ETF може свідчити про слабкість альткоїн-ETF-ринку в цілому.",
+        "watch_next": "Деталі AI-стратегії Bitwise, чи повторять подібні коментарі інші емітенти, реальні обсяги торгівлі альткоїн-ETF після запуску, реакція ринку на NEAR-ETF.",
         "confidence": "низька",
-        "short_conclusion": "Регуляторний фактор може змінити доступ або попит на DOGE; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "short_conclusion": "Це коментар керівника Bitwise про провал DOGE-ETF, а не підтверджений ринковий каталізатор. Через одне джерело та відсутність фактів про обсяги чи лістинг, оцінка має бути обережною.",
+        "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T20:17:56Z"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T23:07:15Z"
     },
     {
       "id": "2263ca375d33a1",
@@ -1360,13 +1357,13 @@
         "short_conclusion": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T20:18:09Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T23:07:20Z"
     },
     {
       "id": "487a91e92562e2",
@@ -1414,13 +1411,13 @@
         "short_conclusion": "Інституційний інтерес до крипторинок важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T21:02:54Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T23:07:26Z"
     },
     {
       "id": "630ad426bb44ed",
@@ -4046,16 +4043,16 @@
     }
   ],
   "jev_enabled": true,
-  "jev_status": "degraded",
+  "jev_status": "ok",
   "jev_provider": "apinex",
   "jev_model": "free/deepseek-v4.1-flash",
-  "jev_analyzed_count": 9,
-  "jev_analyzed_this_run": 0,
+  "jev_analyzed_count": 10,
+  "jev_analyzed_this_run": 1,
   "jev_pending_count": 0,
-  "jev_llm_pending_count": 20,
-  "jev_analysis_errors": 4,
+  "jev_llm_pending_count": 19,
+  "jev_analysis_errors": 3,
   "jev_error_codes": {
-    "ValueError": 4
+    "ValueError": 3
   },
-  "jev_last_run_at": "2026-10-09T23:05:20Z"
+  "jev_last_run_at": "2026-10-09T23:07:38Z"
 }
