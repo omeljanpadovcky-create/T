@@ -153,7 +153,11 @@
       state.channelsReady=true;
     }
     const found=raw.filter(filters);
-    $('archive-matches').textContent='Знайдено: '+found.length;
+    $('archive-matches').textContent='Для бази JEV: '+found.length+' релевантних джерел';
+    // Internal research mode: no public-facing video cards or playback catalogue.
+    $('archive-more').hidden=true;
+    $('archive-list').innerHTML='<div class="empty-state"><strong>🧠 Внутрішня база знань JEV</strong><p>Відео збираються як джерела для AI, а не як публічний відеокаталог. До робочих знань потрапляють лише фактичні конспекти Gemini або JEV, не самі назви відео.</p><p>Відбір не гарантує точності тверджень авторів. Сигнали з відео не запускають угод.</p></div>';
+    return;
     $('archive-more').hidden=state.limit>=found.length;
     if (state.error && !count) {
       $('archive-list').innerHTML='<div class="empty-state"><strong>Архів тимчасово недоступний</strong>'+
