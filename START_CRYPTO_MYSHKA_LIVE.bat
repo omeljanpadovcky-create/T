@@ -38,5 +38,11 @@ echo Channel checks: every 15 seconds when YouTube responds.
 echo Optional AI frame analysis interval: %LIVE_CAPTURE_INTERVAL% sec per active stream.
 echo WARNING: OpenAI vision and speech recognition can create significant API costs.
 echo The monitor records observations only and never places trades.
+echo.
+echo Opening LOCAL dashboard at http://127.0.0.1:8765/youtube-analysts.html#liveMonitor
+start "CryptoMyshka Local Dashboard" /min %PYTHON_CMD% -m http.server 8765 --bind 127.0.0.1
+timeout /t 2 /nobreak >nul
+start "" "http://127.0.0.1:8765/youtube-analysts.html#liveMonitor"
+echo.
 %PYTHON_CMD% crypto_myshka\rapid_live_watch.py --interval 15
 pause
