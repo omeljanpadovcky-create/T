@@ -15,7 +15,7 @@ from datetime import datetime, timezone
 
 import requests
 
-MODEL = os.getenv("YOUTUBE_GEMINI_MODEL", "gemini-2.5-flash").strip()
+MODEL = os.getenv("YOUTUBE_GEMINI_MODEL", "gemini-3.5-flash-lite").strip()
 ENABLED = os.getenv("YOUTUBE_GEMINI_ENABLED", "true").lower().strip() == "true"
 API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 MAX_PER_RUN = max(0, min(3, int(os.getenv("YOUTUBE_GEMINI_MAX_PER_RUN", "1"))))
