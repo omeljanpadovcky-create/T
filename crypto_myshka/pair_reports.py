@@ -180,7 +180,14 @@ def build(snapshot: dict, now: datetime | None = None) -> dict:
             "limitations": limitations,
             "independently_verified": False,
             "trade_status": "NO_AUTO_TRADE",
-            "jev": add_jev_notes(chart, limitations),
+            "jev": (
+                dict(
+                    (seen["jev"] if isinstance(seen.get("jev"), dict) else {}),
+                    limitations=limitations,
+                ) if isinstance(seen.get("jev"), dict)
+                    and seen["jev"].get("status") == "model"
+                else add_jev_notes(chart, limitations)
+            ),
         }
         reports.append(report)
     reports.sort(key=lambda e: (e["observed_at"], e["pair"]), reverse=True)
