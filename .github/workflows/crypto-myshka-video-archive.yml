@@ -1,0 +1,68 @@
+name: CryptoMyshka YouTube Video Archive
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Backfill older video metadata every two hours, not continuous LIVE watching.
+    - cron: '17 */2 * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'crypto_myshka/youtube_archive.py'
+      - 'crypto_myshka/video_jev.py'
+      - 'crypto_myshka/tests/test_youtube_archive.py'
+      - '.github/workflows/crypto-myshka-video-archive.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: crypto-myshka-video-archive
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install public YouTube metadata dependencies
+        run: python -m pip install requests==2.32.5 yt-dlp
+      - name: Check Python syntax and archive guarantees
+        run: |
+          python -m py_compile crypto_myshka/youtube_archive.py crypto_myshka/video_jev.py
+          python -m unittest crypto_myshka.tests.test_youtube_archive -v
+      - name: Gather published video metadata, scan available captions and summarize with JEV if possible
+        env:
+          APINEX_API_KEY: ${{ secrets.APINEX_API_KEY }}
+          YOUTUBE_JEV_MODEL: 'free/deepseek-v4.1-flash'
+          YOUTUBE_JEV_ENABLED: 'true'
+          YOUTUBE_JEV_MAX_PER_RUN: '2'
+          VIDEO_ARCHIVE_PAGE: '45'
+          VIDEO_ARCHIVE_RECENT: '12'
+          VIDEO_ARCHIVE_DETAILS: '5'
+        run: python crypto_myshka/youtube_archive.py
+      - name: Publish only the separately versioned video archive
+        run: |
+          git config user.name "CryptoMyshka Video Archive"
+          git config user.email "crypto-myshka@users.noreply.github.com"
+          cp crypto_myshka/data/youtube_archive.json /tmp/myshka_video_archive.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/myshka_video_archive.json crypto_myshka/data/youtube_archive.json
+            git add crypto_myshka/data/youtube_archive.json
+            if git diff --cached --quiet; then
+              echo "No new or enriched videos"
+              exit 0
+            fi
+            git commit -m "Refresh incremental Myshka YouTube video archive"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 4
+          done
+          exit 1
