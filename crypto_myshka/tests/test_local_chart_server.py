@@ -50,6 +50,74 @@ class LocalChartServerTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(data["direction"], "НЕВИЗНАЧЕНО")
 
+    def test_demo_buy_one_minute_requires_readable_chart_and_timeframe(self):
+        png = base64.b64encode(b"\x89PNG\r\n\x1a\nexample").decode("ascii")
+        model_answer = {
+            "direction": "ВГОРУ", "readable": True,
+            "chart_timeframe": "unknown", "test_expiry_seconds": 60,
+            "evidence": "Видно вищі локальні мінімуми на останніх свічках."
+        }
+        with patch.object(chart, "api_post", return_value={
+            "message": {"content": json.dumps(model_answer, ensure_ascii=False)}
+        }) as mocked:
+            status, result = self.request({"image": png, "chart_timeframe": "1m"})
+        self.assertEqual(status, 200)
+        self.assertEqual(result["action"], "BUY")
+        self.assertEqual(result["test_expiry_seconds"], 60)
+        self.assertEqual(result["chart_timeframe"], "1m")
+        self.assertEqual(result["timeframe_source"], "user")
+        self.assertFalse(result["signal_validated"])
+        self.assertFalse(result["expiry_validated"])
+        self.assertEqual(mocked.call_args.args[1]["format"], "json")
+        self.assertIn("1m", mocked.call_args.args[1]["messages"][1]["content"])
+
+    def test_demo_sell_five_minutes(self):
+        decision = chart.parse_jev_result(json.dumps({
+            "direction": "ВНИЗ", "readable": True,
+            "chart_timeframe": "5m", "test_expiry_seconds": 300,
+            "evidence": "Свічки показують нижчі максимуми й мінімуми."
+        }, ensure_ascii=False))
+        self.assertEqual(decision["action"], "SELL")
+        self.assertEqual(decision["test_expiry_seconds"], 300)
+        self.assertEqual(decision["timeframe_source"], "model")
+
+    def test_no_expiry_when_timeframe_is_missing(self):
+        decision = chart.parse_jev_result(json.dumps({
+            "direction": "ВГОРУ", "readable": True,
+            "chart_timeframe": "unknown", "test_expiry_seconds": 30,
+            "evidence": "Видно підвищення кількох останніх свічок."
+        }, ensure_ascii=False))
+        self.assertEqual(decision["direction"], "ВГОРУ")
+        self.assertEqual(decision["action"], "SKIP")
+        self.assertIsNone(decision["test_expiry_seconds"])
+
+    def test_expiry_shorter_than_candle_timeframe_is_rejected(self):
+        decision = chart.parse_jev_result(json.dumps({
+            "direction": "ВГОРУ", "readable": True,
+            "chart_timeframe": "5m", "test_expiry_seconds": 30,
+            "evidence": "Видно послідовність вищих мінімумів."
+        }, ensure_ascii=False))
+        self.assertEqual(decision["action"], "SKIP")
+
+    def test_unreadable_or_invalid_model_output_cannot_create_signal(self):
+        for raw in (
+            '{"direction":"ВНИЗ","readable":false,"chart_timeframe":"1m","test_expiry_seconds":60}',
+            '{"direction":"ВГОРУ","readable":true,"chart_timeframe":"1m","test_expiry_seconds":99}',
+            '{"direction":"BUY","readable":true,"chart_timeframe":"1m","test_expiry_seconds":60}',
+            'Buy now, guaranteed win!',
+            'ВГОРУ',
+        ):
+            with self.subTest(raw=raw):
+                result = chart.parse_jev_result(raw)
+                self.assertEqual(result["action"], "SKIP")
+                self.assertIsNone(result["test_expiry_seconds"])
+
+    def test_invalid_timeframe_is_rejected(self):
+        png = base64.b64encode(b"\x89PNG\r\n\x1a\nexample").decode("ascii")
+        status, result = self.request({"image": png, "chart_timeframe": "60m"})
+        self.assertEqual(status, 400)
+        self.assertIn("таймфрейм", result["error"])
+
     def test_reject_foreign_origin(self):
         png = base64.b64encode(bytes([137, 80, 78, 71, 13, 10, 26, 10]) + b"example").decode("ascii")
         conn = http.client.HTTPConnection("127.0.0.1", self.server.server_port, timeout=5)
