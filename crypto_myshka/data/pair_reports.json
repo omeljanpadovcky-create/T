@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "updated_at": null,
+  "updated_at": "2026-10-09T19:24:01.745380+00:00",
   "source": "youtube_live.json / timestamped screenshot observations",
   "analysis_mode": "limited_single_frame_evidence",
   "status": "waiting_for_readable_live_chart",
   "reports": [],
   "independently_verified": false,
   "automatic_trading": false,
-  "disclaimer": "Поки немає успішно прочитаних LIVE-графіків. Жодних вигаданих торгових сигналів чи впевненості."
+  "disclaimer": "Не торгові рекомендації; JEV роз'яснення є структурованою інтерпретацією AI-кадру, а не незалежним LLM-висновком."
 }
