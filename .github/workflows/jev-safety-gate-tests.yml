@@ -1,0 +1,33 @@
+name: JEV Strict Safety Gate Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'crypto_myshka/signal_gate.py'
+      - 'crypto_myshka/pair_reports.py'
+      - 'crypto_myshka/tests/test_signal_gate.py'
+      - 'crypto_myshka/tests/test_pair_reports.py'
+      - 'app/myshka.js'
+      - '.github/workflows/jev-safety-gate-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  gate-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test independent-source fail-closed signal gate
+        run: python -m unittest crypto_myshka.tests.test_signal_gate crypto_myshka.tests.test_pair_reports -v
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate frontend syntax
+        run: node --check app/myshka.js
