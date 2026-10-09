@@ -451,13 +451,21 @@
         }
         const dominant=green>red*1.3?'зелених':red>green*1.3?'червоних':'приблизно порівну червоних і зелених';
         const info=document.createElement('div');
-        info.className='report-card';
+        info.className='report-card photo-report';
+        const preview=document.createElement('img');
+        preview.className='chart-photo-preview';
+        preview.alt='Завантажений графік: '+file.name;
+        preview.src=canvas.toDataURL('image/png');
+        preview.loading='eager';
+        const fileLabel=document.createElement('p');
+        fileLabel.className='chart-photo-filename';
+        fileLabel.textContent='📎 '+file.name+' · Фото графіка';
         const heading=document.createElement('h3');heading.textContent='📷 Попередній аналіз фото';
         const desc=document.createElement('p');
         desc.textContent='Розмір: '+image.width+' × '+image.height+' px. За кольорами на зображенні '+(dominant.includes('порівну')?dominant:'більше '+dominant)+' ділянок. Це не визначає напрямок наступної свічки.';
         const caution=document.createElement('p');caution.className='report-notice';
         caution.textContent='Локальна оцінка пікселів — не повноцінний AI/JEV. Пару, таймфрейм, котирування, рівні та обсяг автоматично не підтверджено. Фото нікуди не надсилається.';
-        info.append(heading,desc,caution);box.replaceChildren(info);
+        info.append(preview,fileLabel,heading,desc,caution);box.replaceChildren(info);
       };
       image.onerror = () => { URL.revokeObjectURL(url);box.textContent='Не вдалося прочитати фото.'; };
       image.src=url;
