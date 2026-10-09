@@ -1,0 +1,48 @@
+name: Check Crypto Myshka APInex Connection
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/myshka-apinex-connection-test.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  apinex-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Verify GitHub secret and APInex models endpoint (no paid inference)
+        env:
+          APINEX_API_KEY: ${{ secrets.APINEX_API_KEY }}
+          APINEX_VISION_MODEL: 'gemini-3.8-flash'
+        run: |
+          python - <<'PY'
+          import json, os, urllib.request, urllib.error
+          key = os.environ.get('APINEX_API_KEY', '').strip()
+          if not key:
+              raise SystemExit('ERROR: APINEX_API_KEY is not available in GitHub Actions secrets.')
+          request = urllib.request.Request(
+              'https://api.apinex.bond/v1/models',
+              headers={'Authorization': 'Bearer '+key, 'Accept':'application/json'},
+              method='GET'
+          )
+          try:
+              with urllib.request.urlopen(request, timeout=18) as response:
+                  raw = response.read(1_000_000)
+              data = json.loads(raw)
+              items = data.get('data',[]) if isinstance(data,dict) else []
+              ids = {str(row.get('id')) for row in items if isinstance(row,dict) and row.get('id')}
+              print('APInex models API: reachable, key accepted.')
+              print('Vision model present in advertised list:', os.environ['APINEX_VISION_MODEL'] in ids)
+              print('Model count:', len(ids))
+              print('No paid chat or image requests were made.')
+          except urllib.error.HTTPError as e:
+              # Never output Authorization header, request object or API key.
+              raise SystemExit('APInex models endpoint rejected request (HTTP '+str(e.code)+').')
+          except (TimeoutError, urllib.error.URLError) as e:
+              raise SystemExit('APInex network check failed: '+type(e).__name__)
+          PY
