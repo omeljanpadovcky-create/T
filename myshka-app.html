@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f6f8fc">
-  <meta name="description" content="Crypto Myshka — локальний аналіз скріншотів графіків через JEV та Ollama, без автоматичних угод.">
+  <meta name="description" content="Crypto Myshka — AI-аналіз скріншотів графіків через локальну Ollama або підключений хмарний JEV, без автоматичних угод.">
   <link rel="icon" type="image/svg+xml" href="./app/myshka-icon.svg">
   <link rel="manifest" href="./myshka.webmanifest">
   <link rel="stylesheet" href="./app/myshka.css">
@@ -74,10 +74,10 @@
 
         <section class="screen" id="screen-analysis" data-screen="analysis" aria-labelledby="analysis-title" hidden>
           <div class="section-heading top-heading"><div><div class="eyebrow">JEV EXPLAINABLE AI</div><h1 id="analysis-title">Fast Analysis</h1></div><span class="outline-pill">NO AUTO-TRADE</span></div>
-          <p class="intro">Встав скріншот через Ctrl+V або обери файл. Локальний JEV оцінить видимий напрямок, сформує демо-гіпотезу BUY / SELL / ПРОПУСТИТИ та, якщо даних достатньо, запропонує час закриття 30 с, 1 хв або 5 хв. Збережені звіти за парами залишаються нижче.</p>
+          <p class="intro">Встав скріншот через Ctrl+V або обери файл. JEV (локальний або хмарний) оцінить видимий напрямок, сформує демо-гіпотезу BUY / SELL / ПРОПУСТИТИ та, якщо даних достатньо, запропонує час закриття 30 с, 1 хв або 5 хв. Збережені звіти за парами залишаються нижче.</p>
           <div class="searchbar"><label class="visually-hidden" for="pair-search">Пошук пари</label><span aria-hidden="true">⌕</span><input id="pair-search" type="search" placeholder="Знайти BTC/USDT, AUD/CNY OTC…" autocomplete="off"></div>
           <div id="pair-chips" class="chips" aria-label="Доступні пари"></div>
-          <div class="demo-controls"><label class="small-button" for="chart-photo">📷 Обрати фото графіка</label><input id="chart-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden><span>Або встав скріншот: Win+Shift+S → Ctrl+V. Зображення передається тільки до Ollama на твоєму комп'ютері, якщо запущено локальну версію.</span></div>
+          <div class="demo-controls"><label class="small-button" for="chart-photo">📷 Обрати фото графіка</label><input id="chart-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden><span>Або встав скріншот: Win+Shift+S → Ctrl+V. У локальному режимі фото отримує Ollama на ПК; у хмарному — налаштований сервер і AI-провайдер. Без підключення фото не надсилається.</span></div>
           <div class="expiry-lab-controls">
             <label for="chart-timeframe"><strong>Таймфрейм свічок</strong><small>Не плутати з часом угоди після BUY/SELL</small></label>
             <select id="chart-timeframe" aria-label="Таймфрейм свічок">
@@ -114,13 +114,29 @@
             <div class="setting-item"><div><strong>Тема інтерфейсу</strong><small>Світла або темна</small></div><select id="theme-select" aria-label="Тема"><option value="light">Світла</option><option value="dark">Темна</option></select></div>
             <div class="setting-item"><div><strong>Оновлення сторінки</strong><small>Це не частота зчитування відео</small></div><select id="refresh-select" aria-label="Частота оновлення"><option value="15">15 с</option><option value="30">30 с</option><option value="60">60 с</option><option value="120">120 с</option></select></div>
           </div>
+          <div class="settings-card" id="cloud-settings">
+            <h3>☁️ Хмарний JEV — аналіз без увімкненого ПК</h3>
+            <p class="report-notice">Потрібен власний сервер Vercel з налаштованими секретами. Не вводь сюди ключ Gemini API: тільки адресу свого сервера та окремий код доступу JEV.</p>
+            <div class="cloud-settings-fields">
+              <label for="cloud-endpoint">Адреса сервера (HTTPS)</label>
+              <input id="cloud-endpoint" type="url" inputmode="url" spellcheck="false" placeholder="https://your-project.vercel.app" autocomplete="url">
+              <label for="cloud-access">Код доступу JEV (не Gemini API-ключ)</label>
+              <input id="cloud-access" type="password" autocomplete="off" placeholder="Введи окремий код доступу">
+              <div class="cloud-settings-actions">
+                <button id="cloud-connect" class="small-button" type="button">Підключити хмарний JEV</button>
+                <button id="cloud-disconnect" class="small-button" type="button">Від'єднати</button>
+              </div>
+              <p id="cloud-connection-status" role="status" aria-live="polite">Хмарний сервер не налаштовано.</p>
+            </div>
+            <a class="text-link" href="./crypto_myshka/CLOUD_AI_README_UA.md" target="_blank" rel="noopener noreferrer">Як увімкнути JEV 24/7 через Vercel ↗</a>
+          </div>
           <div class="settings-card">
             <h3>Джерела даних</h3>
             <div id="data-health" class="health-list">Очікування…</div>
             
             <a class="text-link" href="./crypto_myshka/LIVE_README_UA.md" target="_blank" rel="noopener noreferrer">Інструкція запуску ↗</a>
           </div>
-          <div class="notice"><span aria-hidden="true">🔒</span><p>JEV пояснює обмежені дані спостережень, а не гарантує результат. Автоматичні угоди й копіювання ставок вимкнені. Не вводь API-ключі на цій сторінці.</p></div>
+          <div class="notice"><span aria-hidden="true">🔒</span><p>JEV пояснює обмежені дані спостережень, а не гарантує результат. Автоматичні угоди й копіювання ставок вимкнені. Не вводь ключі Gemini API на цій сторінці. Код доступу JEV зберігається лише в сесії браузера.</p></div>
         </section>
       </main>
 
