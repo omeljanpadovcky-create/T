@@ -46,3 +46,6 @@ main{width:100%;max-width:1120px;margin:0 auto;flex:1;min-width:0}h1,h2,h3,h4{fo
 .direction-result{font-size:clamp(25px,5vw,38px);font-weight:800;letter-spacing:.015em;padding:12px 0}
 .direction-up{color:var(--mint)}.direction-down{color:var(--red)}.direction-neutral{color:var(--orange)}
 
+
+.vision-help{margin:-5px 0 14px;font-size:12px;color:var(--blue)}
+.vision-help a{text-decoration:underline;text-underline-offset:3px}
