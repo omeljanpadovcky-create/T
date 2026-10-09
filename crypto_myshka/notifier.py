@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import json, os
+import json, os, re
 from pathlib import Path
+from datetime import datetime, timezone, timedelta
 
 import requests
 
@@ -124,15 +125,27 @@ def main():
     # Telegram digest; unknown/unverified channels are never advertised.
     live=load(LIVE,{})
     for channel in live.get("channels",[]) or []:
-        if not isinstance(channel,dict) or channel.get("live") is not True:
+        if not isinstance(channel,dict) or channel.get("live") is not True or channel.get("status") != "LIVE":
             continue
-        url=channel.get("live_url") or channel.get("watch_url") or channel.get("url") or channel.get("live_page") or ""
+        # Only announce an actual, recently checked video. A channel /videos
+        # page or stale status is not confirmation of a current LIVE stream.
+        try:
+            checked=datetime.fromisoformat(str(channel.get("checked_at") or "").replace("Z","+00:00"))
+            if checked.tzinfo is None or not timedelta(0) <= datetime.now(timezone.utc)-checked <= timedelta(minutes=20):
+                continue
+        except (ValueError, TypeError):
+            continue
+        stream=channel.get("stream") or {}
+        if not isinstance(stream,dict):
+            continue
+        video_id=str(stream.get("video_id") or "")
+        if not re.fullmatch(r"[A-Za-z0-9_-]{11}",video_id):
+            continue
+        url="https://www.youtube.com/watch?v="+video_id
         name=channel.get("name") or channel.get("handle") or "YouTube"
-        event_id=channel.get("video_id") or (url if "/watch?" in url or "/live/" in url else "")
-        if not event_id: continue
-        current.append({"id":"live:"+str(event_id),"source":"youtube",
+        current.append({"id":"live:"+str(channel.get("id") or "")+":"+video_id,"source":"youtube",
                         "title":"🔴 LIVE підтверджено: "+name,
-                        "url":url,"impact_label":"Ефір доступний; не торговий сигнал"})
+                        "url":url,"impact_label":"Трансляція; дії трейдера не перевірені"})
     reports=load(REPORTS,{})
     for report in reports.get("reports",[]) or []:
         if not isinstance(report,dict): continue
@@ -149,7 +162,7 @@ def main():
                         "title":"JEV · на ручну перевірку (НЕ СИГНАЛ): "+pair+" · "+str(report.get("trend") or "невизначено"),
                         "risk":80 if report.get("confidence")=="low" else 60,
                         "jev_ai":{"short_conclusion":(conclusion or "Потрібна перевірка котирувань.")+" Не автоматична угода."},
-                        "url":str(report.get("source_url") or "")})
+                        "url":str(report.get("video_url") or report.get("source_url") or "")})
 
     ids=[x.get("id") for x in current if x.get("id")]
     state=load_state({"initialized":False,"seen":[],"telegram_ready":False})
