@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-09T19:14:24.841360+00:00",
+  "generated_at": "2026-10-09T19:21:38.977149+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -47,7 +47,7 @@
     }
   },
   "raw_item_count": 206,
-  "item_count": 101,
+  "item_count": 100,
   "items": [
     {
       "id": "11152640688458",
@@ -83,9 +83,6 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:14:35Z",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 10s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
       "jev_ai": {
         "what_happened": "P7 DarkSword iOS Exploit Kit Adds Crypto Wallet Data Theft and Remote Commands &nbsp;&nbsp; The Hacker News",
         "why_it_matters": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
@@ -100,7 +97,10 @@
         "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 10s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 10s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T19:14:35Z"
     },
     {
       "id": "edd2450c262553",
@@ -142,9 +142,6 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:14:40Z",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 3s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
       "jev_ai": {
         "what_happened": "DWF Labs subsidiaries sue BitGo for $141 million over alleged token lock-up breach",
         "why_it_matters": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
@@ -159,7 +156,10 @@
         "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 3s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 3s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T19:14:40Z"
     },
     {
       "id": "3f390f004120fe",
@@ -197,9 +197,6 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:14:47Z",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
       "jev_ai": {
         "what_happened": "Stacks Founder Warns Bitcoin Security Breach Could Hit Entire Crypto Market &nbsp;&nbsp; Yahoo Finance",
         "why_it_matters": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
@@ -214,7 +211,10 @@
         "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
       "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T19:14:47Z"
     },
     {
       "id": "1d226d05315623",
@@ -252,9 +252,6 @@
         "Ринковий тон: Потенційно негативний",
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:14:53Z",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
       "jev_ai": {
         "what_happened": "Bitcoin and crypto markets eyed a recovery from Thursday’s drop despite concerns of another hardware wallet exploit.",
         "why_it_matters": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
@@ -269,7 +266,10 @@
         "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
       "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback"
+      "analysis_level": "cross_source_fallback",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T19:14:53Z"
     },
     {
       "id": "5deda94f2556f4",
@@ -308,41 +308,6 @@
       "reasons": [
         "Є незалежне підтвердження",
         "Ринковий тон: Потенційно негативний",
-        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
-      ]
-    },
-    {
-      "id": "3d57b9e8a614a7",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "The SEC Just Broke the 2x Ceiling on Leveraged Crypto ETFs — and the First 3x Products Are One Form Away From Trading - Yahoo Finance",
-      "summary": "The SEC Just Broke the 2x Ceiling on Leveraged Crypto ETFs — and the First 3x Products Are One Form Away From Trading &nbsp;&nbsp; Yahoo Finance",
-      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxORWlBQjRKV1ZBR2NTTWRBeVRUTG4yeXVnXzBOUFdJWlNEMnBCT2kxN0RKUVg1M3luV29yNlFGNHVqZlgyTGlqOS1wbUFkYkxuNk5uczl5MkJlVXotc0VwQ0M2OGFZQkF6ZEJpa1M5THlWNGhGVk5qS3c5Z2tTOUIwY3p6T05tNjdUOGNRekN3VTkyRTVj?oc=5",
-      "published_at": "2026-10-09T10:42:56+00:00",
-      "assets": [],
-      "topics": [
-        "regulation"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Google News discovery"
-      ],
-      "links": [
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxORWlBQjRKV1ZBR2NTTWRBeVRUTG4yeXVnXzBOUFdJWlNEMnBCT2kxN0RKUVg1M3luV29yNlFGNHVqZlgyTGlqOS1wbUFkYkxuNk5uczl5MkJlVXotc0VwQ0M2OGFZQkF6ZEJpa1M5THlWNGhGVk5qS3c5Z2tTOUIwY3p6T05tNjdUOGNRekN3VTkyRTVj?oc=5"
-        }
-      ],
-      "confidence_label": "Discovery: потребує підтвердження",
-      "jev_take": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
-      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Google News використано лише як радар теми",
-        "Ринковий тон: Невизначений / змішаний",
         "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ]
     },
@@ -1319,6 +1284,41 @@
       "analysis_level": "llm",
       "analysis_retry_count": 1,
       "analysis_last_attempt_at": "2026-10-03T17:00:36Z"
+    },
+    {
+      "id": "7542cc906dbb8c",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "THORChain exec accuses Tether of temporarily freezing USDT vaults",
+      "summary": "Chad Barraford, technical co-founder of the network, said that the funds were frozen and then unfrozen without explanation.",
+      "url": "https://cointelegraph.com/news/thorchain-tether-freezing-usdt-addresses?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "published_at": "2026-10-09T19:04:03+00:00",
+      "assets": [],
+      "topics": [
+        "stablecoin"
+      ],
+      "impact": 1,
+      "impact_label": "Низький вплив",
+      "tone": "Невизначений / змішаний",
+      "source_count": 1,
+      "publishers": [
+        "Cointelegraph"
+      ],
+      "links": [
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/thorchain-tether-freezing-usdt-addresses?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
+      "watch_for": "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Невизначений / змішаний",
+        "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
+      ]
     },
     {
       "id": "a165b356d19167",
@@ -3290,41 +3290,6 @@
       ],
       "confidence_label": "Поки одне джерело",
       "jev_take": "Новина стосується крипторинок, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
-      ]
-    },
-    {
-      "id": "0f9b2e63072019",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Bitcoin monthly ‘new money’ inflows near $5B as BTC price rally stalls",
-      "summary": "Bitcoin’s realized cap rise in the 30 days to Oct. 5 came mostly from existing holders, not fresh capital, Glassnode data showed.",
-      "url": "https://cointelegraph.com/markets/bitcoin-monthly-new-money-inflows-near-5b-as-btc-price-rally-stalls?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "published_at": "2026-10-08T09:56:07+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Cointelegraph"
-      ],
-      "links": [
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/markets/bitcoin-monthly-new-money-inflows-near-5b-as-btc-price-rally-stalls?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
       "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
