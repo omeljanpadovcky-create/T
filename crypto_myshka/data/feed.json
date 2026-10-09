@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-09T21:50:25.995054+00:00",
+  "generated_at": "2026-10-09T21:51:28.196505+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,12 +26,12 @@
       "ok": true,
       "count": 10218,
       "complete": true,
-      "updated_at": "2026-10-09T21:50:20.929506+00:00",
+      "updated_at": "2026-10-09T21:51:23.401712+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 98,
+      "count": 117,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -41,38 +41,43 @@
       "ETH",
       "SOL",
       "PENDLE",
+      "ICP",
       "XRP",
       "BNB",
       "DOGE"
     ],
     "prices": {
       "bitcoin": {
-        "usd": 82483,
-        "usd_24h_change": 1.1109176995517176
+        "usd": 82469,
+        "usd_24h_change": 1.0940975531565569
       },
       "ethereum": {
-        "usd": 2482.95,
-        "usd_24h_change": 0.47902431834286624
+        "usd": 2482.46,
+        "usd_24h_change": 0.459402155670897
       },
       "solana": {
-        "usd": 109.01,
-        "usd_24h_change": -0.9361838432557439
+        "usd": 108.96,
+        "usd_24h_change": -0.9821917836763907
       },
       "pendle": {
-        "usd": 2.09,
-        "usd_24h_change": -0.11461334071339761
+        "usd": 2.08,
+        "usd_24h_change": -0.18771952790967372
+      },
+      "internet-computer": {
+        "usd": 3.04,
+        "usd_24h_change": 3.773393087790388
       },
       "ripple": {
         "usd": 1.39,
-        "usd_24h_change": 1.2703536038149947
+        "usd_24h_change": 1.2724704277866072
       },
       "binancecoin": {
-        "usd": 741.99,
-        "usd_24h_change": 1.2016082094510336
+        "usd": 741.98,
+        "usd_24h_change": 1.2002322359740758
       },
       "dogecoin": {
-        "usd": 0.085277,
-        "usd_24h_change": 1.4192262907528792
+        "usd": 0.0853,
+        "usd_24h_change": 1.446996291923355
       }
     }
   },
@@ -5757,7 +5762,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Метамаск повна Інструкція як БЕЗПЕЧНО зберігати Крипту | Metamask як користуватися",
+      "title": "Metamask Complete Instructions on How to SAFELY Store Crypto | Metamask How to Use",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=NIA4LdYEMzI",
       "published_at": null,
@@ -6214,6 +6219,6 @@
     }
   ],
   "archive_count": 10218,
-  "news_count": 98,
+  "news_count": 117,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
