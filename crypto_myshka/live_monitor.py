@@ -259,7 +259,8 @@ def process_once() -> dict:
             continue
         stream, err = get_stream(channel)
         if not stream:
-            row["status"] = "check_error" if err else "offline"
+            # A blocked extractor or missing stream is NOT proof that the channel is offline.
+            row["status"] = "check_error" if err and ("bot" in err.lower() or "sign in" in err.lower()) else "not_detected"
             if err:
                 row["error"] = err
             channels.append(row)
