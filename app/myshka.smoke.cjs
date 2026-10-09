@@ -251,6 +251,99 @@ const { JSDOM } = require('jsdom');
   await new Promise(resolve => setTimeout(resolve, 30));
   assert.match(cloudDoc.querySelector('#connection-pill').textContent,/Підключи хмарний JEV/);
   assert.equal(cloudWin.sessionStorage.getItem('crypto-myshka-cloud-access-session-v1'),null);
+
+  // Dual-mode privacy regression: no cloud calls without explicit consent.
+  const autoDom = new JSDOM(html, {
+    url: 'http://127.0.0.1:18765/myshka-app.html#analysis',
+    pretendToBeVisual: true, runScripts: 'outside-only'
+  });
+  const autoWin = autoDom.window;
+  autoWin.scrollTo = () => {};
+  autoWin.FileReader = win.FileReader;
+  autoWin.Image = win.Image;
+  autoWin.localStorage.setItem('crypto-myshka-app-v1', JSON.stringify({
+    theme:'light',refresh:15,visionMode:'auto',cloudFallback:false,saved:{},votes:{}
+  }));
+  autoWin.localStorage.setItem('crypto-myshka-cloud-endpoint-v1', 'https://myshka-ai.vercel.app');
+  autoWin.sessionStorage.setItem('crypto-myshka-cloud-access-session-v1', 'abcdefghijklmnopqrstuvwxyz123456');
+  let offlineLocalHealth = 0, remoteHealth = 0, remoteImages = 0, localImages = 0;
+  autoWin.fetch = async (url, opts = {}) => {
+    const address = String(url);
+    if (address.startsWith('https://myshka-ai.vercel.app/api/chart-health')) {
+      remoteHealth++;
+      assert.equal(opts.headers['X-JEV-Access'], 'abcdefghijklmnopqrstuvwxyz123456');
+      return {ok:true,status:200,json:async()=>({
+        ready:true,cloud:true,provider:'apinex',model:'gemini-3.8-flash',verified:false
+      })};
+    }
+    if (address.startsWith('https://myshka-ai.vercel.app/api/chart-analysis')) {
+      remoteImages++;
+      assert.equal(JSON.parse(opts.body).image, 'aGVsbG8=');
+      return {ok:true,status:200,json:async()=>({
+        direction:'НЕВИЗНАЧЕНО',action:'SKIP',test_expiry_seconds:null,
+        chart_timeframe:'unknown',timeframe_source:'unknown',reason:'Мало даних.',
+        provider:'apinex'
+      })};
+    }
+    if (address.includes('/api/chart-health')) {
+      offlineLocalHealth++;
+      return {ok:false,status:503,json:async()=>({ready:false,ollama:false,error:'Ollama offline'})};
+    }
+    if (address.includes('/api/chart-analysis')) {
+      localImages++;
+      throw Error('The offline local model must never receive image analysis');
+    }
+    const filename = address.split('/').pop().split('?')[0];
+    if (!data[filename]) throw Error('Unexpected auto resource: '+address);
+    return {ok:true,json:async()=>data[filename]};
+  };
+  autoWin.eval(js);
+  await new Promise(resolve => setTimeout(resolve, 100));
+  const autoDoc = autoWin.document;
+  assert.equal(remoteHealth, 0, 'AUTO mode must not probe the cloud without permission');
+  assert.equal(remoteImages, 0, 'AUTO mode must never send images without consent');
+  assert.equal(autoDoc.querySelector('#vision-mode-quick').value, 'auto');
+  const consent = autoDoc.querySelector('#vision-cloud-fallback');
+  assert.equal(consent.checked, false, 'cloud fallback should default to OFF');
+  consent.checked = true;
+  consent.dispatchEvent(new autoWin.Event('change', {bubbles:true}));
+  await new Promise(resolve => setTimeout(resolve, 80));
+  assert.ok(offlineLocalHealth >= 2, 'prefer local health in AUTO');
+  assert.ok(remoteHealth >= 1, 'cloud health checked only after consent');
+  assert.match(autoDoc.querySelector('#vision-status').textContent, /APInex|хмарний/);
+  const upload = (name) => {
+    const input = autoDoc.querySelector('#chart-photo');
+    Object.defineProperty(input, 'files', {configurable:true,value:[
+      {name,type:'image/png',size:1000}
+    ]});
+    input.dispatchEvent(new autoWin.Event('change',{bubbles:true}));
+  };
+  upload('fallback.png');
+  await new Promise(resolve => setTimeout(resolve, 100));
+  assert.equal(remoteImages, 1, 'explicit cloud fallback analyzes the screenshot');
+  assert.equal(localImages, 0);
+  assert.match(autoDoc.querySelector('#photo-analysis .jev-image-result').textContent,/хмарним AI|резервний режим/);
+  consent.checked = false;
+  consent.dispatchEvent(new autoWin.Event('change', {bubbles:true}));
+  await new Promise(resolve => setTimeout(resolve, 40));
+  upload('no-consent.png');
+  await new Promise(resolve => setTimeout(resolve, 60));
+  assert.equal(remoteImages, 1, 'disabling consent immediately blocks cloud screenshot fallback');
+  const quick = autoDoc.querySelector('#vision-mode-quick');
+  quick.value = 'cloud';
+  quick.dispatchEvent(new autoWin.Event('change',{bubbles:true}));
+  await new Promise(resolve => setTimeout(resolve, 40));
+  assert.equal(autoDoc.querySelector('#vision-mode-select').value,'cloud');
+  upload('explicit-cloud.png');
+  await new Promise(resolve => setTimeout(resolve, 70));
+  assert.equal(remoteImages, 2, 'manual CLOUD selection permits cloud-only analysis');
+  quick.value = 'local';
+  quick.dispatchEvent(new autoWin.Event('change',{bubbles:true}));
+  await new Promise(resolve => setTimeout(resolve, 40));
+  upload('local-only.png');
+  await new Promise(resolve => setTimeout(resolve, 70));
+  assert.equal(remoteImages, 2, 'LOCAL mode cannot upload a screenshot to APInex');
+  autoWin.close();
   cloudWin.close();
   localWin.close();
   win.close();
