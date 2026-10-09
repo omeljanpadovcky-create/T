@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-09T23:20:23.937953+00:00",
+  "generated_at": "2026-10-09T23:22:03.196699+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -607,9 +607,9 @@
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
+      "analysis_error": "Model returned empty content",
       "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-09T23:20:51Z",
-      "analysis_error": "Model returned empty content"
+      "analysis_last_attempt_at": "2026-10-09T23:20:51Z"
     },
     {
       "id": "1ebda8c8f725a4",
