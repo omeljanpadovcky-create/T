@@ -1,0 +1,30 @@
+name: PowerShell LIVE launcher syntax
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'START_CRYPTO_MYSHKA_POWERSHELL.ps1'
+      - '.github/workflows/crypto-myshka-powershell-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  powershell-syntax:
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check PowerShell script parses without executing it
+        shell: powershell
+        run: |
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path '.\START_CRYPTO_MYSHKA_POWERSHELL.ps1').Path, [ref] $tokens, [ref] $errors) | Out-Null
+          if ($errors.Count -gt 0) {
+            $errors | ForEach-Object { Write-Error $_.Message }
+            exit 1
+          }
+          Write-Host 'PowerShell script syntax OK'
