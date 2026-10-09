@@ -33,6 +33,7 @@ FEED=ROOT/"data"/"feed.json"
 NEWS=ROOT/"data"/"news.json"
 LIVE=ROOT/"data"/"youtube_live.json"
 REPORTS=ROOT/"data"/"pair_reports.json"
+YOUTUBE_CONTEXT=ROOT/"data"/"youtube_analysts.json"
 STATE=ROOT/"data"/"notify_state.json"
 
 TOKEN=os.getenv("TELEGRAM_BOT_TOKEN","").strip()
@@ -163,6 +164,33 @@ def main():
                         "risk":80 if report.get("confidence")=="low" else 60,
                         "jev_ai":{"short_conclusion":(conclusion or "Потрібна перевірка котирувань.")+" Не автоматична угода."},
                         "url":str(report.get("video_url") or report.get("source_url") or "")})
+
+    # Educational content from already published YouTube videos:
+    # this is NOT a livestream watch or an independently validated trading signal.
+    youtube_context=load(YOUTUBE_CONTEXT,{})
+    for channel in youtube_context.get("channels",[]) or []:
+        if not isinstance(channel,dict) or not channel.get("confirmed"):
+            continue
+        for video in (channel.get("videos") or [])[:8]:
+            if not isinstance(video,dict) or video.get("sample_only"):
+                continue
+            vid=str(video.get("id") or "")
+            if not re.fullmatch(r"[A-Za-z0-9_-]{11}",vid):
+                continue
+            analysis=video.get("analysis") if isinstance(video.get("analysis"),dict) else {}
+            pairs=analysis.get("mentioned_instruments") or analysis.get("pairs") or []
+            indicators=analysis.get("mentioned_indicators") or []
+            description=[]
+            if pairs: description.append("Згадані пари: "+", ".join(str(v) for v in pairs[:4]))
+            if indicators: description.append("Індикатори: "+", ".join(str(v) for v in indicators[:4]))
+            if analysis.get("otc_flag"): description.append("OTC — котирування не підтверджені")
+            description.append("Ідея автора, не перевірений прогноз")
+            current.append({
+                "id":"youtube_content:"+vid,"source":"youtube",
+                "title":"Матеріал "+str(channel.get("name") or "YouTube")+": "+str(video.get("title") or "")[:95],
+                "url":"https://www.youtube.com/watch?v="+vid,
+                "impact_label":"; ".join(description)[:280],
+            })
 
     ids=[x.get("id") for x in current if x.get("id")]
     state=load_state({"initialized":False,"seen":[],"telegram_ready":False})
