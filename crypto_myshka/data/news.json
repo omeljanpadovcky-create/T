@@ -806,13 +806,13 @@
         "short_conclusion": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 29s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 29s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T22:58:51Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:22:13Z"
     },
     {
       "id": "fb8612a1141d75",
@@ -919,8 +919,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:01:42Z"
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:22:22Z"
     },
     {
       "id": "b0b22e17f4c5dd",
@@ -957,23 +957,20 @@
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
       ],
       "jev_ai": {
-        "what_happened": "France’s Finance Committee backed taxes on stablecoin swaps, as well as unrealized crypto gains when households with more than 800,000 euros move abroad.",
-        "why_it_matters": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
-        "market_effect": "Невизначений / змішаний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента.",
+        "what_happened": "Фінансовий комітет Франції підтримав у проекті бюджету на 2027 рік податок на обмін стейблкоїнів, а також оподаткування нереалізованої прибутковості з криптоактивів для домогосподарств із статками понад 800 000 євро, які переїжджають за кордон. Дані надані одним джерелом (Cointelegraph), остаточний текст законопроекту та голосування парламенту ще не оприлюднені.",
+        "why_it_matters": "Це перша у великій економіці ЄС спроба окремо оподаткувати саме стейблкоїн-свопи — крок, що може задати прецедент для інших юрисдикцій ЄС і вплинути на ліквідність стейблкоїнів у Європі. Також це частина ширшої тенденції до оподаткування нереалізованих криптоприбутків.",
+        "market_effect": "Ймовірний відтік обсягів стейблкоїн-трейдингу з французьких/європейських платформ на офшорні майданчики; можливе тимчасове зниження обсягів у сегменті стейблкоїнів у ЄС. Прямих даних про реакцію ринку наразі немає — подія ще не впроваджена.",
+        "bull_case": "Регуляторна чіткість може легалізувати та інституціоналізувати стейблкоїни в ЄС; податкові надходження для бюджету; стимул для розробки комплаєнс-інфраструктури.",
+        "bear_case": "Капіталовідтік багатих клієнтів за кордон; скорочення європейської ліквідності стейблкоїнів; зростання витрат на комплаєнс; ризик перенесення активності в юрисдикції з м'якшим регулюванням.",
+        "watch_next": "Остаточний текст законопроекту, фінальне голосування в парламенті Франції, реакція інших країн ЄС та Європейської комісії, динаміка обсягів стейблкоїн-свопів у Франції після впровадження.",
         "confidence": "низька",
-        "short_conclusion": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "short_conclusion": "Франція планує оподаткувати стейблкоїн-свопи та нереалізовані криптоприбутки для заможних емігрантів — це може вплинути на європейську ліквідність стейблкоїнів. Поки це лише один джерело і законопроект ще не прийнятий остаточно.",
+        "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:01:49Z"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:22:28Z"
     },
     {
       "id": "18695b478f5f00",
@@ -1026,8 +1023,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:02:05Z"
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:22:33Z"
     },
     {
       "id": "db7396c3648183",
@@ -4038,13 +4035,13 @@
   "jev_status": "ok",
   "jev_provider": "apinex",
   "jev_model": "free/deepseek-v4.1-flash",
-  "jev_analyzed_count": 13,
-  "jev_analyzed_this_run": 2,
+  "jev_analyzed_count": 14,
+  "jev_analyzed_this_run": 1,
   "jev_pending_count": 0,
-  "jev_llm_pending_count": 16,
-  "jev_analysis_errors": 2,
+  "jev_llm_pending_count": 15,
+  "jev_analysis_errors": 3,
   "jev_error_codes": {
-    "ValueError": 2
+    "ValueError": 3
   },
-  "jev_last_run_at": "2026-10-09T23:21:03Z"
+  "jev_last_run_at": "2026-10-09T23:22:39Z"
 }
