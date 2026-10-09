@@ -389,6 +389,51 @@
           'Мишка поки не отримала доступних для читання кадрів. Без них неможливо обґрунтувати тренд, рівні чи прогноз.',
           null);
   }
+  // Local, deduplicated chart screenshot history. Never upload screenshots to GitHub.
+  const PHOTO_STORE = 'crypto-myshka-chart-history-v1';
+  function chartPhotos() {
+    try { const rows=JSON.parse(localStorage.getItem(PHOTO_STORE)||'[]'); return Array.isArray(rows)?rows:[]; }
+    catch { return []; }
+  }
+  function chartPhotoId(dataUrl) {
+    // Stable content hash, independent of filename and upload time.
+    let a=2166136261,b=5381;
+    for(let i=0;i<dataUrl.length;i++){const c=dataUrl.charCodeAt(i);a=Math.imul(a^c,16777619);b=(Math.imul(b,33)^c)>>>0;}
+    return (a>>>0).toString(16)+'-'+b.toString(16)+'-'+dataUrl.length;
+  }
+  function storeChartPhoto(dataUrl, fileName, aiResult) {
+    const id=chartPhotoId(dataUrl), rows=chartPhotos();
+    if(rows.some(x=>x.id===id))return 'duplicate';
+    const img=new Image();img.src=dataUrl;
+    const canvas=document.createElement('canvas');
+    const max=720,scale=Math.min(1,max/Math.max(img.naturalWidth||1,img.naturalHeight||1));
+    canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
+    canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+    const preview=canvas.toDataURL('image/jpeg',.65);
+    rows.unshift({id,preview,name:String(fileName||'Графік').slice(0,80),at:new Date().toISOString(),
+      direction:aiResult?.direction||'НЕВИЗНАЧЕНО',reason:String(aiResult?.reason||'').slice(0,220)});
+    // Browser quota varies. Keep recent thumbnails and gracefully trim older ones.
+    for(let count=Math.min(rows.length,35);count>0;count--){
+      try{localStorage.setItem(PHOTO_STORE,JSON.stringify(rows.slice(0,count)));return 'saved';}catch{}
+    }
+    return 'full';
+  }
+  function renderChartPhotos() {
+    const rows=chartPhotos(), box=document.createElement('section');box.className='settings-card';
+    const heading=document.createElement('h3');heading.textContent='📷 Історія графіків · '+rows.length;box.append(heading);
+    const note=document.createElement('p');note.className='muted';note.textContent='Лише скріншоти, що пройшли AI-аналіз. Дублі не додаються. Зберігаються локально на цьому пристрої; не синхронізуються.';box.append(note);
+    if(!rows.length){const p=document.createElement('p');p.textContent='Поки немає проаналізованих графіків.';box.append(p);}
+    rows.forEach(row=>{const card=document.createElement('article');card.className='saved-card';
+      const pic=document.createElement('img');pic.src=row.preview;pic.alt='Збережений графік';pic.style.cssText='width:110px;max-height:95px;object-fit:contain;border-radius:9px';
+      const details=document.createElement('div');const label=document.createElement('strong');label.textContent=row.name;
+      const sub=document.createElement('small');sub.textContent=' '+new Date(row.at).toLocaleString('uk-UA')+' · '+row.direction;
+      const reason=document.createElement('p');reason.textContent=row.reason;details.append(label,sub,reason);
+      const del=document.createElement('button');del.type='button';del.textContent='Видалити';del.addEventListener('click',()=>{
+        localStorage.setItem(PHOTO_STORE,JSON.stringify(chartPhotos().filter(x=>x.id!==row.id)));renderHistory();
+      });card.append(pic,details,del);box.append(card);
+    });
+    $('history-list').prepend(box);
+  }
   function renderHistory() {
     const saved = Object.entries(state.prefs.saved).map(([id, report]) => ({ id, report }))
       .filter(x => x.report && typeof x.report === 'object')
@@ -404,6 +449,8 @@
       safe(id) + '">Видалити</button></div></article>').join('') :
       empty('☆', 'Немає збережених звітів', 'У Fast Analysis натисни «Зберегти», щоб переглядати звіт пізніше.', 'analysis');
   }
+  const originalRenderHistory = renderHistory;
+  renderHistory = function(){originalRenderHistory();renderChartPhotos();};
   function renderSettings() {
     $('theme-select').value = state.prefs.theme;
     $('refresh-select').value = String(state.prefs.refresh);
@@ -785,6 +832,10 @@
                     '⚠️ Це неперевірена гіпотеза для демо, а не команда на ставку. OTC-котирування не звірені.' +
                     (useCloud ? ' Фото оброблено хмарним AI.' : ' Фото оброблено локально.'));
                 aiResult.replaceChildren(title, visible, timeframe, testTime, reason, latency, warning);
+                const photoSaved=storeChartPhoto(dataUrl,file.name,result);
+                if(photoSaved==='duplicate') toast('Цей графік уже в історії — дубль пропущено.');
+                else if(photoSaved==='full') toast('Пам’ять браузера заповнена — фото не збережено.');
+                else toast('📷 Графік збережено в історії.');
                 if (action !== 'SKIP') {
                   const outcomeId = imageFingerprint(dataUrl, action, expiry, result.chart_timeframe);
                   const outcomeRow = document.createElement('div');
