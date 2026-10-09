@@ -137,8 +137,12 @@ def choose_stream_url(formats: list) -> str | None:
 
 def ffmpeg_run(args: list, timeout: int) -> bool:
     try:
+        ffmpeg_binary = shutil.which("ffmpeg")
+        if not ffmpeg_binary:
+            import imageio_ffmpeg
+            ffmpeg_binary = imageio_ffmpeg.get_ffmpeg_exe()
         result = subprocess.run(
-            ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error",
+            [ffmpeg_binary, "-nostdin", "-hide_banner", "-loglevel", "error",
              "-rw_timeout", "12000000", "-y"] + args,
             capture_output=True, timeout=timeout, check=False,
         )
