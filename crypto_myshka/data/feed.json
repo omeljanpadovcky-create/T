@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-09T18:50:11.523631+00:00",
+  "generated_at": "2026-10-09T19:12:38.368187+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,12 +26,12 @@
       "ok": true,
       "count": 10218,
       "complete": true,
-      "updated_at": "2026-10-09T18:50:06.959261+00:00",
+      "updated_at": "2026-10-09T19:12:33.319344+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
       "ok": true,
-      "count": 121,
+      "count": 101,
       "url": "crypto_myshka/data/news.json"
     }
   },
@@ -41,43 +41,38 @@
       "ETH",
       "SOL",
       "PENDLE",
-      "ICP",
       "XRP",
       "BNB",
       "DOGE"
     ],
     "prices": {
       "bitcoin": {
-        "usd": 82430,
-        "usd_24h_change": 1.189594081813857
+        "usd": 82471,
+        "usd_24h_change": 1.2836947414099509
       },
       "ethereum": {
-        "usd": 2481.86,
-        "usd_24h_change": 1.50649676437846
+        "usd": 2483.65,
+        "usd_24h_change": 1.5038129962216917
       },
       "solana": {
-        "usd": 109.38,
-        "usd_24h_change": 1.353722693834771
+        "usd": 109.53,
+        "usd_24h_change": 0.988306104909101
       },
       "pendle": {
-        "usd": 2.1,
-        "usd_24h_change": 1.9173149527890343
-      },
-      "internet-computer": {
-        "usd": 3.01,
-        "usd_24h_change": 2.889580153180762
+        "usd": 2.06,
+        "usd_24h_change": -0.2690262223710097
       },
       "ripple": {
         "usd": 1.39,
-        "usd_24h_change": 1.8762328858915982
+        "usd_24h_change": 1.8902028616256488
       },
       "binancecoin": {
-        "usd": 738.85,
-        "usd_24h_change": 1.5375145294764487
+        "usd": 739.46,
+        "usd_24h_change": 1.7405052181962057
       },
       "dogecoin": {
-        "usd": 0.084543,
-        "usd_24h_change": 1.919538294680632
+        "usd": 0.084682,
+        "usd_24h_change": 1.7720704520042578
       }
     }
   },
@@ -5248,7 +5243,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Як заробити на Binance від $15 до $100 на рівному місці!",
+      "title": "How to Make from $15 to $100 on Binance Out of Nowhere!",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=rmrkuRMutF0",
       "published_at": null,
@@ -5280,7 +5275,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Як купити S&P 500 на Binance | bStocks — проста інструкція",
+      "title": "How to Buy S&P 500 on Binance | bStocks — A Simple Guide",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=6oL0a355KgI",
       "published_at": null,
@@ -5360,7 +5355,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Огляд критовалют WLD, STRK, APT, SOL, TWT, 5IRE, MYX, ALEX, VANA, FLIP, PUFFER - Що вибрати?",
+      "title": "Cryptocurrency overview WLD, STRK, APT, SOL, TWT, 5IRE, MYX, ALEX, VANA, FLIP, PUFFER - What to c...",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=FHdXLcNg6N8",
       "published_at": null,
@@ -6219,6 +6214,6 @@
     }
   ],
   "archive_count": 10218,
-  "news_count": 121,
+  "news_count": 101,
   "disclaimer": "Аналітичний фільтр. Не виконує угоди й не є фінансовою порадою."
 }
