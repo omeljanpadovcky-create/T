@@ -35,7 +35,7 @@ OLLAMA_URL = os.getenv("MYSHKA_OLLAMA_URL", "").strip().rstrip("/")
 OLLAMA_MODEL = os.getenv("MYSHKA_OLLAMA_MODEL", "qwen2.5vl:3b").strip()
 BROWSER = os.getenv("MYSHKA_YOUTUBE_BROWSER", "").strip().lower()
 AI_AVAILABLE = bool(API_KEY or OLLAMA_URL)
-CAPTURE_INTERVAL = max(60, int(os.getenv("LIVE_CAPTURE_INTERVAL", "300")))
+CAPTURE_INTERVAL = max(15, int(os.getenv("LIVE_CAPTURE_INTERVAL", "300")))
 MAX_FRAMES_PER_RUN = max(1, min(5, int(os.getenv("LIVE_MAX_SNAPSHOTS", "3"))))
 
 PROMPT = """Ти незалежний спостерігач публічної LIVE-трансляції трейдера.
