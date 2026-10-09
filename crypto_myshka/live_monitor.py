@@ -93,7 +93,7 @@ def get_stream(channel: dict) -> tuple[dict | None, str | None]:
         return None, "Потрібне підтверджене посилання на канал"
     base = "https://www.youtube.com/" + handle
     candidates = []
-    error = None
+    errors = []
     try:
         with YoutubeDL(ydl_options(flat=True)) as ydl:
             page = ydl.extract_info(base + "/streams", download=False) or {}
@@ -103,7 +103,7 @@ def get_stream(channel: dict) -> tuple[dict | None, str | None]:
                 if vid and re.fullmatch(r"[\w-]{11}", str(vid)):
                     candidates.append("https://www.youtube.com/watch?v=" + vid)
     except Exception as exc:
-        error = str(exc)[:200]
+        errors.append(str(exc)[:200])
     # The /live canonical endpoint redirects to an active stream on many channels.
     candidates.append(base + "/live")
     for url in dict.fromkeys(candidates):
@@ -123,8 +123,18 @@ def get_stream(channel: dict) -> tuple[dict | None, str | None]:
                     "_formats": info.get("formats") or [],
                 }, None
         except Exception as exc:
-            error = str(exc)[:200]
-    return None, error
+            errors.append(str(exc)[:200])
+    # Preserve YouTube's anti-bot failures: they may be followed by a misleading
+    # "not currently live" response from another extractor.
+    if any("sign in to confirm" in e.lower() or "not a bot" in e.lower()
+           or "cookies" in e.lower() for e in errors):
+        return None, "youtube_access_blocked: automatic viewer challenged; use a local authenticated session"
+    if errors and all("not currently live" in e.lower() or "does not have a streams tab" in e.lower()
+                      for e in errors):
+        return None, None  # No live listing found; this is not proof of offline status.
+    if errors:
+        return None, "youtube_lookup_failed: " + errors[-1]
+    return None, None
 
 def choose_stream_url(formats: list) -> str | None:
     """Pick a public lower-resolution video source for a single temporary frame."""
@@ -249,6 +259,7 @@ def process_once() -> dict:
         row = {
             "id": channel["id"], "name": channel["name"],
             "handle": channel.get("handle"), "url": channel.get("url"),
+            "live_page": "https://www.youtube.com/" + channel["handle"] + "/live" if channel.get("handle") else None,
             "status": "unknown", "live": False,
             "checked_at": now(), "stream": None,
             "last_visual_check": (old_streams.get(channel["id"]) or {}).get("last_visual_check"),
@@ -260,7 +271,8 @@ def process_once() -> dict:
         stream, err = get_stream(channel)
         if not stream:
             # A blocked extractor or missing stream is NOT proof that the channel is offline.
-            row["status"] = "check_error" if err and ("bot" in err.lower() or "sign in" in err.lower()) else "not_detected"
+            row["status"] = ("access_blocked" if err and err.startswith("youtube_access_blocked")
+                             else "check_error" if err else "not_detected")
             if err:
                 row["error"] = err
             channels.append(row)
