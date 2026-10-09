@@ -1,11 +1,12 @@
 {
   "version": 1,
-  "updated_at": "2026-10-09T20:27:30.795583+00:00",
+  "updated_at": "2026-10-09T21:37:12.433341+00:00",
   "source": "youtube_live.json / timestamped screenshot observations",
-  "analysis_mode": "limited_single_frame_evidence",
+  "analysis_mode": "limited_single_frame_evidence_with_strict_signal_gate",
   "status": "waiting_for_readable_live_chart",
   "reports": [],
   "independently_verified": false,
   "automatic_trading": false,
+  "signal_policy": "NO_SIGNAL unless independent price, indicators, out-of-sample edge and JEV verification; even then REVIEW_ONLY",
   "disclaimer": "Не торгові рекомендації; JEV роз'яснення є структурованою інтерпретацією AI-кадру, а не незалежним LLM-висновком."
 }
