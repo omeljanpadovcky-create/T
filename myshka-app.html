@@ -87,11 +87,12 @@
 
         <section class="screen" id="screen-analysis" data-screen="analysis" aria-labelledby="analysis-title" hidden>
           <div class="section-heading top-heading"><div><div class="eyebrow">JEV EXPLAINABLE AI</div><h1 id="analysis-title">Fast Analysis</h1></div><span class="outline-pill">NO AUTO-TRADE</span></div>
-          <p class="intro">Одна пара — один зрозумілий звіт. Цифри й напрямки показуємо тільки за наявності розбірливого LIVE-кадру.</p>
+          <p class="intro">Встав скріншот через Ctrl+V або обери файл. Локальний JEV визначить видимий напрямок графіка: ВГОРУ, ВНИЗ або НЕВИЗНАЧЕНО. Окремі LIVE-звіти залишаються нижче.</p>
           <div class="searchbar"><label class="visually-hidden" for="pair-search">Пошук пари</label><span aria-hidden="true">⌕</span><input id="pair-search" type="search" placeholder="Знайти BTC/USDT, AUD/CNY OTC…" autocomplete="off"></div>
           <div id="pair-chips" class="chips" aria-label="Доступні пари"></div>
           <div class="demo-controls"><label class="small-button" for="chart-photo">📷 Обрати фото графіка</label><input id="chart-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden><span>Або встав скріншот: Win+Shift+S → Ctrl+V. Зображення передається тільки до Ollama на твоєму комп'ютері, якщо запущено локальну версію.</span></div>
           <p id="vision-status" class="vision-status" role="status" aria-live="polite">Перевіряємо підключення AI…</p>
+          <p class="vision-help"><a href="https://github.com/omeljanpadovcky-create/T/blob/main/crypto_myshka/LOCAL_AI_README_UA.md" target="_blank" rel="noopener noreferrer">Як запустити Ollama через PowerShell ↗</a></p>
           <div id="photo-analysis" aria-live="polite"></div>
           <div class="demo-controls"><button id="demo-button" class="small-button" type="button">◈ Показати приклад звіту</button><span>Приклад із наданого скріншота · не LIVE</span></div>
           <div id="analysis-list" class="stack" aria-live="polite"><div class="empty-state">Шукаємо звіти з реальних кадрів…</div></div>
