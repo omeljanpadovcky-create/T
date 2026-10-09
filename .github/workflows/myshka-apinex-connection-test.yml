@@ -15,34 +15,48 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: Verify GitHub secret and APInex models endpoint (no paid inference)
+      - name: Verify secret and test a short free-category JEV completion
         env:
           APINEX_API_KEY: ${{ secrets.APINEX_API_KEY }}
-          APINEX_VISION_MODEL: 'gemini-3.8-flash'
         run: |
           python - <<'PY'
           import json, os, urllib.request, urllib.error
           key = os.environ.get('APINEX_API_KEY', '').strip()
           if not key:
-              raise SystemExit('ERROR: APINEX_API_KEY is not available in GitHub Actions secrets.')
-          request = urllib.request.Request(
-              'https://api.apinex.bond/v1/models',
-              headers={'Authorization': 'Bearer '+key, 'Accept':'application/json'},
-              method='GET'
+              raise SystemExit('ERROR: APINEX_API_KEY is missing from GitHub Actions secrets.')
+          print('GitHub secret exists and is masked. Checking the same API used by JEV.')
+          payload = json.dumps({
+              'model': 'free/deepseek-v4.1-flash',
+              'stream': False, 'max_tokens': 16,
+              'messages': [
+                  {'role':'system','content':'Reply with only OK.'},
+                  {'role':'user','content':'Connection test.'}
+              ]
+          }).encode('utf-8')
+          req = urllib.request.Request(
+              'https://api.apinex.bond/v1/chat/completions',
+              headers={
+                  'Authorization': 'Bearer ' + key,
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json',
+                  'User-Agent': 'CryptoMyshka-JEV/1.0'
+              },
+              data=payload, method='POST'
           )
           try:
-              with urllib.request.urlopen(request, timeout=18) as response:
-                  raw = response.read(1_000_000)
-              data = json.loads(raw)
-              items = data.get('data',[]) if isinstance(data,dict) else []
-              ids = {str(row.get('id')) for row in items if isinstance(row,dict) and row.get('id')}
-              print('APInex models API: reachable, key accepted.')
-              print('Vision model present in advertised list:', os.environ['APINEX_VISION_MODEL'] in ids)
-              print('Model count:', len(ids))
-              print('No paid chat or image requests were made.')
+              with urllib.request.urlopen(req, timeout=25) as response:
+                  data = json.load(response)
+              choices = data.get('choices') if isinstance(data,dict) else None
+              if not choices:
+                  raise SystemExit('APInex returned HTTP 200 but no standard chat response.')
+              print('SUCCESS: APInex chat/completions works for JEV in GitHub Actions.')
+              print('Model: free/deepseek-v4.1-flash; test contained no screenshots or trading data.')
           except urllib.error.HTTPError as e:
-              # Never output Authorization header, request object or API key.
-              raise SystemExit('APInex models endpoint rejected request (HTTP '+str(e.code)+').')
+              # Do not print the original request or raw response, which may contain sensitive fields.
+              code=e.code
+              if code==429:
+                  raise SystemExit('APInex limit reached (HTTP 429); secret is present, retry later.')
+              raise SystemExit('APInex chat API refused the request (HTTP '+str(code)+').')
           except (TimeoutError, urllib.error.URLError) as e:
-              raise SystemExit('APInex network check failed: '+type(e).__name__)
+              raise SystemExit('APInex connection failed: '+type(e).__name__)
           PY
