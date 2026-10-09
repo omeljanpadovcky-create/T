@@ -350,7 +350,7 @@ def run_gemini_video_batch(existing: dict, previous: dict, processor=gemini_anal
             # This remains an unverified model interpretation, not a verified trade.
             entry["market_quotes_verified"] = False
             entry["video_reviewed"] = False
-        if result.get("http_status") in (401, 402, 429):
+        if result.get("http_status") in (400, 401, 402, 403, 404, 429):
             # Stop after a key/quota/billing error, do not repeatedly query it.
             break
     return budget
