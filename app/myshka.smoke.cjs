@@ -170,6 +170,16 @@ const { JSDOM } = require('jsdom');
   assert.match(localDoc.querySelector('#photo-analysis .jev-image-result').textContent, /BUY/);
   assert.match(localDoc.querySelector('#photo-analysis .jev-image-result').textContent, /1 хвилина/);
   assert.match(localDoc.querySelector('#photo-analysis .jev-image-result').textContent, /неперевірена гіпотеза/);
+  const hitButton = Array.from(localDoc.querySelectorAll('.expiry-outcome-row button'))
+    .find(button => button.textContent.includes('влучив'));
+  assert.ok(hitButton, 'manual demo outcome control is visible');
+  hitButton.click();
+  const outcomes = JSON.parse(localWin.localStorage.getItem('crypto-myshka-demo-expiry-v1'));
+  assert.equal(outcomes.length, 1);
+  assert.equal(outcomes[0].expiry, 60);
+  assert.equal(outcomes[0].correct, true);
+  assert.match(localDoc.querySelector('#expiry-journal-summary').textContent, /1 хв: 1\/1/);
+  assert.equal(hitButton.disabled, true);
   assert.doesNotMatch(localDoc.querySelector('#photo-analysis').textContent, /червоних ділянок/);
 
   // Paste from the Windows Snipping Tool must also trigger analysis.
