@@ -1076,8 +1076,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:04:56Z"
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:24:27Z"
     },
     {
       "id": "13ee38e8dbdf4c",
@@ -1130,8 +1130,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:05:02Z"
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:24:33Z"
     },
     {
       "id": "e38ffe5db1d72c",
@@ -1186,8 +1186,8 @@
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
       "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:05:08Z"
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:24:39Z"
     },
     {
       "id": "370328ca5eefd2",
@@ -1224,23 +1224,20 @@
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
       ],
       "jev_ai": {
-        "what_happened": "Despite ongoing bans, China has seen a big surge in peer-to-peer stablecoin use. New figures show South Korea’s $450B crypto economy is the largest in East Asia.",
-        "why_it_matters": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
-        "market_effect": "Потенційно позитивний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента.",
+        "what_happened": "Згідно з матеріалом Cointelegraph, у Китаї спостерігається зростання P2P-гаманців зі стейблкоїнами у 43 рази, попри діючі заборони. Одночасно повідомляється, що криптоекономіка Південної Кореї оцінюється у $450 млрд і є найбільшою у Східній Азії.",
+        "why_it_matters": "Якщо дані підтвердяться, це свідчить про стійкий попит на стейблкоїни та криптоактиви навіть за умов жорсткого регуляторного тиску. Для ринку це може означати зростання обсягів обігу стейблкоїнів у регіоні та зміщення активності в тіньові/неконтрольовані канали.",
+        "market_effect": "Середній вплив. Можливий позитивний тиск на стейблкоїни (USDT/USDC) та азіатські токени, пов'язані з платежами. Однак без підтвердження з інших джерел та розкриття методології підрахунку вплив залишається гіпотетичним.",
+        "bull_case": "Зростання P2P-активності вказує на реальну потребу в альтернативних розрахунках; велика криптоекономіка Кореї може приваблювати інституційну ліквідність; регіональний попит може підтримувати обсяги стейблкоїнів.",
+        "bear_case": "Джерело — одне (Cointelegraph), дані не підтверджені незалежно; зростання P2P може бути пов'язане з обходом санкцій/контролю, а не з легальним попитом; $450 млрд може включати деривативи/непідтверджені активи; можливе регуляторне розкручування.",
+        "watch_next": "Поява додаткових незалежних джерел із підтвердженням цифр; реакція регуляторів Китаю та Кореї; динаміка обсягів обігу стейблкоїнів у регіоні; уточнення складу $450 млрд (спот vs деривативи).",
         "confidence": "низька",
-        "short_conclusion": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "short_conclusion": "Подія має середній потенційний вплив, але базові цифри підтверджені лише одним джерелом і потребують незалежної перевірки. Базуватися на них для рішень зараз ризиковано.",
+        "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:05:14Z"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:24:45Z"
     },
     {
       "id": "b4e31b6883d086",
@@ -4035,13 +4032,13 @@
   "jev_status": "ok",
   "jev_provider": "apinex",
   "jev_model": "free/deepseek-v4.1-flash",
-  "jev_analyzed_count": 14,
+  "jev_analyzed_count": 15,
   "jev_analyzed_this_run": 1,
   "jev_pending_count": 0,
-  "jev_llm_pending_count": 15,
+  "jev_llm_pending_count": 14,
   "jev_analysis_errors": 3,
   "jev_error_codes": {
     "ValueError": 3
   },
-  "jev_last_run_at": "2026-10-09T23:22:39Z"
+  "jev_last_run_at": "2026-10-09T23:24:49Z"
 }
