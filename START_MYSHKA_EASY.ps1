@@ -50,6 +50,22 @@ function Lookup-Python {
         $direct = Join-Path $base 'python.exe'
         if (Test-Path -LiteralPath $direct -PathType Leaf) { $candidates.Add($direct) }
     }
+    # Python's official installer registers its real executable even when
+    # Windows PATH and the py launcher were not refreshed yet.
+    foreach ($hive in @('HKCU:\Software\Python\PythonCore', 'HKLM:\Software\Python\PythonCore', 'HKLM:\Software\WOW6432Node\Python\PythonCore')) {
+        if (-not (Test-Path -LiteralPath $hive)) { continue }
+        foreach ($version in @(Get-ChildItem -LiteralPath $hive -ErrorAction SilentlyContinue)) {
+            $install = Join-Path $version.PSPath 'InstallPath'
+            if (-not (Test-Path -LiteralPath $install)) { continue }
+            try {
+                $key = Get-Item -LiteralPath $install -ErrorAction Stop
+                $registered = $key.GetValue('ExecutablePath')
+                if ($registered) { $candidates.Add([string]$registered) }
+                $folder = $key.GetValue('')
+                if ($folder) { $candidates.Add((Join-Path ([string]$folder) 'python.exe')) }
+            } catch { }
+        }
+    }
     foreach ($alias in @('python.exe', 'python3.exe')) {
         foreach ($command in @(Get-Command $alias -All -ErrorAction SilentlyContinue)) {
             if ($command.Source) { $candidates.Add([string]$command.Source) }
@@ -106,12 +122,29 @@ function Ensure-Python {
     if ($ans -notin @('Y','y')) { Fail 'Install Python 3.12 from https://www.python.org/downloads/windows/ and retry.' }
     $wg = Get-Command winget.exe -ErrorAction SilentlyContinue
     if (-not $wg) { Fail 'winget not available. Install Python manually and retry.' }
-    & $wg.Source install --exact --id Python.Python.3.12 --scope user --accept-source-agreements --accept-package-agreements
-    if ($LASTEXITCODE -ne 0) { Fail 'Python installer failed. Check winget output above.' }
+    # winget sometimes returns a nonzero code when Python is already installed
+    # or the Store repository times out. Always re-check for the interpreter.
+    $exitCode = 1
+    try {
+        & $wg.Source install --exact --id Python.Python.3.12 --scope user --accept-source-agreements --accept-package-agreements
+        $exitCode = $LASTEXITCODE
+    } catch {
+        Write-Host ('winget reported: ' + $_.Exception.Message) -ForegroundColor Yellow
+    }
     Refresh-SessionPath
     $found = Lookup-Python
-    if (-not $found) { Fail 'Python installer finished, but executable is not located yet. Reopen PowerShell and rerun this script; if still missing check: py -0p or winget list --id Python.Python.3.12' }
-    return $found
+    if ($found) {
+        if ($exitCode -ne 0) {
+            Write-Host ('winget returned ' + $exitCode + ', but an installed Python was found. Continuing.') -ForegroundColor Yellow
+        }
+        return $found
+    }
+    Write-Host ('winget exit code: ' + $exitCode) -ForegroundColor Yellow
+    Write-Host 'Python diagnostics (send only the output, no API keys):' -ForegroundColor Cyan
+    try { & $wg.Source list --id Python.Python.3.12 --exact --accept-source-agreements } catch {}
+    $launcher = Get-Command py.exe -ErrorAction SilentlyContinue
+    if ($launcher) { try { & $launcher.Source -0p } catch {} }
+    Fail 'Python is still not available. Install Python 3.12 from https://www.python.org/downloads/windows/ (check Add python.exe to PATH), then reopen PowerShell and rerun.'
 }
 function Ensure-Ollama {
     $found = Lookup-Ollama
