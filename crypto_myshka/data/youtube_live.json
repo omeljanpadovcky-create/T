@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "updated_at": null,
+  "mode": "LIVE public streams monitoring",
+  "polling": "GitHub Actions every 5 minutes, timing best effort; use --watch on an always-on host for continuous checks.",
+  "live_count": 0,
+  "ai_enabled": false,
+  "auto_trade": false,
+  "final_signal": "SKIP",
+  "notice": "Трансляції ще не перевірено. Жодних підтверджених угод. Реальне розпізнавання кадру вимагає доступного відеопотоку й OPENAI_API_KEY.",
+  "channels": [
+    {
+      "id": "nikolas",
+      "name": "НИКОЛАС | ТРЕЙДЕР",
+      "handle": "@NikolasTradin",
+      "status": "pending_first_scan",
+      "live": false
+    },
+    {
+      "id": "backstage",
+      "name": "Закулисье Трейдера",
+      "handle": "@artemtraderr",
+      "status": "pending_first_scan",
+      "live": false
+    },
+    {
+      "id": "mark",
+      "name": "Mark Champs Trader",
+      "handle": "@Mark_champs_trader",
+      "status": "pending_first_scan",
+      "live": false
+    },
+    {
+      "id": "alexey",
+      "name": "Алексей Борщев",
+      "handle": "@alexeyborshev1",
+      "status": "pending_first_scan",
+      "live": false
+    },
+    {
+      "id": "nikolai",
+      "name": "Николай зі скріншота",
+      "handle": null,
+      "status": "source_unverified",
+      "live": false
+    }
+  ],
+  "observations": []
+}
