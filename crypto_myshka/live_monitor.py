@@ -2,7 +2,7 @@
 
 Runs once in GitHub Actions; --watch can keep polling on an always-on machine.
 Public LIVE metadata is checked without an AI key. Optional screenshot/audio
-analysis needs OPENAI_API_KEY and the public stream to be accessible by ffmpeg.
+analysis needs a configured vision provider and the public stream to be accessible by ffmpeg.
 
 One frame is evidence of an on-screen claim, NEVER proof of an executed fill.
 No brokerage integration, order placement, or automatic final trade signals.
@@ -31,10 +31,15 @@ ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "data" / "youtube_live.json"
 MODEL = os.getenv("LIVE_VISION_MODEL", "gpt-4.1-mini")
 API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
+APINEX_KEY = os.getenv("APINEX_API_KEY", "").strip()
+# GitHub scheduled runs must explicitly opt in to APInex chargeable vision calls.
+APINEX_ENABLED = os.getenv("LIVE_APINEX_ENABLED", "").strip().lower() in {"1", "true", "yes"}
+USE_APINEX = bool(APINEX_KEY and APINEX_ENABLED)
+APINEX_MODEL = os.getenv("LIVE_APINEX_VISION_MODEL", "gemini-3.8-flash").strip()
 OLLAMA_URL = os.getenv("MYSHKA_OLLAMA_URL", "").strip().rstrip("/")
 OLLAMA_MODEL = os.getenv("MYSHKA_OLLAMA_MODEL", "qwen2.5vl:3b").strip()
 BROWSER = os.getenv("MYSHKA_YOUTUBE_BROWSER", "").strip().lower()
-AI_AVAILABLE = bool(API_KEY or OLLAMA_URL)
+AI_AVAILABLE = bool(USE_APINEX or API_KEY or OLLAMA_URL)
 CAPTURE_INTERVAL = max(15, int(os.getenv("LIVE_CAPTURE_INTERVAL", "300")))
 MAX_FRAMES_PER_RUN = max(1, min(5, int(os.getenv("LIVE_MAX_SNAPSHOTS", "3"))))
 
@@ -219,7 +224,7 @@ def transcribe(audio: Path | None) -> str:
 
 def vision(image: Path, transcript: str) -> dict:
     encoded = base64.b64encode(image.read_bytes()).decode("ascii")
-    if not API_KEY and OLLAMA_URL:
+    if not USE_APINEX and not API_KEY and OLLAMA_URL:
         if not (OLLAMA_URL.startswith("http://127.0.0.1:") or OLLAMA_URL.startswith("http://localhost:")):
             raise ValueError("Local Ollama must use localhost, not a public endpoint")
         response = requests.post(
@@ -233,11 +238,17 @@ def vision(image: Path, transcript: str) -> dict:
         if not isinstance(parsed, dict):
             raise ValueError("Local vision response not JSON object")
         return normalize_observation(parsed)
+    if USE_APINEX:
+        endpoint, token, model = "https://api.apinex.bond/v1/chat/completions", APINEX_KEY, APINEX_MODEL
+    elif API_KEY:
+        endpoint, token, model = "https://api.openai.com/v1/chat/completions", API_KEY, MODEL
+    else:
+        raise ValueError("No enabled AI provider for frame analysis")
     r = requests.post(
-        "https://api.openai.com/v1/chat/completions",
-        headers={"Authorization": "Bearer " + API_KEY, "Content-Type": "application/json"},
+        endpoint,
+        headers={"Authorization": "Bearer " + token, "Content-Type": "application/json"},
         json={
-            "model": MODEL, "temperature": 0,
+            "model": model, "temperature": 0,
             "max_tokens": 420, "response_format": {"type": "json_object"},
             "messages": [
                 {"role": "system", "content": PROMPT},
@@ -253,7 +264,18 @@ def vision(image: Path, transcript: str) -> dict:
         }, timeout=60,
     )
     r.raise_for_status()
-    parsed = json.loads(r.json()["choices"][0]["message"]["content"])
+    content = r.json()["choices"][0]["message"]["content"]
+    if isinstance(content, list):
+        content = "".join(
+            item if isinstance(item, str) else str(item.get("text") or "")
+            for item in content if isinstance(item, (str, dict))
+        )
+    if not isinstance(content, str) or not content.strip():
+        raise ValueError("Vision model returned no text")
+    clean = content.strip()
+    if clean.startswith("```"):
+        clean = re.sub(r"^```(?:json)?\s*|\s*```$", "", clean).strip()
+    parsed = json.loads(clean)
     return normalize_observation(parsed)
 
 def normalize_observation(parsed: dict) -> dict:
@@ -331,7 +353,7 @@ def process_once() -> dict:
             channels.append(row)
             continue
         if not AI_AVAILABLE:
-            row["observation_status"] = "requires_OPENAI_API_KEY_or_local_OLLAMA"
+            row["observation_status"] = "requires_AI_provider_activation"
             channels.append(row)
             continue
         src = choose_stream_url(stream.get("_formats") or [])
@@ -379,7 +401,7 @@ def process_once() -> dict:
         "auto_trade": False,
         "notice": "Single LIVE screenshots and streamer statements are not independently verified fills or profit statistics.",
         "ai_enabled": AI_AVAILABLE,
-        "ai_provider": "openai" if API_KEY else ("local_ollama" if OLLAMA_URL else "none"),
+        "ai_provider": "apinex" if USE_APINEX else "openai" if API_KEY else ("local_ollama" if OLLAMA_URL else "none"),
     }
     save(updated)
     try:
