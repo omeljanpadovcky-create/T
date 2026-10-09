@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generated_at": "2026-10-08T22:19:43.198557+00:00",
+  "generated_at": "2026-10-09T02:18:22.605721+00:00",
   "analysis_mode": "cross-source pre-analysis; not full-text LLM",
   "feed_status": {
     "CoinDesk": {
@@ -46,25 +46,24 @@
       "role": "discovery"
     }
   },
-  "raw_item_count": 215,
-  "item_count": 103,
+  "raw_item_count": 216,
+  "item_count": 102,
   "items": [
     {
-      "id": "586619d7eb0828",
+      "id": "39a287e6ca4e50",
       "source": "jev_analysis",
       "mode": "news",
-      "title": "Implementing the GENIUS Act: The Federal Reserve Proposes a Comprehensive Rulemaking Governing Payment Stablecoin Issuance - Arnold & Porter",
-      "summary": "Implementing the GENIUS Act: The Federal Reserve Proposes a Comprehensive Rulemaking Governing Payment Stablecoin Issuance &nbsp;&nbsp; Arnold & Porter",
-      "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQOVo2RWktMVp0S3JKb2ZTcDcxMmVxUFJmSjVrMVBOaTZNQjZVVUVrWW5PcnFWWFJEQ0JpRzBtY0JmQUdkUG9QZkJBdkNXd3AyeFN1bzB6MFNXQ1phcTNuQU5hcTlSNm94c2JtWERLWnJQcHFFeEw2N0RlMXhpSW1rN0w3WlJjM2pucDNCR1dDQTRqWkUzVjg1aWxIOTFKbGtsdWZvU2x4MS1qZzRtSTVyTXVyQ3RGUjZWWjZhSUc0OHlLZzdXcVhjLUlRejdpcWt0UXRCZXZHZHN4LWh2Q0p3NQ?oc=5",
-      "published_at": "2026-10-08T17:57:07+00:00",
+      "title": "Seattle crypto company ordered to shut down kiosks as part of lawsuit - My Bellingham Now",
+      "summary": "Seattle crypto company ordered to shut down kiosks as part of lawsuit &nbsp;&nbsp; My Bellingham Now",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOYmMxcy1NVXNiWGFBWkF0VEpkSjY3SUVUcW1vVVpoM0hocXNvS294TVFBUTluSWpTR2pyTG9WRGNlcUFNUkhLSl9BdnpKbHc3dGZKdWZPNUhIemMzRzlkVGNiVW1OTlk5a3MzbmZCeVFZODFLM2FDbTVIMFNOVHJXSWIxUmFJLThsRlRrTnhHTVhSNVdPR2NQekF5aTFYNTlPUXY3SzNfcW5mWFFRdU5F?oc=5",
+      "published_at": "2026-10-08T21:46:39+00:00",
       "assets": [],
       "topics": [
-        "macro",
-        "stablecoin"
+        "regulation"
       ],
       "impact": 3,
       "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
+      "tone": "Потенційно негативний",
       "source_count": 1,
       "publishers": [
         "Google News discovery"
@@ -72,17 +71,17 @@
       "links": [
         {
           "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQOVo2RWktMVp0S3JKb2ZTcDcxMmVxUFJmSjVrMVBOaTZNQjZVVUVrWW5PcnFWWFJEQ0JpRzBtY0JmQUdkUG9QZkJBdkNXd3AyeFN1bzB6MFNXQ1phcTNuQU5hcTlSNm94c2JtWERLWnJQcHFFeEw2N0RlMXhpSW1rN0w3WlJjM2pucDNCR1dDQTRqWkUzVjg1aWxIOTFKbGtsdWZvU2x4MS1qZzRtSTVyTXVyQ3RGUjZWWjZhSUc0OHlLZzdXcVhjLUlRejdpcWt0UXRCZXZHZHN4LWh2Q0p3NQ?oc=5"
+          "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOYmMxcy1NVXNiWGFBWkF0VEpkSjY3SUVUcW1vVVpoM0hocXNvS294TVFBUTluSWpTR2pyTG9WRGNlcUFNUkhLSl9BdnpKbHc3dGZKdWZPNUhIemMzRzlkVGNiVW1OTlk5a3MzbmZCeVFZODFLM2FDbTVIMFNOVHJXSWIxUmFJLThsRlRrTnhHTVhSNVdPR2NQekF5aTFYNTlPUXY3SzNfcW5mWFFRdU5F?oc=5"
         }
       ],
       "confidence_label": "Discovery: потребує підтвердження",
-      "jev_take": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
+      "jev_take": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
+      "watch_for": "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
         "Google News використано лише як радар теми",
-        "Ринковий тон: Невизначений / змішаний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
+        "Ринковий тон: Потенційно негативний",
+        "Офіційний документ регулятора, дата набуття чинності, ETF flows/обсяги після підтвердження."
       ]
     },
     {
@@ -141,43 +140,6 @@
       "analysis_level": "llm",
       "analysis_retry_count": 2,
       "analysis_last_attempt_at": "2026-10-03T17:02:37Z"
-    },
-    {
-      "id": "5361be2859c997",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Bitcoin’s slide below $81,000 exposes why a Fed pause may not save the crypto market - CryptoSlate",
-      "summary": "Bitcoin’s slide below $81,000 exposes why a Fed pause may not save the crypto market &nbsp;&nbsp; CryptoSlate",
-      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOSkFpQ0pjYk9xRWlVZzlXdFREWHRReUZMZTM5Z29NSEV6UExxQmtVRTJaSTA1bmNMc2Vnc1pwak1YdEsybTBNOGk3YTFTRl9LNlZwb2VNX3h2dXhqMXgwcUhvbm83VE43NERGcEhZd1JIalI0NEhnbjBqdFkyTEFYbUdWOXJWeXBEa1Nsb0tlX1hyUGVjdjVwcEFxMHdoMEk2bkg4d2RZcHdfUQ?oc=5",
-      "published_at": "2026-10-08T17:30:25+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [
-        "macro"
-      ],
-      "impact": 3,
-      "impact_label": "Високий вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Google News discovery"
-      ],
-      "links": [
-        {
-          "publisher": "Google News discovery",
-          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOSkFpQ0pjYk9xRWlVZzlXdFREWHRReUZMZTM5Z29NSEV6UExxQmtVRTJaSTA1bmNMc2Vnc1pwak1YdEsybTBNOGk3YTFTRl9LNlZwb2VNX3h2dXhqMXgwcUhvbm83VE43NERGcEhZd1JIalI0NEhnbjBqdFkyTEFYbUdWOXJWeXBEa1Nsb0tlX1hyUGVjdjVwcEFxMHdoMEk2bkg4d2RZcHdfUQ?oc=5"
-        }
-      ],
-      "confidence_label": "Discovery: потребує підтвердження",
-      "jev_take": "Це макро-фактор для BTC: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
-      "watch_for": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Google News використано лише як радар теми",
-        "Ринковий тон: Невизначений / змішаний",
-        "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
     },
     {
       "id": "50f2934f2868bb",
@@ -530,6 +492,41 @@
       },
       "analysis_engine": "free/deepseek-v4.1-flash",
       "analysis_level": "llm"
+    },
+    {
+      "id": "370328ca5eefd2",
+      "source": "jev_analysis",
+      "mode": "news",
+      "title": "China’s P2P stablecoin wallets surge 43x, Korea’s $450B crypto economy: Asia Express",
+      "summary": "Despite ongoing bans, China has seen a big surge in peer-to-peer stablecoin use. New figures show South Korea’s $450B crypto economy is the largest in East Asia.",
+      "url": "https://cointelegraph.com/magazine/chinas-p2p-stablecoin-wallets-surge-43x-koreas-450b-crypto-economy-asia-express?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+      "published_at": "2026-10-08T22:35:00+00:00",
+      "assets": [],
+      "topics": [
+        "stablecoin"
+      ],
+      "impact": 2,
+      "impact_label": "Середній вплив",
+      "tone": "Потенційно позитивний",
+      "source_count": 1,
+      "publishers": [
+        "Cointelegraph"
+      ],
+      "links": [
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/magazine/chinas-p2p-stablecoin-wallets-surge-43x-koreas-450b-crypto-economy-asia-express?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
+        }
+      ],
+      "confidence_label": "Поки одне джерело",
+      "jev_take": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
+      "watch_for": "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента.",
+      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
+      "reasons": [
+        "Поки одне джерело",
+        "Ринковий тон: Потенційно позитивний",
+        "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
+      ]
     },
     {
       "id": "b4e31b6883d086",
@@ -1199,13 +1196,13 @@
       "analysis_last_attempt_at": "2026-10-03T17:00:36Z"
     },
     {
-      "id": "07524d8b8923a4",
+      "id": "b1ecf02d9844d4",
       "source": "jev_analysis",
       "mode": "news",
       "title": "Top Democrat among Senate investigators probes ties between Cantor Fitzgerald, Tether",
       "summary": "",
       "url": "https://www.coindesk.com/policy/2026/10/08/top-democrat-among-senate-investigators-probes-ties-between-cantor-fitzgerald-tether",
-      "published_at": "2026-10-08T21:22:58+00:00",
+      "published_at": "2026-10-09T00:46:27+00:00",
       "assets": [],
       "topics": [
         "stablecoin"
@@ -1213,22 +1210,27 @@
       "impact": 1,
       "impact_label": "Низький вплив",
       "tone": "Невизначений / змішаний",
-      "source_count": 1,
+      "source_count": 2,
       "publishers": [
-        "CoinDesk"
+        "CoinDesk",
+        "Cointelegraph"
       ],
       "links": [
         {
           "publisher": "CoinDesk",
           "url": "https://www.coindesk.com/policy/2026/10/08/top-democrat-among-senate-investigators-probes-ties-between-cantor-fitzgerald-tether"
+        },
+        {
+          "publisher": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/cantor-fitzgerald-faces-senate-democrats-probe-over-tether-ties?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
         }
       ],
-      "confidence_label": "Поки одне джерело",
+      "confidence_label": "Є незалежне підтвердження",
       "jev_take": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
       "watch_for": "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента.",
       "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
       "reasons": [
-        "Поки одне джерело",
+        "Є незалежне підтвердження",
         "Ринковий тон: Невизначений / змішаний",
         "Mint/burn, резерви, peg, біржові потоки та офіційні заяви емітента."
       ]
@@ -3008,41 +3010,6 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
-      ]
-    },
-    {
-      "id": "58074eec649c35",
-      "source": "jev_analysis",
-      "mode": "news",
-      "title": "Bitcoin price drops to $82.7K October low as bond sell-off resumes on Iran nerves",
-      "summary": "Bitcoin fell below $83,000 to reach month-to-date lows as stocks reversed after all-time highs and bond yields spiked higher.",
-      "url": "https://cointelegraph.com/markets/bitcoin-price-drops-to-827k-october-low-as-bond-sell-off-resumes-on-iran-nerves?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-      "published_at": "2026-10-07T15:06:14+00:00",
-      "assets": [
-        "BTC"
-      ],
-      "topics": [],
-      "impact": 1,
-      "impact_label": "Низький вплив",
-      "tone": "Невизначений / змішаний",
-      "source_count": 1,
-      "publishers": [
-        "Cointelegraph"
-      ],
-      "links": [
-        {
-          "publisher": "Cointelegraph",
-          "url": "https://cointelegraph.com/markets/bitcoin-price-drops-to-827k-october-low-as-bond-sell-off-resumes-on-iran-nerves?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound"
-        }
-      ],
-      "confidence_label": "Поки одне джерело",
-      "jev_take": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
-      "watch_for": "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення.",
-      "analysis_basis": "Зведення RSS-сніпетів + крос-перевірка між джерелами; це не повнотекстовий LLM-аналіз статті.",
-      "reasons": [
-        "Поки одне джерело",
-        "Ринковий тон: Невизначений / змішаний",
-        "Друге незалежне джерело, обсяг, реакція ціни й наступні офіційні оновлення."
       ]
     },
     {
