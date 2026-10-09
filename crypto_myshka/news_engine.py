@@ -362,6 +362,17 @@ def main():
         "items": events,
     }
 
+    # Do not erase JEV health information when the cross-source feed refreshes.
+    # The timestamp shows the age of the last completed AI analysis run.
+    for key in (
+        "jev_enabled", "jev_status", "jev_provider", "jev_model",
+        "jev_analyzed_count", "jev_analyzed_this_run", "jev_pending_count",
+        "jev_llm_pending_count", "jev_analysis_errors", "jev_error_codes",
+        "jev_last_run_at"
+    ):
+        if key in previous:
+            payload[key] = previous[key]
+
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     db_count=sync_news(payload)
