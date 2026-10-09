@@ -17,6 +17,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from youtube_analysts import CHANNELS
+from pair_reports import update_from_live
 from live_monitor import (
     AI_AVAILABLE, API_KEY, CAPTURE_INTERVAL, OUT, choose_stream_url,
     capture, get_stream, load, now, save, transcribe, vision,
@@ -216,6 +217,10 @@ def watch(interval: int = DEFAULT_SECONDS, once: bool = False) -> None:
                     ),
                 }
                 save(output)
+                try:
+                    update_from_live(output)
+                except Exception as exc:
+                    print("Pair report generation failed:", str(exc)[:180], flush=True)
                 print(
                     now(),
                     "| LIVE", output["live_count"],
