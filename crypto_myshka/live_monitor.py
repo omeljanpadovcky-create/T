@@ -285,7 +285,7 @@ def normalize_observation(parsed: dict) -> dict:
         chart[field] = [
             str(num) for num in raw_levels[:4]
             if isinstance(num, (str, int, float)) and not isinstance(num, bool)
-            and re.fullmatch(r"-?\\d{1,10}(?:\\.\\d{1,9})?", str(num).strip())
+            and re.fullmatch(r"-?\d{1,10}(?:\.\d{1,9})?", str(num).strip())
         ][:3] if isinstance(raw_levels, list) else []
     parsed["chart"] = chart
     return parsed
