@@ -10,7 +10,7 @@
     analysts: './crypto_myshka/data/youtube_analysts.json'
   };
   const STORE = 'crypto-myshka-app-v1';
-  const VIEWS = new Set(['home', 'analysis', 'history', 'settings']);
+  const VIEWS = new Set(['home', 'analysis', 'archive', 'history', 'settings']);
   const allowedTheme = new Set(['light', 'dark']);
   const allowedRefresh = new Set([15, 30, 60, 120]);
   const allowedVisionModes = new Set(['auto', 'local', 'cloud']);
@@ -185,7 +185,7 @@
         else el.removeAttribute('aria-current');
       }
     });
-    const names = { home: 'AI Chart Observer', analysis: 'Fast Analysis', history: 'Збережене', settings: 'Налаштування' };
+    const names = { home: 'AI Chart Observer', analysis: 'Fast Analysis', archive: 'Архів роликів', history: 'Збережене', settings: 'Налаштування' };
     $('top-context').textContent = names[to];
     document.title = names[to] + ' · Crypto Myshka';
     if (!options.fromHash) history.replaceState(null, '', location.pathname + location.search + '#' + to);
@@ -424,6 +424,9 @@
   function renderView() {
     if (state.view === 'home') renderHome();
     else if (state.view === 'analysis') renderAnalysis();
+    else if (state.view === 'archive') {
+      if (window.MyshkaVideoArchive && typeof window.MyshkaVideoArchive.render === 'function') window.MyshkaVideoArchive.render();
+    }
     else if (state.view === 'history') renderHistory();
     else renderSettings();
   }
