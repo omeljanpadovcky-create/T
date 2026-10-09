@@ -258,13 +258,13 @@
         "short_conclusion": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-09T23:11:20Z"
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 4,
+      "analysis_last_attempt_at": "2026-10-09T23:38:30Z"
     },
     {
       "id": "1d226d05315623",
@@ -313,13 +313,13 @@
         "short_conclusion": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-09T23:11:26Z"
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 4,
+      "analysis_last_attempt_at": "2026-10-09T23:38:35Z"
     },
     {
       "id": "5deda94f2556f4",
@@ -371,13 +371,13 @@
         "short_conclusion": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-09T23:20:33Z"
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 4,
+      "analysis_last_attempt_at": "2026-10-09T23:38:42Z"
     },
     {
       "id": "f2146ba6b342c1",
@@ -603,13 +603,13 @@
         "short_conclusion": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-09T23:20:51Z"
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 4,
+      "analysis_last_attempt_at": "2026-10-09T23:38:49Z"
     },
     {
       "id": "1ebda8c8f725a4",
@@ -4038,8 +4038,8 @@
   "jev_llm_pending_count": 14,
   "jev_analysis_errors": 4,
   "jev_error_codes": {
-    "http_402": 2,
-    "http_429": 2
+    "http_402": 1,
+    "http_429": 3
   },
-  "jev_last_run_at": "2026-10-09T23:29:30Z"
+  "jev_last_run_at": "2026-10-09T23:38:55Z"
 }
