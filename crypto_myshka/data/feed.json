@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-09T19:21:45.281133+00:00",
+  "generated_at": "2026-10-09T19:22:55.139298+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,7 +26,7 @@
       "ok": true,
       "count": 10218,
       "complete": true,
-      "updated_at": "2026-10-09T19:21:40.686566+00:00",
+      "updated_at": "2026-10-09T19:22:50.397157+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
@@ -47,32 +47,32 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 82430,
-        "usd_24h_change": 1.0590374906266868
+        "usd": 82427,
+        "usd_24h_change": 1.0546536925342396
       },
       "ethereum": {
-        "usd": 2482.53,
-        "usd_24h_change": 1.1806047397327908
+        "usd": 2482.43,
+        "usd_24h_change": 1.1761815665419597
       },
       "solana": {
-        "usd": 109.21,
-        "usd_24h_change": 0.3457096405812939
+        "usd": 109.23,
+        "usd_24h_change": 0.3596384729309243
       },
       "pendle": {
         "usd": 2.08,
-        "usd_24h_change": 0.5807399894896403
+        "usd_24h_change": 0.6414732587488253
       },
       "ripple": {
         "usd": 1.39,
-        "usd_24h_change": 1.4090872369872895
+        "usd_24h_change": 1.4140052941733812
       },
       "binancecoin": {
-        "usd": 739.29,
-        "usd_24h_change": 1.4562488000299891
+        "usd": 739.43,
+        "usd_24h_change": 1.4747178898733464
       },
       "dogecoin": {
-        "usd": 0.084569,
-        "usd_24h_change": 1.4047395596942827
+        "usd": 0.084577,
+        "usd_24h_change": 1.4147894217467596
       }
     }
   },
