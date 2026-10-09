@@ -1,0 +1,57 @@
+name: CryptoMyshka Rapid LIVE Smoke Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'crypto_myshka/rapid_live_watch.py'
+      - 'crypto_myshka/live_monitor.py'
+      - 'START_CRYPTO_MYSHKA_LIVE.bat'
+      - '.github/workflows/crypto-myshka-rapid-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install only parser dependencies
+        run: python -m pip install --disable-pip-version-check requests==2.32.5 yt-dlp
+      - name: Compile LIVE scripts
+        run: python -m py_compile crypto_myshka/rapid_live_watch.py crypto_myshka/live_monitor.py crypto_myshka/youtube_analysts.py
+      - name: Check 15-second scheduler with mocked YouTube
+        run: |
+          python - <<'PY'
+          import sys
+          from pathlib import Path
+          from unittest.mock import patch
+
+          sys.path.insert(0, str(Path('crypto_myshka').resolve()))
+          import rapid_live_watch as rapid
+
+          channel = {'id': 'nikolas', 'name': 'НИКОЛАС | ТРЕЙДЕР',
+                     'handle': '@NikolasTradin', 'url': 'https://www.youtube.com/@NikolasTradin/live',
+                     'confirmed': True}
+          with patch.object(rapid, 'get_stream', return_value=(None, 'youtube_access_blocked: challenged')):
+              state, stream = rapid.scan_channel(channel)
+              assert state['status'] == 'access_blocked'
+              assert stream is None
+              assert state['live'] is False
+          written = []
+          with patch.object(rapid, 'CHANNELS', [channel]), \
+               patch.object(rapid, 'get_stream', return_value=(None, None)), \
+               patch.object(rapid, 'save', side_effect=lambda item: written.append(item)), \
+               patch.object(rapid, 'load', return_value={}):
+              rapid.watch(interval=15, once=True)
+          assert written, 'Scheduler must save a snapshot'
+          assert written[0]['scan_interval_seconds'] == 15
+          assert written[0]['auto_trade'] is False
+          print('Rapid LIVE watcher smoke tests passed')
+          PY
