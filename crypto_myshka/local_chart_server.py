@@ -42,8 +42,8 @@ def api_post(path, payload, timeout=100):
 
 
 def has_image_signature(raw):
-    return (raw.startswith(b"\\x89PNG\\r\\n\\x1a\\n") or
-            raw.startswith(b"\\xff\\xd8\\xff") or
+    return (raw.startswith(b"\x89PNG\r\n\x1a\n") or
+            raw.startswith(b"\xff\xd8\xff") or
             (raw.startswith(b"RIFF") and raw[8:12] == b"WEBP"))
 
 
