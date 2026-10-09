@@ -35,7 +35,20 @@
       row.gemini?.summary, row.gemini?.strategy, row.gemini?.visual_context
     ].join(' ').toLocaleLowerCase('uk-UA');
   };
+  // Keep the public archive focused on actual trading lessons and market analysis.
+  // Channel names do not count as evidence: creators also upload unrelated Shorts.
+  const tradeTopic = /(?:трейд|торгов|сделк|угод|стратег|сигнал|график|графік|свеч|свіч|индикатор|індикатор|бирж|бірж|крипт|валют|форекс|forex|trading|trade\\b|market|chart|candlestick|price action|technical analysis|bitcoin|btc\\b|eth\\b|usdt|pocket option|quotex|binarn|бинар|бінар|\\botc\\b|\\brsi\\b|\\bema\\b|\\bmacd\\b|копитрейд|copytrad|live trading|три перекрытия)/i;
+  const offTopic = /(?:мем(?:ы|и|ас|чики|чик|и)?\\b|меми|мемас|прикол|юмор|анекдот|шутк|смешн|смішн|funny|comedy|meme|gaming|minecraft|розыгрыш|пранк)/i;
+  function isTrading(row) {
+    const title=text(row.title,260);
+    const verified=row.gemini?.status==='gemini_video_summary';
+    const evidence=verified ? [row.gemini?.summary,row.gemini?.strategy].join(' ') : '';
+    if (verified && tradeTopic.test(evidence)) return true;
+    if (offTopic.test(title) && !tradeTopic.test(title)) return false;
+    return tradeTopic.test(title);
+  }
   function filters(row) {
+    if (!isTrading(row)) return false;
     if (state.channel && row.channel_id !== state.channel) return false;
     if (state.kind && row.kind !== state.kind) return false;
     if (state.evidence === 'gemini' && row.gemini?.status !== 'gemini_video_summary') return false;
