@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "updated_at": null,
+  "mode": "read_only",
+  "channels": [
+    {
+      "id": "nikolas",
+      "name": "НИКОЛАС | ТРЕЙДЕР",
+      "handle": "@NikolasTradin",
+      "url": "https://www.youtube.com/@NikolasTradin/videos",
+      "confirmed": true,
+      "status": "pending_first_scan",
+      "videos": [],
+      "reviewed": 0
+    },
+    {
+      "id": "backstage",
+      "name": "Закулисье Трейдера",
+      "handle": "@artemtraderr",
+      "url": "https://www.youtube.com/@artemtraderr/videos",
+      "confirmed": true,
+      "status": "pending_first_scan",
+      "videos": [],
+      "reviewed": 0
+    },
+    {
+      "id": "mark",
+      "name": "Mark Champs Trader",
+      "handle": "@Mark_champs_trader",
+      "url": "https://www.youtube.com/@Mark_champs_trader/videos",
+      "confirmed": true,
+      "status": "pending_first_scan",
+      "videos": [],
+      "reviewed": 0
+    },
+    {
+      "id": "alexey",
+      "name": "Алексей Борщев",
+      "handle": "@alexeyborshev1",
+      "url": "https://www.youtube.com/@alexeyborshev1/videos",
+      "confirmed": true,
+      "status": "pending_first_scan",
+      "videos": [],
+      "reviewed": 0
+    },
+    {
+      "id": "nikolai",
+      "name": "Николай (зі скріншота)",
+      "handle": null,
+      "url": null,
+      "confirmed": false,
+      "status": "need_channel_url",
+      "videos": [],
+      "reviewed": 0
+    }
+  ],
+  "final_signal": "SKIP",
+  "reason": "Немає незалежно перевірених торгових сигналів. Відеоконтент не замінює ринкові котирування й перевірку статистики.",
+  "method": "Публічні назви/описи відео та доступні субтитри; не є доказом результативності.",
+  "automatic_orders": false
+}
