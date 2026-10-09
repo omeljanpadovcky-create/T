@@ -1,0 +1,49 @@
+name: CryptoMyshka YouTube Analysts (isolated)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '31 */2 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: crypto-myshka-youtube-only
+  cancel-in-progress: false
+
+jobs:
+  youtube:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install existing collector dependencies
+        run: pip install -r crypto_myshka/requirements.txt
+      - name: Check isolated script
+        run: python -m py_compile crypto_myshka/youtube_analysts.py
+      - name: Scan only public YouTube channels
+        run: python crypto_myshka/youtube_analysts.py
+      - name: Publish YouTube-only snapshot
+        run: |
+          git config user.name "CryptoMyshka YouTube Bot"
+          git config user.email "crypto-myshka@users.noreply.github.com"
+          git add crypto_myshka/data/youtube_analysts.json
+          if git diff --cached --quiet; then
+            echo "No YouTube changes"
+            exit 0
+          fi
+          git commit -m "Update standalone YouTube analyst report"
+          for retry in 1 2 3; do
+            git pull --rebase origin main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 3
+          done
+          exit 1
