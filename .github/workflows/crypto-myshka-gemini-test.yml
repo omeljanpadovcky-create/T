@@ -1,0 +1,43 @@
+name: Test Crypto Myshka Gemini Video API
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Validate Gemini API model access (no video request or trading)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python3 - <<'PY'
+          import os, json
+          from urllib.request import Request, urlopen
+          from urllib.error import HTTPError, URLError
+          key=os.getenv("GEMINI_API_KEY","").strip()
+          if not key:
+              raise SystemExit("FAIL: missing GEMINI_API_KEY in GitHub Actions repository secrets.")
+          model="gemini-3.5-flash-lite"
+          request=Request(
+              "https://generativelanguage.googleapis.com/v1beta/models/"+model,
+              headers={"x-goog-api-key":key, "Accept":"application/json"}
+          )
+          try:
+              with urlopen(request,timeout=18) as response:
+                  data=json.load(response)
+              if not data.get("name","").endswith("/"+model):
+                  raise SystemExit("FAIL: unexpected Gemini model response.")
+              print("OK: Gemini API credentials were accepted and the configured model is available.")
+              print("NOTE: This does not analyze any video or confirm YouTube video access.")
+          except HTTPError as err:
+              print("Gemini API rejected the credentials or model. HTTP",err.code)
+              raise SystemExit(1)
+          except (URLError,ValueError) as err:
+              print("Gemini API connectivity unavailable:",type(err).__name__)
+              raise SystemExit(1)
+          PY
