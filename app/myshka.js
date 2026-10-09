@@ -465,7 +465,43 @@
         desc.textContent='Розмір: '+image.width+' × '+image.height+' px. За кольорами на зображенні '+(dominant.includes('порівну')?dominant:'більше '+dominant)+' ділянок. Це не визначає напрямок наступної свічки.';
         const caution=document.createElement('p');caution.className='report-notice';
         caution.textContent='Локальна оцінка пікселів — не повноцінний AI/JEV. Пару, таймфрейм, котирування, рівні та обсяг автоматично не підтверджено. Фото нікуди не надсилається.';
-        info.append(preview,fileLabel,heading,desc,caution);box.replaceChildren(info);
+        const aiArea=document.createElement('div');
+        aiArea.className='jev-image-area';
+        const aiButton=document.createElement('button');
+        aiButton.type='button';
+        aiButton.className='small-button';
+        aiButton.textContent='🤖 JEV: проаналізувати свічки та рівні';
+        const aiResult=document.createElement('div');
+        aiResult.className='jev-image-result';
+        aiResult.setAttribute('aria-live','polite');
+        const localServer=['localhost','127.0.0.1'].includes(location.hostname);
+        if (!localServer) {
+          aiButton.disabled=true;
+          aiResult.textContent='Справжній AI потребує локального сервера Ollama. На GitHub Pages зараз працює тільки оцінка кольорів. Запусти START_MYSHKA_AI.ps1 через PowerShell та відкрий http://127.0.0.1:8765/myshka-app.html#analysis.';
+        } else {
+          aiResult.textContent='AI аналізує фото локально, без надсилання в хмару. Це не підтверджені котирування чи торговий сигнал.';
+          aiButton.addEventListener('click', async () => {
+            aiButton.disabled=true;
+            aiResult.textContent='⏳ JEV аналізує скріншот через Ollama. Зачекай…';
+            try {
+              const payload={image:preview.src.split(',')[1]};
+              const response=await fetch('/api/chart-analysis', {
+                method:'POST',headers:{'Content-Type':'application/json'},
+                body:JSON.stringify(payload)
+              });
+              const result=await response.json();
+              if (!response.ok || !result.analysis) throw new Error(result.error || 'AI не відповідає');
+              aiResult.textContent='🤖 JEV ('+result.model+'):\n\n'+result.analysis+
+                '\n\n⚠️ Скріншот не підтверджує актуальні котирування або майбутній напрямок.';
+            } catch (error) {
+              aiResult.textContent='AI-аналіз не вдався: '+(error && error.message ? error.message : 'невідома помилка')+
+                '. Перевір, чи запущена Ollama та встановлена vision-модель.';
+            } finally { aiButton.disabled=false; }
+          });
+        }
+        aiArea.append(aiButton,aiResult);
+        info.append(preview,fileLabel,heading,desc,caution,aiArea);box.replaceChildren(info);
+        if (localServer) aiButton.click();
       };
       image.onerror = () => { URL.revokeObjectURL(url);box.textContent='Не вдалося прочитати фото.'; };
       image.src=url;
