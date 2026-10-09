@@ -206,13 +206,13 @@
         "short_conclusion": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 3s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 3s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:14:40Z"
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T21:38:20Z"
     },
     {
       "id": "3f390f004120fe",
@@ -261,13 +261,13 @@
         "short_conclusion": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:14:47Z"
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T21:38:25Z"
     },
     {
       "id": "1d226d05315623",
@@ -316,13 +316,13 @@
         "short_conclusion": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:14:53Z"
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T21:38:31Z"
     },
     {
       "id": "5deda94f2556f4",
@@ -374,13 +374,13 @@
         "short_conclusion": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:23:01Z"
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T21:38:38Z"
     },
     {
       "id": "f2146ba6b342c1",
@@ -4055,12 +4055,12 @@
   "jev_model": "free/deepseek-v4.1-flash",
   "jev_analyzed_count": 8,
   "jev_analyzed_this_run": 0,
-  "jev_pending_count": 14,
-  "jev_llm_pending_count": 39,
+  "jev_pending_count": 0,
+  "jev_llm_pending_count": 21,
   "jev_analysis_errors": 4,
   "jev_error_codes": {
     "http_402": 1,
     "http_429": 3
   },
-  "jev_last_run_at": "2026-10-09T21:14:09Z"
+  "jev_last_run_at": "2026-10-09T21:38:45Z"
 }
