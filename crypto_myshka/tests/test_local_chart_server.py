@@ -34,7 +34,7 @@ class LocalChartServerTests(unittest.TestCase):
         return status, payload
 
     def test_png_is_sent_to_local_vision_model(self):
-        png = base64.b64encode(b"\\x89PNG\\r\\n\\x1a\\nexample").decode("ascii")
+        png = base64.b64encode(b"\x89PNG\r\n\x1a\nexample").decode("ascii")
         with patch.object(chart, "api_post", return_value={"message": {"content": "Ціна зростає, але даних мало."}}) as mock:
             status, data = self.request({"image": png})
         self.assertEqual(status, 200)
@@ -49,7 +49,7 @@ class LocalChartServerTests(unittest.TestCase):
         self.assertIn("JPG", data["error"])
 
     def test_missing_model_is_not_fake_analysis(self):
-        png = base64.b64encode(b"\\x89PNG\\r\\n\\x1a\\nexample").decode("ascii")
+        png = base64.b64encode(b"\x89PNG\r\n\x1a\nexample").decode("ascii")
         import urllib.error
         with patch.object(chart, "api_post", side_effect=urllib.error.HTTPError("local", 404, "not found", {}, None)):
             status, data = self.request({"image": png})
