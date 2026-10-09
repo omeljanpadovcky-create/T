@@ -482,6 +482,8 @@
             aiButton.addEventListener('click', async () => {
               if (requestId !== imageRequestId) return;
               aiButton.disabled = true;
+              const analysisStartedAt = Date.now();
+              aiResult.className = 'jev-image-result';
               aiResult.textContent = '⏳ Перевіряємо Ollama…';
               try {
                 const healthResponse = await fetch('./api/chart-health', {cache: 'no-store'});
@@ -496,17 +498,52 @@
                 const response = await fetch('./api/chart-analysis', {
                   method: 'POST',
                   headers: {'Content-Type': 'application/json'},
-                  body: JSON.stringify({image: dataUrl.split(',')[1]})
+                  body: JSON.stringify({image: dataUrl.split(',')[1], chart_timeframe: $('chart-timeframe').value})
                 });
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.error || 'Помилка AI-сервера (HTTP ' + response.status + ')');
                 if (requestId !== imageRequestId) return;
                 const direction = ['ВГОРУ', 'ВНИЗ', 'НЕВИЗНАЧЕНО'].includes(result.direction)
                   ? result.direction : 'НЕВИЗНАЧЕНО';
-                aiResult.textContent = direction === 'ВГОРУ' ? '↑ ВГОРУ' :
-                  direction === 'ВНИЗ' ? '↓ ВНИЗ' : '— НЕВИЗНАЧЕНО';
-                aiResult.className = 'jev-image-result direction-result ' +
-                  (direction === 'ВГОРУ' ? 'direction-up' : direction === 'ВНИЗ' ? 'direction-down' : 'direction-neutral');
+                const proposedAction = ['BUY', 'SELL'].includes(result.action) ? result.action : 'SKIP';
+                const expiry = [30, 60, 300].includes(result.test_expiry_seconds)
+                  ? result.test_expiry_seconds : null;
+                const elapsed = Math.round((Date.now() - analysisStartedAt) / 1000);
+                const validAction = expiry !== null && proposedAction !== 'SKIP' &&
+                  (proposedAction === 'BUY' ? direction === 'ВГОРУ' : direction === 'ВНИЗ');
+                const tooLate = validAction && elapsed >= expiry;
+                const action = validAction && !tooLate ? proposedAction : 'SKIP';
+                const durationLabel = seconds => seconds === 30 ? '30 секунд' :
+                  seconds === 60 ? '1 хвилина' : seconds === 300 ? '5 хвилин' : 'Не визначено';
+                const tfLabel = tf => ({'15s': '15 с', '30s': '30 с', '1m': '1 хв', '5m': '5 хв'})[tf] || 'не визначено';
+                const makeLine = (tag, cls, value) => {
+                  const el = document.createElement(tag);
+                  if (cls) el.className = cls;
+                  el.textContent = value;
+                  return el;
+                };
+                aiResult.className = 'jev-image-result ' +
+                  (action === 'BUY' ? 'direction-up' : action === 'SELL' ? 'direction-down' : 'direction-neutral');
+                const heading = action === 'BUY' ? 'ДЕМО-ГІПОТЕЗА: BUY ↑' :
+                  action === 'SELL' ? 'ДЕМО-ГІПОТЕЗА: SELL ↓' : 'ПРОПУСТИТИ — сигнал не підтверджено';
+                const title = makeLine('div', 'direction-result', heading);
+                const visible = makeLine('p', 'jev-image-meta', 'Видимий рух: ' +
+                  (direction === 'ВГОРУ' ? '↑ ВГОРУ' : direction === 'ВНИЗ' ? '↓ ВНИЗ' : '— НЕВИЗНАЧЕНО'));
+                const tfSource = result.timeframe_source === 'user' ? 'заданий вручну' :
+                  result.timeframe_source === 'model' ? 'оцінений AI, не перевірено' : 'не визначено';
+                const timeframe = makeLine('p', 'jev-image-meta',
+                  'Таймфрейм свічок: ' + tfLabel(result.chart_timeframe) + ' (' + tfSource + ')');
+                const testTime = makeLine('p', 'jev-image-expiry',
+                  action === 'SKIP' ? 'Час закриття: не рекомендовано' :
+                    'Експериментальний час закриття: ' + durationLabel(expiry));
+                const reason = makeLine('p', 'jev-image-reason', 'Підстава: ' +
+                  (typeof result.reason === 'string' ? result.reason.slice(0, 220) : 'Недостатньо інформації.'));
+                const latency = makeLine('p', 'jev-image-meta',
+                  'Обробка: ' + elapsed + ' с. Фото не є живим потоком котирувань.');
+                const warning = makeLine('p', 'report-notice',
+                  tooLate ? '⛔ Аналіз тривав довше за тестову експірацію. Пропустити.' :
+                    '⚠️ Це неперевірена гіпотеза для демо, а не команда на ставку. OTC-котирування не звірені.');
+                aiResult.replaceChildren(title, visible, timeframe, testTime, reason, latency, warning);
               } catch (error) {
                 if (requestId === imageRequestId) {
                   aiResult.className = 'jev-image-result';
