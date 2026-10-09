@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-09T22:59:58.319070+00:00",
+  "updated_at": "2026-10-09T23:38:17.851760+00:00",
   "mode": "educational_video_context",
   "channels": [
     {
@@ -362,6 +362,16 @@
           }
         }
       ],
+      "reviewed": 0
+    },
+    {
+      "id": "archie",
+      "name": "ARCHIE TRADING",
+      "handle": "@archie_trade",
+      "url": "https://www.youtube.com/@archie_trade/videos",
+      "confirmed": true,
+      "status": "empty_or_unavailable",
+      "videos": [],
       "reviewed": 0
     }
   ],
