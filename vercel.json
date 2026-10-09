@@ -3,5 +3,6 @@
     "api/jev-chat.js": {
       "maxDuration": 30
     }
-  }
+  },
+  "framework": null
 }
