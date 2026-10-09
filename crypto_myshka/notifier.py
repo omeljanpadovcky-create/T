@@ -22,6 +22,11 @@ except ImportError:
         mark_notification_delivered,
     )
 
+try:
+    from signal_gate import evaluate as evaluate_signal
+except ImportError:
+    from crypto_myshka.signal_gate import evaluate as evaluate_signal
+
 ROOT=Path(__file__).resolve().parent
 FEED=ROOT/"data"/"feed.json"
 NEWS=ROOT/"data"/"news.json"
@@ -134,12 +139,16 @@ def main():
         pair=str(report.get("pair") or "").strip()
         observed=str(report.get("observed_at") or "")
         if not pair or not observed or report.get("demo") or report.get("confidence") in ("none","unknown"): continue
+        # A report from YouTube alone must NEVER become a Telegram signal.
+        # Re-evaluate at send time to reject stale reports, including old JSON.
+        if evaluate_signal(report)["decision"] != "REVIEW_ONLY":
+            continue
         jev=report.get("jev") or {}
         conclusion=str(jev.get("why") or "").strip()[:450]
         current.append({"id":"jev:"+pair+":"+observed,"source":"jev_analysis",
-                        "title":"Звіт JEV: "+pair+" · "+str(report.get("trend") or "невизначено"),
+                        "title":"JEV · на ручну перевірку (НЕ СИГНАЛ): "+pair+" · "+str(report.get("trend") or "невизначено"),
                         "risk":80 if report.get("confidence")=="low" else 60,
-                        "jev_ai":{"short_conclusion":conclusion or "Потрібна перевірка котирувань."},
+                        "jev_ai":{"short_conclusion":(conclusion or "Потрібна перевірка котирувань.")+" Не автоматична угода."},
                         "url":str(report.get("source_url") or "")})
 
     ids=[x.get("id") for x in current if x.get("id")]
