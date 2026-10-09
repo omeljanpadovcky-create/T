@@ -437,13 +437,13 @@
         "short_conclusion": "Регуляторний фактор може змінити доступ або попит на BTC, ETH; заголовок треба звіряти з офіційним рішенням/файлінгом.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:23:06Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T21:50:30Z"
     },
     {
       "id": "d0bf4eb3b1012d",
@@ -549,23 +549,20 @@
         "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів."
       ],
       "jev_ai": {
-        "what_happened": "Blockchain analysts identified the US government wallet tied to the recovery of funds from the Bitfinex hack.",
-        "why_it_matters": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
-        "market_effect": "Потенційно негативний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Офіційне підтвердження, сума втрат, on-chain рух коштів, відновлення депозитів/виводів.",
-        "confidence": "низька",
-        "short_conclusion": "Інцидент може тиснути на BTC, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "what_happened": "Аналітики блокчейну відстежили переміщення $1 млрд у BTC з урядового гаманця США, пов'язаного з відновленими коштами після хакерської атаки на Bitfinex. За даними Cointelegraph, CoinDesk та Decrypt, транзакція відбулася без ознак продажу на біржах.",
+        "why_it_matters": "Урядові гаманці США є одними з найбільш відстежуваних у криптоспільноті — будь-який рух часто інтерпретується як попередження про потенційний тиск продажу. Це не перша подія такого роду, тому ринок має історичний контекст реакції.",
+        "market_effect": "Нейтральний до слабко негативного в короткостроковій перспективі. Ключовий фактор — відсутність ознак продажу (no sale indicated), що зменшує ймовірність миттєвого тиску. На момент події BTC торгувався близько $82 593 (за даними стороннього огляду ринку), індекс страху та жадібності — 59 (нейтрально), капіталізація ринку — $2,77 трлн.",
+        "bull_case": "Уряд не продає — переміщення може бути пов'язане з логістикою, зберіганням або реструктуризацією активів. Відсутність депозитів на біржі зменшує ризик миттєвого продажу. Довгострокові бичі можуть сприйняти це як підтвердження, що уряд не планує затоплювати ринок.",
+        "bear_case": "Історично рухи урядових гаманців BTC часто передували продажам. Навіть якщо зараз продажу немає, ринок може реагувати на невизначеність. Якщо BTC вже перебуває у локальному тижневому шортовому наративі (згідно з технічним оглядом), будь-які новини про урядові активи можуть посилити продажі.",
+        "watch_next": "Слідкувати за подальшими рухами цього гаманця (чи йдуть кошти на біржі), офіційними заявами уряду, а також за реакцією ціни BTC на рівнях $82 000-$83 000. Також відстежувати, чи з'являться нові гаманці з тієї ж групи.",
+        "confidence": "середня",
+        "short_conclusion": "Переміщення $1 млрд BTC з урядового гаманця США не супроводжується ознаками продажу, тому миттєвого тиску на ринок очікувати не варто. Однак через історичну чутливість до таких рухів слід стежити за подальшими транзакціями та реакцією ціни BTC.",
+        "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T20:46:33Z"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T21:50:38Z"
     },
     {
       "id": "d63fb58cb29e3e",
@@ -612,13 +609,13 @@
         "short_conclusion": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:26:40Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T21:50:43Z"
     },
     {
       "id": "1ebda8c8f725a4",
@@ -815,13 +812,13 @@
         "short_conclusion": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T21:02:49Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T21:50:49Z"
     },
     {
       "id": "fb8612a1141d75",
@@ -4050,17 +4047,16 @@
     }
   ],
   "jev_enabled": true,
-  "jev_status": "degraded",
+  "jev_status": "ok",
   "jev_provider": "apinex",
   "jev_model": "free/deepseek-v4.1-flash",
-  "jev_analyzed_count": 8,
-  "jev_analyzed_this_run": 0,
+  "jev_analyzed_count": 9,
+  "jev_analyzed_this_run": 1,
   "jev_pending_count": 0,
-  "jev_llm_pending_count": 21,
-  "jev_analysis_errors": 4,
+  "jev_llm_pending_count": 20,
+  "jev_analysis_errors": 3,
   "jev_error_codes": {
-    "http_402": 1,
-    "http_429": 3
+    "ValueError": 3
   },
-  "jev_last_run_at": "2026-10-09T21:38:45Z"
+  "jev_last_run_at": "2026-10-09T21:50:55Z"
 }
