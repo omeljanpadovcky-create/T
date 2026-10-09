@@ -49,16 +49,32 @@ test('strict parser rejects ungrounded claims, unknown timeframe, invalid expiry
   assert.equal(valid.test_expiry_seconds,60);
   assert.equal(valid.signal_validated,false);
 });
-test('cloud health requires secrets, access code and allowed origin',async()=>{
+test('cloud health requires secrets, access code, allowed origin and reachable Gemini model',async()=>{
   await withSecrets(async()=>{
-    const ok=response();await health(request('GET'),ok);
-    assert.equal(ok.code,200);assert.equal(ok.body.ready,true);
-    assert.equal(ok.headers['Access-Control-Allow-Origin'],origin);
-    const denied=response();await health(request('GET',null,{'x-jev-access':'bad'}),denied);
-    assert.equal(denied.code,401);assert.equal(denied.body.ready,false);
-    const cors=response();await health(request('GET',null,{origin:'https://attacker.example'}),cors);
-    assert.equal(cors.code,403);
-    assert.equal(cors.headers['Access-Control-Allow-Origin'],undefined);
+    const old=globalThis.fetch;
+    let calls=0;
+    globalThis.fetch=async (url,opts)=>{
+      calls++;
+      assert.match(url,/generativelanguage\.googleapis\.com\/v1beta\/models\/gemini-2.5-flash/);
+      assert.equal(opts.headers['x-goog-api-key'],'fake-private-gemini-key');
+      return {ok:true,status:200};
+    };
+    try {
+      const ok=response();await health(request('GET'),ok);
+      assert.equal(ok.code,200);assert.equal(ok.body.ready,true);
+      assert.equal(ok.headers['Access-Control-Allow-Origin'],origin);
+      assert.equal(calls,1);
+      const denied=response();await health(request('GET',null,{'x-jev-access':'bad'}),denied);
+      assert.equal(denied.code,401);assert.equal(denied.body.ready,false);
+      const cors=response();await health(request('GET',null,{origin:'https://attacker.example'}),cors);
+      assert.equal(cors.code,403);
+      assert.equal(cors.headers['Access-Control-Allow-Origin'],undefined);
+      assert.equal(calls,1,'no provider request for unauthenticated calls');
+      globalThis.fetch=async()=>({ok:false,status:429});
+      const limited=response();await health(request('GET'),limited);
+      assert.equal(limited.code,503);
+      assert.equal(limited.body.ready,false);
+    } finally {globalThis.fetch=old;}
   });
 });
 test('cloud screenshot requires authorization, valid image and valid timeframe',async()=>{
