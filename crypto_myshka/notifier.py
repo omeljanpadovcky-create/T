@@ -25,6 +25,8 @@ except ImportError:
 ROOT=Path(__file__).resolve().parent
 FEED=ROOT/"data"/"feed.json"
 NEWS=ROOT/"data"/"news.json"
+LIVE=ROOT/"data"/"youtube_live.json"
+REPORTS=ROOT/"data"/"pair_reports.json"
 STATE=ROOT/"data"/"notify_state.json"
 
 TOKEN=os.getenv("TELEGRAM_BOT_TOKEN","").strip()
@@ -112,6 +114,33 @@ def main():
     for x in news.get("items") or []:
         if int(x.get("impact") or 0)>=2:
             current.append(x)
+
+    # Append verified LIVE observations and JEV pair reports to the existing
+    # Telegram digest; unknown/unverified channels are never advertised.
+    live=load(LIVE,{})
+    for channel in live.get("channels",[]) or []:
+        if not isinstance(channel,dict) or channel.get("live") is not True:
+            continue
+        url=channel.get("live_url") or channel.get("watch_url") or channel.get("url") or channel.get("live_page") or ""
+        name=channel.get("name") or channel.get("handle") or "YouTube"
+        event_id=channel.get("video_id") or (url if "/watch?" in url or "/live/" in url else "")
+        if not event_id: continue
+        current.append({"id":"live:"+str(event_id),"source":"youtube",
+                        "title":"🔴 LIVE підтверджено: "+name,
+                        "url":url,"impact_label":"Ефір доступний; не торговий сигнал"})
+    reports=load(REPORTS,{})
+    for report in reports.get("reports",[]) or []:
+        if not isinstance(report,dict): continue
+        pair=str(report.get("pair") or "").strip()
+        observed=str(report.get("observed_at") or "")
+        if not pair or not observed or report.get("demo") or report.get("confidence") in ("none","unknown"): continue
+        jev=report.get("jev") or {}
+        conclusion=str(jev.get("why") or "").strip()[:450]
+        current.append({"id":"jev:"+pair+":"+observed,"source":"jev_analysis",
+                        "title":"Звіт JEV: "+pair+" · "+str(report.get("trend") or "невизначено"),
+                        "risk":80 if report.get("confidence")=="low" else 60,
+                        "jev_ai":{"short_conclusion":conclusion or "Потрібна перевірка котирувань."},
+                        "url":str(report.get("source_url") or "")})
 
     ids=[x.get("id") for x in current if x.get("id")]
     state=load_state({"initialized":False,"seen":[],"telegram_ready":False})
