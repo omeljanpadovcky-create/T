@@ -1,0 +1,486 @@
+{
+  "version": 1,
+  "updated_at": "2026-10-09T22:59:58.319070+00:00",
+  "status": "partial_or_growing",
+  "scope": "Publicly accessible videos, stream replays and shorts from configured channels",
+  "all_videos_guaranteed": false,
+  "videos_copied_or_hosted": false,
+  "full_video_content_reviewed": false,
+  "market_quotes_verified": false,
+  "video_count": 11,
+  "newly_discovered": 0,
+  "legacy_entries_seeded": 11,
+  "scan_calls": 0,
+  "errors": [],
+  "progress": {},
+  "channels": [
+    {
+      "id": "nikolas",
+      "name": "НИКОЛАС | ТРЕЙДЕР",
+      "handle": "@NikolasTradin",
+      "url": "https://www.youtube.com/@NikolasTradin/videos"
+    },
+    {
+      "id": "backstage",
+      "name": "Закулисье Трейдера",
+      "handle": "@artemtraderr",
+      "url": "https://www.youtube.com/@artemtraderr/videos"
+    },
+    {
+      "id": "mark",
+      "name": "Mark Champs Trader",
+      "handle": "@Mark_champs_trader",
+      "url": "https://www.youtube.com/@Mark_champs_trader/videos"
+    },
+    {
+      "id": "alexey",
+      "name": "Алексей Борщев",
+      "handle": "@alexeyborshev1",
+      "url": "https://www.youtube.com/@alexeyborshev1/videos"
+    }
+  ],
+  "videos": [
+    {
+      "id": "Z4HMrRpKcV4",
+      "channel_id": "backstage",
+      "channel_name": "Закулисье Трейдера",
+      "channel_handle": "@artemtraderr",
+      "kind": "videos",
+      "title": "ТРЕЙДИНГ С НУЛЯ 2026: Как торговать в ПЛЮС каждый день? Лучшая Стратегия в Трейдинге 2026",
+      "url": "https://www.youtube.com/watch?v=Z4HMrRpKcV4",
+      "thumbnail": "https://i.ytimg.com/vi/Z4HMrRpKcV4/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T22:59:58.319070+00:00",
+      "details_checked_at": null,
+      "content_status": "legacy_metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Video captions have not yet been processed"
+      }
+    },
+    {
+      "id": "IEn3UX3mfGM",
+      "channel_id": "backstage",
+      "channel_name": "Закулисье Трейдера",
+      "channel_handle": "@artemtraderr",
+      "kind": "videos",
+      "title": "Трейдинг для ТУПЫХ: Самая ПРОСТАЯ СТРАТЕГИЯ для начинающих в 2026. Трейдинг для Новичков! Обучение!",
+      "url": "https://www.youtube.com/watch?v=IEn3UX3mfGM",
+      "thumbnail": "https://i.ytimg.com/vi/IEn3UX3mfGM/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T22:59:58.319070+00:00",
+      "details_checked_at": null,
+      "content_status": "legacy_metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Video captions have not yet been processed"
+      }
+    },
+    {
+      "id": "dphISIyvH94",
+      "channel_id": "backstage",
+      "channel_name": "Закулисье Трейдера",
+      "channel_handle": "@artemtraderr",
+      "kind": "videos",
+      "title": "С 5$ до 1735$ за 16 МИНУТ! Разгон Депозита для Новичков! Лучшая Стратегия в Трейдинге 2026",
+      "url": "https://www.youtube.com/watch?v=dphISIyvH94",
+      "thumbnail": "https://i.ytimg.com/vi/dphISIyvH94/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T22:59:58.319070+00:00",
+      "details_checked_at": null,
+      "content_status": "legacy_metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Video captions have not yet been processed"
+      }
+    },
+    {
+      "id": "bpQLYZM2FfE",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "videos",
+      "title": "How I Made 100,000₽ Trading in 30 Minutes. A Simple Strategy for One-Minute Trades",
+      "url": "https://www.youtube.com/watch?v=bpQLYZM2FfE",
+      "thumbnail": "https://i.ytimg.com/vi/bpQLYZM2FfE/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T22:59:58.319070+00:00",
+      "details_checked_at": null,
+      "content_status": "legacy_metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Video captions have not yet been processed"
+      }
+    },
+    {
+      "id": "e9_ai0mgpts",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "videos",
+      "title": "Compound Interest in Trading: How It Works and Why Traders Blow Their Accounts | Trading Psychology",
+      "url": "https://www.youtube.com/watch?v=e9_ai0mgpts",
+      "thumbnail": "https://i.ytimg.com/vi/e9_ai0mgpts/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T22:59:58.319070+00:00",
+      "details_checked_at": null,
+      "content_status": "legacy_metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Video captions have not yet been processed"
+      }
+    },
+    {
+      "id": "maXN3sHs2FA",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "videos",
+      "title": "BOUGHT A BMW F10 IN 2 WEEKS VIA TRADE-IN | My new car review",
+      "url": "https://www.youtube.com/watch?v=maXN3sHs2FA",
+      "thumbnail": "https://i.ytimg.com/vi/maXN3sHs2FA/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T22:59:58.319070+00:00",
+      "details_checked_at": null,
+      "content_status": "legacy_metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Video captions have not yet been processed"
+      }
+    },
+    {
+      "id": "ElfSeIVxRH8",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "videos",
+      "title": "+134,000₽ in One Trading Session | Trading with Technical Analysis + STOCHASTIC | Training for Be...",
+      "url": "https://www.youtube.com/watch?v=ElfSeIVxRH8",
+      "thumbnail": "https://i.ytimg.com/vi/ElfSeIVxRH8/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T22:59:58.319070+00:00",
+      "details_checked_at": null,
+      "content_status": "legacy_metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [
+          "STOCHASTIC"
+        ],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Video captions have not yet been processed"
+      }
+    },
+    {
+      "id": "7bkdptaLxA0",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "videos",
+      "title": "From 5,000 to 100,000 without a single loss in one session! Trading with Technical Analysis 2026",
+      "url": "https://www.youtube.com/watch?v=7bkdptaLxA0",
+      "thumbnail": "https://i.ytimg.com/vi/7bkdptaLxA0/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T22:59:58.319070+00:00",
+      "details_checked_at": null,
+      "content_status": "legacy_metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Video captions have not yet been processed"
+      }
+    },
+    {
+      "id": "uFGHNKVd4zk",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "videos",
+      "title": "Trading from Scratch in 2026! Technical Analysis Tutorial for Beginners | Live Trading",
+      "url": "https://www.youtube.com/watch?v=uFGHNKVd4zk",
+      "thumbnail": "https://i.ytimg.com/vi/uFGHNKVd4zk/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T22:59:58.319070+00:00",
+      "details_checked_at": null,
+      "content_status": "legacy_metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Video captions have not yet been processed"
+      }
+    },
+    {
+      "id": "2JGhrD2ZzeY",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "videos",
+      "title": "THE BEST ANALYSIS SYSTEM! Technical analysis for beginners in 2026 | Real-time trading",
+      "url": "https://www.youtube.com/watch?v=2JGhrD2ZzeY",
+      "thumbnail": "https://i.ytimg.com/vi/2JGhrD2ZzeY/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T22:59:58.319070+00:00",
+      "details_checked_at": null,
+      "content_status": "legacy_metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Video captions have not yet been processed"
+      }
+    },
+    {
+      "id": "fzVB8L6GQRM",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "videos",
+      "title": "Review of \"The Fortress\": Our Private Trading Community",
+      "url": "https://www.youtube.com/watch?v=fzVB8L6GQRM",
+      "thumbnail": "https://i.ytimg.com/vi/fzVB8L6GQRM/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T22:59:58.319070+00:00",
+      "details_checked_at": null,
+      "content_status": "legacy_metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Video captions have not yet been processed"
+      }
+    }
+  ]
+}
