@@ -1,4 +1,4 @@
-"""Independent read-only YouTube source monitor for CryptoMyshka.
+"""Read-only public YouTube educational content extraction for CryptoMyshka.
 
 Public video metadata and available caption snippets are treated as claims,
 not verified signals. No broker API, orders, or trading side effects.
@@ -30,6 +30,10 @@ SHORT_RE = re.compile(r"\b(short|sell|put|bearish|шорт|продать|про
 OTC_RE = re.compile(r"\b(otc|pocket\s*option|quotex|binarn|binary|бинарн|бінарн|экспирац|експіраці)\b", re.I)
 PROMO_RE = re.compile(r"\b(100%|без\s*проигрыш|гарантир|гарантов|vip|промокод|реферал|удвой|копитрейдинг|copy\s*trading|winrate)\b", re.I)
 TRADING_RE = re.compile(r"(trading|trade|trader|трейд|торгов|strategy|стратег|отс|otc|pocket.?option|option|crypt|крипт|forex|binanc|btc|eth|сигнал|копитрейд|сделк|угод)", re.I)
+INSTRUMENT_RE = re.compile(r"(?<![A-Z0-9])(?:BTC|ETH|SOL|XRP|ADA|BNB|DOGE|LINK|AVAX|AUD|CHF|USD|EUR|GBP|JPY|CAD|NZD|AED|IDR|CNY|TRY)\\s*[/_-]\\s*(?:USDT|USDC|USD|BTC|ETH|AUD|CHF|EUR|GBP|JPY|CAD|NZD|AED|IDR|CNY|TRY)\\s*(?:OTC)?(?![A-Z0-9])", re.I)
+TIMEFRAME_RE = re.compile(r"(?<![A-Z0-9])(?:M1|M5|M15|M30|H1|H4|D1|1m|5m|15m|1h|4h)(?![A-Z0-9])", re.I)
+INDICATOR_RE = re.compile(r"(?i)\\b(?:rsi|ema|sma|macd|stochastic|moving average|bollinger|price action|support|resistance|підтримк|опір|поддержк|сопротивлен|скользящ|середн)\\w*")
+
 VERIFIED_EXAMPLES = {
     "nikolas": ("g5sXQlvCPVo", "I'm Trading LIVE — Watch What Happens | Pocket Option LIVE"),
     "mark": ("L31S4DgpEIo", "ОНЛАЙН СТРИМ. КОПИРОВАНИЕ СДЕЛОК 7.10 ВЕЧЕРНИЙ ЭФИР"),
@@ -83,7 +87,23 @@ def classify(title: str, description: str = "", excerpt: str = "") -> dict:
         notes.append("У доступному описі немає чіткої криптовалютної пари")
     if not excerpt:
         notes.append("Повний зміст відео не підтверджений субтитрами")
+    # Only excerpt, title and description are observed. Do not invent what
+    # happened visually during the video or imply that a live trade was checked.
+    mentioned_instruments = list(dict.fromkeys(
+        re.sub(r"\\s+", "", x.upper()).replace("_", "/").replace("-", "/")
+        for x in INSTRUMENT_RE.findall(visible)
+    ))[:10]
+    timeframes = list(dict.fromkeys(x.upper() for x in TIMEFRAME_RE.findall(visible)))[:6]
+    indicators = list(dict.fromkeys(x.upper() for x in INDICATOR_RE.findall(visible)))[:8]
+    if mentioned_instruments:
+        notes.append("Назви інструментів виявлено у тексті; їхню ціну та угоди не перевірено")
+    evidence_excerpt = normalize(excerpt or "")[:350]
     return {
+        "mentioned_instruments": mentioned_instruments,
+        "mentioned_timeframes": timeframes,
+        "mentioned_indicators": indicators,
+        "content_excerpt": evidence_excerpt,
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
         "instrument": "OTC / binary" if otc else ("Криптовалюта (згадана)" if pairs else "Не визначено"),
         "pairs": pairs[:5],
         "direction_claim": direction,
@@ -162,11 +182,11 @@ def main():
     result = {
         "version": 1,
         "updated_at": datetime.now(timezone.utc).isoformat(),
-        "mode": "read_only",
+        "mode": "educational_video_context",
         "channels": [],
         "final_signal": "SKIP",
         "reason": "Відео не є незалежно перевіреними ринковими сигналами. Немає підтвердження котируваннями, часом входу та результатами.",
-        "method": "Аналіз публічних назв/описів і доступних субтитрів; це не перевірка прибутковості, не транскрипція відеопотоків і не рекомендація угод.",
+        "method": "Збір торгових фактів із назв, описів та доступних субтитрів опублікованих відео — не цілодобовий нагляд за LIVE.",
         "automatic_orders": False,
     }
     for channel in CHANNELS:
