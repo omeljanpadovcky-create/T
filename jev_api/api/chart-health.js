@@ -41,12 +41,21 @@ export default async function handler(req,res) {
           headers:{'x-goog-api-key':geminiKey},
           signal:AbortSignal.timeout(6000)
         });
+    if (!upstream.ok && provider === 'apinex' && upstream.status === 403) {
+      // APInex may deny model catalog access even when chat completions work.
+      // Do NOT label the key invalid. Authorize a photo test without claiming
+      // actual inference has been verified by this health check.
+      return res.status(200).json({ready:true,provider,model,cloud:true,
+        verified:false,probe:'model_catalog_denied',
+        notice:'API-ключ налаштовано; каталог моделей повернув 403. Роботу моделі перевірить запит аналізу фото.'});
+    }
     if (!upstream.ok) return res.status(503).json({
       ready:false,error:upstream.status===429?'Ліміт APInex/Gemini вичерпано.':
         'API-ключ або сервер моделі недоступний (HTTP ' + upstream.status + ').'
     });
     return res.status(200).json({ready:true,provider,model,cloud:true,
-      notice:'Доступність API перевірено; це не перевірка точності аналізу чи реальної торгівлі.'});
+      verified:true,
+      notice:'API відповів; це не перевірка точності аналізу чи реальної торгівлі.'});
   } catch {
     return res.status(503).json({ready:false,error:'Немає зв’язку з сервером APInex/Gemini. Спробуй пізніше.'});
   }
