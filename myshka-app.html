@@ -120,19 +120,19 @@
 
         <section class="screen" id="screen-archive" data-screen="archive" aria-labelledby="archive-title" hidden>
           <div class="section-heading top-heading">
-            <div><div class="eyebrow">YOUTUBE CONTENT KNOWLEDGE BASE</div><h1 id="archive-title">📚 Архів роликів</h1></div>
+            <div><div class="eyebrow">JEV INTERNAL RESEARCH</div><h1 id="archive-title">🧠 Джерела знань JEV</h1></div>
             <span id="archive-index-status" class="outline-pill">Індекс завантажується…</span>
           </div>
-          <p class="intro">Мишка поступово індексує ролики, Shorts і записи ефірів. <strong>Gemini може аналізувати публічне YouTube-відео напряму — звук і вибрані кадри навіть без субтитрів.</strong> JEV використовує доступні субтитри як запасний канал. Зберігаються конспекти й посилання, не відеофайли. Статистика угод авторів не підтверджена.</p>
+          <p class="intro">Це внутрішня база досліджень JEV, а не каталог для перегляду людьми. Мишка поступово знаходить матеріали для аналізу. <strong>Gemini може аналізувати публічне YouTube-відео напряму — звук і вибрані кадри навіть без субтитрів.</strong> JEV використовує доступні субтитри як запасний канал. Зберігаються конспекти й посилання, не відеофайли. Статистика угод авторів не підтверджена.</p>
           <p class="muted" id="archive-gemini-status">Gemini API: перевіряємо налаштування.</p>
           <p><a class="text-link" href="./crypto_myshka/GEMINI_YOUTUBE_UA.md" target="_blank" rel="noopener noreferrer">Як увімкнути Gemini для всіх доступних роликів ↗</a></p>
           <div class="archive-stats">
-            <div class="stat"><span>Роликів в архіві</span><strong id="archive-count">—</strong><small>Знайдених, не всіх на YouTube</small></div>
+            <div class="stat"><span>Знайдено джерел</span><strong id="archive-count">—</strong><small>Знайдених, не всіх на YouTube</small></div>
             <div class="stat"><span>Gemini: відео + звук</span><strong id="archive-gemini-count">—</strong><small>Справжній відеоаналіз AI</small></div>
             <div class="stat"><span>Із прочитаними субтитрами</span><strong id="archive-caption-count">—</strong><small>Без аналізу кадрів</small></div>
             <div class="stat"><span>Конспектів JEV</span><strong id="archive-jev-count">—</strong><small>Підтверджених викликів AI</small></div>
           </div>
-          <div class="archive-filterbox">
+          <div class="archive-filterbox" style="display:none" aria-hidden="true">
             <label for="archive-query">🔎 Шукати відео, пару або індикатор</label>
             <input id="archive-query" type="search" placeholder="Наприклад, RSI, BTC/USDT або стратегія…" autocomplete="off">
             <div class="archive-selectrow">
@@ -147,7 +147,7 @@
               </label>
             </div>
           </div>
-          <div class="archive-meta"><span id="archive-coverage">Архів доповнюється.</span><span id="archive-matches">—</span></div>
+          <div class="archive-meta"><span id="archive-coverage">База доповнюється.</span><span id="archive-matches">—</span></div>
           <div id="archive-list" class="archive-list" aria-live="polite"><div class="empty-state">Завантаження відеотеки…</div></div>
           <button id="archive-more" type="button" class="small-button archive-more" hidden>Показати ще ролики ↓</button>
           <div class="notice"><span aria-hidden="true">ⓘ</span><p>Gemini отримує публічний відеоряд та звук через API, але може пропускати короткі зміни кадрів (базово ~1 кадр/сек.). Він не підтверджує ринкові ціни чи фактичний результат ставки. Доступність і кількість опрацьованих відео залежать від API-ключа, квот і доступу YouTube.</p></div>
