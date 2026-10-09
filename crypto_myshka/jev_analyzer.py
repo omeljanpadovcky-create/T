@@ -15,6 +15,7 @@ NEWS = ROOT / "data" / "news.json"
 FEED = ROOT / "data" / "feed.json"
 ARCHIVE = ROOT / "data" / "telegram_archive.json"
 VIDEO_CONTEXT = ROOT / "data" / "youtube_analysts.json"
+VIDEO_ARCHIVE = ROOT / "data" / "youtube_archive.json"
 
 APINEX_API_KEY = os.getenv("APINEX_API_KEY", "").strip()
 APINEX_MODEL = os.getenv("JEV_MODEL", "").strip() or "free/deepseek-v4.1-flash"
@@ -208,10 +209,51 @@ def related_youtube_context(event, video_data, limit=3):
     return matches
 
 
+def relevant_archive_video_notes(event, limit=3):
+    """Ground news analysis in ACTUALLY extracted public captions, never claims of wins."""
+    tokens=set()
+    for x in (event.get("assets") or [])[:12]:
+        name=str(x).upper().strip()
+        if len(name)>1:
+            tokens.add(name)
+    if not tokens:
+        return []
+    archive=load(VIDEO_ARCHIVE, {"videos":[]})
+    selected=[]
+    for video in (archive.get("videos") or []):
+        if not isinstance(video,dict):continue
+        details=video.get("analysis") if isinstance(video.get("analysis"),dict) else {}
+        instruments={str(x).upper() for x in (details.get("mentioned_instruments") or [])}
+        coins={str(x).upper() for x in (details.get("pairs") or [])}
+        symbols=instruments|coins
+        if not any(coin==term or coin.startswith(term+"/") or coin.endswith("/"+term)
+                   or coin.startswith(term+" ") for term in tokens for coin in symbols):
+            continue
+        jev=video.get("jev") if isinstance(video.get("jev"),dict) else {}
+        content={
+            "channel":str(video.get("channel_name") or "")[:80],
+            "title":str(video.get("title") or "")[:130],
+            "url":str(video.get("url") or "")[:220],
+            "source_coverage":video.get("content_status"),
+            "mentioned_instruments":list(symbols)[:5],
+            "mentioned_indicators":(details.get("mentioned_indicators") or [])[:5],
+            "source_claims_not_verified":True,
+            "market_prices_verified":False,
+        }
+        if jev.get("status")=="model_summary":
+            content["video_subtitle_summary"]=str(jev.get("summary") or "")[:350]
+            content["learning_points"]=str(jev.get("strategy") or "")[:280]
+        selected.append(content)
+        if len(selected)>=limit:
+            break
+    return selected
+
+
 def build_payload(event, feed, archive=None):
     live, knowledge = related_context(event, feed)
     historical=related_archive_context(event, archive or {"posts":[]})
     video_notes=related_youtube_context(event,load(VIDEO_CONTEXT,{"channels":[]}))
+    archive_notes=relevant_archive_video_notes(event)
     return {
         "event": {
             "title": event.get("title"),
@@ -228,6 +270,7 @@ def build_payload(event, feed, archive=None):
         "related_itstatti_archive": historical,
         "related_itstatti_knowledge": knowledge,
         "related_trader_video_notes_unverified": video_notes,
+        "related_archived_video_ideas_not_price_data": archive_notes,
         "instruction": "Дай незалежний JEV-аналіз події. Відеозамітки — лише слова з назви, опису або доступних субтитрів. Не вигадуй кадри, угоди чи підтвердження прибутковості. Не повторюй рекламні та реферальні твердження як факт.",
     }
 
