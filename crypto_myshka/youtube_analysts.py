@@ -16,13 +16,12 @@ from yt_dlp import YoutubeDL
 HERE = Path(__file__).resolve().parent
 OUTPUT = HERE / "data" / "youtube_analysts.json"
 
-# Four identifiers independently matched to YouTube. Fifth is intentionally unverified.
+# Four specified YouTube channels. Unverified fifth channel removed as requested.
 CHANNELS = [
     {"id": "nikolas", "name": "НИКОЛАС | ТРЕЙДЕР", "handle": "@NikolasTradin", "url": "https://www.youtube.com/@NikolasTradin/videos", "confirmed": True},
     {"id": "backstage", "name": "Закулисье Трейдера", "handle": "@artemtraderr", "url": "https://www.youtube.com/@artemtraderr/videos", "confirmed": True},
     {"id": "mark", "name": "Mark Champs Trader", "handle": "@Mark_champs_trader", "url": "https://www.youtube.com/@Mark_champs_trader/videos", "confirmed": True},
     {"id": "alexey", "name": "Алексей Борщев", "handle": "@alexeyborshev1", "url": "https://www.youtube.com/@alexeyborshev1/videos", "confirmed": True},
-    {"id": "nikolai", "name": "Николай (зі скріншота)", "handle": None, "url": None, "confirmed": False},
 ]
 
 PAIR_RE = re.compile(r"(?<![A-Z0-9])(BTC|ETH|SOL|BNB|XRP|DOGE|ADA|AVAX|LINK)(?:\s*[/_-]\s*(?:USDT|USD))?(?![A-Z0-9])", re.I)
