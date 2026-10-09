@@ -111,6 +111,7 @@
     document.title = names[to] + ' · Crypto Myshka';
     if (!options.fromHash) history.replaceState(null, '', location.pathname + location.search + '#' + to);
     renderView();
+    if (to === 'analysis') checkVisionHealth();
     if (!options.noScroll) window.scrollTo({ top: 0, behavior: 'instant' });
   }
   function link(url, label, additional = '') {
@@ -413,6 +414,32 @@
       return;
     } else { return; }
     renderAnalysis(); renderHistory();
+  }
+  async function checkVisionHealth() {
+    const status = $('vision-status');
+    if (!status) return;
+    if (!['localhost', '127.0.0.1'].includes(location.hostname)) {
+      status.textContent = '🔴 Хмарна сторінка: локальний JEV тут недоступний. Запусти START_MYSHKA_AI.ps1 і відкрий http://127.0.0.1:18765/myshka-app.html#analysis';
+      status.dataset.ready = 'false';
+      return;
+    }
+    status.textContent = '⏳ Перевіряємо локальну Ollama…';
+    status.dataset.ready = 'false';
+    try {
+      const response = await fetch('./api/chart-health', {cache: 'no-store'});
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      const result = await response.json();
+      if (result.ready) {
+        status.textContent = '🟢 JEV готовий · модель ' + result.model + ' · локально';
+        status.dataset.ready = 'true';
+      } else if (result.ollama) {
+        status.textContent = '🟠 Ollama запущена, але модель відсутня. Виконай: ollama pull ' + result.model;
+      } else {
+        status.textContent = '🔴 Ollama не відповідає. Запусти Ollama або ollama serve.';
+      }
+    } catch {
+      status.textContent = '🔴 AI-сервер не відповідає. Перезапусти START_MYSHKA_AI.ps1 (порт 18765).';
+    }
   }
   function installInteractions() {
     document.body.addEventListener('click', e => {
