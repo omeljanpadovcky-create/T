@@ -689,7 +689,7 @@
           aiArea.append(aiButton, aiResult);
           info.append(preview, fileLabel, heading, note, aiArea);
           box.replaceChildren(info);
-          if (localServer) aiButton.click();
+          if (localServer || (state.cloudEndpoint && state.cloudAccess)) aiButton.click();
         };
         image.src = dataUrl;
       };
