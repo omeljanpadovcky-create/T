@@ -94,13 +94,13 @@
         "short_conclusion": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 47s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-09T23:07:32Z"
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 47s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 4,
+      "analysis_last_attempt_at": "2026-10-09T23:29:16Z"
     },
     {
       "id": "11152640688458",
@@ -203,13 +203,13 @@
         "short_conclusion": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 40s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 3,
-      "analysis_last_attempt_at": "2026-10-09T23:11:14Z"
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 40s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 4,
+      "analysis_last_attempt_at": "2026-10-09T23:29:23Z"
     },
     {
       "id": "3f390f004120fe",
@@ -1343,13 +1343,13 @@
         "short_conclusion": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:07:20Z"
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:29:05Z"
     },
     {
       "id": "487a91e92562e2",
@@ -1397,13 +1397,13 @@
         "short_conclusion": "Інституційний інтерес до крипторинок важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "Model returned empty content"
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "Model returned empty content",
-      "analysis_retry_count": 2,
-      "analysis_last_attempt_at": "2026-10-09T23:07:26Z"
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 3,
+      "analysis_last_attempt_at": "2026-10-09T23:29:10Z"
     },
     {
       "id": "630ad426bb44ed",
@@ -4029,16 +4029,17 @@
     }
   ],
   "jev_enabled": true,
-  "jev_status": "ok",
+  "jev_status": "degraded",
   "jev_provider": "apinex",
   "jev_model": "free/deepseek-v4.1-flash",
   "jev_analyzed_count": 15,
-  "jev_analyzed_this_run": 1,
+  "jev_analyzed_this_run": 0,
   "jev_pending_count": 0,
   "jev_llm_pending_count": 14,
-  "jev_analysis_errors": 3,
+  "jev_analysis_errors": 4,
   "jev_error_codes": {
-    "ValueError": 3
+    "http_402": 2,
+    "http_429": 2
   },
-  "jev_last_run_at": "2026-10-09T23:24:49Z"
+  "jev_last_run_at": "2026-10-09T23:29:30Z"
 }
