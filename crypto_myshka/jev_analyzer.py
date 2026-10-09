@@ -460,7 +460,7 @@ def main():
             event["analysis_engine"]="cross_source"
             event["analysis_level"]="cross_source_fallback"
             errors += 1
-            match=re.search(r"APInex (\\d{3})", str(e))
+            match=re.search(r"APInex ([0-9]{3})", str(e))
             code=("http_"+match.group(1)) if match else type(e).__name__
             error_codes[code]=error_codes.get(code, 0)+1
 
