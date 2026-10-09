@@ -280,7 +280,7 @@ function renderPairs(data){
       '<span class="pairAction">'+esc(j.what_to_do||'WAIT / OBSERVE')+'</span></details>'+
       '<details><summary>Що саме видно на графіку</summary><p>'+esc(r.visual_evidence||'Опис кадру недоступний')+'</p><p>'+esc(r.price_action||'Цінову поведінку не встановлено')+'</p></details>'+
       '<details><summary>Чому висновок обмежений</summary><p>'+esc(lim.join(' · ')||'Немає незалежної перевірки')+'</p>'+
-      '<p>Це структуроване пояснення побаченого кадру. Окремий повнотекстовий JEV LLM тут ще не підтверджено.</p></details>'+
+      '<p>'+(j.status==='model'?'JEV: окрема AI-модель ('+esc(j.provider||'модель не вказана')+'), пояснення лише за даними кадру.':'JEV: окрема модель ще не дала відповіді; показано попереднє структуроване пояснення Мишки.')+'</p></details>'+
       '<div class="limited">Інформація з відеокадрів. Не підтверджена угода й не сигнал для автоматичної ставки.</div>'+
       '<div class="buttons">'+link+'</div>'+
     '</article>';
