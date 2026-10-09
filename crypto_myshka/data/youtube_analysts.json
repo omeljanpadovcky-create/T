@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-09T23:38:17.851760+00:00",
+  "updated_at": "2026-10-09T23:54:55.493682+00:00",
   "mode": "educational_video_context",
   "channels": [
     {
@@ -372,6 +372,89 @@
       "confirmed": true,
       "status": "empty_or_unavailable",
       "videos": [],
+      "reviewed": 0
+    },
+    {
+      "id": "tilbury",
+      "name": "Mark Tilbury",
+      "handle": "@marktilbury",
+      "url": "https://www.youtube.com/@marktilbury/videos",
+      "confirmed": true,
+      "status": "ok",
+      "videos": [
+        {
+          "id": "MC7k4ruZD5c",
+          "title": "Investing For Beginners in 75 Minutes",
+          "url": "https://www.youtube.com/watch?v=MC7k4ruZD5c",
+          "upload_date": null,
+          "analysis": {
+            "mentioned_instruments": [],
+            "mentioned_timeframes": [],
+            "mentioned_indicators": [],
+            "content_excerpt": "",
+            "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "kg8EKQd0NWQ",
+          "title": "How to Use Trading 212 in 2026 (Full Investing Guide)",
+          "url": "https://www.youtube.com/watch?v=kg8EKQd0NWQ",
+          "upload_date": null,
+          "analysis": {
+            "mentioned_instruments": [],
+            "mentioned_timeframes": [],
+            "mentioned_indicators": [],
+            "content_excerpt": "",
+            "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        },
+        {
+          "id": "O8t50OxsfB8",
+          "title": "I'm Changing How I Invest My Money Because of AI",
+          "url": "https://www.youtube.com/watch?v=O8t50OxsfB8",
+          "upload_date": null,
+          "analysis": {
+            "mentioned_instruments": [],
+            "mentioned_timeframes": [],
+            "mentioned_indicators": [],
+            "content_excerpt": "",
+            "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+            "instrument": "Не визначено",
+            "pairs": [],
+            "direction_claim": "НЕВІДОМО",
+            "promotion_flag": false,
+            "otc_flag": false,
+            "evidence": "назва та опис (без перевіреного відеотексту)",
+            "notes": [
+              "У доступному описі немає чіткої криптовалютної пари",
+              "Повний зміст відео не підтверджений субтитрами"
+            ],
+            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+          }
+        }
+      ],
       "reviewed": 0
     }
   ],
