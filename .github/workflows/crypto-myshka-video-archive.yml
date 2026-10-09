@@ -10,6 +10,7 @@ on:
     paths:
       - 'crypto_myshka/youtube_archive.py'
       - 'crypto_myshka/video_jev.py'
+      - 'crypto_myshka/video_gemini.py'
       - 'crypto_myshka/tests/test_youtube_archive.py'
       - '.github/workflows/crypto-myshka-video-archive.yml'
 
@@ -35,10 +36,15 @@ jobs:
         run: python -m pip install requests==2.32.5 yt-dlp
       - name: Check Python syntax and archive guarantees
         run: |
-          python -m py_compile crypto_myshka/youtube_archive.py crypto_myshka/video_jev.py
+          python -m py_compile crypto_myshka/youtube_archive.py crypto_myshka/video_jev.py crypto_myshka/video_gemini.py
           python -m unittest crypto_myshka.tests.test_youtube_archive -v
-      - name: Gather published video metadata, scan available captions and summarize with JEV if possible
+      - name: Index public videos and use Gemini to understand actual audio and frames when configured
         env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          YOUTUBE_GEMINI_MODEL: 'gemini-2.5-flash'
+          YOUTUBE_GEMINI_ENABLED: 'true'
+          YOUTUBE_GEMINI_MAX_PER_RUN: '2'
+          YOUTUBE_GEMINI_DAILY_SECONDS: '21600'
           APINEX_API_KEY: ${{ secrets.APINEX_API_KEY }}
           YOUTUBE_JEV_MODEL: 'free/deepseek-v4.1-flash'
           YOUTUBE_JEV_ENABLED: 'true'
