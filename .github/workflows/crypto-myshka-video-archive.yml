@@ -38,6 +38,17 @@ jobs:
         run: |
           python -m py_compile crypto_myshka/youtube_archive.py crypto_myshka/video_jev.py crypto_myshka/video_gemini.py
           python -m unittest crypto_myshka.tests.test_youtube_archive crypto_myshka.tests.test_jev_video_context -v
+      - name: Show Gemini API setup status (no secret values)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::warning title=Gemini not configured::GEMINI_API_KEY is missing in GitHub Actions Secrets. Video indexing continues, but Gemini cannot analyze videos."
+            echo "⚠️ Gemini API is not connected. Add \`GEMINI_API_KEY\` in Actions Secrets to start genuine video analysis." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Gemini API secret is present; attempting budget-limited video analysis."
+            echo "✅ Gemini API secret found; actual video results depend on model access and YouTube." >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Index public videos and use Gemini to understand actual audio and frames when configured
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -53,6 +64,27 @@ jobs:
           VIDEO_ARCHIVE_RECENT: '12'
           VIDEO_ARCHIVE_DETAILS: '5'
         run: python crypto_myshka/youtube_archive.py
+      - name: Print evidence-based video analysis progress
+        run: |
+          python - <<'PY'
+          import json,os
+          path="crypto_myshka/data/youtube_archive.json"
+          with open(path,encoding="utf-8") as stream:data=json.load(stream)
+          found=len(data.get("videos") or [])
+          done=data.get("gemini_analyzed_count") or 0
+          cap=sum(1 for item in data.get("videos") or [] if item.get("caption_status")=="available")
+          lines=[
+            "### 🐭 ТрейдМишка · YouTube Analysis",
+            f"Відео знайдено: **{found}**",
+            f"Відео фактично проаналізовано Gemini: **{done}**",
+            f"Із доступними субтитрами: **{cap}**",
+            f"Gemini API налаштовано: **{'так' if data.get('gemini_configured') else 'ні'}**",
+            "Знайдені відео не вважаються автоматично проаналізованими.",
+          ]
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf-8") as target:
+            target.write("\n".join(lines)+"\n")
+          print("ARCHIVE FOUND",found,"GEMINI VIDEO ANALYSES",done)
+          PY
       - name: Publish only the separately versioned video archive
         run: |
           git config user.name "CryptoMyshka Video Archive"
