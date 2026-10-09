@@ -94,13 +94,13 @@
         "short_conclusion": "Регуляторний фактор може змінити доступ або попит на крипторинок; заголовок треба звіряти з офіційним рішенням/файлінгом.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T20:46:28Z"
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T21:03:01Z"
     },
     {
       "id": "11152640688458",
@@ -147,13 +147,13 @@
         "short_conclusion": "Інцидент може тиснути на крипторинок, але спочатку треба підтвердити масштаб втрат і чи зупинені виводи/контракти.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 10s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 10s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:14:35Z"
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T21:03:07Z"
     },
     {
       "id": "edd2450c262553",
@@ -803,7 +803,25 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T21:02:49Z",
+      "analysis_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "The Treasury Department has announced several digital asset seizures related to sanctions on Iran as part of US sanctions.",
+        "why_it_matters": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "market_effect": "Невизначений / змішаний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "DXY, US 2Y/10Y, реакція BTC після релізу та чи утримується рух через кілька годин.",
+        "confidence": "низька",
+        "short_conclusion": "Це макро-фактор для крипторинок: важлива не сама новина, а реакція ліквідності, долара й прибутковостей.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 402 for free/gemini-3.8-flash: {\"error\":{\"message\":\"This model is currently available only with a subscription. Buy a subscription at https://apinex.bond/subscriptions to use it.\",\"type\":\"billing_error\",\"param\":nu"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "fb8612a1141d75",
@@ -1388,7 +1406,25 @@
         "Поки одне джерело",
         "Ринковий тон: Невизначений / змішаний",
         "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу."
-      ]
+      ],
+      "analysis_retry_count": 1,
+      "analysis_last_attempt_at": "2026-10-09T21:02:54Z",
+      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
+      "jev_ai": {
+        "what_happened": "Tether, issuer of the USDT stablecoin, will help Kazakhstan's central bank study a tenge-pegged token and put real-world assets on a blockchain.",
+        "why_it_matters": "Інституційний інтерес до крипторинок важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
+        "market_effect": "Невизначений / змішаний",
+        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
+        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
+        "watch_next": "Фактичні flows/покупки, розмір позиції, повторюваність попиту та реакція обсягу.",
+        "confidence": "низька",
+        "short_conclusion": "Інституційний інтерес до крипторинок важливий, якщо це підтверджені покупки/flows, а не лише намір або маркетинг.",
+        "_cross_source_fallback": true,
+        "_retry_llm": true,
+        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 50s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+      },
+      "analysis_engine": "cross_source",
+      "analysis_level": "cross_source_fallback"
     },
     {
       "id": "630ad426bb44ed",
@@ -4052,12 +4088,12 @@
   "jev_model": "free/deepseek-v4.1-flash",
   "jev_analyzed_count": 8,
   "jev_analyzed_this_run": 0,
-  "jev_pending_count": 17,
-  "jev_llm_pending_count": 40,
+  "jev_pending_count": 0,
+  "jev_llm_pending_count": 21,
   "jev_analysis_errors": 4,
   "jev_error_codes": {
     "http_402": 1,
     "http_429": 3
   },
-  "jev_last_run_at": "2026-10-09T20:46:53Z"
+  "jev_last_run_at": "2026-10-09T21:03:14Z"
 }
