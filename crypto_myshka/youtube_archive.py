@@ -313,7 +313,7 @@ def run_gemini_video_batch(existing: dict, previous: dict, processor=gemini_anal
     for entry in due:
         if used >= GEMINI_MAX_PER_RUN:
             break
-        if not VALID_ID.fullmatch(str(entry.get("id") or "")):  # checked by archive IDs
+        if not VID_ID.fullmatch(str(entry.get("id") or "")):  # checked by archive IDs
             continue
         info = entry.get("gemini") or {}
         if isinstance(info, dict) and info.get("status") == "gemini_video_summary":
