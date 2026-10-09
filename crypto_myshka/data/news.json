@@ -857,23 +857,20 @@
         "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни."
       ],
       "jev_ai": {
-        "what_happened": "Wealthy investors are embracing crypto faster than their advisers, while OKX attracts new funding and Strategy shifts more capital toward preferred stock buybacks.",
-        "why_it_matters": "Біржова новина може впливати на ліквідність і доступність крипторинок; важливо відділити операційне оновлення від системного ризику.",
-        "market_effect": "Невизначений / змішаний",
-        "bull_case": "Позитивний сценарій потребує підтвердження незалежними джерелами та реакцією ринку.",
-        "bear_case": "Негативний сценарій — заголовок або масштаб події не підтверджуються, а ринкова реакція згасає.",
-        "watch_next": "Офіційний статус біржі, депозити/виводи, резерви, спреди та реакція ціни.",
+        "what_happened": "За даними Cointelegraph, заможні інвестори (HNWI) активніше купують криптоактиви, ніж їхні фінансові радники схвалюють. Паралельно OKX залучив нове фінансування, а MicroStrategy (Strategy) перенаправляє капітал на викуп преференційних акцій.",
+        "why_it_matters": "Показує розрив між попитом кінцевих інвесторів та обережністю професійних радників — це може означати як стійкий попит, так і приховані ризики. Нове фінансування OKX свідчить про ліквідність у секторі бірж, а викуп акцій Strategy впливає на їхню стратегію накопичення BTC.",
+        "market_effect": "Помірний вплив: позитивний настрій для біржових токенів та BTC-сентименту, але одне джерело обмежує впевненість. Викуп акцій Strategy може тимчасово зменшити тиск на накопичення біткоїна.",
+        "bull_case": "HNWI-адаптація забезпечує стійкий попит; фінансування OKX підтверджує ріст біржової інфраструктури; розвинена інституційна екосистема (RWA, токенизація) створює додаткові драйвери.",
+        "bear_case": "Радники не переконані — потенційне гальмування масового потоку; одне джерело без підтвердження; регуляторна невизначеність (CLARITY Act застряг); викуп акцій Strategy може скоротити темпи накопичення BTC.",
+        "watch_next": "Додаткові джерела щодо розриву в настроях інвесторів/радників; деталі фінансування OKX; умови викупу акцій Strategy; рух регуляторних ініціатив у США.",
         "confidence": "низька",
-        "short_conclusion": "Біржова новина може впливати на ліквідність і доступність крипторинок; важливо відділити операційне оновлення від системного ризику.",
-        "_cross_source_fallback": true,
-        "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "short_conclusion": "Подія має середній потенційний вплив, але базується лише на одному джерелі, тому вимагає підтвердження. Позитив для біржового сектору та сентименту, проте обережність радників залишається фактором ризику.",
+        "_model_used": "free/deepseek-v4.1-flash"
       },
-      "analysis_engine": "cross_source",
-      "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 49s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:26:45Z"
+      "analysis_engine": "free/deepseek-v4.1-flash",
+      "analysis_level": "llm",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T23:01:37Z"
     },
     {
       "id": "4b0f9d92fb38d4",
@@ -925,13 +922,13 @@
         "short_conclusion": "Новина стосується BTC, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 43s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:26:52Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T23:01:42Z"
     },
     {
       "id": "b0b22e17f4c5dd",
@@ -978,13 +975,13 @@
         "short_conclusion": "Стейблкоїн-новина важлива через ліквідність ринку; треба дивитися, чи є реальний вплив на випуски, резерви або розрахунки.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:26:59Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T23:01:49Z"
     },
     {
       "id": "18695b478f5f00",
@@ -1032,13 +1029,13 @@
         "short_conclusion": "Новина стосується BTC, ETH, але сама по собі ще не дає торгового сигналу. Потрібно дивитися, чи підтверджує її ринок.",
         "_cross_source_fallback": true,
         "_retry_llm": true,
-        "_last_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}"
+        "_last_error": "Model returned empty content"
       },
       "analysis_engine": "cross_source",
       "analysis_level": "cross_source_fallback",
-      "analysis_error": "APInex 429 for free/gemini-3.8-flash: {\"error\":{\"message\":\"Rate limit exceeded. Max 5 requests per minute for this account. Retry in 36s.\",\"type\":\"rate_limit_error\",\"param\":null,\"code\":null}}",
-      "analysis_retry_count": 1,
-      "analysis_last_attempt_at": "2026-10-09T19:55:21Z"
+      "analysis_error": "Model returned empty content",
+      "analysis_retry_count": 2,
+      "analysis_last_attempt_at": "2026-10-09T23:02:05Z"
     },
     {
       "id": "db7396c3648183",
@@ -4049,17 +4046,16 @@
     }
   ],
   "jev_enabled": true,
-  "jev_status": "degraded",
+  "jev_status": "ok",
   "jev_provider": "apinex",
   "jev_model": "free/deepseek-v4.1-flash",
-  "jev_analyzed_count": 8,
-  "jev_analyzed_this_run": 0,
+  "jev_analyzed_count": 9,
+  "jev_analyzed_this_run": 1,
   "jev_pending_count": 0,
-  "jev_llm_pending_count": 21,
+  "jev_llm_pending_count": 20,
   "jev_analysis_errors": 3,
   "jev_error_codes": {
-    "ValueError": 2,
-    "http_429": 1
+    "ValueError": 3
   },
-  "jev_last_run_at": "2026-10-09T22:58:57Z"
+  "jev_last_run_at": "2026-10-09T23:02:11Z"
 }
