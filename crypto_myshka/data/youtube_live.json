@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-09T18:34:22.068739+00:00",
+  "updated_at": "2026-10-09T18:35:34.660271+00:00",
   "mode": "LIVE public streams monitoring",
   "polling": "Every 5 minutes on scheduled GitHub Actions (may be delayed); --watch for persistent host",
   "channels": [
@@ -9,9 +9,9 @@
       "name": "НИКОЛАС | ТРЕЙДЕР",
       "handle": "@NikolasTradin",
       "url": "https://www.youtube.com/@NikolasTradin/videos",
-      "status": "offline",
+      "status": "not_detected",
       "live": false,
-      "checked_at": "2026-10-09T18:34:13.199415+00:00",
+      "checked_at": "2026-10-09T18:35:25.284926+00:00",
       "stream": null,
       "last_visual_check": null
     },
@@ -20,9 +20,9 @@
       "name": "Закулисье Трейдера",
       "handle": "@artemtraderr",
       "url": "https://www.youtube.com/@artemtraderr/videos",
-      "status": "offline",
+      "status": "not_detected",
       "live": false,
-      "checked_at": "2026-10-09T18:34:16.499681+00:00",
+      "checked_at": "2026-10-09T18:35:28.690043+00:00",
       "stream": null,
       "last_visual_check": null
     },
@@ -31,9 +31,9 @@
       "name": "Mark Champs Trader",
       "handle": "@Mark_champs_trader",
       "url": "https://www.youtube.com/@Mark_champs_trader/videos",
-      "status": "offline",
+      "status": "not_detected",
       "live": false,
-      "checked_at": "2026-10-09T18:34:17.024067+00:00",
+      "checked_at": "2026-10-09T18:35:29.270764+00:00",
       "stream": null,
       "last_visual_check": null
     },
@@ -42,9 +42,9 @@
       "name": "Алексей Борщев",
       "handle": "@alexeyborshev1",
       "url": "https://www.youtube.com/@alexeyborshev1/videos",
-      "status": "offline",
+      "status": "not_detected",
       "live": false,
-      "checked_at": "2026-10-09T18:34:19.476382+00:00",
+      "checked_at": "2026-10-09T18:35:31.900990+00:00",
       "stream": null,
       "last_visual_check": null
     },
@@ -55,7 +55,7 @@
       "url": null,
       "status": "source_unverified",
       "live": false,
-      "checked_at": "2026-10-09T18:34:22.068722+00:00",
+      "checked_at": "2026-10-09T18:35:34.660254+00:00",
       "stream": null,
       "last_visual_check": null
     }
