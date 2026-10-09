@@ -1,49 +1,69 @@
 {
   "version": 1,
-  "updated_at": null,
+  "updated_at": "2026-10-09T18:33:28.931294+00:00",
   "mode": "LIVE public streams monitoring",
-  "polling": "GitHub Actions every 5 minutes, timing best effort; use --watch on an always-on host for continuous checks.",
-  "live_count": 0,
-  "ai_enabled": false,
-  "auto_trade": false,
-  "final_signal": "SKIP",
-  "notice": "Трансляції ще не перевірено. Жодних підтверджених угод. Реальне розпізнавання кадру вимагає доступного відеопотоку й OPENAI_API_KEY.",
+  "polling": "Every 5 minutes on scheduled GitHub Actions (may be delayed); --watch for persistent host",
   "channels": [
     {
       "id": "nikolas",
       "name": "НИКОЛАС | ТРЕЙДЕР",
       "handle": "@NikolasTradin",
-      "status": "pending_first_scan",
-      "live": false
+      "url": "https://www.youtube.com/@NikolasTradin/videos",
+      "status": "offline",
+      "live": false,
+      "checked_at": "2026-10-09T18:33:18.445221+00:00",
+      "stream": null,
+      "last_visual_check": null
     },
     {
       "id": "backstage",
       "name": "Закулисье Трейдера",
       "handle": "@artemtraderr",
-      "status": "pending_first_scan",
-      "live": false
+      "url": "https://www.youtube.com/@artemtraderr/videos",
+      "status": "offline",
+      "live": false,
+      "checked_at": "2026-10-09T18:33:21.813452+00:00",
+      "stream": null,
+      "last_visual_check": null
     },
     {
       "id": "mark",
       "name": "Mark Champs Trader",
       "handle": "@Mark_champs_trader",
-      "status": "pending_first_scan",
-      "live": false
+      "url": "https://www.youtube.com/@Mark_champs_trader/videos",
+      "status": "offline",
+      "live": false,
+      "checked_at": "2026-10-09T18:33:22.505972+00:00",
+      "stream": null,
+      "last_visual_check": null
     },
     {
       "id": "alexey",
       "name": "Алексей Борщев",
       "handle": "@alexeyborshev1",
-      "status": "pending_first_scan",
-      "live": false
+      "url": "https://www.youtube.com/@alexeyborshev1/videos",
+      "status": "offline",
+      "live": false,
+      "checked_at": "2026-10-09T18:33:25.607407+00:00",
+      "stream": null,
+      "last_visual_check": null
     },
     {
       "id": "nikolai",
-      "name": "Николай зі скріншота",
+      "name": "Николай (зі скріншота)",
       "handle": null,
+      "url": null,
       "status": "source_unverified",
-      "live": false
+      "live": false,
+      "checked_at": "2026-10-09T18:33:28.931279+00:00",
+      "stream": null,
+      "last_visual_check": null
     }
   ],
-  "observations": []
+  "observations": [],
+  "live_count": 0,
+  "final_signal": "SKIP",
+  "auto_trade": false,
+  "notice": "Single LIVE screenshots and streamer statements are not independently verified fills or profit statistics.",
+  "ai_enabled": false
 }
