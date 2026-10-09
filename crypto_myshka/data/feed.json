@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-09T21:38:15.858397+00:00",
+  "generated_at": "2026-10-09T21:50:25.995054+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,7 +26,7 @@
       "ok": true,
       "count": 10218,
       "complete": true,
-      "updated_at": "2026-10-09T21:38:11.632014+00:00",
+      "updated_at": "2026-10-09T21:50:20.929506+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
@@ -47,32 +47,32 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 82504,
-        "usd_24h_change": 1.0248560703895302
+        "usd": 82483,
+        "usd_24h_change": 1.1109176995517176
       },
       "ethereum": {
-        "usd": 2481.97,
-        "usd_24h_change": 0.2800928897636199
+        "usd": 2482.95,
+        "usd_24h_change": 0.47902431834286624
       },
       "solana": {
-        "usd": 108.99,
-        "usd_24h_change": -1.0044139043676787
+        "usd": 109.01,
+        "usd_24h_change": -0.9361838432557439
       },
       "pendle": {
-        "usd": 2.08,
-        "usd_24h_change": -0.7071165226146962
+        "usd": 2.09,
+        "usd_24h_change": -0.11461334071339761
       },
       "ripple": {
         "usd": 1.39,
-        "usd_24h_change": 1.0560475136292193
+        "usd_24h_change": 1.2703536038149947
       },
       "binancecoin": {
-        "usd": 741.64,
-        "usd_24h_change": 1.0385961569531452
+        "usd": 741.99,
+        "usd_24h_change": 1.2016082094510336
       },
       "dogecoin": {
-        "usd": 0.085226,
-        "usd_24h_change": 1.0809069743929955
+        "usd": 0.085277,
+        "usd_24h_change": 1.4192262907528792
       }
     }
   },
@@ -5757,7 +5757,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Metamask Complete Instructions on How to SAFELY Store Crypto | Metamask How to Use",
+      "title": "Метамаск повна Інструкція як БЕЗПЕЧНО зберігати Крипту | Metamask як користуватися",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=NIA4LdYEMzI",
       "published_at": null,
