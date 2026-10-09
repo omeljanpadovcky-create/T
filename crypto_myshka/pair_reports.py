@@ -12,6 +12,11 @@ import re
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+try:
+    from signal_gate import evaluate as evaluate_signal
+except ImportError:
+    from crypto_myshka.signal_gate import evaluate as evaluate_signal
+
 HERE = Path(__file__).resolve().parent
 OUTPUT = HERE / "data" / "pair_reports.json"
 
@@ -189,17 +194,22 @@ def build(snapshot: dict, now: datetime | None = None) -> dict:
                 else add_jev_notes(chart, limitations)
             ),
         }
+        # Fail closed: video observations are never independent price checks.
+        # This keeps all explanatory cards visible but blocks unverified signals.
+        report["signal_gate"] = evaluate_signal(report, current)
+        report["signal_decision"] = report["signal_gate"]["decision"]
         reports.append(report)
     reports.sort(key=lambda e: (e["observed_at"], e["pair"]), reverse=True)
     return {
         "version": 1,
         "updated_at": current.isoformat(),
         "source": "youtube_live.json / timestamped screenshot observations",
-        "analysis_mode": "limited_single_frame_evidence",
+        "analysis_mode": "limited_single_frame_evidence_with_strict_signal_gate",
         "status": "observations_available" if reports else "waiting_for_readable_live_chart",
         "reports": reports[:30],
         "independently_verified": False,
         "automatic_trading": False,
+        "signal_policy": "NO_SIGNAL unless independent price, indicators, out-of-sample edge and JEV verification; even then REVIEW_ONLY",
         "disclaimer": "Не торгові рекомендації; JEV роз'яснення є структурованою інтерпретацією AI-кадру, а не незалежним LLM-висновком.",
     }
 
