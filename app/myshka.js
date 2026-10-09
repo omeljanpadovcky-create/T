@@ -514,62 +514,74 @@
   async function checkVisionHealth() {
     const status = $('vision-status');
     if (!status) return;
-    const local = ['localhost', '127.0.0.1'].includes(location.hostname);
+    const seq = ++state.visionCheckSeq;
     state.visionStatus = 'checking';
     state.visionSource = null;
     status.dataset.ready = 'false';
     status.textContent = '⏳ Перевіряємо JEV…';
     statusPill();
-    if (local) {
-      try {
-        const response = await fetch('./api/chart-health', {cache:'no-store'});
-        const result = response.ok ? await response.json() : {};
-        if (result.ready) {
-          state.visionStatus = 'ready';
-          state.visionSource = 'local';
-          status.dataset.ready = 'true';
-          status.textContent = '🟢 JEV готовий · модель ' + result.model + ' · локальна Ollama';
-          statusPill();
-          updateCloudSettings();
-          if (state.view === 'home') renderHome();
-          return;
-        }
-        if (result.ollama && !state.cloudEndpoint) {
-          state.visionStatus = 'missing_model';
-          status.textContent = '🟠 Ollama працює, але модель відсутня: ollama pull ' + result.model;
-        }
-      } catch { /* Cloud may still be configured as a fallback. */ }
-    }
-    if (state.cloudEndpoint && state.cloudAccess) {
-      try {
-        const response = await fetch(state.cloudEndpoint + '/api/chart-health', {
-          cache:'no-store', headers:{'X-JEV-Access':state.cloudAccess}
-        });
-        const result = await response.json();
-        if (!response.ok || !result.ready) throw new Error(result.error || 'HTTP ' + response.status);
-        const provisionallyAvailable = result.verified === false;
-        state.visionStatus = provisionallyAvailable ? 'provisional' : 'ready';
-        state.visionSource = 'cloud';
-        status.dataset.ready = provisionallyAvailable ? 'provisional' : 'true';
-        status.textContent = provisionallyAvailable
-          ? '🟠 APInex налаштовано · каталог моделей недоступний · перевіримо при аналізі фото'
-          : '🟢 JEV готовий · ' + (result.provider === 'apinex' ? 'APInex / ' : '') +
-              (result.model || 'AI') + ' · хмарний сервер';
-      } catch (error) {
-        state.visionStatus = 'offline';
-        status.textContent = '🔴 Хмарний JEV не готовий: ' + (error.message || 'Перевір URL, код і секрети Vercel.');
+    syncVisionModeControls();
+
+    const targets = visionTargets();
+    let errorMessage = '';
+    let missingModel = null;
+    if (!targets.length) {
+      state.visionStatus = 'offline';
+      if (state.prefs.visionMode === 'local' || (state.prefs.visionMode === 'auto' && !isLocalPage())) {
+        status.textContent = isLocalPage()
+          ? '🔴 Ollama не запущена. Запусти локальний JEV.'
+          : '🟠 Локальний JEV доступний лише на 127.0.0.1:18765. Для хмарного вибери «Хмарний» або дозволь резервний хмарний аналіз.';
+      } else {
+        status.textContent = '🟠 Налаштуй адресу Vercel та код доступу в Налаштуваннях.';
       }
-    } else if (!local) {
-      state.visionStatus = 'offline';
-      status.textContent = state.cloudEndpoint ?
-        '🟠 Введи код доступу в Налаштуваннях для хмарного JEV.' :
-        '🟠 Хмарний JEV не підключено. Відкрий Налаштування → Хмарний JEV.';
-    } else if (state.visionStatus === 'checking') {
-      state.visionStatus = 'offline';
-      status.textContent = '🔴 Локальна Ollama не відповідає. Запусти START_MYSHKA_AI.ps1 або підключи хмарний JEV.';
+      statusPill();
+      updateCloudSettings();
+      if (state.view === 'home') renderHome();
+      return;
     }
+
+    for (const target of targets) {
+      try {
+        const root = target === 'cloud' ? state.cloudEndpoint : '.';
+        const headers = target === 'cloud' ? {'X-JEV-Access': state.cloudAccess} : {};
+        const response = await fetch(root + '/api/chart-health', {
+          cache: 'no-store', headers, signal: AbortSignal.timeout(9000)
+        });
+        const result = await response.json().catch(() => ({}));
+        if (seq !== state.visionCheckSeq) return;
+        if (!response.ok || result.ready !== true) {
+          if (target === 'local' && result.ollama) missingModel = result.model || 'qwen2.5vl:3b';
+          errorMessage = String(result.error || 'HTTP ' + response.status).slice(0,160);
+          continue;
+        }
+        const provisional = target === 'cloud' && result.verified === false;
+        state.visionSource = target;
+        state.visionStatus = provisional ? 'provisional' : 'ready';
+        status.dataset.ready = provisional ? 'provisional' : 'true';
+        status.textContent = target === 'local'
+          ? '🟢 JEV готовий · локальна Ollama (' + (result.model || 'AI') + ')'
+          : provisional
+            ? '🟠 APInex налаштовано, але роботу моделі перевірить запит фото.'
+            : '🟢 JEV готовий · хмарний ' + (result.provider === 'apinex' ? 'APInex' : 'Gemini') +
+              ' (' + (result.model || 'AI') + ')';
+        statusPill();
+        syncVisionModeControls();
+        updateCloudSettings();
+        if (state.view === 'home') renderHome();
+        return;
+      } catch (error) {
+        if (seq !== state.visionCheckSeq) return;
+        errorMessage = error && error.name === 'TimeoutError'
+          ? 'Тайм-аут перевірки' : 'Немає з’єднання з сервером';
+      }
+    }
+    if (seq !== state.visionCheckSeq) return;
+    state.visionStatus = missingModel && targets.length === 1 ? 'missing_model' : 'offline';
+    status.textContent = missingModel && targets.length === 1
+      ? '🟠 Ollama працює, але модель відсутня: ollama pull ' + missingModel
+      : '🔴 JEV недоступний у вибраному режимі. ' + errorMessage;
     statusPill();
-    showLocalStart();
+    syncVisionModeControls();
     updateCloudSettings();
     if (state.view === 'home') renderHome();
   }
