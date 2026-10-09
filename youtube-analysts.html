@@ -74,7 +74,7 @@ h1 em{color:var(--gold);font-style:normal}p{line-height:1.65;color:#acbed0}
 <section class="section" id="liveMonitor" aria-labelledby="liveMonitorTitle">
   <div class="box" style="border-color:#704252;background:linear-gradient(140deg,#251628,#0a1925)">
     <div class="top"><h2 id="liveMonitorTitle" style="margin:0;color:#ffb2be">🔴 LIVE — Мишка на трансляціях</h2><span class="tag" id="liveMeta">Перший запуск…</span></div>
-    <p>Перевірка прямих ефірів приблизно кожні 5 хвилин. Коли публічний потік доступний та налаштовано AI-ключ, Мишка аналізує знімок торгового екрана і коротку озвучку. Це спостереження, не підтвердження виконання угод.</p>
+    <p>На твоєму комп’ютері з локальним спостерігачем перевірка LIVE запускається кожні 15 секунд (якщо попередній запит завершено). Публічний GitHub-звіт оновлюється приблизно кожні 5 хвилин. Коли потік доступний та налаштовано AI-ключ, Мишка аналізує кадри і коротку озвучку. Це спостереження, не підтвердження виконання угод.</p>
     <div class="row" id="liveCounts" style="margin-bottom:9px"><span class="flag">🔴 LIVE: —</span><span class="flag">🧠 Розпізнавання: —</span></div>
     <div id="liveChannels" class="cards"><div class="empty">Статус прямих ефірів завантажується…</div></div>
     <h3 style="margin:18px 0 8px">Журнал спостережень</h3>
@@ -164,7 +164,8 @@ function renderLive(status){
   el('liveCounts').innerHTML=
     '<span class="flag">🔴 Ефірів зараз: '+(recent?Number(status.live_count||0):'не підтверджено')+'</span>'+
     '<span class="flag">🧠 Аналіз кадрів: '+(status.ai_enabled?'увімкнений':'не налаштований або недоступний')+'</span>'+
-    '<span class="flag">Спостережень: '+observations.length+'</span>';
+    '<span class="flag">Спостережень: '+observations.length+'</span>'+
+    '<span class="flag">Частота перевірки: '+(status.scan_interval_seconds?esc(status.scan_interval_seconds)+' с (локально)':'~5 хв (GitHub)')+'</span>';
   el('liveChannels').innerHTML=channels.map(c=>{
     let state=(c.status==='LIVE'&&recent)?'🔴 LIVE':c.status==='not_detected'&&recent?'⚪ LIVE не підтверджено':
       c.status==='check_error'?'⚠️ YouTube недоступний':
@@ -204,7 +205,8 @@ function loadLive(){
     .catch(()=>{el('liveChannels').innerHTML='<div class="empty">Статус LIVE поки недоступний; записані відео й старі розділи працюють окремо.</div>'});
 }
 loadLive();
-setInterval(loadLive,60000);
+const localMonitoring=['127.0.0.1','localhost'].includes(location.hostname);
+setInterval(loadLive,localMonitoring?15000:60000);
 
 </script>
 </body>
