@@ -123,9 +123,10 @@
             <div><div class="eyebrow">YOUTUBE CONTENT KNOWLEDGE BASE</div><h1 id="archive-title">📚 Архів роликів</h1></div>
             <span id="archive-index-status" class="outline-pill">Індекс завантажується…</span>
           </div>
-          <p class="intro">Мишка поступово індексує доступні відео, Shorts і записи ефірів трейдерів. Зберігаються посилання та витягнуті факти — не самі відеофайли. JEV готує конспект <strong>лише якщо доступні субтитри та AI</strong>; чужі заяви про прибутки не перевірені.</p>
+          <p class="intro">Мишка поступово індексує ролики, Shorts і записи ефірів. <strong>Gemini може аналізувати публічне YouTube-відео напряму — звук і вибрані кадри навіть без субтитрів.</strong> JEV використовує доступні субтитри як запасний канал. Зберігаються конспекти й посилання, не відеофайли. Статистика угод авторів не підтверджена.</p>
           <div class="archive-stats">
             <div class="stat"><span>Роликів в архіві</span><strong id="archive-count">—</strong><small>Знайдених, не всіх на YouTube</small></div>
+            <div class="stat"><span>Gemini: відео + звук</span><strong id="archive-gemini-count">—</strong><small>Справжній відеоаналіз AI</small></div>
             <div class="stat"><span>Із прочитаними субтитрами</span><strong id="archive-caption-count">—</strong><small>Без аналізу кадрів</small></div>
             <div class="stat"><span>Конспектів JEV</span><strong id="archive-jev-count">—</strong><small>Підтверджених викликів AI</small></div>
           </div>
@@ -140,14 +141,14 @@
                 <select id="archive-kind"><option value="">Усі ролики</option><option value="videos">Відео</option><option value="streams">Записи ефірів</option><option value="shorts">Shorts</option></select>
               </label>
               <label for="archive-evidence">Аналіз
-                <select id="archive-evidence"><option value="">Будь-який</option><option value="subtitles">Є субтитри</option><option value="jev">Є висновок JEV</option><option value="metadata">Лише метадані</option></select>
+                <select id="archive-evidence"><option value="">Будь-який</option><option value="gemini">Gemini аналізував відео</option><option value="subtitles">Є субтитри</option><option value="jev">JEV зі субтитрів</option><option value="metadata">Лише метадані</option></select>
               </label>
             </div>
           </div>
           <div class="archive-meta"><span id="archive-coverage">Архів доповнюється.</span><span id="archive-matches">—</span></div>
           <div id="archive-list" class="archive-list" aria-live="polite"><div class="empty-state">Завантаження відеотеки…</div></div>
           <button id="archive-more" type="button" class="small-button archive-more" hidden>Показати ще ролики ↓</button>
-          <div class="notice"><span aria-hidden="true">ⓘ</span><p>Повнота архіву залежить від YouTube: недоступні, приватні або видалені відео не можна гарантувати. Розпізнавання назв, описів і субтитрів не дорівнює перегляду всього відеоряду чи підтвердженню угоди.</p></div>
+          <div class="notice"><span aria-hidden="true">ⓘ</span><p>Gemini отримує публічний відеоряд та звук через API, але може пропускати короткі зміни кадрів (базово ~1 кадр/сек.). Він не підтверджує ринкові ціни чи фактичний результат ставки. Доступність і кількість опрацьованих відео залежать від API-ключа, квот і доступу YouTube.</p></div>
         </section>
 
         <section class="screen" id="screen-history" data-screen="history" aria-labelledby="history-title" hidden>
