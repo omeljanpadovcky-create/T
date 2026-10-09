@@ -47,6 +47,11 @@ const { JSDOM } = require('jsdom');
        title:'BTC trading RSI tutorial', kind:'videos', upload_date:'20261009',
        caption_status:'available',content_status:'captions_scanned',
        jev:{status:'model_summary',summary:'Пояснює роботу RSI.',strategy:'RSI',risk:'Торгові результати не перевірено.'},
+       gemini:{status:'gemini_video_summary',summary:'Gemini бачить графік і чує автора',
+         strategy:'RSI та свічки',risk:'Котирування не підтверджено',
+         pairs:['BTC/USDT'],indicators:['RSI'],timeframes:['M1'],
+         moments:[{timestamp:'00:20',observation:'Показано свічковий графік'}]},
+
        analysis:{mentioned_instruments:['BTC/USDT'],mentioned_indicators:['RSI']}},
       {id:'bpQLYZM2FfE',channel_id:'alexey',channel_name:'Алексей Борщев',
        title:'Forex short lesson',kind:'videos',upload_date:null,
@@ -86,9 +91,16 @@ const { JSDOM } = require('jsdom');
   assert.equal(doc.querySelector('#screen-archive').hidden, false, 'video archive tab visible');
   assert.match(doc.querySelector('#archive-list').textContent, /BTC trading RSI tutorial/);
   assert.match(doc.querySelector('#archive-list').textContent, /JEV: конспект субтитрів/);
+  assert.match(doc.querySelector('#archive-list').textContent, /Gemini · аналіз відео та звуку/);
+  assert.match(doc.querySelector('#archive-list').textContent, /00:20/);
   assert.equal(doc.querySelector('#archive-count').textContent, '2');
+  assert.equal(doc.querySelector('#archive-gemini-count').textContent, '1');
   assert.equal(doc.querySelector('#archive-caption-count').textContent, '1');
   assert.equal(doc.querySelector('#archive-jev-count').textContent, '1');
+  const evidence=doc.querySelector('#archive-evidence');
+  evidence.value='gemini';evidence.dispatchEvent(new win.Event('change',{bubbles:true}));
+  assert.equal(doc.querySelectorAll('#archive-list .archive-card').length,1);
+  evidence.value='';evidence.dispatchEvent(new win.Event('change',{bubbles:true}));
   const archiveInput=doc.querySelector('#archive-query');
   archiveInput.value='RSI';
   archiveInput.dispatchEvent(new win.Event('input',{bubbles:true}));
