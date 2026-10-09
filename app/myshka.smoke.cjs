@@ -137,7 +137,17 @@ const { JSDOM } = require('jsdom');
       imageCalls++;
       assert.equal(opts.method, 'POST');
       assert.equal(JSON.parse(opts.body).image, 'aGVsbG8=', 'full original image is sent');
-      return {ok: true, json: async () => ({analysis: 'ВГОРУ', direction: 'ВГОРУ', model: 'qwen2.5vl:3b'})};
+      assert.equal(JSON.parse(opts.body).chart_timeframe, '1m', 'selected candle timeframe is sent');
+      if (imageCalls === 1) return {ok: true, json: async () => ({
+        analysis: 'ВГОРУ', direction: 'ВГОРУ', action: 'BUY', test_expiry_seconds: 60,
+        chart_timeframe: '1m', timeframe_source: 'user',
+        reason: 'Видно послідовність вищих мінімумів.', mode: 'demo_hypothesis'
+      })};
+      return {ok: true, json: async () => ({
+        analysis: 'НЕВИЗНАЧЕНО', direction: 'НЕВИЗНАЧЕНО', action: 'SKIP',
+        test_expiry_seconds: null, chart_timeframe: '1m', timeframe_source: 'user',
+        reason: 'Рух змішаний.', mode: 'demo_hypothesis'
+      })};
     }
     const filename = String(url).split('/').pop().split('?')[0];
     if (!data[filename]) throw Error('Unexpected resource: ' + url);
@@ -148,6 +158,7 @@ const { JSDOM } = require('jsdom');
   const localDoc = localWin.document;
   assert.match(localDoc.querySelector('#vision-status').textContent, /JEV готовий/);
   assert.match(localDoc.querySelector('#connection-pill').textContent, /JEV готовий/, 'local header reflects Ollama, not archive feeds');
+  localDoc.querySelector('#chart-timeframe').value = '1m';
   const localInput = localDoc.querySelector('#chart-photo');
   Object.defineProperty(localInput, 'files', { configurable: true, value: [
     { name: 'paste.png', type: 'image/png', size: 1000 }
@@ -156,7 +167,9 @@ const { JSDOM } = require('jsdom');
   await new Promise(resolve => setTimeout(resolve, 30));
   assert.equal(imageCalls, 1, 'local image should be analyzed once');
   assert.ok(healthChecks >= 2, 'local health checked at startup and before inference');
-  assert.match(localDoc.querySelector('#photo-analysis .jev-image-result').textContent, /ВГОРУ/);
+  assert.match(localDoc.querySelector('#photo-analysis .jev-image-result').textContent, /BUY/);
+  assert.match(localDoc.querySelector('#photo-analysis .jev-image-result').textContent, /1 хвилина/);
+  assert.match(localDoc.querySelector('#photo-analysis .jev-image-result').textContent, /неперевірена гіпотеза/);
   assert.doesNotMatch(localDoc.querySelector('#photo-analysis').textContent, /червоних ділянок/);
 
   // Paste from the Windows Snipping Tool must also trigger analysis.
@@ -168,8 +181,10 @@ const { JSDOM } = require('jsdom');
   localDoc.dispatchEvent(paste);
   await new Promise(resolve => setTimeout(resolve, 30));
   assert.equal(imageCalls, 2, 'Ctrl+V screenshot should be analyzed');
+  assert.match(localDoc.querySelector('#photo-analysis .jev-image-result').textContent, /ПРОПУСТИТИ/);
+  assert.match(localDoc.querySelector('#photo-analysis .jev-image-result').textContent, /не рекомендовано/);
   assert.equal(paste.defaultPrevented, true);
   localWin.close();
   win.close();
-  console.log('✅ Crypto Myshka: all screens, LIVE, saved history, original photo, Ctrl+V, Ollama health, direction and cloud fallback passed');
+  console.log('Crypto Myshka: screens, saved history, full-res photo, Ctrl+V, local JEV health, demo BUY/SELL/SKIP expiry and cloud fallback passed');
 })().catch(error => { console.error(error); process.exit(1); });
