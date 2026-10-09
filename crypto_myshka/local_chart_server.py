@@ -24,17 +24,79 @@ OLLAMA = os.environ.get("MYSHKA_OLLAMA_URL", "http://127.0.0.1:11434").rstrip("/
 if urlsplit(OLLAMA).hostname not in ("localhost", "127.0.0.1", "::1"):
     raise SystemExit("Для захисту фото Ollama повинна працювати лише на localhost.")
 MAX_BYTES = 8 * 1024 * 1024
-SYSTEM = """Ти JEV. Дивишся лише на скріншот графіка і визначаєш
-напрямок ВИДИМОГО короткострокового руху, а не гарантований прогноз.
-Відповідай РІВНО одним із трьох слів українською, без жодного іншого тексту:
-ВГОРУ
-ВНИЗ
-НЕВИЗНАЧЕНО
-ВГОРУ — лише якщо видимий висхідний рух чіткий.
-ВНИЗ — лише якщо видимий спадний рух чіткий.
-НЕВИЗНАЧЕНО — коли графік нечіткий, рух змішаний або недостатньо даних.
-Не вигадуй сигналів, не давай команд на купівлю чи продаж.
-OTC котирування і майбутні свічки неможливо підтвердити зі скріншота."""
+ALLOWED_TIMEFRAMES = {"auto", "15s", "30s", "1m", "5m"}
+TIMEFRAME_SECONDS = {"15s": 15, "30s": 30, "1m": 60, "5m": 300}
+EXPIRIES = {30, 60, 300}
+SYSTEM = """Ти JEV — локальний дослідник скріншотів графіків для ДЕМО-ТЕСТІВ.
+Не обіцяй результату угоди. Ти не бачиш майбутніх свічок і не маєш незалежних OTC-котирувань.
+Розрізняй:
+- chart_timeframe: тривалість ОДНІЄЇ СВІЧКИ на графіку;
+- expiry: час ДО ЗАКРИТТЯ угоди після натискання BUY/SELL.
+Напис 00:01:00 біля кнопок BUY/SELL — це expiry, НЕ chart_timeframe.
+Поверни тільки JSON з ключами:
+"direction": "ВГОРУ" | "ВНИЗ" | "НЕВИЗНАЧЕНО" (видимий рух, НЕ майбутня ціна);
+"readable": true | false (чи справді видно достатньо свічок та їхню структуру);
+"chart_timeframe": "15s" | "30s" | "1m" | "5m" | "unknown";
+"test_expiry_seconds": 30 | 60 | 300 | null;
+"evidence": коротке конкретне пояснення українською, лише видимі факти (до 180 символів).
+Якщо графік закритий меню, кадр не показує свічок, рух змішаний або таймфрейм невідомий —
+вкажи direction НЕВИЗНАЧЕНО, readable false, test_expiry_seconds null.
+Якщо таймфрейм надіслано явно користувачем, використай його, не вигадуй інший.
+Якщо таймфрейм auto, визначай його лише за видимим маркуванням ГРАФІКА.
+Демо-експірація — тільки гіпотеза для перевірки, а не оптимальний чи доведений час.
+Не вказуй відсотків точності, ставок, прибутку чи інструкцій торгувати.
+Для суперечливих ситуацій обирай НЕВИЗНАЧЕНО і null.
+"""
+
+
+def parse_jev_result(content, requested_timeframe="auto"):
+    """Convert untrusted model text to a strictly bounded DEMO hypothesis."""
+    result = {
+        "direction": "НЕВИЗНАЧЕНО", "action": "SKIP", "test_expiry_seconds": None,
+        "chart_timeframe": "unknown", "timeframe_source": "unknown",
+        "reason": "Не вистачає перевірених даних для демо-гіпотези.",
+        "signal_validated": False, "expiry_validated": False,
+    }
+    if not isinstance(content, str):
+        return result
+    raw = content.strip()
+    try:
+        # Ollama JSON mode normally returns plain JSON. Some models wrap it in fences.
+        if raw.startswith("```"):
+            raw = raw.split("\n", 1)[-1].rsplit("```", 1)[0].strip()
+        obj = json.loads(raw)
+    except (ValueError, TypeError):
+        # Backward-compatible direction-only answers are observations, never trade signals.
+        token = raw.upper().strip().strip(".! ")
+        if token in ("ВГОРУ", "ВНИЗ", "НЕВИЗНАЧЕНО"):
+            result["direction"] = token
+            result["reason"] = "Лише видимий напрямок; таймфрейм і час угоди не підтверджено."
+        return result
+    if not isinstance(obj, dict):
+        return result
+    direction = obj.get("direction")
+    if direction not in ("ВГОРУ", "ВНИЗ", "НЕВИЗНАЧЕНО"):
+        return result
+    if obj.get("readable") is not True:
+        return result
+    result["direction"] = direction
+    reason = obj.get("evidence")
+    if isinstance(reason, str) and reason.strip():
+        result["reason"] = reason.strip()[:180]
+    manual = requested_timeframe in TIMEFRAME_SECONDS
+    model_tf = obj.get("chart_timeframe")
+    tf = requested_timeframe if manual else model_tf if model_tf in TIMEFRAME_SECONDS else "unknown"
+    result["chart_timeframe"] = tf
+    result["timeframe_source"] = "user" if manual else "model" if tf != "unknown" else "unknown"
+    expiry = obj.get("test_expiry_seconds")
+    # No fabricated 30s recommendation on a 1m or 5m candle.
+    if (direction != "НЕВИЗНАЧЕНО" and tf in TIMEFRAME_SECONDS
+            and type(expiry) is int and expiry in EXPIRIES
+            and expiry >= TIMEFRAME_SECONDS[tf]
+            and isinstance(reason, str) and len(reason.strip()) >= 12):
+        result["action"] = "BUY" if direction == "ВГОРУ" else "SELL"
+        result["test_expiry_seconds"] = expiry
+    return result
 
 
 def api_post(path, payload, timeout=180):
@@ -118,6 +180,9 @@ class Handler(SimpleHTTPRequestHandler):
         try:
             data = json.loads(self.rfile.read(length))
             image64 = data.get("image", "")
+            timeframe = data.get("chart_timeframe", "auto")
+            if timeframe not in ALLOWED_TIMEFRAMES:
+                return self.json_response(400, {"error": "Невідомий таймфрейм свічок."})
             if not isinstance(image64, str) or len(image64) > MAX_BYTES * 1.4:
                 return self.json_response(400, {"error": "Неправильний формат фото."})
             raw = base64.b64decode(image64, validate=True)
@@ -126,25 +191,29 @@ class Handler(SimpleHTTPRequestHandler):
         except (ValueError, TypeError, json.JSONDecodeError):
             return self.json_response(400, {"error": "Не вдалося прочитати фото."})
         try:
+            user_prompt = (
+                "Оціни тільки видимі свічки. Вказаний користувачем таймфрейм свічок: "
+                + timeframe + ". Якщо auto — бери лише підпис на самому графіку. "
+                "Вибери тестовий час закриття 30, 60 або 300 секунд лише коли "
+                "структура графіка зрозуміла; інакше null. Не плутай із таймером угоди."
+            )
             result = api_post("/api/chat", {
-                "model": MODEL, "stream": False,
-                "options": {"temperature": 0, "num_predict": 24},
+                "model": MODEL, "stream": False, "format": "json",
+                "options": {"temperature": 0, "num_predict": 230},
                 "messages": [
                     {"role": "system", "content": SYSTEM},
-                    {"role": "user", "content": "Куди рухається видимий графік? Відповідай лише ВГОРУ, ВНИЗ або НЕВИЗНАЧЕНО.",
-                     "images": [image64]}
+                    {"role": "user", "content": user_prompt, "images": [image64]}
                 ]
             })
-            analysis = (result.get("message") or {}).get("content", "").strip()
-            if not analysis:
+            analysis = (result.get("message") or {}).get("content", "")
+            if not isinstance(analysis, str) or not analysis.strip():
                 return self.json_response(502, {"error": "JEV не повернув текст аналізу."})
-            # Never present free-form AI prose as a trade instruction.
-            # Ambiguous responses fall back to the safe neutral state.
-            token = analysis.upper().strip().strip(".! ")
-            direction = token if token in ("ВГОРУ", "ВНИЗ", "НЕВИЗНАЧЕНО") else "НЕВИЗНАЧЕНО"
-            return self.json_response(200, {"analysis": direction, "direction": direction,
-                                            "model": MODEL, "source": "local_ollama",
-                                            "verified_quotes": False})
+            decision = parse_jev_result(analysis, timeframe)
+            return self.json_response(200, {
+                "analysis": decision["direction"], **decision,
+                "model": MODEL, "source": "local_ollama",
+                "verified_quotes": False, "mode": "demo_hypothesis"
+            })
         except urllib.error.HTTPError as exc:
             if exc.code == 404:
                 return self.json_response(503, {"error": "Модель " + MODEL +
