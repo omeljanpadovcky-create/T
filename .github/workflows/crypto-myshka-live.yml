@@ -10,6 +10,8 @@ on:
     paths:
       - 'crypto_myshka/live_monitor.py'
       - 'crypto_myshka/pair_reports.py'
+      - 'crypto_myshka/pair_jev.py'
+      - 'crypto_myshka/tests/test_pair_jev.py'
       - 'crypto_myshka/tests/test_pair_reports.py'
       - 'youtube-analysts.html'
       - '.github/workflows/crypto-myshka-live.yml'
@@ -41,8 +43,8 @@ jobs:
 
       - name: Compile isolated live observer
         run: |
-          python -m py_compile crypto_myshka/live_monitor.py crypto_myshka/pair_reports.py
-          python -m unittest crypto_myshka.tests.test_pair_reports -v
+          python -m py_compile crypto_myshka/live_monitor.py crypto_myshka/pair_reports.py crypto_myshka/pair_jev.py
+          python -m unittest crypto_myshka.tests.test_pair_reports crypto_myshka.tests.test_pair_jev -v
 
       - name: Check LIVE channels and inspect temporary frames when available
         env:
