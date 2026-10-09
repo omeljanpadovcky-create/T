@@ -60,3 +60,10 @@ main{width:100%;max-width:1120px;margin:0 auto;flex:1;min-width:0}h1,h2,h3,h4{fo
 .jev-image-reason{font-size:14px;color:var(--ink);margin:9px 0;line-height:1.5}
 .jev-image-result .direction-result{font-size:clamp(20px,4vw,29px)}
 @media(max-width:650px){.expiry-lab-controls{align-items:stretch}.expiry-lab-controls select{width:100%}}
+
+.expiry-journal{margin:14px 0 20px;padding:16px;border:1px solid var(--line);background:var(--panel);border-radius:14px}
+.expiry-journal strong{color:var(--ink)}
+.expiry-journal p{margin:8px 0;color:var(--ink);font-size:13px;line-height:1.6}
+.expiry-journal small{color:var(--muted);font-size:12px;line-height:1.5}
+.expiry-outcome-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line);margin-top:10px}
+.expiry-outcome-row .small-button:disabled{opacity:.5;cursor:default}
