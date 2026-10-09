@@ -16,13 +16,14 @@ from yt_dlp import YoutubeDL
 HERE = Path(__file__).resolve().parent
 OUTPUT = HERE / "data" / "youtube_analysts.json"
 
-# Four specified YouTube channels. Unverified fifth channel removed as requested.
+# Curated public channels. Content is research context, not verified financial advice.
 CHANNELS = [
     {"id": "nikolas", "name": "НИКОЛАС | ТРЕЙДЕР", "handle": "@NikolasTradin", "url": "https://www.youtube.com/@NikolasTradin/videos", "confirmed": True},
     {"id": "backstage", "name": "Закулисье Трейдера", "handle": "@artemtraderr", "url": "https://www.youtube.com/@artemtraderr/videos", "confirmed": True},
     {"id": "mark", "name": "Mark Champs Trader", "handle": "@Mark_champs_trader", "url": "https://www.youtube.com/@Mark_champs_trader/videos", "confirmed": True},
     {"id": "alexey", "name": "Алексей Борщев", "handle": "@alexeyborshev1", "url": "https://www.youtube.com/@alexeyborshev1/videos", "confirmed": True},
     {"id": "archie", "name": "ARCHIE TRADING", "handle": "@archie_trade", "url": "https://www.youtube.com/@archie_trade/videos", "confirmed": True},
+    {"id": "tilbury", "name": "Mark Tilbury", "handle": "@marktilbury", "url": "https://www.youtube.com/@marktilbury/videos", "confirmed": True},
 ]
 
 PAIR_RE = re.compile(r"(?<![A-Z0-9])(BTC|ETH|SOL|BNB|XRP|DOGE|ADA|AVAX|LINK)(?:\s*[/_-]\s*(?:USDT|USD))?(?![A-Z0-9])", re.I)
@@ -30,7 +31,7 @@ LONG_RE = re.compile(r"\b(long|buy|call|bullish|лонг|купить|покуп
 SHORT_RE = re.compile(r"\b(short|sell|put|bearish|шорт|продать|продажа|падінн|падени|вниз)\b", re.I)
 OTC_RE = re.compile(r"\b(otc|pocket\s*option|quotex|binarn|binary|бинарн|бінарн|экспирац|експіраці)\b", re.I)
 PROMO_RE = re.compile(r"\b(100%|без\s*проигрыш|гарантир|гарантов|vip|промокод|реферал|удвой|копитрейдинг|copy\s*trading|winrate)\b", re.I)
-TRADING_RE = re.compile(r"(trading|trade|trader|трейд|торгов|strategy|стратег|отс|otc|pocket.?option|option|crypt|крипт|forex|binanc|btc|eth|сигнал|копитрейд|сделк|угод)", re.I)
+TRADING_RE = re.compile(r"(trading|trade|trader|трейд|торгов|strategy|стратег|invest|інвест|инвест|stocks?|shares?|etf|portfolio|дивіденд|дивиденд|отс|otc|pocket.?option|option|crypt|крипт|forex|binanc|btc|eth|сигнал|копитрейд|сделк|угод)", re.I)
 INSTRUMENT_RE = re.compile(r"(?<![A-Z0-9])(?:BTC|ETH|SOL|XRP|ADA|BNB|DOGE|LINK|AVAX|AUD|CHF|USD|EUR|GBP|JPY|CAD|NZD|AED|IDR|CNY|TRY)\s*[/_-]\s*(?:USDT|USDC|USD|BTC|ETH|AUD|CHF|EUR|GBP|JPY|CAD|NZD|AED|IDR|CNY|TRY)\s*(?:OTC)?(?![A-Z0-9])", re.I)
 TIMEFRAME_RE = re.compile(r"(?<![A-Z0-9])(?:M1|M5|M15|M30|H1|H4|D1|1m|5m|15m|1h|4h)(?![A-Z0-9])", re.I)
 INDICATOR_RE = re.compile(r"(?i)\b(?:rsi|ema|sma|macd|stochastic|moving average|bollinger|price action|support|resistance|підтримк|опір|поддержк|сопротивлен|скользящ|середн)\w*")
