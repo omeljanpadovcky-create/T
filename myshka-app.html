@@ -144,6 +144,12 @@
               <span><strong>Дозволити резервний хмарний аналіз</strong><small>Лише в автоматичному режимі. Якщо Ollama недоступна, фото буде передано на Vercel та до обраного AI-провайдера. Можливі витрати API.</small></span>
             </label>
             <p id="vision-mode-info" class="muted" role="status">Перевіряємо джерело аналізу…</p>
+            <div id="local-mode-warning" class="report-notice" hidden>
+              <strong>⚠️ Локальний режим не запускається з GitHub Pages.</strong>
+              <p>Потрібно запустити Ollama через PowerShell і відкрити локальну адресу цього ж додатка.</p>
+              <button id="copy-local-mode-command" class="small-button" type="button">📋 Скопіювати запуск локального JEV</button>
+              <a class="text-link" href="http://127.0.0.1:18765/myshka-app.html#analysis" target="_blank" rel="noopener noreferrer">Відкрити локальну Мишку ↗</a>
+            </div>
             <p class="report-notice">Локальний режим працює на сторінці http://127.0.0.1:18765/myshka-app.html. Публічна GitHub Pages не запускає локальну Ollama. Без дозволу автоматичного передавання фото в хмару не буде.</p>
           </div>
           <div class="settings-card" id="cloud-settings">
