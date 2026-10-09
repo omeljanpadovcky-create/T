@@ -474,10 +474,12 @@ def main() -> None:
     archive = build(old, source)
     ARCHIVE_FILE.parent.mkdir(parents=True, exist_ok=True)
     temporary = ARCHIVE_FILE.with_suffix(".tmp")
-    temporary.write_text(json.dumps(archive, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
+    temporary.write_text(json.dumps(archive, ensure_ascii=False, separators=(",", ":"))+"\n", encoding="utf-8")
     temporary.replace(ARCHIVE_FILE)
     print(json.dumps({"indexed": archive["video_count"],
                       "new": archive["newly_discovered"],
+                      "gemini_connected":archive["gemini_configured"],
+                      "gemini_video_summaries":archive["gemini_analyzed_count"],
                       "errors": len(archive["errors"]),
                       "status": archive["status"]},ensure_ascii=False))
 
