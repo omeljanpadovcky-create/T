@@ -90,6 +90,13 @@
           </div>
           <p class="report-notice">JEV порівнює напрямок і пропонує лише <strong>тестову експірацію 30 с, 1 хв або 5 хв</strong> для демо. Без читабельного графіка — «ПРОПУСТИТИ». Це не перевірений прогноз чи порада робити ставку.</p>
           <p id="vision-status" class="vision-status" role="status" aria-live="polite">Перевіряємо підключення AI…</p>
+          <div id="local-quickstart" class="settings-card" style="display:none">
+            <h3>🛠 Запустити справжній JEV на Windows</h3>
+            <p>Це GitHub Pages, тут немає AI-сервера. На своєму комп’ютері запусти локальну Ollama одним PowerShell-скриптом — він окремо завантажить файли, запитає дозвіл на встановлення залежностей і відкриє адресу <code>127.0.0.1:18765</code>. Не треба налаштовувати Vercel.</p>
+            <button id="copy-local-start" type="button" class="small-button">📋 Копіювати команду PowerShell</button>
+            <a class="text-link" href="https://github.com/omeljanpadovcky-create/T/blob/main/START_MYSHKA_EASY.ps1" target="_blank" rel="noopener noreferrer">Переглянути скрипт ↗</a>
+            <p class="report-notice">Перший запуск може потребувати завантаження AI-моделі на декілька ГБ. Встановлення відбувається лише після підтвердження.</p>
+          </div>
           <p class="vision-help"><a href="https://github.com/omeljanpadovcky-create/T/blob/main/crypto_myshka/LOCAL_AI_README_UA.md" target="_blank" rel="noopener noreferrer">Як запустити Ollama через PowerShell ↗</a></p>
           <div id="photo-analysis" aria-live="polite"></div>
           <div class="expiry-journal" aria-live="polite">
