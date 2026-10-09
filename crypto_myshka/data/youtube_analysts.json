@@ -296,16 +296,6 @@
         }
       ],
       "reviewed": 0
-    },
-    {
-      "id": "nikolai",
-      "name": "Николай (зі скріншота)",
-      "handle": null,
-      "url": null,
-      "confirmed": false,
-      "status": "need_channel_url",
-      "videos": [],
-      "reviewed": 0
     }
   ],
   "final_signal": "SKIP",
