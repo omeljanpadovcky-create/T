@@ -1,106 +1,108 @@
 {
   "version": 1,
-  "updated_at": "2026-10-09T23:19:13.876787+00:00",
+  "updated_at": "2026-10-09T23:20:42.267884+00:00",
   "status": "partial_or_growing",
   "scope": "Publicly accessible videos, stream replays and shorts from configured channels",
   "all_videos_guaranteed": false,
   "videos_copied_or_hosted": false,
   "full_video_content_reviewed": false,
   "market_quotes_verified": false,
-  "video_count": 762,
+  "video_count": 850,
   "gemini_analyzed_count": 0,
+  "gemini_configured": false,
+  "gemini_mode": "direct_public_youtube_video_understanding",
   "gemini_budget": {
     "utc_date": "2026-10-09",
     "reserved_seconds": 0,
     "requests_attempted": 0
   },
-  "newly_discovered": 135,
+  "newly_discovered": 88,
   "legacy_entries_seeded": 0,
   "scan_calls": 15,
   "errors": [],
   "progress": {
     "nikolas:videos": {
-      "last_attempt": "2026-10-09T23:18:53.608010+00:00",
-      "last_successful_scan": "2026-10-09T23:18:54.037545+00:00",
+      "last_attempt": "2026-10-09T23:20:22.595161+00:00",
+      "last_successful_scan": "2026-10-09T23:20:23.031305+00:00",
       "next_start": 13,
       "backfill_complete": true,
       "status": "ok"
     },
     "nikolas:streams": {
-      "last_attempt": "2026-10-09T23:18:54.037564+00:00",
-      "last_successful_scan": "2026-10-09T23:18:54.571885+00:00",
+      "last_attempt": "2026-10-09T23:20:23.031324+00:00",
+      "last_successful_scan": "2026-10-09T23:20:23.562050+00:00",
       "next_start": 146,
       "backfill_complete": true,
       "status": "ok"
     },
     "nikolas:shorts": {
-      "last_attempt": "2026-10-09T23:18:54.571892+00:00",
-      "last_successful_scan": "2026-10-09T23:18:57.658342+00:00",
-      "next_start": 193,
+      "last_attempt": "2026-10-09T23:20:23.562058+00:00",
+      "last_successful_scan": "2026-10-09T23:20:27.715332+00:00",
+      "next_start": 238,
       "backfill_complete": false,
       "status": "ok"
     },
     "backstage:videos": {
-      "last_attempt": "2026-10-09T23:18:57.658349+00:00",
-      "last_successful_scan": "2026-10-09T23:18:58.058050+00:00",
+      "last_attempt": "2026-10-09T23:20:27.715340+00:00",
+      "last_successful_scan": "2026-10-09T23:20:28.104840+00:00",
       "next_start": 13,
       "backfill_complete": true,
       "status": "ok"
     },
     "backstage:streams": {
-      "last_attempt": "2026-10-09T23:18:58.058055+00:00",
-      "last_successful_scan": "2026-10-09T23:18:58.411158+00:00",
+      "last_attempt": "2026-10-09T23:20:28.104848+00:00",
+      "last_successful_scan": "2026-10-09T23:20:28.402058+00:00",
       "next_start": 13,
       "backfill_complete": true,
       "status": "ok"
     },
     "backstage:shorts": {
-      "last_attempt": "2026-10-09T23:18:58.411178+00:00",
-      "last_successful_scan": "2026-10-09T23:18:58.756560+00:00",
+      "last_attempt": "2026-10-09T23:20:28.402076+00:00",
+      "last_successful_scan": "2026-10-09T23:20:28.705475+00:00",
       "next_start": 13,
       "backfill_complete": true,
       "status": "ok"
     },
     "mark:videos": {
-      "last_attempt": "2026-10-09T23:18:58.756581+00:00",
-      "last_successful_scan": "2026-10-09T23:18:59.129187+00:00",
+      "last_attempt": "2026-10-09T23:20:28.705497+00:00",
+      "last_successful_scan": "2026-10-09T23:20:29.060813+00:00",
       "next_start": 13,
       "backfill_complete": true,
       "status": "ok"
     },
     "mark:streams": {
-      "last_attempt": "2026-10-09T23:18:59.129193+00:00",
-      "last_successful_scan": "2026-10-09T23:18:59.573703+00:00",
+      "last_attempt": "2026-10-09T23:20:29.060818+00:00",
+      "last_successful_scan": "2026-10-09T23:20:29.486782+00:00",
       "next_start": 18,
       "backfill_complete": true,
       "status": "ok"
     },
     "mark:shorts": {
-      "last_attempt": "2026-10-09T23:18:59.573709+00:00",
-      "last_successful_scan": "2026-10-09T23:18:59.917472+00:00",
+      "last_attempt": "2026-10-09T23:20:29.486787+00:00",
+      "last_successful_scan": "2026-10-09T23:20:29.849982+00:00",
       "next_start": 13,
       "backfill_complete": true,
       "status": "ok"
     },
     "alexey:videos": {
-      "last_attempt": "2026-10-09T23:18:59.917478+00:00",
-      "last_successful_scan": "2026-10-09T23:19:02.198649+00:00",
+      "last_attempt": "2026-10-09T23:20:29.849988+00:00",
+      "last_successful_scan": "2026-10-09T23:20:30.210237+00:00",
       "next_start": 13,
       "backfill_complete": true,
       "status": "ok"
     },
     "alexey:streams": {
-      "last_attempt": "2026-10-09T23:19:02.198657+00:00",
-      "last_successful_scan": "2026-10-09T23:19:05.583791+00:00",
-      "next_start": 193,
-      "backfill_complete": false,
+      "last_attempt": "2026-10-09T23:20:30.210245+00:00",
+      "last_successful_scan": "2026-10-09T23:20:33.581753+00:00",
+      "next_start": 222,
+      "backfill_complete": true,
       "status": "ok"
     },
     "alexey:shorts": {
-      "last_attempt": "2026-10-09T23:19:05.583798+00:00",
-      "last_successful_scan": "2026-10-09T23:19:08.958744+00:00",
-      "next_start": 193,
-      "backfill_complete": false,
+      "last_attempt": "2026-10-09T23:20:33.581762+00:00",
+      "last_successful_scan": "2026-10-09T23:20:36.937474+00:00",
+      "next_start": 207,
+      "backfill_complete": true,
       "status": "ok"
     }
   },
@@ -131,6 +133,3880 @@
     }
   ],
   "videos": [
+    {
+      "id": "zM7vcQLUONU",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "shorts",
+      "title": "СМОТРИ ПОЛНЫЙ ВЫПУСК НА КАНАЛЕ #саморазвитие #успех #мотивация #мышление",
+      "url": "https://www.youtube.com/watch?v=zM7vcQLUONU",
+      "thumbnail": "https://i.ytimg.com/vi/zM7vcQLUONU/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:36.937405+00:00",
+      "details_checked_at": "2026-10-09T23:20:38.031750+00:00",
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      },
+      "details_error": "DownloadError: ERROR: [youtube] zM7vcQLUONU: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See https://github.com/yt-dlp/yt-d"
+    },
+    {
+      "id": "WB4hIVCaOo4",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "shorts",
+      "title": "КАК НАЙТИ ДЕЛО СВОЕЙ ЖИЗНИ #карьера #личностныйрост #мотивациякаждыйдень",
+      "url": "https://www.youtube.com/watch?v=WB4hIVCaOo4",
+      "thumbnail": "https://i.ytimg.com/vi/WB4hIVCaOo4/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:36.937332+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "lG8b2tD7Nf4",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "shorts",
+      "title": "СМОТРИ ПОЛНЫЙ ВЫПУСК НА КАНАЛЕ #саморазвитие#мышление",
+      "url": "https://www.youtube.com/watch?v=lG8b2tD7Nf4",
+      "thumbnail": "https://i.ytimg.com/vi/lG8b2tD7Nf4/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:36.937272+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "ScmfaZ14uRs",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "shorts",
+      "title": "Стримы каждый день ! #трейдинг #теханализ #техническийанализ",
+      "url": "https://www.youtube.com/watch?v=ScmfaZ14uRs",
+      "thumbnail": "https://i.ytimg.com/vi/ScmfaZ14uRs/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:36.937210+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "QT76VqW-6L0",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "shorts",
+      "title": "Жду тебя на стримах , бро ! #техническийанализ #трейдинг #шортс",
+      "url": "https://www.youtube.com/watch?v=QT76VqW-6L0",
+      "thumbnail": "https://i.ytimg.com/vi/QT76VqW-6L0/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:36.937143+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "fvEx2QscQr4",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "shorts",
+      "title": "Стримы каждый день ! #обучениетрейдингу #trading #техническийанализ",
+      "url": "https://www.youtube.com/watch?v=fvEx2QscQr4",
+      "thumbnail": "https://i.ytimg.com/vi/fvEx2QscQr4/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:36.937080+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "3iLp_Tec_74",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "shorts",
+      "title": "Запись со стрима #трейдинг #теханализ #техническийанализ",
+      "url": "https://www.youtube.com/watch?v=3iLp_Tec_74",
+      "thumbnail": "https://i.ytimg.com/vi/3iLp_Tec_74/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:36.937021+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "muMJuNQAme8",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "shorts",
+      "title": "Жду на прямых эфирах !! #трейдер #техническийанализ",
+      "url": "https://www.youtube.com/watch?v=muMJuNQAme8",
+      "thumbnail": "https://i.ytimg.com/vi/muMJuNQAme8/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:36.936965+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "fAjnsLWaCIQ",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "shorts",
+      "title": "Стримы каждый день #трейдинг #теханализ #техническийанализ",
+      "url": "https://www.youtube.com/watch?v=fAjnsLWaCIQ",
+      "thumbnail": "https://i.ytimg.com/vi/fAjnsLWaCIQ/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:36.936906+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "9gT2sKUkdw4",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "shorts",
+      "title": "Забрал ! #трейдинг #теханализ #техническийанализ",
+      "url": "https://www.youtube.com/watch?v=9gT2sKUkdw4",
+      "thumbnail": "https://i.ytimg.com/vi/9gT2sKUkdw4/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:36.936855+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "8i6Vjh69UP8",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "shorts",
+      "title": "Залетай на стрим ! #техническийанализ #trading #трейдингвью",
+      "url": "https://www.youtube.com/watch?v=8i6Vjh69UP8",
+      "thumbnail": "https://i.ytimg.com/vi/8i6Vjh69UP8/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:36.936796+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "PIV2rF4ZQvA",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "shorts",
+      "title": "СТРИМЫ КАЖДЫЙ ДЕНЬ #трейдинг #теханализ #техническийанализ",
+      "url": "https://www.youtube.com/watch?v=PIV2rF4ZQvA",
+      "thumbnail": "https://i.ytimg.com/vi/PIV2rF4ZQvA/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:36.936730+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "8fKsxHiLCxQ",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "shorts",
+      "title": "Наблюдай за сделками в прямом эфире #техническийанализ #трейдингвью #trading",
+      "url": "https://www.youtube.com/watch?v=8fKsxHiLCxQ",
+      "thumbnail": "https://i.ytimg.com/vi/8fKsxHiLCxQ/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:36.936625+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "crzj4l42Rac",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "shorts",
+      "title": "Стримы каждый день ! #техническийанализ #trading #спекуляции",
+      "url": "https://www.youtube.com/watch?v=crzj4l42Rac",
+      "thumbnail": "https://i.ytimg.com/vi/crzj4l42Rac/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:36.936534+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "URH9dPoBuPo",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=URH9dPoBuPo",
+      "thumbnail": "https://i.ytimg.com/vi/URH9dPoBuPo/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 1668,
+      "indexed_at": "2026-10-09T23:20:33.581678+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "SVZdDZgbCO4",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=SVZdDZgbCO4",
+      "thumbnail": "https://i.ytimg.com/vi/SVZdDZgbCO4/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 8891,
+      "indexed_at": "2026-10-09T23:20:33.581622+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "tsSQdEJp6z8",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=tsSQdEJp6z8",
+      "thumbnail": "https://i.ytimg.com/vi/tsSQdEJp6z8/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 5835,
+      "indexed_at": "2026-10-09T23:20:33.581566+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "NrGW16gmB2I",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=NrGW16gmB2I",
+      "thumbnail": "https://i.ytimg.com/vi/NrGW16gmB2I/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 9170,
+      "indexed_at": "2026-10-09T23:20:33.581509+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "l3vp7csjmu4",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=l3vp7csjmu4",
+      "thumbnail": "https://i.ytimg.com/vi/l3vp7csjmu4/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 6455,
+      "indexed_at": "2026-10-09T23:20:33.581453+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "b_SE325F4LE",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=b_SE325F4LE",
+      "thumbnail": "https://i.ytimg.com/vi/b_SE325F4LE/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 1008,
+      "indexed_at": "2026-10-09T23:20:33.581397+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "972JjdeTww8",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=972JjdeTww8",
+      "thumbnail": "https://i.ytimg.com/vi/972JjdeTww8/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 56,
+      "indexed_at": "2026-10-09T23:20:33.581340+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "0HTqjn6tRHI",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=0HTqjn6tRHI",
+      "thumbnail": "https://i.ytimg.com/vi/0HTqjn6tRHI/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 295,
+      "indexed_at": "2026-10-09T23:20:33.581283+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "1t44Qs0xw4Q",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=1t44Qs0xw4Q",
+      "thumbnail": "https://i.ytimg.com/vi/1t44Qs0xw4Q/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 7464,
+      "indexed_at": "2026-10-09T23:20:33.581226+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "IOud-is4v2U",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=IOud-is4v2U",
+      "thumbnail": "https://i.ytimg.com/vi/IOud-is4v2U/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 975,
+      "indexed_at": "2026-10-09T23:20:33.581169+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "TJNJmgxkI8A",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=TJNJmgxkI8A",
+      "thumbnail": "https://i.ytimg.com/vi/TJNJmgxkI8A/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 9716,
+      "indexed_at": "2026-10-09T23:20:33.581112+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "Wy5yu5K5z_c",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=Wy5yu5K5z_c",
+      "thumbnail": "https://i.ytimg.com/vi/Wy5yu5K5z_c/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 12823,
+      "indexed_at": "2026-10-09T23:20:33.581053+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "I0PjU8U9TzE",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=I0PjU8U9TzE",
+      "thumbnail": "https://i.ytimg.com/vi/I0PjU8U9TzE/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 4571,
+      "indexed_at": "2026-10-09T23:20:33.580995+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "Y-WVHmIiqx0",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=Y-WVHmIiqx0",
+      "thumbnail": "https://i.ytimg.com/vi/Y-WVHmIiqx0/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 8088,
+      "indexed_at": "2026-10-09T23:20:33.580938+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "X5H_sDurCJY",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=X5H_sDurCJY",
+      "thumbnail": "https://i.ytimg.com/vi/X5H_sDurCJY/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 7043,
+      "indexed_at": "2026-10-09T23:20:33.580882+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "oOQVK7o0qgQ",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=oOQVK7o0qgQ",
+      "thumbnail": "https://i.ytimg.com/vi/oOQVK7o0qgQ/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 4555,
+      "indexed_at": "2026-10-09T23:20:33.580824+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "EW4Am9T5kAc",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=EW4Am9T5kAc",
+      "thumbnail": "https://i.ytimg.com/vi/EW4Am9T5kAc/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 7231,
+      "indexed_at": "2026-10-09T23:20:33.580764+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "aNy5uWNl9as",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=aNy5uWNl9as",
+      "thumbnail": "https://i.ytimg.com/vi/aNy5uWNl9as/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 4697,
+      "indexed_at": "2026-10-09T23:20:33.580681+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "p9L3ECzImk8",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=p9L3ECzImk8",
+      "thumbnail": "https://i.ytimg.com/vi/p9L3ECzImk8/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 7359,
+      "indexed_at": "2026-10-09T23:20:33.580624+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "5IAHveT59Mk",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=5IAHveT59Mk",
+      "thumbnail": "https://i.ytimg.com/vi/5IAHveT59Mk/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 5008,
+      "indexed_at": "2026-10-09T23:20:33.580566+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "S2fbtXLAXyc",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=S2fbtXLAXyc",
+      "thumbnail": "https://i.ytimg.com/vi/S2fbtXLAXyc/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 5302,
+      "indexed_at": "2026-10-09T23:20:33.580508+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "lLOiMv7n0OA",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=lLOiMv7n0OA",
+      "thumbnail": "https://i.ytimg.com/vi/lLOiMv7n0OA/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 4529,
+      "indexed_at": "2026-10-09T23:20:33.580450+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "TBSiXiuPhUU",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=TBSiXiuPhUU",
+      "thumbnail": "https://i.ytimg.com/vi/TBSiXiuPhUU/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 5173,
+      "indexed_at": "2026-10-09T23:20:33.580389+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "wRdYILUh-Ik",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=wRdYILUh-Ik",
+      "thumbnail": "https://i.ytimg.com/vi/wRdYILUh-Ik/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 4327,
+      "indexed_at": "2026-10-09T23:20:33.580300+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "lbgn24L6g-E",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=lbgn24L6g-E",
+      "thumbnail": "https://i.ytimg.com/vi/lbgn24L6g-E/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 10321,
+      "indexed_at": "2026-10-09T23:20:33.580218+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "s23gUljCrm0",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=s23gUljCrm0",
+      "thumbnail": "https://i.ytimg.com/vi/s23gUljCrm0/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 5762,
+      "indexed_at": "2026-10-09T23:20:33.580160+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "ENjvrElKqsQ",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=ENjvrElKqsQ",
+      "thumbnail": "https://i.ytimg.com/vi/ENjvrElKqsQ/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 8481,
+      "indexed_at": "2026-10-09T23:20:33.580101+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "Ta-wXRtrX8o",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=Ta-wXRtrX8o",
+      "thumbnail": "https://i.ytimg.com/vi/Ta-wXRtrX8o/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 5092,
+      "indexed_at": "2026-10-09T23:20:33.580037+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "BVBtRhUOt14",
+      "channel_id": "alexey",
+      "channel_name": "Алексей Борщев",
+      "channel_handle": "@alexeyborshev1",
+      "kind": "streams",
+      "title": "Торгую с Подписчиками в реальном времени | Трейдинг",
+      "url": "https://www.youtube.com/watch?v=BVBtRhUOt14",
+      "thumbnail": "https://i.ytimg.com/vi/BVBtRhUOt14/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": 10517,
+      "indexed_at": "2026-10-09T23:20:33.579948+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "EHpcv-uDgAE",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Майнкрафт мемы #майнкрафт #смешнойшортс #мемы #мем #мемас #смешнойшортс",
+      "url": "https://www.youtube.com/watch?v=EHpcv-uDgAE",
+      "thumbnail": "https://i.ytimg.com/vi/EHpcv-uDgAE/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.715266+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "sUlb4ErkPcE",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Игровые Мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=sUlb4ErkPcE",
+      "thumbnail": "https://i.ytimg.com/vi/sUlb4ErkPcE/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.715214+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "MvCeZjlmnUY",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=MvCeZjlmnUY",
+      "thumbnail": "https://i.ytimg.com/vi/MvCeZjlmnUY/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.715164+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "9_3yVes8eG0",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=9_3yVes8eG0",
+      "thumbnail": "https://i.ytimg.com/vi/9_3yVes8eG0/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.715113+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "5QiD3qhuA98",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=5QiD3qhuA98",
+      "thumbnail": "https://i.ytimg.com/vi/5QiD3qhuA98/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.715062+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "EiELlVHivcY",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=EiELlVHivcY",
+      "thumbnail": "https://i.ytimg.com/vi/EiELlVHivcY/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.715011+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "5IdYadzJC5w",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Майнкрафт мемы #майнкрафт #смешнойшортс #мемы #мем #мемас #смешнойшортс",
+      "url": "https://www.youtube.com/watch?v=5IdYadzJC5w",
+      "thumbnail": "https://i.ytimg.com/vi/5IdYadzJC5w/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714941+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "Qy_KLjHFLko",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Майнкрафт мемы #майнкрафт #смешнойшортс #мемы #мем #мемас #смешнойшортс",
+      "url": "https://www.youtube.com/watch?v=Qy_KLjHFLko",
+      "thumbnail": "https://i.ytimg.com/vi/Qy_KLjHFLko/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714869+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "StKzGzw9vV8",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Игровые Мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=StKzGzw9vV8",
+      "thumbnail": "https://i.ytimg.com/vi/StKzGzw9vV8/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714817+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "7645WkVbBlU",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=7645WkVbBlU",
+      "thumbnail": "https://i.ytimg.com/vi/7645WkVbBlU/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714765+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "veMIrpAMUVg",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=veMIrpAMUVg",
+      "thumbnail": "https://i.ytimg.com/vi/veMIrpAMUVg/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714712+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "w_ruHg5T3Yg",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=w_ruHg5T3Yg",
+      "thumbnail": "https://i.ytimg.com/vi/w_ruHg5T3Yg/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714645+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "sDV8g7lmSHM",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Игровые Мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=sDV8g7lmSHM",
+      "thumbnail": "https://i.ytimg.com/vi/sDV8g7lmSHM/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714594+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "EqP_fRIkEQE",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Майнкрафт мемы #майнкрафт #смешнойшортс #мемы #мем #мемас #смешнойшортс",
+      "url": "https://www.youtube.com/watch?v=EqP_fRIkEQE",
+      "thumbnail": "https://i.ytimg.com/vi/EqP_fRIkEQE/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714522+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "vJ3Z9Hrh7fQ",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=vJ3Z9Hrh7fQ",
+      "thumbnail": "https://i.ytimg.com/vi/vJ3Z9Hrh7fQ/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714376+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "Y2tYfug8bNo",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=Y2tYfug8bNo",
+      "thumbnail": "https://i.ytimg.com/vi/Y2tYfug8bNo/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714326+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "LCh1U8CyA10",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=LCh1U8CyA10",
+      "thumbnail": "https://i.ytimg.com/vi/LCh1U8CyA10/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714275+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "LjEEPo3tsug",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Майнкрафт мемы #майнкрафт #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=LjEEPo3tsug",
+      "thumbnail": "https://i.ytimg.com/vi/LjEEPo3tsug/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714215+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "Yojn7-QK5RM",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Игровые Мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=Yojn7-QK5RM",
+      "thumbnail": "https://i.ytimg.com/vi/Yojn7-QK5RM/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714164+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "L-aZ4Zi-7zo",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=L-aZ4Zi-7zo",
+      "thumbnail": "https://i.ytimg.com/vi/L-aZ4Zi-7zo/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714113+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "Uo_PcfaPM_Y",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=Uo_PcfaPM_Y",
+      "thumbnail": "https://i.ytimg.com/vi/Uo_PcfaPM_Y/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714062+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "oDN7cnZE7ik",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=oDN7cnZE7ik",
+      "thumbnail": "https://i.ytimg.com/vi/oDN7cnZE7ik/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.714012+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "qR7gAlPUvyk",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=qR7gAlPUvyk",
+      "thumbnail": "https://i.ytimg.com/vi/qR7gAlPUvyk/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713961+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "wItn1QNZjBE",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=wItn1QNZjBE",
+      "thumbnail": "https://i.ytimg.com/vi/wItn1QNZjBE/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713911+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "7-Mh_HYN4ak",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=7-Mh_HYN4ak",
+      "thumbnail": "https://i.ytimg.com/vi/7-Mh_HYN4ak/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713859+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "LLFsHTfjXns",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Майнкрафт мемы #майнкрафт #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=LLFsHTfjXns",
+      "thumbnail": "https://i.ytimg.com/vi/LLFsHTfjXns/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713798+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "CUaKgTmUXsw",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Майнкрафт мемы #майнкрафт #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=CUaKgTmUXsw",
+      "thumbnail": "https://i.ytimg.com/vi/CUaKgTmUXsw/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713735+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "jUVASBScsQA",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Игровые Мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=jUVASBScsQA",
+      "thumbnail": "https://i.ytimg.com/vi/jUVASBScsQA/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713665+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "wCV1gkhOygM",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Майнкрафт мемы #майнкрафт #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=wCV1gkhOygM",
+      "thumbnail": "https://i.ytimg.com/vi/wCV1gkhOygM/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713605+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "JEnb5DoFWhg",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=JEnb5DoFWhg",
+      "thumbnail": "https://i.ytimg.com/vi/JEnb5DoFWhg/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713555+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "kLjKTUpPfDQ",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=kLjKTUpPfDQ",
+      "thumbnail": "https://i.ytimg.com/vi/kLjKTUpPfDQ/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713505+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "at0On9YngSc",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=at0On9YngSc",
+      "thumbnail": "https://i.ytimg.com/vi/at0On9YngSc/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713456+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "wteBMH1iHn8",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=wteBMH1iHn8",
+      "thumbnail": "https://i.ytimg.com/vi/wteBMH1iHn8/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713406+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "NXv_QPFSNMU",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=NXv_QPFSNMU",
+      "thumbnail": "https://i.ytimg.com/vi/NXv_QPFSNMU/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713355+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "jqKkWgoHQW4",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=jqKkWgoHQW4",
+      "thumbnail": "https://i.ytimg.com/vi/jqKkWgoHQW4/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713304+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "F05TAMokqWQ",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Майнкрафт мемы #майнкрафт #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=F05TAMokqWQ",
+      "thumbnail": "https://i.ytimg.com/vi/F05TAMokqWQ/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713244+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "HvLSX3X_KxM",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Игровые Мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=HvLSX3X_KxM",
+      "thumbnail": "https://i.ytimg.com/vi/HvLSX3X_KxM/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713192+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "jxRB3sYEH6M",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Майнкрафт мемы #майнкрафт #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=jxRB3sYEH6M",
+      "thumbnail": "https://i.ytimg.com/vi/jxRB3sYEH6M/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713130+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "ztxK6JTneUs",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Игровые Мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=ztxK6JTneUs",
+      "thumbnail": "https://i.ytimg.com/vi/ztxK6JTneUs/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713078+00:00",
+      "details_checked_at": "2026-10-09T23:20:36.938219+00:00",
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      },
+      "details_error": "DownloadError: ERROR: [youtube] ztxK6JTneUs: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See https://github.com/yt-dlp/yt-d"
+    },
+    {
+      "id": "Rr5n7vOmB8A",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=Rr5n7vOmB8A",
+      "thumbnail": "https://i.ytimg.com/vi/Rr5n7vOmB8A/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.713027+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "-QoL8TbQS-4",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=-QoL8TbQS-4",
+      "thumbnail": "https://i.ytimg.com/vi/-QoL8TbQS-4/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.712977+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "-I6jVn-ywjA",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=-I6jVn-ywjA",
+      "thumbnail": "https://i.ytimg.com/vi/-I6jVn-ywjA/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.712924+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "qJbFGRS_R4w",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Майнкрафт мемы #майнкрафт #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=qJbFGRS_R4w",
+      "thumbnail": "https://i.ytimg.com/vi/qJbFGRS_R4w/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.712860+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "JKQKMP30TKw",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Игровые Мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=JKQKMP30TKw",
+      "thumbnail": "https://i.ytimg.com/vi/JKQKMP30TKw/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.712800+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
+    {
+      "id": "t2m_ygFJW0k",
+      "channel_id": "nikolas",
+      "channel_name": "НИКОЛАС | ТРЕЙДЕР",
+      "channel_handle": "@NikolasTradin",
+      "kind": "shorts",
+      "title": "Свежие мемы #смешнойшортс #мемы #мем #мемас",
+      "url": "https://www.youtube.com/watch?v=t2m_ygFJW0k",
+      "thumbnail": "https://i.ytimg.com/vi/t2m_ygFJW0k/hqdefault.jpg",
+      "upload_date": null,
+      "duration_seconds": null,
+      "indexed_at": "2026-10-09T23:20:27.712690+00:00",
+      "details_checked_at": null,
+      "content_status": "metadata_only",
+      "caption_status": "not_checked",
+      "analysis": {
+        "mentioned_instruments": [],
+        "mentioned_timeframes": [],
+        "mentioned_indicators": [],
+        "content_excerpt": "",
+        "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
+        "instrument": "Не визначено",
+        "pairs": [],
+        "direction_claim": "НЕВІДОМО",
+        "promotion_flag": false,
+        "otc_flag": false,
+        "evidence": "назва та опис (без перевіреного відеотексту)",
+        "notes": [
+          "У доступному описі немає чіткої криптовалютної пари",
+          "Повний зміст відео не підтверджений субтитрами"
+        ],
+        "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
+      },
+      "video_reviewed": false,
+      "market_quotes_verified": false,
+      "gemini": {
+        "status": "not_analyzed",
+        "reason": "Gemini has not been called"
+      },
+      "jev": {
+        "status": "not_analyzed",
+        "reason": "Only metadata have been collected"
+      }
+    },
     {
       "id": "e1IX55O0Ch4",
       "channel_id": "alexey",
@@ -8199,7 +12075,7 @@
       "upload_date": null,
       "duration_seconds": 5136,
       "indexed_at": "2026-10-09T23:18:16.894135+00:00",
-      "details_checked_at": null,
+      "details_checked_at": "2026-10-09T23:20:39.982041+00:00",
       "content_status": "metadata_only",
       "caption_status": "not_checked",
       "analysis": {
@@ -8229,7 +12105,8 @@
       "jev": {
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
-      }
+      },
+      "details_error": "DownloadError: ERROR: [youtube] yCjlmw3Q63g: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See https://github.com/yt-dlp/yt-d"
     },
     {
       "id": "XL11RB7-PbE",
@@ -18373,7 +22250,7 @@
       "upload_date": null,
       "duration_seconds": null,
       "indexed_at": "2026-10-09T23:17:05.863576+00:00",
-      "details_checked_at": null,
+      "details_checked_at": "2026-10-09T23:20:40.905047+00:00",
       "content_status": "metadata_only",
       "caption_status": "not_checked",
       "analysis": {
@@ -18403,7 +22280,8 @@
       "jev": {
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
-      }
+      },
+      "details_error": "DownloadError: ERROR: [youtube] yBcFva-EFf8: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See https://github.com/yt-dlp/yt-d"
     },
     {
       "id": "1D6IxJmvr04",
@@ -23783,7 +27661,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:06.134554+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:34.187674+00:00"
     },
     {
       "id": "GwIcafaid4s",
@@ -23791,7 +27669,7 @@
       "channel_name": "Алексей Борщев",
       "channel_handle": "@alexeyborshev1",
       "kind": "shorts",
-      "title": "Лучший момент с эфира #техническийанализ #Trading #Трейдинг",
+      "title": "Best moment from the stream #technicalanalysis #Trading #Trading",
       "url": "https://www.youtube.com/watch?v=GwIcafaid4s",
       "thumbnail": "https://i.ytimg.com/vi/GwIcafaid4s/hqdefault.jpg",
       "upload_date": null,
@@ -23824,7 +27702,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:06.134509+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:34.187631+00:00"
     },
     {
       "id": "iNF_3kvIlJY",
@@ -23865,7 +27743,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:06.134440+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:34.187588+00:00"
     },
     {
       "id": "-p9ka2aXkxE",
@@ -23906,7 +27784,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:06.134397+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:34.187545+00:00"
     },
     {
       "id": "bIVmfWczsjw",
@@ -23947,7 +27825,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:06.134354+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:34.187502+00:00"
     },
     {
       "id": "x66i9g1n80M",
@@ -23988,7 +27866,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:06.134307+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:34.187458+00:00"
     },
     {
       "id": "IyI9Gcw_zEg",
@@ -24029,7 +27907,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:06.134243+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:34.187414+00:00"
     },
     {
       "id": "d5xDOWhDXu8",
@@ -24070,7 +27948,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:06.134199+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:34.187370+00:00"
     },
     {
       "id": "WbhxH_r-4Bk",
@@ -24111,7 +27989,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:06.134155+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:34.187325+00:00"
     },
     {
       "id": "YwFqCSr3nAY",
@@ -24152,7 +28030,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:06.134110+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:34.187278+00:00"
     },
     {
       "id": "aVvENlU3W_E",
@@ -24193,7 +28071,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:06.134062+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:34.187230+00:00"
     },
     {
       "id": "F7SO8q1QEjI",
@@ -24234,7 +28112,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:06.134008+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:34.187175+00:00"
     },
     {
       "id": "rRtzbSpm1VU",
@@ -26076,7 +29954,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.665400+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.722423+00:00"
     },
     {
       "id": "z84FIhRuwdg",
@@ -26118,7 +29996,7 @@
         "reason": "Only metadata have been collected"
       },
       "details_error": "DownloadError: ERROR: [youtube] z84FIhRuwdg: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See https://github.com/yt-dlp/yt-d",
-      "last_seen_index_at": "2026-10-09T23:19:02.665341+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.722367+00:00"
     },
     {
       "id": "6p41Q2oy3fY",
@@ -26159,7 +30037,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.665306+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.722334+00:00"
     },
     {
       "id": "Agea6rD5A8k",
@@ -26200,7 +30078,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.665253+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.722303+00:00"
     },
     {
       "id": "xUC1RuulgNc",
@@ -26241,7 +30119,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.665222+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.722269+00:00"
     },
     {
       "id": "dCZUZqLnr5A",
@@ -26282,7 +30160,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.665189+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.722236+00:00"
     },
     {
       "id": "23P0qnTBNd8",
@@ -26323,7 +30201,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.665157+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.722203+00:00"
     },
     {
       "id": "fWuj9-mZhaA",
@@ -26364,7 +30242,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.665125+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.722170+00:00"
     },
     {
       "id": "aR0Jh17qY8E",
@@ -26405,7 +30283,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.665091+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.722134+00:00"
     },
     {
       "id": "ZkZX0WNUEPA",
@@ -26446,7 +30324,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.665055+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.722098+00:00"
     },
     {
       "id": "CafCLhVdndA",
@@ -26487,7 +30365,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.665015+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.722057+00:00"
     },
     {
       "id": "HwZIJNbdGfU",
@@ -26528,7 +30406,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.664948+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.721991+00:00"
     },
     {
       "id": "UuWiv-Ys96Q",
@@ -26569,7 +30447,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.198647+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.210234+00:00"
     },
     {
       "id": "bS9VxT2Day0",
@@ -26610,7 +30488,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.198582+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.210169+00:00"
     },
     {
       "id": "ZmcpQMHWv1c",
@@ -26652,7 +30530,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.917469+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.849979+00:00"
     },
     {
       "id": "bDtE5nizk4A",
@@ -26693,7 +30571,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.917380+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.849893+00:00"
     },
     {
       "id": "Lkkb9KyIwc4",
@@ -26934,7 +30812,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.573701+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.486779+00:00"
     },
     {
       "id": "fGPcexUEhCM",
@@ -26975,7 +30853,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.573643+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.486694+00:00"
     },
     {
       "id": "slAJvGLdqzI",
@@ -27016,7 +30894,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.573583+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.486633+00:00"
     },
     {
       "id": "mdWBhnH81lE",
@@ -27057,7 +30935,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.573520+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.486568+00:00"
     },
     {
       "id": "lVSsgDg9v2E",
@@ -27098,7 +30976,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.573460+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.486507+00:00"
     },
     {
       "id": "L31S4DgpEIo",
@@ -27139,7 +31017,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.573400+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.486449+00:00"
     },
     {
       "id": "WRqiBgz6vhw",
@@ -27180,7 +31058,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.573331+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.486386+00:00"
     },
     {
       "id": "FiMprRk9wNg",
@@ -27221,7 +31099,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.573236+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.486314+00:00"
     },
     {
       "id": "b8W59dRBMP4",
@@ -27262,7 +31140,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.573168+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.486246+00:00"
     },
     {
       "id": "u1swiwtD3Vk",
@@ -27303,7 +31181,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.573139+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.486215+00:00"
     },
     {
       "id": "wM__58CLFOQ",
@@ -27344,7 +31222,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.573103+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.486178+00:00"
     },
     {
       "id": "Q-p7vhTE6eM",
@@ -27385,7 +31263,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.573052+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.486128+00:00"
     },
     {
       "id": "WZiWMx9bEvc",
@@ -27426,7 +31304,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.129185+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.060811+00:00"
     },
     {
       "id": "KHymQb1olO0",
@@ -27467,7 +31345,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.129161+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.060787+00:00"
     },
     {
       "id": "htVENWcUKpE",
@@ -27508,7 +31386,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.129135+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.060760+00:00"
     },
     {
       "id": "9cFPm9Dm2ZU",
@@ -27549,7 +31427,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.129105+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.060727+00:00"
     },
     {
       "id": "MA2ao0m5QLo",
@@ -27590,7 +31468,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.129077+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.060676+00:00"
     },
     {
       "id": "GjgVzFMb3ko",
@@ -27631,7 +31509,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.129048+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.060647+00:00"
     },
     {
       "id": "8XntFDFsrws",
@@ -27672,7 +31550,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.129018+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.060617+00:00"
     },
     {
       "id": "xqWfqK6MyOM",
@@ -27713,7 +31591,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.128986+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.060585+00:00"
     },
     {
       "id": "HvfyqUtPCkw",
@@ -27754,7 +31632,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:59.128946+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:29.060545+00:00"
     },
     {
       "id": "aYNrfJdVYj8",
@@ -29568,7 +33446,7 @@
       "upload_date": null,
       "duration_seconds": null,
       "indexed_at": "2026-10-09T23:06:21.720202+00:00",
-      "details_checked_at": null,
+      "details_checked_at": "2026-10-09T23:20:39.092163+00:00",
       "content_status": "metadata_only",
       "caption_status": "not_checked",
       "analysis": {
@@ -29595,7 +33473,8 @@
       "jev": {
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
-      }
+      },
+      "details_error": "DownloadError: ERROR: [youtube] yKTak-bUCHc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See https://github.com/yt-dlp/yt-d"
     },
     {
       "id": "gJdZn1ftr1A",
@@ -29637,7 +33516,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:55.129888+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:24.123148+00:00"
     },
     {
       "id": "6gtzmZfy7Lk",
@@ -29679,7 +33558,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:55.129867+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:24.123127+00:00"
     },
     {
       "id": "YwVdZnJFPDs",
@@ -29721,7 +33600,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:55.129846+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:24.123107+00:00"
     },
     {
       "id": "MzAVQB5bNDk",
@@ -29763,7 +33642,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:55.129823+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:24.123085+00:00"
     },
     {
       "id": "52HPYaB2jcc",
@@ -29805,7 +33684,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:55.129802+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:24.123063+00:00"
     },
     {
       "id": "W35XmPo7me8",
@@ -29847,7 +33726,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:55.129780+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:24.123041+00:00"
     },
     {
       "id": "bqdQnMe3nu4",
@@ -29889,7 +33768,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:55.129757+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:24.123018+00:00"
     },
     {
       "id": "Ej5vPvp6Xjs",
@@ -29930,7 +33809,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:55.129734+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:24.122996+00:00"
     },
     {
       "id": "duF5MgJ3am0",
@@ -29972,7 +33851,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:55.129704+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:24.122967+00:00"
     },
     {
       "id": "S1CmsdEfVRw",
@@ -30014,7 +33893,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:55.129680+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:24.122944+00:00"
     },
     {
       "id": "Oy1RS4NE3s0",
@@ -30056,7 +33935,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:55.129655+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:24.122919+00:00"
     },
     {
       "id": "_HduV_kLmEM",
@@ -30098,7 +33977,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:55.129622+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:24.122887+00:00"
     },
     {
       "id": "9xVEEYqMcNc",
@@ -31986,7 +35865,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:54.571882+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:23.562047+00:00"
     },
     {
       "id": "37skFbZVgbU",
@@ -32028,7 +35907,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:54.571809+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:23.561975+00:00"
     },
     {
       "id": "G0Ps_zcSS4s",
@@ -32070,7 +35949,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:54.571737+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:23.561903+00:00"
     },
     {
       "id": "bpAdRa3MfAU",
@@ -32112,7 +35991,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:54.571665+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:23.561830+00:00"
     },
     {
       "id": "IhSYvlEHqng",
@@ -32154,7 +36033,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:54.571592+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:23.561752+00:00"
     },
     {
       "id": "yczyTtiNTxA",
@@ -32196,7 +36075,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:54.571519+00:00",
+      "last_seen_index_at": "2026-10-09T23:20:23.561655+00:00",
       "details_error": "DownloadError: ERROR: [youtube] yczyTtiNTxA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See https://github.com/yt-dlp/yt-d"
     },
     {
@@ -32239,7 +36118,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:54.571444+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:23.561582+00:00"
     },
     {
       "id": "F0iAb1dDFZ0",
@@ -32281,7 +36160,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:54.571358+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:23.561509+00:00"
     },
     {
       "id": "JIL275i8cBM",
@@ -32323,7 +36202,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:54.571231+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:23.561435+00:00"
     },
     {
       "id": "8-eMNoPj9Hg",
@@ -32365,7 +36244,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:54.571154+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:23.561359+00:00"
     },
     {
       "id": "lY4tMm7hNew",
@@ -32407,7 +36286,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:54.571084+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:23.561289+00:00"
     },
     {
       "id": "gtYtH747q6g",
@@ -32449,7 +36328,7 @@
         "status": "not_analyzed",
         "reason": "Only metadata have been collected"
       },
-      "last_seen_index_at": "2026-10-09T23:18:54.570992+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:23.561197+00:00"
     },
     {
       "id": "uFGHNKVd4zk",
@@ -32490,7 +36369,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.198402+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.209990+00:00"
     },
     {
       "id": "maXN3sHs2FA",
@@ -32531,7 +36410,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.198171+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.209774+00:00"
     },
     {
       "id": "fzVB8L6GQRM",
@@ -32572,7 +36451,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.198506+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.210093+00:00"
     },
     {
       "id": "e9_ai0mgpts",
@@ -32613,7 +36492,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.198108+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.209687+00:00"
     },
     {
       "id": "dphISIyvH94",
@@ -32654,7 +36533,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:18:58.058048+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:28.104838+00:00"
     },
     {
       "id": "bpQLYZM2FfE",
@@ -32695,7 +36574,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.198030+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.209610+00:00"
     },
     {
       "id": "Z4HMrRpKcV4",
@@ -32736,7 +36615,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:18:58.057825+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:28.104595+00:00"
     },
     {
       "id": "IEn3UX3mfGM",
@@ -32777,7 +36656,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:18:58.057941+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:28.104728+00:00"
     },
     {
       "id": "ElfSeIVxRH8",
@@ -32820,7 +36699,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.198252+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.209859+00:00"
     },
     {
       "id": "7bkdptaLxA0",
@@ -32861,7 +36740,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.198344+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.209932+00:00"
     },
     {
       "id": "2JGhrD2ZzeY",
@@ -32902,7 +36781,7 @@
         "status": "not_analyzed",
         "reason": "Video captions have not yet been processed"
       },
-      "last_seen_index_at": "2026-10-09T23:19:02.198460+00:00"
+      "last_seen_index_at": "2026-10-09T23:20:30.210048+00:00"
     }
   ]
 }
