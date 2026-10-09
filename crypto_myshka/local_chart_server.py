@@ -2,7 +2,7 @@
 """Local-only Fast Analysis server for Crypto Myshka.
 
 Run from the repository: python crypto_myshka/local_chart_server.py
-Open http://127.0.0.1:8765/myshka-app.html#analysis
+Open http://127.0.0.1:18765/myshka-app.html#analysis
 Requires Ollama and a vision-capable model, e.g. ollama pull qwen2.5vl:3b.
 No orders, Telegram sends, or cloud image uploads.
 """
@@ -18,7 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 HOST = "127.0.0.1"
-PORT = int(os.environ.get("MYSHKA_AI_PORT", "8765"))
+PORT = int(os.environ.get("MYSHKA_AI_PORT", "18765"))
 MODEL = os.environ.get("MYSHKA_VISION_MODEL", "qwen2.5vl:3b")
 OLLAMA = os.environ.get("MYSHKA_OLLAMA_URL", "http://127.0.0.1:11434").rstrip("/")
 if urlsplit(OLLAMA).hostname not in ("localhost", "127.0.0.1", "::1"):
