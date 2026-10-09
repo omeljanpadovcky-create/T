@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parent
 NEWS = ROOT / "data" / "news.json"
 FEED = ROOT / "data" / "feed.json"
 ARCHIVE = ROOT / "data" / "telegram_archive.json"
+VIDEO_CONTEXT = ROOT / "data" / "youtube_analysts.json"
 
 APINEX_API_KEY = os.getenv("APINEX_API_KEY", "").strip()
 APINEX_MODEL = os.getenv("JEV_MODEL", "").strip() or "free/deepseek-v4.1-flash"
@@ -171,9 +172,46 @@ def extract_json(text):
         }
     raise ValueError("Model returned empty content")
 
+def related_youtube_context(event, video_data, limit=3):
+    """Only use text actually available from public uploaded videos, never
+    assume that a streamer performed a trade or that stated winrates are true."""
+    names={str(v).lower() for v in (event.get("assets") or []) if v}
+    titles=str(event.get("title") or "").lower()
+    names.update(re.findall(r"(?i)(?:BTC|ETH|SOL|XRP|ADA|BNB|DOGE|AUD|CHF|USD|EUR|GBP|JPY|AED|IDR|CNY)(?:[/_-][A-Z]{3,5})?", titles))
+    aliases={"btc":"bitcoin","eth":"ethereum","sol":"solana"}
+    needles=set(names)
+    for name in names:
+        if name in aliases: needles.add(aliases[name])
+    if not needles:
+        return []
+    matches=[]
+    for channel in (video_data.get("channels") or []):
+        if not isinstance(channel, dict) or not channel.get("confirmed"): continue
+        for video in (channel.get("videos") or []):
+            if not isinstance(video,dict) or video.get("sample_only"): continue
+            a=video.get("analysis") or {}
+            blob=(" "+str(video.get("title") or "")+" "+str(a.get("content_excerpt") or "")+
+                  " "+" ".join(a.get("mentioned_instruments") or [])+" ").lower()
+            if not any(word in blob for word in needles):
+                continue
+            matches.append({
+                "channel":str(channel.get("name") or "")[:80],
+                "title":str(video.get("title") or "")[:160],
+                "url":str(video.get("url") or "")[:220],
+                "mentioned_instruments":(a.get("mentioned_instruments") or [])[:5],
+                "mentioned_indicators":(a.get("mentioned_indicators") or [])[:5],
+                "subtitle_excerpt":str(a.get("content_excerpt") or "")[:300],
+                "verified_market_data":False,
+                "source_type":"published_youtube_text_only",
+            })
+            if len(matches)>=limit:return matches
+    return matches
+
+
 def build_payload(event, feed, archive=None):
     live, knowledge = related_context(event, feed)
     historical=related_archive_context(event, archive or {"posts":[]})
+    video_notes=related_youtube_context(event,load(VIDEO_CONTEXT,{"channels":[]}))
     return {
         "event": {
             "title": event.get("title"),
@@ -189,7 +227,8 @@ def build_payload(event, feed, archive=None):
         "related_itstatti_live": live,
         "related_itstatti_archive": historical,
         "related_itstatti_knowledge": knowledge,
-        "instruction": "Дай незалежний JEV-аналіз події. Не повторюй рекламні або реферальні твердження як факт.",
+        "related_trader_video_notes_unverified": video_notes,
+        "instruction": "Дай незалежний JEV-аналіз події. Відеозамітки — лише слова з назви, опису або доступних субтитрів. Не вигадуй кадри, угоди чи підтвердження прибутковості. Не повторюй рекламні та реферальні твердження як факт.",
     }
 
 def apinex_response_text(data):
