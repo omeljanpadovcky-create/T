@@ -1,0 +1,30 @@
+name: Crypto Myshka Easy Setup Validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'START_MYSHKA_EASY.ps1'
+      - '.github/workflows/myshka-easy-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  windows-powershell-parser:
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check one-click launcher syntax (no installation executed)
+        shell: powershell
+        run: |
+          $tokens=$null
+          $errors=$null
+          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path './START_MYSHKA_EASY.ps1').Path, [ref]$tokens, [ref]$errors) | Out-Null
+          if ($errors.Count -gt 0) {
+            $errors | ForEach-Object { Write-Error $_.ToString() }
+            exit 1
+          }
+          Write-Host 'PowerShell one-click launcher syntax valid'
