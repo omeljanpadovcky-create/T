@@ -22,6 +22,7 @@ CHANNELS = [
     {"id": "backstage", "name": "Закулисье Трейдера", "handle": "@artemtraderr", "url": "https://www.youtube.com/@artemtraderr/videos", "confirmed": True},
     {"id": "mark", "name": "Mark Champs Trader", "handle": "@Mark_champs_trader", "url": "https://www.youtube.com/@Mark_champs_trader/videos", "confirmed": True},
     {"id": "alexey", "name": "Алексей Борщев", "handle": "@alexeyborshev1", "url": "https://www.youtube.com/@alexeyborshev1/videos", "confirmed": True},
+    {"id": "archie", "name": "ARCHIE TRADING", "handle": "@archie_trade", "url": "https://www.youtube.com/@archie_trade/videos", "confirmed": True},
 ]
 
 PAIR_RE = re.compile(r"(?<![A-Z0-9])(BTC|ETH|SOL|BNB|XRP|DOGE|ADA|AVAX|LINK)(?:\s*[/_-]\s*(?:USDT|USD))?(?![A-Z0-9])", re.I)
