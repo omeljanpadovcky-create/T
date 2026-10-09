@@ -15,25 +15,39 @@ export default async function handler(req,res) {
   if (req.method==='OPTIONS') return res.status(204).end();
   if (req.method!=='GET') return res.status(405).json({error:'GET only'});
   if (!ALLOWED_ORIGINS.has(origin)) return res.status(403).json({ready:false,error:'Недозволений сайт.'});
-  if (!process.env.GEMINI_API_KEY || !process.env.JEV_ACCESS_TOKEN || process.env.JEV_ACCESS_TOKEN.length<24)
-    return res.status(503).json({ready:false,error:'Хмарний JEV не налаштовано.'});
+  const apinexKey = (process.env.APINEX_API_KEY || '').trim();
+  const geminiKey = (process.env.GEMINI_API_KEY || '').trim();
+  if ((!apinexKey && !geminiKey) || !process.env.JEV_ACCESS_TOKEN || process.env.JEV_ACCESS_TOKEN.length<24)
+    return res.status(503).json({ready:false,error:'Немає APINEX_API_KEY або GEMINI_API_KEY та/або JEV_ACCESS_TOKEN у змінних серверного проєкту.'});
   const supplied=req.headers['x-jev-access'] || '';
   const expected=process.env.JEV_ACCESS_TOKEN;
   if (typeof supplied!=='string'||supplied.length!==expected.length||
       !timingSafeEqual(Buffer.from(supplied),Buffer.from(expected)))
     return res.status(401).json({ready:false,error:'Неправильний код доступу.'});
-  const model = process.env.JEV_CLOUD_MODEL || 'gemini-2.5-flash';
+  // GitHub Actions secrets are NOT automatically available to Vercel functions.
+  // This check only sees environment variables configured for THIS backend.
+  const provider = apinexKey ? 'apinex' : 'gemini';
+  const model = provider === 'apinex'
+    ? (process.env.JEV_APINEX_MODEL || 'gemini-3.8-flash')
+    : (process.env.JEV_CLOUD_MODEL || 'gemini-2.5-flash');
   try {
-    const upstream = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' +
-      encodeURIComponent(model), {
-      headers:{'x-goog-api-key':process.env.GEMINI_API_KEY},
-      signal:AbortSignal.timeout(6000)
-    });
+    const upstream = provider === 'apinex'
+      ? await fetch('https://api.apinex.bond/v1/models', {
+          headers:{Authorization:'Bearer ' + apinexKey},
+          signal:AbortSignal.timeout(8000)
+        })
+      : await fetch('https://generativelanguage.googleapis.com/v1beta/models/' +
+          encodeURIComponent(model), {
+          headers:{'x-goog-api-key':geminiKey},
+          signal:AbortSignal.timeout(6000)
+        });
     if (!upstream.ok) return res.status(503).json({
-      ready:false,error:upstream.status===429?'Ліміт Gemini вичерпано.':'Gemini API-ключ або модель недоступні.'
+      ready:false,error:upstream.status===429?'Ліміт APInex/Gemini вичерпано.':
+        'API-ключ або сервер моделі недоступний (HTTP ' + upstream.status + ').'
     });
-    return res.status(200).json({ready:true,provider:'gemini',model,cloud:true});
+    return res.status(200).json({ready:true,provider,model,cloud:true,
+      notice:'Доступність API перевірено; це не перевірка точності аналізу чи реальної торгівлі.'});
   } catch {
-    return res.status(503).json({ready:false,error:'Немає зв’язку з Gemini. Спробуй пізніше.'});
+    return res.status(503).json({ready:false,error:'Немає зв’язку з сервером APInex/Gemini. Спробуй пізніше.'});
   }
 }
