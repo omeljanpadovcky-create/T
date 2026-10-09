@@ -11,6 +11,7 @@ on:
       - 'crypto_myshka/live_monitor.py'
       - 'crypto_myshka/pair_reports.py'
       - 'crypto_myshka/pair_jev.py'
+      - 'crypto_myshka/tests/test_apinex_providers.py'
       - 'crypto_myshka/tests/test_pair_jev.py'
       - 'crypto_myshka/tests/test_pair_reports.py'
       - 'youtube-analysts.html'
@@ -44,14 +45,19 @@ jobs:
       - name: Compile isolated live observer
         run: |
           python -m py_compile crypto_myshka/live_monitor.py crypto_myshka/pair_reports.py crypto_myshka/pair_jev.py
-          python -m unittest crypto_myshka.tests.test_pair_reports crypto_myshka.tests.test_pair_jev -v
+          python -m unittest crypto_myshka.tests.test_pair_reports crypto_myshka.tests.test_pair_jev crypto_myshka.tests.test_apinex_providers -v
 
       - name: Check LIVE channels and inspect temporary frames when available
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          APINEX_API_KEY: ${{ secrets.APINEX_API_KEY }}
+          # Explicit opt-in repository variable. This avoids paid API calls by accident.
+          LIVE_APINEX_ENABLED: ${{ vars.LIVE_APINEX_ENABLED || 'false' }}
+          LIVE_APINEX_VISION_MODEL: ${{ vars.LIVE_APINEX_VISION_MODEL || 'gemini-3.8-flash' }}
+          JEV_APINEX_TEXT_MODEL: 'free/deepseek-v4.1-flash'
           LIVE_VISION_MODEL: gpt-4.1-mini
           LIVE_CAPTURE_INTERVAL: '300'
-          LIVE_MAX_SNAPSHOTS: '2'
+          LIVE_MAX_SNAPSHOTS: '1'
         run: python crypto_myshka/live_monitor.py
 
       - name: Publish only LIVE snapshot (safe concurrent writers)
