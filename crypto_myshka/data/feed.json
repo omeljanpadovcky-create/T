@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-09T20:06:47.143469+00:00",
+  "generated_at": "2026-10-09T20:07:46.301490+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,7 +26,7 @@
       "ok": true,
       "count": 10218,
       "complete": true,
-      "updated_at": "2026-10-09T20:06:43.034341+00:00",
+      "updated_at": "2026-10-09T20:07:41.996892+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
