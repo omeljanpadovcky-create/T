@@ -68,6 +68,43 @@ class LocalChartServerTests(unittest.TestCase):
         response.read()
         conn.close()
 
+    def test_local_app_is_served_and_root_redirects(self):
+        conn = http.client.HTTPConnection("127.0.0.1", self.server.server_port, timeout=5)
+        conn.request("GET", "/")
+        response = conn.getresponse()
+        self.assertEqual(response.status, 302)
+        self.assertEqual(response.getheader("Location"), "/myshka-app.html#analysis")
+        response.read()
+        conn.request("GET", "/myshka-app.html")
+        response = conn.getresponse()
+        self.assertEqual(response.status, 200)
+        self.assertEqual(response.getheader("Cache-Control"), "no-store")
+        self.assertIn(b"Crypto Myshka", response.read())
+        conn.close()
+
+    def test_health_reports_model_readiness(self):
+        from io import BytesIO
+        class FakeResponse:
+            def __enter__(self): return self
+            def __exit__(self, *_): return False
+            def read(self, *_): return b'{"models":[{"name":"qwen2.5vl:3b"}]}'
+        with patch.object(chart.urllib.request, "urlopen", return_value=FakeResponse()):
+            conn = http.client.HTTPConnection("127.0.0.1", self.server.server_port, timeout=5)
+            conn.request("GET", "/api/chart-health")
+            response = conn.getresponse()
+            self.assertEqual(response.status, 200)
+            result = json.loads(response.read())
+            self.assertTrue(result["ready"])
+            self.assertTrue(result["installed"])
+            conn.close()
+
+    def test_direction_down_only(self):
+        png = base64.b64encode(bytes([137, 80, 78, 71, 13, 10, 26, 10]) + b"example").decode("ascii")
+        with patch.object(chart, "api_post", return_value={"message": {"content": "ВНИЗ"}}):
+            status, result = self.request({"image": png})
+        self.assertEqual(status, 200)
+        self.assertEqual(result["direction"], "ВНИЗ")
+
     def test_reject_nonimage(self):
         status, data = self.request({"image": base64.b64encode(b"not a chart").decode("ascii")})
         self.assertEqual(status, 400)
