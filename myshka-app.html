@@ -139,6 +139,7 @@
             </select>
           </div>
           <p id="vision-status" class="vision-status" role="status" aria-live="polite">Перевіряємо підключення AI…</p>
+          <button id="cloud-reconnect-shortcut" class="small-button" type="button" hidden>🔑 Підключити хмарний JEV — ввести код доступу</button>
           <div id="local-quickstart" class="settings-card" style="display:none">
             <h3>🛠 Запустити справжній JEV на Windows</h3>
             <p>Це GitHub Pages, тут немає AI-сервера. На своєму комп’ютері запусти локальну Ollama одним PowerShell-скриптом — він окремо завантажить файли, запитає дозвіл на встановлення залежностей і відкриє адресу <code>127.0.0.1:18765</code>. Не треба налаштовувати Vercel.</p>
@@ -146,7 +147,7 @@
             <a class="text-link" href="https://github.com/omeljanpadovcky-create/T/blob/main/START_MYSHKA_EASY.ps1" target="_blank" rel="noopener noreferrer">Переглянути скрипт ↗</a>
             <p class="report-notice">Перший запуск може потребувати завантаження AI-моделі на декілька ГБ. Встановлення відбувається лише після підтвердження.</p>
           </div>
-          <p class="vision-help"><a href="https://github.com/omeljanpadovcky-create/T/blob/main/crypto_myshka/LOCAL_AI_README_UA.md" target="_blank" rel="noopener noreferrer">Як запустити Ollama через PowerShell ↗</a></p>
+          <p id="local-quickstart-help" class="vision-help"><a href="https://github.com/omeljanpadovcky-create/T/blob/main/crypto_myshka/LOCAL_AI_README_UA.md" target="_blank" rel="noopener noreferrer">Як запустити Ollama через PowerShell ↗</a></p>
           <div id="photo-analysis" aria-live="polite"></div>
           <div class="expiry-journal" aria-live="polite">
             <strong>Журнал демоперевірок JEV</strong>
@@ -251,7 +252,7 @@
             
             <a class="text-link" href="./crypto_myshka/LIVE_README_UA.md" target="_blank" rel="noopener noreferrer">Інструкція запуску ↗</a>
           </div>
-          <div class="notice"><span aria-hidden="true">🔒</span><p>JEV пояснює обмежені дані спостережень, а не гарантує результат. Автоматичні угоди й копіювання ставок вимкнені. Не вводь API-ключі APInex або Gemini на цій сторінці. Код доступу JEV зберігається лише в сесії браузера.</p></div>
+          <div class="notice"><span aria-hidden="true">🔒</span><p>JEV пояснює обмежені дані спостережень, а не гарантує результат. Автоматичні угоди й копіювання ставок вимкнені. Не вводь API-ключі APInex або Gemini на цій сторінці. Код доступу JEV зберігається лише в поточній вкладці браузера: в іншій вкладці або після закриття може знадобитися повторне введення. Постійно зберігати секрет у браузері не будемо.</p></div>
         </section>
       </main>
 
@@ -268,7 +269,7 @@
   </nav>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script defer src="./app/myshka-archive.js"></script>
-  <script defer src="./app/myshka.js?v=20261010-compact"></script>
+  <script defer src="./app/myshka.js?v=20261010-reauth"></script>
   <script defer src="./app/bybit-market.js"></script>
   <script defer src="./app/bybit-trades.js"></script>
 </body>
