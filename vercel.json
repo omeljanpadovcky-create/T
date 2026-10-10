@@ -5,6 +5,9 @@
     },
     "api/chart-analysis.js": {
       "maxDuration": 40
+    },
+    "api/pocket-vision.js": {
+      "maxDuration": 40
     }
   },
   "framework": null,
