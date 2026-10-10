@@ -232,6 +232,7 @@
           <div class="settings-card" id="cloud-settings">
             <h3>☁️ Хмарний JEV — аналіз без увімкненого ПК</h3>
             <p class="report-notice"><strong>Це окреме підключення, n8n тут не потрібен.</strong> GitHub Pages не запускає AI самостійно. На своєму Vercel-сервері перевір <code>APINEX_API_KEY</code> та створи окремий <code>JEV_ACCESS_TOKEN</code> (мінімум 24 символи). Після розгортання введи нижче URL сервера й <em>лише</em> код доступу JEV. API-ключ APInex сюди не вставляй. <a class="text-link" href="https://vercel.com/omeljanpadovcky-6074/t" target="_blank" rel="noopener noreferrer">Відкрити твій проєкт Vercel «t» ↗</a></p>
+            <p class="report-notice"><strong>Якщо APInex повертає HTTP 402:</strong> сервер авторизований, але обробка фото обмежена квотою, балансом або доступом до моделі. Можна використати прямий Gemini API без n8n: створи власний ключ у <a class="text-link" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio ↗</a>, додай його в <a class="text-link" href="https://vercel.com/omeljanpadovcky-6074/t/settings/environment-variables" target="_blank" rel="noopener noreferrer">Vercel → Environment Variables ↗</a> як <code>GEMINI_API_KEY</code> (Production) і виконай Redeploy. Коли він заданий, аналіз фото використовує прямий Gemini <code>gemini-2.5-flash-lite</code> замість APInex. Google має безкоштовний рівень із квотами; обов'язково перевір тариф свого проєкту. <strong>Сам ключ сюди або в чат не вставляй.</strong></p>
             <p class="report-notice"><strong>Без AI-сервера теж можна:</strong> переглядати 10 трейдерів Bybit, імпортувати їхні угоди та бачити розраховані показники. Для аналізу скріншота можеш надіслати фото прямо в наш чат.</p>
             <div class="cloud-settings-fields">
               <label for="cloud-endpoint">Адреса сервера (HTTPS)</label>
@@ -269,7 +270,7 @@
   </nav>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script defer src="./app/myshka-archive.js"></script>
-  <script defer src="./app/myshka.js?v=20261010-reauth"></script>
+  <script defer src="./app/myshka.js?v=20261010-402"></script>
   <script defer src="./app/bybit-market.js"></script>
   <script defer src="./app/bybit-trades.js"></script>
 </body>
