@@ -89,7 +89,7 @@
             <p class="report-notice">Окремий аналіз завершених свічок Bybit: тренд EMA 9/21, RSI 14, підтримка, опір та обсяги. <strong>Це НЕ аналіз фото AI, НЕ історія Master Traders і НЕ прогноз.</strong></p>
             <div class="public-analysis-controls">
               <label for="bybit-fast-symbol">Пара
-                <input id="bybit-fast-symbol" type="text" value="TSLAUSDT" list="bybit-fast-symbols" autocomplete="off" spellcheck="false" maxlength="24" placeholder="TSLAUSDT">
+                <input id="bybit-fast-symbol" type="text" value="BTCUSDT" list="bybit-fast-symbols" autocomplete="off" spellcheck="false" maxlength="24" placeholder="BTCUSDT">
               </label>
               <datalist id="bybit-fast-symbols">
                 <option value="TSLAUSDT"></option>
@@ -100,16 +100,16 @@
               <label for="bybit-fast-interval">Свічка
                 <select id="bybit-fast-interval">
                   <option value="1">1 хв</option>
-                  <option value="5">5 хв</option>
+                  <option value="5" selected>5 хв</option>
                   <option value="15">15 хв</option>
-                  <option value="30" selected>30 хв</option>
+                  <option value="30">30 хв</option>
                   <option value="60">1 година</option>
                   <option value="240">4 години</option>
                 </select>
               </label>
               <button id="bybit-fast-analyze" class="small-button" type="button">↻ Аналізувати Bybit</button>
             </div>
-            <div id="bybit-fast-status" role="status" aria-live="polite">Готово до аналізу TSLAUSDT · 30 хв.</div>
+            <div id="bybit-fast-status" role="status" aria-live="polite">Готово до аналізу BTCUSDT · 5 хв.</div>
             <div id="bybit-fast-output" class="public-analysis-output" aria-live="polite">Результат з’явиться тут після отримання свічок з офіційного Bybit API. Дані можуть не бути доступні для окремих інструментів.</div>
             <small class="public-analysis-source">Джерело: <a href="https://bybit-exchange.github.io/docs/v5/market/kline" target="_blank" rel="noopener noreferrer">Bybit V5 Get Kline ↗</a>. Використовуються лише завершені свічки, без відкриття угод.</small>
           </section>
@@ -325,8 +325,8 @@
   </nav>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script defer src="./app/myshka-archive.js"></script>
-  <script defer src="./app/photo-scan.js?v=20261010-context2"></script>
-  <script defer src="./app/photo-market-direction.js?v=20261010-context2"></script>
+  <script defer src="./app/photo-scan.js?v=20261010-clarity3"></script>
+  <script defer src="./app/photo-market-direction.js?v=20261010-clarity3"></script>
   <script defer src="./app/myshka.js?v=20261010-cloud-only-v2"></script>
   <script defer src="./app/bybit-market.js"></script>
   <script defer src="./app/bybit-fast-analysis.js?v=20261010-jev-bridge"></script>
