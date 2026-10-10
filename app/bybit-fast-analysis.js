@@ -12,6 +12,11 @@
   const pct=n=>Number.isFinite(n)?(n>0?'+':'')+n.toFixed(2)+'%':'—';
   let pending=false;
   let lastController=null;
+  let latestReport=null;
+  function emitReport(value){
+    latestReport=value;
+    window.dispatchEvent(new CustomEvent('crypto-myshka-market',{detail:value}));
+  }
   const normalizeSymbol=raw=>String(raw||'').toUpperCase().replace(/[\s/]/g,'').trim();
   function appendLine(title,value,detail){
     const section=document.createElement('div');
@@ -137,6 +142,7 @@
     try{localStorage.setItem('crypto-myshka-public-symbol',symbol);}catch{}
     try{localStorage.setItem('crypto-myshka-public-interval',interval);}catch{}
     pending=true;button.disabled=true;
+    emitReport(null);
     status.textContent='⏳ Отримуємо '+symbol+' · '+allowedIntervals[interval]+' хв із Bybit…';
     output.textContent='Завантажуємо тільки публічні свічки. AI-код не потрібен.';
     const controller=new AbortController();lastController=controller;
@@ -152,6 +158,20 @@
         const t=await requestJson(host+'/v5/market/tickers?category=linear&symbol='+encodeURIComponent(symbol),controller);
         if(t.retCode===0)ticker=t.result?.list?.find(x=>x.symbol===symbol)||null;
       }catch{}
+      emitReport(Object.freeze({
+        source:'bybit_v5_market_kline',verifiedMarketFeed:true,symbol,
+        intervalMinutes:allowedIntervals[interval],
+        lastClosedAt:new Date(calc.last.start+allowedIntervals[interval]*60000).toISOString(),
+        completedCandles:calc.completed,observedAt:new Date().toISOString(),
+        indicators:{
+          lastClose:calc.last.close,ema9:calc.ma9,ema21:calc.ma21,rsi14:calc.rsi14,
+          support:calc.support,resistance:calc.resistance,volumeRatio:calc.volumeRatio,
+          range10Pct:calc.nearRange,change1Pct:calc.singleChange,change5Pct:calc.fiveChange,
+          regime:calc.regime,volumeNote:calc.volumeNote
+        },
+        currentTicker:Number.isFinite(Number(ticker?.lastPrice))&&ticker?Number(ticker.lastPrice):null,
+        positionsVerified:false,ordersEnabled:false
+      }));
       showAnalysis(symbol,allowedIntervals[interval],calc,ticker);
       status.textContent='✅ Огляд побудовано за '+calc.completed+' завершеними свічками · '+new Date().toLocaleTimeString('uk-UA')+' · без JEV';
     }catch(e){
@@ -171,7 +191,7 @@
     const prior=localStorage.getItem('crypto-myshka-public-interval');
     if(prior && Object.hasOwn(allowedIntervals,prior))timeframe.value=prior;
   }catch{}
-  window.cryptoMyshkaPublicAnalysis={run,selectSymbol(symbol){
+  window.cryptoMyshkaPublicAnalysis={run,getLastReport(){return latestReport;},selectSymbol(symbol){
     const normalized=normalizeSymbol(symbol);
     if(/^[A-Z0-9]{3,22}$/.test(normalized))input.value=normalized;
   }};
