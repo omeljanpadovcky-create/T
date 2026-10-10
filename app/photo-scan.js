@@ -205,7 +205,7 @@
     title.style.margin='0 0 8px';
     const explain=document.createElement('p');
     explain.className='report-notice';
-    explain.textContent='Головний результат: ↑ ВГОРУ або ↓ ВНИЗ — це лише рух, який видно на вже зробленому фото, НЕ передбачення наступної свічки. За браком даних буде «НЕВИЗНАЧЕНО». Виділи сам графік; за потреби вибери кольори свічок.';
+    explain.textContent='Спершу автоматично шукаємо сам графік без меню та книги ордерів. Результат ↑ ВГОРУ / ↓ ВНИЗ описує лише вже намальовані свічки, не майбутню ціну. За браком даних — НЕВИЗНАЧЕНО. Можна обвести графік вручну або вибрати кольори свічок.';
     const canvas=document.createElement('canvas');
     canvas.style.cssText='display:block;max-width:100%;width:100%;height:auto;border-radius:8px;border:1px solid #8194aa;touch-action:none;cursor:crosshair';
     canvas.setAttribute('role','img');
@@ -223,7 +223,7 @@
       w:Math.floor(w*.83),h:Math.floor(h*.72)});
     const detectCrop=()=>findChartBounds(source.getContext('2d',{willReadFrequently:true})
       .getImageData(0,0,w,h),{colors})||fallbackCrop();
-    let crop=detectCrop();
+    let crop=detectCrop(),userCrop=false;
     let origin=null,dragging=false,lastShapes=[];
     function draw(){
       ctx.clearRect(0,0,w,h);
@@ -264,6 +264,7 @@
           if(selected===1 && color1){color1.textContent='✓ Колір 1 вибрано';color1.style.borderColor=sampled.css;}
           if(selected===2 && color2){color2.textContent='✓ Колір 2 вибрано';color2.style.borderColor=sampled.css;}
           out.textContent='Палітру оновлено, виконуємо сканування за вибраним кольором…';
+          if(!userCrop){crop=detectCrop();lastShapes=[];draw();}
           scan();
         }
         return;
@@ -284,8 +285,8 @@
       dragging=false;const at=where(e);
       const next={x:Math.min(at.x,origin.x),y:Math.min(at.y,origin.y),
         w:Math.abs(at.x-origin.x),h:Math.abs(at.y-origin.y)};
-      if(next.w>50 && next.h>45)crop=next;
-      else crop=detectCrop();
+      if(next.w>50 && next.h>45){crop=next;userCrop=true;}
+      else {crop=detectCrop();userCrop=false;}
       lastShapes=[];draw();
     });
     canvas.addEventListener('pointercancel',()=>{dragging=false;origin=null;draw();});
@@ -294,7 +295,7 @@
     const button=document.createElement('button');button.type='button';button.className='small-button';
     button.textContent='🔎 Сканувати вибрану область';
     const reset=document.createElement('button');reset.type='button';reset.className='small-button';
-    reset.textContent='↺ Скинути рамку';
+    reset.textContent='↺ Знайти графік автоматично';
     color1=document.createElement('button');color1.type='button';color1.className='small-button';
     color1.textContent='🎨 Вибрати колір 1 (зелений)';
     color2=document.createElement('button');color2.type='button';color2.className='small-button';
@@ -307,6 +308,7 @@
       delete colors[1];delete colors[2];picking=0;
       color1.textContent='🎨 Вибрати колір 1 (зелений)';color1.style.borderColor='';
       color2.textContent='🎨 Вибрати колір 2 (червоний)';color2.style.borderColor='';
+      if(!userCrop){crop=detectCrop();lastShapes=[];draw();}
       scan();
     });
     const out=document.createElement('div');
@@ -335,7 +337,7 @@
       out.replaceChildren(label,qualifier,technical);
     }
     reset.addEventListener('click',()=>{
-      crop=detectCrop();lastShapes=[];draw();scan();
+      userCrop=false;crop=detectCrop();lastShapes=[];draw();scan();
     });
     function scan(){
       if(crop.w<50||crop.h<45){showVerdict('unknown','Збільш виділену область графіка.');return;}
