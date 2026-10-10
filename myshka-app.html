@@ -27,12 +27,12 @@
 <a href="./index.html">← Старий сайт (архів)</a></div>
 </aside>
 <div class="workspace">
-<header class="topbar"><div class="mini-brand"><span>🐭</span><strong>Crypto Myshka</strong><small>Pocket Lab</small></div><span id="cloud-indicator" class="pill">⏳ Перевіряємо Pocket API</span></header>
+<header class="topbar"><div class="mini-brand"><span>🐭</span><strong>Crypto Myshka</strong><small>Pocket Lab</small></div><span id="cloud-indicator" class="pill">🐭 JEV локально · без ключів</span></header>
 <main id="main">
 <section id="screen-home" data-screen="home" class="screen">
 <div class="overline">POCKET OPTION · SCREENSHOT RESEARCH</div>
 <h1>Мишка аналізує. <span class="accent">Ти перевіряєш.</span></h1>
-<p class="lead">Окремий режим для графіків Pocket Option, зокрема OTC. Скріншот → опис свічок → обережна гіпотеза JEV (якщо хмарна модель доступна) → демоперевірка.</p>
+<p class="lead">Окремий режим для графіків Pocket Option, зокрема OTC. Скріншот → локальний аналіз свічок → пояснення JEV → демоперевірка. Без AI-ключів.</p>
 <div class="hero"><div><span class="pill safe">ЖОДНИХ РЕАЛЬНИХ СТАВОК</span><h2>ВГОРУ · ВНИЗ · СТОП</h2><p>Висновок на одну обрану експірацію. Не змішуємо Pocket Option OTC із котируваннями Bybit чи Binance.</p><button class="btn primary" type="button" data-go="analysis">Перейти до аналізу ↗</button></div><div class="hero-chart" aria-hidden="true"><span class="candle c1"></span><span class="candle c2"></span><span class="candle c3"></span><span class="candle c4"></span><span class="candle c5"></span><span class="hero-mouse">🐭</span></div></div>
 <div class="statgrid"><div class="stat"><small>Зареєстровано демогіпотез</small><strong id="home-total">0</strong></div><div class="stat"><small>Завершено вручну</small><strong id="home-checked">0</strong></div><div class="stat"><small>Останній результат</small><strong id="home-last">—</strong></div></div>
 <div class="notice"><strong>Чому OTC окремо?</strong><p>Котирування EUR/USD OTC на Pocket Option можуть відрізнятися від міжбанківських та біржових. Фото саме по собі не містить достовірного майбутнього руху й не підтверджує виграш.</p></div>
@@ -57,7 +57,7 @@
 <div class="card">
 <div class="section-title"><h2>2. Скріншот графіка</h2><span class="pill">JPG · PNG · WebP</span></div>
 <div class="actions"><label class="btn primary" for="pocket-photo">📷 Обрати фото</label><input id="pocket-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden><button class="btn" id="paste-photo" type="button">Вставити з буфера</button><button class="btn" id="clear-photo" type="button">Очистити фото</button></div>
-<p class="hint">Можеш просто натиснути Ctrl+V після Win+Shift+S. Фото не передається до AI, доки не натиснеш відповідну кнопку. Обведи лише поле графіка, без балансу, профілю, ставок і меню.</p>
+<p class="hint">Можеш просто натиснути Ctrl+V після Win+Shift+S. Фото залишається на твоєму пристрої. Обведи лише поле графіка, без балансу, профілю, ставок і меню.</p>
 <div id="empty-photo" class="dropzone" tabindex="0">📉<strong>Тут з’явиться графік Pocket Option</strong><span>Завантаж скріншот або встав зображення</span></div>
 <div id="photo-stage" class="photo-stage" hidden><canvas id="pocket-canvas" aria-label="Обведи мишею або пальцем область свічкового графіка"></canvas><p id="image-info" class="hint"></p><div class="actions"><button id="auto-crop" class="btn" type="button">⤢ Знайти свічки</button><button id="reset-crop" class="btn" type="button">↺ Скинути область</button><button id="scan-pixels" class="btn" type="button">🔬 Описати минулий рух</button></div></div>
 <div id="scan-output" class="scan-result" role="status" aria-live="polite">Локальний сканер прочитає кольорові свічки тільки на завантаженому фото. Це не прогноз.</div>
@@ -65,10 +65,10 @@
 
 <div class="card focus-card" id="pocket-ai-card">
 <div class="section-title"><h2>3. Гіпотеза JEV</h2><span class="pill safe">DEMO · NO AUTO-TRADE</span></div>
-<p class="hint">Відправляється тільки виділена частина фото. AI може запропонувати ↑ ВГОРУ, ↓ ВНИЗ або СТОП на вибрану експірацію. Для OTC це неперевірена гіпотеза зі скріншота, а не точні котирування.</p>
-<div class="actions"><button class="btn primary" id="run-pocket-ai" type="button" disabled>🤖 Проаналізувати фото через JEV</button><button class="btn" type="button" data-go="settings">🔑 Хмарний JEV</button></div>
-<p id="ai-status" class="hint" role="status">Спершу завантаж фото й підключи хмарний AI.</p>
-<div id="ai-verdict" class="verdict" aria-live="polite"><span class="overline">ОЦІНКА НА НАСТУПНУ ЕКСПІРАЦІЮ</span><strong id="ai-direction">⏸ СТОП</strong><p id="ai-reason">Немає перевіреної відповіді AI. Не робимо висновок на основі випадкового кольору свічок.</p><p id="ai-risk" class="hint"></p><p id="ai-meta" class="hint"></p></div>
+<p class="hint">Фото аналізується локально на пристрої. JEV описує минулі свічки та ризики; без незалежних OTC-котирувань не видає неперевірений прогноз як достовірний.</p>
+<div class="actions"><button class="btn primary" id="run-pocket-ai" type="button" disabled>🐭 Аналіз JEV · без ключів</button></div>
+<p id="ai-status" class="hint" role="status">Завантаж фото для локального аналізу.</p>
+<div id="ai-verdict" class="verdict" aria-live="polite"><span class="overline">ОЦІНКА НА НАСТУПНУ ЕКСПІРАЦІЮ</span><strong id="ai-direction">⏸ СТОП</strong><p id="ai-reason">Без перевірених даних наступний напрям невідомий.</p><p id="ai-risk" class="hint"></p><p id="ai-meta" class="hint"></p></div>
 <div class="actions"><button id="save-paper" class="btn" type="button" disabled>📓 Записати гіпотезу в деможурнал</button></div>
 </div>
 <div class="notice"><strong>Як оцінюємо результат?</strong><p>Лише після закінчення експірації познач його вручну за фактичною ціною Pocket Option. «Влучив»/«Помилився» не підтверджені брокером і не є автоматичним навчанням моделі. Нуль угод і СТОП — нормальний результат.</p></div>
@@ -94,8 +94,8 @@
 </section>
 
 <section id="screen-settings" data-screen="settings" class="screen" hidden>
-<div class="overline">CLOUD · VERCEL</div><h1>Налаштування JEV</h1>
-<p class="lead">Тільки хмарний режим. Без PowerShell, Ollama і локального AI. Код доступу JEV не є API-ключем провайдера.</p>
+<div class="overline">CLOUD · VERCEL</div><h1>JEV · локальний режим</h1>
+<p class="lead">Локальний аналіз фото працює без хмарного сервера та ключів. Налаштування нижче — застарілий необов’язковий хмарний режим.</p>
 <div class="card settings-card">
 <label>Vercel HTTPS URL<input id="cloud-endpoint" type="url" autocomplete="url" value="https://t-zeta-ashy.vercel.app" spellcheck="false"></label>
 <label>Код доступу JEV<input id="cloud-access" type="password" autocomplete="off" placeholder="Окремий код JEV_ACCESS_TOKEN"></label>
@@ -114,6 +114,6 @@
 <nav class="mobile-nav" aria-label="Мобільна навігація"><button data-go="home">⌂<small>Головна</small></button><button data-go="analysis">▥<small>Аналіз</small></button><button data-go="history">◷<small>Демо</small></button><button data-go="archive">▤<small>База</small></button><button data-go="settings">⚙<small>JEV</small></button></nav>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <script defer src="./app/photo-scan.js?v=20261010-pocket1"></script>
-<script defer src="./app/pocket-option.js?v=20261010-pocket5"></script>
+<script defer src="./app/pocket-option.js?v=20261011-local1"></script>
 </body>
 </html>
