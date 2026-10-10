@@ -159,8 +159,10 @@
     else if (!state.cloudAccess) label.textContent = '🔑 Адресу збережено, але код JEV не зберігається назавжди. Після відкриття нової вкладки його потрібно ввести знову (це не API-ключ APInex).';
     else if (state.visionSource === 'cloud' && state.visionStatus === 'ready')
       label.textContent = '🟢 Хмарний JEV доступний. Фото надсилатиметься лише у хмарному режимі або за дозволом автоматичного перемикання.';
+    else if (state.visionStatus === 'quota_blocked')
+      label.textContent = '⛔ AI-провайдер відхилив аналіз із HTTP 402. Каталог моделей доступний, але обробка фото обмежена. Перевір квоту або налаштуй прямий Gemini API.';
     else if (state.visionSource === 'cloud' && state.visionStatus === 'provisional')
-      label.textContent = '🟠 APInex налаштовано, але доступність моделі перевірить перший запит фото.';
+      label.textContent = '🟠 AI-сервер доступний, але успішність обробки фото ще не підтверджена.';
     else label.textContent = 'Адресу збережено. Перевірка хмарного JEV: ' +
       (state.visionStatus === 'checking' ? 'очікування…' : 'не готовий або працює локальний JEV.');
   }
@@ -260,6 +262,7 @@
     const label = ready ? (state.visionSource === 'cloud' ? 'JEV хмарний готовий' : 'JEV готовий · локально') :
       state.visionStatus === 'provisional' ? 'JEV: перевірити фото' :
       state.visionStatus === 'checking' ? 'Перевіряємо JEV' :
+      state.visionStatus === 'quota_blocked' ? '⛔ AI: HTTP 402 — доступ обмежено' :
       state.visionStatus === 'missing_model' ? 'Потрібна модель Ollama' :
       !local && state.prefs.visionMode === 'local' ? 'Ollama: відкрий локальну Мишку' :
       state.prefs.visionMode === 'cloud' && !state.cloudAccess ? '🔑 Хмарний JEV: введи код доступу' :
@@ -627,7 +630,8 @@
         status.textContent = target === 'local'
           ? '🟢 JEV готовий · локальна Ollama (' + (result.model || 'AI') + ')'
           : provisional
-            ? '🟠 APInex налаштовано, але роботу моделі перевірить запит фото.'
+            ? '🟠 ' + (result.provider === 'gemini' ? 'Gemini' : 'APInex') +
+                ' доступний (' + (result.model || 'AI') + '), але аналіз фото ще не підтверджено.'
             : '🟢 JEV готовий · хмарний ' + (result.provider === 'apinex' ? 'APInex' : 'Gemini') +
               ' (' + (result.model || 'AI') + ')';
         statusPill();
@@ -781,8 +785,19 @@
                     });
                     const answer = await response.json().catch(() => ({}));
                     if (!response.ok) {
-                      throw new Error((response.status === 402 || /HTTP\s*402\b/i.test(String(answer.error || '')))
-                        ? '⛔ APInex відмовив у запиті (HTTP 402): перевір безкоштовну модель JEV_APINEX_MODEL, доступний ліміт і баланс API. Фото не аналізувалося. Повторні спроби не допоможуть, доки провайдер не надасть доступ.'
+                      const quotaBlocked = response.status === 402 || /HTTP\s*402\b/i.test(String(answer.error || ''));
+                      if (quotaBlocked && cloud) {
+                        state.visionStatus = 'quota_blocked';
+                        const liveStatus = $('vision-status');
+                        if (liveStatus) {
+                          liveStatus.dataset.ready = 'false';
+                          liveStatus.textContent = '⛔ Хмарний AI відхилив аналіз із HTTP 402. Потрібно перевірити доступ і квоту провайдера або налаштувати прямий Gemini.';
+                        }
+                        statusPill();
+                        updateCloudSettings();
+                      }
+                      throw new Error(quotaBlocked
+                        ? '⛔ HTTP 402: AI-провайдер не дозволив обробити фото через обмеження доступу, квоти або оплати. Спробуй прямий Gemini API у Налаштуваннях або перевір свій APInex-акаунт. Фото НЕ проаналізоване.'
                         : String(answer.error || 'Помилка AI-сервера (HTTP ' + response.status + ')').slice(0,160));
                     }
                     if (!answer || typeof answer !== 'object' || !['ВГОРУ', 'ВНИЗ', 'НЕВИЗНАЧЕНО'].includes(answer.direction)) {
