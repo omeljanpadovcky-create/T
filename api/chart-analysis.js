@@ -6,7 +6,7 @@ const ALLOWED_ORIGINS = new Set([
   'http://127.0.0.1:18765',
   'http://localhost:18765'
 ]);
-const TIMEFRAMES = { '15s': 15, '30s': 30, '1m': 60, '5m': 300 };
+const TIMEFRAMES = { '15s': 15, '30s': 30, '1m': 60, '5m': 300, '15m': 900, '30m': 1800, '1h': 3600, '4h': 14400 };
 const EXPIRIES = new Set([30, 60, 300]);
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 function modelAndProvider() {
@@ -74,10 +74,11 @@ const SYSTEM = `Ти JEV, асистент для дослідження ДЕМ�
 Таймер 00:01:00 біля кнопок — це час угоди, не таймфрейм.
 Відповідай тільки JSON з ключами:
 direction ("ВГОРУ", "ВНИЗ", "НЕВИЗНАЧЕНО"),
-readable (boolean), chart_timeframe ("15s", "30s", "1m", "5m", "unknown"),
+readable (boolean), chart_timeframe ("15s", "30s", "1m", "5m", "15m", "30m", "1h", "4h", "unknown"),
 test_expiry_seconds (30, 60, 300 або null), evidence (короткий факт зі скріншота).
 Якщо свічок не видно, таймфрейм невідомий, графік змішаний, або немає
 зрозумілої структури — direction "НЕВИЗНАЧЕНО", readable false, expiry null.
+Якщо свічки 15 хв або довші, test_expiry_seconds завжди null — короткостроковий демосигнал не обґрунтований.
 Час експірації — лише неперевірена гіпотеза для демо, не сигнал торгувати.
 Не вигадуй цін, індикаторів, прибутків або точності.`;
 
