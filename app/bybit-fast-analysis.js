@@ -185,15 +185,36 @@
   const picker=document.getElementById('pair-search');
   // Search field is distinct from Bybit symbol selection: do not silently change
   // contract and mistake an OTC or non-Bybit instrument for an official ticker.
-  try{
+  try {
     const saved=localStorage.getItem('crypto-myshka-public-symbol');
-    if(saved && /^[A-Z0-9]{3,22}$/.test(saved))input.value=saved;
     const prior=localStorage.getItem('crypto-myshka-public-interval');
-    if(prior && Object.hasOwn(allowedIntervals,prior))timeframe.value=prior;
-  }catch{}
-  window.cryptoMyshkaPublicAnalysis={run,getLastReport(){return latestReport;},selectSymbol(symbol){
-    const normalized=normalizeSymbol(symbol);
-    if(/^[A-Z0-9]{3,22}$/.test(normalized))input.value=normalized;
-  }};
+    const migration='crypto-myshka-public-default-btc5-v1';
+    // Older releases auto-saved TSLA/30 as a default without user intent.
+    // Migrate only that exact old default once, preserving other manual choices.
+    if (!localStorage.getItem(migration) && saved==='TSLAUSDT' && prior==='30') {
+      input.value='BTCUSDT'; timeframe.value='5';
+      localStorage.setItem('crypto-myshka-public-symbol','BTCUSDT');
+      localStorage.setItem('crypto-myshka-public-interval','5');
+    } else {
+      if (saved && /^[A-Z0-9]{3,22}$/.test(saved)) input.value=saved;
+      if (prior && Object.hasOwn(allowedIntervals,prior)) timeframe.value=prior;
+    }
+    localStorage.setItem(migration,'true');
+  } catch {}
+  window.cryptoMyshkaPublicAnalysis={
+    run,
+    getLastReport(){return latestReport;},
+    selectMarket({symbol,interval='5',analyze=false}={}) {
+      const normalized=normalizeSymbol(String(symbol||''));
+      if (!/^[A-Z0-9]{3,22}$/.test(normalized) || !Object.hasOwn(allowedIntervals,String(interval))) return false;
+      input.value=normalized; timeframe.value=String(interval);
+      if (analyze) run();
+      return true;
+    },
+    selectSymbol(symbol){
+      const normalized=normalizeSymbol(symbol);
+      if(/^[A-Z0-9]{3,22}$/.test(normalized))input.value=normalized;
+    }
+  };
   run();
 })();
