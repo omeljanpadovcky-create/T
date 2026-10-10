@@ -10,10 +10,12 @@ const TIMEFRAMES = { '15s': 15, '30s': 30, '1m': 60, '5m': 300 };
 const EXPIRIES = new Set([30, 60, 300]);
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 function modelAndProvider() {
+  // When a direct Gemini key is configured, prefer Google's documented
+  // Flash-Lite free-tier vision path. Never silently fall back to a billable API.
+  const geminiKey = (process.env.GEMINI_API_KEY || '').trim();
+  if (geminiKey) return {provider:'gemini',model:process.env.JEV_CLOUD_MODEL || 'gemini-2.5-flash-lite',key:geminiKey};
   const apinexKey = (process.env.APINEX_API_KEY || '').trim();
   if (apinexKey) return {provider:'apinex',model:process.env.JEV_APINEX_MODEL || 'gemini-3.8-flash',key:apinexKey};
-  const geminiKey = (process.env.GEMINI_API_KEY || '').trim();
-  if (geminiKey) return {provider:'gemini',model:process.env.JEV_CLOUD_MODEL || 'gemini-2.5-flash',key:geminiKey};
   return null;
 }
 
