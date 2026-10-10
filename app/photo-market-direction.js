@@ -76,12 +76,20 @@
     for(const row of payload.result.list){
       const start=Number(row[0]),open=Number(row[1]),high=Number(row[2]),low=Number(row[3]),close=Number(row[4]);
       if(![start,open,high,low,close].every(Number.isFinite)||start<=0||low<=0||open<=0||
-         close<=0||high<Math.max(open,close,low)||start+minutes*60000>now-1500)continue;
+         close<=0||high<Math.max(open,close,low)||low>Math.min(open,close)||
+         start+minutes*60000>now-1500)continue;
       candles.set(start,{start,open,high,low,close});
     }
     const completed=[...candles.values()].sort((a,b)=>a.start-b.start);
     if(completed.length<6)throw new Error('Недостатньо завершених свічок для порівняння.');
     const recent=completed.slice(-6),first=recent[0],last=recent[5];
+    const step=minutes*60000;
+    if(recent.some((row,i)=>i>0 && row.start-recent[i-1].start!==step))
+      throw new Error('В останніх шести свічках є пропуски. Напрям не визначено.');
+    // A gap inside the backtest would compare non-adjacent candles and overstate
+    // performance. Return a neutral scenario rather than a fabricated hit rate.
+    const scenarioHistory=completed.slice(-65);
+    const hasGaps=scenarioHistory.some((row,i)=>i>0 && row.start-scenarioHistory[i-1].start!==step);
     // We do not substitute old market history for the user's current chart.
     const age=now-(last.start+minutes*60000);
     if(age>minutes*60000*3)
@@ -90,7 +98,9 @@
     const direction=Math.abs(delta)<.005?'unknown':delta>0?'up':'down';
     return {symbol,category,intervalMinutes:minutes,completedCount:completed.length,
       direction,changePct:delta,
-      scenario:evaluate(completed),
+      scenario:hasGaps?
+        {bias:'unknown',score:0,reasons:[],trials:0,hits:0,misses:0,skipped:0,observedAccuracy:null}:
+        evaluate(completed),
       firstClose:first.close,lastClose:last.close,
       lastClosedAt:new Date(last.start+minutes*60000).toISOString(),
       source:'Bybit V5 /v5/market/kline',notScreenshot:true,
