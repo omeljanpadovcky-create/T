@@ -61,6 +61,10 @@
   ask.addEventListener('click', async () => {
     const snapshot = lastSnapshot;
     if (busy || !snapshot) return;
+    if (/^https?:\/\//i.test(question.value.trim())) {
+      status.textContent = 'ℹ️ У поле «Що уточнити у JEV?» потрібно писати питання, наприклад «Що показує RSI?». Адреса https://t-zeta-ashy.vercel.app налаштовується в «Налаштування → Хмарний JEV».';
+      return;
+    }
     const cfg = credentials();
     if (!cfg || cfg.access.length < 24) {
       status.textContent = '🔑 Для окремого AI-аналізу відкрий «Налаштування» та підключи хмарний JEV. Математичний аналіз працює без ключа.';
