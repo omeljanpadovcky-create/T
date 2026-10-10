@@ -334,7 +334,20 @@
       description.style.whiteSpace='pre-wrap';
       description.textContent=details||'';
       technical.append(summary,description);
-      out.replaceChildren(label,qualifier,technical);
+      const scenarioButton=document.createElement('button');
+      scenarioButton.type='button';
+      scenarioButton.className='small-button';
+      scenarioButton.textContent='🧠 Перейти до сценарію НАСТУПНИХ 5 хв ↑';
+      scenarioButton.style.cssText='display:inline-block;margin:9px 0';
+      scenarioButton.addEventListener('click',()=>{
+        const target=container.querySelector('.screenshot-market-direction') ||
+          document.querySelector('.screenshot-market-direction');
+        if(!target)return;
+        target.scrollIntoView?.({behavior:'smooth',block:'start'});
+        const pair=target.querySelector('input');
+        if(pair){try{pair.focus({preventScroll:true});}catch{pair.focus();}}
+      });
+      out.replaceChildren(label,qualifier,scenarioButton,technical);
     }
     reset.addEventListener('click',()=>{
       userCrop=false;crop=detectCrop();lastShapes=[];draw();scan();
