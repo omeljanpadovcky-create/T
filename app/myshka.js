@@ -889,7 +889,18 @@
             });
           }
           aiArea.append(aiButton, aiResult);
-          info.append(preview, fileLabel, heading, note, aiArea);
+          const expandPreview = document.createElement('button');
+          expandPreview.type = 'button';
+          expandPreview.className = 'small-button chart-preview-toggle';
+          expandPreview.textContent = '🔎 Розгорнути графік';
+          expandPreview.setAttribute('aria-expanded', 'false');
+          expandPreview.addEventListener('click', () => {
+            const expanded = preview.classList.toggle('chart-photo-expanded');
+            expandPreview.textContent = expanded ? '🔎 Згорнути графік' : '🔎 Розгорнути графік';
+            expandPreview.setAttribute('aria-expanded', String(expanded));
+          });
+          // Keep inference status visible ahead of the large chart screenshot.
+          info.append(heading, aiArea, preview, fileLabel, expandPreview, note);
           box.replaceChildren(info);
           if (visionTargets().length) aiButton.click();
         };
