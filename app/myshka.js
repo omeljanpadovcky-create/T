@@ -784,7 +784,7 @@
               if (controls[0]) controls[0].value = marketPair.value;
               if (controls[1]) controls[1].value = marketType.value;
             });
-            box.addEventListener('change', event => {
+            aiArea.addEventListener('change', event => {
               if (event.target.closest('.screenshot-market-direction')) mirror();
             });
             // The public scenario is attached later during photo initialization.
