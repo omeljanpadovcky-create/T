@@ -953,6 +953,11 @@
           // the working offline flow. Its canvas stays on the user's device.
           const offlineMount = document.createElement('div');
           aiArea.appendChild(offlineMount);
+          if (window.cryptoMyshkaPhotoMarket && typeof window.cryptoMyshkaPhotoMarket.attach === 'function') {
+            // Separate public market comparison. Symbol is selected explicitly
+            // by the visitor, never assumed from a screenshot or OTC image.
+            window.cryptoMyshkaPhotoMarket.attach({container:offlineMount});
+          }
           if (window.cryptoMyshkaPhotoScan && typeof window.cryptoMyshkaPhotoScan.attach === 'function') {
             window.cryptoMyshkaPhotoScan.attach({image,container:offlineMount,fileName:file.name});
           }
