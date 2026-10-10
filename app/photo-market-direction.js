@@ -215,6 +215,13 @@
         const verdict=review(data,pair,period,market);
         if(!panel.isConnected)return;
         render(verdict);
+        // Keep the ordinary OHLCV summary on the same pair and interval only
+        // after the user explicitly requested this screenshot-related comparison.
+        if (market==='linear' && window.cryptoMyshkaPublicAnalysis?.selectMarket) {
+          window.cryptoMyshkaPublicAnalysis.selectMarket({
+            symbol:pair,interval:period,analyze:true
+          });
+        }
         status.textContent='✅ Отримано завершені свічки Bybit. Гіпотеза не є торговим сигналом.';
       }catch(e){
         if(!panel.isConnected)return;
