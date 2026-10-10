@@ -201,7 +201,7 @@
     section.className='offline-photo-scanner';
     section.style.cssText='padding:14px;margin:12px 0;border:1px solid #8ea7c1;border-radius:14px;overflow:hidden';
     const title=document.createElement('h3');
-    title.textContent='🔬 Що вже відбулося на фото';
+    title.textContent='🕒 Минулі свічки на фото · не прогноз';
     title.style.margin='0 0 8px';
     const explain=document.createElement('p');
     explain.className='report-notice';
@@ -316,16 +316,16 @@
     out.style.cssText='font-size:13px;line-height:1.55;overflow-wrap:anywhere';
     function showVerdict(direction,details){
       // Only report observed movement when the pixel evidence passes quality checks.
-      const labels={up:'НА ФОТО: ↑ РІСТ',down:'НА ФОТО: ↓ СПАД',unknown:'НА ФОТО: НЕВИЗНАЧЕНО'};
+      const labels={up:'Минуле фото: ↑ ріст',down:'Минуле фото: ↓ спад',unknown:'Минуле фото: напрям невизначений'};
       const label=document.createElement('div');
       label.textContent=labels[direction]||labels.unknown;
-      label.style.cssText='font-size:clamp(20px,4vw,31px);font-weight:750;letter-spacing:.01em;line-height:1.3;margin:8px 0;';
+      label.style.cssText='font-size:clamp(16px,2.4vw,21px);font-weight:650;letter-spacing:.01em;line-height:1.3;margin:8px 0;';
       label.style.color='inherit';
       const qualifier=document.createElement('div');
       qualifier.className='report-notice';
       qualifier.textContent=direction==='unknown'?
         'Для висновку бракує надійно розпізнаних свічок. Напрям не вгадуємо.':
-        'ЛИШЕ вже намальований рух на цьому зображенні. До наступної свічки висновок не має стосунку.';
+        'Це НЕ сигнал ВГОРУ/ВНИЗ на майбутнє. Для сценарію наступних 3–5 хв обери BTCUSDT · ф’ючерси · 5 хв у блоці «Актуальний ринок» вище й перевір реальні дані Bybit.';
       const technical=document.createElement('details');
       technical.style.marginTop='10px';
       const summary=document.createElement('summary');
