@@ -30,11 +30,14 @@ main{width:100%;max-width:1120px;margin:0 auto;flex:1;min-width:0}h1,h2,h3,h4{fo
 .demo-controls>span{font-size:11px;color:var(--muted)}
 .demo-banner{margin:0 0 12px;border:1px solid #eac28f;background:var(--orange-soft);color:var(--orange);border-radius:13px;padding:13px 16px;font-size:11px;letter-spacing:.035em;font-weight:900;line-height:1.55}
 
-/* Uploaded chart preview appears above the local analysis, including on mobile. */
+/* AI status comes first; keep the chart preview compact until expanded. */
 .photo-report{overflow:hidden}
-.chart-photo-preview{display:block;width:100%;max-height:520px;object-fit:contain;border:1px solid var(--line);border-radius:14px;background:var(--bg,#f3f6fc);margin:0 0 12px}
-.chart-photo-filename{font-size:12px;color:var(--muted);overflow-wrap:anywhere;margin:0 0 16px}
-@media(max-width:600px){.chart-photo-preview{max-height:65vh;border-radius:10px}}
+.chart-photo-preview{display:block;width:100%;max-height:260px;object-fit:contain;border:1px solid var(--line);border-radius:14px;background:var(--bg,#f3f6fc);margin:10px 0}
+.chart-photo-preview.chart-photo-expanded{max-height:none}
+.chart-photo-filename{font-size:12px;color:var(--muted);overflow-wrap:anywhere;margin:0 0 10px}
+.chart-preview-toggle{margin-bottom:10px}
+.photo-report .jev-image-area{border-top:0;padding-top:0;margin:8px 0 16px;border-bottom:1px solid var(--line);padding-bottom:12px}
+@media(max-width:600px){.chart-photo-preview{max-height:180px;border-radius:10px}.chart-photo-preview.chart-photo-expanded{max-height:none}}
 
 /* Vision AI result: distinct from the preliminary pixel count. */
 .jev-image-area{border-top:1px solid var(--line);padding-top:16px;margin-top:18px}
