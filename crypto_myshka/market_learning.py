@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only Bybit 15m research. No orders, secrets or claims of model fine-tuning.
+"""Read-only 5-minute crypto market research. No orders, secrets or claims of model fine-tuning.
 
 Scheduled invocations persist *prospective* predictions before the next bar exists,
 then score each prediction using a later confirmed closed candle. Backtest train and
@@ -20,13 +20,13 @@ from collections import defaultdict
 
 SYMBOLS = ("BTCUSDT", "ETHUSDT", "SOLUSDT")
 START_MS = int(dt.datetime(2026, 1, 1, tzinfo=dt.timezone.utc).timestamp() * 1000)
-STEP = 15 * 60 * 1000
+STEP = 5 * 60 * 1000
 API = "https://api.bybit.com/v5/market/kline"
 BINANCE_API = "https://data-api.binance.vision/api/v3/klines"
 BYBIT_SOURCE = "Bybit V5 linear"
 BINANCE_SOURCE = "Binance Spot public (Bybit 403 fallback; NOT Bybit futures)"
 ACTIVE_SOURCE = BYBIT_SOURCE
-STATE_FILE = pathlib.Path("crypto_myshka/data/market_learning.json")
+STATE_FILE = pathlib.Path("crypto_myshka/data/market_learning_5m.json")
 ASSUMED_ROUND_TRIP_COST_PCT = 0.14  # illustration, not measured fees/spread/funding
 USER_AGENT = "CryptoMyshka-Bybit-ReadOnly-Research/1.0"
 
@@ -38,13 +38,13 @@ def utc_iso(ms):
 def request_bars(symbol, start, end):
     if ACTIVE_SOURCE == BINANCE_SOURCE:
         query = urllib.parse.urlencode({
-            "symbol": symbol, "interval": "15m",
+            "symbol": symbol, "interval": "5m",
             "startTime": start, "endTime": end, "limit": 1000,
         })
         url = BINANCE_API + "?" + query
     elif ACTIVE_SOURCE == BYBIT_SOURCE:
         query = urllib.parse.urlencode({
-            "category": "linear", "symbol": symbol, "interval": "15",
+            "category": "linear", "symbol": symbol, "interval": "5",
             "start": start, "end": end, "limit": 1000,
         })
         url = API + "?" + query
@@ -337,7 +337,7 @@ def run(path=STATE_FILE, now=None, fetcher=fetch_history):
     state["symbols"] = updates
     state["version"] = 1
     state["updated_at"] = today
-    state["interval_minutes"] = 15
+    state["interval_minutes"] = 5
     state["history_requested_since"] = "2026-01-01T00:00:00Z"
     state["market"] = ACTIVE_SOURCE
     state["mode"] = "read_only_research"
