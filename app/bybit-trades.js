@@ -52,4 +52,24 @@ input.addEventListener('change',async()=>{
 });
 clear?.addEventListener('click',()=>{localStorage.removeItem(key);render([]);status.textContent='Імпорт очищено';});
 try{const saved=JSON.parse(localStorage.getItem(key)||'[]');if(Array.isArray(saved)&&saved.length)render(saved)}catch{localStorage.removeItem(key)}
+const autoStatus=document.getElementById('bybit-auto-status'),autoRefresh=document.getElementById('bybit-auto-refresh');
+async function loadAuto(){
+ if(!autoStatus)return;
+ autoStatus.textContent='Перевіряємо архів Master Traders…';
+ try{
+  const res=await fetch('./crypto_myshka/data/bybit_master_research.json?ts='+Date.now(),{cache:'no-store'});
+  if(!res.ok)throw Error('архів ще не опубліковано');
+  const data=await res.json();
+  if(data.status!=='ok'||!Array.isArray(data.trades)||!data.trades.length){
+   autoStatus.textContent='Автоматичний архів: '+(data.status==='unconfigured'?'очікує дозволеного джерела угод':'угод немає')+'. LIVE не підключено.';
+   return;
+  }
+  const trades=normalize({trades:data.trades});
+  if(!trades.length)throw Error('архів не містить перевірених записів');
+  autoStatus.textContent='Автоархів: '+trades.length+' угод, оновлено '+String(data.updated_at||'невідомо')+'. Дані джерела не верифіковані незалежно.';
+  if(!localStorage.getItem(key))render(trades);
+ }catch(e){autoStatus.textContent='Автоматичний архів поки недоступний: '+e.message;}
+}
+autoRefresh?.addEventListener('click',loadAuto);
+loadAuto();
 })();
