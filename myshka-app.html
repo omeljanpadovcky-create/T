@@ -79,12 +79,21 @@
           <p class="intro">Встав скріншот через Ctrl+V або обери файл. JEV (локальний або хмарний) оцінить видимий напрямок, сформує демо-гіпотезу BUY / SELL / ПРОПУСТИТИ та, якщо даних достатньо, запропонує час закриття 30 с, 1 хв або 5 хв. Збережені звіти за парами залишаються нижче.</p>
 
           <section class="settings-card" aria-label="Bybit TOP-10" style="margin:16px 0;padding:18px">
-            <h2 style="margin:0 0 8px">🏆 BYBIT TOP-10 · Copy Trading</h2>
-            <p>Окремий блок дослідження майстер-трейдерів Bybit. Порівнюватимемо підтверджені позиції, історію та ризик, коли буде доступне дозволене джерело даних.</p>
-            <p class="report-notice"><strong>⚪ LIVE: ще не підключено.</strong> Немає перевіреного потоку угод, тому тут не відображаються вигадані трейдери чи сигнали. JEV і Gemini не відкривають угоди та не копіюють позиції.</p>
+            <h2 style="margin:0 0 8px">🏆 BYBIT · 10 Master Traders</h2>
+            <p>Дослідницький список із десяти публічно названих учасників архівного змагання Bybit. <strong>Це не поточний ТОП-10 Copy Trading.</strong> Поточний рейтинг, угоди й прибутковість цих людей не підтверджені.</p>
+            <p class="report-notice"><strong>⚪ LIVE-позиції не підключено.</strong> JEV не копіює угоди; без справжньої історії операцій не показуємо удавані сигнали чи прибуток.</p>
             <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
               <a class="small-button" href="https://www.bybit.com/copyTrade/" target="_blank" rel="noopener noreferrer">Переглянути Bybit Copy Trading ↗</a>
               <span class="outline-pill">Master Trader API: не підтверджено</span>
+            </div>
+            <div style="margin:14px 0;border-top:1px solid #dce3ed;padding-top:12px" aria-label="Десять трейдерів Bybit зі списку спостереження">
+              <h3 style="margin:0 0 8px">👥 10 трейдерів · список спостереження</h3>
+              <p style="font-size:12px">Імена походять із попереднього публічного рейтингу події Human vs Bot. Це <strong>не LIVE</strong> і не доказ поточної прибутковості. Після імпорту угод поруч із відповідним трейдером з'явиться його фактична статистика за наданими записами.</p>
+              <div id="bybit-watchlist-status" role="status" aria-live="polite">Завантаження списку трейдерів…</div>
+              <div id="bybit-watchlist-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px;margin-top:10px"></div>
+              <button id="bybit-watchlist-copy" class="small-button" type="button" style="margin-top:10px">📋 Скопіювати звіт для JEV</button>
+              <div id="bybit-watchlist-copy-status" role="status" aria-live="polite" style="font-size:12px"></div>
+              <p style="font-size:12px;margin-top:10px"><a href="https://www.bybit.com/copyTrading/en/trader-vs-bot" target="_blank" rel="noopener noreferrer">Джерело: Bybit Human vs Bot ↗</a> · Публічні сторінки можуть не показувати старі результати.</p>
             </div>
             <div style="margin:14px 0;border-top:1px solid #dce3ed;padding-top:12px">
               <strong>📈 Публічний ринок Bybit · BTC / ETH / SOL</strong>
