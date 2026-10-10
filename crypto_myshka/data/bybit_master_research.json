@@ -1,0 +1,10 @@
+{
+  "updated_at": "2026-10-10T08:28:45.194626+00:00",
+  "status": "unconfigured",
+  "source": "authorized_feed",
+  "traders": [],
+  "trades": [],
+  "analysis": {
+    "status": "awaiting_verified_trades"
+  }
+}
