@@ -767,7 +767,9 @@
                     });
                     const answer = await response.json().catch(() => ({}));
                     if (!response.ok) {
-                      throw new Error(String(answer.error || 'Помилка AI-сервера (HTTP ' + response.status + ')').slice(0,160));
+                      throw new Error(response.status === 402
+                        ? '⛔ APInex відмовив у запиті (HTTP 402): перевір безкоштовну модель JEV_APINEX_MODEL, доступний ліміт і баланс API. Фото не аналізувалося. Повторні спроби не допоможуть, доки провайдер не надасть доступ.'
+                        : String(answer.error || 'Помилка AI-сервера (HTTP ' + response.status + ')').slice(0,160));
                     }
                     if (!answer || typeof answer !== 'object' || !['ВГОРУ', 'ВНИЗ', 'НЕВИЗНАЧЕНО'].includes(answer.direction)) {
                       throw new Error('JEV не повернув коректний аналіз.');
