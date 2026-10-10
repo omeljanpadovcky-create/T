@@ -765,9 +765,31 @@
           }
           marketControls.appendChild(marketNote);
           const marketPair = marketSelect('Пара на фото', [['BTCUSDT','BTC / USDT'],['ETHUSDT','ETH / USDT'],['SOLUSDT','SOL / USDT']], 'BTCUSDT');
-          const marketType = marketSelect('Ринок на фото', [['spot','Bybit Spot'],['linear','Bybit Linear']], 'spot');
-          aiArea.appendChild(marketControls);
+          const marketType = marketSelect('Ринок на фото', [['linear','Bybit Ф’ючерси'],['spot','Bybit Spot']], 'linear');
+          // Only show AI-only duplicate selectors when cloud AI is actually connected.
+          // The keyless Bybit scenario keeps its separate, visible market controls.
           const destinations = visionTargets();
+          if (destinations.length) {
+            aiArea.appendChild(marketControls);
+            const publicPanel = () => box.querySelector('.screenshot-market-direction');
+            const mirror = () => {
+              const controls = publicPanel()?.querySelectorAll('input,select') || [];
+              if (controls[0]?.value && ['BTCUSDT','ETHUSDT','SOLUSDT'].includes(controls[0].value.toUpperCase()))
+                marketPair.value = controls[0].value.toUpperCase();
+              if (controls[1] && ['spot','linear'].includes(controls[1].value))
+                marketType.value = controls[1].value;
+            };
+            marketControls.addEventListener('change', () => {
+              const controls = publicPanel()?.querySelectorAll('input,select') || [];
+              if (controls[0]) controls[0].value = marketPair.value;
+              if (controls[1]) controls[1].value = marketType.value;
+            });
+            box.addEventListener('change', event => {
+              if (event.target.closest('.screenshot-market-direction')) mirror();
+            });
+            // The public scenario is attached later during photo initialization.
+            queueMicrotask(mirror);
+          }
           if (!destinations.length) {
             aiButton.disabled = true;
             const instructions = document.createElement('p');
