@@ -8,7 +8,7 @@
   const SESSION_KEY='crypto-myshka-cloud-access-session-v1';
   const ENDPOINT_KEY='crypto-myshka-cloud-endpoint-v1';
   const JOURNAL_KEY='crypto-myshka-pocket-paper-v1';
-  const SCREENS=new Set(['home','analysis','history','archive']);
+  const SCREENS=new Set(['home','analysis','history','archive','autodemo']);
   const LIMIT=300;
   const state={image:null,filename:'',crop:null,canvasWidth:0,canvasHeight:0,
     dragStart:null,dragging:false,ai:null,cloudReady:false,model:'',provider:'',loading:false};
