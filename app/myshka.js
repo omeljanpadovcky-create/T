@@ -748,6 +748,30 @@
           aiResult.className = 'jev-image-result';
           aiResult.setAttribute('role', 'status');
           aiResult.setAttribute('aria-live', 'polite');
+          // User explicitly selects the Bybit market, never inferred from an unrelated screenshot.
+          const marketControls = document.createElement('div');
+          marketControls.className = 'jev-market-pickers';
+          marketControls.style.cssText = 'display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin:10px 0;padding:12px;border:1px solid #8294aa;border-radius:12px';
+          const marketNote = document.createElement('p');
+          marketNote.style.cssText = 'width:100%;margin:0;font-size:13px';
+          marketNote.textContent = '🧠 JEV: обери пару та тип ринку, які зображені на фото. Хмарний аналіз звірить їх із завершеними свічками Bybit за 5, 15 і 60 хв.';
+          function marketSelect(labelText, values, defaultValue) {
+            const label = document.createElement('label');
+            label.style.cssText = 'display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px;font-size:13px';
+            label.textContent = labelText;
+            const select = document.createElement('select');
+            select.style.cssText = 'min-height:38px;border-radius:8px;padding:6px;background:transparent;color:inherit;border:1px solid #8294aa';
+            for(const [value,text] of values) {
+              const opt=document.createElement('option');opt.value=value;opt.textContent=text;select.appendChild(opt);
+            }
+            select.value=defaultValue;
+            label.appendChild(select);marketControls.appendChild(label);
+            return select;
+          }
+          marketControls.appendChild(marketNote);
+          const marketPair = marketSelect('Пара на фото', [['BTCUSDT','BTC / USDT'],['ETHUSDT','ETH / USDT'],['SOLUSDT','SOL / USDT']], 'BTCUSDT');
+          const marketType = marketSelect('Ринок на фото', [['spot','Bybit Spot'],['linear','Bybit Linear']], 'spot');
+          aiArea.appendChild(marketControls);
           const destinations = visionTargets();
           if (!destinations.length) {
             aiButton.disabled = true;
@@ -809,7 +833,8 @@
                     const response = await fetch(apiRoot + '/api/chart-analysis', {
                       method: 'POST',
                       headers: {'Content-Type': 'application/json', ...authHeaders},
-                      body: JSON.stringify({image: dataUrl.split(',')[1], chart_timeframe: $('chart-timeframe').value}),
+                      body: JSON.stringify({image: dataUrl.split(',')[1], chart_timeframe: $('chart-timeframe').value,
+                        market_symbol: marketPair.value, market_category: marketType.value}),
                       signal: AbortSignal.timeout(cloud ? 38000 : 125000)
                     });
                     const answer = await response.json().catch(() => ({}));
@@ -830,7 +855,7 @@
                         ? '⛔ HTTP 402: AI-провайдер не дозволив обробити фото через обмеження доступу, квоти або оплати. Спробуй прямий Gemini API у Налаштуваннях або перевір свій APInex-акаунт. Фото НЕ проаналізоване.'
                         : String(answer.error || 'Помилка AI-сервера (HTTP ' + response.status + ')').slice(0,160));
                     }
-                    if (!answer || typeof answer !== 'object' || !['ВГОРУ', 'ВНИЗ', 'НЕВИЗНАЧЕНО'].includes(answer.direction)) {
+                    if (!answer || typeof answer !== 'object' || !['ВГОРУ', 'ВНИЗ', 'СТОП', 'НЕВИЗНАЧЕНО'].includes(answer.direction)) {
                       throw new Error('JEV не повернув коректний аналіз.');
                     }
                     result = answer;
@@ -863,15 +888,17 @@
                         ')' + (ordered[0] === 'local' ? ' · резервний режим' : '')
                     : '🟢 Аналіз виконано локальним JEV (Ollama)';
                 }
-                const direction = ['ВГОРУ', 'ВНИЗ', 'НЕВИЗНАЧЕНО'].includes(result.direction)
-                  ? result.direction : 'НЕВИЗНАЧЕНО';
+                const research = result.mode === 'research_hypothesis' || result.mode === 'research_only';
+                const direction = ['ВГОРУ', 'ВНИЗ', 'СТОП', 'НЕВИЗНАЧЕНО'].includes(result.direction)
+                  ? result.direction : 'СТОП';
                 const proposedAction = ['BUY', 'SELL'].includes(result.action) ? result.action : 'SKIP';
                 const expiry = [30, 60, 300].includes(result.test_expiry_seconds)
                   ? result.test_expiry_seconds : null;
                 const elapsed = Math.round((Date.now() - analysisStartedAt) / 1000);
-                const validAction = expiry !== null && proposedAction !== 'SKIP' &&
+                const validAction = !research && expiry !== null && proposedAction !== 'SKIP' &&
                   (proposedAction === 'BUY' ? direction === 'ВГОРУ' : direction === 'ВНИЗ');
                 const tooLate = validAction && elapsed >= expiry;
+                // Research forecasts are not demo orders. They must not be logged as simulated wins.
                 const action = validAction && !tooLate ? proposedAction : 'SKIP';
                 const durationLabel = seconds => seconds === 30 ? '30 секунд' :
                   seconds === 60 ? '1 хвилина' : seconds === 300 ? '5 хвилин' : 'Не визначено';
@@ -883,29 +910,45 @@
                   el.textContent = value;
                   return el;
                 };
+                const researchDirection = research && result.market_verified === true &&
+                  ['ВГОРУ', 'ВНИЗ'].includes(direction) ? direction : 'СТОП';
+                const shown = research ? researchDirection : action === 'BUY' ? 'ВГОРУ' :
+                  action === 'SELL' ? 'ВНИЗ' : 'СТОП';
                 aiResult.className = 'jev-image-result ' +
-                  (action === 'BUY' ? 'direction-up' : action === 'SELL' ? 'direction-down' : 'direction-neutral');
-                const heading = action === 'BUY' ? 'ДЕМО-ГІПОТЕЗА: BUY ↑' :
+                  (shown === 'ВГОРУ' ? 'direction-up' : shown === 'ВНИЗ' ? 'direction-down' : 'direction-neutral');
+                const heading = research ?
+                  (shown === 'ВГОРУ' ? '↑ ВГОРУ · ДОСЛІДНИЦЬКА ГІПОТЕЗА' :
+                    shown === 'ВНИЗ' ? '↓ ВНИЗ · ДОСЛІДНИЦЬКА ГІПОТЕЗА' : '⛔ СТОП · ПЕРЕВАГУ НЕ ПІДТВЕРДЖЕНО') :
+                  action === 'BUY' ? 'ДЕМО-ГІПОТЕЗА: BUY ↑' :
                   action === 'SELL' ? 'ДЕМО-ГІПОТЕЗА: SELL ↓' : 'ПРОПУСТИТИ — сигнал не підтверджено';
                 const title = makeLine('div', 'direction-result', heading);
-                const visible = makeLine('p', 'jev-image-meta', 'Видимий рух: ' +
-                  (direction === 'ВГОРУ' ? '↑ ВГОРУ' : direction === 'ВНИЗ' ? '↓ ВНИЗ' : '— НЕВИЗНАЧЕНО'));
+                const visible = makeLine('p', 'jev-image-meta', research ?
+                  'Фото + ринок: ' + (result.market_verified ? marketPair.value + ' · ' + marketType.value +
+                    ' · дані Bybit перевірено' : 'не вдалося перевірити актуальні свічки') :
+                  'Видимий рух: ' + (direction === 'ВГОРУ' ? '↑ ВГОРУ' :
+                    direction === 'ВНИЗ' ? '↓ ВНИЗ' : '— НЕВИЗНАЧЕНО'));
                 const tfSource = result.timeframe_source === 'user' ? 'заданий вручну' :
                   result.timeframe_source === 'model' ? 'оцінений AI, не перевірено' : 'не визначено';
                 const timeframe = makeLine('p', 'jev-image-meta',
                   'Таймфрейм свічок: ' + tfLabel(result.chart_timeframe) + ' (' + tfSource + ')');
-                const testTime = makeLine('p', 'jev-image-expiry',
+                const testTime = makeLine('p', 'jev-image-expiry', research ?
+                  (shown === 'СТОП' ? 'Горизонт руху: не визначено' :
+                    'Оціночний горизонт: ' + result.horizon_minutes +
+                    ' хв. Це не обіцянка тривалості руху.') :
                   action === 'SKIP' ? 'Час закриття: не рекомендовано' :
                     'Експериментальний час закриття: ' + durationLabel(expiry));
                 const reason = makeLine('p', 'jev-image-reason', 'Підстава: ' +
-                  (typeof result.reason === 'string' ? result.reason.slice(0, 220) : 'Недостатньо інформації.'));
+                  (typeof result.reason === 'string' ? result.reason.slice(0, 350) : 'Недостатньо інформації.'));
+                const risk = makeLine('p', 'jev-image-meta', 'Ризик: ' +
+                  (typeof result.risk === 'string' ? result.risk.slice(0, 240) :
+                    'Прогноз може бути помилковим.'));
                 const latency = makeLine('p', 'jev-image-meta',
                   'Обробка: ' + elapsed + ' с. Фото не є живим потоком котирувань.');
                 const warning = makeLine('p', 'report-notice',
+                  research ? '⚠️ Це гіпотеза для спостереження, не перевірена прибуткова стратегія і не наказ торгувати. Реальні та демоордери не відкриваються.' :
                   tooLate ? '⛔ Аналіз тривав довше за тестову експірацію. Пропустити.' :
-                    '⚠️ Це неперевірена гіпотеза для демо, а не команда на ставку. OTC-котирування не звірені.' +
-                    (useCloud ? ' Фото оброблено хмарним AI.' : ' Фото оброблено локально.'));
-                aiResult.replaceChildren(title, visible, timeframe, testTime, reason, latency, warning);
+                    '⚠️ Це неперевірена гіпотеза для демо, а не команда на ставку. OTC-котирування не звірені.');
+                aiResult.replaceChildren(title, visible, timeframe, testTime, reason, risk, latency, warning);
                 const photoSaved=storeChartPhoto(dataUrl,file.name,result);
                 if(photoSaved==='duplicate') toast('Цей графік уже в історії — дубль пропущено.');
                 else if(photoSaved==='full') toast('Пам’ять браузера заповнена — фото не збережено.');
