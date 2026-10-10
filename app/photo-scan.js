@@ -107,6 +107,47 @@
       bins:new Set(items.map(x=>Math.min(4,Math.floor(x.x/Math.max(1,w/5))))).size
     };
   }
+  // Group vertically shaped colored components by horizontal proximity.
+  // On Bybit screenshots, order-book digits form a separate narrow group,
+  // whereas genuine candle bodies span much of the chart width.
+  function findChartBounds(imageData,options={}){
+    const w=imageData.width,h=imageData.height,d=imageData.data;
+    if(w<140||h<120||!d||d.length<w*h*4)return null;
+    const mask=new Uint8Array(w*h);
+    for(let i=0,j=0;i<mask.length;i++,j+=4)
+      mask[i]=classify(d[j],d[j+1],d[j+2],d[j+3],options);
+    const items=components(mask,w,h);
+    for(const [lo,hi] of [[.31,.91],[.18,.94]]){
+      const relevant=items.filter(p=>p.x>=w*.035&&p.x<=w*.94 && p.y>=h*lo&&p.y<=h*hi)
+        .sort((a,b)=>a.x-b.x);
+      const groups=[];let previous=-Infinity;
+      for(const item of relevant){
+        if(!groups.length||item.x-previous>Math.max(16,w*.032))groups.push([]);
+        groups[groups.length-1].push(item);previous=item.x;
+      }
+      const best=groups.map(group=>{
+        const span=group.length?group[group.length-1].maxX-group[0].minX:0;
+        return {group,span,score:group.length*span/w};
+      }).filter(v=>v.group.length>=12&&v.span>=w*.24)
+        .sort((a,b)=>b.score-a.score)[0];
+      if(!best)continue;
+      const group=best.group;
+      const ymin=Math.min(...group.map(v=>v.minY)),ymax=Math.max(...group.map(v=>v.maxY));
+      const left=Math.max(0,Math.floor(group[0].minX-w*.015));
+      const right=Math.min(w,Math.ceil(group[group.length-1].maxX+w*.018));
+      let top=Math.max(0,Math.floor(Math.max(h*lo+h*.005,ymin-h*.02)));
+      let bottom=Math.min(h,Math.ceil(Math.min(h*.94,ymax+h*.055)));
+      // Sideways candles occupy a narrow vertical band: give them a real ROI.
+      if(bottom-top<h*.24){
+        const middle=(top+bottom)/2;
+        top=Math.max(0,Math.floor(middle-h*.14));
+        bottom=Math.min(h,Math.ceil(middle+h*.14));
+      }
+      if(right-left<w*.22||bottom-top<h*.19)continue;
+      return {x:left,y:top,w:right-left,h:bottom-top,candidates:group.length,auto:true};
+    }
+    return null;
+  }
   function analyzePixels(imageData,options={}){
     const w=imageData.width,h=imageData.height,d=imageData.data;
     if(w<80||h<70||!d||d.length<w*h*4)return {recognized:false,reason:'Область графіка надто мала.'};
@@ -170,7 +211,11 @@
     source.getContext('2d').drawImage(image,0,0,w,h); // picker samples unmasked source, never overlay
     const colors={};
     let picking=0,color1=null,color2=null;
-    let crop={x:Math.floor(w*0.08),y:Math.floor(h*0.13),w:Math.floor(w*0.83),h:Math.floor(h*0.72)};
+    const fallbackCrop=()=>({x:Math.floor(w*.08),y:Math.floor(h*.13),
+      w:Math.floor(w*.83),h:Math.floor(h*.72)});
+    const detectCrop=()=>findChartBounds(source.getContext('2d',{willReadFrequently:true})
+      .getImageData(0,0,w,h),{colors})||fallbackCrop();
+    let crop=detectCrop();
     let origin=null,dragging=false,lastShapes=[];
     function draw(){
       ctx.clearRect(0,0,w,h);
@@ -232,7 +277,7 @@
       const next={x:Math.min(at.x,origin.x),y:Math.min(at.y,origin.y),
         w:Math.abs(at.x-origin.x),h:Math.abs(at.y-origin.y)};
       if(next.w>50 && next.h>45)crop=next;
-      else crop={x:Math.floor(w*0.08),y:Math.floor(h*0.13),w:Math.floor(w*0.83),h:Math.floor(h*0.72)};
+      else crop=detectCrop();
       lastShapes=[];draw();
     });
     canvas.addEventListener('pointercancel',()=>{dragging=false;origin=null;draw();});
@@ -282,8 +327,7 @@
       out.replaceChildren(label,qualifier,technical);
     }
     reset.addEventListener('click',()=>{
-      crop={x:Math.floor(w*0.08),y:Math.floor(h*0.13),w:Math.floor(w*0.83),h:Math.floor(h*0.72)};
-      lastShapes=[];draw();out.textContent='Область скинуто. Натисни «Сканувати».';
+      crop=detectCrop();lastShapes=[];draw();scan();
     });
     function scan(){
       if(crop.w<50||crop.h<45){showVerdict('unknown','Збільш виділену область графіка.');return;}
@@ -314,11 +358,14 @@
     }
     button.addEventListener('click',scan);
     actions.append(button,reset,color1,color2,autoColors);
-    section.append(title,explain,canvas,actions,out);
+    const autodetect=document.createElement('small');
+    if(crop.auto)autodetect.textContent='✓ Графік відокремлено від меню та книги ордерів автоматично.';
+    else autodetect.textContent='⚪ Автовиділення не вдалося. Обведи поле графіка вручну.';
+    section.append(title,explain,autodetect,canvas,actions,out);
     container.appendChild(section);
     draw();
     // Preview already decoded; this is a local, synchronous scan, not a background job.
     scan();
   }
-  window.cryptoMyshkaPhotoScan={attach,analyzePixels};
+  window.cryptoMyshkaPhotoScan={attach,analyzePixels,findChartBounds};
 })();
