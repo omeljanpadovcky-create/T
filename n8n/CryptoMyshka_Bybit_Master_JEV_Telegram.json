@@ -1,0 +1,356 @@
+{
+  "name": "CryptoMyshka | BYBIT Master Research → JEV → Telegram [READ ONLY]",
+  "nodes": [
+    {
+      "name": "Manual Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -920,
+        260
+      ],
+      "parameters": {},
+      "id": "myshka-manual-test"
+    },
+    {
+      "name": "Every 30 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -920,
+        60
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      },
+      "id": "myshka-every-30-minutes"
+    },
+    {
+      "name": "Bybit V5 Public Tickers",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -660,
+        160
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.bybit.com/v5/market/tickers?category=linear",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "myshka-bybit-v5-public-tickers"
+    },
+    {
+      "name": "Market Snapshot",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        160
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const x=$input.first().json;if(x.retCode!==0||!Array.isArray(x.result?.list))throw Error(\"Invalid Bybit public API\");const symbols=[\"BTCUSDT\",\"ETHUSDT\",\"SOLUSDT\"];const market=symbols.map(symbol=>{const t=x.result.list.find(v=>v.symbol===symbol);const price=Number(t?.lastPrice),change24hPct=Number(t?.price24hPcnt)*100;if(!(price>0)||!Number.isFinite(change24hPct))throw Error(\"Missing price \"+symbol);return {symbol,price,change24hPct};});return [{json:{market,observed_at:new Date().toISOString(),trade_execution:false}}];"
+      },
+      "id": "myshka-market-snapshot"
+    },
+    {
+      "name": "Read Authorized Master Archive",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -160,
+        160
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://raw.githubusercontent.com/omeljanpadovcky-create/T/main/crypto_myshka/data/bybit_master_research.json",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "myshka-read-authorized-master-archive",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "name": "Select New Master Trades",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        100,
+        160
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const market=$(\"Market Snapshot\").first().json;const feed=$input.first().json||{};const base={ready:false,market:market.market,observed_at:market.observed_at,reason:\"Master Trader source unconfigured\",trades:[],keys:[],trade_execution:false};if(feed.status!==\"ok\"||feed.source!==\"authorized_feed\"||!Array.isArray(feed.trades))return [{json:base}];const updated=Date.parse(feed.updated_at||\"\");if(!Number.isFinite(updated)||Date.now()-updated>48*3600000||updated>Date.now()+300000)return [{json:{...base,reason:\"Master archive stale\"}}];const state=$getWorkflowStaticData(\"global\");const delivered=state.sentTradeKeys||{};const unique=new Set();const current=[];for(const t of feed.trades.slice(0,1000)){if(!t||typeof t!==\"object\")continue;const trader=String(t.trader||\"\").slice(0,80),symbol=String(t.symbol||\"\").toUpperCase(),side=String(t.side||\"\"),ts=Date.parse(t.opened_at||\"\"),price=Number(t.entry_price),url=String(t.source_url||\"\");if(!trader||!/^[A-Z0-9]{4,24}$/.test(symbol)||![\"Buy\",\"Sell\",\"Long\",\"Short\"].includes(side)||!Number.isFinite(ts)||ts>Date.now()+300000||Date.now()-ts>30*86400000||!(price>0)||!/^https:\\/\\/(www\\.)?bybit\\.com\\//.test(url))continue;const key=[trader,symbol,side,new Date(ts).toISOString(),price].join(\"|\");if(unique.has(key)||delivered[key])continue;unique.add(key);current.push({key,trader,symbol,side,opened_at:new Date(ts).toISOString(),entry_price:price,closed_at:String(t.closed_at||\"\"),exit_price:t.exit_price||null,source_url:url});if(current.length>=10)break;}if(!current.length)return [{json:{...base,reason:\"No new sourced trades\"}}];return [{json:{...base,ready:true,trades:current.map(({key,...rest})=>rest),keys:current.map(t=>t.key),prompt:JSON.stringify({market:market.market,observed_at:market.observed_at,trades:current.map(({key,...rest})=>rest),caution:\"External feed is not independently verified; not a trading signal.\"}).slice(0,11500)}}];"
+      },
+      "id": "myshka-select-new-master-trades"
+    },
+    {
+      "name": "Any New Sourced Trades?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        360,
+        160
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "myshka-ready",
+              "leftValue": "={{ $json.ready }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "myshka-any-new-sourced-trades-"
+    },
+    {
+      "name": "JEV Research (APInex)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        60
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apinex.bond/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({model:\"free/deepseek-v4.1-flash\",temperature:0.2,max_tokens:600,messages:[{role:\"system\",content:\"Ти JEV. Українською. Критичний огляд тільки неперевірених даних стороннього джерела. Відділи факти та припущення, опиши ризики та що перевірити. Ніяких BUY/SELL, ніяких ордерів.\"},{role:\"user\",content:$json.prompt}]}) }}",
+        "options": {
+          "timeout": 55000
+        }
+      },
+      "id": "myshka-jev-research-apinex-"
+    },
+    {
+      "name": "Format JEV Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        870,
+        60
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const resp=$input.first().json;const ctx=$(\"Select New Master Trades\").first().json;const content=resp?.choices?.[0]?.message?.content;if(typeof content!==\"string\"||!content.trim())throw Error(\"Empty JEV answer\");const raw=\"🐭 CryptoMyshka · Bybit Master research, не сигнал\\n\"+ctx.trades.length+\" нових записів\\n\\n\"+content.slice(0,2300)+\"\\n\\n⚠️ Дані зовнішнього джерела не верифіковані. Угоди НЕ відкриваються.\";const text=raw.replace(/&/g,\"&amp;\").replace(/</g,\"&lt;\").replace(/>/g,\"&gt;\");return [{json:{telegram_text:text,keys:ctx.keys,trade_execution:false}}];"
+      },
+      "id": "myshka-format-jev-message"
+    },
+    {
+      "name": "Telegram Research Digest",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1110,
+        60
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "CHAT_ID_HERE",
+        "text": "={{ $json.telegram_text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML",
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "myshka-telegram-research-digest"
+    },
+    {
+      "name": "Mark Delivered (Deduplicate)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        60
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const keys=$(\"Format JEV Message\").first().json.keys||[];const state=$getWorkflowStaticData(\"global\");if(!state.sentTradeKeys||typeof state.sentTradeKeys!==\"object\")state.sentTradeKeys={};for(const k of keys)state.sentTradeKeys[k]=Date.now();state.sentTradeKeys=Object.fromEntries(Object.entries(state.sentTradeKeys).sort((a,b)=>b[1]-a[1]).slice(0,2000));return [{json:{status:\"sent\",count:keys.length,trade_execution:false}}];"
+      },
+      "id": "myshka-mark-delivered-deduplicate-"
+    },
+    {
+      "name": "No Verified Trades (Safe Stop)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        620,
+        260
+      ],
+      "parameters": {},
+      "id": "myshka-no-verified-trades-safe-stop-"
+    },
+    {
+      "name": "SETUP / READ ME",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -940,
+        -420
+      ],
+      "parameters": {
+        "content": "🐭 BYBIT → JEV → TELEGRAM (READ ONLY)\n\n1. Bybit market public API requires NO API key.\n2. Master Trader archive currently UNCONFIGURED. No source = no JEV or Telegram.\n3. Bind APInex token as HTTP Bearer Auth credential in JEV node.\n4. Bind Telegram Bot credential, replace CHAT_ID_HERE in Telegram node.\n5. Test manually, activate schedule only after verifying data source.\n\nNo execution / copy trading nodes.",
+        "height": 310,
+        "width": 690,
+        "color": 5
+      },
+      "id": "myshka-setup-read-me"
+    }
+  ],
+  "connections": {
+    "Manual Test": {
+      "main": [
+        [
+          {
+            "node": "Bybit V5 Public Tickers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Every 30 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Bybit V5 Public Tickers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bybit V5 Public Tickers": {
+      "main": [
+        [
+          {
+            "node": "Market Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Market Snapshot": {
+      "main": [
+        [
+          {
+            "node": "Read Authorized Master Archive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Authorized Master Archive": {
+      "main": [
+        [
+          {
+            "node": "Select New Master Trades",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select New Master Trades": {
+      "main": [
+        [
+          {
+            "node": "Any New Sourced Trades?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Any New Sourced Trades?": {
+      "main": [
+        [
+          {
+            "node": "JEV Research (APInex)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Verified Trades (Safe Stop)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JEV Research (APInex)": {
+      "main": [
+        [
+          {
+            "node": "Format JEV Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format JEV Message": {
+      "main": [
+        [
+          {
+            "node": "Telegram Research Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Research Digest": {
+      "main": [
+        [
+          {
+            "node": "Mark Delivered (Deduplicate)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Kyiv"
+  },
+  "pinData": {},
+  "tags": []
+}
