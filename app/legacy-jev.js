@@ -120,6 +120,60 @@
     }catch(e){put('legacy-jev-market','⚠️ Котирування Bybit тимчасово недоступні. '+e.message)}
     finally{clearTimeout(t);btn.disabled=false;}
   }
+  function ema(values, span){
+    const weight=2/(span+1);
+    return values.reduce((prior,next,i)=>i===0?next:prior+weight*(next-prior),0);
+  }
+  function rsi14(values){
+    if(values.length<16)return null;
+    let up=0,down=0;
+    for(let i=1;i<=14;i++){
+      const delta=values[i]-values[i-1];
+      up+=Math.max(delta,0);down+=Math.max(-delta,0);
+    }
+    up/=14;down/=14;
+    for(let i=15;i<values.length;i++){
+      const delta=values[i]-values[i-1];
+      up=(up*13+Math.max(delta,0))/14;
+      down=(down*13+Math.max(-delta,0))/14;
+    }
+    return down===0 ? (up===0?50:100) : 100-100/(1+up/down);
+  }
+  async function analyzePublicCandles(){
+    const btn=$('legacy-jev-technical-button'),symbol=$('legacy-jev-symbol').value;
+    if(!['BTCUSDT','ETHUSDT','SOLUSDT'].includes(symbol))return;
+    btn.disabled=true;
+    put('legacy-jev-technical','Отримуємо завершені 30-хвилинні свічки Bybit…');
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+    try{
+      const url='https://api.bybit.com/v5/market/kline?category=linear&symbol='+encodeURIComponent(symbol)+'&interval=30&limit=80';
+      const response=await fetch(url,{cache:'no-store',signal:controller.signal});
+      if(!response.ok)throw Error('HTTP '+response.status);
+      const data=await response.json();
+      if(data.retCode!==0||!Array.isArray(data.result?.list))throw Error('Немає коректного OHLCV');
+      const candles=data.result.list.map(x=>({
+        start:Number(x[0]),open:Number(x[1]),high:Number(x[2]),
+        low:Number(x[3]),close:Number(x[4]),volume:Number(x[5])
+      })).filter(x=>Object.values(x).every(Number.isFinite)&&x.start+1800000<=Date.now()).sort((a,b)=>a.start-b.start);
+      if(candles.length<35)throw Error('Замало завершених свічок для аналізу.');
+      const closes=candles.map(x=>x.close),last=candles[candles.length-1],e9=ema(closes,9),e21=ema(closes,21),r=rsi14(closes);
+      const recent=candles.slice(-20),support=Math.min(...recent.map(x=>x.low)),resistance=Math.max(...recent.map(x=>x.high));
+      const avgVolume=recent.reduce((n,x)=>n+x.volume,0)/recent.length;
+      const ratio=avgVolume>0?last.volume/avgVolume:null;
+      const regime=e9>e21?'EMA9 вище EMA21 (локально висхідний нахил)':e9<e21?'EMA9 нижче EMA21 (локально спадний нахил)':'EMA9 ≈ EMA21 (без нахилу)';
+      put('legacy-jev-technical','BYBIT '+symbol+' · 30 хв · '+candles.length+' завершених свічок'+
+        '\nЗакриття останньої: '+formatter(last.close)+' USDT · '+new Date(last.start+1800000).toLocaleString('uk-UA')+
+        '\nEMA 9 / EMA 21: '+formatter(e9)+' / '+formatter(e21)+' USDT'+
+        '\nЛокальна структура: '+regime+
+        '\nRSI 14: '+(r===null?'—':formatter(r))+
+        '\nМінімум/максимум 20 свічок: '+formatter(support)+' / '+formatter(resistance)+' USDT'+
+        '\nОбсяг останньої свічки / середній 20: '+(ratio===null?'—':formatter(ratio)+'×')+
+        '\n\nЦе розрахунки за офіційними свічками Bybit, НЕ AI, НЕ LIVE-позиції трейдерів і НЕ сигнал BUY/SELL.');
+    }catch(e){
+      put('legacy-jev-technical','⚠️ Технічний огляд недоступний: '+String(e.message||'Помилка API').slice(0,180)+
+        '\nРеальні угоди й сигнали не створювалися.');
+    }finally{clearTimeout(timer);btn.disabled=false;}
+  }
   function readFile(file){
     selectedFile=null;
     if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null;}
@@ -176,6 +230,7 @@
       document.getElementById('legacy-jev-panel')?.scrollIntoView({behavior:'smooth'});
     });
     $('legacy-jev-market-refresh').addEventListener('click',refreshMarket);
+    $('legacy-jev-technical-button').addEventListener('click',analyzePublicCandles);
     $('legacy-jev-file').addEventListener('change',e=>readFile(e.target.files?.[0]));
     $('legacy-jev-analyze').addEventListener('click',analyzePhoto);
     refreshMarket();
