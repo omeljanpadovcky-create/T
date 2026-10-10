@@ -41,7 +41,7 @@ function skip(reason = 'Ринкові дані не підтверджені �
 export function parseVision(raw, requested='auto', market=null) {
   const base=skip();
   let data;
-  try { data=JSON.parse(String(raw||'').trim().replace(/^```(?:json)?\\s*/i,'').replace(/\\s*```$/,'').trim()); }
+  try { data=JSON.parse(String(raw||'').trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'').trim()); }
   catch { return base; }
   if(!data||typeof data!=='object'||data.readable!==true||
     !['ВГОРУ','ВНИЗ','СТОП','НЕВИЗНАЧЕНО'].includes(data.direction))return base;
