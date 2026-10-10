@@ -126,7 +126,7 @@ export default async function handler(req, res) {
       method:'POST',headers,body:JSON.stringify(payload),
       signal:AbortSignal.timeout(25000)
     });
-    if (!response.ok) return res.status(response.status===429?429:502).json({
+    if (!response.ok) return res.status(response.status===402?402:response.status===429?429:502).json({
       error:response.status===429?'Ліміт запитів хмарного AI. Спробуй пізніше.':
         response.status===401?'APInex або Gemini відхилив API-ключ.':
         'Хмарний AI не зміг обробити фото (HTTP ' + response.status + ').'});
