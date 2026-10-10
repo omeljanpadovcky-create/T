@@ -20,7 +20,7 @@
 <button type="button" data-go="analysis"><span>▥</span> Pocket Analysis</button>
 <button type="button" data-go="history"><span>◷</span> Демоісторія</button>
 <button type="button" data-go="archive"><span>▤</span> Навчальні матеріали</button>
-<a href="./demo-bot.html" class="btn">🐭 Автодемо BTC</a>
+<button type="button" data-go="autodemo">🐭 Автодемо BTC</button>
 </nav>
 <div class="sidebar-note"><span class="pill safe">● DEMO / READ-ONLY</span>
 <p>Аналіз скріншотів і перевірка ідей. Жодних автоматичних угод.</p>
@@ -66,7 +66,7 @@
 <div class="card focus-card" id="pocket-ai-card">
 <div class="section-title"><h2>3. Гіпотеза JEV</h2><span class="pill safe">DEMO · NO AUTO-TRADE</span></div>
 <p class="hint">Фото аналізується локально на пристрої. JEV описує минулі свічки та ризики; без незалежних OTC-котирувань не видає неперевірений прогноз як достовірний.</p>
-<div class="actions"><a class="btn primary" href="./demo-bot.html">🐭 Перейти до автоматичного демо ↗</a></div>
+<div class="actions"><button class="btn primary" type="button" data-go="autodemo">🐭 Відкрити автодемо</button></div>
 <p id="ai-status" class="hint" role="status">Автодемо працює окремо від цього аналізатора.</p>
 <div id="ai-verdict" class="verdict" aria-live="polite"><span class="overline">ОЦІНКА НА НАСТУПНУ ЕКСПІРАЦІЮ</span><strong id="ai-direction">⏸ СТОП</strong><p id="ai-reason">Без перевірених даних наступний напрям невідомий.</p><p id="ai-risk" class="hint"></p><p id="ai-meta" class="hint"></p></div>
 <div class="actions"><button id="save-paper" class="btn" type="button" disabled>📓 Записати гіпотезу в деможурнал</button></div>
@@ -74,6 +74,24 @@
 <div class="notice"><strong>Як оцінюємо результат?</strong><p>Лише після закінчення експірації познач його вручну за фактичною ціною Pocket Option. «Влучив»/«Помилився» не підтверджені брокером і не є автоматичним навчанням моделі. Нуль угод і СТОП — нормальний результат.</p></div>
 </section>
 
+<section id="screen-autodemo" data-screen="autodemo" class="screen" hidden>
+<div class="overline">BTC/USDT · GITHUB ACTIONS · PAPER ONLY</div>
+<h1>🐭 Мишка · Автодемо</h1>
+<p class="lead">Фонова симуляція Bitcoin працює за розкладом GitHub Actions незалежно від телефона. Жодних реальних ордерів. Перевірка приблизно кожні 5 хвилин, але GitHub може затримувати або пропускати запуски.</p>
+<div class="card"><div class="section-title"><h2>Фонова система</h2><span id="auto-badge" class="pill">⏳ Перевірка</span></div>
+<p id="auto-status" class="hint" role="status">Завантажуємо дані з GitHub…</p>
+<div class="statgrid">
+<div class="stat"><small>Усього завершено</small><strong id="auto-total">—</strong></div>
+<div class="stat"><small>Влучань / програшів</small><strong id="auto-winloss">—</strong></div>
+<div class="stat"><small>Умовний P&amp;L</small><strong id="auto-pnl">—</strong></div>
+<div class="stat"><small>Поточний сигнал</small><strong id="auto-signal">—</strong></div>
+</div>
+<div class="notice" style="margin-top:15px"><strong>Поточна віртуальна угода</strong><p id="auto-pending">Завантаження…</p></div>
+<div class="actions"><button class="btn primary" id="auto-refresh" type="button">↻ Оновити статистику</button><a class="btn" href="https://github.com/omeljanpadovcky-create/T/actions/workflows/btc-paper.yml" target="_blank" rel="noopener">⚙ Запуски GitHub</a></div>
+</div>
+<div class="card"><h2>Останні демоугоди</h2><div id="auto-trades" class="journal"><p class="hint">Поки завантажується…</p></div></div>
+<p class="hint">Джерело фонового аналізу — публічні хвилинні свічки Kraken, а не Pocket Option OTC. Ціни входу/виходу — наближені ціни закритих свічок. Це експериментальна симуляція, а не підтверджена прибуткова стратегія.</p>
+</section>
 <section id="screen-history" data-screen="history" class="screen" hidden>
 <div class="overline">PAPER ONLY · LOCAL DEVICE</div><h1>Деможурнал</h1>
 <p class="lead">Записи доступні лише в цьому браузері. Результати позначаються вручну, не перевіряються Pocket Option і не використовуються для реальних ордерів.</p>
@@ -98,9 +116,10 @@
 <footer>Crypto Myshka © 2026 · Pocket Option Screenshot Lab · Дослідницький режим, без ордерів</footer>
 </div>
 </div>
-<nav class="mobile-nav" aria-label="Мобільна навігація"><button data-go="home">⌂<small>Головна</small></button><button data-go="analysis">▥<small>Аналіз</small></button><button data-go="history">◷<small>Демо</small></button><button data-go="archive">▤<small>База</small></button><a href="./demo-bot.html" style="text-decoration:none;color:inherit;text-align:center">🐭<small>Автодемо</small></a></nav>
+<nav class="mobile-nav" aria-label="Мобільна навігація"><button data-go="home">⌂<small>Головна</small></button><button data-go="analysis">▥<small>Аналіз</small></button><button data-go="history">◷<small>Демо</small></button><button data-go="archive">▤<small>База</small></button><button type="button" data-go="autodemo">🐭<small>Автодемо</small></button></nav>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <script defer src="./app/photo-scan.js?v=20261010-pocket1"></script>
-<script defer src="./app/pocket-option.js?v=20261011-no-local2"></script>
+<script defer src="./app/pocket-option.js?v=20261011-auto3"></script>
+<script defer src="./app/auto-dashboard.js?v=20261011-auto1"></script>
 </body>
 </html>
