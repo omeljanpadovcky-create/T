@@ -86,6 +86,21 @@
   }
   const CLOUD_URL_KEY = 'crypto-myshka-cloud-endpoint-v1';
   const CLOUD_ACCESS_KEY = 'crypto-myshka-cloud-access-session-v1';
+  const CLOUD_QUOTA_KEY = 'crypto-myshka-photo-quota-402-v1';
+  function cloudQuotaBlocked() {
+    try {
+      const item = JSON.parse(sessionStorage.getItem(CLOUD_QUOTA_KEY) || 'null');
+      return !!(item && item.endpoint === state.cloudEndpoint && item.until > Date.now());
+    } catch { return false; }
+  }
+  function markCloudQuotaBlocked() {
+    try { sessionStorage.setItem(CLOUD_QUOTA_KEY,JSON.stringify({
+      endpoint:state.cloudEndpoint,until:Date.now()+30*60*1000
+    })); } catch {}
+  }
+  function clearCloudQuotaBlocked() {
+    try { sessionStorage.removeItem(CLOUD_QUOTA_KEY); } catch {}
+  }
   function validCloudEndpoint(value) {
     try {
       const url = new URL(String(value).trim());
@@ -160,7 +175,7 @@
     else if (state.visionSource === 'cloud' && state.visionStatus === 'ready')
       label.textContent = '🟢 Хмарний JEV доступний. Фото надсилатиметься лише у хмарному режимі або за дозволом автоматичного перемикання.';
     else if (state.visionStatus === 'quota_blocked')
-      label.textContent = '⛔ AI-провайдер відхилив аналіз із HTTP 402. Каталог моделей доступний, але обробка фото обмежена. Перевір квоту або налаштуй прямий Gemini API.';
+      label.textContent = '⛔ AI-провайдер відхилив фото (HTTP 402). Каталог моделей — не доказ робочого аналізу. Перевір квоту/модель або користуйся локальним сканером пікселів без AI.';
     else if (state.visionSource === 'cloud' && state.visionStatus === 'provisional')
       label.textContent = '🟠 AI-сервер доступний, але успішність обробки фото ще не підтверджена.';
     else label.textContent = 'Адресу збережено. Перевірка хмарного JEV: ' +
@@ -590,6 +605,18 @@
     syncVisionModeControls();
 
     const targets = visionTargets();
+    // Catalog availability is NOT a working vision model. After confirmed HTTP 402,
+    // avoid resetting the warning on each page navigation or retrying automatically.
+    if (targets.length === 1 && targets[0] === 'cloud' && cloudQuotaBlocked()) {
+      state.visionStatus = 'quota_blocked';
+      state.visionSource = 'cloud';
+      status.dataset.ready = 'false';
+      status.textContent = '⛔ AI відхилив фото з HTTP 402. Ключ сервера збережений, але сканування хмарою зараз недоступне. Нижче можна сканувати пікселі фото локально без AI.';
+      statusPill();
+      updateCloudSettings();
+      if(state.view === 'home') renderHome();
+      return;
+    }
     let errorMessage = '';
     let missingModel = null;
     if (!targets.length) {
@@ -788,6 +815,7 @@
                       const quotaBlocked = response.status === 402 || /HTTP\s*402\b/i.test(String(answer.error || ''));
                       if (quotaBlocked && cloud) {
                         state.visionStatus = 'quota_blocked';
+                        markCloudQuotaBlocked();
                         const liveStatus = $('vision-status');
                         if (liveStatus) {
                           liveStatus.dataset.ready = 'false';
@@ -821,6 +849,7 @@
                 if (requestId !== imageRequestId) return;
                 state.visionSource = successfulTarget;
                 state.visionStatus = 'ready';
+                if (successfulTarget === 'cloud') clearCloudQuotaBlocked();
                 statusPill();
                 updateCloudSettings();
                 const status = $('vision-status');
@@ -935,6 +964,11 @@
             if (analyzer && typeof analyzer.run === 'function') analyzer.run();
           });
           aiArea.appendChild(publicButton);
+          // Real browser-side image processing: independent from cloud credits.
+          // It can find colored candle-like shapes but never claims AI/price prediction.
+          if (window.cryptoMyshkaPhotoScan && typeof window.cryptoMyshkaPhotoScan.attach === 'function') {
+            window.cryptoMyshkaPhotoScan.attach({image,container:aiArea,fileName:file.name});
+          }
           const expandPreview = document.createElement('button');
           expandPreview.type = 'button';
           expandPreview.className = 'small-button chart-preview-toggle';
@@ -948,7 +982,10 @@
           // Keep inference status visible ahead of the large chart screenshot.
           info.append(heading, aiArea, preview, fileLabel, expandPreview, note);
           box.replaceChildren(info);
-          if (visionTargets().length) aiButton.click();
+          // The offline scanner above runs immediately. Do not auto-spend API calls
+          // while a recent real HTTP 402 is known; the retry button stays enabled.
+          const targetsNow = visionTargets();
+          if (targetsNow.includes('local') || (targetsNow.includes('cloud') && !cloudQuotaBlocked())) aiButton.click();
         };
         image.src = dataUrl;
       };
@@ -1022,6 +1059,8 @@
       state.cloudEndpoint = endpoint;
       state.cloudAccess = access;
       // Pressing "Connect cloud" is an explicit cloud-mode selection.
+      // User explicitly reconnecting also opts into trying again after HTTP 402.
+      clearCloudQuotaBlocked();
       state.prefs.visionMode = 'cloud';
       persist();
       syncVisionModeControls();
@@ -1031,7 +1070,7 @@
       } catch { toast('Сховище браузера недоступне. Параметри діють лише до оновлення.'); }
       await checkVisionHealth();
       if (state.visionSource === 'cloud' && ['ready', 'provisional'].includes(state.visionStatus))
-        toast('Хмарний JEV налаштовано. Перевір аналіз на одному фото.');
+        toast('Сервер і код JEV доступні. Це не перевірка AI-аналізу фото; перевір один запит.');
       else toast('Хмарний JEV не підтверджено. Перевір адресу, код і секрети сервера.');
     });
     $('cloud-disconnect').addEventListener('click', () => {
@@ -1040,6 +1079,7 @@
       $('cloud-endpoint').value = '';
       $('cloud-access').value = '';
       try { localStorage.removeItem(CLOUD_URL_KEY); sessionStorage.removeItem(CLOUD_ACCESS_KEY); } catch {}
+      clearCloudQuotaBlocked();
       if (state.prefs.visionMode === 'cloud') state.prefs.visionMode = 'auto';
       persist();
       syncVisionModeControls();
