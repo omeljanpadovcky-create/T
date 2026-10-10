@@ -92,7 +92,7 @@ function replyError(status, message) {
 
 async function callGemini(apiKey, messages) {
   const model = process.env.JEV_CLOUD_MODEL || 'gemini-2.5-flash-lite';
-  const systemText = messages.filter(x => x.role === 'system').map(x => x.content).join('\\n\\n');
+  const systemText = messages.filter(x => x.role === 'system').map(x => x.content).join('\n\n');
   const conversation = messages.filter(x => x.role !== 'system')
     .map(x => ({role:x.role === 'assistant' ? 'model' : 'user',parts:[{text:x.content}]}));
   const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' +
@@ -191,7 +191,7 @@ export default async function handler(req,res){
     const ctx=await contextFor(message);
     const messages=[
       {role:'system',content:SYSTEM},
-      {role:'system',content:'Контекст із публічних джерел КриптоМишки (може бути застарілим/неповним):\\n'+JSON.stringify(ctx).slice(0,14000)},
+      {role:'system',content:'Контекст із публічних джерел КриптоМишки (може бути застарілим/неповним):\n'+JSON.stringify(ctx).slice(0,14000)},
       ...history.map(x=>({role:x.role==='assistant'?'assistant':'user',content:String(x.content||'').slice(0,1000)})),
       {role:'user',content:message}
     ];
