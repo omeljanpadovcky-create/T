@@ -10,6 +10,7 @@ on:
     paths:
       - 'crypto_myshka/youtube_archive.py'
       - 'crypto_myshka/video_jev.py'
+      - 'crypto_myshka/jev_gemini_dialogue.py'
       - 'crypto_myshka/video_gemini.py'
       - 'crypto_myshka/tests/test_youtube_archive.py'
       - '.github/workflows/crypto-myshka-video-archive.yml'
@@ -36,7 +37,7 @@ jobs:
         run: python -m pip install requests==2.32.5 yt-dlp
       - name: Check Python syntax and archive guarantees
         run: |
-          python -m py_compile crypto_myshka/youtube_archive.py crypto_myshka/video_jev.py crypto_myshka/video_gemini.py
+          python -m py_compile crypto_myshka/youtube_archive.py crypto_myshka/video_jev.py crypto_myshka/video_gemini.py crypto_myshka/jev_gemini_dialogue.py
           python -m unittest crypto_myshka.tests.test_youtube_archive crypto_myshka.tests.test_jev_video_context -v
       - name: Show Gemini API setup status (no secret values)
         env:
@@ -64,6 +65,13 @@ jobs:
           VIDEO_ARCHIVE_RECENT: '12'
           VIDEO_ARCHIVE_DETAILS: '5'
         run: python crypto_myshka/youtube_archive.py
+      - name: Gemini and JEV discuss one newly reviewed video (research only)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          APINEX_API_KEY: ${{ secrets.APINEX_API_KEY }}
+          YOUTUBE_GEMINI_MODEL: 'gemini-2.5-flash'
+          YOUTUBE_JEV_MODEL: 'free/deepseek-v4.1-flash'
+        run: python crypto_myshka/jev_gemini_dialogue.py
       - name: Print evidence-based video analysis progress
         run: |
           python - <<'PY'
@@ -91,12 +99,15 @@ jobs:
           git config user.email "crypto-myshka@users.noreply.github.com"
           cp crypto_myshka/data/youtube_archive.json /tmp/myshka_video_archive.json
           cp crypto_myshka/data/jev_video_knowledge.json /tmp/myshka_jev_video_knowledge.json
+          if [ -f crypto_myshka/data/jev_research_dialogues.json ]; then cp crypto_myshka/data/jev_research_dialogues.json /tmp/myshka_jev_dialogues.json; fi
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             git reset --hard origin/main
             cp /tmp/myshka_video_archive.json crypto_myshka/data/youtube_archive.json
             cp /tmp/myshka_jev_video_knowledge.json crypto_myshka/data/jev_video_knowledge.json
+            if [ -f /tmp/myshka_jev_dialogues.json ]; then cp /tmp/myshka_jev_dialogues.json crypto_myshka/data/jev_research_dialogues.json; fi
             git add crypto_myshka/data/youtube_archive.json crypto_myshka/data/jev_video_knowledge.json
+            if [ -f crypto_myshka/data/jev_research_dialogues.json ]; then git add crypto_myshka/data/jev_research_dialogues.json; fi
             if git diff --cached --quiet; then
               echo "No new or enriched videos"
               exit 0
