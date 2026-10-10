@@ -10,6 +10,58 @@
   const percent = v => (v>=0?'+':'')+v.toFixed(3)+'%';
   const formatPrice = n => Number(n).toLocaleString('uk-UA',{maximumFractionDigits:6});
 
+  // Transparent heuristic, not AI or a validated prediction. Features use only
+  // completed candles up to index i. The next-candle result is never used to score it.
+  function vote(candles,index){
+    if(index<26)return {bias:'unknown',score:0,reasons:[]};
+    const rows=candles.slice(0,index+1),closes=rows.map(x=>x.close),last=rows[rows.length-1];
+    function ema(period){
+      let value=closes.slice(0,period).reduce((a,b)=>a+b,0)/period;
+      for(let i=period;i<closes.length;i++)value+=2/(period+1)*(closes[i]-value);
+      return value;
+    }
+    let tr=0;
+    for(let k=rows.length-14;k<rows.length;k++){
+      const row=rows[k],previous=rows[k-1].close;
+      tr+=Math.max(row.high-row.low,Math.abs(row.high-previous),Math.abs(row.low-previous));
+    }
+    const atr=tr/14;
+    if(!(atr>0))return {bias:'unknown',score:0,reasons:[]};
+    let gain=0,loss=0;
+    for(let k=closes.length-14;k<closes.length;k++){
+      const diff=closes[k]-closes[k-1];
+      gain+=Math.max(diff,0);loss+=Math.max(-diff,0);
+    }
+    const rsi=gain===0&&loss===0?50:loss===0?100:100-100/(1+gain/loss);
+    const classify=(change,min)=>change>min?1:change< -min?-1:0;
+    const components=[
+      ['EMA 9/21',classify(ema(9)-ema(21),atr*.1)],
+      ['Імпульс 3 свічок',classify(last.close-rows[rows.length-4].close,atr*.25)],
+      ['RSI 14',classify(rsi-50,5)],
+      ['Тіло останньої свічки',classify(last.close-last.open,atr*.12)]
+    ];
+    const score=components.reduce((s,p)=>s+p[1],0);
+    const active=components.filter(p=>p[1]!==0).length;
+    return {
+      bias:active>=3&&Math.abs(score)>=3?(score>0?'up':'down'):'unknown',
+      score,
+      reasons:components.map(([name,v])=>name+': '+(v>0?'↑':v<0?'↓':'—'))
+    };
+  }
+  function evaluate(candles){
+    const recent=vote(candles,candles.length-1);
+    let tries=0,hits=0,skipped=0;
+    for(let i=Math.max(26,candles.length-61);i<candles.length-1;i++){
+      const observation=vote(candles,i);
+      const old=candles[i].close,next=candles[i+1].close;
+      if(observation.bias==='unknown'||Math.abs(next/old-1)<.00005){skipped++;continue;}
+      tries++;
+      if((next>old)===(observation.bias==='up'))hits++;
+    }
+    return {bias:recent.bias,score:recent.score,reasons:recent.reasons,
+      trials:tries,hits,misses:tries-hits,skipped,
+      observedAccuracy:tries?100*hits/tries:null};
+  }
   function review(payload, symbol, interval, category, now=Date.now()){
     if(!ALLOWED_INTERVALS.has(String(interval))||!ALLOWED_CATEGORIES.has(category))
       throw new Error('Непідтримуваний тип ринку або таймфрейм.');
@@ -38,6 +90,7 @@
     const direction=Math.abs(delta)<.005?'unknown':delta>0?'up':'down';
     return {symbol,category,intervalMinutes:minutes,completedCount:completed.length,
       direction,changePct:delta,
+      scenario:evaluate(completed),
       firstClose:first.close,lastClose:last.close,
       lastClosedAt:new Date(last.start+minutes*60000).toISOString(),
       source:'Bybit V5 /v5/market/kline',notScreenshot:true,
