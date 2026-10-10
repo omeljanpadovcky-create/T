@@ -86,8 +86,8 @@
         },
         "approved_patterns": []
       },
-      "latest_bar_closed_at": "2026-10-10T18:55:00Z",
-      "latest_close": 83048.39,
+      "latest_bar_closed_at": "2026-10-10T20:25:00Z",
+      "latest_close": 83054.78,
       "latest_heuristic": "STOP",
       "latest_research_signal": "STOP",
       "pattern": "STOP_range",
@@ -98,7 +98,7 @@
         "avg_paper_net_pct": null
       },
       "forward_settled": 0,
-      "forward_stop_count": 1
+      "forward_stop_count": 2
     },
     "ETHUSDT": {
       "backtest": {
@@ -185,11 +185,11 @@
         },
         "approved_patterns": []
       },
-      "latest_bar_closed_at": "2026-10-10T18:55:00Z",
-      "latest_close": 2512.01,
-      "latest_heuristic": "STOP",
+      "latest_bar_closed_at": "2026-10-10T20:25:00Z",
+      "latest_close": 2508.92,
+      "latest_heuristic": "DOWN",
       "latest_research_signal": "STOP",
-      "pattern": "STOP_trend",
+      "pattern": "DOWN_range",
       "forward_observed": {
         "observations": 0,
         "directional_accuracy_pct": null,
@@ -197,7 +197,7 @@
         "avg_paper_net_pct": null
       },
       "forward_settled": 0,
-      "forward_stop_count": 1
+      "forward_stop_count": 2
     },
     "SOLUSDT": {
       "backtest": {
@@ -284,11 +284,11 @@
         },
         "approved_patterns": []
       },
-      "latest_bar_closed_at": "2026-10-10T18:55:00Z",
-      "latest_close": 110.32,
+      "latest_bar_closed_at": "2026-10-10T20:25:00Z",
+      "latest_close": 110.34,
       "latest_heuristic": "STOP",
       "latest_research_signal": "STOP",
-      "pattern": "STOP_trend",
+      "pattern": "STOP_range",
       "forward_observed": {
         "observations": 0,
         "directional_accuracy_pct": null,
@@ -296,10 +296,43 @@
         "avg_paper_net_pct": null
       },
       "forward_settled": 0,
-      "forward_stop_count": 1
+      "forward_stop_count": 2
     }
   },
   "forward_predictions": [
+    {
+      "id": "BTCUSDT:1791663600000",
+      "symbol": "BTCUSDT",
+      "candle_closed_at": "2026-10-10T20:25:00Z",
+      "target_candle_start": 1791663900000,
+      "signal": "STOP",
+      "ungated_heuristic": "STOP",
+      "pattern": "STOP_range",
+      "evaluated_at": null,
+      "outcome": null
+    },
+    {
+      "id": "ETHUSDT:1791663600000",
+      "symbol": "ETHUSDT",
+      "candle_closed_at": "2026-10-10T20:25:00Z",
+      "target_candle_start": 1791663900000,
+      "signal": "STOP",
+      "ungated_heuristic": "DOWN",
+      "pattern": "DOWN_range",
+      "evaluated_at": null,
+      "outcome": null
+    },
+    {
+      "id": "SOLUSDT:1791663600000",
+      "symbol": "SOLUSDT",
+      "candle_closed_at": "2026-10-10T20:25:00Z",
+      "target_candle_start": 1791663900000,
+      "signal": "STOP",
+      "ungated_heuristic": "STOP",
+      "pattern": "STOP_range",
+      "evaluated_at": null,
+      "outcome": null
+    },
     {
       "id": "BTCUSDT:1791658200000",
       "symbol": "BTCUSDT",
@@ -308,8 +341,10 @@
       "signal": "STOP",
       "ungated_heuristic": "STOP",
       "pattern": "STOP_range",
-      "evaluated_at": null,
-      "outcome": null
+      "evaluated_at": "2026-10-10T19:00:00Z",
+      "outcome": {
+        "reason": "STOP; no direction predicted"
+      }
     },
     {
       "id": "ETHUSDT:1791658200000",
@@ -319,8 +354,10 @@
       "signal": "STOP",
       "ungated_heuristic": "STOP",
       "pattern": "STOP_trend",
-      "evaluated_at": null,
-      "outcome": null
+      "evaluated_at": "2026-10-10T19:00:00Z",
+      "outcome": {
+        "reason": "STOP; no direction predicted"
+      }
     },
     {
       "id": "SOLUSDT:1791658200000",
@@ -330,11 +367,13 @@
       "signal": "STOP",
       "ungated_heuristic": "STOP",
       "pattern": "STOP_trend",
-      "evaluated_at": null,
-      "outcome": null
+      "evaluated_at": "2026-10-10T19:00:00Z",
+      "outcome": {
+        "reason": "STOP; no direction predicted"
+      }
     }
   ],
-  "updated_at": "2026-10-10T18:58:08.416000Z",
+  "updated_at": "2026-10-10T20:26:34.932000Z",
   "interval_minutes": 5,
   "history_requested_since": "2026-01-01T00:00:00Z",
   "market": "Binance Spot public (Bybit 403 fallback; NOT Bybit futures)",
