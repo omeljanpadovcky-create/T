@@ -213,6 +213,25 @@
     if(!state.image)$('ai-status').textContent='Спершу завантаж фото графіка.';
     else if(!connected())$('ai-status').textContent='🔑 Потрібен URL Vercel і код доступу JEV в Налаштуваннях.';
   }
+  async function probeBackend(){
+    const endpoint=cloudEndpoint();
+    if(!endpoint){setCloudLabel('⚠️ Вкажи HTTPS адресу сервера JEV');return;}
+    setCloudLabel('⏳ Перевіряємо Pocket API…');
+    const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),9000);
+    try{
+      const response=await fetch(endpoint+'/api/pocket-vision',
+        {method:'GET',cache:'no-store',signal:ctrl.signal});
+      if(!connected()){
+        if(response.status===405) setCloudLabel('☁️ Pocket API онлайн · 🔑 потрібен код JEV');
+        else if(response.status===404) setCloudLabel('⚠️ Pocket API не знайдено на Vercel');
+        else if([401,403].includes(response.status))
+          setCloudLabel('⚠️ Доступ до Pocket API обмежено сервером');
+        else setCloudLabel('⚠️ Pocket API: HTTP '+response.status);
+      }
+    }catch(e){
+      if(!connected())setCloudLabel('⚠️ Pocket API недоступне: '+(e?.name==='AbortError'?'час очікування вийшов':'мережа/CORS'));
+    }finally{clearTimeout(timer);}
+  }
   async function connect(){
     const endpoint=cloudEndpoint(),access=cloudAccess();
     if(!endpoint||access.length<24){setCloudLabel('🔑 Введи HTTPS URL і код JEV (не API-ключ).');updateAIButton();return;}
@@ -233,7 +252,7 @@
         throw Error('Pocket AI API ще не розгорнуто (HTTP '+pocketProbe.status+').');
       try{localStorage.setItem(ENDPOINT_KEY,endpoint);sessionStorage.setItem(SESSION_KEY,access);}catch{}
       state.cloudReady=true;state.provider=data.provider;state.model=data.model;
-      setCloudLabel('☁️ '+(data.provider||'AI')+' · каталог доступний, фото не перевірено',true);
+      setCloudLabel('☁️ Pocket API та '+(data.provider||'AI')+' підключено · аналіз фото не перевірено');
       $('ai-status').textContent='Можна надіслати вирізану частину фото. Каталог моделей не гарантує, що AI відповість.';
     }catch(e){
       state.cloudReady=false;setCloudLabel('⚠️ JEV: '+String(e.message||'Недоступний').slice(0,160));
@@ -272,7 +291,8 @@
       state.ai=result;
       renderVerdict(result);
       $('ai-status').textContent='✅ Модель відповіла. Це аналіз фото, не підтверджені поточні OTC-котирування.';
-      setCloudLabel('☁️ JEV відповів · '+(answer.provider||'AI'),true);
+      setCloudLabel(answer.provider==='rules'?'⚠️ Лише перевірка параметрів, AI не викликано':
+        '✅ JEV відповів · '+(answer.provider||'AI'),answer.provider!=='rules');
     }catch(e){
       state.ai=null;renderVerdict(null,'AI недоступний: '+String(e.message||'Помилка').slice(0,200)+
         '. Рішення без відповіді моделі не створюємо.');
@@ -402,7 +422,10 @@
     }
     installPointer();showMath();updateAIButton();renderVerdict(null);
     route(SCREENS.has(location.hash.slice(1))?location.hash.slice(1):'home');
-    if(connected()){setCloudLabel('🔑 Код є · натисни Перевірити підключення');updateAIButton();}
+    // A saved tab-only token is sufficient to re-check the model catalog.
+    // With no token, publicly probe only route existence; never send a screenshot.
+    if(connected())void connect();
+    else void probeBackend();
     setInterval(()=>{if(!$('screen-history').hidden)renderJournal();},15000);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
