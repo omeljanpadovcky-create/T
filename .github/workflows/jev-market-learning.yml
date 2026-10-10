@@ -1,0 +1,78 @@
+name: JEV Bybit Cloud Research (15m, read-only)
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Approximate cadence: GitHub Actions schedules can be delayed or skipped.
+    - cron: '7,22,37,52 * * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: jev-bybit-market-learning
+  cancel-in-progress: false
+
+jobs:
+  forward-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout current state
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Test anti-lookahead rules and syntax
+        run: |
+          python -m py_compile crypto_myshka/market_learning.py
+          python -m unittest crypto_myshka.tests.test_market_learning -v
+
+      - name: Read Bybit public candles and score only later closed bars
+        run: python crypto_myshka/market_learning.py
+
+      - name: Show confirmed statistics, not invented AI confidence
+        run: |
+          python - <<'PY'
+          import json, os
+          with open('crypto_myshka/data/market_learning.json', encoding='utf-8') as f:
+              state=json.load(f)
+          lines=["### JEV · Bybit cloud observation",
+                 "Market: Bybit public linear candles, 15m, read-only",
+                 "Forward outcomes are separate from the chronological historical holdout."]
+          for symbol, row in state["symbols"].items():
+              lines.append(f"- {symbol}: historical bars={row['backtest']['candles']}, "
+                           f"last closed={row['latest_bar_closed_at']}, "
+                           f"hypothesis={row['latest_research_signal']}, "
+                           f"forward evaluated={row['forward_settled']}.")
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as f:
+              f.write('\n'.join(lines)+'\n')
+          PY
+
+      - name: Publish only research state (retry unrelated concurrent writers)
+        run: |
+          git config user.name "JEV Market Research"
+          git config user.email "crypto-myshka@users.noreply.github.com"
+          cp crypto_myshka/data/market_learning.json /tmp/jev-market-learning.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/jev-market-learning.json crypto_myshka/data/market_learning.json
+            git add crypto_myshka/data/market_learning.json
+            if git diff --cached --quiet; then
+              echo "No changed research state"
+              exit 0
+            fi
+            git commit -m "JEV read-only Bybit prospective observation"
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Could not publish research observations without a conflict"
+          exit 1
