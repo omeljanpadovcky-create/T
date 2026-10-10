@@ -15,12 +15,17 @@ import pathlib
 import time
 import urllib.parse
 import urllib.request
+import urllib.error
 from collections import defaultdict
 
 SYMBOLS = ("BTCUSDT", "ETHUSDT", "SOLUSDT")
 START_MS = int(dt.datetime(2026, 1, 1, tzinfo=dt.timezone.utc).timestamp() * 1000)
 STEP = 15 * 60 * 1000
 API = "https://api.bybit.com/v5/market/kline"
+BINANCE_API = "https://data-api.binance.vision/api/v3/klines"
+BYBIT_SOURCE = "Bybit V5 linear"
+BINANCE_SOURCE = "Binance Spot public (Bybit 403 fallback; NOT Bybit futures)"
+ACTIVE_SOURCE = BYBIT_SOURCE
 STATE_FILE = pathlib.Path("crypto_myshka/data/market_learning.json")
 ASSUMED_ROUND_TRIP_COST_PCT = 0.14  # illustration, not measured fees/spread/funding
 USER_AGENT = "CryptoMyshka-Bybit-ReadOnly-Research/1.0"
@@ -31,21 +36,37 @@ def utc_iso(ms):
 
 
 def request_bars(symbol, start, end):
-    query = urllib.parse.urlencode({
-        "category": "linear", "symbol": symbol, "interval": "15",
-        "start": start, "end": end, "limit": 1000,
-    })
-    request = urllib.request.Request(API + "?" + query, headers={
+    if ACTIVE_SOURCE == BINANCE_SOURCE:
+        query = urllib.parse.urlencode({
+            "symbol": symbol, "interval": "15m",
+            "startTime": start, "endTime": end, "limit": 1000,
+        })
+        url = BINANCE_API + "?" + query
+    elif ACTIVE_SOURCE == BYBIT_SOURCE:
+        query = urllib.parse.urlencode({
+            "category": "linear", "symbol": symbol, "interval": "15",
+            "start": start, "end": end, "limit": 1000,
+        })
+        url = API + "?" + query
+    else:
+        raise ValueError("Unknown exchange provider")
+    request = urllib.request.Request(url, headers={
         "User-Agent": USER_AGENT, "Accept": "application/json"
     })
     for attempt in range(3):
         try:
             with urllib.request.urlopen(request, timeout=25) as response:
                 payload = json.load(response)
-            if payload.get("retCode") != 0 or payload.get("result", {}).get("symbol") != symbol:
-                raise ValueError("Bybit rejected bar request")
+            if ACTIVE_SOURCE == BYBIT_SOURCE:
+                if payload.get("retCode") != 0 or payload.get("result", {}).get("symbol") != symbol:
+                    raise ValueError("Bybit rejected bar request")
+                rows = payload.get("result", {}).get("list", [])
+            else:
+                if not isinstance(payload, list):
+                    raise ValueError("Binance did not return a candle list")
+                rows = payload
             result = []
-            for row in payload.get("result", {}).get("list", []):
+            for row in rows:
                 bar = [int(row[0])] + [float(row[k]) for k in range(1, 6)]
                 t, op, hi, lo, cl, vol = bar
                 if (start <= t <= end and all(math.isfinite(x) for x in bar)
@@ -53,6 +74,14 @@ def request_bars(symbol, start, end):
                         and lo <= max(op, cl) <= hi):
                     result.append(bar)
             return sorted(result)
+        except urllib.error.HTTPError as exc:
+            # A 403/451 on Bybit in GitHub US runners is not a missing candle.
+            # Report it so the caller can explicitly switch provider and label it.
+            if exc.code in (403, 451):
+                raise
+            if attempt == 2:
+                raise
+            time.sleep(2 * (attempt + 1))
         except (OSError, ValueError, KeyError, TypeError, IndexError):
             if attempt == 2:
                 raise
@@ -214,6 +243,28 @@ def run(path=STATE_FILE, now=None, fetcher=fetch_history):
     if last_closed_start < START_MS + 200 * STEP:
         raise ValueError("Too early for research")
     state = load_state(path)
+    global ACTIVE_SOURCE
+    previous_source = state.get("market")
+    if previous_source in (BYBIT_SOURCE, BINANCE_SOURCE):
+        ACTIVE_SOURCE = previous_source
+    elif fetcher is fetch_history:
+        # Detect service accessibility from the GitHub runner before backfilling.
+        ACTIVE_SOURCE = BYBIT_SOURCE
+        try:
+            probe = request_bars("BTCUSDT", last_closed_start - 30 * STEP,
+                                 last_closed_start - 25 * STEP)
+            if len(probe) < 4:
+                raise ValueError("Bybit returned insufficient probe candles")
+        except urllib.error.HTTPError as exc:
+            if exc.code not in (403, 451):
+                raise
+            print("Bybit public feed returns", exc.code,
+                  "from the GitHub runner. Trying explicitly labeled Binance Spot.")
+            ACTIVE_SOURCE = BINANCE_SOURCE
+            probe = request_bars("BTCUSDT", last_closed_start - 30 * STEP,
+                                 last_closed_start - 25 * STEP)
+            if len(probe) < 4:
+                raise ValueError("Binance fallback has insufficient confirmed candles")
     today = utc_iso(now_ms)
     updates = {}
     for symbol in SYMBOLS:
@@ -288,7 +339,7 @@ def run(path=STATE_FILE, now=None, fetcher=fetch_history):
     state["updated_at"] = today
     state["interval_minutes"] = 15
     state["history_requested_since"] = "2026-01-01T00:00:00Z"
-    state["market"] = "Bybit V5 linear public candles"
+    state["market"] = ACTIVE_SOURCE
     state["mode"] = "read_only_research"
     state["orders_enabled"] = False
     state["ai_weights_trained"] = False
