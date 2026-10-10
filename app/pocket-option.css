@@ -5,3 +5,20 @@
 @media(max-width:900px){.shell{grid-template-columns:210px 1fr}.sidebar{padding:26px 12px}.menu button{padding:13px 9px;gap:10px}.brand{gap:8px}.brand strong{font-size:16px}.hero{padding:26px}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.shell{display:block}.sidebar{display:none}.topbar{height:64px;padding:0 16px}.mini-brand small{display:none}.topbar .pill{font-size:10px;max-width:54%;overflow:hidden;text-overflow:ellipsis}main{padding:25px 15px 100px}.hero{grid-template-columns:1fr;min-height:220px}.hero-chart{display:none}.form-grid{grid-template-columns:1fr 1fr}.card{padding:17px}.statgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.archive-grid{grid-template-columns:1fr}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:20;background:#0c1425f5;border-top:1px solid var(--line);padding:9px 4px max(8px,env(safe-area-inset-bottom));justify-content:space-around;gap:4px;backdrop-filter:blur(15px)}.mobile-nav button{border:0;background:transparent;color:#9db4d0;font-size:21px;min-width:53px;display:grid;justify-items:center;gap:1px}.mobile-nav button.active{color:#79aaff}.mobile-nav small{font-size:10px}footer{padding:20px 15px 105px}.toast{bottom:85px;left:15px;right:15px;text-align:center}.header-line{display:block}.header-line>.pill{margin:9px 0}.section-title{align-items:flex-start;flex-wrap:wrap}}
 @media(max-width:380px){.form-grid{grid-template-columns:1fr}.statgrid{grid-template-columns:1fr}.topbar .pill{display:none}}
+
+/* Five-item mobile navigation: equal-width tabs and compact icons */
+@media(max-width:700px){
+ .mobile-nav{align-items:stretch;gap:0;padding-left:4px;padding-right:4px}
+ .mobile-nav button,.mobile-nav a{
+   flex:1 1 0;min-width:0;max-width:20%;width:20%;
+   display:flex;flex-direction:column;align-items:center;justify-content:center;
+   gap:4px;box-sizing:border-box;padding:7px 1px;
+   font-size:21px;line-height:1.2;white-space:nowrap;
+   color:#9db4d0;background:transparent;border:0;text-decoration:none;
+ }
+ .mobile-nav button small,.mobile-nav a small{
+   display:block;font-size:10px;line-height:1.2;font-weight:500;
+   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
+ }
+ .mobile-nav button.active,.mobile-nav a.active{color:#79aaff}
+}
