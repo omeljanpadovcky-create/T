@@ -3,6 +3,23 @@
 </style></head><body><main><header><b>🐭 Crypto Myshka</b><a href="./myshka-app.html#analysis">← Pocket Analysis</a></header>
 <h1>JEV · Автономне демо</h1><p class="muted">Автоматичні <b>віртуальні</b> угоди за публічними цінами Binance Spot. <b>Це не Pocket Option OTC</b> і не угоди в акаунті брокера. Жодних грошей, ключів або підключення до біржі.</p>
 <div class="card"><span class="pill">● PAPER ONLY · БЕЗ РЕАЛЬНИХ ОРДЕРІВ</span><label>Публічний ринок<select id="pair"><option value="BTCUSDT">BTC/USDT</option><option value="ETHUSDT">ETH/USDT</option><option value="SOLUSDT">SOL/USDT</option></select></label><div class="controls"><button class="primary" id="start">▶ Запустити автодемо</button><button id="stop" disabled>■ Зупинити</button><button id="reset">↺ Очистити журнал</button></div><p id="status" class="muted" role="status">Очікуємо запуску. Поки сторінка відкрита, JEV перевіряє ринок приблизно кожні 15 секунд.</p></div>
+<div class="card"><h2>☁️ Фонова Мишка · BTC/USDT</h2><p class="muted">Безкоштовний запуск GitHub Actions приблизно раз на 5 хвилин. Працює незалежно від цієї вкладки, якщо GitHub Actions увімкнено. Це окремий журнал від браузерного автодемо.</p><div id="background-status" class="muted" role="status">Перевіряємо фоновий журнал…</div><p><a href="https://github.com/omeljanpadovcky-create/T/actions/workflows/btc-paper.yml" target="_blank" rel="noopener noreferrer">Перевірити запуски GitHub Actions ↗</a></p></div>
+<script>
+(async function refreshBackground(){
+ const el=document.getElementById('background-status');
+ try{
+ const res=await fetch('./data/btc-paper.json?ts='+Date.now(),{cache:'no-store'});
+ if(!res.ok)throw Error('Ще немає першого результату');
+ const d=await res.json(),trades=Array.isArray(d.trades)?d.trades:[];
+ const pnl=trades.reduce((sum,t)=>sum+(Number(t.pnl)||0),0);
+ el.textContent='Остання перевірка: '+(d.checked_at||'—')+' · Статус: '+(d.status||'—')+
+ ' · Демоугод: '+trades.length+' · Умовний P&L: '+pnl.toFixed(2)+' USDT'+
+ (d.error?' · Помилка: '+d.error:'')+
+ (d.pending?' · Є незавершена віртуальна угода':'');
+ }catch(e){el.textContent='Фонова автоматизація ще не створила журнал. Перевір GitHub Actions → BTC Paper → Run workflow.';}
+ setTimeout(refreshBackground,60000);
+})();
+</script>
 <div class="stats"><div class="stat"><small>Ціна ринку (USDT)</small><strong id="price">—</strong></div><div class="stat"><small>Стан JEV</small><strong id="signal">СТОП</strong></div><div class="stat"><small>Демо P&L (USDT)</small><strong id="pnl">0.00</strong></div><div class="stat"><small>Перевірені / виграшні</small><strong id="score">0 / 0</strong></div></div>
 <div class="card"><h2>Поточна віртуальна угода</h2><div id="pending" class="muted">Немає відкритої демоугоди.</div><p class="muted">Умовна ставка 10 USDT · експірація 60 с · виплата 92% · програш −10 USDT. Це модель бінарної виплати, <b>не реальні умови Binance</b>. Відкриття за фактично отриманою ціною; результат за першою отриманою ціною після 60 с, тому при затримках можливе відхилення.</p></div>
 <div class="card"><h2>Деможурнал</h2><div class="scroll"><table><thead><tr><th>Час</th><th>Пара</th><th>Напрям</th><th>Вхід → вихід</th><th>Результат</th></tr></thead><tbody id="rows"><tr><td colspan="5">Поки порожньо</td></tr></tbody></table></div></div>
