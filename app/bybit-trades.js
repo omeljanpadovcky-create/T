@@ -1,0 +1,55 @@
+/* User-supplied Bybit Master Trader history: local-only, no credentials, no execution. */
+(() => {
+'use strict';
+const input=document.getElementById('bybit-trades-file'),status=document.getElementById('bybit-trades-status'),target=document.getElementById('bybit-trades-table'),clear=document.getElementById('bybit-trades-clear');
+if(!input||!status||!target)return;
+const key='myshka.bybit.verified-trades.v1';
+const cleanText=(v,max=100)=>typeof v==='string'?v.trim().slice(0,max):'';
+const validDate=v=>typeof v==='string'&&!Number.isNaN(Date.parse(v))?new Date(v).toISOString():'';
+function normalize(raw){
+ if(!raw||!Array.isArray(raw.trades)||raw.trades.length>3000)throw Error('Очікується масив trades (до 3000 записів)');
+ const seen=new Set(),trades=[];
+ for(const row of raw.trades){
+  if(!row||typeof row!=='object')continue;
+  const trader=cleanText(row.trader,80),symbol=cleanText(row.symbol,30).toUpperCase(),side=cleanText(row.side,12),opened=validDate(row.opened_at);
+  const entry=Number(row.entry_price),closed=validDate(row.closed_at),exit=Number(row.exit_price);
+  const url=cleanText(row.source_url,400);
+  if(!trader||!/^([A-Z0-9]{4,20})$/.test(symbol)||!['Buy','Sell','Long','Short'].includes(side)||!opened||!(entry>0))continue;
+  if(url&&(!url.startsWith('https://www.bybit.com/')&&!url.startsWith('https://bybit.com/')))continue;
+  const fingerprint=[trader,symbol,side,opened,entry].join('|');
+  if(seen.has(fingerprint))continue;seen.add(fingerprint);
+  trades.push({trader,symbol,side,opened,entry,closed,exit:closed&&exit>0?exit:null,url});
+ }
+ return trades.slice(0,1000);
+}
+function render(trades){
+ target.replaceChildren();
+ if(!trades.length){status.textContent='Немає коректних записів угод';return;}
+ const traders=new Set(trades.map(t=>t.trader));
+ const closed=trades.filter(t=>t.closed&&t.exit);
+ const positive=closed.filter(t=>(t.side==='Buy'||t.side==='Long'?t.exit-t.entry:t.entry-t.exit)>0).length;
+ status.textContent=`Імпортовано ${trades.length} унікальних угод · ${traders.size} трейдерів · ${closed.length} закритих · ${closed.length?Math.round(positive/closed.length*100)+'% напрямків у плюс':'результат невідомий'} (без комісій, funding і розміру позицій). Джерело: імпорт користувача, не LIVE.`;
+ const table=document.createElement('table');table.style.cssText='width:100%;text-align:left;font-size:12px';
+ const header=document.createElement('tr');
+ for(const v of ['Трейдер','Пара','Напрям','Відкрито','Вхід','Вихід','Результат']){const th=document.createElement('th');th.textContent=v;header.appendChild(th)}
+ table.appendChild(header);
+ for(const t of trades.slice(0,100)){
+  const tr=document.createElement('tr');
+  const direction=t.side==='Buy'||t.side==='Long'?1:-1;
+  const result=t.exit?((t.exit/t.entry-1)*direction*100).toFixed(2)+'%*':'відкрита / невідомо';
+  for(const v of [t.trader,t.symbol,t.side,t.opened.slice(0,16),String(t.entry),t.exit?String(t.exit):'—',result]){const td=document.createElement('td');td.textContent=v;td.style.padding='6px 9px 6px 0';tr.appendChild(td)}
+  table.appendChild(tr);
+ }
+ target.appendChild(table);
+ const note=document.createElement('small');note.textContent='*Зміна ціни за напрямком, не ROI/P&L. Дані не верифіковано незалежно. Показано до 100 рядків.';target.appendChild(note);
+}
+input.addEventListener('change',async()=>{
+ const file=input.files?.[0];if(!file)return;
+ if(file.size>1500000){status.textContent='Файл завеликий (макс. 1,5 МБ)';return;}
+ try{const trades=normalize(JSON.parse(await file.text()));if(!trades.length)throw Error('Немає коректних угод');localStorage.setItem(key,JSON.stringify(trades));render(trades)}
+ catch(e){status.textContent='Помилка імпорту: '+e.message;}
+ input.value='';
+});
+clear?.addEventListener('click',()=>{localStorage.removeItem(key);render([]);status.textContent='Імпорт очищено';});
+try{const saved=JSON.parse(localStorage.getItem(key)||'[]');if(Array.isArray(saved)&&saved.length)render(saved)}catch{localStorage.removeItem(key)}
+})();
