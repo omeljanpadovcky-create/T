@@ -219,6 +219,14 @@
         headers:{'X-JEV-Access':access},cache:'no-store',signal:ctrl.signal});
       const data=await response.json().catch(()=>({}));
       if(!response.ok||data.ready!==true)throw Error(data.error||'HTTP '+response.status);
+      // A healthy legacy JEV catalog does not prove that the Pocket endpoint
+      // exists in the deployed Vercel revision.
+      let pocketProbe;
+      try { pocketProbe=await fetch(endpoint+'/api/pocket-vision',
+        {cache:'no-store',signal:ctrl.signal}); }
+      catch { throw Error('Pocket AI API ще не опубліковано на Vercel. Зачекай нового деплою.'); }
+      if(pocketProbe.status!==405)
+        throw Error('Pocket AI API ще не розгорнуто (HTTP '+pocketProbe.status+').');
       try{localStorage.setItem(ENDPOINT_KEY,endpoint);sessionStorage.setItem(SESSION_KEY,access);}catch{}
       state.cloudReady=true;state.provider=data.provider;state.model=data.model;
       setCloudLabel('☁️ '+(data.provider||'AI')+' · каталог доступний, фото не перевірено',true);
