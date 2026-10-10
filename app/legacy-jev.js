@@ -141,7 +141,7 @@
   }
   async function analyzePublicCandles(){
     const btn=$('legacy-jev-technical-button'),symbol=$('legacy-jev-symbol').value;
-    if(!['BTCUSDT','ETHUSDT','SOLUSDT'].includes(symbol))return;
+    if(!['TSLAUSDT','BTCUSDT','ETHUSDT','SOLUSDT'].includes(symbol))return;
     btn.disabled=true;
     put('legacy-jev-technical','Отримуємо завершені 30-хвилинні свічки Bybit…');
     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
