@@ -4,87 +4,144 @@
  */
 (() => {
   'use strict';
-  function classify(r,g,b,a) {
-    if (a < 180) return 0;
-    const hi=Math.max(r,g,b), lo=Math.min(r,g,b), delta=hi-lo;
-    if (hi < 75 || delta < 50 || delta/hi < 0.35) return 0;
-    let hue=0;
-    if (hi===r) hue=60*(((g-b)/delta)%6);
-    else if (hi===g) hue=60*((b-r)/delta+2);
-    else hue=60*((r-g)/delta+4);
-    if(hue<0)hue+=360;
-    if(hue>=67 && hue<=187) return 1;  // green/mint bullish candles
-    if(hue<=23 || hue>=336) return 2;    // red bearish candles
+  // Pixel geometry, never AI. Optional user-picked colors adapt to unusual chart palettes.
+  function hsv(r,g,b) {
+    const max=Math.max(r,g,b)/255,min=Math.min(r,g,b)/255,delta=max-min,s=max?delta/max:0;
+    if(!delta)return {h:0,s,v:max};
+    let h;
+    if(max===r/255)h=60*(((g-b)/255/delta)%6);
+    else if(max===g/255)h=60*((b-r)/255/delta+2);
+    else h=60*((r-g)/255/delta+4);
+    return {h:(h+360)%360,s,v:max};
+  }
+  function classify(r,g,b,a,options={}){
+    if(a<160)return 0;
+    const pixel=hsv(r,g,b);if(pixel.v<.18)return 0;
+    const colors=options.colors||{};
+    for(const type of [1,2]){
+      const ref=colors[type];if(!ref)continue;
+      if(ref.s<.16 && pixel.s<.18 && pixel.v>.38 && Math.abs(pixel.v-ref.v)<.12)return type;
+      const dh=Math.min(Math.abs(pixel.h-ref.h),360-Math.abs(pixel.h-ref.h));
+      if(ref.s>=.16 && pixel.s>=Math.max(.16,ref.s*.45) && dh<=22 && Math.abs(pixel.v-ref.v)<.62)return type;
+    }
+    // Once both candle colors are manually selected, ignore third-party indicators.
+    if(colors[1]&&colors[2])return 0;
+    if(pixel.s<.22||pixel.v<.29)return 0;
+    if(!colors[1]&&pixel.h>=49&&pixel.h<=197)return 1;
+    if(!colors[2]&&(pixel.h<=43||pixel.h>=326))return 2;
     return 0;
   }
-  function median(values) {
-    if(!values.length) return null;
-    const s=values.slice().sort((a,b)=>a-b),m=Math.floor(s.length/2);
-    return s.length%2?s[m]:(s[m-1]+s[m])/2;
+  function median(xs){
+    if(!xs.length)return null;
+    const a=xs.slice().sort((p,q)=>p-q),mid=a.length>>1;
+    return a.length%2?a[mid]:(a[mid-1]+a[mid])/2;
   }
-  function analyzePixels(imageData) {
-    const width=imageData.width,height=imageData.height,data=imageData.data;
-    if(width<80||height<70||!data||data.length<width*height*4)
-      return {recognized:false,reason:'Область графіка замала для аналізу.'};
-    const n=width*height, mask=new Uint8Array(n),seen=new Uint8Array(n);
-    for(let i=0,j=0;i<n;i++,j+=4)mask[i]=classify(data[j],data[j+1],data[j+2],data[j+3]);
-    const queue=new Int32Array(n), candidates=[];
-    const maxWidth=Math.max(13,Math.floor(width*0.05));
-    const minHeight=Math.max(5,Math.floor(height*0.016));
-    for(let pos=0;pos<n;pos++){
-      const color=mask[pos];
-      if(!color||seen[pos])continue;
-      let head=0,tail=1,area=0;
-      queue[0]=pos;seen[pos]=1;
-      let minX=width,maxX=0,minY=height,maxY=0;
+  function mergeX(items,width){
+    const sorted=items.sort((a,b)=>a.x-b.x||b.area-a.area),out=[],distance=Math.max(2,Math.min(4,Math.round(width*.004)));
+    for(const item of sorted){
+      const previous=out[out.length-1];
+      if(previous&&item.x-previous.x<=distance){if(item.area>previous.area)out[out.length-1]=item;}
+      else out.push(item);
+    }
+    return out;
+  }
+  function components(mask,w,h){
+    const n=w*h,seen=new Uint8Array(n),q=new Int32Array(n),items=[];
+    const maxW=Math.max(12,Math.floor(w*.055)),minH=Math.max(3,Math.floor(h*.01));
+    for(let p=0;p<n;p++){
+      const color=mask[p];if(!color||seen[p])continue;
+      q[0]=p;seen[p]=1;
+      let head=0,tail=1,area=0,left=w,right=0,top=h,bottom=0;
       while(head<tail){
-        const p=queue[head++],x=p%width,y=(p/width)|0;
-        area++;
-        if(x<minX)minX=x;if(x>maxX)maxX=x;
-        if(y<minY)minY=y;if(y>maxY)maxY=y;
-        const neighbors=[x? p-1:-1,x+1<width?p+1:-1,y?p-width:-1,y+1<height?p+width:-1];
-        for(let k=0;k<4;k++){
-          const q=neighbors[k];
-          if(q>=0 && !seen[q] && mask[q]===color){seen[q]=1;queue[tail++]=q;}
+        const i=q[head++],x=i%w,y=(i/w)|0;area++;
+        if(x<left)left=x;if(x>right)right=x;if(y<top)top=y;if(y>bottom)bottom=y;
+        if(x>0&&!seen[i-1]&&mask[i-1]===color){seen[i-1]=1;q[tail++]=i-1;}
+        if(x+1<w&&!seen[i+1]&&mask[i+1]===color){seen[i+1]=1;q[tail++]=i+1;}
+        if(y>0&&!seen[i-w]&&mask[i-w]===color){seen[i-w]=1;q[tail++]=i-w;}
+        if(y+1<h&&!seen[i+w]&&mask[i+w]===color){seen[i+w]=1;q[tail++]=i+w;}
+      }
+      const bw=right-left+1,bh=bottom-top+1;
+      if(area<4||bw>maxW||bh<minH||bh>h*.68||bh<bw*.48||area<Math.max(4,.11*bw*bh))continue;
+      items.push({color,x:(left+right)/2,y:(top+bottom)/2,minX:left,maxX:right,minY:top,maxY:bottom,area});
+    }
+    return mergeX(items,w);
+  }
+  function projections(mask,w,h){
+    // Vertical-run fallback: handles narrow wicks/body gaps from JPEG compression.
+    const runs=new Array(w).fill(null),minLen=Math.max(4,Math.floor(h*.011));
+    for(let x=0;x<w;x++){
+      let best=null;
+      for(const color of [1,2]){
+        let from=-1,longest=0,at=0;
+        for(let y=0;y<=h;y++){
+          const active=y<h&&mask[y*w+x]===color;
+          if(active&&from<0)from=y;
+          if(!active&&from>=0){const length=y-from;if(length>longest){longest=length;at=from;}from=-1;}
+        }
+        if(longest>=minLen&&longest<h*.64&&(!best||longest>best.length)){
+          best={color,start:at,end:at+longest-1,length:longest};
         }
       }
-      const bw=maxX-minX+1,bh=maxY-minY+1;
-      if(area<6 || bw>maxWidth || bh<minHeight || bh>height*0.72 || bh<bw*0.54)continue;
-      // Discard isolated tiny specks, long horizontal text or chart decorations.
-      if(area < Math.max(6,0.15*bw*bh))continue;
-      candidates.push({color,x:(minX+maxX)/2,y:(minY+maxY)/2,minX,maxX,minY,maxY,area});
+      runs[x]=best;
     }
-    candidates.sort((a,b)=>a.x-b.x||b.area-a.area);
-    const distinct=[];
-    for(const candidate of candidates){
-      const prev=distinct[distinct.length-1];
-      if(prev && candidate.x-prev.x<Math.max(3,width*0.004)){
-        if(candidate.area>prev.area)distinct[distinct.length-1]=candidate;
-      }else distinct.push(candidate);
+    const out=[];
+    for(let x=0;x<w;){
+      if(!runs[x]){x++;continue;}
+      const first=x,color=runs[x].color;
+      let top=h,bottom=0,area=0;
+      while(x<w&&runs[x]&&runs[x].color===color){
+        top=Math.min(top,runs[x].start);bottom=Math.max(bottom,runs[x].end);
+        area+=runs[x].length;x++;
+      }
+      const bw=x-first,bh=bottom-top+1;
+      if(bw<=Math.max(10,w*.047)&&bh>=minLen&&bh<h*.68)
+        out.push({color,x:(first+x-1)/2,y:(top+bottom)/2,
+          minX:first,maxX:x-1,minY:top,maxY:bottom,area});
     }
-    const spread=distinct.length>1?distinct[distinct.length-1].x-distinct[0].x:0;
-    const bins=new Set(distinct.map(x=>Math.floor(x.x/Math.max(1,width/5))));
-    if(distinct.length<8 || spread<width*0.26 || bins.size<3){
-      return {
-        recognized:false,candidates:distinct.length,
-        reason:'Кольорові свічки не вдалося достатньо надійно відрізнити від тексту, ліній або кнопок. Виділи саме поле графіка (без меню), потім повтори.'
-      };
-    }
-    const size=Math.max(3,Math.floor(distinct.length/3));
-    const first=distinct.slice(0,size),last=distinct.slice(-size);
-    const firstY=median(first.map(x=>x.y)),lastY=median(last.map(x=>x.y));
-    const fullRange=Math.max(...distinct.map(x=>x.maxY))-Math.min(...distinct.map(x=>x.minY));
-    const drift=(firstY-lastY)/Math.max(1,fullRange);
-    const observedDirection=drift>0.12?'Вищі позиції свічок праворуч':drift< -0.12?
-      'Нижчі позиції свічок праворуч':'Без виразної зміни вертикальної позиції';
-    const greens=last.filter(x=>x.color===1).length;
-    const reds=last.length-greens;
+    return mergeX(out,w);
+  }
+  function distribution(items,w){
+    if(items.length<2)return {spread:0,bins:0};
     return {
-      recognized:true, candidates:distinct.length, firstY,lastY,drift,
-      green:greens,red:reds,sample:last.length,observedDirection,
-      xSpreadRatio:spread/width,
-      shapes:distinct.slice(-120).map(x=>({x:x.minX,y:x.minY,w:x.maxX-x.minX+1,h:x.maxY-x.minY+1,color:x.color}))
+      spread:items[items.length-1].x-items[0].x,
+      bins:new Set(items.map(x=>Math.min(4,Math.floor(x.x/Math.max(1,w/5))))).size
     };
+  }
+  function analyzePixels(imageData,options={}){
+    const w=imageData.width,h=imageData.height,d=imageData.data;
+    if(w<80||h<70||!d||d.length<w*h*4)return {recognized:false,reason:'Область графіка надто мала.'};
+    const n=w*h,mask=new Uint8Array(n);
+    for(let i=0,j=0;i<n;i++,j+=4)mask[i]=classify(d[j],d[j+1],d[j+2],d[j+3],options);
+    const cc=components(mask,w,h),cols=projections(mask,w,h),a=distribution(cc,w),b=distribution(cols,w);
+    const columnMode=(cols.length>=cc.length+2&&b.spread>=Math.max(w*.16,a.spread*.75)&&b.bins>=2) ||
+      (cc.length<5&&cols.length>cc.length);
+    const found=columnMode?cols:cc,disp=columnMode?b:a;
+    if(found.length<5||disp.spread<w*.16||disp.bins<2){
+      return {recognized:false,candidates:found.length,componentCandidates:cc.length,
+        columnCandidates:cols.length,
+        reason:'Надто мало розподілених по горизонталі вертикальних елементів. Можливо, це лінійний графік або нестандартні кольори свічок. Обведи лише поле графіка й спробуй вручну вибрати кольори свічок.'};
+    }
+    const partial=found.length<9||disp.spread<w*.33||disp.bins<3;
+    const amount=Math.max(2,Math.floor(found.length/3)),first=found.slice(0,amount),last=found.slice(-amount);
+    const firstY=median(first.map(x=>x.y)),lastY=median(last.map(x=>x.y));
+    const range=Math.max(...found.map(x=>x.maxY))-Math.min(...found.map(x=>x.minY));
+    const drift=(firstY-lastY)/Math.max(1,range);
+    const observedDirection=partial?'Недостатньо елементів для оцінки переміщення':
+      drift>.12?'Пізніші елементи вище попередніх (лише зображення)':
+      drift<-.12?'Пізніші елементи нижче попередніх (лише зображення)':
+      'Без виразної зміни положення елементів (лише зображення)';
+    return {recognized:true,partial,candidates:found.length,
+      componentCandidates:cc.length,columnCandidates:cols.length,method:columnMode?'column':'regions',
+      green:last.filter(x=>x.color===1).length,red:last.filter(x=>x.color===2).length,sample:last.length,
+      observedDirection,xSpreadRatio:disp.spread/w,
+      shapes:found.slice(-130).map(x=>({x:x.minX,y:x.minY,w:x.maxX-x.minX+1,h:x.maxY-x.minY+1,color:x.color}))};
+  }
+  function colorAt(canvas,x,y){
+    const ctx=canvas.getContext('2d',{willReadFrequently:true});
+    if(!ctx)return null;
+    const at=ctx.getImageData(Math.max(0,Math.min(canvas.width-1,Math.round(x))),
+      Math.max(0,Math.min(canvas.height-1,Math.round(y))),1,1).data;
+    return {hsv:hsv(at[0],at[1],at[2]),css:'rgb('+at[0]+','+at[1]+','+at[2]+')'};
   }
   function attach({image,container,fileName}) {
     if(!image || !container) return;
@@ -96,7 +153,7 @@
     title.style.margin='0 0 8px';
     const explain=document.createElement('p');
     explain.className='report-notice';
-    explain.textContent='Працює локально в браузері навіть при HTTP 402. Визначає лише можливі червоні/зелені свічки та їхнє розташування. Не розпізнає ціни, таймфрейм, назву активу або майбутній напрям. Пальцем чи мишею обведи саме графік без меню та підписів.';
+    explain.textContent='Без ключів та HTTP 402. Сканер шукає вертикальні свічкоподібні елементи. Спочатку обведи поле графіка (без меню); якщо свічки не знаходяться, кнопками нижче вибери на фото кольори свічок. Це НЕ AI: ціни, назви активу та майбутній напрям не визначаються.';
     const canvas=document.createElement('canvas');
     canvas.style.cssText='display:block;max-width:100%;width:100%;height:auto;border-radius:8px;border:1px solid #8194aa;touch-action:none;cursor:crosshair';
     canvas.setAttribute('role','img');
@@ -105,6 +162,11 @@
     canvas.width=Math.max(1,Math.floor(image.naturalWidth*ratio));
     canvas.height=Math.max(1,Math.floor(image.naturalHeight*ratio));
     const w=canvas.width,h=canvas.height,ctx=canvas.getContext('2d');
+    const source=document.createElement('canvas');
+    source.width=w;source.height=h;
+    source.getContext('2d').drawImage(image,0,0,w,h); // picker samples unmasked source, never overlay
+    const colors={};
+    let picking=0,color1=null,color2=null;
     let crop={x:Math.floor(w*0.08),y:Math.floor(h*0.13),w:Math.floor(w*0.83),h:Math.floor(h*0.72)};
     let origin=null,dragging=false,lastShapes=[];
     function draw(){
@@ -137,6 +199,19 @@
     }
     canvas.addEventListener('pointerdown',e=>{
       if(e.button!==0 && e.pointerType==='mouse')return;
+      if(picking){
+        const sampled=colorAt(source,where(e).x,where(e).y);
+        if(sampled){
+          colors[picking]=sampled.hsv;
+          const selected=picking;
+          picking=0;
+          if(selected===1 && color1){color1.textContent='✓ Колір 1 вибрано';color1.style.borderColor=sampled.css;}
+          if(selected===2 && color2){color2.textContent='✓ Колір 2 вибрано';color2.style.borderColor=sampled.css;}
+          out.textContent='Палітру оновлено, виконуємо сканування за вибраним кольором…';
+          scan();
+        }
+        return;
+      }
       origin=where(e);dragging=true;lastShapes=[];
       canvas.setPointerCapture?.(e.pointerId);
       crop={x:origin.x,y:origin.y,w:1,h:1};draw();
@@ -164,6 +239,20 @@
     button.textContent='🔎 Сканувати вибрану область';
     const reset=document.createElement('button');reset.type='button';reset.className='small-button';
     reset.textContent='↺ Скинути рамку';
+    color1=document.createElement('button');color1.type='button';color1.className='small-button';
+    color1.textContent='🎨 Вибрати колір 1 (зелений)';
+    color2=document.createElement('button');color2.type='button';color2.className='small-button';
+    color2.textContent='🎨 Вибрати колір 2 (червоний)';
+    const autoColors=document.createElement('button');autoColors.type='button';autoColors.className='small-button';
+    autoColors.textContent='↺ Автопалітра';
+    color1.addEventListener('click',()=>{picking=1;out.textContent='Клацни по ТІЛУ зеленої (або першої кольорової) свічки на зображенні.';});
+    color2.addEventListener('click',()=>{picking=2;out.textContent='Клацни по ТІЛУ червоної (або другої кольорової) свічки на зображенні.';});
+    autoColors.addEventListener('click',()=>{
+      delete colors[1];delete colors[2];picking=0;
+      color1.textContent='🎨 Вибрати колір 1 (зелений)';color1.style.borderColor='';
+      color2.textContent='🎨 Вибрати колір 2 (червоний)';color2.style.borderColor='';
+      scan();
+    });
     const out=document.createElement('p');
     out.setAttribute('role','status');out.setAttribute('aria-live','polite');
     out.style.cssText='white-space:pre-wrap;font-size:13px;line-height:1.55;overflow-wrap:anywhere';
@@ -180,7 +269,7 @@
       tctx.drawImage(image,crop.x/w*image.naturalWidth,crop.y/h*image.naturalHeight,
         crop.w/w*image.naturalWidth,crop.h/h*image.naturalHeight,0,0,sw,sh);
       let report;
-      try{report=analyzePixels(tctx.getImageData(0,0,sw,sh));}
+      try{report=analyzePixels(tctx.getImageData(0,0,sw,sh),{colors});}
       catch(e){out.textContent='⚠️ Не вдалося прочитати пікселі цього зображення.';return;}
       if(!report.recognized){
         lastShapes=[];draw();
@@ -190,15 +279,17 @@
         return;
       }
       lastShapes=report.shapes;draw();
-      out.textContent='🟠 ЕКСПЕРИМЕНТАЛЬНЕ РОЗПІЗНАВАННЯ ПІКСЕЛІВ · НЕ AI\n'+
-        'Можливих кольорових свічок: '+report.candidates+' (обведено рамками).\n'+
-        'Остання третина розпізнаних елементів: зелених '+report.green+', червоних '+report.red+'.\n'+
-        'Положення елементів: '+report.observedDirection+'.\n\n'+
+      out.textContent=(report.partial ? '🟡 ЧАСТКОВЕ РОЗПІЗНАВАННЯ · НЕ AI\\n' :
+        '🟠 ЕКСПЕРИМЕНТАЛЬНЕ РОЗПІЗНАВАННЯ · НЕ AI\\n')+
+        'Можливих вертикальних елементів: '+report.candidates+' (показані рамки).\\n'+
+        'Остання третина: колір 1 — '+report.green+', колір 2 — '+report.red+'.\\n'+
+        'Розташування: '+report.observedDirection+'.\\n'+
+        (report.partial?'Мало даних: це лише часткове розпізнавання, без оцінки тренду.\\n':'')+'\\n'+
         'Це лише геометрія кольорових фігур на вибраному фрагменті. Розпізнавання може помилково прийняти індикатори або текст за свічки. Без підписів осей та незалежних OHLCV НЕ визначаємо ціни, актив чи прогноз. BUY/SELL: НЕВИЗНАЧЕНО.\n'+
         'Зображення не відправлялося на сервер.';
     }
     button.addEventListener('click',scan);
-    actions.append(button,reset);
+    actions.append(button,reset,color1,color2,autoColors);
     section.append(title,explain,canvas,actions,out);
     container.appendChild(section);
     draw();
