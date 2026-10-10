@@ -114,6 +114,24 @@
             <small class="public-analysis-source">Джерело: <a href="https://bybit-exchange.github.io/docs/v5/market/kline" target="_blank" rel="noopener noreferrer">Bybit V5 Get Kline ↗</a>. Використовуються лише завершені свічки, без відкриття угод.</small>
           </section>
 
+          <section class="settings-card public-analysis-card" aria-labelledby="jev-market-title" style="margin:16px 0">
+            <div class="public-analysis-heading"><div>
+              <div class="eyebrow">BYBIT OHLCV → JEV</div>
+              <h2 id="jev-market-title">🧠 JEV пояснює ринок</h2>
+            </div><span class="outline-pill">READ ONLY</span></div>
+            <p class="report-notice">Математичний огляд реальних завершених свічок працює без AI. Кнопка JEV окремо запитує хмарну модель лише після натискання та підключення коду доступу. Якщо модель недоступна (наприклад HTTP 402), залишиться чесний огляд без AI.</p>
+            <div class="public-analysis-controls" style="align-items:flex-end">
+              <label style="flex:1;min-width:180px">Що уточнити у JEV?
+                <input id="jev-market-question" type="text" maxlength="240" placeholder="Які ризики та сценарії для цієї пари?" style="width:100%;margin-top:7px">
+              </label>
+              <button id="jev-market-ask" type="button" class="small-button" disabled>🤖 Запитати JEV AI</button>
+              <button type="button" class="small-button" data-go="settings">🔑 Налаштування AI</button>
+            </div>
+            <p id="jev-market-status" role="status" aria-live="polite">Очікуємо підтверджені свічки.</p>
+            <div id="jev-market-output" aria-live="polite" style="white-space:pre-wrap;overflow-wrap:anywhere;padding:14px;border:1px solid #dce3ed;border-radius:12px">Спершу натисни «Аналізувати Bybit» вище.</div>
+            <small class="public-analysis-source">Джерело цін: Bybit V5 /market/kline · підтверджені свічки; висновок не означає гарантованого прогнозу й не містить реальних позицій інших трейдерів.</small>
+          </section>
+
           <details class="settings-card research-details" aria-label="Bybit TOP-10" style="margin:16px 0;padding:18px">
             <summary>🏆 BYBIT · 10 Master Traders <small>· архівний список · розгорнути</small></summary>
             <p>Дослідницький список із десяти публічно названих учасників архівного змагання Bybit. <strong>Це не поточний ТОП-10 Copy Trading.</strong> Поточний рейтинг, угоди й прибутковість цих людей не підтверджені.</p>
@@ -312,7 +330,8 @@
   <script defer src="./app/myshka-archive.js"></script>
   <script defer src="./app/myshka.js?v=20261010-tsla2"></script>
   <script defer src="./app/bybit-market.js"></script>
-  <script defer src="./app/bybit-fast-analysis.js?v=20261010-tsla2"></script>
+  <script defer src="./app/bybit-fast-analysis.js?v=20261010-jev-bridge"></script>
+  <script defer src="./app/jev-market-brief.js?v=20261010-v1"></script>
 <script defer src="./app/bybit-trades.js"></script>
 </body>
 </html>
