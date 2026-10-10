@@ -119,7 +119,7 @@
     panel.className='screenshot-market-direction';
     const heading=create('h3','margin:0 0 6px','📊 Актуальний ринок: факт і гіпотеза');
     const info=create('p','font-size:13px;line-height:1.55;margin:0 0 12px',
-      'Низхідна чи висхідна лінія НА ФОТО ще не прогноз. Тут обираєш реальну пару/ринок/таймфрейм, після чого бачиш окремо МИНУЛИЙ рух та дослідницьку гіпотезу на наступну свічку з ретроспективним тестом. OTC та інші біржі можуть мати інші ціни.');
+      'Для оцінки наступних 5 хв обери правильну пару, тип ринку й свічку. Початковий вибір BTCUSDT · ф’ючерси · 5 хв — ПЕРЕВІР, чи він відповідає фото. Висновок на фото нижче означає лише минулий рух; OTC та інші біржі мають інші ціни.');
     const controls=create('div','display:flex;gap:8px;flex-wrap:wrap;align-items:end');
     function field(title,control){
       const label=create('label','display:flex;flex-direction:column;gap:5px;min-width:104px;flex:1;font-size:12px',title);
@@ -135,14 +135,14 @@
     for(const [value,label] of [['spot','Spot'],['linear','Ф’ючерси (linear)']]){
       const option=document.createElement('option');option.value=value;option.textContent=label;category.appendChild(option);
     }
-    category.value='spot';
+    category.value='linear';
     field('Тип ринку',category);
     const timeframe=document.createElement('select');
     for(const [value,label] of [['1','1 хв'],['5','5 хв'],['15','15 хв'],['30','30 хв'],['60','1 год'],['240','4 год']]){
       const option=document.createElement('option');option.value=value;option.textContent=label;timeframe.appendChild(option);
     }
-    timeframe.value='30';field('Свічка',timeframe);
-    const button=create('button','','↻ Оцінити актуальні свічки');
+    timeframe.value='5';field('Свічка',timeframe);
+    const button=create('button','','🔎 Оцінити наступну свічку (гіпотеза)');
     button.type='button';button.className='small-button';
     button.style.margin='10px 0';
     const status=create('p','font-size:12px;line-height:1.5','Оберіть пару, яка справді показана на фото, і натисніть кнопку.');
@@ -156,7 +156,7 @@
       const s=answer.scenario;
       const time=new Date(answer.lastClosedAt).toLocaleString('uk-UA');
       const headline=create('div','font-size:12px;font-weight:750;letter-spacing:.03em;margin:8px 0',
-        'ФАКТ: ОСТАННІ П’ЯТЬ ЗАВЕРШЕНИХ СВІЧОК');
+        'МИНУЛИЙ РУХ: ОСТАННІ П’ЯТЬ ЗАВЕРШЕНИХ СВІЧОК');
       const historyLabels={up:'↑ Ріст',down:'↓ Спад',unknown:'— Майже без змін'};
       const prior=create('div','font-size:clamp(21px,3.5vw,29px);font-weight:700;margin:4px 0',
         historyLabels[answer.direction]);
@@ -165,9 +165,9 @@
         'За попередні п’ять свічок: '+percent(answer.changePct)+'\n'+
         'Ціна: '+formatPrice(answer.firstClose)+' → '+formatPrice(answer.lastClose)+' USDT\n'+
         'Останнє закриття: '+time);
-      const forecast=create('section','border:1px solid #8996aa;border-radius:12px;padding:14px;margin:12px 0');
+      const forecast=create('section','border:1px solid #8996aa;border-radius:12px;padding:14px;margin:12px 0;background:rgba(100,116,139,.06)');
       const title=create('div','font-size:12px;font-weight:750;letter-spacing:.03em',
-        'ГІПОТЕЗА ДЛЯ НАСТУПНОЇ СВІЧКИ · НЕ СИГНАЛ');
+        'НАСТУПНІ '+answer.intervalMinutes+' ХВ · ГІПОТЕЗА, НЕ СИГНАЛ');
       const label=s.bias==='up'?'↑ ВИСХІДНИЙ НАХИЛ':
         s.bias==='down'?'↓ СПАДНИЙ НАХИЛ':'— НЕВИЗНАЧЕНО';
       const big=create('div','font-size:clamp(23px,4vw,33px);font-weight:800;line-height:1.28;margin:9px 0',
@@ -191,7 +191,7 @@
         'Джерело: публічні закриті свічки Bybit V5, не завантажене фото. '+
         'Якщо фото старе або з OTC/іншої біржі, порівнювати напрями некоректно. Ордери не відкриваються.');
       forecast.append(title,big,notice,test,details,caution);
-      result.append(headline,prior,historic,forecast);
+      result.append(forecast,headline,prior,historic);
     }
     button.addEventListener('click',async ()=>{
       const pair=normalize(symbol.value);
