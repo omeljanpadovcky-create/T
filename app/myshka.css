@@ -133,3 +133,30 @@ main{width:100%;max-width:1120px;margin:0 auto;flex:1;min-width:0}h1,h2,h3,h4{fo
 .archive-jev ul{padding-left:20px;margin:7px 0}
 .archive-jev li{font-size:11px;line-height:1.65;margin-bottom:5px}
 @media(max-width:760px){.archive-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Public Bybit candle research: always available independently of JEV credentials. */
+.public-analysis-card{padding:19px;margin:18px 0}
+.public-analysis-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.public-analysis-heading h2{margin:4px 0 9px;font-size:21px}
+.public-analysis-controls{display:flex;align-items:flex-end;flex-wrap:wrap;gap:10px;margin:15px 0}
+.public-analysis-controls label{display:grid;gap:6px;color:var(--ink);font-size:12px;font-weight:800;min-width:135px;flex:1}
+.public-analysis-controls input,.public-analysis-controls select{width:100%;max-width:100%;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--ink);padding:11px 12px;font:inherit;font-size:14px}
+.public-analysis-controls button{padding:12px 17px;min-height:44px;border-color:var(--blue);color:var(--blue)}
+#bybit-fast-status{color:var(--muted);font-size:12px;line-height:1.55;padding:7px 0}
+.public-analysis-output{border:1px solid var(--line);border-radius:15px;background:var(--bg);padding:15px;color:var(--ink);overflow-wrap:anywhere;line-height:1.5}
+.public-analysis-summary{padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.public-analysis-summary>strong{display:block;font-size:14px}
+.public-analysis-summary>p{font-size:16px;font-weight:800;margin:6px 0;color:var(--ink)}
+.public-analysis-summary>small{font-size:11px;color:var(--muted)}
+.public-analysis-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.public-analysis-metric{padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:var(--panel);min-width:0;overflow-wrap:anywhere}
+.public-analysis-metric>span{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}
+.public-analysis-metric>strong{display:block;color:var(--ink);font-size:15px}
+.public-analysis-metric>small{display:block;color:var(--muted);font-size:10px;line-height:1.4;margin-top:4px}
+.public-analysis-note{font-size:11px;color:var(--muted);line-height:1.6;margin:12px 0 0}
+.public-analysis-source{display:block;margin-top:12px;font-size:11px;color:var(--muted)}
+.public-analysis-source a{text-decoration:underline;text-underline-offset:3px}
+.research-details>summary{cursor:pointer;font-weight:800;font-size:14px;color:var(--ink);list-style-position:inside}
+.research-details>summary small{font-size:11px;color:var(--muted);font-weight:400}
+.research-details[open]>summary{margin-bottom:15px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+@media(max-width:680px){.public-analysis-card{padding:13px}.public-analysis-controls{display:grid;grid-template-columns:1fr 1fr}.public-analysis-controls button{grid-column:1/-1;width:100%}.public-analysis-grid{grid-template-columns:1fr}.public-analysis-heading h2{font-size:18px}}
