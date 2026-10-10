@@ -1,4 +1,4 @@
-name: JEV Bybit Cloud Research (15m, read-only)
+name: JEV Cloud Market Research (5m, read-only)
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ on:
       - '.github/workflows/jev-market-learning.yml'
   schedule:
     # Approximate cadence: GitHub Actions schedules can be delayed or skipped.
-    - cron: '7,22,37,52 * * * *'
+    - cron: '*/5 * * * *'
 
 permissions:
   contents: write
@@ -46,11 +46,11 @@ jobs:
         run: |
           python - <<'PY'
           import json, os
-          with open('crypto_myshka/data/market_learning.json', encoding='utf-8') as f:
+          with open('crypto_myshka/data/market_learning_5m.json', encoding='utf-8') as f:
               state=json.load(f)
           lines=["### JEV · Bybit cloud observation",
-                 "Market: Bybit public linear candles, 15m, read-only",
-                 "Forward outcomes are separate from the chronological historical holdout."]
+                 "Market: 5-minute public candles; provider shown below; read-only",
+                 "Provider: "+str(state.get('market')), "Forward outcomes are separate from the chronological historical holdout."]
           for symbol, row in state["symbols"].items():
               lines.append(f"- {symbol}: historical bars={row['backtest']['candles']}, "
                            f"last closed={row['latest_bar_closed_at']}, "
@@ -64,12 +64,12 @@ jobs:
         run: |
           git config user.name "JEV Market Research"
           git config user.email "crypto-myshka@users.noreply.github.com"
-          cp crypto_myshka/data/market_learning.json /tmp/jev-market-learning.json
+          cp crypto_myshka/data/market_learning_5m.json /tmp/jev-market-learning-5m.json
           for attempt in 1 2 3 4 5; do
             git fetch origin main
             git reset --hard origin/main
-            cp /tmp/jev-market-learning.json crypto_myshka/data/market_learning.json
-            git add crypto_myshka/data/market_learning.json
+            cp /tmp/jev-market-learning-5m.json crypto_myshka/data/market_learning_5m.json
+            git add crypto_myshka/data/market_learning_5m.json
             if git diff --cached --quiet; then
               echo "No changed research state"
               exit 0
