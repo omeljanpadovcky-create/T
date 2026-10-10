@@ -33,33 +33,34 @@ function headers(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type,X-JEV-Access');
   res.setHeader('Cache-Control', 'no-store');
 }
-function skip(reason = 'Недостатньо даних для демо-гіпотези.') {
-  return {direction:'НЕВИЗНАЧЕНО', action:'SKIP', test_expiry_seconds:null,
-    chart_timeframe:'unknown', timeframe_source:'unknown', reason,
-    signal_validated:false, expiry_validated:false};
+function skip(reason = 'Ринкові дані не підтверджені — краще утриматися.') {
+  return {direction:'СТОП',action:'SKIP',test_expiry_seconds:null,horizon_minutes:null,
+    chart_timeframe:'unknown',timeframe_source:'unknown',reason,risk:'Невизначеність або недостатньо даних.',
+    market_verified:false,signal_validated:false,expiry_validated:false};
 }
-export function parseVision(raw, requested = 'auto') {
-  const base = skip();
+export function parseVision(raw, requested='auto', market=null) {
+  const base=skip();
   let data;
-  try {
-    data = JSON.parse(String(raw || '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, ''));
-  } catch { return base; }
-  if (!data || typeof data !== 'object' || data.readable !== true ||
-      !['ВГОРУ','ВНИЗ','НЕВИЗНАЧЕНО'].includes(data.direction)) return base;
-  const manual = Object.hasOwn(TIMEFRAMES, requested);
-  const tf = manual ? requested : Object.hasOwn(TIMEFRAMES, data.chart_timeframe) ? data.chart_timeframe : 'unknown';
-  const reason = typeof data.evidence === 'string' ? data.evidence.trim().slice(0,180) : '';
-  const out = {...base, direction:data.direction, chart_timeframe:tf,
-    timeframe_source:manual?'user':tf==='unknown'?'unknown':'model',
-    reason:reason || base.reason};
-  const expiry = data.test_expiry_seconds;
-  if (out.direction !== 'НЕВИЗНАЧЕНО' && tf !== 'unknown' &&
-      Number.isInteger(expiry) && EXPIRIES.has(expiry) && expiry >= TIMEFRAMES[tf] &&
-      reason.length >= 12) {
-    out.action = out.direction === 'ВГОРУ' ? 'BUY' : 'SELL';
-    out.test_expiry_seconds = expiry;
-  }
-  return out;
+  try { data=JSON.parse(String(raw||'').trim().replace(/^```(?:json)?\\s*/i,'').replace(/\\s*```$/,'').trim()); }
+  catch { return base; }
+  if(!data||typeof data!=='object'||data.readable!==true||
+    !['ВГОРУ','ВНИЗ','СТОП','НЕВИЗНАЧЕНО'].includes(data.direction))return base;
+  const manual=Object.hasOwn(TIMEFRAMES,requested);
+  const tf=manual?requested:Object.hasOwn(TIMEFRAMES,data.chart_timeframe)?data.chart_timeframe:'unknown';
+  const reason=typeof data.evidence==='string'?data.evidence.trim().slice(0,320):'';
+  const risk=typeof data.risk==='string'?data.risk.trim().slice(0,240):'';
+  const direction=data.direction==='НЕВИЗНАЧЕНО'?'СТОП':data.direction;
+  const out={...base,direction:'СТОП',chart_timeframe:tf,timeframe_source:manual?'user':tf==='unknown'?'unknown':'model',
+    reason:reason||base.reason,risk:risk||base.risk,market_verified:!!market,model_direction:direction};
+  if(!market||tf==='unknown'||direction==='СТОП'||reason.length<25||risk.length<12)return out;
+  const horizon=Number(data.horizon_minutes);
+  if(![5,15,60].includes(horizon)||horizon*60<TIMEFRAMES[tf])return out;
+  const requestedSide=direction==='ВГОРУ'?'up':'down';
+  const votes=market.intervals.map(x=>x.regime);
+  if(votes.filter(x=>x===requestedSide).length<2||
+     votes.filter(x=>x!==requestedSide&&x!=='range').length>0)return {...out,reason:'Сигнал не узгоджується з кількома таймфреймами Bybit. '+out.reason};
+  return {...out,direction,action:direction==='ВГОРУ'?'BUY':'SELL',
+    horizon_minutes:horizon,signal_validated:false,expiry_validated:false};
 }
 function imageType(bytes) {
   if (bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]))) return 'image/png';
@@ -68,20 +69,79 @@ function imageType(bytes) {
       bytes.toString('ascii',8,12)==='WEBP') return 'image/webp';
   return null;
 }
-const SYSTEM = `Ти JEV, асистент для дослідження ДЕМО-графіків.
-Оціни лише видимий рух, не прогнозуй гарантованих результатів.
-Розрізняй таймфрейм ОДНІЄЇ СВІЧКИ і час закриття BUY/SELL.
-Таймер 00:01:00 біля кнопок — це час угоди, не таймфрейм.
-Відповідай тільки JSON з ключами:
-direction ("ВГОРУ", "ВНИЗ", "НЕВИЗНАЧЕНО"),
-readable (boolean), chart_timeframe ("15s", "30s", "1m", "5m", "15m", "30m", "1h", "4h", "unknown"),
-test_expiry_seconds (30, 60, 300 або null), evidence (короткий факт зі скріншота).
-Якщо свічок не видно, таймфрейм невідомий, графік змішаний, або немає
-зрозумілої структури — direction "НЕВИЗНАЧЕНО", readable false, expiry null.
-Якщо свічки 15 хв або довші, test_expiry_seconds завжди null — короткостроковий демосигнал не обґрунтований.
-Час експірації — лише неперевірена гіпотеза для демо, не сигнал торгувати.
-Не вигадуй цін, індикаторів, прибутків або точності.`;
 
+const TRACKED=new Set(['BTCUSDT','ETHUSDT','SOLUSDT']);
+async function getMarketContext(symbol,category) {
+  if(typeof symbol!=='string'||!TRACKED.has(symbol)||!['spot','linear'].includes(category))
+    throw new Error('Вибери BTC, ETH або SOL і правильний ринок Bybit.');
+  const intervals=await Promise.all([5,15,60].map(async minutes=>{
+    const url='https://api.bybit.com/v5/market/kline?category='+category+
+      '&symbol='+encodeURIComponent(symbol)+'&interval='+minutes+'&limit=80';
+    const response=await fetch(url,{signal:AbortSignal.timeout(7000),headers:{Accept:'application/json'}});
+    if(!response.ok)throw new Error('Bybit HTTP '+response.status);
+    const data=await response.json();
+    if(data?.retCode!==0||!Array.isArray(data?.result?.list)||
+       data.result.symbol&&data.result.symbol!==symbol)throw new Error('Помилка підтвердження Bybit OHLCV.');
+    const now=Date.now(),step=minutes*60000;
+    const rows=data.result.list.map(r=>({time:Number(r[0]),open:Number(r[1]),high:Number(r[2]),
+      low:Number(r[3]),close:Number(r[4]),volume:Number(r[5])}))
+      .filter(r=>Object.values(r).every(Number.isFinite)&&r.time>0&&r.close>0&&r.low>0&&
+        r.high>=Math.max(r.open,r.close,r.low)&&r.low<=Math.min(r.open,r.close)&&r.time+step<=now-1000)
+      .sort((a,b)=>a.time-b.time);
+    if(rows.length<35)throw new Error('Недостатньо завершених свічок.');
+    const recent=rows.slice(-35);
+    if(recent.some((r,i)=>i>0&&r.time-recent[i-1].time!==step))
+      throw new Error('В історії Bybit є пропуски.');
+    const last=rows.at(-1);
+    if(now-(last.time+step)>step*2.2)throw new Error('Застарілі котирування Bybit.');
+    const closes=rows.map(x=>x.close);
+    function ema(n){let a=closes.slice(0,n).reduce((s,x)=>s+x,0)/n;
+      for(let k=n;k<closes.length;k++)a+=(2/(n+1))*(closes[k]-a);return a;}
+    const e9=ema(9),e21=ema(21);
+    let up=0,down=0,tr=0;
+    for(let i=rows.length-14;i<rows.length;i++){
+      const d=rows[i].close-rows[i-1].close;
+      up+=Math.max(d,0);down+=Math.max(-d,0);
+      tr+=Math.max(rows[i].high-rows[i].low,
+        Math.abs(rows[i].high-rows[i-1].close),Math.abs(rows[i].low-rows[i-1].close));
+    }
+    const rsi=up===0&&down===0?50:down===0?100:100-100/(1+up/down);
+    const atr=tr/14, momentum=last.close-rows.at(-6).close;
+    const regime=e9-e21>atr*.15&&momentum>atr*.3?'up':
+      e21-e9>atr*.15&&momentum< -atr*.3?'down':'range';
+    const v20=rows.slice(-21,-1).reduce((s,x)=>s+x.volume,0)/20;
+    const window=rows.slice(-20);
+    return {minutes,closedAt:new Date(last.time+step).toISOString(),
+      lastClose:Number(last.close.toPrecision(8)),ema9:Number(e9.toPrecision(8)),
+      ema21:Number(e21.toPrecision(8)),rsi14:Number(rsi.toFixed(2)),
+      atrPct:Number((100*atr/last.close).toFixed(3)),
+      momentum5Pct:Number((100*momentum/rows.at(-6).close).toFixed(3)),
+      volumeRatio:v20>0?Number((last.volume/v20).toFixed(2)):null,
+      support:Number(Math.min(...window.map(x=>x.low)).toPrecision(8)),
+      resistance:Number(Math.max(...window.map(x=>x.high)).toPrecision(8)),
+      regime};
+  }));
+  return {symbol,category,source:'Bybit V5 /v5/market/kline',
+    verifiedAt:new Date().toISOString(),intervals};
+}
+
+const SYSTEM = `Ти JEV — дослідницький аналітик криптографіків, не оракул.
+Дай конкретну, але НЕ гарантовану гіпотезу майбутнього руху.
+Твоє завдання: прочитати свічки на фото, перевірити, чи збігаються актив,
+ринок і таймфрейм з підтвердженими закритими свічками Bybit, врахувати
+EMA 9/21, RSI, імпульс, волатильність, підтримку/опір, обсяг на 5/15/60 хв.
+Якщо фото з OTC/іншої біржі, не видно активу, тренди суперечать один одному,
+не вистачає даних або немає чіткого аргументу — дай СТОП.
+Не трактуй уже намальований рух як доказ майбутнього.
+Відповідай ТІЛЬКИ JSON:
+{"readable":true/false,"direction":"ВГОРУ"|"ВНИЗ"|"СТОП",
+"chart_timeframe":"15s"|"30s"|"1m"|"5m"|"15m"|"30m"|"1h"|"4h"|"unknown",
+"horizon_minutes":5|15|60|null,
+"evidence":"конкретні факти фото та підтверджених Bybit даних, без вигадок",
+"risk":"конкретна причина, через яку прогноз може бути хибним"}.
+Горизонт прогнозу має бути не коротшим за одну свічку фото.
+Не вигадуй відсоток упевненості, прибуток, рівні ціни чи тривалість руху,
+якщо даних для них немає. Жодних імперативних наказів торгувати.`;
 export default async function handler(req, res) {
   headers(req,res);
   if (req.method === 'OPTIONS') return res.status(204).end();
@@ -101,8 +161,15 @@ export default async function handler(req, res) {
   const mime = bytes.length <= MAX_IMAGE_BYTES ? imageType(bytes) : null;
   if (!mime) return res.status(400).json({error:'Непідтримуваний або завеликий файл.'});
   try {
-    const prompt = 'Таймфрейм свічки від користувача: ' + timeframe +
-      '. Якщо auto, визначай тільки за підписом на самому графіку. Демо-експірація 30, 60 або 300 секунд або null.';
+    let market;
+    try { market=await getMarketContext(body.market_symbol,body.market_category); }
+    catch(err) { return res.status(200).json({...skip('СТОП: '+String(err?.message||'Bybit недоступний').slice(0,180)),
+      source:'market_unavailable',mode:'research_only'}); }
+    const prompt='Вибраний користувачем ринок: '+market.symbol+' '+market.category+
+      '. Перевір напис пари/біржі на фото; якщо не збігається або її не видно — СТОП. '+
+      'Таймфрейм фото: '+timeframe+'. Верифіковані сервером ЗАКРИТІ свічки Bybit: '+
+      JSON.stringify(market)+'. Висновок стосується ТІЛЬКИ цього активу. '+
+      'Напрям — гіпотеза, не гарантія і не команда на угоду.';
     const isApinex = provider.provider === 'apinex';
     const url = isApinex
       ? 'https://api.apinex.bond/v1/chat/completions'
@@ -139,10 +206,11 @@ export default async function handler(req, res) {
       ? (typeof content==='string' ? content :
           Array.isArray(content) ? content.map(p=>typeof p==='string'?p:(p?.text||'')).join('') : '')
       : (data?.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('') || '');
-    const parsed = parseVision(raw,timeframe);
+    const parsed = parseVision(raw,timeframe,market);
     return res.status(200).json({...parsed,analysis:parsed.direction,model:provider.model,
       source:isApinex?'cloud_apinex':'cloud_gemini',provider:provider.provider,
-      mode:'demo_hypothesis',verified_quotes:false});
+      market_verified:true,market_symbol:market.symbol,market_category:market.category,
+      market_context:market,mode:'research_hypothesis',verified_quotes:true});
   } catch (err) {
     return res.status(504).json({error:err?.name==='TimeoutError'?'Хмарний AI не відповів за 25 секунд.':'Не вдалося зв’язатися з AI-провайдером.'});
   }
