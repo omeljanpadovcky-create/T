@@ -163,13 +163,21 @@
         reason:'Надто мало розподілених по горизонталі вертикальних елементів. Можливо, це лінійний графік або нестандартні кольори свічок. Обведи лише поле графіка й спробуй вручну вибрати кольори свічок.'};
     }
     const partial=found.length<9||disp.spread<w*.33||disp.bins<3;
-    const amount=Math.max(2,Math.floor(found.length/3)),first=found.slice(0,amount),last=found.slice(-amount);
+    const amount=Math.max(2,Math.floor(found.length/3));
+    const edge=Math.max(3,Math.min(12,Math.floor(found.length*.18)));
+    const first=found.slice(0,amount),last=found.slice(-amount);
     const firstY=median(first.map(x=>x.y)),lastY=median(last.map(x=>x.y));
+    const edgeFirst=median(found.slice(0,edge).map(x=>x.y));
+    const edgeLast=median(found.slice(-edge).map(x=>x.y));
     const range=Math.max(...found.map(x=>x.maxY))-Math.min(...found.map(x=>x.minY));
-    const drift=(firstY-lastY)/Math.max(1,range);
-    // Direction of the pixels already visible on the image, NOT the next candle.
-    // Require enough candidates, lateral coverage and a meaningful change.
-    const visualDirection=partial||Math.abs(drift)<.15?'unknown':drift>0?'up':'down';
+    const globalDrift=(firstY-lastY)/Math.max(1,range);
+    const edgeDrift=(edgeFirst-edgeLast)/Math.max(1,range);
+    const drift=.65*edgeDrift+.35*globalDrift;
+    // Only describe visible, historical displacement. Requiring agreement
+    // of both edge and broad samples avoids a false direction from a noisy UI.
+    const consistent=Math.sign(edgeDrift)===Math.sign(globalDrift) &&
+      Math.abs(edgeDrift)>.16 && Math.abs(drift)>.13;
+    const visualDirection=partial||!consistent?'unknown':drift>0?'up':'down';
     const observedDirection=partial?'Недостатньо елементів для оцінки переміщення':
       visualDirection==='up'?'Пізніші елементи вище попередніх (лише зображення)':
       visualDirection==='down'?'Пізніші елементи нижче попередніх (лише зображення)':
@@ -177,7 +185,7 @@
     return {recognized:true,partial,visualDirection,candidates:found.length,
       componentCandidates:cc.length,columnCandidates:cols.length,method:columnMode?'column':'regions',
       green:last.filter(x=>x.color===1).length,red:last.filter(x=>x.color===2).length,sample:last.length,
-      observedDirection,xSpreadRatio:disp.spread/w,
+      observedDirection,xSpreadRatio:disp.spread/w,globalDrift,edgeDrift,
       shapes:found.slice(-130).map(x=>({x:x.minX,y:x.minY,w:x.maxX-x.minX+1,h:x.maxY-x.minY+1,color:x.color}))};
   }
   function colorAt(canvas,x,y){
