@@ -230,10 +230,11 @@
           </div>
           <div class="settings-card" id="cloud-settings">
             <h3>☁️ Хмарний JEV — аналіз без увімкненого ПК</h3>
-            <p class="report-notice">APInex-ключ із GitHub Secrets вже використовується фоновим JEV, але для аналізу фото на сайті потрібен окремо налаштований сервер Vercel. На Vercel додай APINEX_API_KEY і JEV_ACCESS_TOKEN, а сюди встав тільки адресу свого сервера та окремий код доступу.</p>
+            <p class="report-notice"><strong>Це окреме підключення, n8n тут не потрібен.</strong> GitHub Pages не запускає AI самостійно. На своєму Vercel-сервері перевір <code>APINEX_API_KEY</code> та створи окремий <code>JEV_ACCESS_TOKEN</code> (мінімум 24 символи). Після розгортання введи нижче URL сервера й <em>лише</em> код доступу JEV. API-ключ APInex сюди не вставляй. <a class="text-link" href="https://vercel.com/omeljanpadovcky-6074/t" target="_blank" rel="noopener noreferrer">Відкрити твій проєкт Vercel «t» ↗</a></p>
+            <p class="report-notice"><strong>Без AI-сервера теж можна:</strong> переглядати 10 трейдерів Bybit, імпортувати їхні угоди та бачити розраховані показники. Для аналізу скріншота можеш надіслати фото прямо в наш чат.</p>
             <div class="cloud-settings-fields">
               <label for="cloud-endpoint">Адреса сервера (HTTPS)</label>
-              <input id="cloud-endpoint" type="url" inputmode="url" spellcheck="false" placeholder="https://your-project.vercel.app" autocomplete="url">
+              <input id="cloud-endpoint" type="url" inputmode="url" spellcheck="false" placeholder="https://t-zeta-ashy.vercel.app (якщо API доступний)" autocomplete="url">
               <label for="cloud-access">Код доступу JEV (не APInex/Gemini API-ключ)</label>
               <input id="cloud-access" type="password" autocomplete="off" placeholder="Введи окремий код доступу">
               <div class="cloud-settings-actions">
