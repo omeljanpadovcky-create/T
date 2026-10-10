@@ -741,7 +741,9 @@
           const aiButton = document.createElement('button');
           aiButton.type = 'button';
           aiButton.className = 'small-button';
-          aiButton.textContent = '🤖 Повторити аналіз JEV';
+          aiButton.textContent = cloudQuotaBlocked()
+            ? '⛔ Спробувати хмарний JEV ще раз (попередній HTTP 402)'
+            : '🤖 Повторити аналіз JEV';
           const aiResult = document.createElement('div');
           aiResult.className = 'jev-image-result';
           aiResult.setAttribute('role', 'status');
@@ -947,6 +949,13 @@
               }
             });
           }
+          // Local scanner comes FIRST so HTTP 402 cannot hide or distract from
+          // the working offline flow. Its canvas stays on the user's device.
+          const offlineMount = document.createElement('div');
+          aiArea.appendChild(offlineMount);
+          if (window.cryptoMyshkaPhotoScan && typeof window.cryptoMyshkaPhotoScan.attach === 'function') {
+            window.cryptoMyshkaPhotoScan.attach({image,container:offlineMount,fileName:file.name});
+          }
           aiArea.append(aiButton, aiResult);
           // Public OHLCV research does not need a JEV token and must never
           // impersonate screenshot parsing. The visitor chooses the symbol.
@@ -964,11 +973,6 @@
             if (analyzer && typeof analyzer.run === 'function') analyzer.run();
           });
           aiArea.appendChild(publicButton);
-          // Real browser-side image processing: independent from cloud credits.
-          // It can find colored candle-like shapes but never claims AI/price prediction.
-          if (window.cryptoMyshkaPhotoScan && typeof window.cryptoMyshkaPhotoScan.attach === 'function') {
-            window.cryptoMyshkaPhotoScan.attach({image,container:aiArea,fileName:file.name});
-          }
           const expandPreview = document.createElement('button');
           expandPreview.type = 'button';
           expandPreview.className = 'small-button chart-preview-toggle';
@@ -1070,7 +1074,7 @@
       } catch { toast('Сховище браузера недоступне. Параметри діють лише до оновлення.'); }
       await checkVisionHealth();
       if (state.visionSource === 'cloud' && ['ready', 'provisional'].includes(state.visionStatus))
-        toast('Сервер і код JEV доступні. Це не перевірка AI-аналізу фото; перевір один запит.');
+        toast('Код JEV прийнято. Обробка фото AI не підтверджена: сервер лише перевірив каталог моделей.');
       else toast('Хмарний JEV не підтверджено. Перевір адресу, код і секрети сервера.');
     });
     $('cloud-disconnect').addEventListener('click', () => {
