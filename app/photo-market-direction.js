@@ -107,9 +107,9 @@
     if(!container)return;
     const panel=create('section','padding:14px;margin:12px 0;border:1px solid #64748b;border-radius:14px;overflow:hidden;');
     panel.className='screenshot-market-direction';
-    const heading=create('h3','margin:0 0 6px','📈 ВГОРУ / ВНИЗ із реальних свічок');
+    const heading=create('h3','margin:0 0 6px','📊 Актуальний ринок: факт і гіпотеза');
     const info=create('p','font-size:13px;line-height:1.55;margin:0 0 12px',
-      'Якщо фото містить індикатор або сканер не впізнав свічки, обери ту саму пару та тип ринку, що на графіку. Це ОКРЕМИЙ аналіз завершених свічок Bybit, а НЕ розпізнавання завантаженого фото. OTC та інші біржі можуть мати інші ціни.');
+      'Низхідна чи висхідна лінія НА ФОТО ще не прогноз. Тут обираєш реальну пару/ринок/таймфрейм, після чого бачиш окремо МИНУЛИЙ рух та дослідницьку гіпотезу на наступну свічку з ретроспективним тестом. OTC та інші біржі можуть мати інші ціни.');
     const controls=create('div','display:flex;gap:8px;flex-wrap:wrap;align-items:end');
     function field(title,control){
       const label=create('label','display:flex;flex-direction:column;gap:5px;min-width:104px;flex:1;font-size:12px',title);
@@ -132,7 +132,7 @@
       const option=document.createElement('option');option.value=value;option.textContent=label;timeframe.appendChild(option);
     }
     timeframe.value='30';field('Свічка',timeframe);
-    const button=create('button','','↻ Показати напрям');
+    const button=create('button','','↻ Оцінити актуальні свічки');
     button.type='button';button.className='small-button';
     button.style.margin='10px 0';
     const status=create('p','font-size:12px;line-height:1.5','Оберіть пару, яка справді показана на фото, і натисніть кнопку.');
@@ -143,20 +143,45 @@
     let currentController=null;
     function render(answer){
       result.replaceChildren();
-      const labels={up:'↑ ВГОРУ',down:'↓ ВНИЗ',unknown:'— БЕЗ ЧІТКОГО РУХУ'};
-      const big=create('div','font-size:clamp(27px,5vw,42px);font-weight:850;line-height:1.25;margin:10px 0',
-        labels[answer.direction]);
-      big.style.color=answer.direction==='up'?'#16a34a':answer.direction==='down'?'#f87171':'inherit';
-      const caption=create('p','font-size:13px;white-space:pre-wrap;line-height:1.6',
+      const s=answer.scenario;
+      const time=new Date(answer.lastClosedAt).toLocaleString('uk-UA');
+      const headline=create('div','font-size:12px;font-weight:750;letter-spacing:.03em;margin:8px 0',
+        'ФАКТ: ОСТАННІ П’ЯТЬ ЗАВЕРШЕНИХ СВІЧОК');
+      const historyLabels={up:'↑ Ріст',down:'↓ Спад',unknown:'— Майже без змін'};
+      const prior=create('div','font-size:clamp(21px,3.5vw,29px);font-weight:700;margin:4px 0',
+        historyLabels[answer.direction]);
+      const historic=create('p','font-size:12px;line-height:1.65;white-space:pre-wrap;margin:8px 0 14px',
         answer.symbol+' · '+(answer.category==='spot'?'Spot':'Linear')+' · '+answer.intervalMinutes+' хв\n'+
-        'Останні 5 завершених свічок: '+percent(answer.changePct)+'\n'+
-        'Закриття: '+formatPrice(answer.firstClose)+' → '+formatPrice(answer.lastClose)+' USDT\n'+
-        'Остання закрита свічка: '+new Date(answer.lastClosedAt).toLocaleString('uk-UA')+'\n'+
-        'Джерело: офіційний Bybit V5 /market/kline');
-      const caution=create('p','font-size:12px;line-height:1.5;color:inherit',
-        'Це ВЖЕ ВІДОМИЙ рух завершених свічок вибраної пари. Не прогноз, не AI, не сигнал для ставки. '+
-        'Якщо фото з іншої біржі, OTC чи іншого часу, результат може не відповідати скріншоту.');
-      result.append(big,caption,caution);
+        'За попередні п’ять свічок: '+percent(answer.changePct)+'\n'+
+        'Ціна: '+formatPrice(answer.firstClose)+' → '+formatPrice(answer.lastClose)+' USDT\n'+
+        'Останнє закриття: '+time);
+      const forecast=create('section','border:1px solid #8996aa;border-radius:12px;padding:14px;margin:12px 0');
+      const title=create('div','font-size:12px;font-weight:750;letter-spacing:.03em',
+        'ГІПОТЕЗА ДЛЯ НАСТУПНОЇ СВІЧКИ · НЕ СИГНАЛ');
+      const label=s.bias==='up'?'↑ ВИСХІДНИЙ НАХИЛ':
+        s.bias==='down'?'↓ СПАДНИЙ НАХИЛ':'— НЕВИЗНАЧЕНО';
+      const big=create('div','font-size:clamp(23px,4vw,33px);font-weight:800;line-height:1.28;margin:9px 0',
+        label);
+      big.style.color=s.bias==='up'?'#36ce96':s.bias==='down'?'#f87171':'inherit';
+      const notice=create('p','font-size:12px;line-height:1.6;margin:7px 0',
+        'Це лише узгодженість EMA, RSI, імпульсу й останнього тіла свічки. '+
+        'Напрям наступної свічки невідомий; результат не є обчисленою ймовірністю.');
+      const testMessage=s.trials>=25?
+        ('Історична перевірка: '+s.hits+' із '+s.trials+' випадків ('+
+         s.observedAccuracy.toFixed(1)+'%). Це малий ретроспективний тест без гарантії повторення.') :
+        ('Історична перевірка: лише '+s.trials+
+         ' випадків; замало для оцінки результативності.');
+      const test=create('p','font-size:12px;line-height:1.6;margin:7px 0',testMessage);
+      const details=document.createElement('details');
+      const summary=create('summary','','Як сформувалася гіпотеза');
+      const explanation=create('p','font-size:12px;white-space:pre-wrap;line-height:1.6',
+        s.reasons.length?s.reasons.join('\n'):'Недостатньо завершених свічок.');
+      details.append(summary,explanation);
+      const caution=create('p','font-size:12px;line-height:1.6;margin:9px 0',
+        'Джерело: публічні закриті свічки Bybit V5, не завантажене фото. '+
+        'Якщо фото старе або з OTC/іншої біржі, порівнювати напрями некоректно. Ордери не відкриваються.');
+      forecast.append(title,big,notice,test,details,caution);
+      result.append(headline,prior,historic,forecast);
     }
     button.addEventListener('click',async ()=>{
       const pair=normalize(symbol.value);
@@ -180,7 +205,7 @@
         const verdict=review(data,pair,period,market);
         if(!panel.isConnected)return;
         render(verdict);
-        status.textContent='✅ Напрям останніх 5 завершених свічок отримано без AI.';
+        status.textContent='✅ Отримано завершені свічки Bybit. Гіпотеза не є торговим сигналом.';
       }catch(e){
         if(!panel.isConnected)return;
         status.textContent=e?.name==='AbortError'?'⚠️ Час очікування Bybit минув.':
