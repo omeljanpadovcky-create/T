@@ -844,7 +844,8 @@
                 const action = validAction && !tooLate ? proposedAction : 'SKIP';
                 const durationLabel = seconds => seconds === 30 ? '30 секунд' :
                   seconds === 60 ? '1 хвилина' : seconds === 300 ? '5 хвилин' : 'Не визначено';
-                const tfLabel = tf => ({'15s': '15 с', '30s': '30 с', '1m': '1 хв', '5m': '5 хв'})[tf] || 'не визначено';
+                const tfLabel = tf => ({'15s': '15 с', '30s': '30 с', '1m': '1 хв', '5m': '5 хв',
+                  '15m': '15 хв', '30m': '30 хв', '1h': '1 година', '4h': '4 години'})[tf] || 'не визначено';
                 const makeLine = (tag, cls, value) => {
                   const el = document.createElement(tag);
                   if (cls) el.className = cls;
