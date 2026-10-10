@@ -76,7 +76,7 @@
 
         <section class="screen" id="screen-analysis" data-screen="analysis" aria-labelledby="analysis-title" hidden>
           <div class="section-heading top-heading"><div><div class="eyebrow">JEV EXPLAINABLE AI</div><h1 id="analysis-title">Fast Analysis</h1></div><span class="outline-pill">NO AUTO-TRADE</span></div>
-          <p class="intro">Обери пару для аналізу Bybit або додай фото: сканер покаже ↑ ВГОРУ чи ↓ ВНИЗ, якщо на минулому графіку видно достатньо свічок. Це опис зображення, а не прогноз наступного руху. JEV AI працює окремо, якщо провайдер доступний.</p>
+          <p class="intro">Додай фото графіка: сканер автоматично відділить свічки від меню й книги ордерів та покаже ↑ ВГОРУ / ↓ ВНИЗ для вже видимого руху. Якщо свічок замало — НЕВИЗНАЧЕНО. Це не прогноз майбутньої ціни. Окремо доступний аналіз публічних свічок Bybit.</p>
 
           <section class="settings-card public-analysis-card" id="public-candle-analysis" aria-labelledby="public-candle-heading">
             <div class="public-analysis-heading">
@@ -187,7 +187,7 @@
               <option value="4h">4 години / свічка</option>
             </select>
           </div>
-          <p class="report-notice">AI-аналіз фото є необов’язковим. Якщо APInex повертає HTTP 402, <strong>локальний сканер над кнопкою хмарного JEV працює без AI-ключа</strong>: він великими літерами покаже ↑ ВГОРУ / ↓ ВНИЗ лише для видимого руху на фото або «НЕВИЗНАЧЕНО», якщо розпізнано замало свічок. За потреби вручну вибери кольори. Це не прогноз. Публічні свічки Bybit зверху працюють окремо. Для 15-хвилинних і довших свічок не робимо коротких демо-прогнозів 30 с / 1 хв.</p>
+          <p class="report-notice">AI-аналіз фото є необов’язковим. Якщо APInex повертає HTTP 402, <strong>локальний сканер працює без AI-ключа й сам знаходить поле графіка</strong>: він великими літерами покаже ↑ ВГОРУ / ↓ ВНИЗ для видимого руху або «НЕВИЗНАЧЕНО» за браком даних. Потрібна інша область? Натисни «Знайти графік автоматично», обведи її вручну або вибери кольори. Це не прогноз. Публічні свічки Bybit зверху працюють окремо. Для 15-хвилинних і довших свічок не робимо коротких демо-прогнозів 30 с / 1 хв.</p>
           <div class="vision-mode-inline">
             <label for="vision-mode-quick"><strong>🤖 Де працює JEV?</strong></label>
             <select id="vision-mode-quick" aria-label="Режим JEV для аналізу фото">
@@ -328,7 +328,7 @@
   </nav>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script defer src="./app/myshka-archive.js"></script>
-  <script defer src="./app/photo-scan.js?v=20261010-arrows1"></script>
+  <script defer src="./app/photo-scan.js?v=20261010-autofind1"></script>
   <script defer src="./app/myshka.js?v=20261010-photo2"></script>
   <script defer src="./app/bybit-market.js"></script>
   <script defer src="./app/bybit-fast-analysis.js?v=20261010-jev-bridge"></script>
