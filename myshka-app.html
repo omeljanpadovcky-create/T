@@ -7,7 +7,7 @@
   <meta name="description" content="Crypto Myshka — AI-аналіз скріншотів графіків через локальну Ollama або підключений хмарний JEV, без автоматичних угод.">
   <link rel="icon" type="image/svg+xml" href="./app/myshka-icon.svg">
   <link rel="manifest" href="./myshka.webmanifest">
-  <link rel="stylesheet" href="./app/myshka.css?v=20261010-compact">
+  <link rel="stylesheet" href="./app/myshka.css?v=20261010-tsla2">
   <title>Crypto Myshka — AI Chart Observer</title>
 </head>
 <body>
@@ -76,10 +76,46 @@
 
         <section class="screen" id="screen-analysis" data-screen="analysis" aria-labelledby="analysis-title" hidden>
           <div class="section-heading top-heading"><div><div class="eyebrow">JEV EXPLAINABLE AI</div><h1 id="analysis-title">Fast Analysis</h1></div><span class="outline-pill">NO AUTO-TRADE</span></div>
-          <p class="intro">Встав скріншот через Ctrl+V або обери файл. JEV (локальний або хмарний) оцінить видимий напрямок, сформує демо-гіпотезу BUY / SELL / ПРОПУСТИТИ та, якщо даних достатньо, запропонує час закриття 30 с, 1 хв або 5 хв. Збережені звіти за парами залишаються нижче.</p>
+          <p class="intro">Спершу обери пару та отримай аналіз реальних свічок Bybit без пароля й AI-сервера. За бажанням можеш додати скріншот для окремого AI-аналізу JEV, якщо провайдер доступний.</p>
 
-          <section class="settings-card" aria-label="Bybit TOP-10" style="margin:16px 0;padding:18px">
-            <h2 style="margin:0 0 8px">🏆 BYBIT · 10 Master Traders</h2>
+          <section class="settings-card public-analysis-card" id="public-candle-analysis" aria-labelledby="public-candle-heading">
+            <div class="public-analysis-heading">
+              <div>
+                <div class="eyebrow">БЕЗ КЛЮЧІВ · БЕЗ N8N · BYBIT V5</div>
+                <h2 id="public-candle-heading">📊 Аналіз ринку без JEV</h2>
+              </div>
+              <span class="outline-pill">PUBLIC DATA</span>
+            </div>
+            <p class="report-notice">Окремий аналіз завершених свічок Bybit: тренд EMA 9/21, RSI 14, підтримка, опір та обсяги. <strong>Це НЕ аналіз фото AI, НЕ історія Master Traders і НЕ прогноз.</strong></p>
+            <div class="public-analysis-controls">
+              <label for="bybit-fast-symbol">Пара
+                <input id="bybit-fast-symbol" type="text" value="TSLAUSDT" list="bybit-fast-symbols" autocomplete="off" spellcheck="false" maxlength="24" placeholder="TSLAUSDT">
+              </label>
+              <datalist id="bybit-fast-symbols">
+                <option value="TSLAUSDT"></option>
+                <option value="BTCUSDT"></option>
+                <option value="ETHUSDT"></option>
+                <option value="SOLUSDT"></option>
+              </datalist>
+              <label for="bybit-fast-interval">Свічка
+                <select id="bybit-fast-interval">
+                  <option value="1">1 хв</option>
+                  <option value="5">5 хв</option>
+                  <option value="15">15 хв</option>
+                  <option value="30" selected>30 хв</option>
+                  <option value="60">1 година</option>
+                  <option value="240">4 години</option>
+                </select>
+              </label>
+              <button id="bybit-fast-analyze" class="small-button" type="button">↻ Аналізувати Bybit</button>
+            </div>
+            <div id="bybit-fast-status" role="status" aria-live="polite">Готово до аналізу TSLAUSDT · 30 хв.</div>
+            <div id="bybit-fast-output" class="public-analysis-output" aria-live="polite">Результат з’явиться тут після отримання свічок з офіційного Bybit API. Дані можуть не бути доступні для окремих інструментів.</div>
+            <small class="public-analysis-source">Джерело: <a href="https://bybit-exchange.github.io/docs/v5/market/kline" target="_blank" rel="noopener noreferrer">Bybit V5 Get Kline ↗</a>. Використовуються лише завершені свічки, без відкриття угод.</small>
+          </section>
+
+          <details class="settings-card research-details" aria-label="Bybit TOP-10" style="margin:16px 0;padding:18px">
+            <summary>🏆 BYBIT · 10 Master Traders <small>· архівний список · розгорнути</small></summary>
             <p>Дослідницький список із десяти публічно названих учасників архівного змагання Bybit. <strong>Це не поточний ТОП-10 Copy Trading.</strong> Поточний рейтинг, угоди й прибутковість цих людей не підтверджені.</p>
             <p class="report-notice"><strong>⚪ LIVE-позиції не підключено.</strong> JEV не копіює угоди; без справжньої історії операцій не показуємо удавані сигнали чи прибуток.</p>
             <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
@@ -115,7 +151,7 @@
               <details><summary>Формат JSON</summary><pre style="white-space:pre-wrap;font-size:11px">{"trades":[{"trader":"Публічний нік","symbol":"BTCUSDT","side":"Buy","opened_at":"2026-10-10T12:00:00Z","entry_price":65000,"closed_at":"2026-10-10T13:00:00Z","exit_price":65100,"source_url":"https://www.bybit.com/..."}]}</pre></details>
             </div>
             <p style="font-size:13px">Майбутні поля: трейдер · пара · LONG/SHORT · час відкриття · статус позиції · результат · джерело та час оновлення. Показники прибутку не гарантують майбутніх результатів.</p>
-          </section>
+          </details>
           <div class="searchbar"><label class="visually-hidden" for="pair-search">Пошук пари</label><span aria-hidden="true">⌕</span><input id="pair-search" type="search" placeholder="Знайти BTC/USDT, AUD/CNY OTC…" autocomplete="off"></div>
           <div id="pair-chips" class="chips" aria-label="Доступні пари"></div>
           <div class="demo-controls"><label class="small-button" for="chart-photo">📷 Обрати фото графіка</label><input id="chart-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden><span>Або встав скріншот: Win+Shift+S → Ctrl+V. У локальному режимі фото отримує Ollama на ПК; у хмарному — налаштований сервер і AI-провайдер. Без підключення фото не надсилається.</span></div>
@@ -127,9 +163,13 @@
               <option value="30s">30 секунд / свічка</option>
               <option value="1m">1 хвилина / свічка</option>
               <option value="5m">5 хвилин / свічка</option>
+              <option value="15m">15 хвилин / свічка</option>
+              <option value="30m">30 хвилин / свічка</option>
+              <option value="1h">1 година / свічка</option>
+              <option value="4h">4 години / свічка</option>
             </select>
           </div>
-          <p class="report-notice">JEV порівнює напрямок і пропонує лише <strong>тестову експірацію 30 с, 1 хв або 5 хв</strong> для демо. Без читабельного графіка — «ПРОПУСТИТИ». Це не перевірений прогноз чи порада робити ставку.</p>
+          <p class="report-notice">AI-аналіз фото є необов’язковим. Якщо APInex повертає HTTP 402 або код JEV не підключено, <strong>кнопка «Аналізувати Bybit» вище працює окремо</strong>. Для 15-хвилинних і довших свічок не робимо коротких демо-прогнозів 30 с / 1 хв.</p>
           <div class="vision-mode-inline">
             <label for="vision-mode-quick"><strong>🤖 Де працює JEV?</strong></label>
             <select id="vision-mode-quick" aria-label="Режим JEV для аналізу фото">
@@ -270,8 +310,9 @@
   </nav>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script defer src="./app/myshka-archive.js"></script>
-  <script defer src="./app/myshka.js?v=20261010-402"></script>
+  <script defer src="./app/myshka.js?v=20261010-tsla2"></script>
   <script defer src="./app/bybit-market.js"></script>
-  <script defer src="./app/bybit-trades.js"></script>
+  <script defer src="./app/bybit-fast-analysis.js?v=20261010-tsla2"></script>
+<script defer src="./app/bybit-trades.js"></script>
 </body>
 </html>
