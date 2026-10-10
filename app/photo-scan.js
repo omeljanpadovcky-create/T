@@ -126,11 +126,14 @@
     const firstY=median(first.map(x=>x.y)),lastY=median(last.map(x=>x.y));
     const range=Math.max(...found.map(x=>x.maxY))-Math.min(...found.map(x=>x.minY));
     const drift=(firstY-lastY)/Math.max(1,range);
+    // Direction of the pixels already visible on the image, NOT the next candle.
+    // Require enough candidates, lateral coverage and a meaningful change.
+    const visualDirection=partial||Math.abs(drift)<.15?'unknown':drift>0?'up':'down';
     const observedDirection=partial?'Недостатньо елементів для оцінки переміщення':
-      drift>.12?'Пізніші елементи вище попередніх (лише зображення)':
-      drift<-.12?'Пізніші елементи нижче попередніх (лише зображення)':
+      visualDirection==='up'?'Пізніші елементи вище попередніх (лише зображення)':
+      visualDirection==='down'?'Пізніші елементи нижче попередніх (лише зображення)':
       'Без виразної зміни положення елементів (лише зображення)';
-    return {recognized:true,partial,candidates:found.length,
+    return {recognized:true,partial,visualDirection,candidates:found.length,
       componentCandidates:cc.length,columnCandidates:cols.length,method:columnMode?'column':'regions',
       green:last.filter(x=>x.color===1).length,red:last.filter(x=>x.color===2).length,sample:last.length,
       observedDirection,xSpreadRatio:disp.spread/w,
@@ -153,7 +156,7 @@
     title.style.margin='0 0 8px';
     const explain=document.createElement('p');
     explain.className='report-notice';
-    explain.textContent='Без ключів та HTTP 402. Сканер шукає вертикальні свічкоподібні елементи. Спочатку обведи поле графіка (без меню); якщо свічки не знаходяться, кнопками нижче вибери на фото кольори свічок. Це НЕ AI: ціни, назви активу та майбутній напрям не визначаються.';
+    explain.textContent='Головний результат: ↑ ВГОРУ або ↓ ВНИЗ — це лише рух, який видно на вже зробленому фото, НЕ передбачення наступної свічки. За браком даних буде «НЕВИЗНАЧЕНО». Виділи сам графік; за потреби вибери кольори свічок.';
     const canvas=document.createElement('canvas');
     canvas.style.cssText='display:block;max-width:100%;width:100%;height:auto;border-radius:8px;border:1px solid #8194aa;touch-action:none;cursor:crosshair';
     canvas.setAttribute('role','img');
@@ -253,40 +256,61 @@
       color2.textContent='🎨 Вибрати колір 2 (червоний)';color2.style.borderColor='';
       scan();
     });
-    const out=document.createElement('p');
+    const out=document.createElement('div');
     out.setAttribute('role','status');out.setAttribute('aria-live','polite');
-    out.style.cssText='white-space:pre-wrap;font-size:13px;line-height:1.55;overflow-wrap:anywhere';
+    out.style.cssText='font-size:13px;line-height:1.55;overflow-wrap:anywhere';
+    function showVerdict(direction,details){
+      // Only report observed movement when the pixel evidence passes quality checks.
+      const labels={up:'↑ ВГОРУ',down:'↓ ВНИЗ',unknown:'— НЕВИЗНАЧЕНО'};
+      const label=document.createElement('div');
+      label.textContent=labels[direction]||labels.unknown;
+      label.style.cssText='font-size:clamp(24px,5vw,38px);font-weight:850;letter-spacing:.02em;line-height:1.3;margin:8px 0;';
+      label.style.color=direction==='up'?'#15803d':direction==='down'?'#dc2626':'inherit';
+      const qualifier=document.createElement('div');
+      qualifier.className='report-notice';
+      qualifier.textContent=direction==='unknown'?
+        'Для висновку бракує надійно розпізнаних свічок. Напрям не вгадуємо.':
+        'ВИДИМИЙ рух на минулому скріншоті. НЕ прогноз майбутньої ціни й НЕ сигнал на угоду.';
+      const technical=document.createElement('details');
+      technical.style.marginTop='10px';
+      const summary=document.createElement('summary');
+      summary.textContent='Деталі розпізнавання';
+      const description=document.createElement('p');
+      description.style.whiteSpace='pre-wrap';
+      description.textContent=details||'';
+      technical.append(summary,description);
+      out.replaceChildren(label,qualifier,technical);
+    }
     reset.addEventListener('click',()=>{
       crop={x:Math.floor(w*0.08),y:Math.floor(h*0.13),w:Math.floor(w*0.83),h:Math.floor(h*0.72)};
       lastShapes=[];draw();out.textContent='Область скинуто. Натисни «Сканувати».';
     });
     function scan(){
-      if(crop.w<50||crop.h<45){out.textContent='⚠️ Збільш виділену область графіка.';return;}
+      if(crop.w<50||crop.h<45){showVerdict('unknown','Збільш виділену область графіка.');return;}
       const sw=Math.max(1,Math.floor(crop.w)),sh=Math.max(1,Math.floor(crop.h));
       const tmp=document.createElement('canvas');tmp.width=sw;tmp.height=sh;
       const tctx=tmp.getContext('2d',{willReadFrequently:true});
-      if(!tctx){out.textContent='Canvas недоступний у браузері.';return;}
+      if(!tctx){showVerdict('unknown','Canvas недоступний у браузері.');return;}
       tctx.drawImage(image,crop.x/w*image.naturalWidth,crop.y/h*image.naturalHeight,
         crop.w/w*image.naturalWidth,crop.h/h*image.naturalHeight,0,0,sw,sh);
       let report;
       try{report=analyzePixels(tctx.getImageData(0,0,sw,sh),{colors});}
-      catch(e){out.textContent='⚠️ Не вдалося прочитати пікселі цього зображення.';return;}
+      catch(e){showVerdict('unknown','Не вдалося прочитати пікселі цього зображення.');return;}
       if(!report.recognized){
         lastShapes=[];draw();
-        out.textContent='⚪ Сканування виконано, але результат НЕВИЗНАЧЕНИЙ.\n'+report.reason+
+        showVerdict('unknown',report.reason+
           (report.candidates===undefined?'':'\nКандидатів на свічки: '+report.candidates)+
-          '\nФото залишається лише у твоєму браузері.';
+          '\nФото залишається лише у твоєму браузері.');
         return;
       }
       lastShapes=report.shapes;draw();
-      out.textContent=(report.partial ? '🟡 ЧАСТКОВЕ РОЗПІЗНАВАННЯ · НЕ AI\n' :
-        '🟠 ЕКСПЕРИМЕНТАЛЬНЕ РОЗПІЗНАВАННЯ · НЕ AI\n')+
+      showVerdict(report.visualDirection||'unknown',
         'Можливих вертикальних елементів: '+report.candidates+' (показані рамки).\n'+
         'Остання третина: колір 1 — '+report.green+', колір 2 — '+report.red+'.\n'+
         'Розташування: '+report.observedDirection+'.\n'+
-        (report.partial?'Мало даних: це лише часткове розпізнавання, без оцінки тренду.\n':'')+'\n'+
-        'Це лише геометрія кольорових фігур на вибраному фрагменті. Розпізнавання може помилково прийняти індикатори або текст за свічки. Без підписів осей та незалежних OHLCV НЕ визначаємо ціни, актив чи прогноз. BUY/SELL: НЕВИЗНАЧЕНО.\n'+
-        'Зображення не відправлялося на сервер.';
+        (report.partial?'Мало даних: це лише часткове розпізнавання.\n':'')+'\n'+
+        'Це лише геометрія кольорових фігур. Індикатори або текст можуть бути помилково прийняті за свічки. Висновок НЕ означає рух ціни в майбутньому. BUY/SELL: невідомо.\n'+
+        'Зображення не відправлялося на сервер.');
     }
     button.addEventListener('click',scan);
     actions.append(button,reset,color1,color2,autoColors);
