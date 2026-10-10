@@ -1,5 +1,5 @@
 /* Scope is /T/ on GitHub Pages. Do not intercept or cache legacy app routes. */
-const VERSION = 'myshka-app-shell-v19';
+const VERSION = 'myshka-app-shell-v20';
 const STATIC = ['./myshka-app.html','./app/myshka.css','./app/myshka.js','./app/photo-scan.js','./app/photo-market-direction.js','./app/jev-market-brief.js','./app/jev-learning-status.js','./app/myshka-archive.js','./app/bybit-fast-analysis.js','./app/bybit-trades.js','./app/bybit-market.js','./app/myshka-icon.svg','./myshka.webmanifest'];
 const JSON_FEEDS = ['crypto_myshka/data/youtube_live.json','crypto_myshka/data/pair_reports.json','crypto_myshka/data/youtube_analysts.json','crypto_myshka/data/youtube_archive.json'];
 self.addEventListener('install',event=>{
