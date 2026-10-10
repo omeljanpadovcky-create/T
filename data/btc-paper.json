@@ -1,0 +1,10 @@
+{
+  "trades": [],
+  "pending": null,
+  "market": "BTCUSDT",
+  "source": "Binance public spot M1 candles, not Pocket Option OTC",
+  "mode": "paper_only",
+  "checked_at": "2026-10-10T23:23:13.488839+00:00",
+  "status": "error",
+  "error": "HTTP Error 451: "
+}
