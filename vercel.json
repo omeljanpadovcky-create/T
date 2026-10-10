@@ -7,5 +7,12 @@
       "maxDuration": 40
     }
   },
-  "framework": null
+  "framework": null,
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "https://omeljanpadovcky-create.github.io/T/myshka-app.html",
+      "permanent": false
+    }
+  ]
 }
