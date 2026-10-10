@@ -78,6 +78,12 @@
   <h4 style="margin:18px 0 8px">📈 Публічний ринок Bybit · без AI</h4>
   <pre id="legacy-jev-market" class="legacyJevOutput">Отримуємо ціни BTC / ETH / SOL…</pre>
   <button id="legacy-jev-market-refresh" class="btn" type="button">↻ Оновити котирування</button>
+  <div class="legacyJevActions" style="margin-top:14px">
+    <label for="legacy-jev-symbol">Пара:</label>
+    <select id="legacy-jev-symbol"><option value="BTCUSDT">BTC/USDT</option><option value="ETHUSDT">ETH/USDT</option><option value="SOLUSDT">SOL/USDT</option></select>
+    <button id="legacy-jev-technical-button" class="btn" type="button">📊 Огляд 30-хв свічок без AI</button>
+  </div>
+  <pre id="legacy-jev-technical" class="legacyJevOutput">Доступний технічний огляд останніх завершених 30-хвилинних свічок з офіційного Bybit V5 API. Не потребує JEV або API-ключа.</pre>
   <h4 style="margin:20px 0 8px">📷 Демоаналіз скріншота через JEV</h4>
   <div class="legacyJevActions">
     <label class="btn" for="legacy-jev-file">📁 Вибрати скріншот</label>
@@ -483,6 +489,6 @@ refreshData();
 // перевіряє нову версію щохвилини, тому Ctrl+F5 більше не потрібен.
 setInterval(refreshData,60000);
 </script>
-<script defer src="./app/legacy-jev.js?v=20261010-legacy-1"></script>
+<script defer src="./app/legacy-jev.js?v=20261010-legacy-2"></script>
 </body>
 </html>
