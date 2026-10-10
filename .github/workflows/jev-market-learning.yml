@@ -2,6 +2,12 @@ name: JEV Bybit Cloud Research (15m, read-only)
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'crypto_myshka/market_learning.py'
+      - 'crypto_myshka/tests/test_market_learning.py'
+      - '.github/workflows/jev-market-learning.yml'
   schedule:
     # Approximate cadence: GitHub Actions schedules can be delayed or skipped.
     - cron: '7,22,37,52 * * * *'
