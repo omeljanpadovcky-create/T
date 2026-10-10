@@ -209,9 +209,8 @@
     $('cloud-settings-status').textContent=label;
   }
   function updateAIButton(){
-    $('run-pocket-ai').disabled=!state.image||!connected()||state.loading;
-    if(!state.image)$('ai-status').textContent='Спершу завантаж фото графіка.';
-    else if(!connected())$('ai-status').textContent='🔑 Потрібен URL Vercel і код доступу JEV в Налаштуваннях.';
+    $('run-pocket-ai').disabled=!state.image||state.loading;
+    $('ai-status').textContent=state.image?'🐭 Локальний JEV готовий. Фото залишається на пристрої.':'Спершу завантаж фото графіка.';
   }
   async function probeBackend(){
     const endpoint=cloudEndpoint();
@@ -259,45 +258,36 @@
     }finally{clearTimeout(timer);updateAIButton();}
   }
   async function runAI(){
-    if(state.loading||!state.image||!connected())return;
-    const pref=getPrefs();if(!pairValid(pref.pair)||![15,30,60,300,900].includes(pref.timeframe)||
-      ![30,60,180,300].includes(pref.expiry)||!(pref.payout>0&&pref.payout<=100)){
-      toast('Перевір пару, таймфрейм, експірацію та виплату.');return;
-    }
-    state.ai=null;renderVerdict(null,'Очікуємо фактичну відповідь хмарного AI.');
-    state.loading=true;updateAIButton();$('ai-status').textContent='⏳ JEV отримує тільки виділену частину графіка…';
-    const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),35000);
+    if(state.loading||!state.image)return;
+    const pref=getPrefs();
+    if(!pairValid(pref.pair)){toast('Вкажи коректну пару.');return;}
+    state.loading=true;updateAIButton();
     try{
       const cv=croppedCanvas();
-      let quality=.82,raw=cv.toDataURL('image/jpeg',quality).split(',')[1];
-      while(raw.length>2*1024*1024*4/3-2000&&quality>.4){
-        quality-=.12;raw=cv.toDataURL('image/jpeg',quality).split(',')[1];
-      }
-      if(raw.length>2*1024*1024*4/3-2000)throw Error('Вирізаний графік завеликий. Виділи меншу область.');
-      const response=await fetch(cloudEndpoint()+'/api/pocket-vision',{
-        method:'POST',headers:{'Content-Type':'application/json','X-JEV-Access':cloudAccess()},
-        body:JSON.stringify({image:raw,pair:pref.pair,chart_timeframe_seconds:pref.timeframe,
-          expiry_seconds:pref.expiry,payout_pct:pref.payout}),
-        signal:ctrl.signal,cache:'no-store'
-      });
-      const answer=await response.json().catch(()=>({}));
-      if(!response.ok)throw Error(answer.error||'HTTP '+response.status);
-      if(!['UP','DOWN','STOP'].includes(answer.direction)||answer.mode!=='screenshot_hypothesis')
-        throw Error('AI не повернув перевірюваного формату відповіді.');
-      const result={direction:answer.direction,reason:String(answer.reason||'').slice(0,550),
-        risk:String(answer.risk||'').slice(0,350),expiry:pref.expiry,timeframe:pref.timeframe,
-        pair:pref.pair,provider:answer.provider,model:answer.model,created:new Date().toISOString(),
-        payout:pref.payout,stake:pref.stake,source:'pocket_cloud_screenshot_only'};
-      state.ai=result;
-      renderVerdict(result);
-      $('ai-status').textContent='✅ Модель відповіла. Це аналіз фото, не підтверджені поточні OTC-котирування.';
-      setCloudLabel(answer.provider==='rules'?'⚠️ Лише перевірка параметрів, AI не викликано':
-        '✅ JEV відповів · '+(answer.provider||'AI'),answer.provider!=='rules');
-    }catch(e){
-      state.ai=null;renderVerdict(null,'AI недоступний: '+String(e.message||'Помилка').slice(0,200)+
-        '. Рішення без відповіді моделі не створюємо.');
-      $('ai-status').textContent='⚠️ '+String(e.message||'AI не відповів').slice(0,180);
-    }finally{clearTimeout(timer);state.loading=false;updateAIButton();}
+      const report=window.cryptoMyshkaPhotoScan?.analyzePixels?.(
+        cv.getContext('2d',{willReadFrequently:true}).getImageData(0,0,cv.width,cv.height));
+      const count=Number(report?.candidates)||0;
+      const trend=report?.visualDirection;
+      const enough=report?.recognized&&count>=12&&!report.partial;
+      // No future-price data is available from a screenshot. Keep the decision
+      // conservative; historical image geometry is NOT a calibrated forecast.
+      const direction='STOP';
+      const movement=trend==='up'?'висхідне':trend==='down'?'низхідне':'бокове або невизначене';
+      const reason=enough?
+        'На фото виявлено приблизно '+count+' свічкоподібних елементів; минуле розташування показує '+movement+' зміщення. Це не дозволяє достовірно визначити напрям наступних '+pref.expiry+' секунд.':
+        'Свічки розпізнані недостатньо надійно ('+count+' елементів). Обведи чисту ділянку графіка без індикаторів.';
+      const risk='OTC: незалежних котирувань і обсягів немає. Впевненість у прогнозі не виміряна; рішення СТОП.';
+      state.ai={direction,reason,risk,expiry:pref.expiry,timeframe:pref.timeframe,pair:pref.pair,
+        provider:'local_geometry',model:'JEV offline',created:new Date().toISOString(),
+        payout:pref.payout,stake:pref.stake,source:'pocket_local_geometry'};
+      renderVerdict(state.ai);
+      $('ai-status').textContent='✅ Локальний аналіз завершено · фото не надсилалося на сервер.';
+      $('scan-output').textContent='KEY INSIGHTS\nТренд на фото: '+movement+
+        '\nРозпізнано: '+count+' елементів\nВпевненість у майбутньому напрямі: не визначена'+
+        '\nВолатильність: невідома\nОбсяг: невідомий\nMarket sentiment: невідомий'+
+        '\nCONCLUSION\n'+reason;
+    }catch(e){state.ai=null;renderVerdict(null,'Не вдалося проаналізувати фото: '+String(e.message||e));}
+    finally{state.loading=false;updateAIButton();}
   }
   function recordPaper(){
     const a=state.ai;if(!a||!['UP','DOWN'].includes(a.direction))return;
@@ -424,8 +414,7 @@
     route(SCREENS.has(location.hash.slice(1))?location.hash.slice(1):'home');
     // A saved tab-only token is sufficient to re-check the model catalog.
     // With no token, publicly probe only route existence; never send a screenshot.
-    if(connected())void connect();
-    else void probeBackend();
+    setCloudLabel('🐭 JEV локально · без ключів',true);
     setInterval(()=>{if(!$('screen-history').hidden)renderJournal();},15000);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
