@@ -1,0 +1,346 @@
+{
+  "version": 1,
+  "symbols": {
+    "BTCUSDT": {
+      "backtest": {
+        "candles": 27147,
+        "first_closed_at": "2026-01-01T00:15:00Z",
+        "last_closed_at": "2026-10-10T18:45:00Z",
+        "train": {
+          "observations": 7187,
+          "directional_accuracy_pct": 44.55,
+          "positive_net_pct": 19.38,
+          "avg_paper_net_pct": -0.1454,
+          "stop_count": 11787,
+          "always_up_baseline": {
+            "observations": 18974,
+            "directional_accuracy_pct": 49.54,
+            "positive_net_pct": 19.37,
+            "avg_paper_net_pct": -0.14134
+          },
+          "by_pattern": {
+            "DOWN_range": {
+              "observations": 1180,
+              "directional_accuracy_pct": 44.83,
+              "positive_net_pct": 19.07,
+              "avg_paper_net_pct": -0.14618
+            },
+            "DOWN_trend": {
+              "observations": 2502,
+              "directional_accuracy_pct": 45.36,
+              "positive_net_pct": 21.54,
+              "avg_paper_net_pct": -0.1418
+            },
+            "UP_range": {
+              "observations": 1125,
+              "directional_accuracy_pct": 47.56,
+              "positive_net_pct": 18.13,
+              "avg_paper_net_pct": -0.1358
+            },
+            "UP_trend": {
+              "observations": 2380,
+              "directional_accuracy_pct": 42.14,
+              "positive_net_pct": 17.86,
+              "avg_paper_net_pct": -0.15333
+            }
+          }
+        },
+        "holdout": {
+          "observations": 3113,
+          "directional_accuracy_pct": 45.55,
+          "positive_net_pct": 13.88,
+          "avg_paper_net_pct": -0.14222,
+          "stop_count": 5031,
+          "always_up_baseline": {
+            "observations": 8144,
+            "directional_accuracy_pct": 49.86,
+            "positive_net_pct": 13.85,
+            "avg_paper_net_pct": -0.13663
+          },
+          "by_pattern": {
+            "DOWN_range": {
+              "observations": 473,
+              "directional_accuracy_pct": 46.09,
+              "positive_net_pct": 14.16,
+              "avg_paper_net_pct": -0.14954
+            },
+            "DOWN_trend": {
+              "observations": 960,
+              "directional_accuracy_pct": 45.94,
+              "positive_net_pct": 14.06,
+              "avg_paper_net_pct": -0.14534
+            },
+            "UP_range": {
+              "observations": 528,
+              "directional_accuracy_pct": 48.67,
+              "positive_net_pct": 11.74,
+              "avg_paper_net_pct": -0.13801
+            },
+            "UP_trend": {
+              "observations": 1152,
+              "directional_accuracy_pct": 43.58,
+              "positive_net_pct": 14.58,
+              "avg_paper_net_pct": -0.13854
+            }
+          }
+        },
+        "approved_patterns": []
+      },
+      "latest_bar_closed_at": "2026-10-10T18:45:00Z",
+      "latest_close": 83026.15,
+      "latest_heuristic": "STOP",
+      "latest_research_signal": "STOP",
+      "pattern": "STOP_trend",
+      "forward_observed": {
+        "observations": 0,
+        "directional_accuracy_pct": null,
+        "positive_net_pct": null,
+        "avg_paper_net_pct": null
+      },
+      "forward_settled": 0,
+      "forward_stop_count": 1
+    },
+    "ETHUSDT": {
+      "backtest": {
+        "candles": 27147,
+        "first_closed_at": "2026-01-01T00:15:00Z",
+        "last_closed_at": "2026-10-10T18:45:00Z",
+        "train": {
+          "observations": 7017,
+          "directional_accuracy_pct": 43.48,
+          "positive_net_pct": 22.7,
+          "avg_paper_net_pct": -0.14329,
+          "stop_count": 11957,
+          "always_up_baseline": {
+            "observations": 18974,
+            "directional_accuracy_pct": 49.67,
+            "positive_net_pct": 23.47,
+            "avg_paper_net_pct": -0.14199
+          },
+          "by_pattern": {
+            "DOWN_range": {
+              "observations": 1175,
+              "directional_accuracy_pct": 44.09,
+              "positive_net_pct": 22.47,
+              "avg_paper_net_pct": -0.14686
+            },
+            "DOWN_trend": {
+              "observations": 2381,
+              "directional_accuracy_pct": 43.81,
+              "positive_net_pct": 25.24,
+              "avg_paper_net_pct": -0.14008
+            },
+            "UP_range": {
+              "observations": 1184,
+              "directional_accuracy_pct": 44.26,
+              "positive_net_pct": 20.1,
+              "avg_paper_net_pct": -0.14258
+            },
+            "UP_trend": {
+              "observations": 2277,
+              "directional_accuracy_pct": 42.42,
+              "positive_net_pct": 21.52,
+              "avg_paper_net_pct": -0.14519
+            }
+          }
+        },
+        "holdout": {
+          "observations": 3101,
+          "directional_accuracy_pct": 44.24,
+          "positive_net_pct": 16.7,
+          "avg_paper_net_pct": -0.14066,
+          "stop_count": 5043,
+          "always_up_baseline": {
+            "observations": 8144,
+            "directional_accuracy_pct": 50.56,
+            "positive_net_pct": 18.37,
+            "avg_paper_net_pct": -0.13588
+          },
+          "by_pattern": {
+            "DOWN_range": {
+              "observations": 510,
+              "directional_accuracy_pct": 44.71,
+              "positive_net_pct": 17.45,
+              "avg_paper_net_pct": -0.14849
+            },
+            "DOWN_trend": {
+              "observations": 857,
+              "directional_accuracy_pct": 43.17,
+              "positive_net_pct": 18.67,
+              "avg_paper_net_pct": -0.13853
+            },
+            "UP_range": {
+              "observations": 552,
+              "directional_accuracy_pct": 45.47,
+              "positive_net_pct": 12.86,
+              "avg_paper_net_pct": -0.14564
+            },
+            "UP_trend": {
+              "observations": 1182,
+              "directional_accuracy_pct": 44.25,
+              "positive_net_pct": 16.75,
+              "avg_paper_net_pct": -0.13651
+            }
+          }
+        },
+        "approved_patterns": []
+      },
+      "latest_bar_closed_at": "2026-10-10T18:45:00Z",
+      "latest_close": 2510.38,
+      "latest_heuristic": "UP",
+      "latest_research_signal": "STOP",
+      "pattern": "UP_trend",
+      "forward_observed": {
+        "observations": 0,
+        "directional_accuracy_pct": null,
+        "positive_net_pct": null,
+        "avg_paper_net_pct": null
+      },
+      "forward_settled": 0,
+      "forward_stop_count": 1
+    },
+    "SOLUSDT": {
+      "backtest": {
+        "candles": 27147,
+        "first_closed_at": "2026-01-01T00:15:00Z",
+        "last_closed_at": "2026-10-10T18:45:00Z",
+        "train": {
+          "observations": 7199,
+          "directional_accuracy_pct": 44.02,
+          "positive_net_pct": 25.71,
+          "avg_paper_net_pct": -0.14427,
+          "stop_count": 11775,
+          "always_up_baseline": {
+            "observations": 18974,
+            "directional_accuracy_pct": 48.99,
+            "positive_net_pct": 26.93,
+            "avg_paper_net_pct": -0.14197
+          },
+          "by_pattern": {
+            "DOWN_range": {
+              "observations": 1175,
+              "directional_accuracy_pct": 46.47,
+              "positive_net_pct": 26.3,
+              "avg_paper_net_pct": -0.13638
+            },
+            "DOWN_trend": {
+              "observations": 2524,
+              "directional_accuracy_pct": 42.59,
+              "positive_net_pct": 26.31,
+              "avg_paper_net_pct": -0.14613
+            },
+            "UP_range": {
+              "observations": 1169,
+              "directional_accuracy_pct": 45.85,
+              "positive_net_pct": 23.18,
+              "avg_paper_net_pct": -0.14895
+            },
+            "UP_trend": {
+              "observations": 2331,
+              "directional_accuracy_pct": 43.41,
+              "positive_net_pct": 26.04,
+              "avg_paper_net_pct": -0.14387
+            }
+          }
+        },
+        "holdout": {
+          "observations": 3110,
+          "directional_accuracy_pct": 44.28,
+          "positive_net_pct": 21.9,
+          "avg_paper_net_pct": -0.14121,
+          "stop_count": 5034,
+          "always_up_baseline": {
+            "observations": 8144,
+            "directional_accuracy_pct": 49.4,
+            "positive_net_pct": 23.16,
+            "avg_paper_net_pct": -0.13483
+          },
+          "by_pattern": {
+            "DOWN_range": {
+              "observations": 490,
+              "directional_accuracy_pct": 44.29,
+              "positive_net_pct": 23.47,
+              "avg_paper_net_pct": -0.14352
+            },
+            "DOWN_trend": {
+              "observations": 932,
+              "directional_accuracy_pct": 45.28,
+              "positive_net_pct": 21.57,
+              "avg_paper_net_pct": -0.14705
+            },
+            "UP_range": {
+              "observations": 547,
+              "directional_accuracy_pct": 43.69,
+              "positive_net_pct": 20.11,
+              "avg_paper_net_pct": -0.15019
+            },
+            "UP_trend": {
+              "observations": 1141,
+              "directional_accuracy_pct": 43.73,
+              "positive_net_pct": 22.35,
+              "avg_paper_net_pct": -0.13114
+            }
+          }
+        },
+        "approved_patterns": []
+      },
+      "latest_bar_closed_at": "2026-10-10T18:45:00Z",
+      "latest_close": 110.3,
+      "latest_heuristic": "STOP",
+      "latest_research_signal": "STOP",
+      "pattern": "STOP_range",
+      "forward_observed": {
+        "observations": 0,
+        "directional_accuracy_pct": null,
+        "positive_net_pct": null,
+        "avg_paper_net_pct": null
+      },
+      "forward_settled": 0,
+      "forward_stop_count": 1
+    }
+  },
+  "forward_predictions": [
+    {
+      "id": "BTCUSDT:1791657000000",
+      "symbol": "BTCUSDT",
+      "candle_closed_at": "2026-10-10T18:45:00Z",
+      "target_candle_start": 1791657900000,
+      "signal": "STOP",
+      "ungated_heuristic": "STOP",
+      "pattern": "STOP_trend",
+      "evaluated_at": null,
+      "outcome": null
+    },
+    {
+      "id": "ETHUSDT:1791657000000",
+      "symbol": "ETHUSDT",
+      "candle_closed_at": "2026-10-10T18:45:00Z",
+      "target_candle_start": 1791657900000,
+      "signal": "STOP",
+      "ungated_heuristic": "UP",
+      "pattern": "UP_trend",
+      "evaluated_at": null,
+      "outcome": null
+    },
+    {
+      "id": "SOLUSDT:1791657000000",
+      "symbol": "SOLUSDT",
+      "candle_closed_at": "2026-10-10T18:45:00Z",
+      "target_candle_start": 1791657900000,
+      "signal": "STOP",
+      "ungated_heuristic": "STOP",
+      "pattern": "STOP_range",
+      "evaluated_at": null,
+      "outcome": null
+    }
+  ],
+  "updated_at": "2026-10-10T18:49:16.349000Z",
+  "interval_minutes": 15,
+  "history_requested_since": "2026-01-01T00:00:00Z",
+  "market": "Binance Spot public (Bybit 403 fallback; NOT Bybit futures)",
+  "mode": "read_only_research",
+  "orders_enabled": false,
+  "ai_weights_trained": false,
+  "round_trip_cost_assumed_pct": 0.14,
+  "note": "Historical 70/30 chronological test and future outcomes are different. Paper net assumes ideal next open and next close and estimated costs. Not an executable trade or a verified edge."
+}
