@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generated_at": "2026-10-09T23:38:26.485425+00:00",
+  "generated_at": "2026-10-10T08:36:10.233114+00:00",
   "sources": {
     "telegram_main": {
       "ok": true,
@@ -26,7 +26,7 @@
       "ok": true,
       "count": 10218,
       "complete": true,
-      "updated_at": "2026-10-09T23:38:22.062866+00:00",
+      "updated_at": "2026-10-10T08:36:04.874128+00:00",
       "url": "https://t.me/it_statti"
     },
     "jev_news": {
@@ -47,32 +47,32 @@
     ],
     "prices": {
       "bitcoin": {
-        "usd": 82544,
-        "usd_24h_change": 0.9315115056912929
+        "usd": 82756,
+        "usd_24h_change": 0.33808590976607494
       },
       "ethereum": {
-        "usd": 2486.46,
-        "usd_24h_change": 0.4105412986396052
+        "usd": 2492.89,
+        "usd_24h_change": -0.18846625712117832
       },
       "solana": {
-        "usd": 109.14,
-        "usd_24h_change": -0.927198790465676
+        "usd": 109.83,
+        "usd_24h_change": -0.26990277230820875
       },
       "pendle": {
-        "usd": 2.12,
-        "usd_24h_change": 1.1105029454625224
+        "usd": 2.14,
+        "usd_24h_change": 0.7922995889250961
       },
       "ripple": {
-        "usd": 1.39,
-        "usd_24h_change": 0.6938291055121453
+        "usd": 1.41,
+        "usd_24h_change": 0.47644379098272455
       },
       "binancecoin": {
-        "usd": 742.23,
-        "usd_24h_change": 0.6180638520178744
+        "usd": 749.21,
+        "usd_24h_change": 0.9798392687697062
       },
       "dogecoin": {
-        "usd": 0.085301,
-        "usd_24h_change": 0.9419285253077314
+        "usd": 0.086192,
+        "usd_24h_change": 1.3286762598262347
       }
     }
   },
@@ -5163,7 +5163,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "OKX Registration 2026: How to Create an Account + 30 Days of VIP1",
+      "title": "OKX реєстрація 2026: як створити акаунт + VIP1 на 30 днів",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=CxNvknaqIME",
       "published_at": null,
@@ -5179,7 +5179,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "How to earn on cryptocurrency in 2026 — passive income on Binance",
+      "title": "Як заробляти на криптовалюті у 2026 році — пасивний дохід на Binance",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=seFNnvpftz4",
       "published_at": null,
@@ -5195,7 +5195,7 @@
         "деривативи/плече: потрібна перевірка max loss, margin і ліквідації",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "What are options and how to buy them on Binance in 2026?",
+      "title": "Що таке опціони та як їх купити на Binance у 2026 році?",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=vQw_-w1Dy7o",
       "published_at": null,
@@ -5211,7 +5211,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "How to Buy Stocks in Ukraine in 2026? A Step-by-Step Guide",
+      "title": "Як купити акції в Україні у 2026 році? Покрокова інструкція",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=RSdKKuXNZ5k",
       "published_at": null,
@@ -5227,7 +5227,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "How to Earn Crypto on OKX — Passive Income for Beginners",
+      "title": "Як заробляти на криптовалюті на OKX — пасивний дохід для новачків",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=RGbcPPKIW5E",
       "published_at": null,
@@ -5243,7 +5243,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "How to Make from $15 to $100 on Binance Out of Nowhere!",
+      "title": "Як заробити на Binance від $15 до $100 на рівному місці!",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=rmrkuRMutF0",
       "published_at": null,
@@ -5259,7 +5259,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Which Crypto to Buy in 2026? 11 Coins I'm Looking At Right Now",
+      "title": "Яку крипту купляти у 2026 році? 11 монет, які я зараз розглядаю",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=cmpvbcc27K0",
       "published_at": null,
@@ -5275,7 +5275,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "How to Buy S&P 500 on Binance | bStocks — A Simple Guide",
+      "title": "Як купити S&P 500 на Binance | bStocks — проста інструкція",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=6oL0a355KgI",
       "published_at": null,
@@ -5291,7 +5291,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Bitcoin 2026 Review: Price and Market Updates",
+      "title": "Огляд біткоіна 2026: оновлення цін і ринку",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=4QoyO40jff4",
       "published_at": null,
@@ -5323,7 +5323,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Binance for beginners or how to earn from $60 to $7,000 upon registration",
+      "title": "Бінанс для новачків або як при реєстрації заробити від 60$ до 7000$",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=bYCRLR5t6aU",
       "published_at": null,
@@ -5355,7 +5355,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Cryptocurrency overview WLD, STRK, APT, SOL, TWT, 5IRE, MYX, ALEX, VANA, FLIP, PUFFER - What to c...",
+      "title": "Огляд критовалют WLD, STRK, APT, SOL, TWT, 5IRE, MYX, ALEX, VANA, FLIP, PUFFER - Що вибрати?",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=FHdXLcNg6N8",
       "published_at": null,
@@ -5371,7 +5371,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Register on Binance from your phone in 5 minutes and get a $50 bonus!",
+      "title": "Реєстрація на Binance з телефону за 5 хвилин та бонус 50$!",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=XoKZS7pyxUQ",
       "published_at": null,
@@ -5387,7 +5387,7 @@
         "криптоідея без чіткої портфельної рамки",
         "YouTube використовується як контекст/методологія, не як прямий сигнал"
       ],
-      "title": "Earn money online without investment that even a schoolkid can handle",
+      "title": "Заробіток без вкладень в інтернеті з яким впорається навіть школяр",
       "summary": "Відео ITstatti. Мишка використовує його як контекст для інвестицій, трейдингу, ризику та криптоможливостей.",
       "url": "https://www.youtube.com/watch?v=KQd67gY-fi0",
       "published_at": null,
