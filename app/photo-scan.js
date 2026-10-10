@@ -325,7 +325,7 @@
       qualifier.className='report-notice';
       qualifier.textContent=direction==='unknown'?
         'Для висновку бракує надійно розпізнаних свічок. Напрям не вгадуємо.':
-        'Це НЕ сигнал ВГОРУ/ВНИЗ на майбутнє. Для сценарію наступних 3–5 хв обери BTCUSDT · ф’ючерси · 5 хв у блоці «Актуальний ринок» вище й перевір реальні дані Bybit.';
+        'Це НЕ сигнал на майбутнє. Натисни кнопку нижче й перевір у блоці «Актуальний ринок», чи збігаються пара, тип ринку й таймфрейм із фото.';
       const technical=document.createElement('details');
       technical.style.marginTop='10px';
       const summary=document.createElement('summary');
@@ -337,7 +337,7 @@
       const scenarioButton=document.createElement('button');
       scenarioButton.type='button';
       scenarioButton.className='small-button';
-      scenarioButton.textContent='🧠 Перейти до сценарію НАСТУПНИХ 5 хв ↑';
+      scenarioButton.textContent='🧠 Перевірити наступні 5 хв за Bybit';
       scenarioButton.style.cssText='display:inline-block;margin:9px 0';
       scenarioButton.addEventListener('click',()=>{
         const target=container.querySelector('.screenshot-market-direction') ||
@@ -346,6 +346,8 @@
         target.scrollIntoView?.({behavior:'smooth',block:'start'});
         const pair=target.querySelector('input');
         if(pair){try{pair.focus({preventScroll:true});}catch{pair.focus();}}
+        const analyze=target.querySelector('button.small-button');
+        if(analyze && !analyze.disabled) analyze.click();
       });
       out.replaceChildren(label,qualifier,scenarioButton,technical);
     }
