@@ -1,5 +1,5 @@
 /* Scope is /T/ on GitHub Pages. Do not intercept or cache legacy app routes. */
-const VERSION = 'myshka-app-shell-v21-pocket';
+const VERSION = 'myshka-app-shell-v22-pocket';
 const STATIC = ['./myshka-app.html','./app/pocket-option.css','./app/pocket-option.js','./app/photo-scan.js','./app/myshka-icon.svg','./myshka.webmanifest'];
 const JSON_FEEDS = ['crypto_myshka/data/youtube_live.json','crypto_myshka/data/pair_reports.json','crypto_myshka/data/youtube_analysts.json','crypto_myshka/data/youtube_archive.json'];
 self.addEventListener('install',event=>{
