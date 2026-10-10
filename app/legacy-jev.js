@@ -169,6 +169,7 @@
     $('legacy-jev-disconnect').addEventListener('click',disconnect);
     $('legacy-jev-show-connection').addEventListener('click',showConnection);
     $('mouseJevConnect').addEventListener('click',()=>{
+      const popup=$('mouseAiToggle');if(popup)popup.checked=false;
       document.querySelector('.tab[data-mode="chart"]')?.click();
       $('legacy-jev-connection').hidden=false;
       $('legacy-jev-access').focus();
