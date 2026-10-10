@@ -77,6 +77,16 @@
         <section class="screen" id="screen-analysis" data-screen="analysis" aria-labelledby="analysis-title" hidden>
           <div class="section-heading top-heading"><div><div class="eyebrow">JEV EXPLAINABLE AI</div><h1 id="analysis-title">Fast Analysis</h1></div><span class="outline-pill">NO AUTO-TRADE</span></div>
           <p class="intro">Встав скріншот через Ctrl+V або обери файл. JEV (локальний або хмарний) оцінить видимий напрямок, сформує демо-гіпотезу BUY / SELL / ПРОПУСТИТИ та, якщо даних достатньо, запропонує час закриття 30 с, 1 хв або 5 хв. Збережені звіти за парами залишаються нижче.</p>
+          <section class="settings-card" aria-label="ТОП-10 трейдерів Pocket Option" style="margin:16px 0;padding:18px">
+            <h2 style="margin:0 0 8px">🏆 ТОП-10 Pocket Option · Live Actions</h2>
+            <p class="report-notice"><strong>🔴 LIVE не підключено.</strong> Рейтинг і чужі угоди не надходять у цей сайт автоматично: потрібне дозволене джерело подій Pocket Option. Ми не вигадуємо імена, прибутки чи угоди.</p>
+            <p>Після підключення авторизованого джерела тут можна показувати 10 трейдерів, час, актив, напрямок, відкриття/закриття й результат кожної доступної події. Без доступу до подій JEV не використовує їх для сигналів.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+              <a class="small-button" href="https://pocketoption.com/" target="_blank" rel="noopener noreferrer">Відкрити Social Trading ↗</a>
+              <span class="outline-pill" aria-label="Статус підключення">Джерело: не налаштовано</span>
+            </div>
+            <ol style="padding-left:26px;line-height:1.7;color:var(--muted,#667085)"><li>Трейдер 1–10: очікуємо підтверджений рейтинг та ID.</li><li>LIVE-угоди: очікуємо дозволений потік подій.</li><li>Аналітика JEV: лише після отримання справжніх даних.</li></ol>
+          </section>
           <div class="searchbar"><label class="visually-hidden" for="pair-search">Пошук пари</label><span aria-hidden="true">⌕</span><input id="pair-search" type="search" placeholder="Знайти BTC/USDT, AUD/CNY OTC…" autocomplete="off"></div>
           <div id="pair-chips" class="chips" aria-label="Доступні пари"></div>
           <div class="demo-controls"><label class="small-button" for="chart-photo">📷 Обрати фото графіка</label><input id="chart-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden><span>Або встав скріншот: Win+Shift+S → Ctrl+V. У локальному режимі фото отримує Ollama на ПК; у хмарному — налаштований сервер і AI-провайдер. Без підключення фото не надсилається.</span></div>
