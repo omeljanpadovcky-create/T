@@ -27,7 +27,7 @@
 <a href="./index.html">← Старий сайт (архів)</a></div>
 </aside>
 <div class="workspace">
-<header class="topbar"><div class="mini-brand"><span>🐭</span><strong>Crypto Myshka</strong><small>Pocket Lab</small></div><span id="cloud-indicator" class="pill">AI: не перевірено</span></header>
+<header class="topbar"><div class="mini-brand"><span>🐭</span><strong>Crypto Myshka</strong><small>Pocket Lab</small></div><span id="cloud-indicator" class="pill">⏳ Перевіряємо Pocket API</span></header>
 <main id="main">
 <section id="screen-home" data-screen="home" class="screen">
 <div class="overline">POCKET OPTION · SCREENSHOT RESEARCH</div>
@@ -100,7 +100,7 @@
 <label>Vercel HTTPS URL<input id="cloud-endpoint" type="url" autocomplete="url" value="https://t-zeta-ashy.vercel.app" spellcheck="false"></label>
 <label>Код доступу JEV<input id="cloud-access" type="password" autocomplete="off" placeholder="Окремий код JEV_ACCESS_TOKEN"></label>
 <div class="actions"><button class="btn primary" id="cloud-connect" type="button">Перевірити підключення</button><button class="btn" id="cloud-disconnect" type="button">Від’єднати</button></div>
-<p id="cloud-settings-status" class="hint" role="status">Хмарний AI ще не перевірено.</p>
+<p id="cloud-settings-status" class="hint" role="status">Перевіряємо наявність Pocket API. Для аналізу фото потрібен код JEV і доступна квота AI-провайдера.</p>
 <p class="hint">Адреса зберігається в браузері, код доступу — тільки для поточної вкладки. Сервер має містити JEV_ACCESS_TOKEN і робочий GEMINI_API_KEY або APINEX_API_KEY. Якщо APInex повертає HTTP 402, самою зміною коду сайту це не виправити.</p>
 <a class="small-link" href="https://vercel.com/omeljanpadovcky-6074/t/settings/environment-variables" target="_blank" rel="noopener noreferrer">Відкрити Vercel Environment Variables ↗</a>
 <p><a class="small-link" href="./crypto_myshka/POCKET_LAB_README_UA.md" target="_blank" rel="noopener noreferrer">📖 Як працює Pocket Lab і коли JEV буде доступним ↗</a></p>
@@ -114,6 +114,6 @@
 <nav class="mobile-nav" aria-label="Мобільна навігація"><button data-go="home">⌂<small>Головна</small></button><button data-go="analysis">▥<small>Аналіз</small></button><button data-go="history">◷<small>Демо</small></button><button data-go="archive">▤<small>База</small></button><button data-go="settings">⚙<small>JEV</small></button></nav>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <script defer src="./app/photo-scan.js?v=20261010-pocket1"></script>
-<script defer src="./app/pocket-option.js?v=20261010-pocket4"></script>
+<script defer src="./app/pocket-option.js?v=20261010-pocket5"></script>
 </body>
 </html>
