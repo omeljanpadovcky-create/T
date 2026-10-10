@@ -360,7 +360,7 @@
     $('pocket-photo').addEventListener('change',e=>{const f=e.target.files?.[0];if(f)loadImage(f);e.target.value='';});
     $('paste-photo').addEventListener('click',clipboardPhoto);
     document.addEventListener('paste',e=>{
-      if(e.target.closest('input,textarea'))return;
+      if(e.target?.closest?.('input,textarea'))return;
       const file=Array.from(e.clipboardData?.items||[]).find(i=>i.type.startsWith('image/'))?.getAsFile();
       if(file){e.preventDefault();route('analysis');loadImage(file);}
     });
