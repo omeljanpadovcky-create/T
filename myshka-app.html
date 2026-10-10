@@ -99,6 +99,8 @@
               <label class="small-button" for="bybit-trades-file">📁 Завантажити JSON угод</label>
               <input id="bybit-trades-file" type="file" accept=".json,application/json" hidden>
               <button id="bybit-trades-clear" class="small-button" type="button">Очистити імпорт</button>
+              <div id="bybit-auto-status" role="status" aria-live="polite">Перевіряємо автоматичний архів…</div>
+              <button id="bybit-auto-refresh" class="small-button" type="button">↻ Перевірити автоархів</button>
               <div id="bybit-trades-status" role="status" aria-live="polite">Угоди не імпортовано</div>
               <div id="bybit-trades-table" style="overflow-x:auto"></div>
               <details><summary>Формат JSON</summary><pre style="white-space:pre-wrap;font-size:11px">{"trades":[{"trader":"Публічний нік","symbol":"BTCUSDT","side":"Buy","opened_at":"2026-10-10T12:00:00Z","entry_price":65000,"closed_at":"2026-10-10T13:00:00Z","exit_price":65100,"source_url":"https://www.bybit.com/..."}]}</pre></details>
