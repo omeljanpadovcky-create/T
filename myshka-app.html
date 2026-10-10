@@ -84,7 +84,14 @@
             <p class="report-notice"><strong>⚪ LIVE: ще не підключено.</strong> Немає перевіреного потоку угод, тому тут не відображаються вигадані трейдери чи сигнали. JEV і Gemini не відкривають угоди та не копіюють позиції.</p>
             <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
               <a class="small-button" href="https://www.bybit.com/copyTrade/" target="_blank" rel="noopener noreferrer">Переглянути Bybit Copy Trading ↗</a>
-              <span class="outline-pill">Очікуємо джерело даних</span>
+              <span class="outline-pill">Master Trader API: не підтверджено</span>
+            </div>
+            <div style="margin:14px 0;border-top:1px solid #dce3ed;padding-top:12px">
+              <strong>📈 Публічний ринок Bybit · BTC / ETH / SOL</strong>
+              <p style="font-size:12px">Справжні ціни та 24-годинна зміна з офіційного публічного Bybit V5 API. Це НЕ позиції ТОП-10 трейдерів і НЕ сигнали JEV.</p>
+              <div id="bybit-market-status" role="status" aria-live="polite">Очікування запиту…</div>
+              <div id="bybit-market-data" style="overflow-x:auto"></div>
+              <button id="bybit-market-refresh" class="small-button" type="button" style="margin-top:10px">↻ Оновити ринок</button>
             </div>
             <p style="font-size:13px">Майбутні поля: трейдер · пара · LONG/SHORT · час відкриття · статус позиції · результат · джерело та час оновлення. Показники прибутку не гарантують майбутніх результатів.</p>
           </section>
@@ -240,5 +247,6 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script defer src="./app/myshka-archive.js"></script>
   <script defer src="./app/myshka.js"></script>
+  <script defer src="./app/bybit-market.js"></script>
 </body>
 </html>
