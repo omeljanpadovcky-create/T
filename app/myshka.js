@@ -27,7 +27,7 @@
     selectedPair: null, demo: false, refreshing: false, sequence: 0,
     visionStatus: 'checking', visionSource: null, cloudEndpoint: '', cloudAccess: '',
     visionCheckSeq: 0,
-    prefs: { theme: 'light', refresh: 15, visionMode: 'auto', cloudFallback: false, saved: {}, votes: {} },
+    prefs: { theme: 'light', refresh: 15, visionMode: 'cloud', cloudFallback: false, saved: {}, votes: {} },
     pollTimer: null
   };
   const $ = id => document.getElementById(id);
@@ -68,7 +68,8 @@
       if (raw && typeof raw === 'object') {
         if (allowedTheme.has(raw.theme)) state.prefs.theme = raw.theme;
         if (allowedRefresh.has(Number(raw.refresh))) state.prefs.refresh = Number(raw.refresh);
-        if (allowedVisionModes.has(raw.visionMode)) state.prefs.visionMode = raw.visionMode;
+        // JEV is cloud-only in this project; ignore legacy saved local/auto modes.
+        state.prefs.visionMode = 'cloud';
         if (typeof raw.cloudFallback === 'boolean') state.prefs.cloudFallback = raw.cloudFallback;
         if (raw.saved && typeof raw.saved === 'object' && !Array.isArray(raw.saved)) state.prefs.saved = raw.saved;
         if (raw.votes && typeof raw.votes === 'object' && !Array.isArray(raw.votes)) state.prefs.votes = raw.votes;
@@ -116,14 +117,8 @@
     return !!(state.cloudEndpoint && state.cloudAccess.length >= 24);
   }
   function visionTargets() {
-    const mode = state.prefs.visionMode;
-    const targets = [];
-    if (mode !== 'cloud' && isLocalPage()) targets.push('local');
-    // Selecting "cloud" is explicit consent. In "auto" mode the extra
-    // checkbox is mandatory before any screenshot can leave this device.
-    if ((mode === 'cloud' || (mode === 'auto' && state.prefs.cloudFallback))
-      && isCloudConfigured()) targets.push('cloud');
-    return targets;
+    // Intentional cloud-only operation: never fall back to PC Ollama.
+    return isCloudConfigured() ? ['cloud'] : [];
   }
   function syncVisionModeControls() {
     const mode = state.prefs.visionMode;
@@ -152,8 +147,8 @@
       (!isLocalPage() ? ' Тут відкрита публічна сторінка, локальний JEV недоступний.' : '');
   }
   function setVisionMode(mode) {
-    if (!allowedVisionModes.has(mode)) return;
-    state.prefs.visionMode = mode;
+    // The user chose cloud-only; reject attempts to revive legacy local mode.
+    state.prefs.visionMode = 'cloud';
     persist();
     syncVisionModeControls();
     checkVisionHealth();
