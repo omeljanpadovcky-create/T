@@ -187,7 +187,7 @@
               <option value="4h">4 години / свічка</option>
             </select>
           </div>
-          <p class="report-notice">AI-аналіз фото є необов’язковим. Якщо APInex повертає HTTP 402, <strong>локальний сканер працює без AI-ключа й сам знаходить поле графіка</strong>: він великими літерами покаже ↑ ВГОРУ / ↓ ВНИЗ для видимого руху або «НЕВИЗНАЧЕНО» за браком даних. Потрібна інша область? Натисни «Знайти графік автоматично», обведи її вручну або вибери кольори. Це не прогноз. Публічні свічки Bybit зверху працюють окремо. Для 15-хвилинних і довших свічок не робимо коротких демо-прогнозів 30 с / 1 хв.</p>
+          <p class="report-notice">Фото — тільки ретроспективний рух: <strong>НЕ прогноз наступної свічки</strong>. Для актуальних даних скористайся окремим блоком «Актуальний ринок: факт і гіпотеза», що з’являється під сканером; обери потрібну пару, тип ринку й таймфрейм. Показана гіпотеза — дослідницька й може помилятися. Хмарний JEV при HTTP 402 залишається недоступним. Публічні свічки Bybit зверху працюють окремо. Для 15-хвилинних і довших свічок не робимо коротких демо-прогнозів 30 с / 1 хв.</p>
           <div class="vision-mode-inline">
             <label for="vision-mode-quick"><strong>🤖 Де працює JEV?</strong></label>
             <select id="vision-mode-quick" aria-label="Режим JEV для аналізу фото">
@@ -328,9 +328,9 @@
   </nav>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script defer src="./app/myshka-archive.js"></script>
-  <script defer src="./app/photo-scan.js?v=20261010-autofind1"></script>
-  <script defer src="./app/photo-market-direction.js?v=20261010-v1"></script>
-  <script defer src="./app/myshka.js?v=20261010-marketlink1"></script>
+  <script defer src="./app/photo-scan.js?v=20261010-context2"></script>
+  <script defer src="./app/photo-market-direction.js?v=20261010-context2"></script>
+  <script defer src="./app/myshka.js?v=20261010-context2"></script>
   <script defer src="./app/bybit-market.js"></script>
   <script defer src="./app/bybit-fast-analysis.js?v=20261010-jev-bridge"></script>
   <script defer src="./app/jev-market-brief.js?v=20261010-v1"></script>
