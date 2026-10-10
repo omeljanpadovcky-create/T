@@ -116,6 +116,9 @@
     $('vision-mode-quick').value = mode;
     $('vision-cloud-fallback').checked = !!state.prefs.cloudFallback;
     $('vision-cloud-fallback').disabled = mode !== 'auto';
+    showLocalStart();
+    const reconnect = $('cloud-reconnect-shortcut');
+    if (reconnect) reconnect.hidden = !((mode === 'cloud' || (mode === 'auto' && state.prefs.cloudFallback)) && !isCloudConfigured());
     const warning = $('local-mode-warning');
     if (warning) warning.hidden = isLocalPage() || mode === 'cloud' ||
       (mode === 'auto' && state.prefs.cloudFallback && isCloudConfigured());
@@ -125,7 +128,9 @@
       : 'Локальний режим потребує запуску сторінки на 127.0.0.1:18765. На GitHub Pages Ollama недоступна.';
     else if (mode === 'cloud') info.textContent = isCloudConfigured()
       ? 'Хмарний режим: фото надсилатимуться через твій Vercel API до APInex / Gemini.'
-      : 'Хмарний режим вибрано. Налаштуй адресу Vercel та окремий код доступу.';
+      : state.cloudEndpoint
+        ? 'Хмарний режим: адресу Vercel збережено, але код JEV відсутній у цій вкладці. Відкрий Налаштування та введи код знову.'
+        : 'Хмарний режим: потрібно вказати адресу Vercel та окремий код доступу в Налаштуваннях.';
     else info.textContent = (state.prefs.cloudFallback
       ? 'Автоматично: спочатку Ollama, а за її недоступності — хмарний JEV із передаванням фото.'
       : 'Автоматично: Ollama, якщо відкрито локальну сторінку. Перехід у хмару заборонено.') +
@@ -141,7 +146,9 @@
   function loadCloudSettings() {
     try { state.cloudEndpoint = validCloudEndpoint(localStorage.getItem(CLOUD_URL_KEY)) || ''; } catch {}
     try { state.cloudAccess = sessionStorage.getItem(CLOUD_ACCESS_KEY) || ''; } catch {}
-    $('cloud-endpoint').value = state.cloudEndpoint;
+    // URL is public configuration; secrets are never written to localStorage.
+    // Prefill the known project URL as a suggestion, without granting cloud consent.
+    $('cloud-endpoint').value = state.cloudEndpoint || 'https://t-zeta-ashy.vercel.app';
     $('cloud-access').value = state.cloudAccess;
     syncVisionModeControls();
   }
@@ -149,7 +156,7 @@
     const label = $('cloud-connection-status');
     if (!label) return;
     if (!state.cloudEndpoint) label.textContent = 'Хмарний сервер ще не підключено.';
-    else if (!state.cloudAccess) label.textContent = 'Введи окремий код доступу JEV.';
+    else if (!state.cloudAccess) label.textContent = '🔑 Адресу збережено, але код JEV не зберігається назавжди. Після відкриття нової вкладки його потрібно ввести знову (це не API-ключ APInex).';
     else if (state.visionSource === 'cloud' && state.visionStatus === 'ready')
       label.textContent = '🟢 Хмарний JEV доступний. Фото надсилатиметься лише у хмарному режимі або за дозволом автоматичного перемикання.';
     else if (state.visionSource === 'cloud' && state.visionStatus === 'provisional')
@@ -241,8 +248,10 @@
   const LOCAL_START_COMMAND = "$u='https://raw.githubusercontent.com/omeljanpadovcky-create/T/main/START_MYSHKA_EASY.ps1'; Invoke-WebRequest -Uri $u -OutFile \"$env:TEMP\\myshka_easy.ps1\"; powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"$env:TEMP\\myshka_easy.ps1\"";
   function showLocalStart() {
     const panel = $('local-quickstart');
-    if (!panel) return;
-    panel.style.display = ['localhost', '127.0.0.1'].includes(location.hostname) ? 'none' : 'block';
+    const help = $('local-quickstart-help');
+    const show = !isLocalPage() && state.prefs.visionMode !== 'cloud';
+    if (panel) panel.style.display = show ? 'block' : 'none';
+    if (help) help.hidden = !show;
   }
   function statusPill() {
     const node = $('connection-pill');
@@ -253,6 +262,7 @@
       state.visionStatus === 'checking' ? 'Перевіряємо JEV' :
       state.visionStatus === 'missing_model' ? 'Потрібна модель Ollama' :
       !local && state.prefs.visionMode === 'local' ? 'Ollama: відкрий локальну Мишку' :
+      state.prefs.visionMode === 'cloud' && !state.cloudAccess ? '🔑 Хмарний JEV: введи код доступу' :
       state.cloudEndpoint ? 'Хмарний JEV не відповідає' :
       local ? 'JEV не відповідає' : 'Підключи хмарний JEV';
     node.className = 'connection-pill ' + (ready ? 'good' : 'warn');
@@ -586,7 +596,9 @@
           ? '🔴 Ollama не запущена. Запусти локальний JEV.'
           : '🟠 Цей сайт працює на GitHub Pages без AI-сервера. Для фото потрібні Vercel із налаштованим доступом або локальна Мишка на 127.0.0.1:18765. Просто змінити перемикач недостатньо.';
       } else {
-        status.textContent = '🟠 Налаштуй адресу Vercel та код доступу в Налаштуваннях.';
+        status.textContent = state.prefs.visionMode === 'cloud' && state.cloudEndpoint && !state.cloudAccess
+          ? '🔑 Адреса Vercel збережена, але код доступу JEV відсутній у цій вкладці. Введи його в Налаштуваннях.'
+          : '🟠 Налаштуй адресу Vercel та код доступу в Налаштуваннях.';
       }
       statusPill();
       updateCloudSettings();
@@ -709,7 +721,9 @@
             const instructions = document.createElement('p');
             instructions.textContent = isLocalPage()
               ? '⛔ JEV ще не підключено. Запусти локальну Ollama або налаштуй хмарний сервер у Налаштуваннях.'
-              : '☁️ GitHub Pages не має власного AI-сервера. Для аналізу фото потрібен налаштований Vercel або запуск локальної Мишки на ПК. n8n не потрібен.';
+              : state.prefs.visionMode === 'cloud' && state.cloudEndpoint && !state.cloudAccess
+                ? '🔑 Хмарний режим вибраний, але код JEV не зберігся в цій вкладці. Введи збережений код у Налаштуваннях — API-ключ не потрібен.'
+                : '☁️ GitHub Pages не має власного AI-сервера. Для аналізу фото потрібен налаштований Vercel або запуск локальної Мишки на ПК. n8n не потрібен.';
             const settingsButton = document.createElement('button');
             settingsButton.type = 'button';
             settingsButton.className = 'small-button';
@@ -946,6 +960,10 @@
     });
     $('vision-mode-select').addEventListener('change', event => setVisionMode(event.target.value));
     $('vision-mode-quick').addEventListener('change', event => setVisionMode(event.target.value));
+    $('cloud-reconnect-shortcut').addEventListener('click', () => {
+      navigate('settings');
+      $('cloud-access').focus();
+    });
     $('vision-cloud-fallback').addEventListener('change', event => {
       state.prefs.cloudFallback = !!event.target.checked;
       persist();
