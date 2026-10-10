@@ -38,6 +38,7 @@ async function main(){
       return {ok:true,status:200,json:async()=>({ready:true,provider:'gemini',
         model:'gemini-2.5-flash-lite',verified:false})};
     if(String(url).endsWith('/api/pocket-vision')){
+      if(!opts.method)return {ok:false,status:405,json:async()=>({error:'POST only'})};
       const body=JSON.parse(opts.body);
       assert.equal(body.pair,'EUR/USD OTC');
       assert.equal(body.chart_timeframe_seconds,60);
