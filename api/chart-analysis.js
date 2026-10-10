@@ -126,7 +126,7 @@ async function getMarketContext(symbol,category) {
 }
 
 
-const HISTORY_URL = 'https://omeljanpadovcky-create.github.io/T/crypto_myshka/data/market_learning.json';
+const HISTORY_URL = 'https://omeljanpadovcky-create.github.io/T/crypto_myshka/data/market_learning_5m.json';
 async function latestResearch(symbol) {
   try {
     const res = await fetch(HISTORY_URL + '?t=' + Date.now(),
@@ -135,7 +135,7 @@ async function latestResearch(symbol) {
     const doc = await res.json();
     const updated=Date.parse(doc.updated_at||'');
     // A stale background journal is not evidence for a current screenshot.
-    if(doc.version!==1||doc.orders_enabled!==false||doc.interval_minutes!==15||
+    if(doc.version!==1||doc.orders_enabled!==false||doc.interval_minutes!==5||
       !Number.isFinite(updated)||Math.abs(Date.now()-updated)>2*60*60*1000)return null;
     const entry=doc.symbols?.[symbol];
     if(!entry?.backtest)return null;
