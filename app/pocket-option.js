@@ -8,7 +8,7 @@
   const SESSION_KEY='crypto-myshka-cloud-access-session-v1';
   const ENDPOINT_KEY='crypto-myshka-cloud-endpoint-v1';
   const JOURNAL_KEY='crypto-myshka-pocket-paper-v1';
-  const SCREENS=new Set(['home','analysis','history','archive','settings']);
+  const SCREENS=new Set(['home','analysis','history','archive']);
   const LIMIT=300;
   const state={image:null,filename:'',crop:null,canvasWidth:0,canvasHeight:0,
     dragStart:null,dragging:false,ai:null,cloudReady:false,model:'',provider:'',loading:false};
@@ -210,7 +210,7 @@
   }
   function updateAIButton(){
     $('run-pocket-ai').disabled=!state.image||state.loading;
-    $('ai-status').textContent=state.image?'🐭 Локальний JEV готовий. Фото залишається на пристрої.':'Спершу завантаж фото графіка.';
+    $('ai-status').textContent='Автоматичне демо BTC працює окремо від аналізатора скриншотів.';
   }
   async function probeBackend(){
     const endpoint=cloudEndpoint();
@@ -414,7 +414,7 @@
     route(SCREENS.has(location.hash.slice(1))?location.hash.slice(1):'home');
     // A saved tab-only token is sufficient to re-check the model catalog.
     // With no token, publicly probe only route existence; never send a screenshot.
-    setCloudLabel('🐭 JEV локально · без ключів',true);
+    setCloudLabel('🐭 Фонове автодемо · BTC',true);
     setInterval(()=>{if(!$('screen-history').hidden)renderJournal();},15000);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
