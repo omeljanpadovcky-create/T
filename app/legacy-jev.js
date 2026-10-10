@@ -43,7 +43,7 @@
       });
       const result=await r.json().catch(()=>({}));
       if(!r.ok)throw new Error(
-        (r.status===402||/HTTP\\s*402\\b/.test(String(result.error||'')))
+        (r.status===402||/HTTP\s*402\b/.test(String(result.error||'')))
           ? 'HTTP 402: AI-провайдер обмежив аналіз за квотою/балансом. Безкоштовний огляд Bybit працює окремо.'
           : String(result.error||'JEV: HTTP '+r.status).slice(0,240)
       );
