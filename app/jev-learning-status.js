@@ -3,7 +3,7 @@
   'use strict';
   const area = document.getElementById('jev-learning-status');
   if (!area) return;
-  const uri = './crypto_myshka/data/market_learning.json';
+  const uri = './crypto_myshka/data/market_learning_5m.json';
   const label = (iso) => {
     const timestamp = Date.parse(iso || '');
     return Number.isFinite(timestamp) ? new Date(timestamp).toLocaleString('uk-UA') : 'ще не підтверджено';
@@ -24,13 +24,13 @@
       finally { clearTimeout(timer); }
       if (!response.ok) throw new Error('статистика ще не опублікована');
       const data = await response.json();
-      if (data.version !== 1 || !data.symbols || data.orders_enabled !== false)
+      if (data.version !== 1 || data.interval_minutes !== 5 || !data.symbols || data.orders_enabled !== false)
         throw new Error('формат статистики недоступний');
       const updated = Date.parse(data.updated_at || '');
-      const stale = !Number.isFinite(updated) || Date.now() - updated > 2 * 60 * 60 * 1000;
+      const stale = !Number.isFinite(updated) || Date.now() - updated > 30 * 60 * 1000;
       const title = document.createElement('strong');
-      title.textContent = '☁️ JEV · Хмарний журнал ринку (Bybit, 15 хв)';
-      const status = line('Останній підтверджений цикл: ' + label(data.updated_at) +
+      title.textContent = '☁️ JEV · Хмарний журнал ринку (5 хв)';
+      const status = line('Джерело: ' + String(data.market || 'не підтверджене').slice(0, 100) + '. Останній підтверджений цикл: ' + label(data.updated_at) +
         (stale ? ' · дані застарілі, поточні гіпотези НЕ використовуй' :
           ' · хмарний процес не є безперервним потоком'));
       const fragment = document.createDocumentFragment();
