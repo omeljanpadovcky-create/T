@@ -767,7 +767,7 @@
                     });
                     const answer = await response.json().catch(() => ({}));
                     if (!response.ok) {
-                      throw new Error(response.status === 402
+                      throw new Error((response.status === 402 || /HTTP\s*402\b/i.test(String(answer.error || '')))
                         ? '⛔ APInex відмовив у запиті (HTTP 402): перевір безкоштовну модель JEV_APINEX_MODEL, доступний ліміт і баланс API. Фото не аналізувалося. Повторні спроби не допоможуть, доки провайдер не надасть доступ.'
                         : String(answer.error || 'Помилка AI-сервера (HTTP ' + response.status + ')').slice(0,160));
                     }
