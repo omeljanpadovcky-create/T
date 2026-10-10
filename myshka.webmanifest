@@ -1,15 +1,15 @@
 {
   "id": "./myshka-app.html",
-  "name": "Crypto Myshka · JEV Analyzer",
-  "short_name": "Crypto Myshka",
-  "description": "Пояснюваний аналіз LIVE-графіків та валютних пар. Без автоматичної торгівлі.",
+  "name": "Crypto Myshka · Pocket Option Lab",
+  "short_name": "Myshka Pocket",
+  "description": "Дослідницький аналіз скріншотів Pocket Option OTC та деможурнал, без автоматичних угод.",
   "start_url": "./myshka-app.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f6f8fc",
-  "theme_color": "#f6f8fc",
+  "background_color": "#090f1b",
+  "theme_color": "#090f1b",
   "lang": "uk",
-  "orientation": "portrait-primary",
+  "orientation": "any",
   "icons": [
     {
       "src": "./app/myshka-icon.svg",
