@@ -106,6 +106,10 @@
   function pickAutoCrop(){
     const cv=$('pocket-canvas');if(!state.image)return;
     const ctx=cv.getContext('2d',{willReadFrequently:true});
+    // Always inspect ORIGINAL pixels. On the initial upload canvas is blank,
+    // and later drawing overlays may otherwise be mistaken for candles.
+    ctx.clearRect(0,0,cv.width,cv.height);
+    ctx.drawImage(state.image,0,0,cv.width,cv.height);
     const original=ctx.getImageData(0,0,cv.width,cv.height);
     const candidate=window.cryptoMyshkaPhotoScan?.findChartBounds?.(original);
     state.crop=candidate||cropFallback();drawCanvas();
