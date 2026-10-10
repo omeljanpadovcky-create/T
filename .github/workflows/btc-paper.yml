@@ -30,3 +30,6 @@ jobs:
             git commit -m "chore: update BTC paper demo [skip ci]"
             git push
           fi
+      - name: Validate market data status
+        run: |
+          python3 -c "import json,sys; s=json.load(open('data/btc-paper.json')); print('Market status:',s.get('status'),s.get('error','')); sys.exit(0 if s.get('status')=='ok' else 1)"
