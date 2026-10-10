@@ -26,10 +26,11 @@ export default async function handler(req,res) {
     return res.status(401).json({ready:false,error:'Неправильний код доступу.'});
   // GitHub Actions secrets are NOT automatically available to Vercel functions.
   // This check only sees environment variables configured for THIS backend.
-  const provider = apinexKey ? 'apinex' : 'gemini';
+  // Direct Gemini takes precedence for vision if its secret is configured.
+  const provider = geminiKey ? 'gemini' : 'apinex';
   const model = provider === 'apinex'
     ? (process.env.JEV_APINEX_MODEL || 'gemini-3.8-flash')
-    : (process.env.JEV_CLOUD_MODEL || 'gemini-2.5-flash');
+    : (process.env.JEV_CLOUD_MODEL || 'gemini-2.5-flash-lite');
   try {
     const upstream = provider === 'apinex'
       ? await fetch('https://api.apinex.bond/v1/models', {
