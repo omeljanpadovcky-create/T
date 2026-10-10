@@ -584,7 +584,7 @@
       if (state.prefs.visionMode === 'local' || (state.prefs.visionMode === 'auto' && !isLocalPage())) {
         status.textContent = isLocalPage()
           ? '🔴 Ollama не запущена. Запусти локальний JEV.'
-          : '🟠 Локальний JEV доступний лише на 127.0.0.1:18765. Для хмарного вибери «Хмарний» або дозволь резервний хмарний аналіз.';
+          : '🟠 Цей сайт працює на GitHub Pages без AI-сервера. Для фото потрібні Vercel із налаштованим доступом або локальна Мишка на 127.0.0.1:18765. Просто змінити перемикач недостатньо.';
       } else {
         status.textContent = '🟠 Налаштуй адресу Vercel та код доступу в Налаштуваннях.';
       }
@@ -706,7 +706,18 @@
           const destinations = visionTargets();
           if (!destinations.length) {
             aiButton.disabled = true;
-            aiResult.textContent = '⛔ Немає дозволеного AI-сервера. Для локального JEV відкрий 127.0.0.1:18765; для хмарного обери режим «Хмарний» у Налаштуваннях, або увімкни дозволений резервний хмарний аналіз.';
+            const instructions = document.createElement('p');
+            instructions.textContent = isLocalPage()
+              ? '⛔ JEV ще не підключено. Запусти локальну Ollama або налаштуй хмарний сервер у Налаштуваннях.'
+              : '☁️ GitHub Pages не має власного AI-сервера. Для аналізу фото потрібен налаштований Vercel або запуск локальної Мишки на ПК. n8n не потрібен.';
+            const settingsButton = document.createElement('button');
+            settingsButton.type = 'button';
+            settingsButton.className = 'small-button';
+            settingsButton.dataset.go = 'settings';
+            settingsButton.textContent = '⚙️ Налаштувати JEV';
+            const manual = document.createElement('p');
+            manual.textContent = 'Без AI-сервера список 10 трейдерів, імпорт JSON та розрахунки за наданими угодами залишаються доступними. Фото графіка можна надіслати в чат ChatGPT для окремого аналізу.';
+            aiResult.append(instructions, settingsButton, manual);
           } else {
             aiResult.textContent = 'Перевіряємо доступність JEV…';
             aiButton.addEventListener('click', async () => {
