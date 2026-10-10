@@ -15,6 +15,10 @@
       throw new Error('Непідтримуваний тип ринку або таймфрейм.');
     if(payload?.retCode!==0 || !Array.isArray(payload?.result?.list))
       throw new Error('Bybit не повернув підтверджені свічки: '+String(payload?.retMsg||'невідома помилка').slice(0,100));
+    if(payload.result.symbol && payload.result.symbol!==symbol)
+      throw new Error('Bybit повернув іншу торгову пару — аналіз зупинено.');
+    if(payload.result.category && payload.result.category!==category)
+      throw new Error('Bybit повернув інший тип ринку — аналіз зупинено.');
     const minutes=Number(interval);
     const candles=new Map();
     for(const row of payload.result.list){
