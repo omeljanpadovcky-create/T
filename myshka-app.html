@@ -80,7 +80,7 @@
 
           <section class="settings-card" aria-label="Bybit TOP-10" style="margin:16px 0;padding:18px">
             <h2 style="margin:0 0 8px">🏆 BYBIT TOP-10 · Copy Trading</h2>
-            <p>Окремий блок дослідження майстер-трейдерів Bybit поруч із Pocket Option. Порівнюватимемо підтверджені позиції, історію та ризик, коли буде доступне дозволене джерело даних.</p>
+            <p>Окремий блок дослідження майстер-трейдерів Bybit. Порівнюватимемо підтверджені позиції, історію та ризик, коли буде доступне дозволене джерело даних.</p>
             <p class="report-notice"><strong>⚪ LIVE: ще не підключено.</strong> Немає перевіреного потоку угод, тому тут не відображаються вигадані трейдери чи сигнали. JEV і Gemini не відкривають угоди та не копіюють позиції.</p>
             <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
               <a class="small-button" href="https://www.bybit.com/copyTrade/" target="_blank" rel="noopener noreferrer">Переглянути Bybit Copy Trading ↗</a>
@@ -92,6 +92,16 @@
               <div id="bybit-market-status" role="status" aria-live="polite">Очікування запиту…</div>
               <div id="bybit-market-data" style="overflow-x:auto"></div>
               <button id="bybit-market-refresh" class="small-button" type="button" style="margin-top:10px">↻ Оновити ринок</button>
+            </div>
+            <div style="margin:14px 0;border-top:1px solid #dce3ed;padding-top:12px">
+              <strong>📂 Імпорт підтверджених угод Master Traders</strong>
+              <p style="font-size:12px">Додай JSON з доступними тобі публічними угодами. Без паролів, cookie, API-ключів чи токенів. Лише локальний перегляд у браузері, без відправлення даних на сервер.</p>
+              <label class="small-button" for="bybit-trades-file">📁 Завантажити JSON угод</label>
+              <input id="bybit-trades-file" type="file" accept=".json,application/json" hidden>
+              <button id="bybit-trades-clear" class="small-button" type="button">Очистити імпорт</button>
+              <div id="bybit-trades-status" role="status" aria-live="polite">Угоди не імпортовано</div>
+              <div id="bybit-trades-table" style="overflow-x:auto"></div>
+              <details><summary>Формат JSON</summary><pre style="white-space:pre-wrap;font-size:11px">{"trades":[{"trader":"Публічний нік","symbol":"BTCUSDT","side":"Buy","opened_at":"2026-10-10T12:00:00Z","entry_price":65000,"closed_at":"2026-10-10T13:00:00Z","exit_price":65100,"source_url":"https://www.bybit.com/..."}]}</pre></details>
             </div>
             <p style="font-size:13px">Майбутні поля: трейдер · пара · LONG/SHORT · час відкриття · статус позиції · результат · джерело та час оновлення. Показники прибутку не гарантують майбутніх результатів.</p>
           </section>
@@ -248,5 +258,6 @@
   <script defer src="./app/myshka-archive.js"></script>
   <script defer src="./app/myshka.js"></script>
   <script defer src="./app/bybit-market.js"></script>
+  <script defer src="./app/bybit-trades.js"></script>
 </body>
 </html>
