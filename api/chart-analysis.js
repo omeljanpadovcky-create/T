@@ -125,6 +125,37 @@ async function getMarketContext(symbol,category) {
     verifiedAt:new Date().toISOString(),intervals};
 }
 
+
+const HISTORY_URL = 'https://omeljanpadovcky-create.github.io/T/crypto_myshka/data/market_learning.json';
+async function latestResearch(symbol) {
+  try {
+    const res = await fetch(HISTORY_URL + '?t=' + Date.now(),
+      {cache:'no-store',signal:AbortSignal.timeout(2500)});
+    if (!res.ok) return null;
+    const doc = await res.json();
+    const updated=Date.parse(doc.updated_at||'');
+    // A stale background journal is not evidence for a current screenshot.
+    if(doc.version!==1||doc.orders_enabled!==false||doc.interval_minutes!==15||
+      !Number.isFinite(updated)||Math.abs(Date.now()-updated)>2*60*60*1000)return null;
+    const entry=doc.symbols?.[symbol];
+    if(!entry?.backtest)return null;
+    return {source:String(doc.market||'unknown').slice(0,120),
+      backtest_period_start:doc.history_requested_since,
+      last_observed_at:doc.updated_at,
+      last_bar_closed_at:entry.latest_bar_closed_at,
+      total_historical_bars:entry.backtest.candles,
+      historical_holdout:entry.backtest.holdout&&{
+        observations:entry.backtest.holdout.observations,
+        directional_accuracy_pct:entry.backtest.holdout.directional_accuracy_pct,
+        avg_paper_net_pct:entry.backtest.holdout.avg_paper_net_pct,
+        baseline:entry.backtest.holdout.always_up_baseline},
+      true_prospective_observations:entry.forward_observed,
+      prospective_settled:entry.forward_settled,
+      latest_research_signal:entry.latest_research_signal,
+      note:'Historical/forward research from the specified exchange only, NOT proof of real trade performance.'};
+  } catch {return null;}
+}
+
 const SYSTEM = `Ти JEV — дослідницький аналітик криптографіків, не оракул.
 Дай конкретну, але НЕ гарантовану гіпотезу майбутнього руху.
 Твоє завдання: прочитати свічки на фото, перевірити, чи збігаються актив,
@@ -165,11 +196,14 @@ export default async function handler(req, res) {
     try { market=await getMarketContext(body.market_symbol,body.market_category); }
     catch(err) { return res.status(200).json({...skip('СТОП: '+String(err?.message||'Bybit недоступний').slice(0,180)),
       source:'market_unavailable',mode:'research_only'}); }
+    const historical=await latestResearch(market.symbol);
     const prompt='Вибраний користувачем ринок: '+market.symbol+' '+market.category+
       '. Перевір напис пари/біржі на фото; якщо не збігається або її не видно — СТОП. '+
       'Таймфрейм фото: '+timeframe+'. Верифіковані сервером ЗАКРИТІ свічки Bybit: '+
       JSON.stringify(market)+'. Висновок стосується ТІЛЬКИ цього активу. '+
-      'Напрям — гіпотеза, не гарантія і не команда на угоду.';
+      'Напрям — гіпотеза, не гарантія і не команда на угоду. ' +
+      (historical ? 'ІСТОРИЧНА ПЕРЕВІРКА (окремий дослідницький контекст, не торговий сигнал): '+JSON.stringify(historical) :
+        'Історичний журнал ще недоступний; не вигадуй точності або результативності.');
     const isApinex = provider.provider === 'apinex';
     const url = isApinex
       ? 'https://api.apinex.bond/v1/chat/completions'
@@ -210,7 +244,7 @@ export default async function handler(req, res) {
     return res.status(200).json({...parsed,analysis:parsed.direction,model:provider.model,
       source:isApinex?'cloud_apinex':'cloud_gemini',provider:provider.provider,
       market_verified:true,market_symbol:market.symbol,market_category:market.category,
-      market_context:market,mode:'research_hypothesis',verified_quotes:true});
+      market_context:market,market_learning:historical,mode:'research_hypothesis',verified_quotes:true});
   } catch (err) {
     return res.status(504).json({error:err?.name==='TimeoutError'?'Хмарний AI не відповів за 25 секунд.':'Не вдалося зв’язатися з AI-провайдером.'});
   }
