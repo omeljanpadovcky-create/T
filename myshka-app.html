@@ -20,19 +20,19 @@
 <button type="button" data-go="analysis"><span>▥</span> Pocket Analysis</button>
 <button type="button" data-go="history"><span>◷</span> Демоісторія</button>
 <button type="button" data-go="archive"><span>▤</span> Навчальні матеріали</button>
-<button type="button" data-go="settings"><span>⚙</span> Налаштування JEV</button>
+<a href="./demo-bot.html" class="btn">🐭 Автодемо BTC</a>
 </nav>
 <div class="sidebar-note"><span class="pill safe">● DEMO / READ-ONLY</span>
 <p>Аналіз скріншотів і перевірка ідей. Жодних автоматичних угод.</p>
 <a href="./index.html">← Старий сайт (архів)</a></div>
 </aside>
 <div class="workspace">
-<header class="topbar"><div class="mini-brand"><span>🐭</span><strong>Crypto Myshka</strong><small>Pocket Lab</small></div><span id="cloud-indicator" class="pill">🐭 JEV локально · без ключів</span></header>
+<header class="topbar"><div class="mini-brand"><span>🐭</span><strong>Crypto Myshka</strong><small>Pocket Lab</small></div><span id="cloud-indicator" class="pill">🐭 Фонове автодемо · BTC</span></header>
 <main id="main">
 <section id="screen-home" data-screen="home" class="screen">
 <div class="overline">POCKET OPTION · SCREENSHOT RESEARCH</div>
 <h1>Мишка аналізує. <span class="accent">Ти перевіряєш.</span></h1>
-<p class="lead">Окремий режим для графіків Pocket Option, зокрема OTC. Скріншот → локальний аналіз свічок → пояснення JEV → демоперевірка. Без AI-ключів.</p>
+<p class="lead">Окремий режим для графіків Pocket Option, зокрема OTC. Для фонової симуляції BTC/USDT відкрий Автодемо. Аналіз скриншотів Pocket Option — окремий інструмент.</p>
 <div class="hero"><div><span class="pill safe">ЖОДНИХ РЕАЛЬНИХ СТАВОК</span><h2>ВГОРУ · ВНИЗ · СТОП</h2><p>Висновок на одну обрану експірацію. Не змішуємо Pocket Option OTC із котируваннями Bybit чи Binance.</p><button class="btn primary" type="button" data-go="analysis">Перейти до аналізу ↗</button></div><div class="hero-chart" aria-hidden="true"><span class="candle c1"></span><span class="candle c2"></span><span class="candle c3"></span><span class="candle c4"></span><span class="candle c5"></span><span class="hero-mouse">🐭</span></div></div>
 <p><a class="btn primary" href="./demo-bot.html">🐭 Запустити автономне демо (BTC / ETH / SOL) ↗</a></p><div class="statgrid"><div class="stat"><small>Зареєстровано демогіпотез</small><strong id="home-total">0</strong></div><div class="stat"><small>Завершено вручну</small><strong id="home-checked">0</strong></div><div class="stat"><small>Останній результат</small><strong id="home-last">—</strong></div></div>
 <div class="notice"><strong>Чому OTC окремо?</strong><p>Котирування EUR/USD OTC на Pocket Option можуть відрізнятися від міжбанківських та біржових. Фото саме по собі не містить достовірного майбутнього руху й не підтверджує виграш.</p></div>
@@ -66,8 +66,8 @@
 <div class="card focus-card" id="pocket-ai-card">
 <div class="section-title"><h2>3. Гіпотеза JEV</h2><span class="pill safe">DEMO · NO AUTO-TRADE</span></div>
 <p class="hint">Фото аналізується локально на пристрої. JEV описує минулі свічки та ризики; без незалежних OTC-котирувань не видає неперевірений прогноз як достовірний.</p>
-<div class="actions"><button class="btn primary" id="run-pocket-ai" type="button" disabled>🐭 Аналіз JEV · без ключів</button></div>
-<p id="ai-status" class="hint" role="status">Завантаж фото для локального аналізу.</p>
+<div class="actions"><a class="btn primary" href="./demo-bot.html">🐭 Перейти до автоматичного демо ↗</a></div>
+<p id="ai-status" class="hint" role="status">Автодемо працює окремо від цього аналізатора.</p>
 <div id="ai-verdict" class="verdict" aria-live="polite"><span class="overline">ОЦІНКА НА НАСТУПНУ ЕКСПІРАЦІЮ</span><strong id="ai-direction">⏸ СТОП</strong><p id="ai-reason">Без перевірених даних наступний напрям невідомий.</p><p id="ai-risk" class="hint"></p><p id="ai-meta" class="hint"></p></div>
 <div class="actions"><button id="save-paper" class="btn" type="button" disabled>📓 Записати гіпотезу в деможурнал</button></div>
 </div>
@@ -93,27 +93,14 @@
 </div>
 </section>
 
-<section id="screen-settings" data-screen="settings" class="screen" hidden>
-<div class="overline">CLOUD · VERCEL</div><h1>JEV · локальний режим</h1>
-<p class="lead">Локальний аналіз фото працює без хмарного сервера та ключів. Налаштування нижче — застарілий необов’язковий хмарний режим.</p>
-<div class="card settings-card">
-<label>Vercel HTTPS URL<input id="cloud-endpoint" type="url" autocomplete="url" value="https://t-zeta-ashy.vercel.app" spellcheck="false"></label>
-<label>Код доступу JEV<input id="cloud-access" type="password" autocomplete="off" placeholder="Окремий код JEV_ACCESS_TOKEN"></label>
-<div class="actions"><button class="btn primary" id="cloud-connect" type="button">Перевірити підключення</button><button class="btn" id="cloud-disconnect" type="button">Від’єднати</button></div>
-<p id="cloud-settings-status" class="hint" role="status">Перевіряємо наявність Pocket API. Для аналізу фото потрібен код JEV і доступна квота AI-провайдера.</p>
-<p class="hint">Адреса зберігається в браузері, код доступу — тільки для поточної вкладки. Сервер має містити JEV_ACCESS_TOKEN і робочий GEMINI_API_KEY або APINEX_API_KEY. Якщо APInex повертає HTTP 402, самою зміною коду сайту це не виправити.</p>
-<a class="small-link" href="https://vercel.com/omeljanpadovcky-6074/t/settings/environment-variables" target="_blank" rel="noopener noreferrer">Відкрити Vercel Environment Variables ↗</a>
-<p><a class="small-link" href="./crypto_myshka/POCKET_LAB_README_UA.md" target="_blank" rel="noopener noreferrer">📖 Як працює Pocket Lab і коли JEV буде доступним ↗</a></p>
-</div>
-<div class="notice"><strong>Конфіденційність фото</strong><p>Локальна геометрія свічок не покидає пристрою. Під час хмарного запиту вирізана ділянка фото передається на твій Vercel API та до обраного AI-провайдера. Не додавай персональні дані на графік.</p></div>
-</section>
+
 </main>
 <footer>Crypto Myshka © 2026 · Pocket Option Screenshot Lab · Дослідницький режим, без ордерів</footer>
 </div>
 </div>
-<nav class="mobile-nav" aria-label="Мобільна навігація"><button data-go="home">⌂<small>Головна</small></button><button data-go="analysis">▥<small>Аналіз</small></button><button data-go="history">◷<small>Демо</small></button><button data-go="archive">▤<small>База</small></button><button data-go="settings">⚙<small>JEV</small></button></nav>
+<nav class="mobile-nav" aria-label="Мобільна навігація"><button data-go="home">⌂<small>Головна</small></button><button data-go="analysis">▥<small>Аналіз</small></button><button data-go="history">◷<small>Демо</small></button><button data-go="archive">▤<small>База</small></button><a href="./demo-bot.html" style="text-decoration:none;color:inherit;text-align:center">🐭<small>Автодемо</small></a></nav>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <script defer src="./app/photo-scan.js?v=20261010-pocket1"></script>
-<script defer src="./app/pocket-option.js?v=20261011-local1"></script>
+<script defer src="./app/pocket-option.js?v=20261011-no-local2"></script>
 </body>
 </html>
