@@ -1,4 +1,4 @@
-name: JEV Cloud Market Research (5m, read-only)
+name: Legacy Bybit-Binance Research (manual archive)
 
 on:
   workflow_dispatch:
@@ -8,9 +8,9 @@ on:
       - 'crypto_myshka/market_learning.py'
       - 'crypto_myshka/tests/test_market_learning.py'
       - '.github/workflows/jev-market-learning.yml'
-  schedule:
-    # Approximate cadence: GitHub Actions schedules can be delayed or skipped.
-    - cron: '*/5 * * * *'
+  # The former Binance Spot/Bybit five-minute schedule is archived after
+  # switching the main app to Pocket Option OTC. OTC quotes cannot be inferred
+  # from Binance Spot. Workflow stays available for manual archival research.
 
 permissions:
   contents: write
