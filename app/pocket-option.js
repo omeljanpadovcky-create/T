@@ -393,6 +393,9 @@
       if(!confirm('Очистити всі локальні демозаписи Pocket Lab?'))return;
       try{localStorage.removeItem(JOURNAL_KEY);}catch{}renderJournal();toast('Деможурнал очищено.');
     });
+    if ('serviceWorker' in navigator && location.protocol==='https:') {
+      navigator.serviceWorker.register('./myshka-sw.js').catch(()=>{});
+    }
     installPointer();showMath();updateAIButton();renderVerdict(null);
     route(SCREENS.has(location.hash.slice(1))?location.hash.slice(1):'home');
     if(connected()){setCloudLabel('🔑 Код є · натисни Перевірити підключення');updateAIButton();}
