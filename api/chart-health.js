@@ -54,8 +54,8 @@ export default async function handler(req,res) {
         'API-ключ або сервер моделі недоступний (HTTP ' + upstream.status + ').'
     });
     return res.status(200).json({ready:true,provider,model,cloud:true,
-      verified:true,
-      notice:'API відповів; це не перевірка точності аналізу чи реальної торгівлі.'});
+      verified:false,probe:'model_catalog_only',
+      notice:'Каталог моделей доступний. Аналіз фото ще не перевірено, без гарантії доступу або квоти.'});
   } catch {
     return res.status(503).json({ready:false,error:'Немає зв’язку з сервером APInex/Gemini. Спробуй пізніше.'});
   }
