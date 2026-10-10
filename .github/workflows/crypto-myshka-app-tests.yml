@@ -1,4 +1,4 @@
-name: Crypto Myshka App UI Tests
+name: Crypto Myshka Pocket Lab UI & Vision Tests
 
 on:
   workflow_dispatch:
@@ -8,23 +8,20 @@ on:
       - 'myshka-app.html'
       - 'myshka.webmanifest'
       - 'myshka-sw.js'
-      - 'app/myshka.css'
-      - 'app/myshka.js'
-      - 'app/myshka-archive.js'
-      - 'app/myshka-icon.svg'
-      - 'app/myshka.smoke.cjs'
-      - 'api/chart-analysis.js'
-      - 'api/chart-health.js'
-      - 'jev_api/api/chart-analysis.js'
-      - 'jev_api/api/chart-health.js'
-      - 'jev_api/tests/chart-cloud.test.js'
+      - 'app/pocket-option.js'
+      - 'app/pocket-option.css'
+      - 'app/pocket-option.smoke.cjs'
+      - 'app/photo-scan.js'
+      - 'api/pocket-vision.js'
+      - 'jev_api/api/pocket-vision.js'
+      - 'jev_api/tests/pocket-vision.test.js'
       - '.github/workflows/crypto-myshka-app-tests.yml'
 
 permissions:
   contents: read
 
 jobs:
-  verify-mobile-app:
+  verify-pocket-lab:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
@@ -32,37 +29,43 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Check JavaScript syntax
+      - name: Check Pocket JavaScript syntax
         run: |
-          node --check app/myshka.js
-          node --check app/myshka-archive.js
+          node --check app/pocket-option.js
+          node --check app/photo-scan.js
+          node --check api/pocket-vision.js
+          node --check jev_api/api/pocket-vision.js
           node --check myshka-sw.js
-          node --check app/myshka.smoke.cjs
-      - name: Validate install manifest and icon
+          node --check app/pocket-option.smoke.cjs
+      - name: Validate manifest and Pocket DOM
         run: |
           python3 - <<'PY'
           import json
+          from pathlib import Path
           from html.parser import HTMLParser
           from xml.etree import ElementTree as ET
-          from pathlib import Path
           data=json.loads(Path('myshka.webmanifest').read_text())
-          assert data['display']=='standalone'
           assert data['start_url']=='./myshka-app.html'
+          assert data['display']=='standalone'
           ET.parse('app/myshka-icon.svg')
-          class Inspect(HTMLParser):
-              def __init__(self):
-                  super().__init__();self.ids=set()
+          class Check(HTMLParser):
+              def __init__(self): super().__init__(); self.ids=set()
               def handle_starttag(self,tag,attrs):
-                  self.ids.update(v for k,v in attrs if k=='id')
-          ins=Inspect();ins.feed(Path('myshka-app.html').read_text())
-          required=['screen-home','screen-analysis','screen-archive','screen-history','screen-settings','analysis-list','archive-list','history-list','photo-analysis','vision-status']
-          assert all(k in ins.ids for k in required)
-          assert 'screen-live' not in ins.ids
-          print('Manifest, SVG, and 5-screen DOM structure OK')
+                  for k,v in attrs:
+                      if k=='id':self.ids.add(v)
+          c=Check();c.feed(Path('myshka-app.html').read_text())
+          required=['screen-home','screen-analysis','screen-archive','screen-history',
+                    'screen-settings','pocket-pair','pocket-photo','pocket-canvas',
+                    'run-pocket-ai','ai-direction','journal-list','cloud-endpoint','cloud-access']
+          assert all(i in c.ids for i in required), set(required)-c.ids
+          text=Path('myshka-app.html').read_text()
+          assert 'app/pocket-option.js' in text
+          assert 'app/bybit-fast-analysis.js' not in text
+          print('Pocket Lab manifest and five-screen structure OK')
           PY
-      - name: Verify secure cloud JEV endpoints
-        run: node --test jev_api/tests/chart-cloud.test.js
+      - name: Test Pocket screenshot contract, honest STOP and market isolation
+        run: node --test jev_api/tests/pocket-vision.test.js
       - name: Install DOM test dependency
         run: npm install --no-save --ignore-scripts jsdom@26.1.0
-      - name: Exercise JEV reports, history, settings and screenshot analysis
-        run: node app/myshka.smoke.cjs
+      - name: Test Pocket upload, cloud response and demo journal
+        run: node app/pocket-option.smoke.cjs
