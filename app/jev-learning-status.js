@@ -31,7 +31,7 @@
       const title = document.createElement('strong');
       title.textContent = '☁️ JEV · Хмарний журнал ринку (5 хв)';
       const status = line('Джерело: ' + String(data.market || 'не підтверджене').slice(0, 100) + '. Останній підтверджений цикл: ' + label(data.updated_at) +
-        (stale ? ' · дані застарілі, поточні гіпотези НЕ використовуй' :
+        (stale ? ' · автоматичні запуски не підтверджені вчасно; дані застарілі, гіпотези НЕ використовуй. Відкрий GitHub Actions для діагностики' :
           ' · хмарний процес не є безперервним потоком'));
       const fragment = document.createDocumentFragment();
       fragment.append(title,status);
@@ -47,6 +47,14 @@
           ' · історія: ' + fmt(row.backtest?.candles) + ' свічок' +
           ' · окрема історична перевірка: ' + fmt(held.observations) + ' випадків' +
           ' · майбутні результати: ' + fmt(fw.observations) + ' перевірених'));
+      }
+      if (stale) {
+        const link=document.createElement('a');
+        link.href='https://github.com/omeljanpadovcky-create/T/actions/workflows/jev-market-learning.yml';
+        link.target='_blank';link.rel='noopener noreferrer';
+        link.textContent='⚠️ Перевірити хмарні запуски GitHub Actions ↗';
+        link.style.cssText='font-size:13px;display:inline-block;margin:8px 0;text-decoration:underline';
+        fragment.append(link);
       }
       fragment.append(line('Минуле не доводить точності майбутнього. Віртуальні оцінки враховують припущені витрати, але не є результатами Bybit Demo Trading. Ордери вимкнені.'));
       area.replaceChildren(fragment);
