@@ -11,13 +11,23 @@ NOW = dt.datetime.now(dt.timezone.utc)
 STAKE, PAYOUT = 10.0, 0.92
 
 def fetch_candles():
-    url = "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=150"
-    req = urllib.request.Request(url, headers={"User-Agent": "CryptoMyshkaPaperResearch/1.0"})
-    with urllib.request.urlopen(req, timeout=15) as response:
-        candles = json.load(response)
-    if not isinstance(candles, list) or len(candles) < 40:
-        raise RuntimeError("Insufficient public candles")
-    return [{"open": int(c[0]), "close_time": int(c[6]), "close": float(c[4])} for c in candles]
+    # Kraken public OHLC; no keys. XBTUSDT is Bitcoin against USDT.
+    url = "https://api.kraken.com/0/public/OHLC?pair=XBTUSDT&interval=1"
+    req = urllib.request.Request(url, headers={"User-Agent": "CryptoMyshkaPaperResearch/1.1"})
+    with urllib.request.urlopen(req, timeout=20) as response:
+        payload = json.load(response)
+    if payload.get("error"):
+        raise RuntimeError("Kraken API: " + ", ".join(payload["error"]))
+    result = payload.get("result", {})
+    pair_keys = [key for key in result if key != "last"]
+    if not pair_keys:
+        raise RuntimeError("Kraken returned no BTC/USDT pair")
+    rows = result[pair_keys[0]]
+    if not isinstance(rows, list) or len(rows) < 40:
+        raise RuntimeError("Insufficient Kraken BTC/USDT candles")
+    return [{"open": int(c[0]) * 1000,
+             "close_time": int(c[0]) * 1000 + 59999,
+             "close": float(c[4])} for c in rows]
 
 def ema(values, n):
     value = values[0]
@@ -41,7 +51,7 @@ def main():
     state.setdefault("trades", [])
     state.setdefault("pending", None)
     state["market"] = "BTCUSDT"
-    state["source"] = "Binance public spot M1 candles, not Pocket Option OTC"
+    state["source"] = "Kraken public XBT/USDT M1 candles, not Pocket Option OTC"
     state["mode"] = "paper_only"
     state["checked_at"] = NOW.isoformat()
     try:
