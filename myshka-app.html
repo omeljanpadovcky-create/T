@@ -76,7 +76,7 @@
 
         <section class="screen" id="screen-analysis" data-screen="analysis" aria-labelledby="analysis-title" hidden>
           <div class="section-heading top-heading"><div><div class="eyebrow">JEV EXPLAINABLE AI</div><h1 id="analysis-title">Fast Analysis</h1></div><span class="outline-pill">NO AUTO-TRADE</span></div>
-          <p class="intro">Спершу обери пару та отримай аналіз реальних свічок Bybit без пароля й AI-сервера. За бажанням можеш додати скріншот для окремого AI-аналізу JEV, якщо провайдер доступний.</p>
+          <p class="intro">Спершу обери пару для аналізу реальних свічок Bybit. Можна також додати фото: локальний сканер визначає кольорові свічки без ключів, а JEV AI окремо аналізує зображення тільки якщо провайдер доступний.</p>
 
           <section class="settings-card public-analysis-card" id="public-candle-analysis" aria-labelledby="public-candle-heading">
             <div class="public-analysis-heading">
@@ -172,7 +172,7 @@
           </details>
           <div class="searchbar"><label class="visually-hidden" for="pair-search">Пошук пари</label><span aria-hidden="true">⌕</span><input id="pair-search" type="search" placeholder="Знайти BTC/USDT, AUD/CNY OTC…" autocomplete="off"></div>
           <div id="pair-chips" class="chips" aria-label="Доступні пари"></div>
-          <div class="demo-controls"><label class="small-button" for="chart-photo">📷 Обрати фото графіка</label><input id="chart-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden><span>Або встав скріншот: Win+Shift+S → Ctrl+V. У локальному режимі фото отримує Ollama на ПК; у хмарному — налаштований сервер і AI-провайдер. Без підключення фото не надсилається.</span></div>
+          <div class="demo-controls"><label class="small-button" for="chart-photo">📷 Обрати фото графіка</label><input id="chart-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden><span>Або встав скріншот: Win+Shift+S → Ctrl+V. Сканер кольорових свічок запускається прямо у браузері без ключа та без надсилання фото. Окремий AI-аналіз: локальна Ollama або хмарний провайдер за твоїм вибором.</span></div>
           <div class="expiry-lab-controls">
             <label for="chart-timeframe"><strong>Таймфрейм свічок</strong><small>Не плутати з часом угоди після BUY/SELL</small></label>
             <select id="chart-timeframe" aria-label="Таймфрейм свічок">
@@ -187,7 +187,7 @@
               <option value="4h">4 години / свічка</option>
             </select>
           </div>
-          <p class="report-notice">AI-аналіз фото є необов’язковим. Якщо APInex повертає HTTP 402 або код JEV не підключено, <strong>кнопка «Аналізувати Bybit» вище працює окремо</strong>. Для 15-хвилинних і довших свічок не робимо коротких демо-прогнозів 30 с / 1 хв.</p>
+          <p class="report-notice">AI-аналіз фото є необов’язковим. Якщо APInex повертає HTTP 402, <strong>спробуй новий «Сканер фото — без AI-ключа» під завантаженим зображенням</strong>: він знаходить лише можливі кольорові свічки й ніколи не видає прогноз як факт. Публічні свічки Bybit зверху також працюють окремо. Для 15-хвилинних і довших свічок не робимо коротких демо-прогнозів 30 с / 1 хв.</p>
           <div class="vision-mode-inline">
             <label for="vision-mode-quick"><strong>🤖 Де працює JEV?</strong></label>
             <select id="vision-mode-quick" aria-label="Режим JEV для аналізу фото">
@@ -328,7 +328,8 @@
   </nav>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script defer src="./app/myshka-archive.js"></script>
-  <script defer src="./app/myshka.js?v=20261010-tsla2"></script>
+  <script defer src="./app/photo-scan.js?v=20261010-photo1"></script>
+  <script defer src="./app/myshka.js?v=20261010-photo1"></script>
   <script defer src="./app/bybit-market.js"></script>
   <script defer src="./app/bybit-fast-analysis.js?v=20261010-jev-bridge"></script>
   <script defer src="./app/jev-market-brief.js?v=20261010-v1"></script>
