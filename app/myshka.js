@@ -919,6 +919,22 @@
             });
           }
           aiArea.append(aiButton, aiResult);
+          // Public OHLCV research does not need a JEV token and must never
+          // impersonate screenshot parsing. The visitor chooses the symbol.
+          const publicButton = document.createElement('button');
+          publicButton.type = 'button';
+          publicButton.className = 'small-button';
+          publicButton.textContent = '📊 Аналізувати свічки Bybit без AI';
+          publicButton.addEventListener('click', () => {
+            const panel = $('public-candle-analysis');
+            if (!panel) return;
+            panel.scrollIntoView({behavior:'smooth',block:'start'});
+            const field = $('bybit-fast-symbol');
+            if (field) field.focus({preventScroll:true});
+            const analyzer = window.cryptoMyshkaPublicAnalysis;
+            if (analyzer && typeof analyzer.run === 'function') analyzer.run();
+          });
+          aiArea.appendChild(publicButton);
           const expandPreview = document.createElement('button');
           expandPreview.type = 'button';
           expandPreview.className = 'small-button chart-preview-toggle';
