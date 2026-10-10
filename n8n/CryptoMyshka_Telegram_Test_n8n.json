@@ -1,0 +1,72 @@
+{
+  "name": "CryptoMyshka | Telegram Test | SAFE",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "4ae33ccb-4ac9-4299-a878-f02a9dcb5e63",
+      "name": "Manual Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "1063083825",
+        "text": "🐭 JEV на зв'язку! CryptoMyshka → Telegram працює. ✅\n\nЦе тестове повідомлення n8n. Жодних угод чи торгових сигналів.",
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true
+        }
+      },
+      "id": "9c1620fd-bef3-41a8-bf49-f267b5bc9b57",
+      "name": "Telegram Test - Send Message",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "🐭 CRYPTOMYSHKA — ТЕСТ TELEGRAM\n\n1. Вузол Telegram → Credential: обрати ВЖЕ збережений Telegram account.\n2. Перевірити Chat ID.\n3. Натиснути Execute workflow від Manual Test.\n4. Перевірити повідомлення у Telegram.\n\nНЕ публікувати і НЕ активувати.\nНемає Bybit, AI, ордерів чи ключів у файлі.\nЯкщо старий токен був на скріншоті, відкликати його в BotFather і оновити credential.",
+        "height": 300,
+        "width": 420,
+        "color": 5
+      },
+      "id": "a254667e-cb6f-4477-a3e4-c78b7a92ef75",
+      "name": "How to test safely",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        180,
+        -80
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Test": {
+      "main": [
+        [
+          {
+            "node": "Telegram Test - Send Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Kyiv"
+  },
+  "pinData": {},
+  "tags": []
+}
