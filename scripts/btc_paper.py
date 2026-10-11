@@ -93,6 +93,60 @@ def historical_validation(closed):
     }
 
 
+def signal_for(history):
+    fast, slow, strength = ema(history[-40:], 9), ema(history[-60:], 21), rsi(history)
+    direction = "LONG" if fast > slow and 55 <= strength <= 70 else (
+        "SHORT" if fast < slow and 30 <= strength <= 45 else "STOP")
+    return direction, fast, slow, strength
+
+
+def simulate_missed_minutes(state, closed):
+    """Reconstruct paper decisions from closed candles since the previous run.
+    Entries are retrospective candle-close proxies, NEVER live orders.
+    """
+    previous = state.get("last_processed_candle_ms")
+    if previous is None:
+        # Do not fabricate old trades on the first run after deployment.
+        previous = closed[-1]["open"] - 10 * 60000
+    previous = max(previous, closed[-1]["open"] - 20 * 60000)
+    existing = {t.get("entry_candle_ms") for t in state["trades"]}
+    if state.get("pending"):
+        existing.add(state["pending"].get("entry_candle_ms"))
+    new = []
+    for i in range(60, len(closed)):
+        candle = closed[i]
+        if candle["open"] <= previous or candle["open"] in existing:
+            continue
+        direction, _, _, _ = signal_for([x["close"] for x in closed[:i + 1]])
+        if direction == "STOP":
+            continue
+        entry = candle["close"]
+        trade = {"direction": direction, "entry": entry,
+                 "entry_candle_ms": candle["open"],
+                 "due_ms": candle["close_time"] + 60000,
+                 "recorded_at": NOW.isoformat(), "pair": "BTCUSDT",
+                 "mode": "retrospective_paper",
+                 "note": "Retrospective closed-candle simulation, not live or executable trade"}
+        if i + 1 < len(closed) and closed[i + 1]["open"] == candle["open"] + 60000:
+            exit_candle = closed[i + 1]
+            exit_price = exit_candle["close"]
+            tie = exit_price == entry
+            win = exit_price > entry if direction == "LONG" else exit_price < entry
+            trade.update(exit=exit_price, settled_at=NOW.isoformat(),
+                         outcome="TIE" if tie else ("WIN" if win else "LOSS"),
+                         pnl=0 if tie else (STAKE * PAYOUT if win else -STAKE),
+                         exit_candle_ms=exit_candle["open"])
+            new.append(trade)
+        elif i == len(closed) - 1:
+            state["pending"] = trade
+    if new:
+        state["trades"] = sorted(new + state["trades"],
+                                  key=lambda t: t.get("entry_candle_ms", 0),
+                                  reverse=True)[:250]
+    state["last_processed_candle_ms"] = closed[-1]["open"]
+    state["simulation_note"] = "Backfilled minute-by-minute paper signals; GitHub runs are not continuous."
+
+
 def main():
     STATE.parent.mkdir(parents=True, exist_ok=True)
     try:
@@ -121,7 +175,7 @@ def main():
             if settle:
                 exit_price = settle["close"]
                 tie = exit_price == pending["entry"]
-                win = exit_price > pending["entry"] if pending["direction"] == "UP" else exit_price < pending["entry"]
+                win = exit_price > pending["entry"] if pending["direction"] in ("UP", "LONG") else exit_price < pending["entry"]
                 pending.update(exit=exit_price, settled_at=NOW.isoformat(),
                                outcome="TIE" if tie else ("WIN" if win else "LOSS"),
                                pnl=0 if tie else (STAKE * PAYOUT if win else -STAKE),
@@ -129,20 +183,11 @@ def main():
                 state["trades"].insert(0, pending)
                 state["trades"] = state["trades"][:250]
                 state["pending"] = None
-        values = [c["close"] for c in closed]
-        fast, slow, strength = ema(values[-40:], 9), ema(values[-60:], 21), rsi(values)
-        direction = "UP" if fast > slow and 55 <= strength <= 70 else "DOWN" if fast < slow and 30 <= strength <= 45 else "STOP"
+        simulate_missed_minutes(state, closed)
+        direction, fast, slow, strength = signal_for([c["close"] for c in closed])
         state["insights"] = {"ema9": round(fast, 2), "ema21": round(slow, 2),
                              "rsi14": round(strength, 2), "direction": direction,
                              "last_closed_candle_ms": latest["open"]}
-        # Scheduled runner cannot execute at exact expiry. Entry is a closed
-        # candle price proxy; never describe it as an executable quote.
-        if state["pending"] is None and direction != "STOP" and state.get("last_entry_candle") != latest["open"]:
-            state["pending"] = {"direction": direction, "entry": latest["close"],
-                                "entry_candle_ms": latest["open"], "due_ms": latest["close_time"] + 60000,
-                                "recorded_at": NOW.isoformat(), "pair": "BTCUSDT",
-                                "note": "Entry/exit use closed-candle proxy prices, not executable prices"}
-            state["last_entry_candle"] = latest["open"]
         state["status"] = "ok"
         state.pop("error", None)
     except Exception as exc:
