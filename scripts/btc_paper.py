@@ -42,6 +42,46 @@ def rsi(values):
     losses = sum(max(0, -x) for x in changes) / 14
     return 50.0 if gains == losses == 0 else (100.0 if losses == 0 else 100 - 100 / (1 + gains / losses))
 
+def historical_validation(closed):
+    """Causal walk-forward check: signals use only candles available at decision time.
+    Outcome is the next CLOSED minute, never the same candle. Research only.
+    """
+    samples = []
+    for i in range(60, len(closed) - 1):
+        history = [c["close"] for c in closed[:i + 1]]
+        fast = ema(history[-40:], 9)
+        slow = ema(history[-60:], 21)
+        strength = rsi(history)
+        direction = "UP" if fast > slow and 55 <= strength <= 70 else (
+            "DOWN" if fast < slow and 30 <= strength <= 45 else "STOP")
+        if direction == "STOP":
+            continue
+        current, following = closed[i], closed[i + 1]
+        if following["open"] - current["open"] != 60000:
+            continue
+        start, end = current["close"], following["close"]
+        result = "TIE" if start == end else (
+            "WIN" if (end > start if direction == "UP" else end < start) else "LOSS")
+        samples.append(result)
+    wins = samples.count("WIN")
+    losses = samples.count("LOSS")
+    ties = samples.count("TIE")
+    decided = wins + losses
+    return {
+        "method": "walk_forward_next_closed_m1_proxy",
+        "market": "Kraken BTC/USDT (not Pocket Option OTC)",
+        "lookahead_guard": "signal uses candles through t; result uses t+1",
+        "window_closed_candles": len(closed),
+        "signals": len(samples),
+        "wins": wins, "losses": losses, "ties": ties,
+        "win_rate_pct": round(100 * wins / decided, 2) if decided else None,
+        "break_even_win_rate_pct": round(100 / (1 + PAYOUT), 2),
+        "hypothetical_pnl_usdt": round(wins * STAKE * PAYOUT - losses * STAKE, 2),
+        "sufficient_sample": decided >= 100,
+        "warning": "Short historical sample, proxy prices, no fees/slippage or executable fills; not a prediction or proven edge."
+    }
+
+
 def main():
     STATE.parent.mkdir(parents=True, exist_ok=True)
     try:
@@ -61,6 +101,7 @@ def main():
         if len(closed) < 35:
             raise RuntimeError("Not enough closed candles")
         latest = closed[-1]
+        state["backtest"] = historical_validation(closed)
         pending = state["pending"]
         if pending:
             # Settle against first *available closed minute* at/after expiry,
