@@ -66,7 +66,7 @@
 <div class="card focus-card" id="pocket-ai-card">
 <div class="section-title"><h2>3. Гіпотеза JEV</h2><span class="pill safe">DEMO · NO AUTO-TRADE</span></div>
 <p class="hint">Фото аналізується локально на пристрої. JEV описує минулі свічки та ризики; без незалежних OTC-котирувань не видає неперевірений прогноз як достовірний.</p>
-<div class="actions"><button class="btn primary" type="button" data-go="autodemo">🐭 Відкрити автодемо</button></div>
+<div class="actions"><button class="btn primary" id="run-pocket-ai" type="button" disabled>🔬 Аналізувати фото JEV</button><button class="btn" type="button" data-go="autodemo">🐭 Відкрити автодемо</button></div>
 <p id="ai-status" class="hint" role="status">Автодемо працює окремо від цього аналізатора.</p>
 <div id="ai-verdict" class="verdict" aria-live="polite"><span class="overline">ОЦІНКА НА НАСТУПНУ ЕКСПІРАЦІЮ</span><strong id="ai-direction">⏸ СТОП</strong><p id="ai-reason">Без перевірених даних наступний напрям невідомий.</p><p id="ai-risk" class="hint"></p><p id="ai-meta" class="hint"></p></div>
 <div class="actions"><button id="save-paper" class="btn" type="button" disabled>📓 Записати гіпотезу в деможурнал</button></div>
@@ -112,14 +112,14 @@
 </section>
 
 
-<section hidden aria-hidden="true" id="legacy-cloud-controls"><input id="cloud-endpoint" type="url"><input id="cloud-access" type="password"><button id="cloud-connect"></button><button id="cloud-disconnect"></button><span id="cloud-settings-status"></span><button id="run-pocket-ai" disabled></button></section></main>
+<section hidden aria-hidden="true" id="legacy-cloud-controls"><input id="cloud-endpoint" type="url"><input id="cloud-access" type="password"><button id="cloud-connect"></button><button id="cloud-disconnect"></button><span id="cloud-settings-status"></span></section></main>
 <footer>Crypto Myshka © 2026 · Pocket Option Screenshot Lab · Дослідницький режим, без ордерів</footer>
 </div>
 </div>
 <nav class="mobile-nav" aria-label="Мобільна навігація"><button data-go="home">⌂<small>Головна</small></button><button data-go="analysis">▥<small>Аналіз</small></button><button data-go="history">◷<small>Демо</small></button><button data-go="archive">▤<small>База</small></button><button type="button" data-go="autodemo">🐭<small>Автодемо</small></button></nav>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <script defer src="./app/photo-scan.js?v=20261010-pocket1"></script>
-<script defer src="./app/pocket-option.js?v=20261011-auto3"></script>
+<script defer src="./app/pocket-option.js?v=20261011-photofix1"></script>
 <script defer src="./app/auto-dashboard.js?v=20261011-auto1"></script>
 </body>
 </html>
