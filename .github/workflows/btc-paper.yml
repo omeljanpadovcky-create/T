@@ -33,7 +33,8 @@ jobs:
           git add data/btc-paper.json
           if ! git diff --cached --quiet; then
             git commit -m "chore: update BTC paper demo [skip ci]"
-            git push
+            git pull --rebase origin main
+            git push origin HEAD:main
           fi
       - name: Validate market data status
         run: |
