@@ -70,7 +70,7 @@ async function main(){
   d.querySelector('#cloud-access').value='a'.repeat(32);
   press('#cloud-connect');
   await new Promise(r=>setTimeout(r,20));
-  assert.match(d.querySelector('#cloud-indicator').textContent,/Pocket API та .* підключено/);
+  assert.match(d.querySelector('#cloud-status').textContent,/Pocket API та .* підключено/);
   const png=w.document.createElement('input');
   const fake=new w.File([new Uint8Array([137,80,78,71,13,10,26,10,...new Array(300).fill(1)])],
     'pocket.png',{type:'image/png'});
@@ -98,4 +98,4 @@ async function main(){
   console.log('Pocket Option UI: navigation, payout, image crop, local scan, cloud hypothesis and journal OK');
   dom.window.close();
 }
-main().catch(e=>{console.error(e);process.exitCode=1;});
+main().catch(e=>{console.error(e);process.exit(1);});
