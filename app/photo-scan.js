@@ -162,7 +162,22 @@
         columnCandidates:cols.length,
         reason:'Надто мало розподілених по горизонталі вертикальних елементів. Можливо, це лінійний графік або нестандартні кольори свічок. Обведи лише поле графіка й спробуй вручну вибрати кольори свічок.'};
     }
-    const partial=found.length<9||disp.spread<w*.33||disp.bins<3;
+    // Reject scattered labels, indicator fragments and order-book numbers by
+    // requiring plausible, fairly regular candle spacing and comparable bodies.
+    const ordered=found.slice().sort((x,y)=>x.x-y.x);
+    const gaps=ordered.slice(1).map((v,i)=>v.x-ordered[i].x).filter(v=>v>1);
+    const gapMedian=median(gaps)||0;
+    const stableGaps=gaps.length?gaps.filter(v=>v>=gapMedian*.45&&v<=gapMedian*1.85).length/gaps.length:0;
+    const widths=ordered.map(v=>v.maxX-v.minX+1);
+    const widthMedian=median(widths)||0;
+    const stableWidths=widths.length?widths.filter(v=>v>=Math.max(1,widthMedian*.35)&&v<=widthMedian*2.8).length/widths.length:0;
+    const occupiedBins=disp.bins;
+    const qualityScore=Math.round(100*Math.max(0,Math.min(1,
+      .40*stableGaps+.25*stableWidths+.20*Math.min(1,disp.spread/(w*.6))+
+      .15*Math.min(1,found.length/20))));
+    const reliable=found.length>=12&&occupiedBins>=3&&disp.spread>=w*.33&&
+      stableGaps>=.55&&stableWidths>=.55&&qualityScore>=65;
+    const partial=!reliable;
     const amount=Math.max(2,Math.floor(found.length/3));
     const edge=Math.max(3,Math.min(12,Math.floor(found.length*.18)));
     const first=found.slice(0,amount),last=found.slice(-amount);
@@ -182,7 +197,7 @@
       visualDirection==='up'?'Пізніші елементи вище попередніх (лише зображення)':
       visualDirection==='down'?'Пізніші елементи нижче попередніх (лише зображення)':
       'Без виразної зміни положення елементів (лише зображення)';
-    return {recognized:true,partial,visualDirection,candidates:found.length,
+    return {recognized:true,partial,reliable,qualityScore,stableGaps,stableWidths,visualDirection,candidates:found.length,
       componentCandidates:cc.length,columnCandidates:cols.length,method:columnMode?'column':'regions',
       green:last.filter(x=>x.color===1).length,red:last.filter(x=>x.color===2).length,sample:last.length,
       observedDirection,xSpreadRatio:disp.spread/w,globalDrift,edgeDrift,
