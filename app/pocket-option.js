@@ -322,15 +322,288 @@
     if(saveJournal(rows))renderJournal();
   }
   function renderJournal(){
-    const rows=localJournal(),settled=rows.filter(x=>x.outcome==='hit'||x.outcome==='miss');
+    const rows=localJournal(),jevRows=rows.filter(x=>x.source!=='pocket_manual_demo'),
+      manualRows=rows.filter(x=>x.source==='pocket_manual_demo');
+    const settled=jevRows.filter(x=>x.outcome==='hit'||x.outcome==='miss');
+    const manualSettled=manualRows.filter(x=>x.outcome==='hit'||x.outcome==='miss');
     const hit=settled.filter(x=>x.outcome==='hit').length;
-    const ties=rows.filter(x=>x.outcome==='tie').length;
-    const skipped=rows.filter(x=>x.direction==='STOP').length;
+    const ties=jevRows.filter(x=>x.outcome==='tie').length;
+    const skipped=jevRows.filter(x=>x.direction==='STOP').length;
     const pnl=settled.reduce((n,r)=>n+(r.outcome==='hit'?r.stake*r.payout/100:-r.stake),0);
+    const manualPnl=manualSettled.reduce((n,r)=>n+(r.outcome==='hit'?r.stake*r.payout/100:-r.stake),0);
     const grid=$('history-summary');grid.replaceChildren();
-    [['Гіпотез / STOP',rows.length+' / '+skipped],['WIN / LOSS / TIE',hit+' / '+(settled.length-hit)+' / '+ties],
-      ['Частка WIN серед вирішених',settled.length?fmt(hit/settled.length*100,1)+' %':'—'],
-      ['Умовний P&L',settled.length?fmt(pnl)+' $':'—']].forEach(([label,val])=>{
+    [['JEV: гіпотези / STOP',jevRows.length+' / '+skipped],['JEV: WIN / LOSS / TIE',hit+' / '+(settled.length-hit)+' / '+ties],
+      ['JEV: частка WIN',settled.length?fmt(hit/settled.length*100,1)+' %':'—'],
+      ['JEV: умовний P&L',settled.length?fmt(pnl)+' ].forEach(([label,val])=>{
+      const box=document.createElement('div');box.className='stat';
+      const sm=document.createElement('small');sm.textContent=label;
+      const st=document.createElement('strong');st.textContent=String(val);
+      box.append(sm,st);grid.append(box);
+    });
+    const groups=new Map();
+    for(const entry of jevRows){
+      const key=entry.pair+' · '+entry.expiry+' с';
+      if(!groups.has(key))groups.set(key,{win:0,loss:0,tie:0,stop:0,pnl:0});
+      const g=groups.get(key);
+      if(entry.direction==='STOP'){g.stop++;continue;}
+      if(entry.outcome==='tie'){g.tie++;continue;}
+      if(entry.outcome==='hit'){g.win++;g.pnl+=entry.stake*entry.payout/100;}
+      if(entry.outcome==='miss'){g.loss++;g.pnl-=entry.stake;}
+    }
+    const byPair=$('history-by-pair');byPair.replaceChildren();
+    if(!groups.size){const p=document.createElement('p');p.className='hint';p.textContent='Немає гіпотез для аналізу.';byPair.append(p);}
+    else for(const [name,g] of groups){
+      const decided=g.win+g.loss;
+      const card=document.createElement('div');card.className='journal-card';
+      const title=document.createElement('strong');title.textContent=name;
+      const desc=document.createElement('small');desc.textContent='WIN '+g.win+' · LOSS '+g.loss+
+        ' · TIE '+g.tie+' · STOP '+g.stop+' · '+(decided?fmt(g.win/decided*100,1)+'% WIN':'немає оцінених')+
+        ' · P&L '+fmt(g.pnl)+' $'+(decided<30?' · Мала вибірка (<30 WIN/LOSS)':'');
+      card.append(title,desc);byPair.append(card);
+    }
+    const list=$('journal-list');list.replaceChildren();
+    if(!rows.length){const p=document.createElement('p');p.className='notice';
+      p.textContent='Ще немає демогіпотез. Завантаж скріншот і отримай відповідь JEV.';list.append(p);return;}
+    rows.forEach(row=>{
+      const card=document.createElement('article');card.className='journal-card';
+      const content=document.createElement('div');
+      const title=document.createElement('strong');title.textContent=
+        (row.source==='pocket_manual_demo'?'РУЧНА DEMO · ':'JEV · ')+
+        (row.direction==='UP'?'↑ '+(row.source==='pocket_manual_demo'?'BUY':'ВГОРУ'):
+         row.direction==='DOWN'?'↓ '+(row.source==='pocket_manual_demo'?'SELL':'ВНИЗ'):'⏸ СТОП')+' · '+row.pair;
+      const time=document.createElement('small');time.textContent=
+        new Date(row.created).toLocaleString('uk-UA')+' · '+row.timeframe+' с/свічка · експірація '+row.expiry+' с';
+      const reason=document.createElement('small');reason.textContent=row.reason||'';
+      const stateText=document.createElement('small');stateText.textContent='Статус: '+
+        ({pending:'очікує ручної перевірки',hit:'WIN (зі слів користувача)',miss:'LOSS (зі слів користувача)',
+          tie:'TIE (зі слів користувача)',skipped:'утримання (STOP)',void:'скасовано'}[row.outcome]||'невідомий');
+      content.append(title,time,reason,stateText);card.append(content);
+      if(row.outcome==='pending'){
+        const actions=document.createElement('div');actions.className='actions';
+        const waiting=Date.now()<Date.parse(row.expiresAt);
+        [['hit','✓ WIN'],['miss','✕ LOSS'],['tie','= TIE'],['void','Скасувати']].forEach(([value,label])=>{
+          const b=document.createElement('button');b.type='button';b.className='btn';
+          b.textContent=label;b.disabled=waiting;b.addEventListener('click',()=>outcome(row.id,value));
+          actions.append(b);
+        });
+        if(waiting){const sm=document.createElement('small');
+          sm.textContent='Кнопки доступні після експірації.';actions.append(sm);}
+        card.append(actions);
+      }
+      list.append(card);
+    });
+  }
+  function exportJournal(){
+    const blob=new Blob([JSON.stringify({mode:'manual_pocket_paper',exportedAt:new Date().toISOString(),
+      independent_quotes_verified:false,results_broker_verified:false,entries:localJournal()},null,2)],
+      {type:'application/json'});
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');
+    a.href=url;a.download='crypto-myshka-pocket-demo.json';a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),2000);
+  }
+  async function clipboardPhoto(){
+    try{
+      if(!navigator.clipboard?.read){toast('У цьому браузері встав фото через Ctrl+V.');return;}
+      for(const item of await navigator.clipboard.read()){
+        const type=item.types.find(t=>t.startsWith('image/'));
+        if(type){const b=await item.getType(type);loadImage(new File([b],'clipboard.png',{type:b.type}));return;}
+      }toast('У буфері немає фото.');
+    }catch{toast('Доступ до буфера заборонено. Використай Ctrl+V або файл.');}
+  }
+  function init(){
+    document.body.addEventListener('click',e=>{
+      const btn=e.target.closest('button[data-go]');if(btn)route(btn.dataset.go);
+    });
+    window.addEventListener('hashchange',()=>route(location.hash.replace('#','')));
+    $('pocket-pair').addEventListener('change',()=>{
+      $('custom-pair-wrap').hidden=$('pocket-pair').value!=='custom';showMath();
+    });
+    ['custom-pair','pocket-timeframe','pocket-expiry','pocket-payout','pocket-stake'].forEach(id=>
+      $(id).addEventListener('input',showMath));
+    $('pocket-photo').addEventListener('change',e=>{const f=e.target.files?.[0];if(f)loadImage(f);e.target.value='';});
+    $('paste-photo').addEventListener('click',clipboardPhoto);
+    document.addEventListener('paste',e=>{
+      if(e.target?.closest?.('input,textarea'))return;
+      const file=Array.from(e.clipboardData?.items||[]).find(i=>i.type.startsWith('image/'))?.getAsFile();
+      if(file){e.preventDefault();route('analysis');loadImage(file);}
+    });
+    $('clear-photo').addEventListener('click',()=>{
+      state.image=null;state.crop=null;state.filename='';state.ai=null;
+      $('photo-stage').hidden=true;$('empty-photo').hidden=false;resetScan();updateAIButton();
+    });
+    $('auto-crop').addEventListener('click',pickAutoCrop);
+    $('reset-crop').addEventListener('click',()=>{state.crop=cropFallback();drawCanvas();resetScan();});
+    $('scan-pixels').addEventListener('click',scanPixels);
+    $('cloud-connect').addEventListener('click',connectCloud);
+    $('cloud-forget').addEventListener('click',forgetCloud);
+    $('cloud-endpoint').addEventListener('input',()=>{state.cloudReady=false;updateAIButton();});
+    $('cloud-access').addEventListener('input',()=>{state.cloudReady=false;updateAIButton();});
+    $('run-pocket-ai').addEventListener('click',runAI);
+    $('save-paper').addEventListener('click',recordPaper);
+    $('export-journal').addEventListener('click',exportJournal);
+    $('clear-journal').addEventListener('click',()=>{
+      if(!confirm('Очистити всі локальні демозаписи Pocket Lab?'))return;
+      try{localStorage.removeItem(JOURNAL_KEY);}catch{}renderJournal();toast('Деможурнал очищено.');
+    });
+    if ('serviceWorker' in navigator && location.protocol==='https:') {
+      navigator.serviceWorker.register('./myshka-sw.js').catch(()=>{});
+    }
+    installPointer();showMath();updateAIButton();renderVerdict(null);
+    route(SCREENS.has(location.hash.slice(1))?location.hash.slice(1):'home');
+    // A saved tab-only token is sufficient to re-check the model catalog.
+    // With no token, publicly probe only route existence; never send a screenshot.
+    setCloudLabel('☁️ JEV · не підключено');
+    try{
+      const saved=JSON.parse(sessionStorage.getItem(CLOUD_SESSION_KEY)||'null');
+      if(saved&&saved.endpoint&&saved.access){
+        $('cloud-endpoint').value=saved.endpoint;
+        $('cloud-access').value=saved.access;
+        connectCloud();
+      }
+    }catch{}
+    setInterval(()=>{if(!$('screen-history').hidden)renderJournal();},15000);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+  window.cryptoMyshkaPocket={getPrefs,getJournal:localJournal};
+})();
+:'—'],
+      ['Ручні BUY / SELL',manualRows.length+' записів'],
+      ['Ручні WIN / LOSS / TIE',manualSettled.filter(x=>x.outcome==='hit').length+' / '+
+        manualSettled.filter(x=>x.outcome==='miss').length+' / '+
+        manualRows.filter(x=>x.outcome==='tie').length],
+      ['Ручні: умовний P&L',manualSettled.length?fmt(manualPnl)+' ].forEach(([label,val])=>{
+      const box=document.createElement('div');box.className='stat';
+      const sm=document.createElement('small');sm.textContent=label;
+      const st=document.createElement('strong');st.textContent=String(val);
+      box.append(sm,st);grid.append(box);
+    });
+    const groups=new Map();
+    for(const entry of rows){
+      const key=entry.pair+' · '+entry.expiry+' с';
+      if(!groups.has(key))groups.set(key,{win:0,loss:0,tie:0,stop:0,pnl:0});
+      const g=groups.get(key);
+      if(entry.direction==='STOP'){g.stop++;continue;}
+      if(entry.outcome==='tie'){g.tie++;continue;}
+      if(entry.outcome==='hit'){g.win++;g.pnl+=entry.stake*entry.payout/100;}
+      if(entry.outcome==='miss'){g.loss++;g.pnl-=entry.stake;}
+    }
+    const byPair=$('history-by-pair');byPair.replaceChildren();
+    if(!groups.size){const p=document.createElement('p');p.className='hint';p.textContent='Немає гіпотез для аналізу.';byPair.append(p);}
+    else for(const [name,g] of groups){
+      const decided=g.win+g.loss;
+      const card=document.createElement('div');card.className='journal-card';
+      const title=document.createElement('strong');title.textContent=name;
+      const desc=document.createElement('small');desc.textContent='WIN '+g.win+' · LOSS '+g.loss+
+        ' · TIE '+g.tie+' · STOP '+g.stop+' · '+(decided?fmt(g.win/decided*100,1)+'% WIN':'немає оцінених')+
+        ' · P&L '+fmt(g.pnl)+' $'+(decided<30?' · Мала вибірка (<30 WIN/LOSS)':'');
+      card.append(title,desc);byPair.append(card);
+    }
+    const list=$('journal-list');list.replaceChildren();
+    if(!rows.length){const p=document.createElement('p');p.className='notice';
+      p.textContent='Ще немає демогіпотез. Завантаж скріншот і отримай відповідь JEV.';list.append(p);return;}
+    rows.forEach(row=>{
+      const card=document.createElement('article');card.className='journal-card';
+      const content=document.createElement('div');
+      const title=document.createElement('strong');title.textContent=
+        (row.direction==='UP'?'↑ ВГОРУ':row.direction==='DOWN'?'↓ ВНИЗ':'⏸ СТОП')+' · '+row.pair;
+      const time=document.createElement('small');time.textContent=
+        new Date(row.created).toLocaleString('uk-UA')+' · '+row.timeframe+' с/свічка · експірація '+row.expiry+' с';
+      const reason=document.createElement('small');reason.textContent=row.reason||'';
+      const stateText=document.createElement('small');stateText.textContent='Статус: '+
+        ({pending:'очікує ручної перевірки',hit:'WIN (зі слів користувача)',miss:'LOSS (зі слів користувача)',
+          tie:'TIE (зі слів користувача)',skipped:'утримання (STOP)',void:'скасовано'}[row.outcome]||'невідомий');
+      content.append(title,time,reason,stateText);card.append(content);
+      if(row.outcome==='pending'){
+        const actions=document.createElement('div');actions.className='actions';
+        const waiting=Date.now()<Date.parse(row.expiresAt);
+        [['hit','✓ WIN'],['miss','✕ LOSS'],['tie','= TIE'],['void','Скасувати']].forEach(([value,label])=>{
+          const b=document.createElement('button');b.type='button';b.className='btn';
+          b.textContent=label;b.disabled=waiting;b.addEventListener('click',()=>outcome(row.id,value));
+          actions.append(b);
+        });
+        if(waiting){const sm=document.createElement('small');
+          sm.textContent='Кнопки доступні після експірації.';actions.append(sm);}
+        card.append(actions);
+      }
+      list.append(card);
+    });
+  }
+  function exportJournal(){
+    const blob=new Blob([JSON.stringify({mode:'manual_pocket_paper',exportedAt:new Date().toISOString(),
+      independent_quotes_verified:false,results_broker_verified:false,entries:localJournal()},null,2)],
+      {type:'application/json'});
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');
+    a.href=url;a.download='crypto-myshka-pocket-demo.json';a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),2000);
+  }
+  async function clipboardPhoto(){
+    try{
+      if(!navigator.clipboard?.read){toast('У цьому браузері встав фото через Ctrl+V.');return;}
+      for(const item of await navigator.clipboard.read()){
+        const type=item.types.find(t=>t.startsWith('image/'));
+        if(type){const b=await item.getType(type);loadImage(new File([b],'clipboard.png',{type:b.type}));return;}
+      }toast('У буфері немає фото.');
+    }catch{toast('Доступ до буфера заборонено. Використай Ctrl+V або файл.');}
+  }
+  function init(){
+    document.body.addEventListener('click',e=>{
+      const btn=e.target.closest('button[data-go]');if(btn)route(btn.dataset.go);
+    });
+    window.addEventListener('hashchange',()=>route(location.hash.replace('#','')));
+    $('pocket-pair').addEventListener('change',()=>{
+      $('custom-pair-wrap').hidden=$('pocket-pair').value!=='custom';showMath();
+    });
+    ['custom-pair','pocket-timeframe','pocket-expiry','pocket-payout','pocket-stake'].forEach(id=>
+      $(id).addEventListener('input',showMath));
+    $('pocket-photo').addEventListener('change',e=>{const f=e.target.files?.[0];if(f)loadImage(f);e.target.value='';});
+    $('paste-photo').addEventListener('click',clipboardPhoto);
+    document.addEventListener('paste',e=>{
+      if(e.target?.closest?.('input,textarea'))return;
+      const file=Array.from(e.clipboardData?.items||[]).find(i=>i.type.startsWith('image/'))?.getAsFile();
+      if(file){e.preventDefault();route('analysis');loadImage(file);}
+    });
+    $('clear-photo').addEventListener('click',()=>{
+      state.image=null;state.crop=null;state.filename='';state.ai=null;
+      $('photo-stage').hidden=true;$('empty-photo').hidden=false;resetScan();updateAIButton();
+    });
+    $('auto-crop').addEventListener('click',pickAutoCrop);
+    $('reset-crop').addEventListener('click',()=>{state.crop=cropFallback();drawCanvas();resetScan();});
+    $('scan-pixels').addEventListener('click',scanPixels);
+    $('cloud-connect').addEventListener('click',connectCloud);
+    $('cloud-forget').addEventListener('click',forgetCloud);
+    $('cloud-endpoint').addEventListener('input',()=>{state.cloudReady=false;updateAIButton();});
+    $('cloud-access').addEventListener('input',()=>{state.cloudReady=false;updateAIButton();});
+    $('run-pocket-ai').addEventListener('click',runAI);
+    $('save-paper').addEventListener('click',recordPaper);
+    $('export-journal').addEventListener('click',exportJournal);
+    $('clear-journal').addEventListener('click',()=>{
+      if(!confirm('Очистити всі локальні демозаписи Pocket Lab?'))return;
+      try{localStorage.removeItem(JOURNAL_KEY);}catch{}renderJournal();toast('Деможурнал очищено.');
+    });
+    if ('serviceWorker' in navigator && location.protocol==='https:') {
+      navigator.serviceWorker.register('./myshka-sw.js').catch(()=>{});
+    }
+    installPointer();showMath();updateAIButton();renderVerdict(null);
+    route(SCREENS.has(location.hash.slice(1))?location.hash.slice(1):'home');
+    // A saved tab-only token is sufficient to re-check the model catalog.
+    // With no token, publicly probe only route existence; never send a screenshot.
+    setCloudLabel('☁️ JEV · не підключено');
+    try{
+      const saved=JSON.parse(sessionStorage.getItem(CLOUD_SESSION_KEY)||'null');
+      if(saved&&saved.endpoint&&saved.access){
+        $('cloud-endpoint').value=saved.endpoint;
+        $('cloud-access').value=saved.access;
+        connectCloud();
+      }
+    }catch{}
+    setInterval(()=>{if(!$('screen-history').hidden)renderJournal();},15000);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+  window.cryptoMyshkaPocket={getPrefs,getJournal:localJournal};
+})();
+:'—']].forEach(([label,val])=>{
       const box=document.createElement('div');box.className='stat';
       const sm=document.createElement('small');sm.textContent=label;
       const st=document.createElement('strong');st.textContent=String(val);
