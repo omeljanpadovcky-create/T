@@ -33,7 +33,7 @@ async function refresh(){
  $('auto-pnl').textContent=fmt(pnl)+' USDT';
  $('auto-signal').textContent=data.insights?.direction||'—';
  const checked=new Date(data.checked_at||0).getTime(),age=Date.now()-checked;
- const stale=!Number.isFinite(age)||age>20*60*1000||age< -60000;
+ const stale=!Number.isFinite(age)||age>10*60*1000||age< -60000;
  $('auto-badge').textContent=data.status!=='ok'?'🔴 ПОМИЛКА':stale?'🟠 ДАНІ ЗАСТАРІЛИ':'🟢 ДАНІ ОНОВЛЕНО';
  $('auto-status').textContent='Останній запуск: '+stamp(data.checked_at)+' · Джерело: '+(data.source||'невідоме')+(data.error?' · Помилка: '+data.error:'')+(stale?' · Оновлення запізнюється.':'');
  $('auto-pending').textContent=data.pending?'Напрям '+data.pending.direction+' · BTC/USDT · умовний вхід '+fmt(data.pending.entry)+' USDT · термін '+stamp(data.pending.due_ms):'Немає активної віртуальної угоди.';
