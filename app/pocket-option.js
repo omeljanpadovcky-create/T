@@ -5,8 +5,6 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
-  const SESSION_KEY='crypto-myshka-cloud-access-session-v1';
-  const ENDPOINT_KEY='crypto-myshka-cloud-endpoint-v1';
   const JOURNAL_KEY='crypto-myshka-pocket-paper-v1';
   const SCREENS=new Set(['home','analysis','history','archive','autodemo']);
   const LIMIT=300;
@@ -196,67 +194,14 @@
         '\n⚠️ Це геометрія знімка, НЕ напрям наступної хвилини. Помилково можуть розпізнатися індикатори та написи.';
     }catch(e){$('scan-output').textContent='⚠️ '+String(e.message||'Не вдалося прочитати пікселі.');}
   }
-  function cloudEndpoint(){
-    let url=$('cloud-endpoint').value.trim().replace(/\/+$/,'');
-    try{const parsed=new URL(url);return parsed.protocol==='https:'&&
-      !parsed.username&&!parsed.password&&!parsed.search&&!parsed.hash?url:'';}catch{return '';}
-  }
-  function cloudAccess(){return $('cloud-access').value.trim();}
-  function connected(){return !!(cloudEndpoint()&&cloudAccess().length>=24);}
   function setCloudLabel(label,ready=false){
     $('cloud-indicator').textContent=label;
     $('cloud-indicator').classList.toggle('safe',ready);
-    $('cloud-settings-status').textContent=label;
   }
   function updateAIButton(){
     $('run-pocket-ai').disabled=!state.image||state.loading;
     if(!state.image) $('ai-status').textContent='Завантаж фото, щоб виконати локальний аналіз.';
     else if(state.loading) $('ai-status').textContent='Аналізуємо свічки на фото…';
-  }
-  async function probeBackend(){
-    const endpoint=cloudEndpoint();
-    if(!endpoint){setCloudLabel('⚠️ Вкажи HTTPS адресу сервера JEV');return;}
-    setCloudLabel('⏳ Перевіряємо Pocket API…');
-    const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),9000);
-    try{
-      const response=await fetch(endpoint+'/api/pocket-vision',
-        {method:'GET',cache:'no-store',signal:ctrl.signal});
-      if(!connected()){
-        if(response.status===405) setCloudLabel('☁️ Pocket API онлайн · 🔑 потрібен код JEV');
-        else if(response.status===404) setCloudLabel('⚠️ Pocket API не знайдено на Vercel');
-        else if([401,403].includes(response.status))
-          setCloudLabel('⚠️ Доступ до Pocket API обмежено сервером');
-        else setCloudLabel('⚠️ Pocket API: HTTP '+response.status);
-      }
-    }catch(e){
-      if(!connected())setCloudLabel('⚠️ Pocket API недоступне: '+(e?.name==='AbortError'?'час очікування вийшов':'мережа/CORS'));
-    }finally{clearTimeout(timer);}
-  }
-  async function connect(){
-    const endpoint=cloudEndpoint(),access=cloudAccess();
-    if(!endpoint||access.length<24){setCloudLabel('🔑 Введи HTTPS URL і код JEV (не API-ключ).');updateAIButton();return;}
-    setCloudLabel('⏳ Перевіряємо сервер…');
-    const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),10000);
-    try{
-      const response=await fetch(endpoint+'/api/chart-health',{
-        headers:{'X-JEV-Access':access},cache:'no-store',signal:ctrl.signal});
-      const data=await response.json().catch(()=>({}));
-      if(!response.ok||data.ready!==true)throw Error(data.error||'HTTP '+response.status);
-      // A healthy legacy JEV catalog does not prove that the Pocket endpoint
-      // exists in the deployed Vercel revision.
-      let pocketProbe;
-      try { pocketProbe=await fetch(endpoint+'/api/pocket-vision',
-        {cache:'no-store',signal:ctrl.signal}); }
-      catch { throw Error('Pocket AI API ще не опубліковано на Vercel. Зачекай нового деплою.'); }
-      if(pocketProbe.status!==405)
-        throw Error('Pocket AI API ще не розгорнуто (HTTP '+pocketProbe.status+').');
-      try{localStorage.setItem(ENDPOINT_KEY,endpoint);sessionStorage.setItem(SESSION_KEY,access);}catch{}
-      state.cloudReady=true;state.provider=data.provider;state.model=data.model;
-      setCloudLabel('☁️ Pocket API та '+(data.provider||'AI')+' підключено · аналіз фото не перевірено');
-      $('ai-status').textContent='Можна надіслати вирізану частину фото. Каталог моделей не гарантує, що AI відповість.';
-    }catch(e){
-      state.cloudReady=false;setCloudLabel('⚠️ JEV: '+String(e.message||'Недоступний').slice(0,160));
-    }finally{clearTimeout(timer);updateAIButton();}
   }
   async function runAI(){
     if(state.loading||!state.image)return;
@@ -368,9 +313,6 @@
     }catch{toast('Доступ до буфера заборонено. Використай Ctrl+V або файл.');}
   }
   function init(){
-    const savedEndpoint=(()=>{try{return localStorage.getItem(ENDPOINT_KEY)||'';}catch{return '';}})();
-    $('cloud-endpoint').value=savedEndpoint||'https://t-zeta-ashy.vercel.app';
-    try{$('cloud-access').value=sessionStorage.getItem(SESSION_KEY)||'';}catch{}
     document.body.addEventListener('click',e=>{
       const btn=e.target.closest('button[data-go]');if(btn)route(btn.dataset.go);
     });
@@ -396,13 +338,6 @@
     $('scan-pixels').addEventListener('click',scanPixels);
     $('run-pocket-ai').addEventListener('click',runAI);
     $('save-paper').addEventListener('click',recordPaper);
-    $('cloud-connect').addEventListener('click',connect);
-    $('cloud-disconnect').addEventListener('click',()=>{
-      $('cloud-access').value='';try{sessionStorage.removeItem(SESSION_KEY);}catch{}
-      state.cloudReady=false;setCloudLabel('AI від’єднано');updateAIButton();
-    });
-    $('cloud-endpoint').addEventListener('input',()=>{state.cloudReady=false;updateAIButton();});
-    $('cloud-access').addEventListener('input',()=>{state.cloudReady=false;updateAIButton();});
     $('export-journal').addEventListener('click',exportJournal);
     $('clear-journal').addEventListener('click',()=>{
       if(!confirm('Очистити всі локальні демозаписи Pocket Lab?'))return;
