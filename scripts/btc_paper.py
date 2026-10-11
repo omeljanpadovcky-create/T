@@ -5,6 +5,7 @@ import json
 import os
 import pathlib
 import urllib.request
+import time
 
 STATE = pathlib.Path("data/btc-paper.json")
 NOW = dt.datetime.now(dt.timezone.utc)
@@ -14,8 +15,18 @@ def fetch_candles():
     # Kraken public OHLC; no keys. XBTUSDT is Bitcoin against USDT.
     url = "https://api.kraken.com/0/public/OHLC?pair=XBTUSDT&interval=1"
     req = urllib.request.Request(url, headers={"User-Agent": "CryptoMyshkaPaperResearch/1.1"})
-    with urllib.request.urlopen(req, timeout=20) as response:
-        payload = json.load(response)
+    payload = None
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=20) as response:
+                payload = json.load(response)
+            if payload.get("error"):
+                raise RuntimeError("Kraken API: " + ", ".join(payload["error"]))
+            break
+        except (OSError, ValueError, RuntimeError):
+            if attempt == 2:
+                raise
+            time.sleep(2 * (attempt + 1))
     if payload.get("error"):
         raise RuntimeError("Kraken API: " + ", ".join(payload["error"]))
     result = payload.get("result", {})
@@ -139,7 +150,7 @@ def main():
         state["error"] = str(exc)[:250]
         # Never fabricate prices or settle trades on API failure.
     STATE.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n")
-    print("BTC paper run:", state["status"], "trades:", len(state["trades"]), "pending:", bool(state["pending"]))
+    print("BTC paper run:", state["status"], "trades:", len(state["trades"]), "pending:", bool(state["pending"]), "error:", state.get("error", ""))
 
 if __name__ == "__main__":
     main()
