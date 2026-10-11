@@ -7,7 +7,7 @@
 <meta name="description" content="Crypto Myshka Pocket Lab — дослідницький аналіз скріншотів Pocket Option та чесний деможурнал, без автоматичних ставок.">
 <link rel="icon" href="./app/myshka-icon.svg" type="image/svg+xml">
 <link rel="manifest" href="./myshka.webmanifest">
-<link rel="stylesheet" href="./app/pocket-option.css?v=20261011-navfix2">
+<link rel="stylesheet" href="./app/pocket-option.css?v=20261011-buy-sell-demo1">
 <title>Crypto Myshka · Pocket Lab</title>
 </head>
 <body>
@@ -54,13 +54,48 @@
 <p class="hint">Це розрахунок моделі виплати, а не баланс, котирування або справжній результат брокера.</p>
 </div>
 
-<div class="card">
+<div class="pocket-terminal-grid">
+<div class="card pocket-chart-card">
 <div class="section-title"><h2>2. Скріншот графіка</h2><span class="pill">JPG · PNG · WebP</span></div>
 <div class="actions"><label class="btn primary" for="pocket-photo">📷 Обрати фото</label><input id="pocket-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden><button class="btn" id="paste-photo" type="button">Вставити з буфера</button><button class="btn" id="clear-photo" type="button">Очистити фото</button></div>
 <p class="hint">Можеш просто натиснути Ctrl+V після Win+Shift+S. Фото залишається на твоєму пристрої. Обведи лише поле графіка, без балансу, профілю, ставок і меню.</p>
 <div id="empty-photo" class="dropzone" tabindex="0">📉<strong>Тут з’явиться графік Pocket Option</strong><span>Завантаж скріншот або встав зображення</span></div>
 <div id="photo-stage" class="photo-stage" hidden><canvas id="pocket-canvas" aria-label="Обведи мишею або пальцем область свічкового графіка"></canvas><p id="image-info" class="hint"></p><div class="actions"><button id="auto-crop" class="btn" type="button">⤢ Знайти свічки</button><button id="reset-crop" class="btn" type="button">↺ Скинути область</button><button id="scan-pixels" class="btn" type="button">🔬 Описати минулий рух</button></div></div>
 <div id="scan-output" class="scan-result" role="status" aria-live="polite">Локальний сканер прочитає кольорові свічки тільки на завантаженому фото. Це не прогноз.</div>
+</div>
+<aside class="card pocket-demo-ticket" aria-label="Віртуальна угода BUY SELL">
+  <div class="ticket-topline"><span>🐭 MYSHKA TERMINAL</span><strong>DEMO ONLY</strong></div>
+  <h2>BUY / SELL</h2>
+  <p class="ticket-pair" id="ticket-pair">EUR/USD OTC</p>
+  <p class="ticket-disclaimer">Тільки віртуальний запис у Мишці. <strong>Це не кнопки брокера і не реальна ставка.</strong></p>
+  <label class="ticket-control">⏱ Час угоди
+    <select id="ticket-expiry" aria-label="Час віртуальної угоди">
+      <option value="30">00:00:30</option>
+      <option value="60" selected>00:01:00</option>
+      <option value="180">00:03:00</option>
+      <option value="300">00:05:00</option>
+    </select>
+  </label>
+  <label class="ticket-control">💵 Віртуальна сума ($)
+    <input id="ticket-stake" type="number" inputmode="decimal" min="0.01" max="100000" step="0.01" value="10.00">
+  </label>
+  <div class="ticket-payout">
+    <small>Виплата за WIN</small>
+    <strong id="ticket-payout-pct">+92%</strong>
+    <span id="ticket-payout-profit">Прибуток +9,20 $</span>
+  </div>
+  <div class="ticket-ai">JEV на фото: <strong id="ticket-jev-direction">⏸ STOP / немає гіпотези</strong></div>
+  <div class="ticket-actions">
+    <button id="ticket-buy" type="button" class="ticket-button buy" aria-label="BUY — створити віртуальну угоду вгору"><span>↗</span> BUY</button>
+    <button id="ticket-sell" type="button" class="ticket-button sell" aria-label="SELL — створити віртуальну угоду вниз"><span>↘</span> SELL</button>
+  </div>
+  <div class="ticket-current" aria-live="polite">
+    <small>Віртуальна угода / таймер</small>
+    <strong id="ticket-countdown">—</strong>
+    <p id="ticket-order-status">Обери BUY або SELL — створиться лише запис у деможурналі.</p>
+  </div>
+  <button type="button" class="btn ticket-journal" data-go="history">📓 Перевірити WIN / LOSS / TIE</button>
+</aside>
 </div>
 
 <div class="card focus-card" id="pocket-ai-card">
@@ -129,7 +164,7 @@
 <nav class="mobile-nav" aria-label="Мобільна навігація"><button data-go="home">⌂<small>Головна</small></button><button data-go="analysis">▥<small>Аналіз</small></button><button data-go="history">◷<small>Демо</small></button><button data-go="archive">▤<small>База</small></button><button type="button" data-go="autodemo">🐭<small>Автодемо</small></button></nav>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <script defer src="./app/photo-scan.js?v=20261011-quality2"></script>
-<script defer src="./app/pocket-option.js?v=20261011-cloudvision4"></script>
+<script defer src="./app/pocket-option.js?v=20261011-buy-sell-demo1"></script>
 <script defer src="./app/auto-dashboard.js?v=20261011-backtest1"></script>
 </body>
 </html>
