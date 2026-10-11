@@ -65,13 +65,22 @@
 
 <div class="card focus-card" id="pocket-ai-card">
 <div class="section-title"><h2>3. Гіпотеза JEV</h2><span class="pill safe">DEMO · NO AUTO-TRADE</span></div>
-<p class="hint">Фото аналізується локально на пристрої. JEV описує минулі свічки та ризики; без незалежних OTC-котирувань не видає неперевірений прогноз як достовірний.</p>
-<div class="actions"><button class="btn primary" id="run-pocket-ai" type="button" disabled>🔬 Аналізувати фото JEV</button><button class="btn" type="button" data-go="autodemo">🐭 Відкрити автодемо</button></div>
-<p id="ai-status" class="hint" role="status">Автодемо працює окремо від цього аналізатора.</p>
-<div id="ai-verdict" class="verdict" aria-live="polite"><span class="overline">ОЦІНКА НА НАСТУПНУ ЕКСПІРАЦІЮ</span><strong id="ai-direction">⏸ СТОП</strong><p id="ai-reason">Без перевірених даних наступний напрям невідомий.</p><p id="ai-risk" class="hint"></p><p id="ai-meta" class="hint"></p></div>
-<div class="actions"><button id="save-paper" class="btn" type="button" disabled>📓 Записати гіпотезу в деможурнал</button></div>
+<p class="hint">Локальний сканер описує минулі свічки. Для окремої дослідницької гіпотези UP / DOWN / STOP підключи хмарний JEV. Фото надсилається до API лише після натискання «Аналізувати фото JEV»; без незалежних OTC-котирувань результат не є перевіреним сигналом.</p>
+<div class="notice" id="cloud-config">
+<strong>☁️ Хмарний JEV · підключення</strong>
+<div class="form-grid" style="margin-top:10px">
+<label>Адреса API <input id="cloud-endpoint" type="url" inputmode="url" spellcheck="false" value="https://t-zeta-ashy.vercel.app"></label>
+<label>Код доступу JEV <input id="cloud-access" type="password" autocomplete="off" spellcheck="false" placeholder="JEV_ACCESS_TOKEN із Vercel"></label>
 </div>
-<div class="notice"><strong>Як оцінюємо результат?</strong><p>Лише після закінчення експірації познач його вручну за фактичною ціною Pocket Option. «Влучив»/«Помилився» не підтверджені брокером і не є автоматичним навчанням моделі. Нуль угод і СТОП — нормальний результат.</p></div>
+<div class="actions"><button class="btn primary" id="cloud-connect" type="button">🔑 Перевірити підключення</button><button class="btn" id="cloud-forget" type="button">✕ Забути код</button></div>
+<p class="hint" id="cloud-status" role="status">Для AI потрібні робочий Vercel API і код доступу. Код зберігається тільки в цій вкладці браузера, не в GitHub.</p>
+</div>
+<div class="actions"><button class="btn primary" id="run-pocket-ai" type="button" disabled>🔬 Аналізувати фото JEV</button><button class="btn" type="button" data-go="autodemo">🐭 Відкрити автодемо</button></div>
+<p id="ai-status" class="hint" role="status">Додай фото й підключи хмарний JEV. Якщо API недоступний, побачиш причину, а не вигаданий прогноз.</p>
+<div id="ai-verdict" class="verdict" aria-live="polite"><span class="overline">ОЦІНКА НА НАСТУПНУ ЕКСПІРАЦІЮ</span><strong id="ai-direction">⏸ СТОП</strong><p id="ai-reason">Без перевірених даних наступний напрям невідомий.</p><p id="ai-risk" class="hint"></p><p id="ai-meta" class="hint"></p></div>
+<div class="actions"><button id="save-paper" class="btn" type="button" disabled>📓 Зберегти гіпотезу / СТОП</button></div>
+</div>
+<div class="notice"><strong>Як оцінюємо результат?</strong><p>Лише після закінчення експірації познач його вручну за фактичною ціною Pocket Option. Познач WIN / LOSS / TIE лише після експірації. Це ручні результати, не підтверджені брокером. Статистика — перевірка гіпотез, а не автоматичне перенавчання моделі.</p></div>
 </section>
 
 <section id="screen-autodemo" data-screen="autodemo" class="screen" hidden>
@@ -97,7 +106,7 @@
 <section id="screen-history" data-screen="history" class="screen" hidden>
 <div class="overline">PAPER ONLY · LOCAL DEVICE</div><h1>Деможурнал</h1>
 <p class="lead">Записи доступні лише в цьому браузері. Результати позначаються вручну, не перевіряються Pocket Option і не використовуються для реальних ордерів.</p>
-<div id="history-summary" class="statgrid"></div>
+<div id="history-summary" class="statgrid"></div><div class="card" style="margin-top:14px"><h2>📚 Статистика JEV за парами й експіраціями</h2><p class="hint">Лише результати, відмічені вручну після експірації. STOP не враховується як виграш; статистика не змінює ваг AI-моделі.</p><div id="history-by-pair" class="journal"></div></div>
 <div class="actions"><button id="export-journal" type="button" class="btn">↓ Експорт JSON</button><button id="clear-journal" type="button" class="btn danger">Очистити деможурнал</button></div>
 <div id="journal-list" class="journal" aria-live="polite"></div>
 </section>
@@ -120,7 +129,7 @@
 <nav class="mobile-nav" aria-label="Мобільна навігація"><button data-go="home">⌂<small>Головна</small></button><button data-go="analysis">▥<small>Аналіз</small></button><button data-go="history">◷<small>Демо</small></button><button data-go="archive">▤<small>База</small></button><button type="button" data-go="autodemo">🐭<small>Автодемо</small></button></nav>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <script defer src="./app/photo-scan.js?v=20261011-quality2"></script>
-<script defer src="./app/pocket-option.js?v=20261011-quality1"></script>
+<script defer src="./app/pocket-option.js?v=20261011-cloudvision4"></script>
 <script defer src="./app/auto-dashboard.js?v=20261011-backtest1"></script>
 </body>
 </html>
