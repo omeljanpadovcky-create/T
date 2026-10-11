@@ -171,12 +171,22 @@
     const widths=ordered.map(v=>v.maxX-v.minX+1);
     const widthMedian=median(widths)||0;
     const stableWidths=widths.length?widths.filter(v=>v>=Math.max(1,widthMedian*.35)&&v<=widthMedian*2.8).length/widths.length:0;
+    // Independently compare connected-component and vertical-run detectors.
+    // Agreement is useful evidence; disagreement means a noisy/ambiguous crop.
+    const centersA=cc.map(v=>v.x),centersB=cols.map(v=>v.x);
+    const tolerance=Math.max(3,w*.012);
+    const matched=centersA.filter(x=>centersB.some(y=>Math.abs(x-y)<=tolerance)).length;
+    const detectorAgreement=matched/Math.max(1,Math.max(centersA.length,centersB.length));
+    const detectorComparable=cc.length>=8&&cols.length>=8;
+    // Ignore results dominated by elements at the edge of the selected crop.
+    const edgeShare=ordered.filter(v=>v.x<w*.035||v.x>w*.965).length/ordered.length;
     const occupiedBins=disp.bins;
     const qualityScore=Math.round(100*Math.max(0,Math.min(1,
       .40*stableGaps+.25*stableWidths+.20*Math.min(1,disp.spread/(w*.6))+
-      .15*Math.min(1,found.length/20))));
+      .10*Math.min(1,found.length/20)+.05*(detectorComparable?detectorAgreement:0))));
     const reliable=found.length>=12&&occupiedBins>=3&&disp.spread>=w*.33&&
-      stableGaps>=.55&&stableWidths>=.55&&qualityScore>=65;
+      stableGaps>=.55&&stableWidths>=.55&&edgeShare<=.2&&
+      (!detectorComparable||detectorAgreement>=.3)&&qualityScore>=65;
     const partial=!reliable;
     const amount=Math.max(2,Math.floor(found.length/3));
     const edge=Math.max(3,Math.min(12,Math.floor(found.length*.18)));
@@ -197,7 +207,7 @@
       visualDirection==='up'?'Пізніші елементи вище попередніх (лише зображення)':
       visualDirection==='down'?'Пізніші елементи нижче попередніх (лише зображення)':
       'Без виразної зміни положення елементів (лише зображення)';
-    return {recognized:true,partial,reliable,qualityScore,stableGaps,stableWidths,visualDirection,candidates:found.length,
+    return {recognized:true,partial,reliable,qualityScore,stableGaps,stableWidths,detectorAgreement,edgeShare,visualDirection,candidates:found.length,
       componentCandidates:cc.length,columnCandidates:cols.length,method:columnMode?'column':'regions',
       green:last.filter(x=>x.color===1).length,red:last.filter(x=>x.color===2).length,sample:last.length,
       observedDirection,xSpreadRatio:disp.spread/w,globalDrift,edgeDrift,
