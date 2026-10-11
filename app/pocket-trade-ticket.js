@@ -1,0 +1,104 @@
+/* Pocket-like BUY/SELL virtual ticket. No broker calls, no real money, no auto-fill. */
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const KEY = 'crypto-myshka-pocket-paper-v1';
+  const LIMIT = 300;
+  const fmt = amount => Number(amount).toLocaleString('uk-UA',
+    {minimumFractionDigits:2,maximumFractionDigits:2});
+  const elapsed = expiry => {
+    const sec=Math.max(0,Math.ceil((Date.parse(expiry)-Date.now())/1000));
+    return [Math.floor(sec/3600),Math.floor(sec%3600/60),sec%60]
+      .map(x=>String(x).padStart(2,'0')).join(':');
+  };
+  const read = () => {
+    try {
+      const value=JSON.parse(localStorage.getItem(KEY)||'[]');
+      return Array.isArray(value)?value.filter(x=>x&&typeof x.id==='string').slice(0,LIMIT):[];
+    }catch{return [];}
+  };
+  const prefs = () => window.cryptoMyshkaPocket?.getPrefs?.() || null;
+  const valid = p => p && /^[A-Za-z0-9 /._-]{3,50}$/.test(p.pair) &&
+    [30,60,180,300].includes(p.expiry) &&
+    Number.isFinite(p.stake)&&p.stake>=.01&&p.stake<=100000 &&
+    Number.isFinite(p.payout)&&p.payout>0&&p.payout<=100;
+  function refresh(){
+    const p=prefs();if(!p)return;
+    $('ticket-pair').textContent=p.pair||'Вибери пару';
+    if(document.activeElement!==$('ticket-expiry'))$('ticket-expiry').value=String(p.expiry);
+    if(document.activeElement!==$('ticket-stake'))
+      $('ticket-stake').value=Number.isFinite(p.stake)?String(p.stake):'';
+    $('ticket-payout-pct').textContent=Number.isFinite(p.payout)?'+'+fmt(p.payout)+'%':'—';
+    $('ticket-payout-profit').textContent=valid(p)?
+      'Прибуток за WIN: +'+fmt(p.stake*p.payout/100)+' $':'Перевір суму й виплату';
+    const direction=$('ai-direction')?.textContent||'';
+    $('ticket-jev-direction').textContent=direction.includes('ВГОРУ')?'↑ UP · гіпотеза JEV':
+      direction.includes('ВНИЗ')?'↓ DOWN · гіпотеза JEV':'⏸ STOP / немає гіпотези';
+    const records=read().filter(x=>x.source==='pocket_manual_demo');
+    const active=records.find(x=>x.outcome==='pending'&&Date.parse(x.expiresAt)>Date.now());
+    const last=records[0];
+    $('ticket-buy').disabled=$('ticket-sell').disabled=!valid(p)||Boolean(active);
+    if(active){
+      $('ticket-countdown').textContent=elapsed(active.expiresAt);
+      $('ticket-order-status').textContent=(active.direction==='UP'?'↗ BUY':'↘ SELL')+
+        ' · '+active.pair+' · '+fmt(active.stake)+' $ · чекаємо експірації. Це лише демозапис.';
+    }else if(last?.outcome==='pending'){
+      $('ticket-countdown').textContent='00:00:00';
+      $('ticket-order-status').textContent='Час демоугоди минув. Звір котирування на Pocket Option і вручну постав WIN / LOSS / TIE у журналі.';
+    }else if(last){
+      $('ticket-countdown').textContent='—';
+      const result={hit:'WIN',miss:'LOSS',tie:'TIE',void:'скасовано'}[last.outcome]||'невідомо';
+      $('ticket-order-status').textContent='Остання DEMO: '+(last.direction==='UP'?'BUY':'SELL')+' · '+result+'.';
+    }else{
+      $('ticket-countdown').textContent='—';
+      $('ticket-order-status').textContent=valid(p)?
+        'BUY або SELL відкриває лише віртуальну угоду в журналі.':
+        'Перевір пару, час, суму й виплату.';
+    }
+  }
+  function record(direction){
+    const p=prefs();
+    if(!valid(p)){refresh();$('ticket-order-status').textContent='⚠️ Некоректні параметри демоугоди.';return;}
+    const rows=read();
+    if(rows.some(x=>x.source==='pocket_manual_demo'&&x.outcome==='pending'&&
+      Date.parse(x.expiresAt)>Date.now())){refresh();return;}
+    const now=Date.now();
+    const id=typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():
+      now+'-'+Math.random().toString(36).slice(2);
+    rows.unshift({
+      id,created:new Date(now).toISOString(),expiresAt:new Date(now+p.expiry*1000).toISOString(),
+      pair:p.pair,timeframe:p.timeframe,expiry:p.expiry,payout:p.payout,stake:p.stake,direction,
+      source:'pocket_manual_demo',mode:'paper_only',provider:'manual_user',
+      outcome:'pending',manuallyReported:true,broker_verified:false,
+      quotes_verified:false,signal_validated:false,
+      reason:'Ручна DEMO-кнопка '+(direction==='UP'?'BUY':'SELL')+
+        ' у Crypto Myshka. Реальну угоду Pocket Option не відкрито.',
+      risk:'Результат не відомий автоматично; його потрібно вручну перевірити після експірації.'
+    });
+    try{localStorage.setItem(KEY,JSON.stringify(rows.slice(0,LIMIT)));}
+    catch{$('ticket-order-status').textContent='⚠️ Не вдалося зберегти демоугоду.';return;}
+    refresh();
+  }
+  function init(){
+    if(!$('ticket-buy')||!window.cryptoMyshkaPocket)return;
+    $('ticket-buy').addEventListener('click',()=>record('UP'));
+    $('ticket-sell').addEventListener('click',()=>record('DOWN'));
+    $('ticket-expiry').addEventListener('change',()=>{
+      $('pocket-expiry').value=$('ticket-expiry').value;
+      $('pocket-expiry').dispatchEvent(new Event('input',{bubbles:true}));
+      refresh();
+    });
+    $('ticket-stake').addEventListener('input',()=>{
+      $('pocket-stake').value=$('ticket-stake').value;
+      $('pocket-stake').dispatchEvent(new Event('input',{bubbles:true}));
+      refresh();
+    });
+    ['pocket-pair','custom-pair','pocket-expiry','pocket-payout','pocket-stake']
+      .forEach(id=>$(id)?.addEventListener('input',refresh));
+    window.addEventListener('storage',refresh);
+    refresh();
+    setInterval(()=>{if(!$('screen-analysis').hidden)refresh();},1000);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+})();
