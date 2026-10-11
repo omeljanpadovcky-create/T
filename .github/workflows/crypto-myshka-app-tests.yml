@@ -55,7 +55,7 @@ jobs:
                       if k=='id':self.ids.add(v)
           c=Check();c.feed(Path('myshka-app.html').read_text())
           required=['screen-home','screen-analysis','screen-archive','screen-history',
-                    'screen-settings','pocket-pair','pocket-photo','pocket-canvas',
+                    'screen-autodemo','pocket-pair','pocket-photo','pocket-canvas',
                     'run-pocket-ai','ai-direction','journal-list','cloud-endpoint','cloud-access']
           assert all(i in c.ids for i in required), set(required)-c.ids
           text=Path('myshka-app.html').read_text()
