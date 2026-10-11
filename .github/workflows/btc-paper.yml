@@ -3,6 +3,11 @@ on:
   schedule:
     - cron: '2,7,12,17,22,27,32,37,42,47,52,57 * * * *'
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/btc_paper.py'
+      - '.github/workflows/btc-paper.yml'
 permissions:
   contents: write
 concurrency:
