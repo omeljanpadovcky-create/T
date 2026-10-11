@@ -214,14 +214,14 @@
         cv.getContext('2d',{willReadFrequently:true}).getImageData(0,0,cv.width,cv.height));
       const count=Number(report?.candidates)||0;
       const trend=report?.visualDirection;
-      const enough=report?.recognized&&count>=12&&!report.partial;
+      const enough=report?.recognized&&report.reliable===true;
       // No future-price data is available from a screenshot. Keep the decision
       // conservative; historical image geometry is NOT a calibrated forecast.
       const direction='STOP';
       const movement=trend==='up'?'висхідне':trend==='down'?'низхідне':'бокове або невизначене';
       const reason=enough?
-        'На фото виявлено приблизно '+count+' свічкоподібних елементів; минуле розташування показує '+movement+' зміщення. Це не дозволяє достовірно визначити напрям наступних '+pref.expiry+' секунд.':
-        'Свічки розпізнані недостатньо надійно ('+count+' елементів). Обведи чисту ділянку графіка без індикаторів.';
+        'На фото виявлено приблизно '+count+' свічкоподібних елементів (якість розпізнавання '+(report.qualityScore||0)+'/100); минуле розташування показує '+movement+' зміщення. Це не дозволяє достовірно визначити напрям наступних '+pref.expiry+' секунд.':
+        'Свічки розпізнані недостатньо надійно ('+count+' елементів, якість '+(report?.qualityScore??0)+'/100). Обведи лише свічки без індикаторів, меню й цифр; за потреби обери кольори вручну.';
       const risk='OTC: незалежних котирувань і обсягів немає. Впевненість у прогнозі не виміряна; рішення СТОП.';
       state.ai={direction,reason,risk,expiry:pref.expiry,timeframe:pref.timeframe,pair:pref.pair,
         provider:'local_geometry',model:'JEV offline',created:new Date().toISOString(),
@@ -229,7 +229,7 @@
       renderVerdict(state.ai);
       $('ai-status').textContent='✅ Локальний аналіз завершено · фото не надсилалося на сервер.';
       $('scan-output').textContent='KEY INSIGHTS\nТренд на фото: '+movement+
-        '\nРозпізнано: '+count+' елементів\nВпевненість у майбутньому напрямі: не визначена'+
+        '\nРозпізнано: '+count+' елементів\nЯкість розпізнавання: '+(report?.qualityScore??0)+'/100 ('+(enough?'прийнятна':'недостатня')+')\nВпевненість у майбутньому напрямі: не визначена'+
         '\nВолатильність: невідома\nОбсяг: невідомий\nMarket sentiment: невідомий'+
         '\nCONCLUSION\n'+reason;
     }catch(e){state.ai=null;renderVerdict(null,'Не вдалося проаналізувати фото: '+String(e.message||e));}
