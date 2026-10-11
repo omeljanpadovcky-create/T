@@ -1,17 +1,48 @@
 {
-  "trades": [],
+  "trades": [
+    {
+      "direction": "SHORT",
+      "entry": 82993.9,
+      "entry_candle_ms": 1791678240000,
+      "due_ms": 1791678359999,
+      "recorded_at": "2026-10-11T00:30:26.376280+00:00",
+      "pair": "BTCUSDT",
+      "mode": "retrospective_paper",
+      "note": "Retrospective closed-candle simulation, not live or executable trade",
+      "exit": 82993.9,
+      "settled_at": "2026-10-11T00:30:26.376280+00:00",
+      "outcome": "TIE",
+      "pnl": 0,
+      "exit_candle_ms": 1791678300000
+    },
+    {
+      "direction": "SHORT",
+      "entry": 82993.9,
+      "entry_candle_ms": 1791678180000,
+      "due_ms": 1791678299999,
+      "recorded_at": "2026-10-11T00:30:26.376280+00:00",
+      "pair": "BTCUSDT",
+      "mode": "retrospective_paper",
+      "note": "Retrospective closed-candle simulation, not live or executable trade",
+      "exit": 82993.9,
+      "settled_at": "2026-10-11T00:30:26.376280+00:00",
+      "outcome": "TIE",
+      "pnl": 0,
+      "exit_candle_ms": 1791678240000
+    }
+  ],
   "pending": null,
   "market": "BTCUSDT",
   "source": "Kraken public XBT/USDT M1 candles, not Pocket Option OTC",
   "mode": "paper_only",
-  "checked_at": "2026-10-11T00:27:02.988080+00:00",
+  "checked_at": "2026-10-11T00:30:26.376280+00:00",
   "status": "ok",
   "insights": {
-    "ema9": 82995.73,
-    "ema21": 83003.8,
-    "rsi14": 0.0,
+    "ema9": 82984.64,
+    "ema21": 82996.08,
+    "rsi14": 2.99,
     "direction": "STOP",
-    "last_closed_candle_ms": 1791678360000
+    "last_closed_candle_ms": 1791678540000
   },
   "backtest": {
     "method": "walk_forward_next_closed_m1_proxy",
@@ -27,5 +58,7 @@
     "hypothetical_pnl_usdt": -96.8,
     "sufficient_sample": false,
     "warning": "Short historical sample, proxy prices, no fees/slippage or executable fills; not a prediction or proven edge."
-  }
+  },
+  "last_processed_candle_ms": 1791678540000,
+  "simulation_note": "Backfilled minute-by-minute paper signals; GitHub runs are not continuous."
 }
