@@ -2,9 +2,15 @@
   "trades": [],
   "pending": null,
   "market": "BTCUSDT",
-  "source": "Binance public spot M1 candles, not Pocket Option OTC",
+  "source": "Kraken public XBT/USDT M1 candles, not Pocket Option OTC",
   "mode": "paper_only",
-  "checked_at": "2026-10-10T23:23:13.488839+00:00",
-  "status": "error",
-  "error": "HTTP Error 451: "
+  "checked_at": "2026-10-11T00:12:17.984541+00:00",
+  "status": "ok",
+  "insights": {
+    "ema9": 83008.04,
+    "ema21": 83007.47,
+    "rsi14": 93.63,
+    "direction": "STOP",
+    "last_closed_candle_ms": 1791677460000
+  }
 }
