@@ -210,7 +210,8 @@
   }
   function updateAIButton(){
     $('run-pocket-ai').disabled=!state.image||state.loading;
-    $('ai-status').textContent='Автоматичне демо BTC працює окремо від аналізатора скриншотів.';
+    if(!state.image) $('ai-status').textContent='Завантаж фото, щоб виконати локальний аналіз.';
+    else if(state.loading) $('ai-status').textContent='Аналізуємо свічки на фото…';
   }
   async function probeBackend(){
     const endpoint=cloudEndpoint();
