@@ -7,6 +7,7 @@ async function main(){
   const root=path.resolve(__dirname,'..');
   const html=fs.readFileSync(path.join(root,'myshka-app.html'),'utf8');
   const script=fs.readFileSync(path.join(root,'app/pocket-option.js'),'utf8');
+  const ticketScript=fs.readFileSync(path.join(root,'app/pocket-trade-ticket.js'),'utf8');
   const dom=new JSDOM(html,{url:'https://omeljanpadovcky-create.github.io/T/myshka-app.html#analysis',
     pretendToBeVisual:true,runScripts:'outside-only'});
   const w=dom.window,d=w.document;
@@ -54,6 +55,7 @@ async function main(){
     throw Error('Unexpected URL: '+url);
   };
   w.eval(script);
+  w.eval(ticketScript);
   await new Promise(r=>setTimeout(r,20));
   assert.equal(d.querySelectorAll('.mobile-nav button').length,5);
   assert.equal(d.querySelector('#pocket-pair').value,'EUR/USD OTC');
@@ -94,8 +96,42 @@ async function main(){
   press('.mobile-nav [data-go="history"]');
   assert.match(d.querySelector('#journal-list').textContent,/EUR\/USD OTC/);
   assert.match(d.querySelector('#journal-list').textContent,/Очікує|очікує/);
-  assert.equal(requests.some(r=>String(r.url).includes('bybit')||String(r.url).includes('binance')),false);
-  console.log('Pocket Option UI: navigation, payout, image crop, local scan, cloud hypothesis and journal OK');
+  // BUY/SELL buttons write isolated manual paper trades; never broker calls.
+  press('.mobile-nav [data-go="analysis"]');
+  assert.equal(d.querySelector('#ticket-expiry').value,'60');
+  assert.equal(d.querySelector('#ticket-buy').disabled,false);
+  press('#ticket-buy');
+  let records=JSON.parse(w.localStorage.getItem('crypto-myshka-pocket-paper-v1'));
+  assert.equal(records.length,2);
+  assert.equal(records[0].source,'pocket_manual_demo');
+  assert.equal(records[0].direction,'UP');
+  assert.equal(records[0].broker_verified,false);
+  assert.equal(d.querySelector('#ticket-sell').disabled,true);
+  press('.mobile-nav [data-go="history"]');
+  assert.match(d.querySelector('#journal-list').textContent,/РУЧНА DEMO/);
+  assert.match(d.querySelector('#history-summary').textContent,/JEV: гіпотези/);
+  assert.match(d.querySelector('#history-summary').textContent,/Ручні BUY \/ SELL/);
+  records[0].expiresAt=new Date(Date.now()-5000).toISOString();
+  w.localStorage.setItem('crypto-myshka-pocket-paper-v1',JSON.stringify(records));
+  press('.mobile-nav [data-go="analysis"]');
+  d.querySelector('#ticket-expiry').value='30';
+  d.querySelector('#ticket-expiry').dispatchEvent(new w.Event('change',{bubbles:true}));
+  assert.equal(d.querySelector('#pocket-expiry').value,'30');
+  d.querySelector('#ticket-stake').value='7';
+  d.querySelector('#ticket-stake').dispatchEvent(new w.Event('input',{bubbles:true}));
+  assert.equal(d.querySelector('#pocket-stake').value,'7');
+  press('.mobile-nav [data-go="history"]');
+  const manualCard=Array.from(d.querySelectorAll('.journal-card'))
+    .find(x=>x.textContent.includes('РУЧНА DEMO'));
+  assert.ok(manualCard,'manual trade present after expiry');
+  const winButton=Array.from(manualCard.querySelectorAll('button'))
+    .find(x=>x.textContent.includes('WIN'));
+  assert.ok(winButton&&!winButton.disabled,'manual outcome can settle after expiry');
+  winButton.click();
+  records=JSON.parse(w.localStorage.getItem('crypto-myshka-pocket-paper-v1'));
+  assert.equal(records[0].outcome,'hit');
+  assert.equal(requests.some(r=>String(r.url).includes('bybit')||String(r.url).includes('binance')||String(r.url).includes('pocketoption.com')),false);
+  console.log('Pocket UI: cloud screenshot, BUY SELL demo, synced time/stake, manual settlement, isolated JEV metrics OK');
   dom.window.close();
 }
 main().catch(e=>{console.error(e);process.exit(1);});
