@@ -46,7 +46,7 @@ async function main(){
       assert.equal(body.payout_pct,92);
       assert.equal(body.image.startsWith('/9j/'),true);
       return {ok:true,status:200,json:async()=>({
-        mode:'screenshot_hypothesis',direction:'UP',reason:'Два індикатори узгоджені, але це лише гіпотеза з фото.',
+        mode:'screenshot_hypothesis',direction:'UP',orders_enabled:false,quotes_verified:false,broker_verified:false,signal_validated:false,observations:['На фото є свічки із вищими мінімумами','Другий незалежний видимий сигнал підтверджує рух'],reason:'Два індикатори узгоджені, але це лише гіпотеза з фото.',
         risk:'Несподіваний розворот може призвести до втрати всієї ставки.',
         provider:'gemini',model:'test'
       })};
