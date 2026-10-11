@@ -9,6 +9,23 @@ async function refresh(){
  const res=await fetch('./data/btc-paper.json?nocache='+Date.now(),{cache:'no-store'});
  if(!res.ok)throw Error('HTTP '+res.status+' — журнал поки не опублікований');
  const data=await res.json(),trades=Array.isArray(data.trades)?data.trades:[];
+ const backtest=$('auto-backtest');
+ if(backtest){
+   const b=data.backtest;
+   if(!b){backtest.textContent='Ще немає історичної перевірки. Дані з’являться після успішного запуску GitHub Actions.';}
+   else {
+     const decided=(Number(b.wins)||0)+(Number(b.losses)||0);
+     const rate=b.win_rate_pct==null?'—':Number(b.win_rate_pct).toLocaleString('uk-UA')+' %';
+     backtest.replaceChildren();
+     const summary=document.createElement('p');
+     summary.textContent='Сигналів: '+b.signals+' · WIN / LOSS / TIE: '+b.wins+' / '+b.losses+' / '+b.ties+' · Частка влучань: '+rate;
+     const details=document.createElement('p');details.className='hint';
+     details.textContent='Вибірка: '+decided+' завершених результатів · Поріг беззбитковості за умовної виплати 92%: '+b.break_even_win_rate_pct+' % · Умовний P&L: '+fmt(b.hypothetical_pnl_usdt)+' USDT.';
+     const warning=document.createElement('p');warning.className='hint';
+     warning.textContent=b.sufficient_sample?'⚠️ Навіть 100+ спостережень не доводять прибутковість; потрібні незалежні періоди.':'⚠️ Мала вибірка (менше 100 результатів): точність статистично ненадійна.';
+     backtest.append(summary,details,warning);
+   }
+ }
  const wins=trades.filter(t=>t.outcome==='WIN').length,losses=trades.filter(t=>t.outcome==='LOSS').length;
  const pnl=trades.reduce((sum,t)=>sum+(Number(t.pnl)||0),0);
  $('auto-total').textContent=String(trades.length);
