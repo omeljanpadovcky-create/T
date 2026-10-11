@@ -65,7 +65,7 @@
     }
   }
   function renderHome(){
-    const rows=localJournal(),done=rows.filter(x=>x.outcome==='hit'||x.outcome==='miss');
+    const rows=localJournal().filter(x=>x.source!=='pocket_manual_demo'),done=rows.filter(x=>x.outcome==='hit'||x.outcome==='miss');
     $('home-total').textContent=String(rows.length);
     $('home-checked').textContent=String(done.length);
     const last=rows[0];$('home-last').textContent=last?(last.direction==='UP'?'↑':last.direction==='DOWN'?'↓':'⏸')+' '+last.pair:'—';
