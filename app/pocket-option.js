@@ -129,7 +129,10 @@
     state.crop=candidate||cropFallback();drawCanvas();
     imageStatus((candidate?'Автоматично знайдено можливе поле свічок.':'Точну область не знайдено: задано орієнтовну рамку.')+
       ' Перетягни рамку вручну, щоб прибрати меню, баланс та індикатори, які заважають аналізу.');
-    resetScan('Область виділена. Натисни «Описати минулий рух» для локального сканера.');
+    resetScan('Автоматично аналізуємо вже намальовані свічки на вибраній області…');
+    // The old workflow accepted a screenshot and immediately produced a visual
+    // assessment. Restore that low-friction path without silently spending API credits.
+    scanPixels();
   }
   async function loadImage(file){
     if(!file||!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size<1||file.size>8*1024*1024){
@@ -151,8 +154,8 @@
         state.canvasWidth=cv.width;state.canvasHeight=cv.height;
         $('empty-photo').hidden=true;$('photo-stage').hidden=false;
         pickAutoCrop();imageStatus(state.filename+' · '+img.naturalWidth+' × '+img.naturalHeight+
-          ' · Обведи лише свічковий графік. Потім натисни JEV.');
-        updateAIButton();toast('Фото завантажено. Обери область свічок.');
+          ' · Минулий рух уже перевірено локально. Якщо рамка захопила меню — обведи лише свічки; аналіз повториться сам.');
+        updateAIButton();toast('Фото проаналізовано локально. Для окремого AI-прогнозу потрібна доступна модель.');
       };img.src=String(reader.result);
     };reader.readAsDataURL(file);
   }
@@ -179,7 +182,9 @@
       if(!state.dragging)return;
       state.dragging=false;state.dragStart=null;
       if(state.crop.w<60||state.crop.h<60){state.crop=cropFallback();}
-      drawCanvas();resetScan('Нову область обрано. Скануй пікселі або відправ її до хмарного JEV.');
+      drawCanvas();
+      resetScan('Аналізуємо заново після зміни області…');
+      scanPixels();
     }
     cv.addEventListener('pointerup',release);
     cv.addEventListener('pointercancel',release);
@@ -540,7 +545,9 @@
       $('photo-stage').hidden=true;$('empty-photo').hidden=false;resetScan();updateAIButton();
     });
     $('auto-crop').addEventListener('click',pickAutoCrop);
-    $('reset-crop').addEventListener('click',()=>{state.crop=cropFallback();drawCanvas();resetScan();});
+    $('reset-crop').addEventListener('click',()=>{
+      state.crop=cropFallback();drawCanvas();resetScan('Аналізуємо область…');scanPixels();
+    });
     $('scan-pixels').addEventListener('click',scanPixels);
     $('cloud-connect').addEventListener('click',connectCloud);
     $('cloud-forget').addEventListener('click',forgetCloud);
