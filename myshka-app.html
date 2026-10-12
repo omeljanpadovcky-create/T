@@ -7,7 +7,7 @@
 <meta name="description" content="Crypto Myshka Pocket Lab — дослідницький аналіз скріншотів Pocket Option та чесний деможурнал, без автоматичних ставок.">
 <link rel="icon" href="./app/myshka-icon.svg" type="image/svg+xml">
 <link rel="manifest" href="./myshka.webmanifest">
-<link rel="stylesheet" href="./app/pocket-option.css?v=20261013-jev-pulse2">
+<link rel="stylesheet" href="./app/pocket-option.css?v=20261013-jev-guide3">
 <title>Crypto Myshka · Pocket Lab</title>
 </head>
 <body>
@@ -85,6 +85,7 @@
     <span id="ticket-payout-profit">Прибуток +9,20 $</span>
   </div>
   <div class="ticket-ai">JEV на фото: <strong id="ticket-jev-direction">⏳ Немає оцінки JEV</strong><small id="ticket-jev-hint">Додай фото й отримай відповідь JEV. Світіння кнопки — лише дослідницька демопідказка, не підтверджений торговий сигнал.</small></div>
+  <div class="ticket-quick-start"><button id="ticket-guide-action" class="btn ticket-guide-button" type="button">📷 Додати фото графіка</button><small id="ticket-guide-note">Підключення JEV саме по собі не створює сигнал BUY або SELL.</small></div>
   <div class="ticket-actions">
     <button id="ticket-buy" type="button" class="ticket-button buy" aria-label="BUY — створити віртуальну угоду вгору"><span>↗</span> BUY</button>
     <button id="ticket-sell" type="button" class="ticket-button sell" aria-label="SELL — створити віртуальну угоду вниз"><span>↘</span> SELL</button>
@@ -111,7 +112,7 @@
 <p class="hint" id="cloud-status" role="status">Для AI потрібні робочий Vercel API і код доступу. Код зберігається тільки в цій вкладці браузера, не в GitHub.</p>
 </div>
 <div class="actions"><button class="btn primary" id="run-pocket-ai" type="button" disabled>🔬 Аналізувати фото JEV</button><button class="btn" type="button" data-go="autodemo">🐭 Відкрити автодемо</button></div>
-<p id="ai-status" class="hint" role="status">Додай фото й підключи хмарний JEV. Якщо API недоступний, побачиш причину, а не вигаданий прогноз.</p>
+<p id="ai-status" class="hint" role="status">Поки немає графіка для JEV. Навіть коли API готовий, BUY / SELL зʼявиться тільки після аналізу фото.</p>
 <div id="ai-verdict" class="verdict" aria-live="polite"><span class="overline">ОЦІНКА НА НАСТУПНУ ЕКСПІРАЦІЮ</span><strong id="ai-direction">⏳ ОЧІКУЄМО АНАЛІЗУ JEV</strong><p id="ai-reason">JEV ще не аналізував фото. Підключи хмарний API та натисни «Аналізувати фото JEV». Це не прогноз STOP.</p><p id="ai-risk" class="hint"></p><p id="ai-meta" class="hint"></p></div>
 <div class="actions"><button id="save-paper" class="btn" type="button" disabled>📓 Зберегти гіпотезу / СТОП</button></div>
 </div>
@@ -190,8 +191,8 @@
 <nav class="mobile-nav" aria-label="Мобільна навігація"><button data-go="home">⌂<small>Головна</small></button><button data-go="analysis">▥<small>Аналіз</small></button><button data-go="history">◷<small>Демо</small></button><button data-go="archive">▤<small>База</small></button><button type="button" data-go="autodemo">🐭<small>Автодемо</small></button></nav>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <script defer src="./app/photo-scan.js?v=20261011-quality2"></script>
-<script defer src="./app/pocket-option.js?v=20261013-jev-pulse2"></script>
-<script defer src="./app/pocket-trade-ticket.js?v=20261013-jev-pulse2"></script>
+<script defer src="./app/pocket-option.js?v=20261013-jev-guide3"></script>
+<script defer src="./app/pocket-trade-ticket.js?v=20261013-jev-guide3"></script>
 <script defer src="./app/auto-dashboard.js?v=20261011-backtest1"></script>
 <script defer src="./app/jev-laya-dashboard.js?v=20261013-research1"></script>
 <script defer src="./app/trader-video-dashboard.js?v=20261013-study1"></script>
