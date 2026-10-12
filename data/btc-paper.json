@@ -1,6 +1,36 @@
 {
   "trades": [
     {
+      "direction": "SHORT",
+      "entry": 83789.5,
+      "entry_candle_ms": 1791786240000,
+      "due_ms": 1791786359999,
+      "recorded_at": "2026-10-12T06:26:37.340815+00:00",
+      "pair": "BTCUSDT",
+      "mode": "retrospective_paper",
+      "note": "Retrospective closed-candle simulation, not live or executable trade",
+      "exit": 83789.5,
+      "settled_at": "2026-10-12T06:26:37.340815+00:00",
+      "outcome": "TIE",
+      "pnl": 0,
+      "exit_candle_ms": 1791786300000
+    },
+    {
+      "direction": "SHORT",
+      "entry": 83903.0,
+      "entry_candle_ms": 1791785160000,
+      "due_ms": 1791785279999,
+      "recorded_at": "2026-10-12T06:26:37.340815+00:00",
+      "pair": "BTCUSDT",
+      "mode": "retrospective_paper",
+      "note": "Retrospective closed-candle simulation, not live or executable trade",
+      "exit": 83903.0,
+      "settled_at": "2026-10-12T06:26:37.340815+00:00",
+      "outcome": "TIE",
+      "pnl": 0,
+      "exit_candle_ms": 1791785220000
+    },
+    {
       "direction": "LONG",
       "entry": 83863.6,
       "entry_candle_ms": 1791764880000,
@@ -425,30 +455,30 @@
   "market": "BTCUSDT",
   "source": "Kraken public XBT/USDT M1 candles, not Pocket Option OTC",
   "mode": "paper_only",
-  "checked_at": "2026-10-12T00:30:05.633855+00:00",
+  "checked_at": "2026-10-12T06:26:37.340815+00:00",
   "status": "ok",
   "insights": {
-    "ema9": 83835.55,
-    "ema21": 83804.47,
-    "rsi14": 76.09,
+    "ema9": 83800.45,
+    "ema21": 83840.25,
+    "rsi14": 29.54,
     "direction": "STOP",
-    "last_closed_candle_ms": 1791764940000
+    "last_closed_candle_ms": 1791786300000
   },
   "backtest": {
     "method": "walk_forward_next_closed_m1_proxy",
     "market": "Kraken BTC/USDT (not Pocket Option OTC)",
     "lookahead_guard": "signal uses candles through t; result uses t+1",
     "window_closed_candles": 720,
-    "signals": 217,
-    "wins": 62,
-    "losses": 71,
-    "ties": 84,
-    "win_rate_pct": 46.62,
+    "signals": 253,
+    "wins": 96,
+    "losses": 84,
+    "ties": 73,
+    "win_rate_pct": 53.33,
     "break_even_win_rate_pct": 52.08,
-    "hypothetical_pnl_usdt": -139.6,
+    "hypothetical_pnl_usdt": 43.2,
     "sufficient_sample": true,
     "warning": "Short historical sample, proxy prices, no fees/slippage or executable fills; not a prediction or proven edge."
   },
-  "last_processed_candle_ms": 1791764940000,
+  "last_processed_candle_ms": 1791786300000,
   "simulation_note": "Backfilled minute-by-minute paper signals; GitHub runs are not continuous."
 }
