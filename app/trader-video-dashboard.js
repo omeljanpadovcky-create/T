@@ -66,7 +66,12 @@
             ({OPEN:'очікуємо завершеної свічки',WIN:'WIN',LOSS:'LOSS',TIE:'TIE'}[last.status]||'невідомо')+
             ' · '+new Date(last.created_at).toLocaleString('uk-UA');
         }
-        container.append(card(title,desc,statline,lastInfo));
+        const recent=Object.entries(data.last_prospective_checks||{}).map(([pair,strategies])=>{
+          const decision=strategies[key];
+          return decision?pair+': '+decision.direction:'';
+        }).filter(Boolean).join(' · ');
+        container.append(card(title,desc,statline,
+          'Остання перевірка (НЕ команда на ставку): '+(recent||'даних немає')+'; '+lastInfo));
       }
     }catch(error){
       $('video-study-market').textContent='—';
