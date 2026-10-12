@@ -2,7 +2,7 @@
 (() => {
   const $=id=>document.getElementById(id);
   const URL='./data/jev-laya-research.json';
-  const percent=value=>Number.isFinite(Number(value))?
+  const percent=value=>value!==null&&value!==undefined&&Number.isFinite(Number(value))?
     (100*Number(value)).toLocaleString('uk-UA',{maximumFractionDigits:1})+' %':'—';
   const dateTime=value=>value?
     new Date(value).toLocaleString('uk-UA',{dateStyle:'short',timeStyle:'short'}):'невідомо';
@@ -27,7 +27,7 @@
       $('laya-winrate').textContent=percent(holdout.win_rate_excluding_ties);
       const trades=Number(holdout.predicted_trades||0);
       badge.textContent=(stale?'🟠 Звіт застарів · ':'🟢 Звіт оновлено · ')+
-        dateTime(data.trained_at)+' · навчання Laya: ЩЕ НЕ ВИКОНАНЕ';
+        dateTime(data.trained_at)+' · Laya в активному JEV: НЕ ПІДКЛЮЧЕНО';
       $('laya-compare').textContent='Лише логістичний baseline, не Laya: '+
         'паперових рішень '+trades+', WIN '+Number(holdout.wins||0)+
         ' / LOSS '+Number(holdout.losses||0)+' / TIE '+Number(holdout.ties||0)+
