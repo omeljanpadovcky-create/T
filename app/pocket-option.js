@@ -11,7 +11,7 @@
   const LIMIT=300;
   const state={image:null,filename:'',crop:null,canvasWidth:0,canvasHeight:0,
     dragStart:null,dragging:false,ai:null,cloudReady:false,model:'',provider:'',loading:false,
-    lastError:'',lastErrorCode:''};
+    lastError:'',lastErrorCode:'',localReport:null};
   const fmt=(n,d=2)=>Number.isFinite(Number(n))?Number(n).toLocaleString('uk-UA',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
   const localJournal=()=>{
     try {
@@ -99,8 +99,8 @@
   function imageStatus(text){$('image-info').textContent=text;}
   function resetScan(text){
     $('scan-output').textContent=text||'Локальний сканер описує минулі свічки. Жодних прогнозів без перевіреної відповіді JEV.';
-    state.ai=null;state.lastError='';state.lastErrorCode='';renderVerdict(null);
-    updateAIButton();
+    state.ai=null;state.lastError='';state.lastErrorCode='';state.localReport=null;
+    renderVerdict(null);updateAIButton();
   }
   function drawCanvas(){
     const cv=$('pocket-canvas'),image=state.image;if(!image)return;
@@ -197,18 +197,59 @@
     cv.getContext('2d').drawImage(img,x,y,w,h,0,0,cv.width,cv.height);
     return cv;
   }
+  // No network, no inference model, no future prices: diagnostic of ALREADY DRAWN candles.
+  // This remains useful when external cloud vision is blocked by credits or quota.
   function scanPixels(){
+    state.localReport=null;
+    const box=$('scan-output');
     try{
-      const cv=croppedCanvas(),result=window.cryptoMyshkaPhotoScan?.analyzePixels?.(
-        cv.getContext('2d',{willReadFrequently:true}).getImageData(0,0,cv.width,cv.height));
-      const box=$('scan-output');
-      if(!result?.recognized){box.textContent='⚪ Невизначено. '+(result?.reason||'Кольорові свічки не розпізнані.');return;}
-      const direction=result.visualDirection==='up'?'↑ Зростання вже на фото':
-        result.visualDirection==='down'?'↓ Падіння вже на фото':'— Боковий рух / невизначено';
-      box.textContent='🕒 МИНУЛІ СВІЧКИ: '+direction+'\nЗнайдено приблизно '+result.candidates+
-        ' свічкоподібних елементів.\n'+result.observedDirection+
-        '\n⚠️ Це геометрія знімка, НЕ напрям наступної хвилини. Помилково можуть розпізнатися індикатори та написи.';
-    }catch(e){$('scan-output').textContent='⚠️ '+String(e.message||'Не вдалося прочитати пікселі.');}
+      const canvas=croppedCanvas();
+      const scanner=window.cryptoMyshkaPhotoScan;
+      if(!scanner?.analyzePixels)throw Error('Локальний сканер свічок не завантажився. Онови сторінку.');
+      const result=scanner.analyzePixels(canvas.getContext('2d',{willReadFrequently:true})
+        .getImageData(0,0,canvas.width,canvas.height));
+      if(!result?.recognized){
+        const reason=String(result?.reason||'Свічки не розпізнано').slice(0,320);
+        state.localReport={kind:'historical_only',direction:'unknown',reliable:false,
+          candidates:Math.max(0,Number(result?.candidates)||0),message:reason};
+        box.textContent='🟠 ЛОКАЛЬНО · НЕДОСТАТНЬО ДАНИХ\n'+reason+
+          '\nВиділи лише свічки на графіку й повтори. Рух наступної свічки невідомий.';
+        return state.localReport;
+      }
+      const reliable=result.reliable===true&&result.partial!==true;
+      const pastDirection=reliable&&['up','down'].includes(result.visualDirection)?
+        result.visualDirection:'unknown';
+      const label=pastDirection==='up'?'↑ Зростання вже на фото':
+        pastDirection==='down'?'↓ Падіння вже на фото':'— Напрям історичного руху ненадійний';
+      const count=Math.max(0,Math.round(Number(result.candidates)||0));
+      const quality=Number.isFinite(Number(result.qualityScore))?
+        Math.max(0,Math.min(100,Math.round(Number(result.qualityScore)))):null;
+      const green=Math.max(0,Math.round(Number(result.green)||0));
+      const red=Math.max(0,Math.round(Number(result.red)||0));
+      const recent=green+red>0?'Останні розпізнані свічки: зелених '+green+
+        ', червоних '+red+'. ':'';
+      const qualityText=quality!==null?'Оцінка якості розпізнавання: '+quality+
+        '/100 (НЕ ймовірність прогнозу). ':'';
+      const message=(result.observedDirection||'Виявлено кольорові свічки.').slice(0,280);
+      state.localReport={kind:'historical_only',direction:pastDirection,reliable,
+        candidates:count,qualityScore:quality,green,red,message,
+        checkedAt:new Date().toISOString()};
+      box.textContent='🧠 JEV LITE · ЛОКАЛЬНО БЕЗ API\nМИНУЛІ СВІЧКИ: '+label+
+        '\nЗнайдено близько '+count+' свічкоподібних елементів.\n'+qualityText+recent+
+        '\n'+message+'\n⚠️ Це ЛИШЕ опис минулих пікселів на фото. '+
+        'Немає доступу до OTC-котирувань і майбутньої свічки. '+
+        'Локальний сканер НЕ створює торговий сигнал BUY / SELL. '+
+        'Хмарний AI може бути недоступний через квоту.';
+      return state.localReport;
+    }catch(e){
+      const message=String(e?.message||'Не вдалося прочитати свічки').slice(0,250);
+      state.localReport={kind:'historical_only',direction:'unknown',reliable:false,message};
+      box.textContent='⚠️ ЛОКАЛЬНИЙ СКАНЕР: '+message+
+        '\nЖодного результату на наступну експірацію немає.';
+      return state.localReport;
+    }finally{
+      window.dispatchEvent(new CustomEvent('crypto-myshka-analysis-state-change'));
+    }
   }
   function setCloudLabel(label,ready=false){
     $('cloud-indicator').textContent=label;
@@ -226,7 +267,8 @@
   function getAnalysisState(){
     return {hasImage:Boolean(state.image),cloudReady:Boolean(state.cloudReady),
       loading:Boolean(state.loading),hasHypothesis:Boolean(state.ai),
-      lastError:state.lastError,lastErrorCode:state.lastErrorCode};
+      lastError:state.lastError,lastErrorCode:state.lastErrorCode,
+      localReport:state.localReport};
   }
   function updateAIButton(){
     $('run-pocket-ai').disabled=!state.image||state.loading;
@@ -350,7 +392,16 @@
           String(e?.message||'Невідома помилка аналізу.');
       state.lastErrorCode=typeof e?.code==='string'?e.code.slice(0,40):
         e?.name==='TimeoutError'?'CLIENT_TIMEOUT':'';
-      renderVerdict(null,'⚠️ '+state.lastError+'\nСтарий результат не використовується. BUY/SELL не підсвічуються.');
+      renderVerdict(null,'⚠️ '+state.lastError+
+        '\\nСтарий результат не використовується. BUY/SELL не підсвічуються.');
+      // A paid provider's HTTP 402/429 must not make the offline historical
+      // image scanner unusable or silently create a fake AI trading hypothesis.
+      if(['PROVIDER_CREDITS','PROVIDER_RATE_LIMIT','MODEL_NOT_FOUND',
+          'MODEL_REQUEST_REJECTED','PROVIDER_UNAVAILABLE'].includes(state.lastErrorCode)){
+        if(state.lastErrorCode==='PROVIDER_CREDITS')
+          setCloudLabel('☁️ APInex · немає квоти для фото',false);
+        scanPixels();
+      }
     }finally{state.loading=false;updateAIButton();}
   }
   function recordPaper(){
