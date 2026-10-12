@@ -83,6 +83,9 @@
     const heading=$('ai-direction'),reason=$('ai-reason'),risk=$('ai-risk'),meta=$('ai-meta');
     const direction=answer&&['UP','DOWN','STOP'].includes(answer.direction)?answer.direction:'NONE';
     const local=!answer?state.localReport:null;
+    const overline=$('ai-verdict')?.querySelector('.overline');
+    if(overline)overline.textContent=local?'РЕЗУЛЬТАТ СКАНУВАННЯ ФОТО · НЕ ПРОГНОЗ':
+      'ОЦІНКА НА НАСТУПНУ ЕКСПІРАЦІЮ';
     if(local){
       heading.textContent='🔎 ЛОКАЛЬНО · '+localTrendLabel(local);
       heading.className='stop';
@@ -389,6 +392,7 @@
     }
     const prefs=getPrefs();
     state.ai=null;state.localBusy=true;state.loading=true;
+    state.lastError='';state.lastErrorCode='';
     renderVerdict(null);updateAIButton();
     try{
       const answer=await window.cryptoMyshkaBrowserVision.analyze(croppedCanvas(),prefs,
