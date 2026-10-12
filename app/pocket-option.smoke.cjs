@@ -8,6 +8,7 @@ async function main(){
   const html=fs.readFileSync(path.join(root,'myshka-app.html'),'utf8');
   const script=fs.readFileSync(path.join(root,'app/pocket-option.js'),'utf8');
   const ticketScript=fs.readFileSync(path.join(root,'app/pocket-trade-ticket.js'),'utf8');
+  const browserScript=fs.readFileSync(path.join(root,'app/browser-vision.js'),'utf8');
   const dom=new JSDOM(html,{url:'https://omeljanpadovcky-create.github.io/T/myshka-app.html#analysis',
     pretendToBeVisual:true,runScripts:'outside-only'});
   const w=dom.window,d=w.document;
@@ -60,6 +61,7 @@ async function main(){
     }
     throw Error('Unexpected URL: '+url);
   };
+  w.eval(browserScript);
   w.eval(script);
   w.eval(ticketScript);
   await new Promise(r=>setTimeout(r,20));
@@ -113,7 +115,8 @@ async function main(){
   press('#scan-pixels');
   assert.match(d.querySelector('#scan-output').textContent,/МИНУЛІ СВІЧКИ/);
   assert.match(d.querySelector('#scan-output').textContent,/Падіння вже на фото/);
-  assert.match(d.querySelector('#ai-direction').textContent,/ОЧІКУЄМО АНАЛІЗУ/);
+  assert.match(d.querySelector('#ai-direction').textContent,/ЛОКАЛЬНО/);
+  assert.match(d.querySelector('#ai-reason').textContent,/розпізнано/i);
   assert.equal(w.cryptoMyshkaPocket.getScreenshotHypothesis(),null);
   assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),false);
   assert.equal(d.querySelector('#ticket-sell').classList.contains('jev-flash'),false);
@@ -192,8 +195,9 @@ async function main(){
   await new Promise(resolve=>setTimeout(resolve,30));
   assert.match(d.querySelector('#ai-status').textContent,/PROVIDER_CREDITS/);
   assert.match(d.querySelector('#ai-status').textContent,/HTTP 402/);
-  assert.match(d.querySelector('#ai-reason').textContent,/APInex/);
-  assert.match(d.querySelector('#ticket-jev-direction').textContent,/Помилка аналізу/);
+  assert.match(d.querySelector('#ai-reason').textContent,/Пізніші свічки нижче/);
+  assert.match(d.querySelector('#ai-direction').textContent,/ЛОКАЛЬНО/);
+  assert.match(d.querySelector('#ticket-jev-direction').textContent,/Локальний розбір/);
   assert.match(d.querySelector('#ticket-guide-action').textContent,/Сканувати локально/);
   assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),false);
   assert.match(d.querySelector('#scan-output').textContent,/JEV LITE/);
@@ -213,11 +217,44 @@ async function main(){
   // Changing credentials must clear the previous result rather than keep glowing.
   d.querySelector('#cloud-access').value='new-access-code';
   d.querySelector('#cloud-access').dispatchEvent(new w.Event('input',{bubbles:true}));
-  assert.match(d.querySelector('#ai-direction').textContent,/ОЧІКУЄМО/);
+  assert.match(d.querySelector('#ai-direction').textContent,/ЛОКАЛЬНО/);
   assert.equal(w.cryptoMyshkaPocket.getScreenshotHypothesis(),null);
   assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),false);
   assert.equal(requests.some(r=>String(r.url).includes('bybit')||String(r.url).includes('binance')||String(r.url).includes('pocketoption.com')),false);
-  console.log('Pocket UI: fresh AI BUY/SELL flash, stale STOP and disconnect reset, manual demo journal, no broker execution OK');
+
+  // Optional browser model must not fake capabilities or call a paid provider.
+  const networkBeforeLocal=requests.length;
+  press('#local-ai-vision');
+  await new Promise(resolve=>setTimeout(resolve,15));
+  assert.match(d.querySelector('#local-ai-status').textContent,/не підтримує вбудований AI/);
+  assert.equal(requests.length,networkBeforeLocal);
+  w.LanguageModel={
+    availability:async()=> 'available',
+    create:async()=>({
+      prompt:async(input)=>{
+        assert.equal(input[0].content[1].type,'image');
+        return JSON.stringify({readable:true,direction:'DOWN',
+          reason:'The last candles have lower observed highs and short downward slope.',
+          risk:'The trend could reverse abruptly during a short expiry.',
+          observations:['The recent candles show lower highs','The recent slope is downward']});
+      },
+      destroy(){}
+    })
+  };
+  press('#local-ai-vision');
+  await new Promise(resolve=>setTimeout(resolve,30));
+  const localVision=w.cryptoMyshkaPocket.getScreenshotHypothesis();
+  assert.ok(localVision,'on-device model must produce a separate hypothesis');
+  assert.equal(localVision.source,'pocket_browser_hypothesis');
+  assert.equal(localVision.direction,'DOWN');
+  assert.equal(localVision.signal_validated,false);
+  assert.equal(d.querySelector('#ticket-sell').classList.contains('jev-flash'),true);
+  assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),false);
+  assert.match(d.querySelector('#ai-direction').textContent,/AI на ПК/);
+  assert.match(d.querySelector('#local-ai-status').textContent,/без APInex/);
+  assert.equal(requests.length,networkBeforeLocal,'device AI must not call cloud');
+
+  console.log('Pocket UI: photo local analysis, genuine optional Chrome AI, quota failure, paper journal and demo-only flash OK');
   dom.window.close();
 }
 main().catch(e=>{console.error(e);process.exit(1);});
