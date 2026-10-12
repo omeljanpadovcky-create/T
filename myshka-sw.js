@@ -1,7 +1,7 @@
 /* Scope is /T/ on GitHub Pages. Do not intercept or cache legacy app routes. */
-const VERSION = 'myshka-app-shell-v26-laya-research';
-const STATIC = ['./myshka-app.html','./app/pocket-option.css','./app/pocket-option.js','./app/pocket-trade-ticket.js','./app/jev-laya-dashboard.js','./app/photo-scan.js','./app/myshka-icon.svg','./myshka.webmanifest'];
-const JSON_FEEDS = ['crypto_myshka/data/youtube_live.json','crypto_myshka/data/pair_reports.json','crypto_myshka/data/youtube_analysts.json','crypto_myshka/data/youtube_archive.json'];
+const VERSION = 'myshka-app-shell-v27-video-study';
+const STATIC = ['./myshka-app.html','./app/pocket-option.css','./app/pocket-option.js','./app/pocket-trade-ticket.js','./app/jev-laya-dashboard.js','./app/trader-video-dashboard.js','./app/photo-scan.js','./app/myshka-icon.svg','./myshka.webmanifest'];
+const JSON_FEEDS = ['data/trader-video-study.json','crypto_myshka/data/youtube_live.json','crypto_myshka/data/pair_reports.json','crypto_myshka/data/youtube_analysts.json','crypto_myshka/data/youtube_archive.json'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(VERSION).then(cache=>cache.addAll(STATIC)).catch(()=>{}));
   self.skipWaiting();
