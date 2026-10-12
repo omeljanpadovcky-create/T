@@ -203,11 +203,18 @@
     const consistent=Math.sign(edgeDrift)===Math.sign(globalDrift) &&
       Math.abs(edgeDrift)>.16 && Math.abs(drift)>.13;
     const visualDirection=partial||!consistent?'unknown':drift>0?'up':'down';
+    // Recognising candles accurately is NOT the same as finding a trend:
+    // qualityScore may be 100 while the chart is sideways or contradictory.
+    const trendState=!reliable?'unreliable':
+      visualDirection==='up'?'up':
+      visualDirection==='down'?'down':
+      Math.abs(globalDrift)<.15&&Math.abs(edgeDrift)<.17?'sideways':'mixed';
     const observedDirection=partial?'Недостатньо елементів для оцінки переміщення':
       visualDirection==='up'?'Пізніші елементи вище попередніх (лише зображення)':
       visualDirection==='down'?'Пізніші елементи нижче попередніх (лише зображення)':
-      'Без виразної зміни положення елементів (лише зображення)';
-    return {recognized:true,partial,reliable,qualityScore,stableGaps,stableWidths,detectorAgreement,edgeShare,visualDirection,candidates:found.length,
+      trendState==='sideways'?'На фото переважає боковий рух, чіткої тенденції немає':
+      'Різні ділянки графіка суперечать одна одній (лише зображення)';
+    return {recognized:true,partial,reliable,qualityScore,trendState,stableGaps,stableWidths,detectorAgreement,edgeShare,visualDirection,candidates:found.length,
       componentCandidates:cc.length,columnCandidates:cols.length,method:columnMode?'column':'regions',
       green:last.filter(x=>x.color===1).length,red:last.filter(x=>x.color===2).length,sample:last.length,
       observedDirection,xSpreadRatio:disp.spread/w,globalDrift,edgeDrift,
