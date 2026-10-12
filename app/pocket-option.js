@@ -222,11 +222,25 @@
       throw Error('Потрібна HTTPS-адреса проєкту на *.vercel.app без шляху й параметрів.');
     return url.origin;
   }
+  function getAnalysisState(){
+    return {hasImage:Boolean(state.image),cloudReady:Boolean(state.cloudReady),
+      loading:Boolean(state.loading),hasHypothesis:Boolean(state.ai)};
+  }
   function updateAIButton(){
     $('run-pocket-ai').disabled=!state.image||state.loading;
-    if(!state.image) $('ai-status').textContent='Завантаж фото для аналізу.';
-    else if(state.loading) $('ai-status').textContent='Хмарний JEV аналізує обрізаний графік…';
-    else if(!state.cloudReady) $('ai-status').textContent='Фото завантажено. Спочатку підключи хмарний JEV вище.';
+    if(state.loading)
+      $('ai-status').textContent='Хмарний JEV аналізує обрізаний графік…';
+    else if(!state.image)
+      $('ai-status').textContent=state.cloudReady?
+        '✅ Каталог API доступний. Додай свіжий скриншот свічок: підключення саме по собі не дає BUY / SELL.':
+        'Додай скриншот графіка й підключи хмарний JEV.';
+    else if(!state.cloudReady)
+      $('ai-status').textContent='Фото готове. Перевір підключення хмарного JEV нижче.';
+    else if(state.ai)
+      $('ai-status').textContent='Є дослідницька оцінка JEV. Для нової оцінки завантаж свіже фото графіка.';
+    else
+      $('ai-status').textContent='✅ Фото й API готові. Натисни «Аналізувати фото JEV».';
+    window.dispatchEvent(new CustomEvent('crypto-myshka-analysis-state-change'));
   }
   async function connectCloud(){
     const access=$('cloud-access').value.trim();
@@ -249,9 +263,11 @@
       state.cloudReady=true;state.provider=String(data.provider||'AI');
       state.model=String(data.model||'');
       try{sessionStorage.setItem(CLOUD_SESSION_KEY,JSON.stringify({endpoint,access}));}catch{}
-      setCloudLabel('☁️ JEV · '+state.provider+' · готовий',true);
-      $('cloud-status').textContent='✅ Pocket API та '+state.provider+' підключено. '+(data.notice||'Перевірка каталогу не гарантує успіх аналізу фото.');
-      if(state.image)$('ai-status').textContent='Можна надіслати обрізане фото до хмарного JEV.';
+      setCloudLabel('☁️ JEV · '+state.provider+' · API на звʼязку',true);
+      $('cloud-status').textContent='✅ Каталог '+state.provider+
+        ' відповідає. Це ще не аналіз фото і не підтверджений сигнал. '+
+        (data.notice||'Доступ до обробки фото може залежати від квоти.');
+      renderVerdict(null,'API доступний, але прогнозу ще немає. Додай свіжий скриншот графіка й натисни «Аналізувати фото JEV».');
     }catch(e){
       setCloudLabel('☁️ JEV · немає з’єднання',false);
       $('cloud-status').textContent='⚠️ '+String(e.message||e)+'. Перевір код і налаштування Vercel.';
@@ -490,5 +506,5 @@
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
   else init();
-  window.cryptoMyshkaPocket={getPrefs,getJournal:localJournal,getScreenshotHypothesis};
+  window.cryptoMyshkaPocket={getPrefs,getJournal:localJournal,getScreenshotHypothesis,getAnalysisState};
 })();
