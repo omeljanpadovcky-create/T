@@ -31,6 +31,33 @@
     $('ticket-payout-pct').textContent=Number.isFinite(p.payout)?'+'+fmt(p.payout)+'%':'—';
     $('ticket-payout-profit').textContent=valid(p)?
       'Прибуток за WIN: +'+fmt(p.stake*p.payout/100)+' $':'Перевір суму й виплату';
+    const state=window.cryptoMyshkaPocket?.getAnalysisState?.()||{};
+    const guide=$('ticket-guide-action'),guideNote=$('ticket-guide-note');
+    if(guide&&guideNote){
+      if(state.loading){
+        guide.textContent='⏳ JEV аналізує фото…';
+        guide.disabled=true;
+        guideNote.textContent='Дослідницька оцінка обробляється, BUY / SELL ще не підтверджені.';
+      }else if(!state.hasImage){
+        guide.textContent='📷 Додати фото графіка';
+        guide.disabled=false;
+        guideNote.textContent=state.cloudReady?
+          '✅ API доступний. Для оцінки UP / DOWN / STOP потрібен свіжий скриншот.':
+          'Перший крок — додай фото, далі підключи хмарний JEV.';
+      }else if(!state.cloudReady){
+        guide.textContent='🔑 Перевірити підключення JEV';
+        guide.disabled=false;
+        guideNote.textContent='Фото вже є. Підключи API, щоб перевірити графік.';
+      }else if(!state.hasHypothesis){
+        guide.textContent='🔬 Аналізувати фото JEV';
+        guide.disabled=false;
+        guideNote.textContent='Скріншот завантажено. Запусти AI — фото не аналізується автоматично.';
+      }else{
+        guide.textContent='📷 Завантажити нове фото';
+        guide.disabled=false;
+        guideNote.textContent='Оцінка лише за попереднім фото. Новий графік потрібний для наступної перевірки.';
+      }
+    }
     const insight=window.cryptoMyshkaPocket?.getScreenshotHypothesis?.()||null;
     const issuedAt=Date.parse(insight?.created||'');
     const freshnessMs=Math.min(60000,Math.max(10000,Number(insight?.expiry||60)*1000));
@@ -115,6 +142,19 @@
     if(!$('ticket-buy')||!window.cryptoMyshkaPocket)return;
     $('ticket-buy').addEventListener('click',()=>record('UP'));
     $('ticket-sell').addEventListener('click',()=>record('DOWN'));
+    $('ticket-guide-action')?.addEventListener('click',()=>{
+      const current=window.cryptoMyshkaPocket?.getAnalysisState?.()||{};
+      if(current.loading)return;
+      if(!current.hasImage||current.hasHypothesis){
+        $('pocket-photo')?.click();
+      }else if(!current.cloudReady){
+        $('pocket-ai-card')?.scrollIntoView?.({behavior:'smooth',block:'start'});
+        $('cloud-access')?.focus();
+      }else{
+        $('pocket-ai-card')?.scrollIntoView?.({behavior:'smooth',block:'start'});
+        $('run-pocket-ai')?.click();
+      }
+    });
     $('ticket-expiry').addEventListener('change',()=>{
       $('pocket-expiry').value=$('ticket-expiry').value;
       $('pocket-expiry').dispatchEvent(new Event('input',{bubbles:true}));
@@ -129,6 +169,7 @@
       .forEach(id=>$(id)?.addEventListener('input',refresh));
     window.addEventListener('storage',refresh);
     window.addEventListener('crypto-myshka-jev-verdict-change',refresh);
+    window.addEventListener('crypto-myshka-analysis-state-change',refresh);
     refresh();
     setInterval(()=>{if(!$('screen-analysis').hidden)refresh();},1000);
   }
