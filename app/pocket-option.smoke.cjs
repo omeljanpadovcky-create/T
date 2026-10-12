@@ -13,11 +13,12 @@ async function main(){
   const w=dom.window,d=w.document;
   w.scrollTo=()=>{};
   w.confirm=()=>true;
+  let scanCalls=0;
   w.cryptoMyshkaPhotoScan={
     findChartBounds:()=>({x:20,y:15,w:330,h:185}),
-    analyzePixels:()=>({recognized:true,visualDirection:'down',candidates:25,
+    analyzePixels:()=>{scanCalls++;return {recognized:true,visualDirection:'down',candidates:25,
       reliable:true,partial:false,qualityScore:83,green:2,red:5,
-      observedDirection:'Пізніші свічки нижче'})
+      observedDirection:'Пізніші свічки нижче'};}
   };
   let usedCrop=false;
   w.HTMLCanvasElement.prototype.getContext=function(){
@@ -95,9 +96,18 @@ async function main(){
   // Trigger the same handler as Ctrl+V: jsdom provides FileReader and ClipboardEvent data.
   const event=new w.Event('paste',{bubbles:true,cancelable:true});
   Object.defineProperty(event,'clipboardData',{value:{items:[{type:'image/png',getAsFile:()=>fake}]}});
+  const requestsBeforeUpload=requests.length;
   d.dispatchEvent(event);
   await new Promise(r=>setTimeout(r,75));
   assert.equal(d.querySelector('#photo-stage').hidden,false);
+  assert.ok(scanCalls>=1,'screenshot upload must immediately scan past candles');
+  assert.match(d.querySelector('#scan-output').textContent,/JEV LITE/);
+  assert.equal(w.cryptoMyshkaPocket.getAnalysisState().localReport.kind,'historical_only');
+  assert.equal(w.cryptoMyshkaPocket.getAnalysisState().localReport.direction,'down');
+  assert.equal(requests.length,requestsBeforeUpload,'automatic scan must not call paid provider');
+  const beforeRecrop=scanCalls;
+  press('#reset-crop');
+  assert.ok(scanCalls>beforeRecrop,'changing crop should automatically re-scan');
   assert.equal(d.querySelector('#run-pocket-ai').disabled,false);
   assert.match(d.querySelector('#ticket-guide-action').textContent,/Аналізувати фото JEV/);
   press('#scan-pixels');
