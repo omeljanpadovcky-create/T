@@ -56,12 +56,12 @@
 
 <div class="pocket-terminal-grid">
 <div class="card pocket-chart-card">
-<div class="section-title"><h2>2. Скріншот графіка</h2><span class="pill">JPG · PNG · WebP</span></div>
+<div class="section-title"><h2>2. Скріншот графіка · автосканування</h2><span class="pill safe">ЛОКАЛЬНО · БЕЗ КЛЮЧА</span></div>
 <div class="actions"><label class="btn primary" for="pocket-photo">📷 Обрати фото</label><input id="pocket-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden><button class="btn" id="paste-photo" type="button">Вставити з буфера</button><button class="btn" id="clear-photo" type="button">Очистити фото</button></div>
-<p class="hint">Можеш просто натиснути Ctrl+V після Win+Shift+S. Фото залишається на твоєму пристрої. Обведи лише поле графіка, без балансу, профілю, ставок і меню.</p>
+<p class="hint"><strong>Просто додай скриншот — локальна Мишка відразу опише минулі свічки, без реєстрації та APInex.</strong> Фото не покидає пристрій у локальному режимі. Ctrl+V після Win+Shift+S. Якщо рамка захопила меню — обведи лише графік, аналіз повториться автоматично. Прогноз наступної свічки можливий лише через окремий доступний AI.</p>
 <div id="empty-photo" class="dropzone" tabindex="0">📉<strong>Тут з’явиться графік Pocket Option</strong><span>Завантаж скріншот або встав зображення</span></div>
 <div id="photo-stage" class="photo-stage" hidden><canvas id="pocket-canvas" aria-label="Обведи мишею або пальцем область свічкового графіка"></canvas><p id="image-info" class="hint"></p><div class="actions"><button id="auto-crop" class="btn" type="button">⤢ Знайти свічки</button><button id="reset-crop" class="btn" type="button">↺ Скинути область</button><button id="scan-pixels" class="btn" type="button">🔬 Безоплатний аналіз минулих свічок</button></div></div>
-<div id="scan-output" class="scan-result" role="status" aria-live="polite">Безоплатний локальний сканер аналізує кольори й положення вже намальованих свічок. Не потрібні ключ, квота чи мережа. Це НЕ прогноз ціни.</div>
+<div id="scan-output" class="scan-result" role="status" aria-live="polite">📷 Додай фото — автоматично отримаєш локальний розбір минулих свічок, без API-ключа й оплат. Це не прогноз ціни.</div>
 </div>
 <aside class="card pocket-demo-ticket" aria-label="Віртуальна угода BUY SELL">
   <div class="ticket-topline"><span>🐭 MYSHKA TERMINAL</span><strong>DEMO ONLY</strong></div>
@@ -192,7 +192,7 @@
 <nav class="mobile-nav" aria-label="Мобільна навігація"><button data-go="home">⌂<small>Головна</small></button><button data-go="analysis">▥<small>Аналіз</small></button><button data-go="history">◷<small>Демо</small></button><button data-go="archive">▤<small>База</small></button><button type="button" data-go="autodemo">🐭<small>Автодемо</small></button></nav>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <script defer src="./app/photo-scan.js?v=20261011-quality2"></script>
-<script defer src="./app/pocket-option.js?v=20261013-offline-research5"></script>
+<script defer src="./app/pocket-option.js?v=20261013-auto-photo6"></script>
 <script defer src="./app/pocket-trade-ticket.js?v=20261013-offline-research5"></script>
 <script defer src="./app/auto-dashboard.js?v=20261011-backtest1"></script>
 <script defer src="./app/jev-laya-dashboard.js?v=20261013-research1"></script>
