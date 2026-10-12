@@ -86,11 +86,37 @@ async function main(){
   press('#scan-pixels');
   assert.match(d.querySelector('#scan-output').textContent,/МИНУЛІ СВІЧКИ/);
   assert.match(d.querySelector('#scan-output').textContent,/Падіння вже на фото/);
-  assert.match(d.querySelector('#ai-direction').textContent,/СТОП/);
+  assert.match(d.querySelector('#ai-direction').textContent,/ОЧІКУЄМО АНАЛІЗУ/);
+  assert.equal(w.cryptoMyshkaPocket.getScreenshotHypothesis(),null);
+  assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),false);
+  assert.equal(d.querySelector('#ticket-sell').classList.contains('jev-flash'),false);
   press('#run-pocket-ai');
   await new Promise(r=>setTimeout(r,30));
   assert.equal(usedCrop,true);
-  assert.match(d.querySelector('#ai-direction').textContent,/ВГОРУ/);
+  assert.match(d.querySelector('#ai-direction').textContent,/BUY/);
+  // Fresh cloud image-based hypothesis highlights only the matching manual DEMO direction.
+  assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),true);
+  assert.equal(d.querySelector('#ticket-sell').classList.contains('jev-flash'),false);
+  assert.match(d.querySelector('#ticket-jev-hint').textContent,/лише для демо/);
+  const originalGetter=w.cryptoMyshkaPocket.getScreenshotHypothesis;
+  const fresh=originalGetter();
+  assert.equal(fresh.source,'pocket_cloud_screenshot');
+  assert.equal(fresh.signal_validated,false);
+  w.cryptoMyshkaPocket.getScreenshotHypothesis=()=>({...fresh,direction:'DOWN'});
+  w.dispatchEvent(new w.Event('crypto-myshka-jev-verdict-change'));
+  assert.equal(d.querySelector('#ticket-sell').classList.contains('jev-flash'),true);
+  assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),false);
+  w.cryptoMyshkaPocket.getScreenshotHypothesis=()=>({...fresh,direction:'STOP'});
+  w.dispatchEvent(new w.Event('crypto-myshka-jev-verdict-change'));
+  assert.equal(d.querySelector('#ticket-sell').classList.contains('jev-flash'),false);
+  assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),false);
+  w.cryptoMyshkaPocket.getScreenshotHypothesis=()=>({...fresh,created:new Date(Date.now()-120000).toISOString()});
+  w.dispatchEvent(new w.Event('crypto-myshka-jev-verdict-change'));
+  assert.match(d.querySelector('#ticket-jev-direction').textContent,/застаріла/);
+  assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),false);
+  w.cryptoMyshkaPocket.getScreenshotHypothesis=originalGetter;
+  w.dispatchEvent(new w.Event('crypto-myshka-jev-verdict-change'));
+  assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),true);
   press('#save-paper');
   assert.equal(JSON.parse(w.localStorage.getItem('crypto-myshka-pocket-paper-v1')).length,1);
   press('.mobile-nav [data-go="history"]');
@@ -107,6 +133,8 @@ async function main(){
   assert.equal(records[0].direction,'UP');
   assert.equal(records[0].broker_verified,false);
   assert.equal(d.querySelector('#ticket-sell').disabled,true);
+  assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),false,
+    'active demo trade must cancel animated encouragement');
   press('.mobile-nav [data-go="history"]');
   assert.match(d.querySelector('#journal-list').textContent,/РУЧНА DEMO/);
   assert.match(d.querySelector('#history-summary').textContent,/JEV: гіпотези/);
@@ -130,8 +158,14 @@ async function main(){
   winButton.click();
   records=JSON.parse(w.localStorage.getItem('crypto-myshka-pocket-paper-v1'));
   assert.equal(records[0].outcome,'hit');
+  // Changing credentials must clear the previous result rather than keep glowing.
+  d.querySelector('#cloud-access').value='new-access-code';
+  d.querySelector('#cloud-access').dispatchEvent(new w.Event('input',{bubbles:true}));
+  assert.match(d.querySelector('#ai-direction').textContent,/ОЧІКУЄМО/);
+  assert.equal(w.cryptoMyshkaPocket.getScreenshotHypothesis(),null);
+  assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),false);
   assert.equal(requests.some(r=>String(r.url).includes('bybit')||String(r.url).includes('binance')||String(r.url).includes('pocketoption.com')),false);
-  console.log('Pocket UI: cloud screenshot, BUY SELL demo, synced time/stake, manual settlement, isolated JEV metrics OK');
+  console.log('Pocket UI: fresh AI BUY/SELL flash, stale STOP and disconnect reset, manual demo journal, no broker execution OK');
   dom.window.close();
 }
 main().catch(e=>{console.error(e);process.exit(1);});
