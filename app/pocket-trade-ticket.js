@@ -44,6 +44,11 @@
         guideNote.textContent=state.cloudReady?
           '✅ API доступний. Для оцінки UP / DOWN / STOP потрібен свіжий скриншот.':
           'Перший крок — додай фото, далі підключи хмарний JEV.';
+      }else if(state.lastErrorCode==='PROVIDER_CREDITS'){
+        guide.textContent='🔬 Сканувати локально · без оплати';
+        guide.disabled=false;
+        guideNote.textContent='APInex HTTP 402: хмарний аналіз заблоковано. '+
+          'Локальний сканер безкоштовно описує вже намальовані свічки, але НЕ прогнозує експірацію.';
       }else if(state.lastError){
         guide.textContent=state.cloudReady?'↻ Повторити аналіз фото':'🔑 Перевірити підключення JEV';
         guide.disabled=false;
@@ -61,6 +66,22 @@
         guide.textContent='📷 Завантажити нове фото';
         guide.disabled=false;
         guideNote.textContent='Оцінка лише за попереднім фото. Новий графік потрібний для наступної перевірки.';
+      }
+    }
+    const offline=$('ticket-offline-result');
+    if(offline){
+      const local=state.localReport;
+      if(local){
+        offline.hidden=false;
+        const label=local.reliable?
+          local.direction==='up'?'↑ Раніше свічки рухалися вгору':
+          local.direction==='down'?'↓ Раніше свічки рухалися вниз':
+          'Раніший напрям невизначений':'Розпізнавання графіка ненадійне';
+        offline.textContent='🔎 ЛОКАЛЬНИЙ СКАНЕР · БЕЗ AI/КВОТИ. '+label+
+          ' · Знайдено '+(local.candidates||0)+' елементів. '+
+          'Не дає BUY/SELL на майбутню свічку.';
+      }else{
+        offline.hidden=true;offline.textContent='';
       }
     }
     const insight=window.cryptoMyshkaPocket?.getScreenshotHypothesis?.()||null;
@@ -154,7 +175,10 @@
     $('ticket-guide-action')?.addEventListener('click',()=>{
       const current=window.cryptoMyshkaPocket?.getAnalysisState?.()||{};
       if(current.loading)return;
-      if(!current.hasImage||current.hasHypothesis){
+      if(current.lastErrorCode==='PROVIDER_CREDITS'&&current.hasImage){
+        $('scan-pixels')?.click();
+        $('scan-output')?.scrollIntoView?.({behavior:'smooth',block:'nearest'});
+      }else if(!current.hasImage||current.hasHypothesis){
         $('pocket-photo')?.click();
       }else if(!current.cloudReady){
         $('pocket-ai-card')?.scrollIntoView?.({behavior:'smooth',block:'start'});
