@@ -1,5 +1,5 @@
 /* Scope is /T/ on GitHub Pages. Do not intercept or cache legacy app routes. */
-const VERSION = 'myshka-app-shell-v28-jev-pulse';
+const VERSION = 'myshka-app-shell-v29-jev-photo-guide';
 const STATIC = ['./myshka-app.html','./app/pocket-option.css','./app/pocket-option.js','./app/pocket-trade-ticket.js','./app/jev-laya-dashboard.js','./app/trader-video-dashboard.js','./app/photo-scan.js','./app/myshka-icon.svg','./myshka.webmanifest'];
 const JSON_FEEDS = ['data/trader-video-study.json','crypto_myshka/data/youtube_live.json','crypto_myshka/data/pair_reports.json','crypto_myshka/data/youtube_analysts.json','crypto_myshka/data/youtube_archive.json'];
 self.addEventListener('install',event=>{
