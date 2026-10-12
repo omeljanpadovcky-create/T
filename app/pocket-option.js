@@ -10,7 +10,8 @@
   const SCREENS=new Set(['home','analysis','history','archive','autodemo']);
   const LIMIT=300;
   const state={image:null,filename:'',crop:null,canvasWidth:0,canvasHeight:0,
-    dragStart:null,dragging:false,ai:null,cloudReady:false,model:'',provider:'',loading:false};
+    dragStart:null,dragging:false,ai:null,cloudReady:false,model:'',provider:'',loading:false,
+    lastError:'',lastErrorCode:''};
   const fmt=(n,d=2)=>Number.isFinite(Number(n))?Number(n).toLocaleString('uk-UA',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
   const localJournal=()=>{
     try {
@@ -98,7 +99,7 @@
   function imageStatus(text){$('image-info').textContent=text;}
   function resetScan(text){
     $('scan-output').textContent=text||'Локальний сканер описує минулі свічки. Жодних прогнозів без перевіреної відповіді JEV.';
-    state.ai=null;renderVerdict(null);
+    state.ai=null;state.lastError='';state.lastErrorCode='';renderVerdict(null);
     updateAIButton();
   }
   function drawCanvas(){
@@ -224,7 +225,8 @@
   }
   function getAnalysisState(){
     return {hasImage:Boolean(state.image),cloudReady:Boolean(state.cloudReady),
-      loading:Boolean(state.loading),hasHypothesis:Boolean(state.ai)};
+      loading:Boolean(state.loading),hasHypothesis:Boolean(state.ai),
+      lastError:state.lastError,lastErrorCode:state.lastErrorCode};
   }
   function updateAIButton(){
     $('run-pocket-ai').disabled=!state.image||state.loading;
@@ -232,19 +234,26 @@
       $('ai-status').textContent='Хмарний JEV аналізує обрізаний графік…';
     else if(!state.image)
       $('ai-status').textContent=state.cloudReady?
-        '✅ Каталог API доступний. Додай свіжий скриншот свічок: підключення саме по собі не дає BUY / SELL.':
+        '✅ Каталог API доступний. Додай свіжий скриншот: підключення не створює сигнал.':
         'Додай скриншот графіка й підключи хмарний JEV.';
+    else if(state.lastError)
+      $('ai-status').textContent='⚠️ ПОМИЛКА JEV'+
+        (state.lastErrorCode?' ['+state.lastErrorCode+']':'')+': '+state.lastError+
+        ' Фото залишилось завантаженим; після усунення проблеми повтори аналіз.';
     else if(!state.cloudReady)
-      $('ai-status').textContent='Фото готове. Перевір підключення хмарного JEV нижче.';
+      $('ai-status').textContent='Фото готове. Перевір підключення хмарного JEV.';
     else if(state.ai)
-      $('ai-status').textContent='Є дослідницька оцінка JEV. Для нової оцінки завантаж свіже фото графіка.';
+      $('ai-status').textContent=state.ai.direction==='STOP'?
+        '⏸ JEV утримався: '+state.ai.reason:
+        '✅ Хмарний JEV повернув '+state.ai.direction+
+        '. Це дослідницька гіпотеза без перевірки котирувань.';
     else
       $('ai-status').textContent='✅ Фото й API готові. Натисни «Аналізувати фото JEV».';
     window.dispatchEvent(new CustomEvent('crypto-myshka-analysis-state-change'));
   }
   async function connectCloud(){
     const access=$('cloud-access').value.trim();
-    state.cloudReady=false;
+    state.cloudReady=false;state.lastError='';state.lastErrorCode='';
     state.ai=null;renderVerdict(null,'Підключення AI перевіряється. Поки що гіпотези немає.');
     updateAIButton();
     if(access.length<24){$('cloud-status').textContent='Код доступу має містити щонайменше 24 символи.';return;}
@@ -275,7 +284,8 @@
   }
   function forgetCloud(){
     try{sessionStorage.removeItem(CLOUD_SESSION_KEY);}catch{}
-    state.ai=null;renderVerdict(null,'Підключення вимкнене — нових гіпотез немає.');
+    state.ai=null;state.lastError='';state.lastErrorCode='';
+    renderVerdict(null,'Підключення вимкнене — нових гіпотез немає.');
     $('cloud-access').value='';
     state.cloudReady=false;state.provider='';state.model='';
     setCloudLabel('☁️ JEV · не підключено');
@@ -294,7 +304,7 @@
       $('ai-status').textContent='⚠️ Не підключено хмарний JEV. Введи код і натисни «Перевірити підключення».';
       toast('Спочатку підключи хмарний JEV.');return;
     }
-    state.ai=null;renderVerdict(null);
+    state.ai=null;state.lastError='';state.lastErrorCode='';renderVerdict(null);
     state.loading=true;updateAIButton();
     try{
       const endpoint=cloudEndpoint(),access=$('cloud-access').value.trim();
@@ -307,7 +317,11 @@
           expiry_seconds:pref.expiry,payout_pct:pref.payout,image}),
         cache:'no-store',signal:AbortSignal.timeout(34000)});
       const data=await response.json().catch(()=>({}));
-      if(!response.ok)throw Error(data.error||'Хмарний JEV повернув HTTP '+response.status);
+      if(!response.ok){
+        const message=typeof data.error==='string'?data.error:'Хмарний JEV повернув HTTP '+response.status;
+        const err=new Error(message);err.code=typeof data.code==='string'?data.code:'HTTP_'+response.status;
+        throw err;
+      }
       if(data.mode!=='screenshot_hypothesis'||data.orders_enabled!==false||
         data.quotes_verified!==false||data.broker_verified!==false||
         data.signal_validated!==false||!['UP','DOWN','STOP'].includes(data.direction)||
@@ -323,15 +337,20 @@
         created:new Date().toISOString(),payout:pref.payout,stake:pref.stake,
         source:'pocket_cloud_screenshot',broker_verified:false,quotes_verified:false,
         signal_validated:false,picture_only:true};
+      state.lastError='';state.lastErrorCode='';
       renderVerdict(state.ai);
-      $('ai-status').textContent='✅ Хмарний JEV повернув '+direction+
-        '. Це дослідницька гіпотеза лише за фото, без підтвердження брокера.';
       $('scan-output').textContent=observations.length?'ОЗНАКИ НА ФОТО (AI, не перевірені котируваннями):\n'+
         observations.map((s,i)=>(i+1)+'. '+s).join('\n'):'AI не встановив достатньо ознак для напрямку. Рішення STOP.';
     }catch(e){
       state.ai=null;
-      renderVerdict(null,'Хмарна модель не дала перевірюваного висновку.');
-      $('ai-status').textContent='⚠️ '+String(e.message||e)+'. Демопрогноз не створено.';
+      state.lastError=e?.name==='TimeoutError'?
+        'Запит не завершився за 34 секунди. Можливі затримка або ліміт APInex.':
+        e?.name==='TypeError'?
+          'Не вдалося виконати мережевий запит. Перевір зʼєднання, CORS або доступність Vercel.':
+          String(e?.message||'Невідома помилка аналізу.');
+      state.lastErrorCode=typeof e?.code==='string'?e.code.slice(0,40):
+        e?.name==='TimeoutError'?'CLIENT_TIMEOUT':'';
+      renderVerdict(null,'⚠️ '+state.lastError+'\nСтарий результат не використовується. BUY/SELL не підсвічуються.');
     }finally{state.loading=false;updateAIButton();}
   }
   function recordPaper(){
@@ -475,7 +494,7 @@
     $('cloud-connect').addEventListener('click',connectCloud);
     $('cloud-forget').addEventListener('click',forgetCloud);
     ['cloud-endpoint','cloud-access'].forEach(id=>$(id).addEventListener('input',()=>{
-      state.cloudReady=false;state.ai=null;
+      state.cloudReady=false;state.ai=null;state.lastError='';state.lastErrorCode='';
       renderVerdict(null,'Параметри доступу змінені — перепідключи хмарний JEV.');
       updateAIButton();
     }));
