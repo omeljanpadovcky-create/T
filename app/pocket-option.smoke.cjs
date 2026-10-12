@@ -65,6 +65,13 @@ async function main(){
   assert.doesNotMatch(d.querySelector('#screen-analysis').textContent,/Bybit V5|Master Traders|TSLAUSDT/);
   assert.equal(d.querySelector('#screen-analysis').hidden,false);
   const press=sel=>{const el=d.querySelector(sel);assert.ok(el,sel);el.click();return el;};
+  assert.match(d.querySelector('#ticket-guide-action').textContent,/Додати фото/);
+  let filePickerCalls=0;
+  const photoInput=d.querySelector('#pocket-photo'),originalPhotoClick=photoInput.click.bind(photoInput);
+  photoInput.click=()=>{filePickerCalls++;};
+  press('#ticket-guide-action');
+  assert.equal(filePickerCalls,1,'the demo ticket opens screenshot picker');
+  photoInput.click=originalPhotoClick;
   press('.mobile-nav [data-go="history"]');
   assert.equal(d.querySelector('#screen-history').hidden,false);
   press('.mobile-nav [data-go="analysis"]');
@@ -72,7 +79,11 @@ async function main(){
   d.querySelector('#cloud-access').value='a'.repeat(32);
   press('#cloud-connect');
   await new Promise(r=>setTimeout(r,20));
-  assert.match(d.querySelector('#cloud-status').textContent,/Pocket API та .* підключено/);
+  assert.match(d.querySelector('#cloud-status').textContent,/Каталог .* відповідає/);
+  assert.equal(w.cryptoMyshkaPocket.getAnalysisState().cloudReady,true);
+  assert.equal(w.cryptoMyshkaPocket.getAnalysisState().hasImage,false);
+  assert.match(d.querySelector('#ai-status').textContent,/Додай свіжий скриншот/);
+  assert.match(d.querySelector('#ticket-guide-note').textContent,/API доступний/);
   const png=w.document.createElement('input');
   const fake=new w.File([new Uint8Array([137,80,78,71,13,10,26,10,...new Array(300).fill(1)])],
     'pocket.png',{type:'image/png'});
@@ -83,6 +94,7 @@ async function main(){
   await new Promise(r=>setTimeout(r,75));
   assert.equal(d.querySelector('#photo-stage').hidden,false);
   assert.equal(d.querySelector('#run-pocket-ai').disabled,false);
+  assert.match(d.querySelector('#ticket-guide-action').textContent,/Аналізувати фото JEV/);
   press('#scan-pixels');
   assert.match(d.querySelector('#scan-output').textContent,/МИНУЛІ СВІЧКИ/);
   assert.match(d.querySelector('#scan-output').textContent,/Падіння вже на фото/);
@@ -90,7 +102,7 @@ async function main(){
   assert.equal(w.cryptoMyshkaPocket.getScreenshotHypothesis(),null);
   assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),false);
   assert.equal(d.querySelector('#ticket-sell').classList.contains('jev-flash'),false);
-  press('#run-pocket-ai');
+  press('#ticket-guide-action');
   await new Promise(r=>setTimeout(r,30));
   assert.equal(usedCrop,true);
   assert.match(d.querySelector('#ai-direction').textContent,/BUY/);
