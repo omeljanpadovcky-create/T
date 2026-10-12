@@ -127,7 +127,7 @@ async function main(){
   // Fresh cloud image-based hypothesis highlights only the matching manual DEMO direction.
   assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),true);
   assert.equal(d.querySelector('#ticket-sell').classList.contains('jev-flash'),false);
-  assert.match(d.querySelector('#ticket-jev-hint').textContent,/лише для демо/);
+  assert.match(d.querySelector('#ticket-jev-hint').textContent,/лише для віртуального демо/);
   const originalGetter=w.cryptoMyshkaPocket.getScreenshotHypothesis;
   const fresh=originalGetter();
   assert.equal(fresh.source,'pocket_cloud_screenshot');
