@@ -11,7 +11,7 @@
   const LIMIT=300;
   const state={image:null,filename:'',crop:null,canvasWidth:0,canvasHeight:0,
     dragStart:null,dragging:false,ai:null,cloudReady:false,model:'',provider:'',loading:false,
-    lastError:'',lastErrorCode:'',localReport:null,localBusy:false};
+    lastError:'',lastErrorCode:'',localReport:null,localBusy:false,imageRevision:0};
   const fmt=(n,d=2)=>Number.isFinite(Number(n))?Number(n).toLocaleString('uk-UA',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
   const localJournal=()=>{
     try {
@@ -90,7 +90,8 @@
       heading.textContent='🔎 ЛОКАЛЬНО · '+localTrendLabel(local);
       heading.className='stop';
       reason.textContent=(local.message||'Свічки на фото не вдалося впевнено оцінити')+
-        '. Розпізнано '+(local.candidates||0)+' можливих свічкових елементів.';
+        '. Розпізнано '+(local.candidates||0)+' можливих свічкових елементів.'+
+        (local.structureText?' '+local.structureText:'');
       risk.textContent='⚠️ Це лише спостереження минулого руху. '+
         'Точність розпізнавання не є точністю прогнозів. '+
         'За одним скриншотом неможливо перевірити майбутню експірацію чи OTC-котирування.';
@@ -128,6 +129,7 @@
   function imageStatus(text){$('image-info').textContent=text;}
   function resetScan(text){
     $('scan-output').textContent=text||'Локальний сканер описує минулі свічки. Жодних прогнозів без перевіреної відповіді JEV.';
+    state.imageRevision++;
     state.ai=null;state.lastError='';state.lastErrorCode='';state.localReport=null;
     renderVerdict(null);updateAIButton();
   }
@@ -184,7 +186,8 @@
         $('empty-photo').hidden=true;$('photo-stage').hidden=false;
         pickAutoCrop();imageStatus(state.filename+' · '+img.naturalWidth+' × '+img.naturalHeight+
           ' · Минулий рух уже перевірено локально. Якщо рамка захопила меню — обведи лише свічки; аналіз повториться сам.');
-        updateAIButton();toast('Фото проаналізовано локально. Для окремого AI-прогнозу потрібна доступна модель.');
+        updateAIButton();toast('Фото проаналізовано локально. AI на ПК запуститься сам, якщо вже встановлений.');
+        void maybeAutoBrowserVision(state.imageRevision);
       };img.src=String(reader.result);
     };reader.readAsDataURL(file);
   }
@@ -267,15 +270,27 @@
       const red=Math.max(0,Math.round(Number(result.red)||0));
       const recent=green+red>0?'Останні розпізнані свічки: зелених '+green+
         ', червоних '+red+'. ':'';
+    const structure=result.structure&&reliable?result.structure:null;
+    const shortLabel=structure?.shortMove==='higher'?'Останні 6 свічок вище попередніх 6':
+      structure?.shortMove==='lower'?'Останні 6 свічок нижче попередніх 6':
+      structure?'Середня висота останніх 6 свічок майже не змінилась':'';
+    const highLow=structure?.highShape==='higher'&&structure?.lowShape==='higher'?
+      'У виділеній області вищі максимуми й мінімуми.':
+      structure?.highShape==='lower'&&structure?.lowShape==='lower'?
+      'У виділеній області нижчі максимуми й мінімуми.':
+      structure?'Максимуми й мінімуми не підтверджують один напрям.':'';
+    const recentColors=structure?
+      'Останні шість: '+structure.green+' зелених, '+structure.red+' червоних. ':'';
+    const structureText=structure?(shortLabel+'. '+highLow+' '+recentColors).trim():'';
       const qualityText=quality!==null?'Регулярність виявлених свічкоподібних контурів: '+quality+
         '/100 (НЕ точність прогнозів і НЕ доказ напряму). ':'';
       const message=(result.observedDirection||'Виявлено кольорові свічки.').slice(0,280);
       state.localReport={kind:'historical_only',direction:pastDirection,trendState,reliable,
-        candidates:count,qualityScore:quality,green,red,message,
+        candidates:count,qualityScore:quality,green,red,message,structureText,
         checkedAt:new Date().toISOString()};
       box.textContent='🧠 JEV LITE · ЛОКАЛЬНО БЕЗ API\nМИНУЛІ СВІЧКИ: '+label+
         '\nЗнайдено близько '+count+' свічкоподібних елементів.\n'+qualityText+recent+
-        '\n'+message+'\n⚠️ Це ЛИШЕ опис минулих пікселів на фото. '+
+        '\n'+message+(structureText?'\n'+structureText:'')+'\n⚠️ Це ЛИШЕ опис минулих пікселів на фото. '+
         'Немає доступу до OTC-котирувань і майбутньої свічки. '+
         'Локальний сканер НЕ створює торговий сигнал BUY / SELL. '+
         'Хмарний AI може бути недоступний через квоту.';
