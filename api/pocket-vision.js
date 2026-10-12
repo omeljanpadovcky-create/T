@@ -36,7 +36,7 @@ function imageType(bytes){
 export function parsePocketVision(raw,req){
   let d;
   try{d=JSON.parse(String(raw||'').trim().replace(/^\x60{3}(?:json)?\s*/i,'').replace(/\s*\x60{3}$/,'').trim());}
-  catch{return stop('AI не повернув придатний до перевірки JSON. Не вгадуємо напрям.');}
+  catch{return {...stop('AI не повернув придатний до перевірки JSON. Не вгадуємо напрям.'),parse_error:true};}
   if(!d||typeof d!=='object'||d.readable!==true)return stop('На виділеному графіку недостатньо читабельних свічок та індикаторів.');
   const direction=['UP','DOWN','STOP'].includes(d.direction)?d.direction:'STOP';
   const reason=typeof d.reason==='string'?d.reason.trim().slice(0,550):'';
@@ -54,6 +54,38 @@ export function parsePocketVision(raw,req){
     return stop('Модель не назвала дві незалежні конкретні ознаки на графіку.',risk);
   return {...stop(reason,risk),direction,reason,risk,observations,picture_only:true,
     timeframe_seconds:req.chart_timeframe_seconds,expiry_seconds:req.expiry_seconds};
+}
+
+function upstreamProblem(status){
+  if(status===400)return {status:502,code:'MODEL_REQUEST_REJECTED',
+    error:'APInex відхилив формат запиту до моделі (HTTP 400). Перевір JEV_APINEX_MODEL і підтримку зображень.'};
+  if(status===401||status===403)return {status:502,code:'PROVIDER_ACCESS_DENIED',
+    error:'AI-провайдер відмовив у доступі до моделі (HTTP '+status+'). Перевір права API-ключа і модель.'};
+  if(status===402)return {status:402,code:'PROVIDER_CREDITS',
+    error:'APInex вимагає доступний баланс або квоту для цієї моделі (HTTP 402). Фото не проаналізовано.'};
+  if(status===404)return {status:502,code:'MODEL_NOT_FOUND',
+    error:'Модель не знайдена в AI-провайдера (HTTP 404). Перевір JEV_APINEX_MODEL у Vercel.'};
+  if(status===413)return {status:413,code:'PROVIDER_IMAGE_LIMIT',
+    error:'AI-провайдер відхилив завелике зображення. Зменши виділену область графіка.'};
+  if(status===429)return {status:429,code:'PROVIDER_RATE_LIMIT',
+    error:'Зараз вичерпано ліміт запитів AI-провайдера (HTTP 429).'};
+  if(status>=500)return {status:502,code:'PROVIDER_UNAVAILABLE',
+    error:'Сервер AI-провайдера тимчасово недоступний (HTTP '+status+').'};
+  return {status:502,code:'PROVIDER_REQUEST_FAILED',
+    error:'AI-провайдер не прийняв запит (HTTP '+status+').'};
+}
+function visibleAnswer(data,gemini){
+  if(gemini){
+    const parts=data?.candidates?.[0]?.content?.parts;
+    return Array.isArray(parts)?parts.map(p=>typeof p?.text==='string'?p.text:'').join(''):'';
+  }
+  const message=data?.choices?.[0]?.message;
+  const content=message?.content;
+  if(typeof content==='string')return content;
+  if(Array.isArray(content))return content.map(p=>typeof p?.text==='string'?p.text:'').join('');
+  if(content&&typeof content==='object')return JSON.stringify(content);
+  if(message?.parsed&&typeof message.parsed==='object')return JSON.stringify(message.parsed);
+  return '';
 }
 const SYSTEM=String.raw`Ти JEV — обережний дослідник СКРІНШОТІВ Pocket Option.
 Оцінюй лише видимі свічки, імпульс, підтримку/опір, moving average або RSI ТІЛЬКИ коли індикатор справді видно.
@@ -100,29 +132,47 @@ export default async function handler(req,res){
   const payload=gemini?{
     systemInstruction:{parts:[{text:SYSTEM}]},
     contents:[{role:'user',parts:[{text:prompt},{inlineData:{mimeType:mime,data:image}}]}],
-    generationConfig:{temperature:0,responseMimeType:'application/json',maxOutputTokens:750}
+    generationConfig:{temperature:0,responseMimeType:'application/json',maxOutputTokens:1500}
   }:{
-    model:p.model,temperature:0,stream:false,max_tokens:750,
+    model:p.model,temperature:0,stream:false,max_tokens:1800,
     messages:[{role:'system',content:SYSTEM},{role:'user',content:[
       {type:'text',text:prompt},{type:'image_url',image_url:{url:'data:'+mime+';base64,'+image}}]}]
   };
   try{
     const response=await fetch(url,{method:'POST',headers,body:JSON.stringify(payload),
       signal:AbortSignal.timeout(27000)});
-    if(!response.ok)return res.status(response.status===402?402:response.status===429?429:502).json({
-      error:response.status===402?'HTTP 402: AI-провайдер обмежив доступ. Фото НЕ проаналізовано.':
-        response.status===429?'Вичерпано квоту AI-провайдера.':
-        'AI відхилив запит (HTTP '+response.status+'). Фото НЕ проаналізовано.'});
-    const data=await response.json();
-    const content=data?.choices?.[0]?.message?.content;
-    const raw=gemini?(data?.candidates?.[0]?.content?.parts||[]).map(x=>x.text||'').join(''):
-      typeof content==='string'?content:Array.isArray(content)?content.map(x=>x.text||'').join(''):'';
+    if(!response.ok){
+      const issue=upstreamProblem(response.status);
+      // Deliberately never log raw upstream responses, images, API keys or headers.
+      console.warn('[JEV Pocket Vision] provider request failed, status:',response.status);
+      return res.status(issue.status).json({...issue,provider:p.name,model:p.model,retryable:
+        response.status===429||response.status>=500});
+    }
+    const data=await response.json().catch(()=>null);
+    if(!data||typeof data!=='object')
+      return res.status(502).json({code:'MODEL_INVALID_RESPONSE',
+        error:'Провайдер надіслав пошкоджену відповідь замість JSON.',retryable:true});
+    const raw=visibleAnswer(data,gemini);
+    if(!raw.trim()){
+      const reason=data?.choices?.[0]?.finish_reason||data?.candidates?.[0]?.finishReason||'';
+      return res.status(502).json({code:reason==='length'||reason==='MAX_TOKENS'?
+          'MODEL_OUTPUT_TRUNCATED':'MODEL_EMPTY_OUTPUT',
+        error:reason==='length'||reason==='MAX_TOKENS'?
+          'Моделі не вистачило токенів для відповіді. Повтори запит або зміни модель.':
+          'Модель не повернула текстового результату аналізу фото. Перевір, чи обрана модель підтримує зображення.',
+        provider:p.name,model:p.model,retryable:true});
+    }
     const parsed=parsePocketVision(raw,{pair,chart_timeframe_seconds:timeframe,expiry_seconds:expiry});
+    if(parsed.parse_error)
+      return res.status(502).json({code:'MODEL_INVALID_JSON',
+        error:'AI повернув текст не у форматі JSON. Не можна видати його за прогноз. Перевір модель або повтори запит.',
+        provider:p.name,model:p.model,retryable:true});
     return res.status(200).json({...parsed,provider:p.name,model:p.model,
       pair_selected:pair,payout_pct:payout,expiry_seconds:expiry,
       chart_timeframe_seconds:timeframe,received_at:new Date().toISOString()});
   }catch(e){
-    return res.status(504).json({error:e?.name==='TimeoutError'?'Модель не відповіла за 27 секунд.':
-      'Немає зв’язку з AI. Аналіз фото не відбувся.'});
+    return res.status(504).json({code:e?.name==='TimeoutError'?'MODEL_TIMEOUT':'PROVIDER_NETWORK_ERROR',
+      error:e?.name==='TimeoutError'?'Модель не відповіла за 27 секунд.':
+        'Немає зв’язку з AI. Аналіз фото не відбувся.',retryable:true});
   }
 }
