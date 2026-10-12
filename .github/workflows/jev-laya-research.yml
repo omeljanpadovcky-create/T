@@ -85,10 +85,10 @@ jobs:
   # This is ACTUAL Laya training, separate from the inexpensive baseline.
   # It is manual due model download and CPU training cost; artifact is NOT auto-deployed.
   finetune-laya-checkpoint:
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.finetune_laya }}
+    if: (github.event_name == 'workflow_dispatch' && inputs.finetune_laya) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[laya-train-once]'))
     needs: labeled-market-learning
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 30
     permissions:
       contents: read
     steps:
@@ -108,7 +108,7 @@ jobs:
             --text-column state --label-column direction \
             --instructions "Classify the next 5-minute Kraken close from historical indicators only." \
             --base english --out build/jev-laya/checkpoint \
-            --device cpu --freeze-encoder --epochs 2 \
+            --device cpu --freeze-encoder --epochs 1 \
             --micro-batch 4 --grad-accum 8 \
             --eval-data build/jev-laya/test.csv
       - name: Save trained Laya weights for review, NOT trading
