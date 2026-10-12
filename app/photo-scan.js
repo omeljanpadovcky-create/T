@@ -209,12 +209,39 @@
       visualDirection==='up'?'up':
       visualDirection==='down'?'down':
       Math.abs(globalDrift)<.15&&Math.abs(edgeDrift)<.17?'sideways':'mixed';
+    // Last-12 candle-like shapes: recent structure is an observation, NOT a
+    // probability, a verified OHLC feed, or a future-direction classifier.
+    let structure=null;
+    if(reliable&&ordered.length>=12){
+      const previous=ordered.slice(-12,-6),recent=ordered.slice(-6);
+      const previousY=median(previous.map(p=>p.y));
+      const recentY=median(recent.map(p=>p.y));
+      const normalizer=Math.max(1,range);
+      const delta=(previousY-recentY)/normalizer; // image y increases downward
+      const shortMove=delta>=.12?'higher':delta<=-.12?'lower':'flat';
+      const leftHigh=median(previous.map(p=>p.minY)),rightHigh=median(recent.map(p=>p.minY));
+      const leftLow=median(previous.map(p=>p.maxY)),rightLow=median(recent.map(p=>p.maxY));
+      const offset=.055*normalizer;
+      const highShape=rightHigh<leftHigh-offset?'higher':
+        rightHigh>leftHigh+offset?'lower':'similar';
+      const lowShape=rightLow<leftLow-offset?'higher':
+        rightLow>leftLow+offset?'lower':'similar';
+      let sameColor=1;
+      for(let j=ordered.length-2;j>=0&&sameColor<6;j--){
+        if(ordered[j].color!==ordered[j+1].color)break;
+        sameColor++;
+      }
+      structure={sample:12,recent:6,green:recent.filter(p=>p.color===1).length,
+        red:recent.filter(p=>p.color===2).length,shortMove,highShape,lowShape,
+        finalColor:ordered[ordered.length-1].color===1?'green':'red',
+        sameColor};
+    }
     const observedDirection=partial?'Недостатньо елементів для оцінки переміщення':
       visualDirection==='up'?'Пізніші елементи вище попередніх (лише зображення)':
       visualDirection==='down'?'Пізніші елементи нижче попередніх (лише зображення)':
       trendState==='sideways'?'На фото переважає боковий рух, чіткої тенденції немає':
       'Різні ділянки графіка суперечать одна одній (лише зображення)';
-    return {recognized:true,partial,reliable,qualityScore,trendState,stableGaps,stableWidths,detectorAgreement,edgeShare,visualDirection,candidates:found.length,
+    return {recognized:true,partial,reliable,qualityScore,trendState,structure,stableGaps,stableWidths,detectorAgreement,edgeShare,visualDirection,candidates:found.length,
       componentCandidates:cc.length,columnCandidates:cols.length,method:columnMode?'column':'regions',
       green:last.filter(x=>x.color===1).length,red:last.filter(x=>x.color===2).length,sample:last.length,
       observedDirection,xSpreadRatio:disp.spread/w,globalDrift,edgeDrift,
