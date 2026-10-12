@@ -71,19 +71,40 @@
     $('home-checked').textContent=String(done.length);
     const last=rows[0];$('home-last').textContent=last?(last.direction==='UP'?'↑':last.direction==='DOWN'?'↓':'⏸')+' '+last.pair:'—';
   }
+  function localTrendLabel(report){
+    if(!report||report.reliable!==true)return '⚠️ СВІЧКИ НЕ РОЗПІЗНАНО НАДІЙНО';
+    if(report.trendState==='sideways')return '↔ БОКОВИЙ РУХ НА ФОТО';
+    if(report.trendState==='mixed')return '↕ СУПЕРЕЧЛИВИЙ РУХ НА ФОТО';
+    if(report.direction==='up')return '↑ МИНУЛИЙ РУХ УГОРУ';
+    if(report.direction==='down')return '↓ МИНУЛИЙ РУХ УНИЗ';
+    return '⏸ ЧІТКОГО НАПРЯМУ НЕМАЄ';
+  }
   function renderVerdict(answer,notice){
     const heading=$('ai-direction'),reason=$('ai-reason'),risk=$('ai-risk'),meta=$('ai-meta');
     const direction=answer&&['UP','DOWN','STOP'].includes(answer.direction)?answer.direction:'NONE';
-    heading.textContent=direction==='UP'?'↑ BUY · гіпотеза JEV':
-      direction==='DOWN'?'↓ SELL · гіпотеза JEV':
-      direction==='STOP'?'⏸ СТОП · утриматися':'⏳ ОЧІКУЄМО АНАЛІЗУ JEV';
-    heading.className=direction==='UP'?'up':direction==='DOWN'?'down':'stop';
-    reason.textContent=answer?.reason||notice||
-      'Це не прогноз STOP: JEV ще не отримав відповіді. Додай фото, підключи хмарний JEV та натисни «Аналізувати фото».';
-
-    risk.textContent=answer?.risk?'Ризик: '+answer.risk:'';
-    meta.textContent=answer?'Джерело: тільки обраний скріншот · '+(answer.provider||'AI')+
-      ' · горизонт '+answer.expiry+' с · OTC-котирування незалежно не перевірені · результат НЕ гарантується.':'';
+    const local=!answer?state.localReport:null;
+    if(local){
+      heading.textContent='🔎 ЛОКАЛЬНО · '+localTrendLabel(local);
+      heading.className='stop';
+      reason.textContent=(local.message||'Свічки на фото не вдалося впевнено оцінити')+
+        '. Розпізнано '+(local.candidates||0)+' можливих свічкових елементів.';
+      risk.textContent='⚠️ Це лише спостереження минулого руху. '+
+        'Точність розпізнавання не є точністю прогнозів. '+
+        'За одним скриншотом неможливо перевірити майбутню експірацію чи OTC-котирування.';
+      meta.textContent='Локальний розбір готовий · без API та грошей · '+
+        (state.lastErrorCode==='PROVIDER_CREDITS'?'хмарна модель недоступна через квоту · ':'')+
+        'не AI-прогноз, не рекомендація BUY/SELL.';
+    }else{
+      heading.textContent=direction==='UP'?'↑ BUY · гіпотеза JEV':
+        direction==='DOWN'?'↓ SELL · гіпотеза JEV':
+        direction==='STOP'?'⏸ СТОП · утриматися':'⏳ ОЧІКУЄМО АНАЛІЗУ JEV';
+      heading.className=direction==='UP'?'up':direction==='DOWN'?'down':'stop';
+      reason.textContent=answer?.reason||notice||
+        'Скріншот не завантажено. Додай фото — локальний розбір з’явиться автоматично.';
+      risk.textContent=answer?.risk?'Ризик: '+answer.risk:'';
+      meta.textContent=answer?'Джерело: тільки обраний скріншот · '+(answer.provider||'AI')+
+        ' · горизонт '+answer.expiry+' с · OTC-котирування незалежно не перевірені · результат НЕ гарантується.':'';
+    }
     $('save-paper').disabled=!state.ai;
     window.dispatchEvent(new CustomEvent('crypto-myshka-jev-verdict-change'));
   }
@@ -215,8 +236,8 @@
         .getImageData(0,0,canvas.width,canvas.height));
       if(!result?.recognized){
         const reason=String(result?.reason||'Свічки не розпізнано').slice(0,320);
-        state.localReport={kind:'historical_only',direction:'unknown',reliable:false,
-          candidates:Math.max(0,Number(result?.candidates)||0),message:reason};
+        state.localReport={kind:'historical_only',direction:'unknown',trendState:'unreliable',
+          reliable:false,candidates:Math.max(0,Number(result?.candidates)||0),message:reason};
         box.textContent='🟠 ЛОКАЛЬНО · НЕДОСТАТНЬО ДАНИХ\n'+reason+
           '\nВиділи лише свічки на графіку й повтори. Рух наступної свічки невідомий.';
         return state.localReport;
@@ -224,8 +245,13 @@
       const reliable=result.reliable===true&&result.partial!==true;
       const pastDirection=reliable&&['up','down'].includes(result.visualDirection)?
         result.visualDirection:'unknown';
+      const trendState=result.trendState||(!reliable?'unreliable':
+        pastDirection!=='unknown'?pastDirection:'mixed');
       const label=pastDirection==='up'?'↑ Зростання вже на фото':
-        pastDirection==='down'?'↓ Падіння вже на фото':'— Напрям історичного руху ненадійний';
+        pastDirection==='down'?'↓ Падіння вже на фото':
+        trendState==='sideways'?'↔ Боковий рух · немає вираженого тренду':
+        trendState==='mixed'?'↕ Суперечливі ділянки · напрям не підтверджено':
+        '— Напрям історичного руху ненадійний';
       const count=Math.max(0,Math.round(Number(result.candidates)||0));
       const quality=Number.isFinite(Number(result.qualityScore))?
         Math.max(0,Math.min(100,Math.round(Number(result.qualityScore)))):null;
@@ -233,10 +259,10 @@
       const red=Math.max(0,Math.round(Number(result.red)||0));
       const recent=green+red>0?'Останні розпізнані свічки: зелених '+green+
         ', червоних '+red+'. ':'';
-      const qualityText=quality!==null?'Оцінка якості розпізнавання: '+quality+
-        '/100 (НЕ ймовірність прогнозу). ':'';
+      const qualityText=quality!==null?'Регулярність виявлених свічкоподібних контурів: '+quality+
+        '/100 (НЕ точність прогнозів і НЕ доказ напряму). ':'';
       const message=(result.observedDirection||'Виявлено кольорові свічки.').slice(0,280);
-      state.localReport={kind:'historical_only',direction:pastDirection,reliable,
+      state.localReport={kind:'historical_only',direction:pastDirection,trendState,reliable,
         candidates:count,qualityScore:quality,green,red,message,
         checkedAt:new Date().toISOString()};
       box.textContent='🧠 JEV LITE · ЛОКАЛЬНО БЕЗ API\nМИНУЛІ СВІЧКИ: '+label+
@@ -253,6 +279,7 @@
         '\nЖодного результату на наступну експірацію немає.';
       return state.localReport;
     }finally{
+      if(!state.ai)renderVerdict(null);
       window.dispatchEvent(new CustomEvent('crypto-myshka-analysis-state-change'));
     }
   }
