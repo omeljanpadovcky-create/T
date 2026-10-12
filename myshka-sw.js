@@ -1,5 +1,5 @@
 /* Scope is /T/ on GitHub Pages. Do not intercept or cache legacy app routes. */
-const VERSION = 'myshka-app-shell-v33-free-browser-vision';
+const VERSION = 'myshka-app-shell-v34-candle-structure-auto-local-ai';
 const STATIC = ['./myshka-app.html','./app/pocket-option.css','./app/pocket-option.js','./app/pocket-trade-ticket.js','./app/jev-laya-dashboard.js','./app/trader-video-dashboard.js','./app/photo-scan.js','./app/browser-vision.js','./app/myshka-icon.svg','./myshka.webmanifest'];
 const JSON_FEEDS = ['data/trader-video-study.json','crypto_myshka/data/youtube_live.json','crypto_myshka/data/pair_reports.json','crypto_myshka/data/youtube_analysts.json','crypto_myshka/data/youtube_archive.json'];
 self.addEventListener('install',event=>{
