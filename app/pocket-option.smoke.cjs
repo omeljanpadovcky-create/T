@@ -15,7 +15,9 @@ async function main(){
   w.confirm=()=>true;
   w.cryptoMyshkaPhotoScan={
     findChartBounds:()=>({x:20,y:15,w:330,h:185}),
-    analyzePixels:()=>({recognized:true,visualDirection:'down',candidates:25,observedDirection:'Пізніші свічки нижче'})
+    analyzePixels:()=>({recognized:true,visualDirection:'down',candidates:25,
+      reliable:true,partial:false,qualityScore:83,green:2,red:5,
+      observedDirection:'Пізніші свічки нижче'})
   };
   let usedCrop=false;
   w.HTMLCanvasElement.prototype.getContext=function(){
@@ -182,8 +184,21 @@ async function main(){
   assert.match(d.querySelector('#ai-status').textContent,/HTTP 402/);
   assert.match(d.querySelector('#ai-reason').textContent,/APInex/);
   assert.match(d.querySelector('#ticket-jev-direction').textContent,/Помилка аналізу/);
-  assert.match(d.querySelector('#ticket-guide-action').textContent,/Повторити аналіз/);
+  assert.match(d.querySelector('#ticket-guide-action').textContent,/Сканувати локально/);
   assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),false);
+  assert.match(d.querySelector('#scan-output').textContent,/JEV LITE/);
+  assert.match(d.querySelector('#scan-output').textContent,/МИНУЛІ СВІЧКИ/);
+  assert.match(d.querySelector('#scan-output').textContent,/НЕ створює торговий сигнал/);
+  assert.equal(w.cryptoMyshkaPocket.getScreenshotHypothesis(),null);
+  assert.equal(w.cryptoMyshkaPocket.getAnalysisState().localReport.kind,'historical_only');
+  assert.equal(w.cryptoMyshkaPocket.getAnalysisState().localReport.direction,'down');
+  assert.equal(d.querySelector('#ticket-offline-result').hidden,false);
+  assert.match(d.querySelector('#ticket-offline-result').textContent,/минулі/i);
+  assert.match(d.querySelector('#ticket-offline-result').textContent,/Не дає BUY\/SELL/);
+  const callsBeforeLocal=requests.length;
+  press('#ticket-guide-action');
+  assert.equal(requests.length,callsBeforeLocal,
+    'local mode must not call any paid AI provider');
   visionProblem=null;
   // Changing credentials must clear the previous result rather than keep glowing.
   d.querySelector('#cloud-access').value='new-access-code';
