@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-11T23:52:11.721563+00:00",
+  "updated_at": "2026-10-12T06:22:24.214152+00:00",
   "mode": "educational_video_context",
   "channels": [
     {
@@ -193,7 +193,7 @@
         },
         {
           "id": "e9_ai0mgpts",
-          "title": "Сложный процент в трейдинге: как он работает и почему трейдеры сливают депозит | Психология Торговли",
+          "title": "Compound Interest in Trading: How It Works and Why Traders Blow Their Accounts | Trading Psychology",
           "url": "https://www.youtube.com/watch?v=e9_ai0mgpts",
           "upload_date": null,
           "analysis": {
@@ -241,13 +241,15 @@
         },
         {
           "id": "ElfSeIVxRH8",
-          "title": "+134,000₽ за Торговую Сессию | Торговля по Техническому Анализу + СТОХАСТИК | Обучение для новичков",
+          "title": "+134,000₽ in One Trading Session | Trading with Technical Analysis + STOCHASTIC | Training for Be...",
           "url": "https://www.youtube.com/watch?v=ElfSeIVxRH8",
           "upload_date": null,
           "analysis": {
             "mentioned_instruments": [],
             "mentioned_timeframes": [],
-            "mentioned_indicators": [],
+            "mentioned_indicators": [
+              "STOCHASTIC"
+            ],
             "content_excerpt": "",
             "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
             "instrument": "Не визначено",
@@ -337,7 +339,7 @@
         },
         {
           "id": "fzVB8L6GQRM",
-          "title": "Review of \"The Fortress\": Our Private Trading Community",
+          "title": "Обзор на \" Крепость Борщева \" | Наше закрытое комьюнити трейдеров",
           "url": "https://www.youtube.com/watch?v=fzVB8L6GQRM",
           "upload_date": null,
           "analysis": {
