@@ -10,6 +10,7 @@ on:
       - 'myshka-sw.js'
       - 'app/pocket-option.js'
       - 'app/pocket-trade-ticket.js'
+      - 'app/jev-laya-dashboard.js'
       - 'app/pocket-option.css'
       - 'app/pocket-option.smoke.cjs'
       - 'app/photo-scan.js'
@@ -34,6 +35,7 @@ jobs:
         run: |
           node --check app/pocket-option.js
           node --check app/pocket-trade-ticket.js
+          node --check app/jev-laya-dashboard.js
           node --check app/photo-scan.js
           node --check api/pocket-vision.js
           node --check jev_api/api/pocket-vision.js
@@ -64,6 +66,7 @@ jobs:
           assert 'app/pocket-option.js' in text
           assert 'app/pocket-trade-ticket.js' in text
           assert 'id="ticket-buy"' in text and 'id="ticket-sell"' in text
+          assert 'id="jev-laya-research"' in text and 'app/jev-laya-dashboard.js' in text
           assert 'app/bybit-fast-analysis.js' not in text
           print('Pocket Lab manifest and five-screen structure OK')
           PY
