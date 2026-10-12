@@ -137,6 +137,19 @@
 <div class="card"><h2>📊 Історична перевірка JEV · BTC M1</h2><p class="hint">Walk-forward: сигнал розраховано лише за минулими свічками, результат — за наступною завершеною свічкою Kraken. Це окрема перевірка BTC, не точність фотоаналізу Pocket Option.</p><div id="auto-backtest" class="journal" aria-live="polite"><p class="hint">Очікуємо наступного запуску GitHub Actions…</p></div></div>
 <div class="card"><h2>Останні демоугоди</h2><div id="auto-trades" class="journal"><p class="hint">Поки завантажується…</p></div></div>
 <p class="hint">Джерело фонового аналізу — публічні хвилинні свічки Kraken, а не Pocket Option OTC. Ціни входу/виходу — наближені ціни закритих свічок. Це експериментальна симуляція, а не підтверджена прибуткова стратегія.</p>
+<section class="card" id="video-trader-study" aria-label="Дослідження стратегії трейдера з двох відео">
+<div class="section-title"><h2>🎬 JEV · Трейдер із відео</h2><span class="pill">ЛИШЕ DEMO · KRAKEN 5M</span></div>
+<p class="hint">Із двох відео взяли лише <strong>ідею спостерігати за трендом, свічками й точкою входу</strong>. Точних правил, цін і підтверджених результатів чужих угод не видно достатньо чітко, тому ці гіпотези <strong>не є копією трейдера</strong>. Мишка окремо перевіряє два правила: підтвердження після відкату і пробій діапазону. Показаний дохід — не доказ.</p>
+<p id="video-study-status" class="hint" role="status">Перевіряємо дослідницький звіт…</p>
+<div class="statgrid">
+<div class="stat"><small>Закриті свічки / дані</small><strong id="video-study-market">Kraken 5m</strong></div>
+<div class="stat"><small>Форвард WIN / LOSS</small><strong id="video-study-forward">—</strong></div>
+<div class="stat"><small>Доказ переваги</small><strong id="video-study-edge">Немає</strong></div>
+</div>
+<div id="video-study-strategies" class="journal" aria-live="polite"><p class="hint">Після першого запуску зʼявляться окремі результати двох стратегій-кандидатів.</p></div>
+<p class="hint"><strong>Важливо:</strong> форвард-перевірка означає, що JEV записує гіпотезу до появи наступної завершеної свічки. Якщо підтверджених входів мало, висновок про точність робити не можна. Pocket Option OTC не підключено. Жодних ставок.</p>
+<div class="actions"><a class="btn" href="https://github.com/omeljanpadovcky-create/T/actions/workflows/trader-video-study.yml" target="_blank" rel="noopener noreferrer">⚙ Запуски перевірки</a><button id="video-study-refresh" type="button" class="btn">↻ Оновити статистику</button></div>
+</section>
 <section class="card" id="jev-laya-research" aria-label="JEV Laya дослідницьке навчання">
 <div class="section-title"><h2>🧠 Laya · лабораторія навчання</h2><span class="pill">KRAKEN 5M · RESEARCH</span></div>
 <p class="hint">Фоновий підбір навчальних прикладів із закритих криптосвічок і перевірка на окремій хронологічній вибірці. Це <strong>не Pocket Option OTC</strong> і не автоматична реальна торгівля. Базовий класифікатор і майбутня Laya — різні моделі.</p>
@@ -181,5 +194,6 @@
 <script defer src="./app/pocket-trade-ticket.js?v=20261011-buy-sell-demo1"></script>
 <script defer src="./app/auto-dashboard.js?v=20261011-backtest1"></script>
 <script defer src="./app/jev-laya-dashboard.js?v=20261013-research1"></script>
+<script defer src="./app/trader-video-dashboard.js?v=20261013-study1"></script>
 </body>
 </html>
