@@ -1,0 +1,122 @@
+{
+  "version": 1,
+  "trained_at": "2026-10-12T21:19:32+00:00",
+  "source": "Kraken public spot 5m",
+  "not_pocket_option": true,
+  "not_pocket_otc": true,
+  "real_orders": false,
+  "automated_broker_copy": false,
+  "model": "multinomial_logistic_baseline_not_laya",
+  "laya_status": "labeled_dataset_prepared; checkpoint_not_trained",
+  "features": [
+    "ema_gap",
+    "momentum_3",
+    "momentum_12",
+    "rsi",
+    "volatility",
+    "volume_ratio"
+  ],
+  "pair_samples": {
+    "BTC/USDT": {
+      "candles": 720,
+      "train": 441,
+      "calibration": 83,
+      "test": 105,
+      "last_closed_bar": 1791839400
+    },
+    "ETH/USDT": {
+      "candles": 720,
+      "train": 441,
+      "calibration": 83,
+      "test": 105,
+      "last_closed_bar": 1791839400
+    },
+    "SOL/USDT": {
+      "candles": 720,
+      "train": 441,
+      "calibration": 83,
+      "test": 105,
+      "last_closed_bar": 1791839400
+    }
+  },
+  "source_errors": {},
+  "calibration_check": {
+    "examples": 249,
+    "classification_accuracy": 0.2048,
+    "predicted_trades": 5,
+    "wins": 2,
+    "losses": 3,
+    "ties": 0,
+    "stops": 244,
+    "win_rate_excluding_ties": 0.4,
+    "win_rate_wilson_lower_95pct": 0.1176,
+    "hypothetical_pnl_usdt": -11.6,
+    "classes": {
+      "UP": {
+        "STOP": 85,
+        "UP": 1,
+        "DOWN": 3
+      },
+      "DOWN": {
+        "STOP": 109
+      },
+      "STOP": {
+        "STOP": 50,
+        "UP": 1
+      }
+    },
+    "label_definition": "UP/DOWN if next close changes >=2 bps; STOP if abs change <2 bps",
+    "assumed_binary_payout": 0.92,
+    "hypothetical_stake": 10
+  },
+  "chronological_purged_holdout": {
+    "examples": 315,
+    "classification_accuracy": 0.1968,
+    "predicted_trades": 1,
+    "wins": 0,
+    "losses": 1,
+    "ties": 0,
+    "stops": 314,
+    "win_rate_excluding_ties": 0.0,
+    "win_rate_wilson_lower_95pct": 0.0,
+    "hypothetical_pnl_usdt": -10.0,
+    "classes": {
+      "UP": {
+        "STOP": 125
+      },
+      "DOWN": {
+        "STOP": 127,
+        "UP": 1
+      },
+      "STOP": {
+        "STOP": 62
+      }
+    },
+    "label_definition": "UP/DOWN if next close changes >=2 bps; STOP if abs change <2 bps",
+    "assumed_binary_payout": 0.92,
+    "hypothetical_stake": 10
+  },
+  "break_even_win_rate": 0.5208,
+  "research_quality_gate_passed": false,
+  "latest_research_classification": {
+    "BTC/USDT": {
+      "direction_research_only": "STOP",
+      "last_closed_bar": 1791839400
+    },
+    "ETH/USDT": {
+      "direction_research_only": "STOP",
+      "last_closed_bar": 1791839400
+    },
+    "SOL/USDT": {
+      "direction_research_only": "STOP",
+      "last_closed_bar": 1791839400
+    }
+  },
+  "limitations": [
+    "Backtest uses closed 5m Kraken prices, no executable Pocket Option prices.",
+    "STOP is a small-future-movement label and is not an actionable optimal policy.",
+    "Confidence softmax is not calibrated; selection thresholds pre-fixed.",
+    "Overlapping sequences and nonstationary markets make small holdouts unreliable.",
+    "No brokerage execution; no real investment recommendation."
+  ]
+}
