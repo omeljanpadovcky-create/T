@@ -113,6 +113,17 @@
     }else if(pulseBuy||pulseSell){
       $('ticket-jev-direction').textContent=pulseBuy?'↑ BUY · гіпотеза JEV':'↓ SELL · гіпотеза JEV';
       caption.textContent='⚡ Візуальна підказка лише для демо · оцінка зі скриншота, не сигнал брокера · ще '+Math.ceil((freshnessMs-ageMs)/1000)+' с';
+    }else if(state.localReport&&!insight){
+      const rep=state.localReport;
+      const localLabel=rep.reliable!==true?'недостатньо даних':
+        rep.trendState==='sideways'?'боковик':
+        rep.trendState==='mixed'?'суперечливий рух':
+        rep.direction==='up'?'минулий ріст':
+        rep.direction==='down'?'минулий спад':'без чіткого тренду';
+      $('ticket-jev-direction').textContent='🔎 Локальний розбір · '+localLabel;
+      caption.textContent='Фото проаналізоване безплатно. Це лише минулі свічки: '+
+        'прогноз BUY/SELL не підтверджений'+
+        (state.lastErrorCode==='PROVIDER_CREDITS'?' · APInex HTTP 402, квоту вичерпано.':'.');
     }else if(state.lastError){
       $('ticket-jev-direction').textContent='⚠️ Помилка аналізу JEV';
       caption.textContent=(state.lastErrorCode?'['+state.lastErrorCode+'] ':'')+
