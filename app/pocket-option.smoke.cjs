@@ -33,12 +33,15 @@ async function main(){
     get src(){return this._src;}
   };
   const requests=[];
+  let visionProblem=null;
   w.fetch=async (url,opts={})=>{
     requests.push({url:String(url),opts});
     if(String(url).endsWith('/api/chart-health'))
       return {ok:true,status:200,json:async()=>({ready:true,provider:'gemini',
         model:'gemini-2.5-flash-lite',verified:false})};
     if(String(url).endsWith('/api/pocket-vision')){
+      if(visionProblem)return {ok:false,status:visionProblem.status,
+        json:async()=>({error:visionProblem.error,code:visionProblem.code})};
       if(!opts.method)return {ok:false,status:405,json:async()=>({error:'POST only'})};
       const body=JSON.parse(opts.body);
       assert.equal(body.pair,'EUR/USD OTC');
@@ -170,6 +173,18 @@ async function main(){
   winButton.click();
   records=JSON.parse(w.localStorage.getItem('crypto-myshka-pocket-paper-v1'));
   assert.equal(records[0].outcome,'hit');
+  visionProblem={status:402,code:'PROVIDER_CREDITS',
+    error:'APInex вимагає доступний баланс або квоту (HTTP 402).'};
+  press('.mobile-nav [data-go="analysis"]');
+  press('#run-pocket-ai');
+  await new Promise(resolve=>setTimeout(resolve,30));
+  assert.match(d.querySelector('#ai-status').textContent,/PROVIDER_CREDITS/);
+  assert.match(d.querySelector('#ai-status').textContent,/HTTP 402/);
+  assert.match(d.querySelector('#ai-reason').textContent,/APInex/);
+  assert.match(d.querySelector('#ticket-jev-direction').textContent,/Помилка аналізу/);
+  assert.match(d.querySelector('#ticket-guide-action').textContent,/Повторити аналіз/);
+  assert.equal(d.querySelector('#ticket-buy').classList.contains('jev-flash'),false);
+  visionProblem=null;
   // Changing credentials must clear the previous result rather than keep glowing.
   d.querySelector('#cloud-access').value='new-access-code';
   d.querySelector('#cloud-access').dispatchEvent(new w.Event('input',{bubbles:true}));
