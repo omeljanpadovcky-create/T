@@ -15,6 +15,7 @@ on:
       - 'app/pocket-option.css'
       - 'app/pocket-option.smoke.cjs'
       - 'app/photo-scan.js'
+      - 'app/photo-scan.test.cjs'
       - 'app/browser-vision.js'
       - 'api/pocket-vision.js'
       - 'jev_api/api/pocket-vision.js'
@@ -40,6 +41,7 @@ jobs:
           node --check app/jev-laya-dashboard.js
           node --check app/trader-video-dashboard.js
           node --check app/photo-scan.js
+          node --check app/photo-scan.test.cjs
           node --check app/browser-vision.js
           node --check api/pocket-vision.js
           node --check jev_api/api/pocket-vision.js
@@ -76,6 +78,8 @@ jobs:
           assert 'app/bybit-fast-analysis.js' not in text
           print('Pocket Lab manifest and five-screen structure OK')
           PY
+      - name: Real screenshot pixel geometry unit tests
+        run: node --test app/photo-scan.test.cjs
       - name: Test Pocket screenshot contract, honest STOP and market isolation
         run: node --test jev_api/tests/pocket-vision.test.js
       - name: Install DOM test dependency
