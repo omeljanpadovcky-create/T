@@ -91,3 +91,11 @@
   .ticket-button.jev-flash:not(:disabled){animation:none;will-change:auto;
     filter:brightness(1.18);box-shadow:0 0 0 4px rgba(var(--jev-glow),.85),0 0 24px rgba(var(--jev-glow),.65)}
 }
+
+/* A visible next step when the cloud catalog is connected but no photo was analysed. */
+.ticket-quick-start{display:flex;flex-direction:column;gap:8px;margin:12px 0 15px}
+.ticket-guide-button{width:100%;min-height:48px;background:#254d74;border:1px solid #6398c6;
+  color:#fff;font-weight:800;border-radius:12px;box-shadow:0 2px 0 #142a45}
+.ticket-guide-button:hover:not(:disabled){background:#32638f}
+.ticket-guide-button:disabled{opacity:.65;cursor:progress}
+#ticket-guide-note{font-size:12px;line-height:1.5;color:#bdd0e7;display:block}
