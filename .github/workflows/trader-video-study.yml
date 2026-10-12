@@ -1,0 +1,76 @@
+name: JEV Trader Video Hypotheses · Paper Study
+
+on:
+  schedule:
+    # GitHub schedule is best effort. This is NOT a 24/7 live trading server.
+    - cron: '17,47 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/trader_video_study.py'
+      - '.github/workflows/trader-video-study.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: jev-trader-video-study
+  cancel-in-progress: false
+
+jobs:
+  video-hypothesis-study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify no-lookahead, dedupe and forward settlement
+        run: |
+          python -m py_compile scripts/trader_video_study.py
+          python scripts/trader_video_study.py --self-test
+      - name: Read closed Kraken candles and track only prospective paper outcomes
+        run: python scripts/trader_video_study.py
+      - name: Display evidence, never claim broker wins
+        run: |
+          python - <<'PY'
+          import json,os
+          r=json.load(open('data/trader-video-study.json'))
+          lines=['### JEV · trader-video hypotheses (not exact copied strategy)',
+                 'Source: '+r['price_source'],
+                 'No Pocket Option OTC feed. No copied trades or real orders.',
+                 'Latest scan: '+r['updated_at']]
+          for key,description in r['strategies'].items():
+              h=r['retrospective_final_20pct'][key]
+              f=r['forward_results'][key]
+              lines += [f'- {key}: {description}',
+                        f'  - Retrospective: {h["wins"]} WIN / {h["losses"]} LOSS / {h["ties"]} TIE',
+                        f'  - Forward (persisted before outcome): {f["wins"]} WIN / {f["losses"]} LOSS / {f["ties"]} TIE']
+          lines += ['Source errors: '+str(r['source_errors']), 'These results do NOT authorize trading.']
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as handle:
+              handle.write('\n'.join(lines)+'\n')
+          PY
+      - name: Commit report after resolving concurrent main branch commits
+        run: |
+          git config user.name "JEV Paper Research"
+          git config user.email "crypto-myshka@users.noreply.github.com"
+          cp data/trader-video-study.json /tmp/jev-trader-video-study.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/jev-trader-video-study.json data/trader-video-study.json
+            git add data/trader-video-study.json
+            if git diff --cached --quiet; then
+              echo "No new records"
+              exit 0
+            fi
+            git commit -m "chore: trader video research paper state [skip ci]"
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 4
+          done
+          echo "Could not save paper research because main moved repeatedly"
+          exit 1
