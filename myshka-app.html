@@ -56,12 +56,12 @@
 
 <div class="pocket-terminal-grid">
 <div class="card pocket-chart-card">
-<div class="section-title"><h2>2. Скріншот графіка · автосканування</h2><span class="pill safe">ЛОКАЛЬНО · БЕЗ КЛЮЧА</span></div>
+<div class="section-title"><h2>2. Фото → автоматичний розбір графіка</h2><span class="pill safe">ЛОКАЛЬНО · БЕЗ КЛЮЧА</span></div>
 <div class="actions"><label class="btn primary" for="pocket-photo">📷 Обрати фото</label><input id="pocket-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden><button class="btn" id="paste-photo" type="button">Вставити з буфера</button><button class="btn" id="clear-photo" type="button">Очистити фото</button></div>
-<p class="hint"><strong>Просто додай скриншот — локальна Мишка відразу опише минулі свічки, без реєстрації та APInex.</strong> Фото не покидає пристрій у локальному режимі. Ctrl+V після Win+Shift+S. Якщо рамка захопила меню — обведи лише графік, аналіз повториться автоматично. Прогноз наступної свічки можливий лише через окремий доступний AI.</p>
+<p class="hint"><strong>Просто додай скриншот — Мишка відразу перевірить напрям і структуру вже намальованих свічок, без реєстрації та APInex.</strong> Фото не покидає пристрій у локальному режимі. Ctrl+V після Win+Shift+S. Якщо рамка захопила меню — обведи лише графік, аналіз повториться автоматично. Якщо на сумісному ПК вже встановлена локальна AI-модель, її дослідницька оцінка запуститься автоматично; на телефоні залишиться аналіз минулих свічок. Це не перевірений прогноз наступної експірації.</p>
 <div id="empty-photo" class="dropzone" tabindex="0">📉<strong>Тут з’явиться графік Pocket Option</strong><span>Завантаж скріншот або встав зображення</span></div>
 <div id="photo-stage" class="photo-stage" hidden><canvas id="pocket-canvas" aria-label="Обведи мишею або пальцем область свічкового графіка"></canvas><p id="image-info" class="hint"></p><div class="actions"><button id="auto-crop" class="btn" type="button">⤢ Знайти свічки</button><button id="reset-crop" class="btn" type="button">↺ Скинути область</button><button id="scan-pixels" class="btn" type="button">🔬 Безоплатний аналіз минулих свічок</button><button id="local-ai-vision" class="btn" type="button">🤖 AI на ПК · без API-ключа</button></div></div>
-<p id="local-ai-status" class="hint" role="status">AI без ключа доступний лише в підтримуваному браузері Chrome на ПК; якщо модель відсутня, залишиться звичайний розбір свічок.</p><div id="scan-output" class="scan-result" role="status" aria-live="polite">📷 Додай фото — автоматично отримаєш локальний розбір минулих свічок, без API-ключа й оплат. Це не прогноз ціни.</div>
+<p id="local-ai-status" class="hint" role="status">Мишка перевірить локальний AI після завантаження фото. Якщо його немає на пристрої, залишиться безкоштовний аналіз минулих свічок.</p><div id="scan-output" class="scan-result" role="status" aria-live="polite">📷 Додай фото — автоматично отримаєш локальний розбір минулих свічок, без API-ключа й оплат. Це не прогноз ціни.</div>
 </div>
 <aside class="card pocket-demo-ticket" aria-label="Віртуальна угода BUY SELL">
   <div class="ticket-topline"><span>🐭 MYSHKA TERMINAL</span><strong>DEMO ONLY</strong></div>
@@ -102,7 +102,7 @@
 
 <div class="card focus-card" id="pocket-ai-card">
 <div class="section-title"><h2>3. Гіпотеза JEV</h2><span class="pill safe">DEMO · NO AUTO-TRADE</span></div>
-<p class="hint"><strong>Два режими:</strong> локальний сканер безкоштовно аналізує <em>минулі свічки</em> на фото навіть при помилці APInex HTTP 402. Хмарний JEV окремо формує дослідницьку гіпотезу UP / DOWN / STOP, якщо модель доступна. Фото надсилається до API лише після натискання «Аналізувати фото JEV». Локальний сканер не прогнозує майбутню експірацію, хмарна гіпотеза не підтверджена OTC-котируваннями.</p>
+<p class="hint"><strong>Два режими:</strong> локальний сканер безкоштовно аналізує <em>минулі свічки</em> на фото навіть при помилці APInex HTTP 402. Хмарний JEV окремо формує дослідницьку гіпотезу UP / DOWN / STOP, якщо модель доступна. Фото надсилається до API лише після натискання «Аналізувати фото JEV». Локальний сканер не прогнозує майбутню експірацію. Якщо локальна модель Chrome вже встановлена, дослідницька оцінка фото запускається автоматично, без оплати APInex. Жодна AI-гіпотеза не підтверджена OTC-котируваннями.</p>
 <div class="notice" id="cloud-config">
 <strong>☁️ Хмарний JEV · підключення</strong>
 <div class="form-grid" style="margin-top:10px">
@@ -191,9 +191,9 @@
 </div>
 <nav class="mobile-nav" aria-label="Мобільна навігація"><button data-go="home">⌂<small>Головна</small></button><button data-go="analysis">▥<small>Аналіз</small></button><button data-go="history">◷<small>Демо</small></button><button data-go="archive">▤<small>База</small></button><button type="button" data-go="autodemo">🐭<small>Автодемо</small></button></nav>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
-<script defer src="./app/photo-scan.js?v=20261013-trend-state3"></script>
+<script defer src="./app/photo-scan.js?v=20261013-candle-structure4"></script>
 <script defer src="./app/browser-vision.js?v=20261013-desktop-ai1"></script>
-<script defer src="./app/pocket-option.js?v=20261013-local-vision7"></script>
+<script defer src="./app/pocket-option.js?v=20261013-auto-free8"></script>
 <script defer src="./app/pocket-trade-ticket.js?v=20261013-local-vision7"></script>
 <script defer src="./app/auto-dashboard.js?v=20261011-backtest1"></script>
 <script defer src="./app/jev-laya-dashboard.js?v=20261013-research1"></script>
