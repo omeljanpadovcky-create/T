@@ -44,6 +44,11 @@
         guideNote.textContent=state.cloudReady?
           '✅ API доступний. Для оцінки UP / DOWN / STOP потрібен свіжий скриншот.':
           'Перший крок — додай фото, далі підключи хмарний JEV.';
+      }else if(state.lastError){
+        guide.textContent=state.cloudReady?'↻ Повторити аналіз фото':'🔑 Перевірити підключення JEV';
+        guide.disabled=false;
+        guideNote.textContent='⚠️ '+(state.lastErrorCode?'['+state.lastErrorCode+'] ':'')+
+          state.lastError.slice(0,240);
       }else if(!state.cloudReady){
         guide.textContent='🔑 Перевірити підключення JEV';
         guide.disabled=false;
@@ -87,6 +92,10 @@
     }else if(pulseBuy||pulseSell){
       $('ticket-jev-direction').textContent=pulseBuy?'↑ BUY · гіпотеза JEV':'↓ SELL · гіпотеза JEV';
       caption.textContent='⚡ Візуальна підказка лише для демо · оцінка зі скриншота, не сигнал брокера · ще '+Math.ceil((freshnessMs-ageMs)/1000)+' с';
+    }else if(state.lastError){
+      $('ticket-jev-direction').textContent='⚠️ Помилка аналізу JEV';
+      caption.textContent=(state.lastErrorCode?'['+state.lastErrorCode+'] ':'')+
+        state.lastError.slice(0,240);
     }else if(insight?.direction==='STOP'){
       $('ticket-jev-direction').textContent='⏸ СТОП · JEV утримався';
       caption.textContent='AI не підтримав напрям. Жодних кнопок із сигналом.';
