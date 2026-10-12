@@ -11,7 +11,7 @@
   const LIMIT=300;
   const state={image:null,filename:'',crop:null,canvasWidth:0,canvasHeight:0,
     dragStart:null,dragging:false,ai:null,cloudReady:false,model:'',provider:'',loading:false,
-    lastError:'',lastErrorCode:'',localReport:null};
+    lastError:'',lastErrorCode:'',localReport:null,localBusy:false};
   const fmt=(n,d=2)=>Number.isFinite(Number(n))?Number(n).toLocaleString('uk-UA',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
   const localJournal=()=>{
     try {
@@ -95,27 +95,32 @@
         (state.lastErrorCode==='PROVIDER_CREDITS'?'хмарна модель недоступна через квоту · ':'')+
         'не AI-прогноз, не рекомендація BUY/SELL.';
     }else{
-      heading.textContent=direction==='UP'?'↑ BUY · гіпотеза JEV':
-        direction==='DOWN'?'↓ SELL · гіпотеза JEV':
+      const fromBrowser=answer?.source==='pocket_browser_hypothesis';
+      const label=fromBrowser?' · AI на ПК (демо)':' · гіпотеза JEV';
+      heading.textContent=direction==='UP'?'↑ BUY'+label:
+        direction==='DOWN'?'↓ SELL'+label:
         direction==='STOP'?'⏸ СТОП · утриматися':'⏳ ОЧІКУЄМО АНАЛІЗУ JEV';
       heading.className=direction==='UP'?'up':direction==='DOWN'?'down':'stop';
       reason.textContent=answer?.reason||notice||
         'Скріншот не завантажено. Додай фото — локальний розбір з’явиться автоматично.';
       risk.textContent=answer?.risk?'Ризик: '+answer.risk:'';
-      meta.textContent=answer?'Джерело: тільки обраний скріншот · '+(answer.provider||'AI')+
-        ' · горизонт '+answer.expiry+' с · OTC-котирування незалежно не перевірені · результат НЕ гарантується.':'';
+      meta.textContent=answer?'Джерело: '+(answer.source==='pocket_browser_hypothesis'?
+          'локальна модель Chrome на цьому ПК':'хмарна модель')+
+        ' · '+(answer.provider||'AI')+' · горизонт '+answer.expiry+
+        ' с · OTC-котирування незалежно не перевірені · результат НЕ гарантується.':'';
     }
     $('save-paper').disabled=!state.ai;
     window.dispatchEvent(new CustomEvent('crypto-myshka-jev-verdict-change'));
   }
   function getScreenshotHypothesis(){
     const a=state.ai;
-    if(!state.cloudReady||!a||a.source!=='pocket_cloud_screenshot'||
+    if(!a||!['pocket_cloud_screenshot','pocket_browser_hypothesis'].includes(a.source)||
+       (a.source==='pocket_cloud_screenshot'&&!state.cloudReady)||
        !['UP','DOWN','STOP'].includes(a.direction))return null;
     const p=getPrefs();
     if(a.pair!==p.pair||a.timeframe!==p.timeframe||a.expiry!==p.expiry)return null;
     return {direction:a.direction,created:a.created,expiry:a.expiry,source:a.source,
-      broker_verified:false,quotes_verified:false,signal_validated:false};
+      provider:a.provider,broker_verified:false,quotes_verified:false,signal_validated:false};
   }
   function imageStatus(text){$('image-info').textContent=text;}
   function resetScan(text){
@@ -304,8 +309,12 @@
   }
   function updateAIButton(){
     $('run-pocket-ai').disabled=!state.image||state.loading;
+    const desktopButton=$('local-ai-vision');
+    if(desktopButton)desktopButton.disabled=!state.image||state.loading;
     if(state.loading)
-      $('ai-status').textContent='Хмарний JEV аналізує обрізаний графік…';
+      $('ai-status').textContent=state.localBusy?
+        'Локальна AI-модель аналізує фото на цьому комп’ютері…':
+        'Хмарний JEV аналізує обрізаний графік…';
     else if(!state.image)
       $('ai-status').textContent=state.cloudReady?
         '✅ Каталог API доступний. Додай свіжий скриншот: підключення не створює сигнал.':
@@ -314,8 +323,13 @@
       $('ai-status').textContent='⚠️ ПОМИЛКА JEV'+
         (state.lastErrorCode?' ['+state.lastErrorCode+']':'')+': '+state.lastError+
         ' Фото залишилось завантаженим; після усунення проблеми повтори аналіз.';
+    else if(state.ai?.source==='pocket_browser_hypothesis')
+      $('ai-status').textContent=state.ai.direction==='STOP'?
+        '⏸ Локальна AI-модель утрималася: '+state.ai.reason:
+        '✅ Вбудована модель Chrome повернула '+state.ai.direction+
+        '. Лише дослідницька гіпотеза за фото, без перевірених OTC-котирувань.';
     else if(!state.cloudReady)
-      $('ai-status').textContent='Фото готове. Перевір підключення хмарного JEV.';
+      $('ai-status').textContent='Фото готове. Для хмарного AI потрібна квота. За підтримки браузера можна перевірити локальний AI на ПК.';
     else if(state.ai)
       $('ai-status').textContent=state.ai.direction==='STOP'?
         '⏸ JEV утримався: '+state.ai.reason:
@@ -365,6 +379,45 @@
     setCloudLabel('☁️ JEV · не підключено');
     $('cloud-status').textContent='Код із цієї вкладки очищено.';
     updateAIButton();
+  }
+  async function runBrowserAI(){
+    const note=$('local-ai-status');
+    if(state.loading||!state.image){note.textContent='Спочатку додай фото свічкового графіка.';return;}
+    if(!window.cryptoMyshkaBrowserVision?.analyze){
+      note.textContent='⚠️ Модуль локального AI не завантажився. Онови сторінку.';
+      return;
+    }
+    const prefs=getPrefs();
+    state.ai=null;state.localBusy=true;state.loading=true;
+    renderVerdict(null);updateAIButton();
+    try{
+      const answer=await window.cryptoMyshkaBrowserVision.analyze(croppedCanvas(),prefs,
+        message=>{note.textContent='⏳ '+String(message).slice(0,220);});
+      if(answer.orders_enabled!==false||answer.signal_validated!==false||
+         answer.quotes_verified!==false||answer.broker_verified!==false||
+         !['UP','DOWN','STOP'].includes(answer.direction))
+        throw Error('Локальна модель не повернула безпечну дослідницьку відповідь.');
+      if(answer.direction!=='STOP'&&(!Array.isArray(answer.observations)||answer.observations.length<2))
+        throw Error('Для напрямку потрібні щонайменше дві видимі ознаки.');
+      state.ai={direction:answer.direction,reason:answer.reason,risk:answer.risk,
+        observations:answer.observations||[],expiry:prefs.expiry,timeframe:prefs.timeframe,
+        pair:prefs.pair,payout:prefs.payout,stake:prefs.stake,
+        provider:'Chrome Gemini Nano (на пристрої)',model:'browser',
+        created:new Date().toISOString(),source:'pocket_browser_hypothesis',
+        signal_validated:false,quotes_verified:false,broker_verified:false,
+        picture_only:true};
+      renderVerdict(state.ai);
+      note.textContent='✅ Фото оброблено локально в Chrome, без APInex. '+(
+        answer.direction==='STOP'?'Обґрунтованого напрямку немає.':
+        'Гіпотеза '+answer.direction+' тільки для ручного DEMO-тесту, не реальна ставка.');
+    }catch(e){
+      state.ai=null;
+      note.textContent='⚠️ '+String(e?.message||'Вбудований AI недоступний').slice(0,320)+
+        ' Безкоштовний сканер минулих свічок залишається доступним.';
+      renderVerdict(null);
+    }finally{
+      state.localBusy=false;state.loading=false;updateAIButton();
+    }
   }
   async function runAI(){
     if(state.loading||!state.image)return;
@@ -584,6 +637,7 @@
       updateAIButton();
     }));
     $('run-pocket-ai').addEventListener('click',runAI);
+    $('local-ai-vision')?.addEventListener('click',runBrowserAI);
     $('save-paper').addEventListener('click',recordPaper);
     $('export-journal').addEventListener('click',exportJournal);
     $('clear-journal').addEventListener('click',()=>{
