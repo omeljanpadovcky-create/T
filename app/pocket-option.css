@@ -57,3 +57,37 @@
 .ticket-journal{width:100%;margin-top:12px}
 @media(max-width:1020px){.pocket-terminal-grid{grid-template-columns:1fr}.pocket-demo-ticket{position:static}.ticket-actions{grid-template-columns:1fr 1fr}.ticket-button{min-height:70px}}
 @media(max-width:480px){.ticket-button{font-size:20px;gap:8px}.ticket-button span{width:29px;height:29px}.pocket-demo-ticket{padding:16px}}
+
+/* The eye-catching pulse indicates ONLY a fresh, unverified screenshot hypothesis.
+   No simulated/trader data or past-frame scanner may enable this highlight. */
+.ticket-ai small{display:block;margin-top:7px;font-size:11px;line-height:1.55;color:#ffd89a}
+.ticket-button.buy{--jev-glow:39,255,125}
+.ticket-button.sell{--jev-glow:255,75,80}
+.ticket-button.jev-idle:not(:disabled){opacity:.52;filter:saturate(.6)}
+.ticket-button.jev-flash:not(:disabled){
+  position:relative;
+  opacity:1;
+  isolation:isolate;
+  outline:3px solid rgba(var(--jev-glow),.9);
+  outline-offset:2px;
+  animation:jev-demo-pulse 1.05s ease-in-out infinite;
+  will-change:transform,filter;
+}
+.ticket-button.jev-flash:not(:disabled)::after{
+  content:"DEMO · JEV";
+  position:absolute;
+  top:3px;right:9px;
+  font-size:10px;letter-spacing:.12em;
+  background:#10182bdc;color:#fff;
+  border:1px solid #ffffff80;
+  padding:3px 6px;border-radius:20px;
+  pointer-events:none;
+}
+@keyframes jev-demo-pulse{
+  0%,100%{transform:scale(1);filter:brightness(1);box-shadow:0 0 10px rgba(var(--jev-glow),.55),0 0 25px rgba(var(--jev-glow),.25),inset 0 0 4px #fff2}
+  50%{transform:scale(1.035);filter:brightness(1.45);box-shadow:0 0 24px rgba(var(--jev-glow),1),0 0 58px rgba(var(--jev-glow),.7),inset 0 0 20px #ffffff30}
+}
+@media(prefers-reduced-motion:reduce){
+  .ticket-button.jev-flash:not(:disabled){animation:none;will-change:auto;
+    filter:brightness(1.18);box-shadow:0 0 0 4px rgba(var(--jev-glow),.85),0 0 24px rgba(var(--jev-glow),.65)}
+}
