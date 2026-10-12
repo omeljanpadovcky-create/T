@@ -89,7 +89,7 @@
     const freshnessMs=Math.min(60000,Math.max(10000,Number(insight?.expiry||60)*1000));
     const ageMs=Date.now()-issuedAt;
     const fresh=Boolean(insight&&['UP','DOWN'].includes(insight.direction)&&
-      insight.source==='pocket_cloud_screenshot'&&
+      ['pocket_cloud_screenshot','pocket_browser_hypothesis'].includes(insight.source)&&
       insight.broker_verified===false&&insight.signal_validated===false&&
       Number.isFinite(issuedAt)&&ageMs>=0&&ageMs<freshnessMs);
     const records=read().filter(x=>x.source==='pocket_manual_demo');
@@ -111,8 +111,12 @@
       $('ticket-jev-direction').textContent='⏸ Є активна демоугода';
       caption.textContent='Підсвічування призупинене до завершення віртуальної угоди.';
     }else if(pulseBuy||pulseSell){
-      $('ticket-jev-direction').textContent=pulseBuy?'↑ BUY · гіпотеза JEV':'↓ SELL · гіпотеза JEV';
-      caption.textContent='⚡ Візуальна підказка лише для демо · оцінка зі скриншота, не сигнал брокера · ще '+Math.ceil((freshnessMs-ageMs)/1000)+' с';
+      const localAI=insight?.source==='pocket_browser_hypothesis';
+      $('ticket-jev-direction').textContent=(pulseBuy?'↑ BUY':'↓ SELL')+
+        (localAI?' · локальний AI на ПК':' · гіпотеза JEV');
+      caption.textContent='⚡ Візуальна підказка лише для віртуального демо · '+
+        (localAI?'Gemini Nano без APInex':'хмарний JEV')+
+        ' · НЕ підтверджений торговий сигнал · ще '+Math.ceil((freshnessMs-ageMs)/1000)+' с';
     }else if(state.localReport&&!insight){
       const rep=state.localReport;
       const localLabel=rep.reliable!==true?'недостатньо даних':
