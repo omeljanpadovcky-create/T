@@ -138,6 +138,19 @@
 <div class="card"><h2>Останні демоугоди</h2><div id="auto-trades" class="journal"><p class="hint">Поки завантажується…</p></div></div>
 <p class="hint">Джерело фонового аналізу — публічні хвилинні свічки Kraken, а не Pocket Option OTC. Ціни входу/виходу — наближені ціни закритих свічок. Це експериментальна симуляція, а не підтверджена прибуткова стратегія.</p>
 </section>
+<section class="card" id="jev-laya-research" aria-label="JEV Laya дослідницьке навчання">
+<div class="section-title"><h2>🧠 Laya · лабораторія навчання</h2><span class="pill">KRAKEN 5M · RESEARCH</span></div>
+<p class="hint">Фоновий підбір навчальних прикладів із закритих криптосвічок і перевірка на окремій хронологічній вибірці. Це <strong>не Pocket Option OTC</strong> і не автоматична реальна торгівля. Базовий класифікатор і майбутня Laya — різні моделі.</p>
+<p id="laya-status" class="hint" role="status">Завантаження звіту навчання…</p>
+<div class="statgrid">
+<div class="stat"><small>Навчальні приклади</small><strong id="laya-trained-count">—</strong></div>
+<div class="stat"><small>Нові дані для перевірки</small><strong id="laya-test-count">—</strong></div>
+<div class="stat"><small>Точність WIN / LOSS</small><strong id="laya-winrate">—</strong></div>
+</div>
+<p id="laya-compare" class="hint">Звіт з’явиться після першого успішного GitHub Actions.</p>
+<div class="actions"><a class="btn" href="https://github.com/omeljanpadovcky-create/T/actions/workflows/jev-laya-research.yml" target="_blank" rel="noopener">⚙ Навчання GitHub</a><button class="btn" type="button" id="laya-refresh">↻ Оновити звіт</button></div>
+</section>
+
 <section id="screen-history" data-screen="history" class="screen" hidden>
 <div class="overline">PAPER ONLY · LOCAL DEVICE</div><h1>Деможурнал</h1>
 <p class="lead">Записи доступні лише в цьому браузері. Результати позначаються вручну, не перевіряються Pocket Option і не використовуються для реальних ордерів.</p>
@@ -167,5 +180,6 @@
 <script defer src="./app/pocket-option.js?v=20261011-buy-sell-demo1"></script>
 <script defer src="./app/pocket-trade-ticket.js?v=20261011-buy-sell-demo1"></script>
 <script defer src="./app/auto-dashboard.js?v=20261011-backtest1"></script>
+<script defer src="./app/jev-laya-dashboard.js?v=20261013-research1"></script>
 </body>
 </html>
