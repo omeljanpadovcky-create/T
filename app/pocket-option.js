@@ -72,14 +72,28 @@
   }
   function renderVerdict(answer,notice){
     const heading=$('ai-direction'),reason=$('ai-reason'),risk=$('ai-risk'),meta=$('ai-meta');
-    const direction=answer&&['UP','DOWN'].includes(answer.direction)?answer.direction:'STOP';
-    heading.textContent=direction==='UP'?'↑ ВГОРУ · гіпотеза':direction==='DOWN'?'↓ ВНИЗ · гіпотеза':'⏸ СТОП';
+    const direction=answer&&['UP','DOWN','STOP'].includes(answer.direction)?answer.direction:'NONE';
+    heading.textContent=direction==='UP'?'↑ BUY · гіпотеза JEV':
+      direction==='DOWN'?'↓ SELL · гіпотеза JEV':
+      direction==='STOP'?'⏸ СТОП · утриматися':'⏳ ОЧІКУЄМО АНАЛІЗУ JEV';
     heading.className=direction==='UP'?'up':direction==='DOWN'?'down':'stop';
-    reason.textContent=answer?.reason||notice||'Без перевіреної відповіді AI не робимо висновків про наступний рух.';
+    reason.textContent=answer?.reason||notice||
+      'Це не прогноз STOP: JEV ще не отримав відповіді. Додай фото, підключи хмарний JEV та натисни «Аналізувати фото».';
+
     risk.textContent=answer?.risk?'Ризик: '+answer.risk:'';
     meta.textContent=answer?'Джерело: тільки обраний скріншот · '+(answer.provider||'AI')+
       ' · горизонт '+answer.expiry+' с · OTC-котирування незалежно не перевірені · результат НЕ гарантується.':'';
     $('save-paper').disabled=!state.ai;
+    window.dispatchEvent(new CustomEvent('crypto-myshka-jev-verdict-change'));
+  }
+  function getScreenshotHypothesis(){
+    const a=state.ai;
+    if(!state.cloudReady||!a||a.source!=='pocket_cloud_screenshot'||
+       !['UP','DOWN','STOP'].includes(a.direction))return null;
+    const p=getPrefs();
+    if(a.pair!==p.pair||a.timeframe!==p.timeframe||a.expiry!==p.expiry)return null;
+    return {direction:a.direction,created:a.created,expiry:a.expiry,source:a.source,
+      broker_verified:false,quotes_verified:false,signal_validated:false};
   }
   function imageStatus(text){$('image-info').textContent=text;}
   function resetScan(text){
@@ -216,7 +230,9 @@
   }
   async function connectCloud(){
     const access=$('cloud-access').value.trim();
-    state.cloudReady=false;updateAIButton();
+    state.cloudReady=false;
+    state.ai=null;renderVerdict(null,'Підключення AI перевіряється. Поки що гіпотези немає.');
+    updateAIButton();
     if(access.length<24){$('cloud-status').textContent='Код доступу має містити щонайменше 24 символи.';return;}
     let endpoint;
     try{endpoint=cloudEndpoint();}
@@ -243,6 +259,7 @@
   }
   function forgetCloud(){
     try{sessionStorage.removeItem(CLOUD_SESSION_KEY);}catch{}
+    state.ai=null;renderVerdict(null,'Підключення вимкнене — нових гіпотез немає.');
     $('cloud-access').value='';
     state.cloudReady=false;state.provider='';state.model='';
     setCloudLabel('☁️ JEV · не підключено');
@@ -441,8 +458,11 @@
     $('scan-pixels').addEventListener('click',scanPixels);
     $('cloud-connect').addEventListener('click',connectCloud);
     $('cloud-forget').addEventListener('click',forgetCloud);
-    $('cloud-endpoint').addEventListener('input',()=>{state.cloudReady=false;updateAIButton();});
-    $('cloud-access').addEventListener('input',()=>{state.cloudReady=false;updateAIButton();});
+    ['cloud-endpoint','cloud-access'].forEach(id=>$(id).addEventListener('input',()=>{
+      state.cloudReady=false;state.ai=null;
+      renderVerdict(null,'Параметри доступу змінені — перепідключи хмарний JEV.');
+      updateAIButton();
+    }));
     $('run-pocket-ai').addEventListener('click',runAI);
     $('save-paper').addEventListener('click',recordPaper);
     $('export-journal').addEventListener('click',exportJournal);
@@ -470,5 +490,5 @@
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
   else init();
-  window.cryptoMyshkaPocket={getPrefs,getJournal:localJournal};
+  window.cryptoMyshkaPocket={getPrefs,getJournal:localJournal,getScreenshotHypothesis};
 })();
