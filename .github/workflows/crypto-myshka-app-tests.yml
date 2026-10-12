@@ -15,6 +15,7 @@ on:
       - 'app/pocket-option.css'
       - 'app/pocket-option.smoke.cjs'
       - 'app/photo-scan.js'
+      - 'app/browser-vision.js'
       - 'api/pocket-vision.js'
       - 'jev_api/api/pocket-vision.js'
       - 'jev_api/tests/pocket-vision.test.js'
@@ -39,6 +40,7 @@ jobs:
           node --check app/jev-laya-dashboard.js
           node --check app/trader-video-dashboard.js
           node --check app/photo-scan.js
+          node --check app/browser-vision.js
           node --check api/pocket-vision.js
           node --check jev_api/api/pocket-vision.js
           node --check myshka-sw.js
@@ -66,6 +68,7 @@ jobs:
           assert all(i in c.ids for i in required), set(required)-c.ids
           text=Path('myshka-app.html').read_text()
           assert 'app/pocket-option.js' in text
+          assert 'app/browser-vision.js' in text and 'id="local-ai-vision"' in text
           assert 'app/pocket-trade-ticket.js' in text
           assert 'id="ticket-buy"' in text and 'id="ticket-sell"' in text
           assert 'id="jev-laya-research"' in text and 'app/jev-laya-dashboard.js' in text
