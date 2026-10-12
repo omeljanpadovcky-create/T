@@ -31,13 +31,45 @@
     $('ticket-payout-pct').textContent=Number.isFinite(p.payout)?'+'+fmt(p.payout)+'%':'—';
     $('ticket-payout-profit').textContent=valid(p)?
       'Прибуток за WIN: +'+fmt(p.stake*p.payout/100)+' $':'Перевір суму й виплату';
-    const direction=$('ai-direction')?.textContent||'';
-    $('ticket-jev-direction').textContent=direction.includes('ВГОРУ')?'↑ UP · гіпотеза JEV':
-      direction.includes('ВНИЗ')?'↓ DOWN · гіпотеза JEV':'⏸ STOP / немає гіпотези';
+    const insight=window.cryptoMyshkaPocket?.getScreenshotHypothesis?.()||null;
+    const issuedAt=Date.parse(insight?.created||'');
+    const freshnessMs=Math.min(60000,Math.max(10000,Number(insight?.expiry||60)*1000));
+    const ageMs=Date.now()-issuedAt;
+    const fresh=Boolean(insight&&['UP','DOWN'].includes(insight.direction)&&
+      insight.source==='pocket_cloud_screenshot'&&
+      insight.broker_verified===false&&insight.signal_validated===false&&
+      Number.isFinite(issuedAt)&&ageMs>=0&&ageMs<freshnessMs);
     const records=read().filter(x=>x.source==='pocket_manual_demo');
     const active=records.find(x=>x.outcome==='pending'&&Date.parse(x.expiresAt)>Date.now());
     const last=records[0];
     $('ticket-buy').disabled=$('ticket-sell').disabled=!valid(p)||Boolean(active);
+    const pulseBuy=fresh&&insight.direction==='UP'&&!$('ticket-buy').disabled;
+    const pulseSell=fresh&&insight.direction==='DOWN'&&!$('ticket-sell').disabled;
+    $('ticket-buy').classList.toggle('jev-flash',pulseBuy);
+    $('ticket-sell').classList.toggle('jev-flash',pulseSell);
+    $('ticket-buy').classList.toggle('jev-idle',pulseSell);
+    $('ticket-sell').classList.toggle('jev-idle',pulseBuy);
+    $('ticket-buy').setAttribute('aria-description',pulseBuy?
+      'Пульсує за дослідницькою гіпотезою JEV; лише демоугода, прогноз не перевірений.':'Віртуальна ручна угода, без реального ордера.');
+    $('ticket-sell').setAttribute('aria-description',pulseSell?
+      'Пульсує за дослідницькою гіпотезою JEV; лише демоугода, прогноз не перевірений.':'Віртуальна ручна угода, без реального ордера.');
+    const caption=$('ticket-jev-hint');
+    if(active){
+      $('ticket-jev-direction').textContent='⏸ Є активна демоугода';
+      caption.textContent='Підсвічування призупинене до завершення віртуальної угоди.';
+    }else if(pulseBuy||pulseSell){
+      $('ticket-jev-direction').textContent=pulseBuy?'↑ BUY · гіпотеза JEV':'↓ SELL · гіпотеза JEV';
+      caption.textContent='⚡ Візуальна підказка лише для демо · оцінка зі скриншота, не сигнал брокера · ще '+Math.ceil((freshnessMs-ageMs)/1000)+' с';
+    }else if(insight?.direction==='STOP'){
+      $('ticket-jev-direction').textContent='⏸ СТОП · JEV утримався';
+      caption.textContent='AI не підтримав напрям. Жодних кнопок із сигналом.';
+    }else if(insight&&['UP','DOWN'].includes(insight.direction)){
+      $('ticket-jev-direction').textContent='⌛ Гіпотеза застаріла';
+      caption.textContent='Зроби нове фото та запусти JEV знову. Старий прогноз не підсвічується.';
+    }else{
+      $('ticket-jev-direction').textContent='⏳ Немає оцінки JEV';
+      caption.textContent='Додай фото й отримай відповідь хмарного JEV, щоб увімкнути підсвічування.';
+    }
     if(active){
       $('ticket-countdown').textContent=elapsed(active.expiresAt);
       $('ticket-order-status').textContent=(active.direction==='UP'?'↗ BUY':'↘ SELL')+
@@ -96,6 +128,7 @@
     ['pocket-pair','custom-pair','pocket-expiry','pocket-payout','pocket-stake']
       .forEach(id=>$(id)?.addEventListener('input',refresh));
     window.addEventListener('storage',refresh);
+    window.addEventListener('crypto-myshka-jev-verdict-change',refresh);
     refresh();
     setInterval(()=>{if(!$('screen-analysis').hidden)refresh();},1000);
   }
