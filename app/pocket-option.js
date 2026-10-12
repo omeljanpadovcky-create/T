@@ -326,7 +326,8 @@
       localReport:state.localReport};
   }
   function updateAIButton(){
-    $('run-pocket-ai').disabled=!state.image||state.loading;
+    $('run-pocket-ai').disabled=!state.image||state.loading||
+      state.lastErrorCode==='PROVIDER_CREDITS';
     const desktopButton=$('local-ai-vision');
     if(desktopButton)desktopButton.disabled=!state.image||state.loading;
     if(state.loading)
@@ -340,7 +341,9 @@
     else if(state.lastError)
       $('ai-status').textContent='⚠️ ПОМИЛКА JEV'+
         (state.lastErrorCode?' ['+state.lastErrorCode+']':'')+': '+state.lastError+
-        ' Фото залишилось завантаженим; після усунення проблеми повтори аналіз.';
+        (state.lastErrorCode==='PROVIDER_CREDITS'?
+          ' Цей хмарний режим недоступний без квоти. Можна скористатися локальним сканером або AI на сумісному ПК.':
+          ' Фото залишилось завантаженим; після усунення проблеми повтори аналіз.');
     else if(state.ai?.source==='pocket_browser_hypothesis')
       $('ai-status').textContent=state.ai.direction==='STOP'?
         '⏸ Локальна AI-модель утрималася: '+state.ai.reason:
@@ -525,6 +528,9 @@
           String(e?.message||'Невідома помилка аналізу.');
       state.lastErrorCode=typeof e?.code==='string'?e.code.slice(0,40):
         e?.name==='TimeoutError'?'CLIENT_TIMEOUT':'';
+      if(state.lastErrorCode==='PROVIDER_CREDITS')
+        $('cloud-status').textContent='⚠️ APInex відповідає, але квоти для аналізу фото немає (HTTP 402). '+
+          'Перевірка каталогу не означає, що модель доступна. Локальний аналіз працює без API.';
       renderVerdict(null,'⚠️ '+state.lastError+
         '\\nСтарий результат не використовується. BUY/SELL не підсвічуються.');
       // A paid provider's HTTP 402/429 must not make the offline historical
