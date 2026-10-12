@@ -19,6 +19,7 @@ async function main(){
     findChartBounds:()=>({x:20,y:15,w:330,h:185}),
     analyzePixels:()=>{scanCalls++;return {recognized:true,visualDirection:'down',candidates:25,
       reliable:true,partial:false,qualityScore:83,green:2,red:5,
+      structure:{sample:12,recent:6,green:2,red:4,shortMove:'lower',highShape:'lower',lowShape:'lower'},
       observedDirection:'Пізніші свічки нижче'};}
   };
   let usedCrop=false;
@@ -106,6 +107,8 @@ async function main(){
   assert.match(d.querySelector('#scan-output').textContent,/JEV LITE/);
   assert.equal(w.cryptoMyshkaPocket.getAnalysisState().localReport.kind,'historical_only');
   assert.equal(w.cryptoMyshkaPocket.getAnalysisState().localReport.direction,'down');
+  assert.match(d.querySelector('#ai-reason').textContent,/Останні 6 свічок нижче/);
+  assert.match(d.querySelector('#scan-output').textContent,/нижчі максимуми й мінімуми/);
   assert.equal(requests.length,requestsBeforeUpload,'automatic scan must not call paid provider');
   const beforeRecrop=scanCalls;
   press('#reset-crop');
@@ -228,10 +231,12 @@ async function main(){
   await new Promise(resolve=>setTimeout(resolve,15));
   assert.match(d.querySelector('#local-ai-status').textContent,/не підтримує вбудований AI/);
   assert.equal(requests.length,networkBeforeLocal);
+  let devicePromptCount=0;
   w.LanguageModel={
     availability:async()=> 'available',
     create:async()=>({
       prompt:async(input)=>{
+        devicePromptCount++;
         assert.equal(input[0].content[1].type,'image');
         return JSON.stringify({readable:true,direction:'DOWN',
           reason:'The last candles have lower observed highs and short downward slope.',
@@ -253,8 +258,19 @@ async function main(){
   assert.match(d.querySelector('#ai-direction').textContent,/AI на ПК/);
   assert.match(d.querySelector('#local-ai-status').textContent,/без APInex/);
   assert.equal(requests.length,networkBeforeLocal,'device AI must not call cloud');
+  assert.equal(devicePromptCount,1);
+  // A previously downloaded model starts automatically for subsequent uploads.
+  const nextImage=new w.Event('paste',{bubbles:true,cancelable:true});
+  Object.defineProperty(nextImage,'clipboardData',{
+    value:{items:[{type:'image/png',getAsFile:()=>fake}]}
+  });
+  d.dispatchEvent(nextImage);
+  await new Promise(resolve=>setTimeout(resolve,110));
+  assert.equal(devicePromptCount,2,'installed on-device model should auto-run after photo upload');
+  assert.equal(w.cryptoMyshkaPocket.getScreenshotHypothesis()?.source,'pocket_browser_hypothesis');
+  assert.equal(requests.length,networkBeforeLocal,'automatic Chrome AI must not use paid API');
 
-  console.log('Pocket UI: photo local analysis, genuine optional Chrome AI, quota failure, paper journal and demo-only flash OK');
+  console.log('Pocket UI: auto photo analysis and supported local AI, provider quota, paper-only controls OK');
   dom.window.close();
 }
 main().catch(e=>{console.error(e);process.exit(1);});
