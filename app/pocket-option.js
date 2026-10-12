@@ -398,6 +398,30 @@
     $('cloud-status').textContent='Код із цієї вкладки очищено.';
     updateAIButton();
   }
+  // Completely local: automatically use a previously downloaded Chrome model,
+  // but never trigger a multi-GB model download or paid endpoint without a click.
+  async function maybeAutoBrowserVision(revision){
+    const vision=window.cryptoMyshkaBrowserVision;
+    const note=$('local-ai-status');
+    if(!vision?.availability){
+      note.textContent='На цьому браузері локальна AI-модель для фото недоступна. '+
+        'Базовий аналіз свічок уже виконано безплатно.';
+      return;
+    }
+    let status='unavailable';
+    try{status=await vision.availability();}catch{}
+    if(revision!==state.imageRevision||!state.image)return;
+    if(status==='available'&&!state.loading){
+      note.textContent='✅ Локальна AI-модель уже встановлена. Автоматично аналізуємо фото без API…';
+      await runBrowserAI();
+    }else if(status==='downloadable'||status==='downloading'){
+      note.textContent='Локальна AI-модель підтримується, але ще не встановлена. '+
+        'Натисни «AI на ПК», якщо хочеш завантажити модель у браузер.';
+    }else{
+      note.textContent='На цьому пристрої немає підтримуваної локальної AI-моделі для фото. '+
+        'Сканер свічок працює без ключів; хмарний APInex має обмеження квоти.';
+    }
+  }
   async function runBrowserAI(){
     const note=$('local-ai-status');
     if(state.loading||!state.image){note.textContent='Спочатку додай фото свічкового графіка.';return;}
@@ -405,13 +429,17 @@
       note.textContent='⚠️ Модуль локального AI не завантажився. Онови сторінку.';
       return;
     }
-    const prefs=getPrefs();
+    const prefs=getPrefs(),revision=state.imageRevision;
     state.ai=null;state.localBusy=true;state.loading=true;
     state.lastError='';state.lastErrorCode='';
     renderVerdict(null);updateAIButton();
     try{
       const answer=await window.cryptoMyshkaBrowserVision.analyze(croppedCanvas(),prefs,
-        message=>{note.textContent='⏳ '+String(message).slice(0,220);});
+        message=>{if(revision===state.imageRevision)note.textContent='⏳ '+String(message).slice(0,220);});
+      if(revision!==state.imageRevision||!state.image){
+        note.textContent='Фото або рамка змінилися під час аналізу. Стару оцінку скинуто.';
+        return;
+      }
       if(answer.orders_enabled!==false||answer.signal_validated!==false||
          answer.quotes_verified!==false||answer.broker_verified!==false||
          !['UP','DOWN','STOP'].includes(answer.direction))
@@ -430,6 +458,7 @@
         answer.direction==='STOP'?'Обґрунтованого напрямку немає.':
         'Гіпотеза '+answer.direction+' тільки для ручного DEMO-тесту, не реальна ставка.');
     }catch(e){
+      if(revision!==state.imageRevision||!state.image)return;
       state.ai=null;
       note.textContent='⚠️ '+String(e?.message||'Вбудований AI недоступний').slice(0,320)+
         ' Безкоштовний сканер минулих свічок залишається доступним.';
