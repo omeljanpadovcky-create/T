@@ -7,6 +7,7 @@ on:
     paths:
       - 'myshka-app.html'
       - 'app/photo-scan.js'
+      - 'app/photo-scan.analytics.test.cjs'
       - 'app/simple-photo-assistant.js'
       - 'app/simple-photo-assistant.smoke.cjs'
       - 'myshka-sw.js'
@@ -27,6 +28,7 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check app/photo-scan.js
+          node --check app/photo-scan.analytics.test.cjs
           node --check app/simple-photo-assistant.js
           node --check app/simple-photo-assistant.smoke.cjs
           node --check myshka-sw.js
@@ -51,6 +53,8 @@ jobs:
           assert 'app/simple-photo-assistant.js' in html
           print('One page, one scanner, no trade dashboard')
           PY
+      - name: Test chart data analytics
+        run: node app/photo-scan.analytics.test.cjs
       - name: Install browser DOM test dependency
         run: npm install --no-save --ignore-scripts jsdom@26.1.0
       - name: Test screenshot assistant
