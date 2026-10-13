@@ -39,6 +39,7 @@ async function main(){
   let networkCalls=0;
   w.fetch=()=>{networkCalls++;throw Error('No network permitted');};
   w.eval(script);
+  await new Promise(resolve=>setTimeout(resolve,20)); // DOMContentLoaded installs listeners
   const photo=new w.File([new Uint8Array([137,80,78,71,13,10,26,10,...Array(600).fill(25)])],
     'chart.png',{type:'image/png'});
   const paste=new w.Event('paste',{bubbles:true,cancelable:true});
