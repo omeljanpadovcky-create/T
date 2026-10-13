@@ -148,6 +148,36 @@
     }
     return null;
   }
+  // Descriptive analytics of DETECTED candle-like pixels (not price or win odds).
+  // Groups preserve temporal left-to-right order; no broker OHLC is inferred.
+  function summarizeCandles(ordered,structure=null){
+    const items=Array.isArray(ordered)?ordered.slice().sort((a,b)=>a.x-b.x):[];
+    const stats=arr=>{
+      const green=arr.filter(p=>p.color===1).length;
+      const red=arr.filter(p=>p.color===2).length;
+      const count=green+red;
+      return {count,green,red,greenPct:count?100*green/count:null,
+        redPct:count?100*red/count:null};
+    };
+    const total=stats(items);
+    const recent12=stats(items.slice(-12));
+    const recent6=stats(items.slice(-6));
+    const previous6=stats(items.slice(-12,-6));
+    const cut1=Math.floor(items.length/3),cut2=Math.floor(items.length*2/3);
+    const thirds=[
+      {...stats(items.slice(0,cut1)),name:'Початок'},
+      {...stats(items.slice(cut1,cut2)),name:'Середина'},
+      {...stats(items.slice(cut2)),name:'Кінець'}
+    ];
+    const greenDeltaPp=recent6.count===6&&previous6.count===6?
+      recent6.greenPct-previous6.greenPct:null;
+    const recentLevel=structure?.shortMove||'unknown';
+    const contrast=recent6.count===6&&
+      ((recent6.green>=4&&recentLevel==='lower')||
+       (recent6.red>=4&&recentLevel==='higher'));
+    return {total,recent12,recent6,previous6,thirds,greenDeltaPp,
+      recentLevel,contrast,visibleCount:items.length};
+  }
   function analyzePixels(imageData,options={}){
     const w=imageData.width,h=imageData.height,d=imageData.data;
     if(w<80||h<70||!d||d.length<w*h*4)return {recognized:false,reason:'Область графіка надто мала.'};
@@ -245,9 +275,10 @@
     // Never label recent-six candle colors as proportions of the whole screenshot.
     const totalGreen=ordered.filter(p=>p.color===1).length;
     const totalRed=ordered.filter(p=>p.color===2).length;
+    const analytics=summarizeCandles(ordered,structure);
     return {recognized:true,partial,reliable,qualityScore,trendState,structure,stableGaps,stableWidths,detectorAgreement,edgeShare,visualDirection,candidates:found.length,
       componentCandidates:cc.length,columnCandidates:cols.length,method:columnMode?'column':'regions',
-      totalGreen,totalRed,totalSample:ordered.length,
+      totalGreen,totalRed,totalSample:ordered.length,analytics,
       green:last.filter(x=>x.color===1).length,red:last.filter(x=>x.color===2).length,sample:last.length,
       observedDirection,xSpreadRatio:disp.spread/w,globalDrift,edgeDrift,
       shapes:found.slice(-130).map(x=>({x:x.minX,y:x.minY,w:x.maxX-x.minX+1,h:x.maxY-x.minY+1,color:x.color}))};
@@ -456,5 +487,5 @@
     // Preview already decoded; this is a local, synchronous scan, not a background job.
     scan();
   }
-  window.cryptoMyshkaPhotoScan={attach,analyzePixels,findChartBounds};
+  window.cryptoMyshkaPhotoScan={attach,analyzePixels,findChartBounds,summarizeCandles};
 })();
