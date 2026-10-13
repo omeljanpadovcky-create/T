@@ -39,7 +39,7 @@ input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidde
 .stat small{font-size:12px;line-height:1.4;color:#bbcee6}
 #result-facts{padding-left:20px;color:#b8cce5}
 #result-facts li{margin:9px 0}
-.caution{color:#ffe1ac;border-left:3px solid #e7ae56;padding:11px 13px;background:#392c1d66;border-radius:0 12px 12px 0;margin-top:20px}
+.minute-config{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}.minute-config span{background:#0d1b2e;border:1px solid #274461;border-radius:10px;padding:7px 12px;font-size:14px}.minute-assessment{background:#192d46;border:1px solid #48617e;border-radius:12px;padding:13px 15px;margin:14px 0}.minute-assessment p{margin:6px 0 0;color:#bcd0e7}.caution{color:#ffe1ac;border-left:3px solid #e7ae56;padding:11px 13px;background:#392c1d66;border-radius:0 12px 12px 0;margin-top:20px}
 footer{font-size:13px;color:#7f96b1;text-align:center;padding:25px 5px}
 @media(max-width:430px){.tag{font-size:11px}.stats{gap:5px}.stat{padding:12px 5px}.stat small{font-size:11px}}
 </style>
@@ -50,7 +50,9 @@ footer{font-size:13px;color:#7f96b1;text-align:center;padding:25px 5px}
 <h1>Мишка пояснить графік</h1>
 <p class="lead">Просто додай фотографію свічкового графіка. Мишка пояснить, чому на скриншоті видно зростання, падіння чи боковий рух, та порахує частку зелених і червоних свічок.</p>
 <section class="panel" aria-labelledby="upload-title">
-<h2 id="upload-title">1. Додай фото</h2>
+<h2 id="upload-title">1. Додай фото · M1</h2>
+<div class="minute-config"><span>Свічка: <strong>M1 · 1 хвилина</strong></span><span>Наступна експірація: <strong>60 секунд</strong></span></div>
+<p class="note">Сканер аналізує свічки, які вже видно на скриншоті. M1 задає тривалість однієї свічки, але фото не показує, чим закінчиться наступна хвилина.</p>
 <div class="upload">
 <label for="file-input" class="button primary">📷 Обрати скриншот</label>
 <input id="file-input" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Обрати скриншот графіка">
@@ -67,7 +69,8 @@ footer{font-size:13px;color:#7f96b1;text-align:center;padding:25px 5px}
 </div>
 </section>
 <section class="panel" id="result" aria-labelledby="result-title" hidden>
-<p class="note">2. Пояснення Мишки</p>
+<p class="note">2. Розбір свічок M1 · тривалість кожної 60 с</p>
+<div class="minute-assessment"><strong>⏱ Наступні 60 секунд · оцінка</strong><p id="minute-verdict">Без поточних котирувань і перевіреної історії результат наступної M1-свічки невідомий.</p></div>
 <h2 id="result-title" class="result-head">Результат</h2>
 <p id="result-explain" class="explanation"></p>
 <div class="stats" id="result-stats"></div>
@@ -78,6 +81,6 @@ footer{font-size:13px;color:#7f96b1;text-align:center;padding:25px 5px}
 <footer>🐭 Мишка — помічник у читанні графіків, не торговий бот. Ніяких ставок, автоматичної торгівлі чи вигаданих шансів виграшу.</footer>
 </main>
 <script defer src="./app/photo-scan.js?v=simple-20261013-1"></script>
-<script defer src="./app/simple-photo-assistant.js?v=simple-20261013-1"></script>
+<script defer src="./app/simple-photo-assistant.js?v=m1-20261013-2"></script>
 </body>
 </html>
