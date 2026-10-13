@@ -10,6 +10,7 @@
   function setMessage(message){$('message').textContent=message;}
   function showReport(title,paragraph,stats=[],facts=[],warning=''){
     const result=$('result');result.hidden=false;
+    $('data-analytics').hidden=true;
     $('minute-verdict').textContent='Напрям наступної M1-свічки (60 с) невідомий. Висновок нижче стосується лише свічок на фото, а не майбутньої експірації.';
     $('result-title').textContent=title;
     $('result-explain').textContent=paragraph;
@@ -24,6 +25,76 @@
     facts.forEach(value=>{const item=document.createElement('li');item.textContent=value;list.append(item);});
     $('result-caution').textContent=warning||
       'Це розбір уже намальованого графіка, а не сигнал або ймовірність виграшу.';
+  }
+  // Small DATA-ANALYTICS presentation. Numbers are descriptive fractions
+  // of detected coloured shapes; never fabricate future price probabilities.
+  function renderDataAnalytics(report,trend){
+    const box=$('data-analytics'),grid=$('analytics-grid');
+    box.hidden=true;grid.replaceChildren();
+    const a=report?.analytics;
+    if(!a||!report.reliable||!a.total||!Number.isFinite(a.total.count)||!a.total.count)return;
+    const pct=n=>Number.isFinite(n)?Math.round(n)+'%':'—';
+    const groups=[
+      ['Увесь видимий графік',a.total],
+      ['Останні 12',a.recent12],
+      ['Попередні 6',a.previous6],
+      ['Останні 6',a.recent6]
+    ];
+    groups.forEach(([label,data])=>{
+      if(!data||!Number.isFinite(data.count)||data.count<1)return;
+      const card=document.createElement('div');card.className='analytics-card';
+      const small=document.createElement('small');small.textContent=label;
+      const title=document.createElement('strong');
+      title.textContent=data.green+' зелених / '+data.red+' червоних';
+      const counts=document.createElement('small');
+      counts.textContent=data.count+' знайдених контурів · '+pct(data.greenPct)+' зелених';
+      const track=document.createElement('div');track.className='analytics-track';
+      track.setAttribute('role','img');
+      track.setAttribute('aria-label',label+': '+data.green+
+        ' зелених, '+data.red+' червоних');
+      const greenBar=document.createElement('span');greenBar.className='analytics-green';
+      greenBar.style.width=Math.max(0,Math.min(100,Number(data.greenPct)||0))+'%';
+      const redBar=document.createElement('span');redBar.className='analytics-red';
+      redBar.style.width=Math.max(0,Math.min(100,Number(data.redPct)||0))+'%';
+      track.append(greenBar,redBar);
+      card.append(small,title,track,counts);grid.append(card);
+    });
+    const previous=a.previous6,recent=a.recent6;
+    const sufficient=previous?.count===6&&recent?.count===6;
+    const compare=$('analytics-comparison');
+    if(sufficient&&Number.isFinite(a.greenDeltaPp)){
+      const delta=a.greenDeltaPp;
+      compare.textContent='Порівняння двох останніх шісток: частка зелених '+
+        (Math.abs(delta)<.01?'не змінилася':delta>0?'зросла на '+Math.round(delta)+
+          ' відсоткових пунктів':'зменшилася на '+Math.round(Math.abs(delta))+
+          ' відсоткових пунктів')+
+        '. Це порівняння минулих свічок, не ймовірність наступної.';
+    }else compare.textContent='Для порівняння останніх 12 свічок потрібні 12 чітко розпізнаних контурів.';
+    const thirds=Array.isArray(a.thirds)?a.thirds:[];
+    $('analytics-phases').textContent=thirds.length===3?
+      'Три частини графіка (зліва направо): '+thirds.map((part,index)=>
+        ['початок','середина','кінець'][index]+' — '+part.green+'/'+part.count+
+        ' зелених ('+pct(part.greenPct)+')').join('; ')+'.':
+      'Розподілу на три частини немає.';
+    let issue='';
+    if(a.contrast&&recent?.count===6){
+      issue=recent.green>=4?
+        'Важлива суперечність: останні 6 контурів переважно зелені, '+
+        'але їхні рівні нижчі за попередні 6. Зелена свічка означає рух '+
+        'усередині НЕЇ, а не те, що весь графік уже виріс.':
+        'Важлива суперечність: останні 6 контурів переважно червоні, '+
+        'але їхні рівні вищі за попередні 6. Червона свічка не доводить '+
+        'спадного тренду всього графіка.';
+    }else if(trend==='sideways'&&['higher','lower'].includes(a.recentLevel)){
+      issue='На всьому фото боковик, але остання шістка розташована '+
+        (a.recentLevel==='higher'?'вище':'нижче')+
+        ' попередньої. Коротка зміна рівнів не обов’язково перетворює '+
+        'весь боковик на тренд.';
+    }
+    const warning=$('analytics-contrast');
+    warning.hidden=!issue;
+    warning.textContent=issue;
+    box.hidden=false;
   }
   function draw(){
     const canvas=state.canvas,img=state.image;
@@ -171,7 +242,8 @@
       'Це локальне розпізнавання кольорів і положення свічок по всьому фото. '+
       'Не виконується розпізнавання тексту, котирувань чи чисел RSI/MACD на знімку. '+
       'Відсотки — частка розпізнаних кольорів, а НЕ шанс BUY/SELL чи рух ціни за наступні 60 секунд.');
-    setMessage('Готово. Весь скриншот перевірено; пояснення загального та недавнього руху нижче.');
+    renderDataAnalytics(report,trend);
+    setMessage('Готово. Мишка порівняла весь графік, останні 12 та останні 6 свічок — без вигаданих шансів.');
   }
   function drawAndInspect(){draw();inspect();}
   function upload(file){
