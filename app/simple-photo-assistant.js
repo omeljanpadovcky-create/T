@@ -5,7 +5,7 @@
   'use strict';
   const $=id=>document.getElementById(id);
   const scanner=()=>window.cryptoMyshkaPhotoScan;
-  const state={image:null,filename:'',bounds:null,width:0,height:0,drag:null,canvas:null,last:null};
+  const state={image:null,filename:'',bounds:null,drag:null,canvas:null,last:null};
   const round=n=>Number.isFinite(n)?Math.round(n):0;
   function setMessage(message){$('message').textContent=message;}
   function showReport(title,paragraph,stats=[],facts=[],warning=''){
@@ -25,87 +25,153 @@
     $('result-caution').textContent=warning||
       'Це розбір уже намальованого графіка, а не сигнал або ймовірність виграшу.';
   }
-  function fitBounds(){
-    const canvas=state.canvas;
-    if(!canvas)return null;
-    const candidate=scanner()?.findChartBounds?.(
-      canvas.getContext('2d',{willReadFrequently:true})
-        .getImageData(0,0,canvas.width,canvas.height));
-    const fallback={x:round(canvas.width*.08),y:round(canvas.height*.10),
-      w:round(canvas.width*.79),h:round(canvas.height*.77)};
-    return candidate&&candidate.w>=80&&candidate.h>=70?candidate:fallback;
-  }
   function draw(){
     const canvas=state.canvas,img=state.image;
     if(!canvas||!img)return;
     const ctx=canvas.getContext('2d');
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    // Manual selection is OPTIONAL. Full image is always the default.
     const b=state.bounds;
     if(!b)return;
-    ctx.fillStyle='rgba(4,11,24,.50)';
-    ctx.fillRect(0,0,canvas.width,b.y);
-    ctx.fillRect(0,b.y,b.x,b.h);
-    ctx.fillRect(b.x+b.w,b.y,canvas.width-b.x-b.w,b.h);
-    ctx.fillRect(0,b.y+b.h,canvas.width,canvas.height-b.y-b.h);
-    ctx.strokeStyle='#f6d17a';ctx.lineWidth=3;ctx.setLineDash([9,6]);
+    ctx.lineWidth=3;ctx.strokeStyle='#f6d17a';ctx.setLineDash([9,6]);
     ctx.strokeRect(b.x,b.y,b.w,b.h);ctx.setLineDash([]);
   }
+  function imagePixels(area=null){
+    const img=state.image,cv=state.canvas;
+    if(!img||!cv)return null;
+    const b=area||{x:0,y:0,w:cv.width,h:cv.height};
+    const output=document.createElement('canvas');
+    output.width=Math.max(1,round(b.w));
+    output.height=Math.max(1,round(b.h));
+    const ctx=output.getContext('2d',{willReadFrequently:true});
+    ctx.drawImage(img,
+      b.x/cv.width*img.naturalWidth,b.y/cv.height*img.naturalHeight,
+      b.w/cv.width*img.naturalWidth,b.h/cv.height*img.naturalHeight,
+      0,0,output.width,output.height);
+    return ctx.getImageData(0,0,output.width,output.height);
+  }
+  function evaluateScreenshot(){
+    const scan=scanner();
+    if(!scan?.analyzePixels)throw Error('Модуль аналізу фото не завантажився.');
+    const fullData=imagePixels();
+    // Inspect every pixel first, even if the screenshot includes platform UI.
+    const full=scan.analyzePixels(fullData);
+    if(state.bounds){
+      const selected=scan.analyzePixels(imagePixels(state.bounds));
+      return {report:selected,full,method:'manual',
+        area:state.bounds,autoCandidate:false};
+    }
+    // A whole-frame reading is preferred; if overlays contaminate it, locate
+    // the main chart automatically using the *entire* screenshot.
+    if(full?.recognized&&full.reliable)
+      return {report:full,full,method:'whole',area:null,autoCandidate:false};
+    const found=scan.findChartBounds?.(fullData);
+    if(found&&found.w>=80&&found.h>=70){
+      const candidate=scan.analyzePixels(imagePixels(found));
+      if(candidate?.recognized && (!full?.recognized||
+        (candidate.reliable&&!full.reliable) ||
+        (candidate.reliable===full.reliable&&
+          Number(candidate.qualityScore||0)>Number(full.qualityScore||0)+10))){
+        return {report:candidate,full,method:'chart_auto',
+          area:found,autoCandidate:true};
+      }
+    }
+    return {report:full,full,method:'whole',area:null,autoCandidate:false};
+  }
+  function insightForStructure(report){
+    const s=report?.structure;
+    if(!s)return ['Недостатньо незалежних контурів, щоб окремо порівняти останні 12 свічок.'];
+    const level=s.shortMove==='higher'?'вище':s.shortMove==='lower'?'нижче':'приблизно на тому самому рівні';
+    const highs=s.highShape==='higher'?'вищими':s.highShape==='lower'?'нижчими':'схожими';
+    const lows=s.lowShape==='higher'?'вищими':s.lowShape==='lower'?'нижчими':'схожими';
+    const result=[
+      'Останні шість елементів розташовані '+level+' за попередні шість.',
+      'Верхні межі свічкоподібних елементів стали '+highs+
+        ', а нижні — '+lows+'.'
+    ];
+    const last=s.green+s.red;
+    if(last>0)result.push('Останні шість: '+s.green+' зелених ('+
+      round(100*s.green/last)+'%) та '+s.red+' червоних ('+
+      round(100*s.red/last)+'%). Це тільки недавня вибірка.');
+    if(s.sameColor>=2)
+      result.push('Наприкінці видно серію з '+s.sameColor+
+        ' однаково забарвлених елементів; це не гарантує продовження тенденції.');
+    return result;
+  }
   function inspect(){
-    if(!state.image||!state.bounds)return;
-    const b=state.bounds,c=state.canvas;
-    const source=document.createElement('canvas');
-    source.width=Math.max(1,round(b.w));source.height=Math.max(1,round(b.h));
-    const sx=b.x/c.width*state.image.naturalWidth;
-    const sy=b.y/c.height*state.image.naturalHeight;
-    const sw=b.w/c.width*state.image.naturalWidth;
-    const sh=b.h/c.height*state.image.naturalHeight;
-    const ctx=source.getContext('2d',{willReadFrequently:true});
-    ctx.drawImage(state.image,sx,sy,sw,sh,0,0,source.width,source.height);
-    const pixels=ctx.getImageData(0,0,source.width,source.height);
-    const report=scanner()?.analyzePixels?.(pixels);
-    state.last=report||null;
-    if(!report?.recognized){
-      showReport('Недостатньо даних',
-        'Мишка не змогла надійно знайти свічки в цій області.',
-        [],[report?.reason||'Виділи лише поле з червоними й зеленими свічками.',
-          'Спробуй прибрати з рамки кнопки, цифри, меню й графіки індикаторів.']);
-      setMessage('Фото прочитано, але свічки не розпізнано. Зміни рамку.');
+    if(!state.image||!state.canvas)return;
+    let scan;
+    try{scan=evaluateScreenshot();}
+    catch(e){
+      showReport('Не вдалося прочитати фото',
+        String(e?.message||'Сталася помилка аналізу зображення.'));
+      setMessage('Зображення не розпізнано. Спробуй новий скриншот.');
       return;
     }
-    const green=Math.max(0,Number(report.green)||0);
-    const red=Math.max(0,Number(report.red)||0);
+    const {report,full,method}=scan;
+    state.last=scan;
+    const fullCount=Number(full?.candidates)||0;
+    const scope=method==='manual'?'Обрано вручну лише частину зображення.':
+      method==='chart_auto'?'Перевірено весь скриншот; меню та підписи відокремлено від основного поля графіка автоматично.':
+        'Проаналізовано всю площу скриншота без ручного обведення.';
+    const info=$('scan-scope');
+    if(info)info.textContent=scope+' Розмір '+state.image.naturalWidth+'×'+
+      state.image.naturalHeight+' пікселів.';
+    if(!report?.recognized){
+      showReport('Скриншот прочитано · свічки не підтверджені',
+        'Мишка перевірила все зображення, але не змогла надійно відокремити свічки від графічних елементів інтерфейсу.',
+        [],[scope,'На всьому зображенні знайдено '+fullCount+
+          ' можливих кольорових контурів.',
+          report?.reason||'Використай чіткіший скриншот або обведи лише поле графіка.']);
+      setMessage('Фото перевірено повністю, однак достовірного розбору свічок немає.');
+      return;
+    }
+    const green=Math.max(0,Number(report.totalGreen??report.green)||0);
+    const red=Math.max(0,Number(report.totalRed??report.red)||0);
     const observed=green+red;
     const greenPct=observed>0?100*green/observed:null;
     const redPct=observed>0?100*red/observed:null;
     const trend=report.reliable===true?
       report.trendState||report.visualDirection:'unreliable';
-    const title=trend==='up'?'На фото видно зростання':
-      trend==='down'?'На фото видно падіння':
-      trend==='sideways'?'Графік рухається боком':
-      trend==='mixed'?'На графіку суперечливий рух':'Чіткий тренд не визначено';
-    let explanation='';
-    if(trend==='up')explanation='Правіші свічки розташовані вище за ліві. Це візуальна ознака вже відбулого зростання, але не доказ наступного руху.';
-    else if(trend==='down')explanation='Правіші свічки розташовані нижче за ліві. Це візуальна ознака вже відбулого падіння, але не доказ наступного руху.';
-    else if(trend==='sideways')explanation='Положення ранніх і пізніх свічок змінюється незначно: виразного висхідного чи спадного тренду немає.';
-    else if(trend==='mixed')explanation='Різні ділянки скриншота показують протилежний рух, тому стверджувати, що ціна впевнено йде вгору або вниз, не можна.';
-    else explanation='Свічкоподібні контури розпізнано, проте даних замало для надійного визначення напрямку.';
+    const title=trend==='up'?'На скриншоті видно зростання':
+      trend==='down'?'На скриншоті видно падіння':
+      trend==='sideways'?'На скриншоті переважає боковик':
+      trend==='mixed'?'Видимий рух суперечливий':
+      'Недостатньо даних для чіткого тренду';
+    const why=trend==='up'?
+        'Видимі пізніші свічкоподібні елементи розташовані вище за попередні: на графіку був висхідний рух.':
+      trend==='down'?
+        'Пізніші свічкоподібні елементи розташовані нижче за попередні: на графіку був спадний рух.':
+      trend==='sideways'?
+        'Ранні й пізні елементи змінюють висоту незначно, вираженої тенденції немає.':
+      trend==='mixed'?
+        'Різні частини зображення показують протилежні напрямки; загальний тренд не підтверджено.':
+        'Частину елементів знайдено, але їхнє положення або регулярність не дають упевнено назвати тренд.';
     const stats=[
-      {value:String(round(report.candidates||0)),label:'знайдено контурів'},
-      {value:greenPct===null?'—':round(greenPct)+'%',label:'зелених в останній вибірці'},
-      {value:redPct===null?'—':round(redPct)+'%',label:'червоних в останній вибірці'}
+      {value:String(round(report.candidates||0)),label:'контурів на основному графіку'},
+      {value:greenPct===null?'—':round(greenPct)+'%',label:'зелених серед усіх розпізнаних'},
+      {value:redPct===null?'—':round(redPct)+'%',label:'червоних серед усіх розпізнаних'}
     ];
     const facts=[
-      'З останньої вибірки: зелених '+round(green)+', червоних '+round(red)+'.',
-      'M1 означає, що кожна свічка охоплює одну хвилину; скриншот не показує результат наступних 60 секунд.',
-      'Колір свічок показує перевагу певного типу свічок у вибірці, а не ймовірність наступного результату.',
-      'Напрям оцінений за розташуванням свічкоподібних контурів зліва направо: '+String(report.observedDirection||'невідомий')+'.'
+      scope,
+      'Виявлено '+round(report.candidates||0)+' свічкоподібних елементів: '+
+        green+' зелених, '+red+' червоних.',
+      'Загальний минулий напрям: '+String(report.observedDirection||'невизначений')+'.',
+      ...insightForStructure(report),
+      'M1 означає 60 секунд на одну свічку. Невідомо, чи остання намальована свічка вже завершена.'
     ];
+    if(method==='chart_auto')
+      facts.push('На повному скриншоті попередньо знайдено '+fullCount+
+        ' кольорових контурів; для підсумку обрано автоматично відокремлений графік, щоб не рахувати меню.');
     const quality=Number(report.qualityScore);
-    if(Number.isFinite(quality))facts.push('Якість виявлення контурів '+round(quality)+'/100 — це НЕ точність прогнозування.');
-    showReport(title,explanation,stats,facts,
-      'Відсотки вище — частка кольорів свічок, НЕ зміна ціни, НЕ ймовірність BUY/SELL і НЕ очікуваний прибуток. Для реальної відсоткової зміни ціни потрібні числові ціни початку й кінця періоду. Даних майбутньої експірації скриншот не містить.');
-    setMessage('Готово. Мишка описала минулі свічки M1; результат наступної хвилини залишається невідомим.');
+    if(Number.isFinite(quality))facts.push('Оцінка геометрії контурів '+
+      round(quality)+'/100 — не точність торгових прогнозів.');
+    showReport(title,why,stats,facts,
+      'Це локальне розпізнавання кольорів і положення свічок по всьому фото. '+
+      'Не виконується розпізнавання тексту, котирувань чи чисел RSI/MACD на знімку. '+
+      'Відсотки — частка розпізнаних кольорів, а НЕ шанс BUY/SELL чи рух ціни за наступні 60 секунд.');
+    setMessage('Готово. Весь скриншот перевірено; пояснення загального та недавнього руху нижче.');
   }
   function drawAndInspect(){draw();inspect();}
   function upload(file){
@@ -130,9 +196,6 @@
         canvas.height=Math.max(1,round(image.naturalHeight*ratio));
         state.canvas=canvas;state.bounds=null;state.last=null;
         $('canvas-area').hidden=false;
-        const ctx=canvas.getContext('2d',{willReadFrequently:true});
-        ctx.drawImage(image,0,0,canvas.width,canvas.height);
-        state.bounds=fitBounds();
         $('filename').textContent=state.filename+' · '+image.naturalWidth+'×'+image.naturalHeight;
         drawAndInspect();
       };
@@ -174,15 +237,15 @@
     });
     $('auto-select').addEventListener('click',()=>{
       if(!state.image)return;
-      const ctx=state.canvas.getContext('2d',{willReadFrequently:true});
-      ctx.clearRect(0,0,state.canvas.width,state.canvas.height);
-      ctx.drawImage(state.image,0,0,state.canvas.width,state.canvas.height);
-      state.bounds=fitBounds();drawAndInspect();
+      // Explicit reset: entire screenshot, never an old manual selection.
+      state.bounds=null;drawAndInspect();
     });
     $('reset').addEventListener('click',()=>{
       state.image=null;state.bounds=null;state.last=null;
       $('canvas-area').hidden=true;$('result').hidden=true;
-      $('file-input').value='';setMessage('Додай новий скриншот графіка.');
+      $('file-input').value='';
+      if($('scan-scope'))$('scan-scope').textContent='';
+      setMessage('Додай новий скриншот графіка.');
     });
     const cv=$('chart-canvas');
     cv.addEventListener('pointerdown',ev=>{
@@ -199,10 +262,7 @@
     function release(){
       if(!state.drag)return;
       state.drag=null;
-      if(state.bounds?.w<75||state.bounds?.h<65){
-        state.bounds={x:round(state.canvas.width*.08),y:round(state.canvas.height*.10),
-          w:round(state.canvas.width*.79),h:round(state.canvas.height*.77)};
-      }
+      if(state.bounds?.w<75||state.bounds?.h<65)state.bounds=null;
       drawAndInspect();
     }
     cv.addEventListener('pointerup',release);
