@@ -48,11 +48,11 @@ footer{font-size:13px;color:#7f96b1;text-align:center;padding:25px 5px}
 <main class="wrap">
 <header><div class="logo" aria-hidden="true">🐭</div><div class="brand">Crypto Myshka</div><span class="tag">ФОТО · БЕЗ КЛЮЧА</span></header>
 <h1>Мишка пояснить графік</h1>
-<p class="lead">Просто додай фотографію свічкового графіка. Мишка пояснить, чому на скриншоті видно зростання, падіння чи боковий рух, та порахує частку зелених і червоних свічок.</p>
+<p class="lead">Додай фото або натисни Ctrl+V. Мишка автоматично перевірить <strong>весь скриншот</strong>: усі розпізнані свічки, загальний рух, останні 12 свічок і частку зелених/червоних. Обводити графік не потрібно.</p>
 <section class="panel" aria-labelledby="upload-title">
 <h2 id="upload-title">1. Додай фото · M1</h2>
 <div class="minute-config"><span>Свічка: <strong>M1 · 1 хвилина</strong></span><span>Наступна експірація: <strong>60 секунд</strong></span></div>
-<p class="note">Сканер аналізує свічки, які вже видно на скриншоті. M1 задає тривалість однієї свічки, але фото не показує, чим закінчиться наступна хвилина.</p>
+<p class="note">Спершу аналізується вся фотографія. Якщо кнопки Pocket Option чи написи заважають розпізнаванню, Мишка сама відокремить область свічок. M1 — одна хвилина на свічку; результат наступної хвилини з одного фото невідомий.</p>
 <div class="upload">
 <label for="file-input" class="button primary">📷 Обрати скриншот</label>
 <input id="file-input" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Обрати скриншот графіка">
@@ -63,9 +63,10 @@ footer{font-size:13px;color:#7f96b1;text-align:center;padding:25px 5px}
 <p class="note">JPG, PNG або WebP, до 9 МБ. Фото обробляється у твоєму браузері й не надсилається на сервер.</p>
 <div id="canvas-area" hidden>
 <p id="filename"></p>
-<canvas id="chart-canvas" aria-label="Графік; перетягни рамку навколо свічок, щоб уточнити аналіз" role="img"></canvas>
-<div class="crop-actions"><button id="auto-select" class="button" type="button">⤢ Автоматично знайти свічки</button></div>
-<p class="note">Якщо рамка виділила кнопки чи меню, обведи пальцем або мишею лише свічки — Мишка повторить аналіз.</p>
+<canvas id="chart-canvas" aria-label="Увесь завантажений скриншот. За бажанням можна виділити окрему ділянку графіка" role="img"></canvas>
+<p id="scan-scope" class="note" role="status">Мишка перевіряє весь скриншот.</p>
+<div class="crop-actions"><button id="auto-select" class="button" type="button">↻ Повторити аналіз усього фото</button></div>
+<p class="note">Нічого виділяти не потрібно. Якщо на фото багато меню, можна додатково обвести лише свічки для уточнення — це необов’язково.</p>
 </div>
 </section>
 <section class="panel" id="result" aria-labelledby="result-title" hidden>
@@ -74,13 +75,13 @@ footer{font-size:13px;color:#7f96b1;text-align:center;padding:25px 5px}
 <h2 id="result-title" class="result-head">Результат</h2>
 <p id="result-explain" class="explanation"></p>
 <div class="stats" id="result-stats"></div>
-<h3>Чому такий висновок?</h3>
+<h3>Що видно на всьому фото та в останніх свічках?</h3>
 <ul id="result-facts"></ul>
 <p class="caution" id="result-caution"></p>
 </section>
 <footer>🐭 Мишка — помічник у читанні графіків, не торговий бот. Ніяких ставок, автоматичної торгівлі чи вигаданих шансів виграшу.</footer>
 </main>
-<script defer src="./app/photo-scan.js?v=simple-20261013-1"></script>
-<script defer src="./app/simple-photo-assistant.js?v=m1-20261013-2"></script>
+<script defer src="./app/photo-scan.js?v=whole-photo-20261013-3"></script>
+<script defer src="./app/simple-photo-assistant.js?v=whole-photo-20261013-3"></script>
 </body>
 </html>
