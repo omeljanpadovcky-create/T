@@ -16,13 +16,21 @@ async function main(){
   assert.ok(!html.includes('apinex')&&!html.includes('cryptoMyshkaBrowserVision'));
   let callCount=0;
   let mode='up';
+  const scannedSizes=[];
   w.cryptoMyshkaPhotoScan={
     findChartBounds:()=>({x:25,y:35,w:500,h:250}),
-    analyzePixels:()=>{
+    analyzePixels:pixels=>{
       callCount++;
-      return {recognized:true,reliable:true,trendState:mode,
-        visualDirection:mode==='up'?'up':mode==='down'?'down':'unknown',
-        green:4,red:2,candidates:20,qualityScore:96,
+      scannedSizes.push([pixels.width,pixels.height]);
+      const isFull=pixels.width>600;
+      const weaker=mode==='fallback'&&isFull;
+      return {recognized:true,reliable:!weaker,
+        trendState:weaker?'unreliable':mode==='fallback'?'sideways':mode,
+        visualDirection:mode==='up'?'up':'unknown',
+        totalGreen:12,totalRed:8,totalSample:20,
+        green:4,red:2,candidates:20,qualityScore:weaker?41:96,
+        structure:{sample:12,recent:6,green:4,red:2,shortMove:'higher',
+          highShape:'higher',lowShape:'higher',finalColor:'green',sameColor:3},
         observedDirection:mode==='up'?'Пізніші свічки вище':'Суперечливий рух'};
     }
   };
@@ -50,22 +58,42 @@ async function main(){
   await new Promise(r=>setTimeout(r,45));
   assert.equal($('result').hidden,false);
   assert.equal($('canvas-area').hidden,false);
-  assert.ok(callCount>=1,'upload must trigger immediate scan');
+  assert.ok(callCount>=1,'paste triggers immediate whole-frame scan');
+  assert.ok(scannedSizes[0][0]>600&&scannedSizes[0][1]>500,
+    'first scan must include the entire displayed screenshot');
+  assert.match($('scan-scope').textContent,/всю площу скриншота/);
   assert.match($('result-title').textContent,/зростання/);
   assert.match($('minute-verdict').textContent,/наступної M1-свічки \(60 с\) невідомий/);
   assert.match($('result-facts').textContent,/M1 означає/);
-  assert.match($('result-stats').textContent,/67%/);
-  assert.match($('result-stats').textContent,/33%/);
-  assert.match($('result-caution').textContent,/НЕ ймовірність BUY\/SELL/);
+  assert.match($('result-stats').textContent,/60%/);
+  assert.match($('result-stats').textContent,/40%/);
+  assert.match($('result-facts').textContent,/67%/);
+  assert.match($('result-facts').textContent,/33%/);
+  assert.match($('result-facts').textContent,/Верхні межі/);
+  assert.match($('result-caution').textContent,/НЕ шанс BUY\/SELL/);
   assert.equal(networkCalls,0);
-  mode='sideways';$('auto-select').click();
-  assert.ok(callCount>=2);
-  assert.match($('result-title').textContent,/боком/);
+  // When platform labels/noise spoil full image recognition, detect the chart
+  // only AFTER scanning the entire screenshot.
+  mode='fallback';const prior=callCount;
+  $('auto-select').click();
+  assert.ok(callCount>=prior+2,'fall back to chart area after first full scan');
+  assert.match($('result-title').textContent,/боковик/);
+  assert.match($('scan-scope').textContent,/меню та підписи відокремлено/);
+  assert.equal(networkCalls,0);
+  // Manual crop is optional and the user can always reset to full image.
+  const chart=$('chart-canvas');
+  chart.getBoundingClientRect=()=>({left:0,top:0,width:chart.width,height:chart.height});
+  chart.dispatchEvent(new w.MouseEvent('pointerdown',{bubbles:true,clientX:35,clientY:55}));
+  chart.dispatchEvent(new w.MouseEvent('pointermove',{bubbles:true,clientX:465,clientY:290}));
+  chart.dispatchEvent(new w.MouseEvent('pointerup',{bubbles:true,clientX:465,clientY:290}));
+  assert.match($('scan-scope').textContent,/Обрано вручну/);
+  $('auto-select').click();
+  assert.match($('scan-scope').textContent,/меню та підписи відокремлено/);
   assert.equal(networkCalls,0);
   $('reset').click();
   assert.equal($('result').hidden,true);
   assert.equal($('canvas-area').hidden,true);
-  console.log('Simple photo assistant: automatic scan, percentage math, sideways, reset, NO network calls OK');
+  console.log('Simple photo assistant: full screenshot first, all-candle percentages, recent pattern, fallback, manual selection, paste, no network OK');
   dom.window.close();
 }
 main().catch(error=>{console.error(error);process.exit(1);});
