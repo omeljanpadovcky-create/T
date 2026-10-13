@@ -172,7 +172,7 @@
     const greenDeltaPp=recent6.count===6&&previous6.count===6?
       recent6.greenPct-previous6.greenPct:null;
     const recentLevel=structure?.shortMove||'unknown';
-    const contrast=recent6.count===6&&
+    const contrast=recent6.count===6&&previous6.count===6&&
       ((recent6.green>=4&&recentLevel==='lower')||
        (recent6.red>=4&&recentLevel==='higher'));
     return {total,recent12,recent6,previous6,thirds,greenDeltaPp,
