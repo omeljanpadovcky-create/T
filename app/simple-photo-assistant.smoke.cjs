@@ -81,8 +81,8 @@ async function main(){
   assert.match($('result-facts').textContent,/M1 означає/);
   assert.match($('result-stats').textContent,/60%/);
   assert.match($('result-stats').textContent,/40%/);
-  assert.match($('result-facts').textContent,/67%/);
-  assert.match($('result-facts').textContent,/33%/);
+  assert.match($('result-facts').textContent,/83%/);
+  assert.match($('result-facts').textContent,/17%/);
   assert.match($('result-facts').textContent,/Верхні межі/);
   assert.match($('result-caution').textContent,/НЕ шанс BUY\/SELL/);
   assert.equal($('data-analytics').hidden,false);
