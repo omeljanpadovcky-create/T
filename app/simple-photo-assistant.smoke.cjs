@@ -35,9 +35,10 @@ async function main(){
     }
   };
   w.HTMLCanvasElement.prototype.getContext=function(){
+    const canvas=this;
     return {clearRect(){},drawImage(){},fillRect(){},strokeRect(){},setLineDash(){},
-      getImageData(){return {width:this.width,height:this.height,
-        data:new Uint8ClampedArray(this.width*this.height*4)};}};
+      getImageData(){return {width:canvas.width,height:canvas.height,
+        data:new Uint8ClampedArray(canvas.width*canvas.height*4)};}};
   };
   w.Image=class{
     naturalWidth=960;naturalHeight=700;
