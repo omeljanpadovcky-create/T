@@ -39,6 +39,17 @@ input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidde
 .stat small{font-size:12px;line-height:1.4;color:#bbcee6}
 #result-facts{padding-left:20px;color:#b8cce5}
 #result-facts li{margin:9px 0}
+.analytics-dashboard[hidden]{display:none}.analytics-dashboard{margin:21px 0 24px;border:1px solid #284a64;border-radius:16px;background:#0c1b2e;padding:15px}
+.analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:11px;margin:13px 0}
+.analytics-card{background:#142741;border:1px solid #2c4b67;border-radius:12px;padding:12px}
+.analytics-card strong{display:block;font-size:16px;margin:3px 0;color:#f3f8ff}
+.analytics-card small{color:#abc2de;display:block;font-size:12px;line-height:1.45}
+.analytics-track{height:11px;background:#38506b;display:flex;overflow:hidden;border-radius:999px;margin:9px 0}
+.analytics-green{background:#3cdb97;height:100%;display:block}
+.analytics-red{background:#f57f80;height:100%;display:block}
+.analytics-summary{font-size:14px;color:#ccdaf0;margin:11px 0 0;line-height:1.6}
+.analytics-contrast{font-size:14px;color:#f7d6a6;background:#33291d;border:1px solid #89643a;border-radius:12px;padding:10px 12px;margin:12px 0 0}
+.analytics-contrast[hidden]{display:none}
 .minute-config{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}.minute-config span{background:#0d1b2e;border:1px solid #274461;border-radius:10px;padding:7px 12px;font-size:14px}.minute-assessment{background:#192d46;border:1px solid #48617e;border-radius:12px;padding:13px 15px;margin:14px 0}.minute-assessment p{margin:6px 0 0;color:#bcd0e7}.caution{color:#ffe1ac;border-left:3px solid #e7ae56;padding:11px 13px;background:#392c1d66;border-radius:0 12px 12px 0;margin-top:20px}
 footer{font-size:13px;color:#7f96b1;text-align:center;padding:25px 5px}
 @media(max-width:430px){.tag{font-size:11px}.stats{gap:5px}.stat{padding:12px 5px}.stat small{font-size:11px}}
@@ -75,13 +86,21 @@ footer{font-size:13px;color:#7f96b1;text-align:center;padding:25px 5px}
 <h2 id="result-title" class="result-head">Результат</h2>
 <p id="result-explain" class="explanation"></p>
 <div class="stats" id="result-stats"></div>
+<section id="data-analytics" class="analytics-dashboard" aria-labelledby="data-analytics-title" hidden>
+<h3 id="data-analytics-title">📊 Мишка · статистика графіка</h3>
+<p class="note">Частка зелених і червоних серед знайдених контурів; НЕ відсотки ймовірності виграшу.</p>
+<div id="analytics-grid" class="analytics-grid"></div>
+<p id="analytics-comparison" class="analytics-summary"></p>
+<p id="analytics-phases" class="analytics-summary"></p>
+<p id="analytics-contrast" class="analytics-contrast" hidden></p>
+</section>
 <h3>Що видно на всьому фото та в останніх свічках?</h3>
 <ul id="result-facts"></ul>
 <p class="caution" id="result-caution"></p>
 </section>
 <footer>🐭 Мишка — помічник у читанні графіків, не торговий бот. Ніяких ставок, автоматичної торгівлі чи вигаданих шансів виграшу.</footer>
 </main>
-<script defer src="./app/photo-scan.js?v=whole-photo-20261013-3"></script>
-<script defer src="./app/simple-photo-assistant.js?v=whole-photo-20261013-3"></script>
+<script defer src="./app/photo-scan.js?v=data-analytics-20261013-4"></script>
+<script defer src="./app/simple-photo-assistant.js?v=data-analytics-20261013-4"></script>
 </body>
 </html>
