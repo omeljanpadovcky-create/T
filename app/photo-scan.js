@@ -241,8 +241,13 @@
       visualDirection==='down'?'Пізніші елементи нижче попередніх (лише зображення)':
       trendState==='sideways'?'На фото переважає боковий рух, чіткої тенденції немає':
       'Різні ділянки графіка суперечать одна одній (лише зображення)';
+    // Whole detected sequence + recent subset are distinct samples.
+    // Never label recent-six candle colors as proportions of the whole screenshot.
+    const totalGreen=ordered.filter(p=>p.color===1).length;
+    const totalRed=ordered.filter(p=>p.color===2).length;
     return {recognized:true,partial,reliable,qualityScore,trendState,structure,stableGaps,stableWidths,detectorAgreement,edgeShare,visualDirection,candidates:found.length,
       componentCandidates:cc.length,columnCandidates:cols.length,method:columnMode?'column':'regions',
+      totalGreen,totalRed,totalSample:ordered.length,
       green:last.filter(x=>x.color===1).length,red:last.filter(x=>x.color===2).length,sample:last.length,
       observedDirection,xSpreadRatio:disp.spread/w,globalDrift,edgeDrift,
       shapes:found.slice(-130).map(x=>({x:x.minX,y:x.minY,w:x.maxX-x.minX+1,h:x.maxY-x.minY+1,color:x.color}))};
