@@ -10,6 +10,7 @@
   function setMessage(message){$('message').textContent=message;}
   function showReport(title,paragraph,stats=[],facts=[],warning=''){
     const result=$('result');result.hidden=false;
+    $('minute-verdict').textContent='Напрям наступної M1-свічки (60 с) невідомий. Висновок нижче стосується лише свічок на фото, а не майбутньої експірації.';
     $('result-title').textContent=title;
     $('result-explain').textContent=paragraph;
     const tiles=$('result-stats');tiles.replaceChildren();
@@ -96,6 +97,7 @@
     ];
     const facts=[
       'З останньої вибірки: зелених '+round(green)+', червоних '+round(red)+'.',
+      'M1 означає, що кожна свічка охоплює одну хвилину; скриншот не показує результат наступних 60 секунд.',
       'Колір свічок показує перевагу певного типу свічок у вибірці, а не ймовірність наступного результату.',
       'Напрям оцінений за розташуванням свічкоподібних контурів зліва направо: '+String(report.observedDirection||'невідомий')+'.'
     ];
@@ -103,7 +105,7 @@
     if(Number.isFinite(quality))facts.push('Якість виявлення контурів '+round(quality)+'/100 — це НЕ точність прогнозування.');
     showReport(title,explanation,stats,facts,
       'Відсотки вище — частка кольорів свічок, НЕ зміна ціни, НЕ ймовірність BUY/SELL і НЕ очікуваний прибуток. Для реальної відсоткової зміни ціни потрібні числові ціни початку й кінця періоду. Даних майбутньої експірації скриншот не містить.');
-    setMessage('Готово. Мишка пояснила графік без ключа й без серверного AI.');
+    setMessage('Готово. Мишка описала минулі свічки M1; результат наступної хвилини залишається невідомим.');
   }
   function drawAndInspect(){draw();inspect();}
   function upload(file){
