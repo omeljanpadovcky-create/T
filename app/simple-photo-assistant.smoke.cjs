@@ -52,6 +52,8 @@ async function main(){
   assert.equal($('canvas-area').hidden,false);
   assert.ok(callCount>=1,'upload must trigger immediate scan');
   assert.match($('result-title').textContent,/зростання/);
+  assert.match($('minute-verdict').textContent,/наступної M1-свічки \(60 с\) невідомий/);
+  assert.match($('result-facts').textContent,/M1 означає/);
   assert.match($('result-stats').textContent,/67%/);
   assert.match($('result-stats').textContent,/33%/);
   assert.match($('result-caution').textContent,/НЕ ймовірність BUY\/SELL/);
