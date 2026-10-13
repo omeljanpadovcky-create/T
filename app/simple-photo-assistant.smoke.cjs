@@ -24,12 +24,25 @@ async function main(){
       scannedSizes.push([pixels.width,pixels.height]);
       const isFull=pixels.width>600;
       const weaker=mode==='fallback'&&isFull;
+      const shortMove=mode==='conflict'?'lower':'higher';
+      const count=(green,red)=>({count:green+red,green,red,
+        greenPct:100*green/(green+red),redPct:100*red/(green+red)});
       return {recognized:true,reliable:!weaker,
-        trendState:weaker?'unreliable':mode==='fallback'?'sideways':mode,
+        trendState:weaker?'unreliable':mode==='fallback'?'sideways':
+          mode==='conflict'?'mixed':mode,
         visualDirection:mode==='up'?'up':'unknown',
         totalGreen:12,totalRed:8,totalSample:20,
         green:4,red:2,candidates:20,qualityScore:weaker?41:96,
-        structure:{sample:12,recent:6,green:4,red:2,shortMove:'higher',
+        analytics:{
+          total:count(12,8),recent12:count(8,4),
+          previous6:count(1,5),recent6:count(5,1),
+          greenDeltaPp:100*(5/6-1/6),recentLevel:shortMove,
+          contrast:mode==='conflict',
+          thirds:[{name:'Початок',...count(4,2)},
+            {name:'Середина',...count(3,4)},
+            {name:'Кінець',...count(5,2)}]
+        },
+        structure:{sample:12,recent:6,green:5,red:1,shortMove,
           highShape:'higher',lowShape:'higher',finalColor:'green',sameColor:3},
         observedDirection:mode==='up'?'Пізніші свічки вище':'Суперечливий рух'};
     }
@@ -72,6 +85,22 @@ async function main(){
   assert.match($('result-facts').textContent,/33%/);
   assert.match($('result-facts').textContent,/Верхні межі/);
   assert.match($('result-caution').textContent,/НЕ шанс BUY\/SELL/);
+  assert.equal($('data-analytics').hidden,false);
+  assert.equal($('analytics-grid').children.length,4);
+  assert.match($('analytics-grid').textContent,/Увесь видимий графік/);
+  assert.match($('analytics-grid').textContent,/Останні 12/);
+  assert.match($('analytics-grid').textContent,/Попередні 6/);
+  assert.match($('analytics-grid').textContent,/Останні 6/);
+  assert.match($('analytics-comparison').textContent,/67 відсоткових пунктів/);
+  assert.match($('analytics-phases').textContent,/початок/);
+  assert.equal($('analytics-contrast').hidden,true);
+  assert.ok([...$('analytics-grid').querySelectorAll('.analytics-green')].every(el=>
+    el.style.width.endsWith('%')));
+  assert.equal(networkCalls,0);
+  mode='conflict';$('auto-select').click();
+  assert.equal($('analytics-contrast').hidden,false);
+  assert.match($('analytics-contrast').textContent,/переважно зелені/);
+  assert.match($('analytics-contrast').textContent,/рівні нижчі/);
   assert.equal(networkCalls,0);
   // When platform labels/noise spoil full image recognition, detect the chart
   // only AFTER scanning the entire screenshot.
@@ -94,7 +123,7 @@ async function main(){
   $('reset').click();
   assert.equal($('result').hidden,true);
   assert.equal($('canvas-area').hidden,true);
-  console.log('Simple photo assistant: full screenshot first, all-candle percentages, recent pattern, fallback, manual selection, paste, no network OK');
+  console.log('Simple photo assistant: full image + candle analytics comparison, conflicting directions, zero trade/win predictions, manual selection, paste, no network OK');
   dom.window.close();
 }
 main().catch(error=>{console.error(error);process.exit(1);});
