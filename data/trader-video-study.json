@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-13T22:52:49+00:00",
+  "updated_at": "2026-10-14T01:58:14+00:00",
   "origin": "two supplied trader videos; qualitative inspiration, NOT extracted transaction records",
   "video_labels_verified": false,
   "copied_trader_trades": 0,
@@ -21,13 +21,13 @@
       "pullback_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1791931500,
+        "closed_candle_start": 1791942600,
         "paper_only": true
       },
       "breakout_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1791931500,
+        "closed_candle_start": 1791942600,
         "paper_only": true
       }
     },
@@ -35,13 +35,13 @@
       "pullback_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1791931500,
+        "closed_candle_start": 1791942600,
         "paper_only": true
       },
       "breakout_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1791931500,
+        "closed_candle_start": 1791942600,
         "paper_only": true
       }
     },
@@ -49,26 +49,26 @@
       "pullback_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1791931500,
+        "closed_candle_start": 1791942600,
         "paper_only": true
       },
       "breakout_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1791931500,
+        "closed_candle_start": 1791942600,
         "paper_only": true
       }
     }
   },
   "retrospective_final_20pct": {
     "pullback_follow": {
-      "wins": 54,
-      "losses": 57,
+      "wins": 39,
+      "losses": 56,
       "ties": 2,
-      "count": 113,
-      "win_rate": 0.4865,
-      "lower_95pct_wilson": 0.3955,
-      "illustrative_usd": -73.2,
+      "count": 97,
+      "win_rate": 0.4105,
+      "lower_95pct_wilson": 0.317,
+      "illustrative_usd": -201.2,
       "not_real_returns": true,
       "passes_research_gate": false
     },
