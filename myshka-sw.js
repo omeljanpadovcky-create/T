@@ -1,6 +1,6 @@
 /* Simple Crypto Myshka page: only static offline photo scanner. */
-const VERSION='myshka-photo-v1';
-const STATIC=['./myshka-app.html','./app/photo-scan.js','./app/simple-photo-assistant.js'];
+const VERSION='myshka-photo-price-action-v2';
+const STATIC=['./myshka-app.html','./app/photo-scan.js','./app/simple-photo-assistant.js','./app/price-action-core.js','./app/price-action-ui.js'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(VERSION).then(cache=>cache.addAll(STATIC)).catch(()=>{}));
   self.skipWaiting();
