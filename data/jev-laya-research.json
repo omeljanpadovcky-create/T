@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "trained_at": "2026-10-14T09:37:39+00:00",
+  "trained_at": "2026-10-15T09:15:23+00:00",
   "source": "Kraken public spot 5m",
   "not_pocket_option": true,
   "not_pocket_otc": true,
@@ -18,50 +18,52 @@
   ],
   "pair_samples": {
     "BTC/USDT": {
-      "candles": 1156,
-      "train": 724,
-      "calibration": 154,
-      "test": 187,
-      "last_closed_bar": 1791970200
+      "candles": 1440,
+      "train": 909,
+      "calibration": 199,
+      "test": 241,
+      "last_closed_bar": 1792055400
     },
     "ETH/USDT": {
-      "candles": 1156,
-      "train": 724,
-      "calibration": 154,
-      "test": 187,
-      "last_closed_bar": 1791970200
+      "candles": 1440,
+      "train": 909,
+      "calibration": 199,
+      "test": 241,
+      "last_closed_bar": 1792055400
     },
     "SOL/USDT": {
-      "candles": 1156,
-      "train": 724,
-      "calibration": 154,
-      "test": 187,
-      "last_closed_bar": 1791970200
+      "candles": 1440,
+      "train": 909,
+      "calibration": 199,
+      "test": 241,
+      "last_closed_bar": 1792055400
     }
   },
   "source_errors": {},
   "calibration_check": {
-    "examples": 462,
-    "classification_accuracy": 0.145,
-    "predicted_trades": 5,
+    "examples": 597,
+    "classification_accuracy": 0.2261,
+    "predicted_trades": 7,
     "wins": 3,
-    "losses": 2,
+    "losses": 4,
     "ties": 0,
-    "stops": 457,
-    "win_rate_excluding_ties": 0.6,
-    "win_rate_wilson_lower_95pct": 0.2307,
-    "hypothetical_pnl_usdt": 7.6,
+    "stops": 590,
+    "win_rate_excluding_ties": 0.4286,
+    "win_rate_wilson_lower_95pct": 0.1582,
+    "hypothetical_pnl_usdt": -12.4,
     "classes": {
       "UP": {
-        "STOP": 185,
-        "UP": 3
+        "STOP": 224,
+        "DOWN": 2,
+        "UP": 1
       },
       "DOWN": {
-        "STOP": 208,
+        "STOP": 234,
+        "DOWN": 2,
         "UP": 2
       },
       "STOP": {
-        "STOP": 64
+        "STOP": 132
       }
     },
     "label_definition": "UP/DOWN if next close changes >=2 bps; STOP if abs change <2 bps",
@@ -69,26 +71,30 @@
     "hypothetical_stake": 10
   },
   "chronological_purged_holdout": {
-    "examples": 561,
-    "classification_accuracy": 0.2157,
-    "predicted_trades": 3,
-    "wins": 0,
-    "losses": 3,
-    "ties": 0,
-    "stops": 558,
-    "win_rate_excluding_ties": 0.0,
-    "win_rate_wilson_lower_95pct": 0.0,
-    "hypothetical_pnl_usdt": -30.0,
+    "examples": 723,
+    "classification_accuracy": 0.1438,
+    "predicted_trades": 89,
+    "wins": 38,
+    "losses": 47,
+    "ties": 4,
+    "stops": 634,
+    "win_rate_excluding_ties": 0.4471,
+    "win_rate_wilson_lower_95pct": 0.3459,
+    "hypothetical_pnl_usdt": -120.4,
     "classes": {
       "UP": {
-        "STOP": 213
+        "UP": 37,
+        "STOP": 280,
+        "DOWN": 1
       },
       "DOWN": {
-        "STOP": 224,
-        "UP": 3
+        "UP": 43,
+        "STOP": 288,
+        "DOWN": 1
       },
       "STOP": {
-        "STOP": 121
+        "STOP": 66,
+        "UP": 7
       }
     },
     "label_definition": "UP/DOWN if next close changes >=2 bps; STOP if abs change <2 bps",
@@ -100,15 +106,15 @@
   "latest_research_classification": {
     "BTC/USDT": {
       "direction_research_only": "STOP",
-      "last_closed_bar": 1791970200
+      "last_closed_bar": 1792055400
     },
     "ETH/USDT": {
       "direction_research_only": "STOP",
-      "last_closed_bar": 1791970200
+      "last_closed_bar": 1792055400
     },
     "SOL/USDT": {
       "direction_research_only": "STOP",
-      "last_closed_bar": 1791970200
+      "last_closed_bar": 1792055400
     }
   },
   "limitations": [
