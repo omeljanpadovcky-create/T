@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-15T11:57:35.420301+00:00",
+  "updated_at": "2026-10-15T17:17:01.896659+00:00",
   "mode": "educational_video_context",
   "channels": [
     {
@@ -217,7 +217,7 @@
         },
         {
           "id": "maXN3sHs2FA",
-          "title": "BOUGHT A BMW F10 IN 2 WEEKS VIA TRADE-IN | My new car review",
+          "title": "КУПИЛ BMW F10 ЗА 2 НЕДЕЛИ В ТРЕЙДИНГЕ | Обзор моей новой машины",
           "url": "https://www.youtube.com/watch?v=maXN3sHs2FA",
           "upload_date": null,
           "analysis": {
@@ -241,15 +241,13 @@
         },
         {
           "id": "ElfSeIVxRH8",
-          "title": "+134,000₽ in One Trading Session | Trading with Technical Analysis + STOCHASTIC | Training for Be...",
+          "title": "+134,000₽ за Торговую Сессию | Торговля по Техническому Анализу + СТОХАСТИК | Обучение для новичков",
           "url": "https://www.youtube.com/watch?v=ElfSeIVxRH8",
           "upload_date": null,
           "analysis": {
             "mentioned_instruments": [],
             "mentioned_timeframes": [],
-            "mentioned_indicators": [
-              "STOCHASTIC"
-            ],
+            "mentioned_indicators": [],
             "content_excerpt": "",
             "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
             "instrument": "Не визначено",
@@ -339,7 +337,7 @@
         },
         {
           "id": "fzVB8L6GQRM",
-          "title": "Review of \"The Fortress\": Our Private Trading Community",
+          "title": "Обзор на \" Крепость Борщева \" | Наше закрытое комьюнити трейдеров",
           "url": "https://www.youtube.com/watch?v=fzVB8L6GQRM",
           "upload_date": null,
           "analysis": {
