@@ -58,7 +58,7 @@
       list.append(node('li','Протиріччя: напрям M1 не підтверджується структурою M5. Підсумок WAIT.'));
     reasons.append(list);output.append(reasons);
     const stats=node('div',undefined,'pa-backtest');
-    stats.append(node('h3','Історичний walk-forward тест'));
+    stats.append(node('h3','Історичний M1 + M5 walk-forward тест'));
     const evaluation=history.trades>=30?
       history.wins+' / '+history.trades+' правильних ('+history.accuracy.toFixed(1)+'%)':
       'Лише '+history.trades+' перевірених входів. Для оцінки точності потрібно щонайменше 30.';
@@ -71,7 +71,7 @@
       Math.round(payout*100)+'%: '+net+history.netUnits.toFixed(2)+
       ' од. (не реальні гроші).'));
     stats.append(node('p','Перевірка: для кожного історичного моменту модель бачить тільки попередні завершені свічки; результат — наступна завершена M1. '+
-      'Оцінка для M5 не входить у цей тест. Комісії, затримки та різниця котирувань не враховані.','pa-note'));
+      'Кожен історичний вхід фільтрується останньою на той момент завершеною M5. Комісії, затримки та різниця котирувань не враховані.','pa-note'));
     output.append(stats);
     output.append(node('p',
       '⚠️ Біржові котирування Bybit НЕ тотожні Pocket Option OTC. Якщо фото з OTC, значення рівнів тут не можна переносити на нього. '+
@@ -138,7 +138,7 @@
       const now=Date.now(),one=parse(m1,symbol,1,now),five=parse(m5,symbol,5,now);
       const summary=engine.analyze(one);
       const context=engine.analyze(five);
-      const history=engine.backtest(one,{payout});
+      const history=engine.backtestMulti(one,five,{payout});
       if(token!==seq)return;
       render(summary,context,history,symbol,payout,one.length,one[one.length-1].start+60000);
       status.textContent='✓ Перевірено '+one.length+' завершених M1 і '+
