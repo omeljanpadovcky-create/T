@@ -181,6 +181,43 @@
       maxLossStreak,coverage:(rows.length-1-warmup)>0?trades/(rows.length-1-warmup):0,
       records,explanation:'Walk-forward: правила з попередніх завершених свічок, результат лише наступної закритої свічки. Без комісій, затримки чи моделювання OTC.'};
   }
+  function backtestMulti(inputM1,inputM5,opts={}){
+    const one=normalize(inputM1),five=normalize(inputM5);
+    const payout=opts.payout===undefined?.9:Number(opts.payout);
+    if(!(payout>0&&payout<=1))throw Error('Виплата повинна бути в межах (0;1].');
+    const m1Step=60000,m5Step=300000;
+    if(one.some((x,i)=>i>0&&x.start-one[i-1].start!==m1Step)||
+       five.some((x,i)=>i>0&&x.start-five[i-1].start!==m5Step))
+      throw Error('У M1 або M5 є пропуски; walk-forward неможливий.');
+    const warmup=80;
+    let wins=0,losses=0,ties=0,wait=0,net=0,streak=0,maxLossStreak=0,index=-1;
+    const records=[];
+    for(let i=warmup;i<one.length-1;i++){
+      const closedAt=one[i].start+m1Step;
+      // M5 candles must be fully CLOSED before the M1 decision timestamp.
+      while(index+1<five.length&&five[index+1].start+m5Step<=closedAt)index++;
+      if(index<54){wait++;continue;}
+      const m1=analyze(one.slice(0,i+1));
+      const m5=analyze(five.slice(0,index+1));
+      if(m1.bias==='wait'||(m5.trend!=='sideways'&&m5.trend!==m1.bias)){
+        wait++;continue;
+      }
+      const entry=one[i].close,exit=one[i+1].close;
+      if(exit===entry){ties++;continue;}
+      const won=(exit>entry)===(m1.bias==='up');
+      if(won){wins++;streak=0;net+=payout;}
+      else{losses++;streak++;net-=1;}
+      maxLossStreak=Math.max(maxLossStreak,streak);
+      records.push({start:one[i].start,bias:m1.bias,entry,exit,won,
+        m5LastClosedAt:five[index].start+m5Step});
+    }
+    const trades=wins+losses,slots=Math.max(0,one.length-1-warmup);
+    return {payout,trades,wins,losses,ties,wait,netUnits:net,
+      accuracy:trades>=30?100*wins/trades:null,
+      rawAccuracy:trades?100*wins/trades:null,maxLossStreak,
+      coverage:slots?trades/slots:0,records,
+      explanation:'M1 і остання на той момент повністю завершена M5. Обидва таймфрейми без підглядання вперед. Експірація одна M1.'};
+  }
   function photoSummary(report){
     if(!report?.reliable||!Array.isArray(report.shapes)||report.shapes.length<16)
       return ['Price Action на фото: контури ненадійні або їх замало; рівні не підтверджені.'];
@@ -201,5 +238,5 @@
       ' дотиків контурів (пікселі фото, не біржові котирування).',
       'Трикутники та пробої за фото без повних OHLC не підтверджуються. Для перевірки відкрий ринковий модуль нижче.'];
   }
-  return Object.freeze({analyze,backtest,photoSummary,normalize});
+  return Object.freeze({analyze,backtest,backtestMulti,photoSummary,normalize});
 });
