@@ -9,6 +9,10 @@ on:
       - 'app/photo-scan.js'
       - 'app/photo-scan.analytics.test.cjs'
       - 'app/simple-photo-assistant.js'
+      - 'app/price-action-core.js'
+      - 'app/price-action-ui.js'
+      - 'app/price-action.test.cjs'
+      - 'app/price-action-ui.smoke.cjs'
       - 'app/simple-photo-assistant.smoke.cjs'
       - 'myshka-sw.js'
       - '.github/workflows/crypto-myshka-app-tests.yml'
@@ -30,6 +34,10 @@ jobs:
           node --check app/photo-scan.js
           node --check app/photo-scan.analytics.test.cjs
           node --check app/simple-photo-assistant.js
+          node --check app/price-action-core.js
+          node --check app/price-action-ui.js
+          node --check app/price-action.test.cjs
+          node --check app/price-action-ui.smoke.cjs
           node --check app/simple-photo-assistant.smoke.cjs
           node --check myshka-sw.js
       - name: Check simple interface
@@ -53,9 +61,13 @@ jobs:
           assert 'app/simple-photo-assistant.js' in html
           print('One page, one scanner, no trade dashboard')
           PY
+      - name: Test three-lesson Price Action core and history rules
+        run: node --test app/price-action.test.cjs
       - name: Test chart data analytics
         run: node app/photo-scan.analytics.test.cjs
       - name: Install browser DOM test dependency
         run: npm install --no-save --ignore-scripts jsdom@26.1.0
       - name: Test screenshot assistant
-        run: node app/simple-photo-assistant.smoke.cjs
+        run: |
+          node app/simple-photo-assistant.smoke.cjs
+          node app/price-action-ui.smoke.cjs
