@@ -61,6 +61,24 @@ test('backtest includes no lookahead, no betting ladders, and bounded accuracy',
   assert.ok(Math.abs(r.netUnits-expected)<1e-7);
   assert.ok(!Object.hasOwn(r,'martingale'));
 });
+test('multi-timeframe history uses only fully closed past M5 candles',()=>{
+  const m1=make(420,60000),m5=make(145,300000);
+  const full=core.backtestMulti(m1,m5,{payout:.92});
+  assert.ok(full.trades>=0&&full.wait>=0);
+  assert.equal(full.records.length,full.trades);
+  for(const t of full.records)
+    assert.ok(t.m5LastClosedAt<=t.start+60000,
+      'M5 candle was not yet closed at M1 decision');
+  const previous=core.backtestMulti(m1.slice(0,400),m5,{payout:.92});
+  const known=new Map(full.records.map(r=>[r.start,r]));
+  for(const row of previous.records){
+    assert.equal(known.get(row.start)?.won,row.won);
+    assert.equal(known.get(row.start)?.m5LastClosedAt,row.m5LastClosedAt);
+  }
+  assert.throws(()=>core.backtestMulti(
+    [...m1.slice(0,200),{...m1[200],start:m1[200].start+360000}],
+    m5),/пропуски/);
+});
 test('photo review is descriptive and refuses low quality contours',()=>{
   assert.match(core.photoSummary({reliable:false})[0],/ненадійні/);
   const sample=make(25).map((x,i)=>({
