@@ -230,6 +230,8 @@
         green+' зелених, '+red+' червоних.',
       'Загальний минулий напрям: '+String(report.observedDirection||'невизначений')+'.',
       ...insightForStructure(report),
+      ...(typeof window.cryptoMyshkaPriceAction?.photoSummary==='function'?
+        window.cryptoMyshkaPriceAction.photoSummary(report):[]),
       'M1 означає 60 секунд на одну свічку. Невідомо, чи остання намальована свічка вже завершена.'
     ];
     if(method==='chart_auto')
