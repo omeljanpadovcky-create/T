@@ -53,6 +53,8 @@ input[type=file]{position:absolute;width:1px;height:1px;opacity:0;overflow:hidde
 .minute-config{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}.minute-config span{background:#0d1b2e;border:1px solid #274461;border-radius:10px;padding:7px 12px;font-size:14px}.minute-assessment{background:#192d46;border:1px solid #48617e;border-radius:12px;padding:13px 15px;margin:14px 0}.minute-assessment p{margin:6px 0 0;color:#bcd0e7}.caution{color:#ffe1ac;border-left:3px solid #e7ae56;padding:11px 13px;background:#392c1d66;border-radius:0 12px 12px 0;margin-top:20px}
 footer{font-size:13px;color:#7f96b1;text-align:center;padding:25px 5px}
 @media(max-width:430px){.tag{font-size:11px}.stats{gap:5px}.stat{padding:12px 5px}.stat small{font-size:11px}}
+
+.pa-controls{display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin:16px 0}.pa-controls label{display:flex;flex-direction:column;gap:6px;flex:1;min-width:155px;color:#a8bdd6;font-size:13px}.pa-controls input{width:100%;border:1px solid #46678b;border-radius:11px;padding:12px;color:#fff;background:#091728;font:inherit;min-height:50px}.pa-controls button{flex:0 0 auto}.pa-verdict{font-size:clamp(21px,4vw,29px);font-weight:850;letter-spacing:-.025em;padding:12px 15px;margin:12px 0;border-radius:13px;background:#122b3c}.pa-up{color:#57e7a7}.pa-down{color:#ff9995}.pa-wait{color:#ffd68d}.pa-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:9px;margin:15px 0}.pa-metric{border:1px solid #294d69;background:#0e2135;border-radius:13px;padding:12px;display:grid;gap:7px}.pa-metric strong{font-size:16px;overflow-wrap:anywhere}.pa-metric small{font-size:12px;color:#a6bdd9;line-height:1.45}.pa-note{color:#b7cbe2;font-size:13px;line-height:1.6}.pa-reasons,.pa-backtest{border-top:1px solid #284862;margin-top:17px;padding-top:14px}.pa-reasons li{margin:8px 0;color:#bed0e6}.pa-backtest p{margin:9px 0;color:#bed0e6}
 </style>
 </head>
 <body>
@@ -80,6 +82,14 @@ footer{font-size:13px;color:#7f96b1;text-align:center;padding:25px 5px}
 <p class="note">Нічого виділяти не потрібно. Якщо на фото багато меню, можна додатково обвести лише свічки для уточнення — це необов’язково.</p>
 </div>
 </section>
+<section class="panel" id="price-action-live" aria-labelledby="pa-title">
+<h2 id="pa-title">3 уроки трейдера · Price Action</h2>
+<p class="note">Три методи: рівні підтримки/опору, HH/HL або LH/LL та формації (канали, трикутники, клини, діапазон). Використовує реальні завершені M1/M5-свічки Bybit, окремо від завантаженого скриншота. OTC-котирування не підтримуються.</p>
+<div class="pa-controls"><label>Біржова пара <input id="pa-symbol" type="text" value="BTCUSDT" maxlength="22" autocomplete="off" spellcheck="false" aria-label="Біржова пара"></label><label>Умовна виплата для тесту, % <input id="pa-payout" type="number" value="92" min="50" max="100" step="1" aria-label="Умовна виплата у відсотках"></label><button id="pa-run" class="button" type="button">↻ Оновити аналіз</button></div>
+<p id="pa-status" class="note" role="status" aria-live="polite">Отримуємо завершені свічки…</p>
+<div id="pa-output" aria-live="polite"></div>
+<p class="note">Графіки не прогнозують результат гарантовано. Оновлюється щохвилини, доки ця вкладка відкрита. Ні угод, ні мартингейлу, ні вигаданого відсотка впевненості.</p>
+</section>
 <section class="panel" id="result" aria-labelledby="result-title" hidden>
 <p class="note">2. Розбір свічок M1 · тривалість кожної 60 с</p>
 <div class="minute-assessment"><strong>⏱ Наступні 60 секунд · оцінка</strong><p id="minute-verdict">Без поточних котирувань і перевіреної історії результат наступної M1-свічки невідомий.</p></div>
@@ -100,7 +110,9 @@ footer{font-size:13px;color:#7f96b1;text-align:center;padding:25px 5px}
 </section>
 <footer>🐭 Мишка — помічник у читанні графіків, не торговий бот. Ніяких ставок, автоматичної торгівлі чи вигаданих шансів виграшу.</footer>
 </main>
-<script defer src="./app/photo-scan.js?v=data-analytics-20261013-4"></script>
-<script defer src="./app/simple-photo-assistant.js?v=data-analytics-20261013-4"></script>
+<script defer src="./app/photo-scan.js?v=price-action-20261015-1"></script>
+<script defer src="./app/price-action-core.js?v=price-action-20261015-1"></script>
+<script defer src="./app/simple-photo-assistant.js?v=price-action-20261015-1"></script>
+<script defer src="./app/price-action-ui.js?v=price-action-20261015-1"></script>
 </body>
 </html>
