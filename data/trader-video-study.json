@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-17T09:28:07+00:00",
+  "updated_at": "2026-10-17T13:16:32+00:00",
   "origin": "two supplied trader videos; qualitative inspiration, NOT extracted transaction records",
   "video_labels_verified": false,
   "copied_trader_trades": 0,
@@ -19,15 +19,15 @@
   "last_prospective_checks": {
     "BTC/USDT": {
       "pullback_follow": {
-        "direction": "BUY",
-        "reason": "EMA9 > EMA21, відкат і зелена свічка підтвердження",
-        "closed_candle_start": 1792228800,
+        "direction": "SELL",
+        "reason": "EMA9 < EMA21, відкат і червона свічка підтвердження",
+        "closed_candle_start": 1792242600,
         "paper_only": true
       },
       "breakout_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792228800,
+        "closed_candle_start": 1792242600,
         "paper_only": true
       }
     },
@@ -35,13 +35,13 @@
       "pullback_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792228800,
+        "closed_candle_start": 1792242600,
         "paper_only": true
       },
       "breakout_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792228800,
+        "closed_candle_start": 1792242600,
         "paper_only": true
       }
     },
@@ -49,13 +49,13 @@
       "pullback_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792228800,
+        "closed_candle_start": 1792242600,
         "paper_only": true
       },
       "breakout_follow": {
-        "direction": "BUY",
-        "reason": "Пробій максимуму попередніх 7 свічок у висхідному тренді",
-        "closed_candle_start": 1792228800,
+        "direction": "STOP",
+        "reason": "Фільтри кандидата не дали узгодженого входу",
+        "closed_candle_start": 1792242600,
         "paper_only": true
       }
     }
@@ -63,23 +63,23 @@
   "retrospective_final_20pct": {
     "pullback_follow": {
       "wins": 75,
-      "losses": 95,
+      "losses": 90,
       "ties": 7,
-      "count": 177,
-      "win_rate": 0.4412,
-      "lower_95pct_wilson": 0.3687,
-      "illustrative_usd": -260.0,
+      "count": 172,
+      "win_rate": 0.4545,
+      "lower_95pct_wilson": 0.3805,
+      "illustrative_usd": -210.0,
       "not_real_returns": true,
       "passes_research_gate": false
     },
     "breakout_follow": {
-      "wins": 45,
-      "losses": 69,
-      "ties": 4,
-      "count": 118,
-      "win_rate": 0.3947,
-      "lower_95pct_wilson": 0.3098,
-      "illustrative_usd": -276.0,
+      "wins": 48,
+      "losses": 68,
+      "ties": 5,
+      "count": 121,
+      "win_rate": 0.4138,
+      "lower_95pct_wilson": 0.3283,
+      "illustrative_usd": -238.4,
       "not_real_returns": true,
       "passes_research_gate": false
     }
@@ -87,28 +87,43 @@
   "forward_results": {
     "pullback_follow": {
       "wins": 2,
-      "losses": 8,
+      "losses": 9,
       "ties": 0,
-      "count": 10,
-      "win_rate": 0.2,
-      "lower_95pct_wilson": 0.0567,
-      "illustrative_usd": -61.6,
+      "count": 11,
+      "win_rate": 0.1818,
+      "lower_95pct_wilson": 0.0514,
+      "illustrative_usd": -71.6,
       "not_real_returns": true,
       "passes_research_gate": false
     },
     "breakout_follow": {
       "wins": 1,
-      "losses": 7,
+      "losses": 8,
       "ties": 0,
-      "count": 8,
-      "win_rate": 0.125,
-      "lower_95pct_wilson": 0.0224,
-      "illustrative_usd": -60.8,
+      "count": 9,
+      "win_rate": 0.1111,
+      "lower_95pct_wilson": 0.0199,
+      "illustrative_usd": -70.8,
       "not_real_returns": true,
       "passes_research_gate": false
     }
   },
   "events": [
+    {
+      "id": "BTC/USDT:pullback_follow:1792242600",
+      "pair": "BTC/USDT",
+      "strategy": "pullback_follow",
+      "direction": "SELL",
+      "reason": "EMA9 < EMA21, відкат і червона свічка підтвердження",
+      "candle_start": 1792242600,
+      "next_bar_start": 1792242900,
+      "base_close": 81491.7,
+      "created_at": "2026-10-17T13:16:32+00:00",
+      "source": "Kraken public 5m",
+      "mode": "forward_paper_research",
+      "status": "OPEN",
+      "broker_verified": false
+    },
     {
       "id": "SOL/USDT:breakout_follow:1792228800",
       "pair": "SOL/USDT",
@@ -121,8 +136,10 @@
       "created_at": "2026-10-17T09:28:07+00:00",
       "source": "Kraken public 5m",
       "mode": "forward_paper_research",
-      "status": "OPEN",
-      "broker_verified": false
+      "status": "LOSS",
+      "broker_verified": false,
+      "settled_at": "2026-10-17T13:16:32+00:00",
+      "observed_next_close": 105.04
     },
     {
       "id": "BTC/USDT:pullback_follow:1792228800",
@@ -136,8 +153,10 @@
       "created_at": "2026-10-17T09:28:07+00:00",
       "source": "Kraken public 5m",
       "mode": "forward_paper_research",
-      "status": "OPEN",
-      "broker_verified": false
+      "status": "LOSS",
+      "broker_verified": false,
+      "settled_at": "2026-10-17T13:16:32+00:00",
+      "observed_next_close": 81663.2
     },
     {
       "id": "BTC/USDT:pullback_follow:1792212900",
