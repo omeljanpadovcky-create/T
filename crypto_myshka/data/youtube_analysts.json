@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-17T07:08:47.831183+00:00",
+  "updated_at": "2026-10-17T12:20:36.128035+00:00",
   "mode": "educational_video_context",
   "channels": [
     {
@@ -339,7 +339,7 @@
         },
         {
           "id": "fzVB8L6GQRM",
-          "title": "Обзор на \" Крепость Борщева \" | Наше закрытое комьюнити трейдеров",
+          "title": "Review of \"The Fortress\": Our Private Trading Community",
           "url": "https://www.youtube.com/watch?v=fzVB8L6GQRM",
           "upload_date": null,
           "analysis": {
@@ -410,30 +410,6 @@
           "id": "kg8EKQd0NWQ",
           "title": "How to Use Trading 212 in 2026 (Full Investing Guide)",
           "url": "https://www.youtube.com/watch?v=kg8EKQd0NWQ",
-          "upload_date": null,
-          "analysis": {
-            "mentioned_instruments": [],
-            "mentioned_timeframes": [],
-            "mentioned_indicators": [],
-            "content_excerpt": "",
-            "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
-            "instrument": "Не визначено",
-            "pairs": [],
-            "direction_claim": "НЕВІДОМО",
-            "promotion_flag": false,
-            "otc_flag": false,
-            "evidence": "назва та опис (без перевіреного відеотексту)",
-            "notes": [
-              "У доступному описі немає чіткої криптовалютної пари",
-              "Повний зміст відео не підтверджений субтитрами"
-            ],
-            "verdict": "ЛИШЕ КОНТЕКСТ — НЕ ТОРГОВИЙ СИГНАЛ"
-          }
-        },
-        {
-          "id": "O8t50OxsfB8",
-          "title": "I'm Changing How I Invest My Money Because of AI",
-          "url": "https://www.youtube.com/watch?v=O8t50OxsfB8",
           "upload_date": null,
           "analysis": {
             "mentioned_instruments": [],
