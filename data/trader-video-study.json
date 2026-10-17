@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-16T22:07:38+00:00",
+  "updated_at": "2026-10-17T00:33:16+00:00",
   "origin": "two supplied trader videos; qualitative inspiration, NOT extracted transaction records",
   "video_labels_verified": false,
   "copied_trader_trades": 0,
@@ -19,29 +19,29 @@
   "last_prospective_checks": {
     "BTC/USDT": {
       "pullback_follow": {
-        "direction": "BUY",
-        "reason": "EMA9 > EMA21, відкат і зелена свічка підтвердження",
-        "closed_candle_start": 1792188000,
+        "direction": "STOP",
+        "reason": "Фільтри кандидата не дали узгодженого входу",
+        "closed_candle_start": 1792196700,
         "paper_only": true
       },
       "breakout_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792188000,
+        "closed_candle_start": 1792196700,
         "paper_only": true
       }
     },
     "ETH/USDT": {
       "pullback_follow": {
-        "direction": "BUY",
-        "reason": "EMA9 > EMA21, відкат і зелена свічка підтвердження",
-        "closed_candle_start": 1792188000,
+        "direction": "STOP",
+        "reason": "Фільтри кандидата не дали узгодженого входу",
+        "closed_candle_start": 1792196700,
         "paper_only": true
       },
       "breakout_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792188000,
+        "closed_candle_start": 1792196700,
         "paper_only": true
       }
     },
@@ -49,50 +49,50 @@
       "pullback_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792188000,
+        "closed_candle_start": 1792196700,
         "paper_only": true
       },
       "breakout_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792188000,
+        "closed_candle_start": 1792196700,
         "paper_only": true
       }
     }
   },
   "retrospective_final_20pct": {
     "pullback_follow": {
-      "wins": 76,
-      "losses": 93,
+      "wins": 81,
+      "losses": 97,
       "ties": 3,
-      "count": 172,
-      "win_rate": 0.4497,
-      "lower_95pct_wilson": 0.3766,
-      "illustrative_usd": -230.8,
+      "count": 181,
+      "win_rate": 0.4551,
+      "lower_95pct_wilson": 0.3836,
+      "illustrative_usd": -224.8,
       "not_real_returns": true,
       "passes_research_gate": false
     },
     "breakout_follow": {
-      "wins": 49,
-      "losses": 69,
+      "wins": 47,
+      "losses": 74,
       "ties": 2,
-      "count": 120,
-      "win_rate": 0.4153,
-      "lower_95pct_wilson": 0.3304,
-      "illustrative_usd": -239.2,
+      "count": 123,
+      "win_rate": 0.3884,
+      "lower_95pct_wilson": 0.3063,
+      "illustrative_usd": -307.6,
       "not_real_returns": true,
       "passes_research_gate": false
     }
   },
   "forward_results": {
     "pullback_follow": {
-      "wins": 0,
+      "wins": 2,
       "losses": 7,
       "ties": 0,
-      "count": 7,
-      "win_rate": 0.0,
-      "lower_95pct_wilson": 0.0,
-      "illustrative_usd": -70.0,
+      "count": 9,
+      "win_rate": 0.2222,
+      "lower_95pct_wilson": 0.0632,
+      "illustrative_usd": -51.6,
       "not_real_returns": true,
       "passes_research_gate": false
     },
@@ -121,8 +121,10 @@
       "created_at": "2026-10-16T22:07:38+00:00",
       "source": "Kraken public 5m",
       "mode": "forward_paper_research",
-      "status": "OPEN",
-      "broker_verified": false
+      "status": "WIN",
+      "broker_verified": false,
+      "settled_at": "2026-10-17T00:33:16+00:00",
+      "observed_next_close": 2422.26
     },
     {
       "id": "BTC/USDT:pullback_follow:1792188000",
@@ -136,8 +138,10 @@
       "created_at": "2026-10-16T22:07:38+00:00",
       "source": "Kraken public 5m",
       "mode": "forward_paper_research",
-      "status": "OPEN",
-      "broker_verified": false
+      "status": "WIN",
+      "broker_verified": false,
+      "settled_at": "2026-10-17T00:33:16+00:00",
+      "observed_next_close": 81763.6
     },
     {
       "id": "BTC/USDT:pullback_follow:1792129800",
