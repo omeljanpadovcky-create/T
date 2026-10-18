@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-18T04:59:50.549935+00:00",
+  "updated_at": "2026-10-18T11:35:36.595139+00:00",
   "mode": "educational_video_context",
   "channels": [
     {
@@ -193,7 +193,7 @@
         },
         {
           "id": "e9_ai0mgpts",
-          "title": "Сложный процент в трейдинге: как он работает и почему трейдеры сливают депозит | Психология Торговли",
+          "title": "Compound Interest in Trading: How It Works and Why Traders Blow Their Accounts | Trading Psychology",
           "url": "https://www.youtube.com/watch?v=e9_ai0mgpts",
           "upload_date": null,
           "analysis": {
@@ -217,7 +217,7 @@
         },
         {
           "id": "maXN3sHs2FA",
-          "title": "КУПИЛ BMW F10 ЗА 2 НЕДЕЛИ В ТРЕЙДИНГЕ | Обзор моей новой машины",
+          "title": "BOUGHT A BMW F10 IN 2 WEEKS VIA TRADE-IN | My new car review",
           "url": "https://www.youtube.com/watch?v=maXN3sHs2FA",
           "upload_date": null,
           "analysis": {
@@ -241,13 +241,15 @@
         },
         {
           "id": "ElfSeIVxRH8",
-          "title": "+134,000₽ за Торговую Сессию | Торговля по Техническому Анализу + СТОХАСТИК | Обучение для новичков",
+          "title": "+134,000₽ in One Trading Session | Trading with Technical Analysis + STOCHASTIC | Training for Be...",
           "url": "https://www.youtube.com/watch?v=ElfSeIVxRH8",
           "upload_date": null,
           "analysis": {
             "mentioned_instruments": [],
             "mentioned_timeframes": [],
-            "mentioned_indicators": [],
+            "mentioned_indicators": [
+              "STOCHASTIC"
+            ],
             "content_excerpt": "",
             "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
             "instrument": "Не визначено",
@@ -289,7 +291,7 @@
         },
         {
           "id": "uFGHNKVd4zk",
-          "title": "Трейдинг с нуля в 2026 году ! Технический анализ обучение для новчиков | Торговля в реальном времени",
+          "title": "Trading from Scratch in 2026! Technical Analysis Tutorial for Beginners | Live Trading",
           "url": "https://www.youtube.com/watch?v=uFGHNKVd4zk",
           "upload_date": null,
           "analysis": {
@@ -313,7 +315,7 @@
         },
         {
           "id": "2JGhrD2ZzeY",
-          "title": "САМАЯ ЛУЧШАЯ СИСТЕМА АНАЛИЗА ! Технический анализ для новичков в 2026 | Трейдинг в реальном времени",
+          "title": "THE BEST ANALYSIS SYSTEM! Technical analysis for beginners in 2026 | Real-time trading",
           "url": "https://www.youtube.com/watch?v=2JGhrD2ZzeY",
           "upload_date": null,
           "analysis": {
