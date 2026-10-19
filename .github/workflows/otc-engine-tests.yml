@@ -9,6 +9,7 @@ on:
   pull_request:
     paths:
       - 'crypto_myshka/**'
+      - 'p2p_radar/radar.py'
       - '.github/workflows/otc-engine-tests.yml'
   workflow_dispatch:
 permissions:
