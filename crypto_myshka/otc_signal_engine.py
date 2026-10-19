@@ -155,7 +155,7 @@ def record_signal(signal: dict[str, Any], source: str) -> int:
                 (symbol,candle_time,horizon_seconds,direction,entry_price,created_at,due_at,source)
                 VALUES (?,?,?,?,?,?,?,?)""",
                 (signal["symbol"], signal["candle_time"], horizon, signal["direction"],
-                 signal["entry_price"], signal["created_at"], signal["candle_time"] + horizon, source),
+                 signal["entry_price"], signal["created_at"], time.time() + horizon, source),
             )
         conn.commit()
         row = conn.execute(
