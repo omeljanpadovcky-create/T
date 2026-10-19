@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'crypto_myshka/**'
+      - 'p2p_radar/radar.py'
       - '.github/workflows/otc-engine-tests.yml'
   pull_request:
     paths:
@@ -22,6 +23,6 @@ jobs:
         with:
           python-version: '3.12'
       - name: Syntax-check OTC modules
-        run: python -m py_compile crypto_myshka/otc_signal_engine.py crypto_myshka/otc_telegram_handlers.py
+        run: python -m py_compile p2p_radar/radar.py crypto_myshka/otc_signal_engine.py crypto_myshka/otc_telegram_handlers.py
       - name: Run engine unit tests
         run: python -m unittest crypto_myshka.test_otc_signal_engine -v
