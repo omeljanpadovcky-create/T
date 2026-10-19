@@ -1,5 +1,5 @@
 from __future__ import annotations
-import base64, csv, hashlib, hmac, json, os, subprocess, threading, time
+import base64, csv, hashlib, hmac, json, os, subprocess, sys, threading, time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, asdict
 from datetime import datetime
@@ -10,6 +10,7 @@ import requests
 from dotenv import load_dotenv
 
 HERE=Path(__file__).resolve().parent; ROOT=HERE.parent; KYIV=ZoneInfo('Europe/Kyiv')
+if str(ROOT) not in sys.path: sys.path.insert(0, str(ROOT))
 load_dotenv(HERE/'.env'); load_dotenv(ROOT/'.env')
 def ef(k,d):
     try:return float(os.getenv(k,d))
