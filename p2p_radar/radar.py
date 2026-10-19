@@ -919,11 +919,11 @@ def otc_menu_text(action='menu'):
     try:
         from crypto_myshka import otc_signal_engine as otc_engine
     except Exception as exc:
-        return '🐭 Crypto Myshka OTC PAPER\\nМодуль недоступний: '+str(exc)[:180]+'\\nТоргівля вимкнена.'
+        return '🐭 Crypto Myshka OTC PAPER\nМодуль недоступний: '+str(exc)[:180]+'\nТоргівля вимкнена.'
     if action == 'signal':
-        return ('⛔ Сигнал не створено.\\n'
-                'Джерело котирувань Pocket Option OTC не підтверджене.\\n'
-                'Звичайні біржові ціни не можна видавати за OTC.\\n'
+        return ('⛔ Сигнал не створено.\n'
+                'Джерело котирувань Pocket Option OTC не підтверджене.\n'
+                'Звичайні біржові ціни не можна видавати за OTC.\n'
                 'Торгівля вимкнена; реальних угод немає.')
     if action == 'history':
         rows=otc_engine.history(10)
@@ -932,7 +932,7 @@ def otc_menu_text(action='menu'):
         for row in rows:
             stamp=datetime.fromtimestamp(float(row['candle_time']),KYIV).strftime('%m-%d %H:%M:%S Kyiv')
             lines.append(f"#{row['id']} {row['symbol']} · {row['horizon_seconds']}с · {row['direction']} · {row['outcome'] or 'ОЧІКУЄ'} · {stamp}")
-        return '\\n'.join(lines)
+        return '\n'.join(lines)
     if action == 'stats':
         stats=otc_engine.stats()
         lines=['📊 OTC PAPER — фактична статистика, не прогноз:']
@@ -943,14 +943,14 @@ def otc_menu_text(action='menu'):
             else:
                 rate='—' if s['win_rate_pct'] is None else f"{s['win_rate_pct']:.2f}%"
                 lines.append(f"{horizon}с: {s['wins']} WIN / {s['losses']} LOSS / {s['flats']} FLAT; очікують {s['pending']}; win rate {rate}")
-        return '\\n'.join(lines)
+        return '\n'.join(lines)
     if action == 'status':
-        return ('🔌 Crypto Myshka OTC PAPER\\n'
-                'Джерело: НЕ ПІДТВЕРДЖЕНО — адаптер не підключений\\n'
-                'Telegram polling: наявний P2P-процес\\n'
-                'Торгівля: ВИМКНЕНО\\n'
+        return ('🔌 Crypto Myshka OTC PAPER\n'
+                'Джерело: НЕ ПІДТВЕРДЖЕНО — адаптер не підключений\n'
+                'Telegram polling: наявний P2P-процес\n'
+                'Торгівля: ВИМКНЕНО\n'
                 f"База: {otc_engine.DB_PATH}")
-    return '🐭 Crypto Myshka · OTC PAPER\\nТільки тестові сигнали, без реальних угод.\\nВибери дію нижче.'
+    return '🐭 Crypto Myshka · OTC PAPER\nТільки тестові сигнали, без реальних угод.\nВибери дію нижче.'
 
 def telegram_send_otc(chat_id, action='menu', message_id=None):
     if not TG_TOKEN: return
