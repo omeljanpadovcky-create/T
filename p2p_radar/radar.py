@@ -955,7 +955,7 @@ def otc_menu_text(action='menu'):
 def telegram_send_otc(chat_id, action='menu', message_id=None):
     if not TG_TOKEN: return
     text_value=otc_menu_text(action)
-    payload={'chat_id':chat_id,'text':text_value,'reply_markup':json.dumps(otc_menu_keyboard(),ensure_ascii=False)}
+    payload={'chat_id':chat_id,'text':text_value,'reply_markup':otc_menu_keyboard()}
     if message_id is not None:
         payload['message_id']=message_id
         endpoint='editMessageText'
