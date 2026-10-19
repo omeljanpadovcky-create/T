@@ -1,0 +1,19 @@
+services:
+  - type: worker
+    name: crypto-myshka-radar
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r p2p_radar/requirements.txt
+    startCommand: python p2p_radar/radar.py
+    autoDeploy: true
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+      - key: P2P_GIT_PUSH
+        value: "0"
+      - key: P2P_SCAN_SECONDS
+        value: "15"
+      - key: PYTHONUNBUFFERED
+        value: "1"
