@@ -904,6 +904,68 @@ def telegram_public_answer(text):
 
     return ("Не зовсім зрозуміла запит 🙂\n\n"+telegram_public_help()),None
 
+
+# OTC PAPER menu integrated into the existing Telegram polling loop.
+# Signal creation stays disabled until a verified, permitted OTC feed is wired in.
+def otc_menu_keyboard():
+    return {'inline_keyboard': [
+        [{'text':'📡 Сигнал','callback_data':'otc:signal'}],
+        [{'text':'🧾 Історія','callback_data':'otc:history'},
+         {'text':'📊 Статистика','callback_data':'otc:stats'}],
+        [{'text':'🔌 Статус джерела','callback_data':'otc:status'}],
+    ]}
+
+def otc_menu_text(action='menu'):
+    try:
+        from crypto_myshka import otc_signal_engine as otc_engine
+    except Exception as exc:
+        return '🐭 Crypto Myshka OTC PAPER\\nМодуль недоступний: '+str(exc)[:180]+'\\nТоргівля вимкнена.'
+    if action == 'signal':
+        return ('⛔ Сигнал не створено.\\n'
+                'Джерело котирувань Pocket Option OTC не підтверджене.\\n'
+                'Звичайні біржові ціни не можна видавати за OTC.\\n'
+                'Торгівля вимкнена; реальних угод немає.')
+    if action == 'history':
+        rows=otc_engine.history(10)
+        if not rows: return '🧾 OTC PAPER — історія порожня.'
+        lines=['🧾 Останні тестові записи:']
+        for row in rows:
+            stamp=datetime.fromtimestamp(float(row['candle_time']),KYIV).strftime('%m-%d %H:%M:%S Kyiv')
+            lines.append(f"#{row['id']} {row['symbol']} · {row['horizon_seconds']}с · {row['direction']} · {row['outcome'] or 'ОЧІКУЄ'} · {stamp}")
+        return '\\n'.join(lines)
+    if action == 'stats':
+        stats=otc_engine.stats()
+        lines=['📊 OTC PAPER — фактична статистика, не прогноз:']
+        for horizon in ('15','30','60'):
+            s=stats.get(horizon)
+            if not s:
+                lines.append(f'{horizon}с: немає записів')
+            else:
+                rate='—' if s['win_rate_pct'] is None else f"{s['win_rate_pct']:.2f}%"
+                lines.append(f"{horizon}с: {s['wins']} WIN / {s['losses']} LOSS / {s['flats']} FLAT; очікують {s['pending']}; win rate {rate}")
+        return '\\n'.join(lines)
+    if action == 'status':
+        return ('🔌 Crypto Myshka OTC PAPER\\n'
+                'Джерело: НЕ ПІДТВЕРДЖЕНО — адаптер не підключений\\n'
+                'Telegram polling: наявний P2P-процес\\n'
+                'Торгівля: ВИМКНЕНО\\n'
+                f"База: {otc_engine.DB_PATH}")
+    return '🐭 Crypto Myshka · OTC PAPER\\nТільки тестові сигнали, без реальних угод.\\nВибери дію нижче.'
+
+def telegram_send_otc(chat_id, action='menu', message_id=None):
+    if not TG_TOKEN: return
+    text_value=otc_menu_text(action)
+    payload={'chat_id':chat_id,'text':text_value,'reply_markup':json.dumps(otc_menu_keyboard(),ensure_ascii=False)}
+    if message_id is not None:
+        payload['message_id']=message_id
+        endpoint='editMessageText'
+    else:
+        endpoint='sendMessage'
+    try:
+        resp=S.post(f'https://api.telegram.org/bot{TG_TOKEN}/{endpoint}',json=payload,timeout=10)
+        if not resp.ok: print('OTC TELEGRAM UI:',resp.status_code,resp.text[:300],flush=True)
+    except Exception as exc: print('OTC TELEGRAM UI:',str(exc)[:200],flush=True)
+
 def telegram_control_loop():
     if not TG_TOKEN:return
     offset=None
@@ -931,7 +993,11 @@ def telegram_control_loop():
                     if chat!=str(TG_CHAT):
                         callback_answer(qid,'Ця керуюча кнопка доступна лише власнику радара.',True)
                         continue
-                    if data=='p2p_route_checked':
+                    if data in {'otc:signal','otc:history','otc:stats','otc:status'}:
+                        callback_answer(qid,'OTC PAPER: тестовий інтерфейс')
+                        action=data.split(':',1)[1]
+                        telegram_send_otc(chat,action,((q.get('message') or {}).get('message_id')))
+                    elif data=='p2p_route_checked':
                         b,bg=bank_apply('route-checked');n=int(b.get('route_checks',0));warn=n>=TG_CONFIRM_WARN
                         callback_answer(qid,(f"⚠️ Уже {n} перевірок сьогодні. Звір ліміти банку/картки перед наступною дією." if warn else f"Перевірка #{n} зарахована."),warn)
                         if n==TG_CONFIRM_WARN:
@@ -974,6 +1040,14 @@ def telegram_control_loop():
                 # Owner /status keeps the private guard status; public /status shows market status.
                 if owner and cmd in {'/p2p_status'}:
                     telegram_to(chat,telegram_status_text())
+                    continue
+
+                if cmd in {'/otc','/otc_signal','/otc_history','/otc_stats','/otc_status'}:
+                    if not owner:
+                        telegram_to(chat,'Команди OTC доступні лише власнику радара.')
+                        continue
+                    action={'/otc':'menu','/otc_signal':'signal','/otc_history':'history','/otc_stats':'stats','/otc_status':'status'}[cmd]
+                    telegram_send_otc(chat,action)
                     continue
 
                 answer,route=telegram_public_answer(text_msg)
