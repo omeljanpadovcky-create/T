@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-19T20:44:12+00:00",
+  "updated_at": "2026-10-19T23:58:00+00:00",
   "origin": "two supplied trader videos; qualitative inspiration, NOT extracted transaction records",
   "video_labels_verified": false,
   "copied_trader_trades": 0,
@@ -19,29 +19,29 @@
   "last_prospective_checks": {
     "BTC/USDT": {
       "pullback_follow": {
-        "direction": "BUY",
-        "reason": "EMA9 > EMA21, відкат і зелена свічка підтвердження",
-        "closed_candle_start": 1792442100,
+        "direction": "STOP",
+        "reason": "Фільтри кандидата не дали узгодженого входу",
+        "closed_candle_start": 1792453800,
         "paper_only": true
       },
       "breakout_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792442100,
+        "closed_candle_start": 1792453800,
         "paper_only": true
       }
     },
     "ETH/USDT": {
       "pullback_follow": {
-        "direction": "BUY",
-        "reason": "EMA9 > EMA21, відкат і зелена свічка підтвердження",
-        "closed_candle_start": 1792442100,
+        "direction": "STOP",
+        "reason": "Фільтри кандидата не дали узгодженого входу",
+        "closed_candle_start": 1792453800,
         "paper_only": true
       },
       "breakout_follow": {
-        "direction": "BUY",
-        "reason": "Пробій максимуму попередніх 7 свічок у висхідному тренді",
-        "closed_candle_start": 1792442100,
+        "direction": "STOP",
+        "reason": "Фільтри кандидата не дали узгодженого входу",
+        "closed_candle_start": 1792453800,
         "paper_only": true
       }
     },
@@ -49,61 +49,61 @@
       "pullback_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792442100,
+        "closed_candle_start": 1792453800,
         "paper_only": true
       },
       "breakout_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792442100,
+        "closed_candle_start": 1792453800,
         "paper_only": true
       }
     }
   },
   "retrospective_final_20pct": {
     "pullback_follow": {
-      "wins": 119,
-      "losses": 117,
-      "ties": 3,
-      "count": 239,
-      "win_rate": 0.5042,
-      "lower_95pct_wilson": 0.4409,
-      "illustrative_usd": -75.2,
+      "wins": 106,
+      "losses": 108,
+      "ties": 6,
+      "count": 220,
+      "win_rate": 0.4953,
+      "lower_95pct_wilson": 0.429,
+      "illustrative_usd": -104.8,
       "not_real_returns": true,
       "passes_research_gate": false
     },
     "breakout_follow": {
-      "wins": 76,
-      "losses": 95,
+      "wins": 75,
+      "losses": 93,
       "ties": 3,
-      "count": 174,
-      "win_rate": 0.4444,
-      "lower_95pct_wilson": 0.372,
-      "illustrative_usd": -250.8,
+      "count": 171,
+      "win_rate": 0.4464,
+      "lower_95pct_wilson": 0.3733,
+      "illustrative_usd": -240.0,
       "not_real_returns": true,
       "passes_research_gate": false
     }
   },
   "forward_results": {
     "pullback_follow": {
-      "wins": 4,
-      "losses": 10,
+      "wins": 5,
+      "losses": 11,
       "ties": 1,
-      "count": 15,
-      "win_rate": 0.2857,
-      "lower_95pct_wilson": 0.1172,
-      "illustrative_usd": -63.2,
+      "count": 17,
+      "win_rate": 0.3125,
+      "lower_95pct_wilson": 0.1416,
+      "illustrative_usd": -64.0,
       "not_real_returns": true,
       "passes_research_gate": false
     },
     "breakout_follow": {
       "wins": 3,
-      "losses": 10,
+      "losses": 11,
       "ties": 0,
-      "count": 13,
-      "win_rate": 0.2308,
-      "lower_95pct_wilson": 0.0818,
-      "illustrative_usd": -72.4,
+      "count": 14,
+      "win_rate": 0.2143,
+      "lower_95pct_wilson": 0.0757,
+      "illustrative_usd": -82.4,
       "not_real_returns": true,
       "passes_research_gate": false
     }
@@ -121,8 +121,10 @@
       "created_at": "2026-10-19T20:44:12+00:00",
       "source": "Kraken public 5m",
       "mode": "forward_paper_research",
-      "status": "OPEN",
-      "broker_verified": false
+      "status": "LOSS",
+      "broker_verified": false,
+      "settled_at": "2026-10-19T23:58:00+00:00",
+      "observed_next_close": 2402.85
     },
     {
       "id": "ETH/USDT:pullback_follow:1792442100",
@@ -136,8 +138,10 @@
       "created_at": "2026-10-19T20:44:12+00:00",
       "source": "Kraken public 5m",
       "mode": "forward_paper_research",
-      "status": "OPEN",
-      "broker_verified": false
+      "status": "LOSS",
+      "broker_verified": false,
+      "settled_at": "2026-10-19T23:58:00+00:00",
+      "observed_next_close": 2402.85
     },
     {
       "id": "BTC/USDT:pullback_follow:1792442100",
@@ -151,8 +155,10 @@
       "created_at": "2026-10-19T20:44:12+00:00",
       "source": "Kraken public 5m",
       "mode": "forward_paper_research",
-      "status": "OPEN",
-      "broker_verified": false
+      "status": "WIN",
+      "broker_verified": false,
+      "settled_at": "2026-10-19T23:58:00+00:00",
+      "observed_next_close": 82023.4
     },
     {
       "id": "BTC/USDT:breakout_follow:1792424100",
