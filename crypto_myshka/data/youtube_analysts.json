@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-20T11:58:30.455527+00:00",
+  "updated_at": "2026-10-20T17:26:44.289719+00:00",
   "mode": "educational_video_context",
   "channels": [
     {
@@ -241,15 +241,13 @@
         },
         {
           "id": "ElfSeIVxRH8",
-          "title": "+134,000₽ in One Trading Session | Trading with Technical Analysis + STOCHASTIC | Training for Be...",
+          "title": "+134,000₽ за Торговую Сессию | Торговля по Техническому Анализу + СТОХАСТИК | Обучение для новичков",
           "url": "https://www.youtube.com/watch?v=ElfSeIVxRH8",
           "upload_date": null,
           "analysis": {
             "mentioned_instruments": [],
             "mentioned_timeframes": [],
-            "mentioned_indicators": [
-              "STOCHASTIC"
-            ],
+            "mentioned_indicators": [],
             "content_excerpt": "",
             "what_jev_can_use": "Лише підтверджені цитати, згадані пари та індикатори; не копіювати сигнали.",
             "instrument": "Не визначено",
