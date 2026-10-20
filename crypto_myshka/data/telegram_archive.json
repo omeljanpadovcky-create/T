@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "updated_at": "2026-10-19T07:53:02.343163+00:00",
+  "updated_at": "2026-10-20T07:41:26.203770+00:00",
   "channels": {
     "telegram_main": {
       "channel": "it_statti",
       "ok": true,
-      "added": 5,
-      "archived": 7002,
+      "added": 3,
+      "archived": 7005,
       "pages_scanned": 1,
       "earliest_post_id_seen": 1,
       "complete": true
@@ -14,16 +14,48 @@
     "telegram_airdrop": {
       "channel": "it_statti_crypto",
       "ok": true,
-      "added": 0,
-      "archived": 3259,
+      "added": 1,
+      "archived": 3260,
       "pages_scanned": 1,
       "earliest_post_id_seen": 1,
       "complete": true
     }
   },
-  "post_count": 10261,
+  "post_count": 10265,
   "complete": true,
   "posts": [
+    {
+      "id": "b548159e30c200",
+      "post_id": 7419,
+      "channel": "it_statti",
+      "text": "🔶 Цікаві факти / метрики: QNT ≈ $199 Market Cap ≈ $2,9B FDV ≈ $2,9B Circulating ≈14,56M майже 100% supply circulating inflation ≈ 0 великих unlocks = 0. The Clearing House уже офіційно вибрала Quant для своєї On-Chain Money Initiative. Murex інтегрує Quant у MX.3. Fusion mainnet працює та підтримує десятки мереж. Але при valuation ~$2,9B немає достатньо відкритих даних, щоб нормально порахувати: P/S holder yield QNT buyback yield реальний locked/staked % supply. Тобто фундаментальний catalyst сильний. Valuation transparency — слабка. 🔶 Активності / Як заробити: QNT не варто зараз продавати як простий retail staking-token. Fusion використовує QNT staking для Trusted Nodes. Але я не бачу достатньо відкритих даних, щоб сказати: «будь-який holder може зараз застейкати QNT і отримувати стабільний X% APY». Тому investment thesis — не пасивний yield. Для звичайного holder ставка сьогодні: future utility + staking demand + network usage. Overledger integration/development — більше можливість для developers і enterprise clients, ніж проста airdrop-активність. Підтвердженого великого retrodrop для retail немає. 🔶 Мій вердикт: Quant зараз виглядає значно сильніше, ніж старий narrative: «ISO 20022 + банки колись прийдуть». Уже є: ✅ The Clearing House; ✅ live tokenized-deposit transactions; ✅ Murex; ✅ production-grade banking integrations; ✅ Fusion mainnet; ✅ QNT staking model; ✅ fixed supply; ✅ майже весь supply circulating; ✅ нульовий класичний unlock-risk. Тобто: Quant як infrastructure thesis дуже сильний. Але наш головний тест: якщо бізнес Quant виросте у 10 разів — що автоматично зміниться для QNT holder? І тут відповідь поки не ідеальна. Fusion може створити staking demand. Quant services можуть оплачуватися QNT. Але сьогодні ми не бачимо прозоро: скільки QNT реально купують клієнти скільки QNT реально locked скільки QNT staked який network fee revenue який holder revenue. Тому: Quant як компанія/продукт для мене сильніший, ніж QNT як інвестиційний asset. Але через майже ідеальну supply-side tokenomics, сильні institutional contracts і Fusion я б не опускав QNT нижче 7/10. Для rerating хочу бачити: банківські інтеграції переходять у production → usage росте → QNT staking/locking можна виміряти → enterprise activity створює material recurring token demand. Якщо цей міст стане прозорим, QNT може перейти в значно сильнішу інвестиційну категорію. 📊 Інвестиційна оцінка Фундамент: ⭐ ⭐ ⭐ ⭐ ☆ Токеноміка: ⭐ ⭐ ⭐ ⭐ ☆ Value accrual: ⭐ ⭐ ☆☆☆ Конкурентна позиція: ⭐ ⭐ ⭐ ⭐ ☆ Регуляторний профіль: ⭐ ⭐ ⭐ ☆☆ Ризик розлоків: ⭐ ⭐ ⭐ ⭐ ⭐ Потенціал на 2–4 роки: ⭐ ⭐ ⭐ ⭐ ☆ Загальна оцінка: 7,0/10 Тип ідеї: Institutional interoperability / programmable money / tokenized banking infrastructure. Головна ставка: Quant стає одним із ключових infrastructure layers для tokenized deposits і institutional finance, а масштабування Fusion створює суттєвий staking та network demand на дефіцитний QNT. Головний ризик: Quant Network побудує дуже успішний enterprise business, але більша частина економічної цінності залишиться на рівні компанії та fiat-контрактів, тоді як попит на QNT зростатиме значно повільніше. Біржа №1 - Binance 🎰 ТОП біржі - ByBit 📈 , OKX 📈 Криптокартки - ТУТ 💳 🌐 База знань трейдингу | 🎞 YouTube | ✉️ Crypto Проекти",
+      "url": "https://t.me/it_statti/7419",
+      "published_at": "2026-10-19T10:36:01+00:00"
+    },
+    {
+      "id": "97902b77bc223d",
+      "post_id": 7418,
+      "channel": "it_statti",
+      "text": "🔶 Зв’язок продукту і токена / Value accrual: Оце головне питання. QNT має реальну utility. Він використовується для: доступу до Quant services оплати частини продуктів staking у Fusion network operations. У Fusion: Trusted Nodes stake QNT і можуть отримувати rewards залежно від network activity. Тобто product → token bridge існує. Але він поки недостатньо прозорий. Overledger дозволяє оплачувати subscription: USD або QNT. І я не бачу підтвердження, що кожен USD-платіж автоматично: конвертується в market buy QNT або блокує QNT на довгий строк. Так само немає прозорого механізму: Quant revenue → buy QNT → burn / distribute holders. QNT також не дає: частки в Quant Network Ltd дивідендів права на прибуток компанії. Тому не можна писати: «The Clearing House використовує Quant → QNT автоматично отримує цей revenue». Це не доведено. Ще один важливий нюанс: якщо сервіс коштує, наприклад, $100K на рік і оплата номінована у доларах, то: чим дорожчий QNT → тим менше QNT потрібно для тієї ж послуги. Тому стійкий дефіцит з’явиться тільки якщо ростимуть: client spending QNT staking locked balances network fees довжина утримання токена. Саме ці цифри нам зараз найбільше бракують. 🔶 Що виділяє серед конкурентів: Quant сильний не TPS і не DeFi. Його moat: enterprise distribution + interoperability + regulatory-friendly architecture. Банкам не потрібно переходити на одну конкретну мережу. Quant може з'єднати: legacy banking infrastructure public blockchains private DLT tokenized money. Fusion уже запущений у mainnet і підключений до десятків мереж. Основні конкуренти залежать від задачі: Chainlink — interoperability + crypto-native infrastructure; Canton — institutional/private DLT; Fnality / Partior — settlement; традиційні fintech vendors — банківське програмне забезпечення. Quant сильний тим, що намагається працювати поверх усіх цих систем, а не змушувати банк вибирати один blockchain. 🔶 Технологічні та централізаційні ризики: Quant — не permissionless network у стилі Ethereum. Це керована enterprise-платформа. Quant Network контролює: комерційні рішення розвиток Overledger інтеграції частину infrastructure. У Fusion використовується модель Trusted Nodes . Оператори можуть проходити KYC, а інституції можуть визначати: хто обробляє транзакції у якій юрисдикції за якими правилами. Для банків це плюс. Для decentralization — мінус. Ще один ризик: довгий sales cycle. Вибір технології ≠ інтеграція ≠ production ≠ масштабний revenue. У банківському секторі між цими етапами можуть пройти роки. І головний economic risk: Quant як компанія може рости набагато швидше, ніж економічна цінність QNT. 🔶 Регуляторний статус / CLARITY Act: QNT не входить до explicit examples digital commodities у перевірених SEC/CFTC матеріалах. Це: не означає security. У токена є сильна functional utility: network access payment staking infrastructure usage. Але investment thesis значною мірою залежить від execution Quant Network як компанії. Тому managerial-dependence вище, ніж у найбільш decentralized assets. CLARITY Act станом на 19 жовтня 2026 року законом не став. Робота Quant із regulated institutions — сильний institutional signal. Але: банківський контракт ≠ юридичне схвалення QNT регулятором.",
+      "url": "https://t.me/it_statti/7418",
+      "published_at": "2026-10-19T10:36:01+00:00"
+    },
+    {
+      "id": "f5d02f4b0738ab",
+      "post_id": 7417,
+      "channel": "it_statti",
+      "text": "Огляд проекту Quant (QNT): банки реально заходять у tokenized money — але наскільки від цього виграє токен? #оглядкриптопроектів 🔶 Про що проєкт: Quant будує інфраструктуру, яка з’єднує: банківські системи blockchains DLT tokenized assets programmable money. Основний продукт — Overledger , interoperability-layer, через який financial institutions можуть працювати з різними мережами без окремої інтеграції під кожну. Інші важливі напрямки: Quant Flow — tokenized deposits і programmable payments; Fusion — multi-ledger infrastructure із QNT staking для Trusted Nodes. Тобто Quant продає не «ще один blockchain». Його ставка: стати middleware між traditional finance та різними digital-asset networks. 🔶 Чому зараз цікавий: 24 вересня The Clearing House вибрала Quant технологічним постачальником своєї On-Chain Money Initiative . Quant має забезпечити: interoperability transaction orchestration підключення до RTP підключення до CHIPS. Institutional access очікується у H1 2027 . Це дуже сильний catalyst, але важливо: вибір технології вже відбувся, масштабний production revenue ще треба побачити. Ще один сильний напрямок — Murex MX.3 . Quant інтегрується в систему, яку банки вже використовують для: tokenized deposits digital bonds capital markets operations. Також Quant уже брав участь у live tokenized-deposit transactions у Великій Британії. Тобто narrative: «банки колись прийдуть» уже поступово перетворюється на: банки реально тестують і використовують Quant infrastructure. 🔶 Бекери та інвестори: Quant не типовий VC-token нового циклу. Проєкт проводив token sale ще у 2018 році. Публічно підтверджена інвестиція Alpha Sigma Capital у 2020 році. Але для QNT сьогодні важливіше не кількість фондів, а реальні enterprise integrations. Серед ключових клієнтів/партнерів: The Clearing House Murex UK Finance Oracle та інші. Але: партнер Quant ≠ інвестор у QNT. Інтеграція банку не означає, що банк автоматично купує токен на ринку. 🔶 Токеноміка: Поточний зріз: QNT ≈ $199 Market Cap ≈ $2,9B FDV ≈ $2,9B Circulating ≈14,56M QNT Total/Max Supply ≈14,6M. У деяких старих джерелах зустрічається цифра ~14,88M, тому різниця залежить від методики обліку спалених токенів. Але інвестиційно головне інше: майже весь supply уже circulating. Немає: VC unlock cliff щомісячних team unlocks validator inflation постійної нової емісії. Тобто QNT має одну з найчистіших supply-side tokenomics серед великих altcoins. При цьому: майже весь supply у circulation ≠ ідеальна децентралізація ownership. Великі holders або corporate reserves все одно можуть продавати. І старе історичне burn після token sale не означає, що сьогодні існує регулярний revenue-funded burn.",
+      "url": "https://t.me/it_statti/7417",
+      "published_at": "2026-10-19T10:36:01+00:00"
+    },
+    {
+      "id": "da6274154d9ca0",
+      "post_id": 3713,
+      "channel": "it_statti_crypto",
+      "text": "Закидуємо в стейкінг в Flash Earn - пул 30 000 000 KAT від OKX 📈 OKX запускають OKX Flash Earn з пулом 30М KAT 🔶 2 пула: ▪️ BTC (27 000 000 KAT) - ліміт на акаунт 1 BTC ▪️ KAT (3 000 000 KAT) - ліміт на акаунт 3 000 000 KAT 🔶 Що робити: ▪️ Мати обліковий запис OKX + КУС ▪️ Заходимо в Earn з телефону і тиснемо по банеру В додатку це -> Огляд -> банер «Отримуємо частку винагороди на суму….» ▪️ Або просто переходимо по лінку ТУТ Вивести можна в будь-який момент ⏱ Початок: 19 жовтня о 10:00 за Києвом ⏳ Дедлайн: 24 жовтня о 10:00 за Києвом ТОП біржа - OKX 📈 Криптокартки - ТУТ 💳",
+      "url": "https://t.me/it_statti_crypto/3713",
+      "published_at": "2026-10-19T08:18:04+00:00"
+    },
     {
       "id": "6c44d64ad8780b",
       "post_id": 7416,
