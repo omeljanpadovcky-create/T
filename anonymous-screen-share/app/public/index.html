@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Private Screen Share</title>
+<title>Hide & Seek — Game Room</title>
 <style>
 :root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}*{box-sizing:border-box}
 body{margin:0;min-height:100vh;background:#0a0e18;color:#f3f6ff;padding:22px;display:grid;place-items:center}
@@ -18,24 +18,24 @@ video{display:block;width:100%;max-height:65vh;background:#05070c;border-radius:
 </style>
 </head>
 <body><main>
-<div class="eyebrow">PRIVATE SESSION · WEBRTC DEMO</div>
-<h1>Share your screen by choice.</h1>
-<p>Start a session on a supported browser, then give the viewer your six-character room code. Screen capture only begins after you press Start and approve the browser's system prompt.</p>
-<div class="tabs"><button class="active" id="shareTab">Share my screen</button><button id="watchTab">Watch a session</button></div>
+<div class="eyebrow">HIDE &amp; SEEK · GAME ROOM</div>
+<h1>Secret Mission 🎮</h1>
+<p>Join your friends’ hide-and-seek session. Create a room to share your screen, or enter a friend’s room code to watch. Screen sharing starts only when the person sharing chooses it and approves the device prompt.</p>
+<div class="tabs"><button class="active" id="shareTab">Start a mission</button><button id="watchTab">Join a mission</button></div>
 <section class="panel" id="sharePanel">
-<h2>Share screen</h2><p>Choose a browser that supports <code>getDisplayMedia</code>. iPhone Safari does not reliably support whole-device screen capture from a normal webpage; use a compatible native iOS sharing app for that case.</p>
-<div class="actions"><button class="primary" id="startShare">Create session &amp; choose screen</button><button class="secondary" id="stopShare" disabled>Stop sharing</button></div>
+<h2>Start your mission</h2><p>Choose a browser that supports <code>getDisplayMedia</code>. iPhone Safari does not reliably support whole-device screen capture from a normal webpage; use a compatible native iOS sharing app for that case.</p>
+<div class="actions"><button class="primary" id="startShare">Create room &amp; share screen</button><button class="secondary" id="stopShare" disabled>End mission</button></div>
 <div class="status" id="shareStatus" role="status">No active session.</div>
-<div id="shareCodeWrap" hidden><p>Share this code with the intended viewer:</p><h2 id="shareCode" style="letter-spacing:.18em"></h2></div>
+<div id="shareCodeWrap" hidden><p>Give this room code to your friend:</p><h2 id="shareCode" style="letter-spacing:.18em"></h2></div>
 <video id="localVideo" autoplay muted playsinline hidden></video>
 </section>
 <section class="panel" id="watchPanel" hidden>
-<h2>Watch screen</h2><label for="roomInput">Six-character session code</label><input id="roomInput" maxlength="6" autocomplete="off" autocapitalize="characters" placeholder="ABC123">
-<div class="actions"><button class="primary" id="join">Connect to session</button><button class="secondary" id="disconnect" disabled>Disconnect</button></div>
-<div class="status" id="watchStatus" role="status">Enter a code supplied by the person sharing.</div>
+<h2>Join a friend</h2><label for="roomInput">Friend’s six-character room code</label><input id="roomInput" maxlength="6" autocomplete="off" autocapitalize="characters" placeholder="ABC123">
+<div class="actions"><button class="primary" id="join">Join room</button><button class="secondary" id="disconnect" disabled>Disconnect</button></div>
+<div class="status" id="watchStatus" role="status">Enter the room code shared by your friend.</div>
 <video id="remoteVideo" autoplay playsinline controls hidden></video>
 </section>
-<small>Demo limitation: signaling is stored temporarily in this Node server; media is peer-to-peer when the network allows it. For access outside a trusted network, deploy behind HTTPS and add authenticated, short-lived viewer access. Never share a code publicly. This demo does not record the stream.</small>
+<small>Game demo: room signaling is stored temporarily on the Node server; video travels peer-to-peer when the network allows it. For use over the internet, deploy behind HTTPS and add access controls. Share your room code only with the people playing. This demo does not record the stream.</small>
 </main>
 <script>
 const $=id=>document.getElementById(id);
