@@ -1,0 +1,12 @@
+{
+  "name": "anonymous-screen-share-local",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Consent-based browser screen-sharing demo with local signaling server",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
