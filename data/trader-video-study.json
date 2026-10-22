@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-21T20:55:26+00:00",
+  "updated_at": "2026-10-22T00:01:55+00:00",
   "origin": "two supplied trader videos; qualitative inspiration, NOT extracted transaction records",
   "video_labels_verified": false,
   "copied_trader_trades": 0,
@@ -21,13 +21,13 @@
       "pullback_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792615800,
+        "closed_candle_start": 1792626900,
         "paper_only": true
       },
       "breakout_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792615800,
+        "closed_candle_start": 1792626900,
         "paper_only": true
       }
     },
@@ -35,13 +35,13 @@
       "pullback_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792615800,
+        "closed_candle_start": 1792626900,
         "paper_only": true
       },
       "breakout_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792615800,
+        "closed_candle_start": 1792626900,
         "paper_only": true
       }
     },
@@ -49,37 +49,37 @@
       "pullback_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792615800,
+        "closed_candle_start": 1792626900,
         "paper_only": true
       },
       "breakout_follow": {
         "direction": "STOP",
         "reason": "Фільтри кандидата не дали узгодженого входу",
-        "closed_candle_start": 1792615800,
+        "closed_candle_start": 1792626900,
         "paper_only": true
       }
     }
   },
   "retrospective_final_20pct": {
     "pullback_follow": {
-      "wins": 107,
-      "losses": 136,
+      "wins": 102,
+      "losses": 139,
       "ties": 12,
-      "count": 255,
-      "win_rate": 0.4403,
-      "lower_95pct_wilson": 0.3793,
-      "illustrative_usd": -375.6,
+      "count": 253,
+      "win_rate": 0.4232,
+      "lower_95pct_wilson": 0.3625,
+      "illustrative_usd": -451.6,
       "not_real_returns": true,
       "passes_research_gate": false
     },
     "breakout_follow": {
-      "wins": 85,
-      "losses": 114,
+      "wins": 82,
+      "losses": 116,
       "ties": 8,
-      "count": 207,
-      "win_rate": 0.4271,
-      "lower_95pct_wilson": 0.3604,
-      "illustrative_usd": -358.0,
+      "count": 206,
+      "win_rate": 0.4141,
+      "lower_95pct_wilson": 0.3478,
+      "illustrative_usd": -405.6,
       "not_real_returns": true,
       "passes_research_gate": false
     }
