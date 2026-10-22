@@ -65,9 +65,39 @@ export default async function handler(req, res) {
       signal: AbortSignal.timeout(25000)
     });
     if (!response.ok) {
-      if (response.status === 401 || response.status === 403) return json(res, 502, { ok: false, error: "The AI provider did not accept the configured API key." });
-      if (response.status === 429) return json(res, 429, { ok: false, error: "AI provider limit reached. Check your account limits and retry." });
-      return json(res, 502, { ok: false, error: "AI drafting failed. Check provider settings and deployment logs." });
+      let providerPayload = {};
+      try { providerPayload = await response.json(); } catch {}
+      const providerError = providerPayload?.error || {};
+      const providerCode = typeof providerError.code === "string"
+        ? providerError.code.replace(/[^a-zA-Z0-9_.-]/g, "").slice(0, 80)
+        : "";
+      const diagnostic = providerCode ? ` (code: ${providerCode})` : "";
+      if (response.status === 401 || response.status === 403) {
+        const reason = response.status === 401 ? "authentication failed" : "access was denied";
+        return json(res, 502, {
+          ok: false,
+          code: "AI_PROVIDER_AUTH_ERROR",
+          providerStatus: response.status,
+          providerCode: providerCode || null,
+          error: `OpenAI rejected the request: ${reason} (HTTP ${response.status}${diagnostic}). Check that OPENAI_API_KEY is active and belongs to the correct OpenAI project or organization.`
+        });
+      }
+      if (response.status === 429) {
+        return json(res, 429, {
+          ok: false,
+          code: "AI_PROVIDER_LIMIT",
+          providerStatus: response.status,
+          providerCode: providerCode || null,
+          error: `OpenAI usage or rate limit reached (HTTP 429${diagnostic}). Check API billing, credits, and rate limits.`
+        });
+      }
+      return json(res, 502, {
+        ok: false,
+        code: "AI_PROVIDER_ERROR",
+        providerStatus: response.status,
+        providerCode: providerCode || null,
+        error: `AI drafting failed (HTTP ${response.status}${diagnostic}). Check OpenAI project settings and try again.`
+      });
     }
     const data = await response.json();
     const raw = data.choices?.[0]?.message?.content;
