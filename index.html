@@ -77,6 +77,12 @@ main{min-width:0}.screen{display:none}.screen.active{display:block}.hero{display
       <div id="searchResults" class="panel" style="margin-top:12px">
         <div class="empty">Run a search to load current Etsy listing data. This screen will not show fabricated sample results.</div>
       </div>
+      <div class="panel" style="margin-top:12px">
+        <div class="result-head"><div><h3>Compare six pet-product niches</h3><p class="sub">Runs six small live searches in the selected buyer market. Metrics are comparison signals, not sales estimates.</p></div><button id="compareNichesButton" class="btn primary">Compare niches ↗</button></div>
+        <div class="notice"><strong>What this compares:</strong> Etsy's reported active-listing count, the median price in the selected currency, and average favorites among a 20-listing sample. Favorites and listing counts do not prove demand or sales.</div>
+        <div id="compareNichesStatus" class="statusline warn" style="margin-top:10px">Choose a buyer market above, then compare the pet-product starter set.</div>
+        <div id="compareNichesResults" style="margin-top:12px"><div class="empty">No comparison run yet.</div></div>
+      </div>
     </section>
 
     <section class="screen" id="screen-profit">
@@ -280,6 +286,69 @@ $("searchButton").addEventListener("click",async()=>{
    $("searchError").style.display="block";$("searchError").textContent=e.message||"Search failed.";
    $("searchState").textContent="No fresh listing data loaded.";
  }finally{$("searchButton").disabled=false;$("searchButton").textContent="Search Etsy listings ↗";}
+});
+const comparisonNiches=[
+ "personalized dog collar",
+ "reflective dog collar",
+ "personalized dog bandana",
+ "personalized dog leash",
+ "personalized dog ID tag",
+ "custom pet memorial gift"
+];
+function renderNicheComparison(rows, market){
+ const rowsHtml=rows.map(row=>{
+  const d=row.data;
+  if(!d) return '<tr><td>'+escapeHtml(row.keywords)+'</td><td colspan="4" style="color:var(--red)">Search failed: '+escapeHtml(row.error||"No result returned")+'</td></tr>';
+  const groups=Array.isArray(d.metrics?.priceByCurrency)?d.metrics.priceByCurrency:[];
+  const median=groups.length
+    ?groups.map(g=>money(g.medianPrice,g.currency)+" ("+number(g.pricedListings,0)+")").join(" · ")
+    :"—";
+  return '<tr><td><strong>'+escapeHtml(row.keywords)+'</strong></td><td>'+number(d.resultCount,0)+'</td><td>'+number(d.sampleCount,0)+'</td><td>'+escapeHtml(median)+'</td><td>'+number(d.metrics?.averageFavorites,1)+'</td></tr>';
+ }).join("");
+ $("compareNichesResults").innerHTML=
+  '<div class="result-head"><div><h3>Pet niche comparison · '+escapeHtml(market.label)+'</h3><p class="sub">Completed '+escapeHtml(new Date().toLocaleString())+' · '+number(rows.filter(r=>r.data).length,0)+' of '+number(rows.length,0)+' searches succeeded</p></div><span class="chip '+(rows.every(r=>r.data)?"green":"gold")+'">'+(rows.every(r=>r.data)?"LIVE API DATA":"PARTIAL RESULTS")+'</span></div>'+
+  '<div class="table-wrap"><table><thead><tr><th>Search phrase</th><th>Etsy result count</th><th>Listings sampled</th><th>Median price · selected currency (sample count)</th><th>Average favorites</th></tr></thead><tbody>'+rowsHtml+'</tbody></table></div>'+
+  '<p class="fineprint" style="margin-top:10px">Prices are grouped by returned currency if Etsy returns multiple currency codes. Search result counts describe matching active listings, not purchases. Favorites are cumulative engagement signals, not a sales count. Compare the same market and sample settings when repeating this research.</p>';
+}
+$("compareNichesButton").addEventListener("click",async()=>{
+ const token=$("accessToken").value.trim();
+ if(!token){
+  $("compareNichesStatus").className="statusline warn";
+  $("compareNichesStatus").textContent="Enter the private workspace token in Connection status before starting. Do not enter an Etsy or AI provider API key here.";
+  return;
+ }
+ const marketCode=$("targetMarket").value;
+ const marketLabels={US:"United States",GB:"United Kingdom",CA:"Canada",AU:"Australia",DE:"Germany",FR:"France"};
+ const currencyLabels={US:"USD",GB:"GBP",CA:"CAD",AU:"AUD",DE:"EUR",FR:"EUR"};
+ const market={code:marketCode,label:marketLabels[marketCode]||marketCode,currency:currencyLabels[marketCode]||"—"};
+ const button=$("compareNichesButton");
+ button.disabled=true;
+ button.textContent="Comparing…";
+ const rows=[];
+ $("compareNichesResults").innerHTML='<div class="empty">Fetching live Etsy results…</div>';
+ try{
+  for(let i=0;i<comparisonNiches.length;i++){
+   const keywords=comparisonNiches[i];
+   $("compareNichesStatus").className="statusline warn";
+   $("compareNichesStatus").textContent="Searching "+(i+1)+" of "+comparisonNiches.length+": "+keywords+". Requests are made one at a time.";
+   try{
+    const url=apiBase+"/api/etsy/search?keywords="+encodeURIComponent(keywords)+"&limit=20&market="+encodeURIComponent(marketCode);
+    const response=await fetch(url,{headers:{Accept:"application/json","x-myshka-access":token},cache:"no-store"});
+    const data=await response.json().catch(()=>({ok:false,error:"The server returned an unreadable response."}));
+    if(!response.ok||!data.ok) rows.push({keywords,error:data.error||("Request failed ("+response.status+")")});
+    else rows.push({keywords,data});
+   }catch(err){
+    rows.push({keywords,error:"Could not reach the search endpoint."});
+   }
+   renderNicheComparison(rows,market);
+  }
+  const successes=rows.filter(r=>r.data).length;
+  $("compareNichesStatus").className="statusline "+(successes===rows.length?"":"warn");
+  $("compareNichesStatus").textContent="Comparison finished: "+successes+" of "+rows.length+" live searches succeeded for "+market.label+". Use this as a shortlist for further research, not as proof of sales or demand.";
+ }finally{
+  button.disabled=false;
+  button.textContent="Compare niches ↗";
+ }
 });
 $("saveSearchButton").addEventListener("click",()=>{
  const title=$("keywords").value.trim();
