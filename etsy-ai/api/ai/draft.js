@@ -1,3 +1,5 @@
+import { timingSafeEqual } from "node:crypto";
+
 const json = (res, status, body) => {
   res.setHeader("Cache-Control", "no-store");
   res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -8,6 +10,17 @@ export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return json(res, 405, { ok: false, error: "Method not allowed" });
+  }
+  const requiredToken = process.env.MYSHKA_ACCESS_TOKEN || "";
+  if (!requiredToken) return json(res, 503, {
+    ok: false, code: "AI_ACCESS_TOKEN_MISSING",
+    error: "AI drafting is disabled until MYSHKA_ACCESS_TOKEN is configured in Vercel."
+  });
+  const suppliedToken = String(req.headers["x-myshka-access"] || "");
+  const expectedBytes = Buffer.from(requiredToken, "utf8");
+  const suppliedBytes = Buffer.from(suppliedToken, "utf8");
+  if (expectedBytes.length !== suppliedBytes.length || !timingSafeEqual(expectedBytes, suppliedBytes)) {
+    return json(res, 401, { ok: false, code: "AI_ACCESS_DENIED", error: "AI access token is missing or incorrect." });
   }
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return json(res, 503, {
