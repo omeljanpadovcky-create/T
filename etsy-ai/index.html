@@ -144,6 +144,7 @@ main{min-width:0}.screen{display:none}.screen.active{display:block}.hero{display
 <script>
 (function(){
 "use strict";
+if (window.location.hostname.endsWith("github.io")) { window.location.replace("https://myshka-etsy-ai.vercel.app/"); return; }
 const $ = (id) => document.getElementById(id);
 const STORE_KEY = "myshka_etsy_ai_v1";
 let currentSearch = null;
