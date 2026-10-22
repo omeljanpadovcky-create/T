@@ -67,6 +67,7 @@ main{min-width:0}.screen{display:none}.screen.active{display:block}.hero{display
       <div class="panel">
         <div class="field-grid">
           <div class="field full"><label for="keywords">Product or niche keywords</label><input id="keywords" maxlength="120" placeholder="personalized dog collar" value="personalized dog collar"><span class="hint">Use specific phrases; compare multiple searches separately.</span></div>
+          <div class="field"><label for="targetMarket">Target buyer market</label><select id="targetMarket"><option value="US" selected>United States · USD</option><option value="GB">United Kingdom · GBP</option><option value="CA">Canada · CAD</option><option value="AU">Australia · AUD</option><option value="DE">Germany · EUR</option><option value="FR">France · EUR</option></select><span class="hint">Filters for listings that ship to this country; Etsy is asked to convert prices to the listed currency. This does not filter the seller's location.</span></div>
           <div class="field"><label for="searchLimit">Listing sample size</label><select id="searchLimit"><option value="20">20 listings</option><option value="40" selected>40 listings</option><option value="60">60 listings</option><option value="100">100 listings</option></select></div>
           <div class="field"><label for="nicheNote">Your research note</label><input id="nicheNote" maxlength="160" placeholder="e.g. personalization opportunity"></div>
         </div>
@@ -250,17 +251,18 @@ function formatNiche(item){
 }
 function renderSearch(data){
  const m=data.metrics||{};
+ const market=data.market||{label:"Unknown market",currency:"—"};
  const priceGroups=Array.isArray(m.priceByCurrency)?m.priceByCurrency:[];
  const priceSummary=priceGroups.length
   ?priceGroups.map(p=>'<div><strong style="font-size:14px">'+money(p.medianPrice,p.currency)+'</strong> <span style="font-size:10px;color:var(--muted)">'+escapeHtml(p.currency)+' · '+number(p.pricedListings,0)+' listings</span></div>').join("")
   :'<strong>—</strong>';
  $("searchResults").innerHTML=
- '<div class="result-head"><div><h3>Marketplace snapshot: '+escapeHtml(data.keywords)+'</h3><p class="sub">Retrieved '+escapeHtml(new Date(data.fetchedAt).toLocaleString())+' · '+number(data.sampleCount,0)+' returned listings</p></div><span class="chip green">LIVE API DATA</span></div>'+
- '<div class="stats3"><div class="mini"><small>Count reported by Etsy</small><strong>'+number(data.resultCount,0)+'</strong><p>Endpoint result count, not demand</p></div><div class="mini"><small>Median listed price by currency</small><div style="margin-top:5px;line-height:1.7">'+priceSummary+'</div><p>Each currency is calculated separately</p></div><div class="mini"><small>Average favorites</small><strong>'+number(m.averageFavorites,1)+'</strong><p>Only returned listings with a numeric value</p></div></div>'+
+ '<div class="result-head"><div><h3>Marketplace snapshot: '+escapeHtml(data.keywords)+'</h3><p class="sub">Target buyer market: '+escapeHtml(market.label)+' · Prices requested in '+escapeHtml(market.currency)+' · Retrieved '+escapeHtml(new Date(data.fetchedAt).toLocaleString())+' · '+number(data.sampleCount,0)+' returned listings</p></div><span class="chip green">LIVE API DATA</span></div>'+
+ '<div class="stats3"><div class="mini"><small>Count reported by Etsy</small><strong>'+number(data.resultCount,0)+'</strong><p>Endpoint result count for this ship-to market, not demand</p></div><div class="mini"><small>Median listed price — Etsy conversion</small><div style="margin-top:5px;line-height:1.7">'+priceSummary+'</div><p>Prices grouped by returned currency for safety</p></div><div class="mini"><small>Average favorites</small><strong>'+number(m.averageFavorites,1)+'</strong><p>Only returned listings with a numeric value</p></div></div>'+
  '<div class="notice" style="margin-bottom:12px"><strong>Interpretation:</strong> '+escapeHtml(data.caveat||"Active listings are not sales data.")+'</div>'+
  '<div class="table-wrap"><table><thead><tr><th>Listing</th><th>Price</th><th>Favorites</th><th>Type</th></tr></thead><tbody>'+(data.items||[]).map(formatNiche).join("")+'</tbody></table></div>';
  $("countSample").textContent=number(data.sampleCount,0);
- $("searchState").textContent="Last result is live Etsy API data.";
+ $("searchState").textContent="Live Etsy API data · "+market.label+" ship-to filter · "+market.currency+" price currency.";
 }
 $("searchButton").addEventListener("click",async()=>{
  const keywords=$("keywords").value.trim();
@@ -268,7 +270,8 @@ $("searchButton").addEventListener("click",async()=>{
  $("searchError").style.display="none";
  $("searchButton").disabled=true;$("searchButton").textContent="Searching…";$("searchState").textContent="Requesting current data from Etsy…";
  try{
-   const u=apiBase+"/api/etsy/search?keywords="+encodeURIComponent(keywords)+"&limit="+encodeURIComponent($("searchLimit").value);
+   const market=$("targetMarket").value;
+   const u=apiBase+"/api/etsy/search?keywords="+encodeURIComponent(keywords)+"&limit="+encodeURIComponent($("searchLimit").value)+"&market="+encodeURIComponent(market);
    const r=await fetch(u,{headers:{Accept:"application/json","x-myshka-access":$("accessToken").value.trim()},cache:"no-store"});
    const data=await r.json();
    if(!r.ok||!data.ok) throw new Error(data.error||"Search failed.");
@@ -282,7 +285,8 @@ $("saveSearchButton").addEventListener("click",()=>{
  const title=$("keywords").value.trim();
  if(title.length<2){$("searchState").textContent="Enter a niche name first.";return;}
  const store=readStore();
- store.ideas.unshift({id:Date.now(),title,note:$("nicheNote").value.trim(),savedAt:new Date().toISOString(),source:currentSearch&&currentSearch.keywords===title?"Etsy search snapshot":"Manual idea",resultCount:currentSearch&&currentSearch.keywords===title?currentSearch.resultCount:null,priceByCurrency:currentSearch&&currentSearch.keywords===title?currentSearch.metrics.priceByCurrency:null});
+ const matchesCurrentSearch=!!(currentSearch&&currentSearch.keywords===title&&currentSearch.market&&currentSearch.market.code===$("targetMarket").value);
+ store.ideas.unshift({id:Date.now(),title,note:$("nicheNote").value.trim(),savedAt:new Date().toISOString(),source:matchesCurrentSearch?"Etsy search snapshot":"Manual idea",targetMarket:matchesCurrentSearch?currentSearch.market:null,resultCount:matchesCurrentSearch?currentSearch.resultCount:null,priceByCurrency:matchesCurrentSearch?currentSearch.metrics.priceByCurrency:null});
  writeStore(store);$("searchState").textContent="Saved locally in this browser.";
 });
 $("saveProfitButton").addEventListener("click",()=>{
