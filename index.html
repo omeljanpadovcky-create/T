@@ -58,7 +58,7 @@ main{min-width:0}.screen{display:none}.screen.active{display:block}.hero{display
           <button data-go="draft"><b>✎ Prepare listing copy</b><small>AI draft if a provider key is configured.</small></button>
           <button data-go="review"><b>✓ Check policy readiness</b><small>Photos, transparency and human approval.</small></button>
         </div></div>
-        <div class="panel"><h3>Connection status</h3><p class="sub">The server reports configuration status only. It never returns secret keys.</p><div id="healthStatus" class="statusline warn">Checking server…</div><div class="field" style="margin-top:13px"><label for="accessToken">Private workspace token</label><input id="accessToken" type="password" autocomplete="off" placeholder="Paste your Vercel MYSHKA_ACCESS_TOKEN"><span class="hint">Used only to authorize requests to this app. Stored in this browser tab; never enter your Etsy or AI provider API key here.</span></div><hr class="divider"><div class="notice"><strong>Important market-data note</strong><br>Active listing counts, prices and favorites are signals only. They do not prove sales, demand, conversion rate or profit. Treat every result as a lead to validate.</div></div>
+        <div class="panel"><h3>Connection status</h3><p class="sub">The server reports configuration status only. It never returns secret keys.</p><div id="healthStatus" class="statusline warn">Checking server…</div><div class="field" style="margin-top:13px"><label for="accessToken">Private workspace token</label><input id="accessToken" type="password" autocomplete="off" placeholder="Paste your Vercel MYSHKA_ACCESS_TOKEN"><span class="hint">Used only to authorize requests to this app. Stored in this browser tab; never enter your Etsy or AI provider API key here.</span></div><div class="row-actions"><button id="testEtsyButton" class="btn">Test Etsy API ↗</button></div><div id="etsyTestResult" class="statusline warn" style="margin-top:10px">Enter the private workspace token configured in Vercel, then test the live Etsy connection.</div><hr class="divider"><div class="notice"><strong>Important market-data note</strong><br>Active listing counts, prices and favorites are signals only. They do not prove sales, demand, conversion rate or profit. Treat every result as a lead to validate.</div></div>
       </div>
     </section>
 
@@ -193,6 +193,36 @@ async function getHealth(){
     $("healthStatus").textContent="The API server could not be reached from this page. Open the deployed Vercel app or configure its API base URL.";
   }
 }
+async function testEtsyConnection(){
+ const token=$("accessToken").value.trim();
+ if(!token){
+   $("etsyTestResult").className="statusline warn";
+   $("etsyTestResult").textContent="Enter the private workspace token configured in Vercel first. This is not your Etsy API key.";
+   return;
+ }
+ const button=$("testEtsyButton");
+ button.disabled=true;button.textContent="Testing Etsy API…";
+ $("etsyTestResult").className="statusline warn";
+ $("etsyTestResult").textContent="Checking protected workspace access and making a small live Etsy API request…";
+ try{
+   const r=await fetch(apiBase+"/api/etsy/test",{headers:{Accept:"application/json","x-myshka-access":token},cache:"no-store"});
+   const data=await r.json().catch(()=>({ok:false,error:"The server returned an unreadable response."}));
+   if(!r.ok||!data.ok){
+     $("etsyTestResult").className="statusline "+(r.status===401?"error":"warn");
+     $("etsyTestResult").textContent=(data.error||"Etsy connection test failed.")+" ("+r.status+").";
+     return;
+   }
+   $("etsyTestResult").className="statusline";
+   $("etsyTestResult").textContent="Etsy API connection verified · "+number(data.sampleCount,0)+" sample listings returned · "+new Date(data.checkedAt).toLocaleString()+". This checks access, not sales or demand.";
+   $("searchState").textContent="Etsy connection verified. Run a niche search to inspect listing data.";
+ }catch(e){
+   $("etsyTestResult").className="statusline error";
+   $("etsyTestResult").textContent="Could not reach the test endpoint. Confirm the Vercel deployment is ready and try again.";
+ }finally{
+   button.disabled=false;button.textContent="Test Etsy API ↗";
+ }
+}
+$("testEtsyButton").addEventListener("click",testEtsyConnection);
 function val(id){const n=Number($(id).value);return Number.isFinite(n)?Math.max(0,n):0;}
 function calcProfit(){
  const price=val("salePrice"),cost=val("productCost"),ship=val("shippingCost"),pack=val("packagingCost"),listing=val("listingFee"),tx=val("transactionRate")/100,pay=val("paymentRate")/100,fixed=val("paymentFixed"),ads=val("adRate")/100,tax=val("taxCost");
