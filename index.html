@@ -1,420 +1,56 @@
 <!doctype html>
 <html lang="uk">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#071018">
-<meta name="application-name" content="КриптоМишка 2.1">
-<title>КриптоМишка 2.1</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230d1b2a'/%3E%3Ccircle cx='20' cy='22' r='11' fill='%23f5a9b8'/%3E%3Ccircle cx='44' cy='22' r='11' fill='%23f5a9b8'/%3E%3Ccircle cx='20' cy='22' r='6.5' fill='%23d98a9c'/%3E%3Ccircle cx='44' cy='22' r='6.5' fill='%23d98a9c'/%3E%3Cellipse cx='32' cy='36' rx='18' ry='16' fill='%23d8dde7'/%3E%3Ccircle cx='26' cy='34' r='2.4' fill='%23111'/%3E%3Ccircle cx='38' cy='34' r='2.4' fill='%23111'/%3E%3Cellipse cx='32' cy='41' rx='3' ry='2.4' fill='%23e58aa0'/%3E%3Cpath d='M32 44c-3 3-6 4-9 4M32 44c3 3 6 4 9 4' stroke='%238b96a8' stroke-width='1.7' fill='none' stroke-linecap='round'/%3E%3Cpath d='M21 40H8M21 44H7M43 40h13M43 44h14' stroke='%238b96a8' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230d1b2a'/%3E%3Ccircle cx='20' cy='22' r='11' fill='%23f5a9b8'/%3E%3Ccircle cx='44' cy='22' r='11' fill='%23f5a9b8'/%3E%3Cellipse cx='32' cy='36' rx='18' ry='16' fill='%23d8dde7'/%3E%3Ccircle cx='26' cy='34' r='2.4' fill='%23111'/%3E%3Ccircle cx='38' cy='34' r='2.4' fill='%23111'/%3E%3Cellipse cx='32' cy='41' rx='3' ry='2.4' fill='%23e58aa0'/%3E%3C/svg%3E">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080a0d"><meta name="description" content="MYSHKA ETSY AI — research, margin estimator, AI listing drafts and human review.">
+<title>MYSHKA ETSY AI</title>
 <style>
-:root{--bg:#050a10;--panel:#0b1520;--panel2:#0f1c2a;--line:#21364d;--txt:#eef5fb;--muted:#8da4ba;--g:#46e6a4;--y:#ffd166;--r:#ff7084;--b:#7fb4ff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 520px at 15% -10%,#17365c55,transparent 60%),linear-gradient(#07111a,#04070b);color:var(--txt);font:14px Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
-.app{max-width:1280px;margin:auto;padding:16px}.glass{background:linear-gradient(180deg,#0d1825f7,#08111bf7);border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 45px #0008}
-.head{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:16px}.brand{display:flex;gap:12px;align-items:center}.logo{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;font-size:30px;background:#142337;border:1px solid #355579}.brand h1{font-size:22px;margin:0}.brand h1 span{color:#ffd36c}.brand p{margin:4px 0 0;color:var(--muted);font-size:11px}.badges{display:flex;gap:7px;flex-wrap:wrap}.badge{border:1px solid #2b4669;background:#0c1a2a;color:#bdd1e6;border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800}.badge.ok{color:var(--g);border-color:#247053;background:#082219}.badge.warn{color:var(--y);border-color:#695629;background:#241d0b}
-.intro{margin-top:12px;padding:18px;display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.intro h2{font-size:28px;margin:0 0 7px}.intro p{color:#a8bacb;line-height:1.6;margin:0}.sources{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.source{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:11px;border:1px solid #223c58;background:#091522;border-radius:13px}.source b{font-size:11px}.source small{color:var(--muted)}.source a{color:#a9ccff;text-decoration:none;font-size:10px;font-weight:800}
-.tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:12px}.tab{cursor:pointer;border:1px solid #294664;background:#0b1928;color:#b9cbe0;border-radius:14px;padding:12px 8px;font-weight:900}.tab.active{border-color:#4b79ad;background:#10243a;color:white;box-shadow:0 0 24px #4378b322}
-.layout{display:grid;grid-template-columns:1fr 330px;gap:12px;margin-top:12px}.panel{padding:14px}.sectionHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.sectionHead h3{margin:0}.sectionHead small{color:var(--muted)}
-.items{display:grid;gap:9px;margin-top:12px}.item{border:1px solid #213a55;background:linear-gradient(145deg,#0b1928,#08131f);border-radius:16px;padding:13px}.itemTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.item h4{margin:0;font-size:14px;line-height:1.35}.meta{margin-top:7px;display:flex;gap:6px;flex-wrap:wrap}.pill{padding:5px 7px;border-radius:999px;border:1px solid #294664;background:#0d2033;color:#b7cee6;font-size:9px;font-weight:800}.risk{font-weight:950;white-space:nowrap}.risk.low{color:var(--g)}.risk.mid{color:var(--y)}.risk.high{color:var(--r)}.summary{margin-top:9px;color:#a8bacb;font-size:11px;line-height:1.55}.jevbox{margin-top:10px;padding:11px;border:1px solid #305073;background:#0a1927;border-radius:12px}.jevbox b{color:#dbeaff}.jevbox p{margin:5px 0;color:#acc0d3;line-height:1.55;font-size:11px}.reasons{margin-top:8px;color:#7f97ae;font-size:10px;line-height:1.5}
-.guard{margin-top:10px;padding:11px;border:1px solid #33465a;background:#08121d;border-radius:12px}.guardHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.guardHead b{font-size:11px}.guardVerdict{font-size:9px;font-weight:950;padding:5px 7px;border-radius:999px;border:1px solid #36506a}.guardVerdict.ok{color:var(--g);border-color:#247053;background:#082219}.guardVerdict.hold{color:var(--y);border-color:#695629;background:#241d0b}.guardVerdict.stop{color:var(--r);border-color:#7d3440;background:#2a1015}.guardGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px}.guardCell{padding:8px;border:1px solid #20364a;background:#091725;border-radius:9px}.guardCell small{display:block;color:#7892ab;font-size:8px;text-transform:uppercase;letter-spacing:.04em}.guardCell span{display:block;margin-top:3px;color:#d4e0eb;font-size:10px;line-height:1.35}.guardRule{margin-top:8px;color:#91a8bc;font-size:9px;line-height:1.45}.guardRule strong{color:#fff}.ruleBanner{margin-top:12px;padding:12px 14px;border:1px solid #34516d;background:linear-gradient(135deg,#0d1f31,#0a1724);border-radius:14px;color:#a9bdd0;font-size:11px;line-height:1.5}.ruleBanner b{color:#fff}.actions{margin-top:10px;display:flex;gap:7px;flex-wrap:wrap}.btn{border:1px solid #315477;background:#10263e;color:#d7e8fa;border-radius:10px;padding:8px 10px;text-decoration:none;font-size:10px;font-weight:900;cursor:pointer}.btn.save{border-color:#2a745a;background:#0b281f;color:#7deabb}
-.mouseAiBtn{position:fixed;right:22px;bottom:22px;z-index:9999;pointer-events:auto;touch-action:manipulation;border:1px solid #3b6086;background:linear-gradient(145deg,#173652,#0b1b2a);color:#fff;border-radius:999px;padding:11px 15px;display:flex;align-items:center;gap:8px;font-weight:950;box-shadow:0 12px 35px #000a;cursor:pointer}.mouseAiBtn .mouseIcon{font-size:24px}.mouseAiPanel{position:fixed;right:22px;bottom:78px;z-index:9998;pointer-events:auto;width:min(390px,calc(100vw - 28px));height:500px;display:none;flex-direction:column;background:linear-gradient(180deg,#0c1926,#07111b);border:1px solid #2c4b68;border-radius:20px;box-shadow:0 24px 60px #000c;overflow:hidden}.mouseAiPanel.open{display:flex!important}#mouseAiToggle{position:fixed;opacity:0;pointer-events:none;width:1px;height:1px}#mouseAiToggle:checked + .mouseAiBtn + .mouseAiPanel{display:flex!important}.mouseAiHead{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;border-bottom:1px solid #21364d}.mouseAiTitle{display:flex;align-items:center;gap:9px}.mouseAiTitle b{font-size:14px}.mouseAiTitle small{display:block;color:#7892ab;font-size:9px;margin-top:2px}.mouseAiClose{border:0;background:transparent;color:#9ab1c7;font-size:19px;cursor:pointer}.mouseAiLog{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:9px}.mouseMsg{max-width:88%;padding:10px 11px;border-radius:13px;line-height:1.45;font-size:11px;white-space:pre-wrap}.mouseMsg.ai{align-self:flex-start;background:#0d2132;border:1px solid #294b68;color:#dceaf6}.mouseMsg.user{align-self:flex-end;background:#173d5d;border:1px solid #3b6f99;color:#fff}.mouseMsg a{color:#9ac8ff}.mouseAiQuick{display:flex;gap:6px;overflow:auto;padding:0 10px 9px}.mouseAiQuick button{white-space:nowrap;border:1px solid #294b68;background:#0c1c2b;color:#abc3d9;border-radius:999px;padding:7px 9px;font-size:9px;font-weight:800;cursor:pointer}.mouseAiComposer{display:grid;grid-template-columns:1fr auto;gap:7px;padding:10px;border-top:1px solid #21364d}.mouseAiComposer input{min-width:0;background:#06131f;color:#eef5fb;border:1px solid #294664;border-radius:12px;padding:11px;font:inherit;outline:none}.mouseAiComposer button{border:1px solid #3877a8;background:#123c5e;color:white;border-radius:12px;padding:0 14px;font-weight:900;cursor:pointer}.side{display:grid;gap:12px;align-content:start}.metricGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.metric{padding:11px;border:1px solid #213a55;background:#091522;border-radius:13px}.metric label{display:block;color:#7892ab;font-size:9px;text-transform:uppercase}.metric b{display:block;margin-top:4px;font-size:17px}.journal{display:grid;gap:7px;margin-top:10px}.jrow{padding:9px;border:1px solid #213a55;background:#091522;border-radius:11px;font-size:10px;color:#b8c9d9;cursor:pointer}.empty{padding:28px 10px;color:#7e95aa;text-align:center}.foot{margin:12px 0;padding:11px 14px;color:#8399ad;font-size:10px;line-height:1.55}
-@media(max-width:980px){.tabs{grid-template-columns:repeat(3,1fr)}}@media(max-width:860px){.intro,.layout{grid-template-columns:1fr}.sources{grid-template-columns:1fr}.head{align-items:flex-start;flex-direction:column}}@media(max-width:560px){.tabs{grid-template-columns:repeat(2,1fr)}.mouseAiBtn{right:12px;bottom:12px}.mouseAiPanel{right:14px;bottom:70px;height:70vh}.mouseMsg{max-width:94%}}
-
-[hidden]{display:none!important}
-.btn:disabled{opacity:.55;cursor:not-allowed}
+:root{color-scheme:dark;--bg:#080a0d;--panel:#12171d;--line:#2b333d;--text:#f0f4f8;--muted:#94a0ae;--lime:#d8fb68;--mint:#94f0c5;--amber:#ffd58a;--red:#ff9b9b}*{box-sizing:border-box}body{margin:0;background:radial-gradient(850px 420px at 88% -5%,#34431e45,transparent 68%),var(--bg);color:var(--text);font:14px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}.wrap{max-width:1180px;margin:auto;padding:20px 18px 56px}.top{display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding-bottom:16px}.brand{display:flex;align-items:center;gap:12px;font-size:13px;letter-spacing:.1em;font-weight:900}.logo{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:var(--lime);color:#101307;font-size:24px}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.13em}.top-right{display:flex;align-items:center;gap:8px}.status{color:var(--muted);font-size:11px;border:1px solid var(--line);padding:8px 10px;border-radius:99px}.btn{border:1px solid var(--line);background:#1c232b;color:var(--text);padding:10px 13px;border-radius:11px;font-weight:750;cursor:pointer}.btn:hover{border-color:#7b8d48}.btn.primary{background:var(--lime);color:#121608;border-color:var(--lime)}.btn:disabled{opacity:.45;cursor:not-allowed}.hero{display:grid;grid-template-columns:1fr 270px;gap:24px;align-items:end;padding:34px 0 24px}.eyebrow{font-size:10px;color:var(--lime);font-weight:900;letter-spacing:.18em;text-transform:uppercase}h1{font-size:clamp(36px,5.3vw,62px);line-height:.98;letter-spacing:-.06em;margin:13px 0 17px}h1 span{color:var(--lime)}.hero p{max-width:720px;margin:0;color:#a5afbb;font-size:14px}.principle{border:1px solid var(--line);background:#12171d;border-radius:17px;padding:18px}.principle strong{display:block;font-size:23px;color:var(--lime);line-height:1.25}.principle small{display:block;color:var(--muted);margin-top:8px}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:27px}.metric,.panel{border:1px solid var(--line);background:linear-gradient(145deg,#141920,#0f1318);border-radius:17px}.metric{padding:14px;min-height:91px}.metric label{display:block;font-size:11px;color:var(--muted)}.metric strong{display:block;font-size:25px;letter-spacing:-.04em;margin-top:5px}.metric small{color:#687481;font-size:10px}.section{margin-top:28px;scroll-margin-top:16px}.heading{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:12px}.n{color:#75808d;font-size:10px;letter-spacing:.14em;font-weight:900}.heading h2{font-size:23px;letter-spacing:-.04em;margin:4px 0 0}.heading p{font-size:12px;color:var(--muted);margin:4px 0 0}.tag{border:1px solid #37424d;color:#aab6c4;border-radius:99px;padding:4px 8px;font-size:10px;white-space:nowrap}.panel{padding:18px}.grid-search{display:grid;grid-template-columns:1fr 155px auto;gap:9px;align-items:end}.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field label{font-size:11px;color:#a7b1bc;font-weight:700}.input{width:100%;background:#090d11;border:1px solid #313b46;border-radius:10px;padding:12px;color:var(--text);outline:none;min-width:0}.input:focus{border-color:#bfd75c;box-shadow:0 0 0 3px #d8fb6812}.hint,.note{font-size:11px;line-height:1.6;color:var(--muted);margin:10px 0 0}.alert{display:none;margin-top:12px;padding:12px;border:1px solid #67522e;border-radius:12px;background:#221d13;color:var(--amber);font-size:12px}.alert.show{display:block}.stats{display:none;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.stats.show{display:grid}.stat{background:#090d11;border:1px solid #29333e;border-radius:11px;padding:11px}.stat small{display:block;color:var(--muted);font-size:10px}.stat strong{display:block;font-size:18px;margin-top:4px}.results-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:20px 0 10px}.results-top h3{font-size:14px;margin:0}.subtle{font-size:11px;color:var(--muted)}.results{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.empty{grid-column:1/-1;text-align:center;padding:33px 15px;border:1px dashed #3a434f;border-radius:14px;color:var(--muted)}.empty b{display:block;color:#e5ebf2;margin-bottom:5px}.listing{min-width:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#0b0f13;display:flex;flex-direction:column}.listing img,.ph{width:100%;aspect-ratio:1.45;object-fit:cover;background:#171d24;border-bottom:1px solid var(--line)}.ph{display:grid;place-items:center;font-size:30px;color:#697584}.listing-content{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}.listing-title{font-weight:750;font-size:12px;line-height:1.45;overflow-wrap:anywhere}.listing-meta{font-size:10px;color:var(--muted)}.price{font-size:20px;font-weight:900;color:var(--lime)}.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:4px}.actions .btn{font-size:10px;padding:7px 8px;text-decoration:none}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.result{padding:15px;margin-top:13px;background:#191f12;border:1px solid #45522b;border-radius:14px;display:flex;justify-content:space-between;align-items:center;gap:15px}.result strong{font-size:26px;color:var(--lime)}.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}.check{display:flex;gap:10px;padding:12px;border:1px solid #303944;background:#0b0f13;border-radius:11px;font-size:12px;color:#c4ced7;align-items:flex-start}.check input{margin-top:4px;accent-color:var(--lime)}.check strong{display:block;color:#edf2f7}.check small{display:block;font-size:10px;color:var(--muted);margin-top:3px}.output{display:none;white-space:pre-wrap;overflow-wrap:anywhere;max-height:600px;overflow:auto;background:#090d11;border:1px solid #313a44;border-radius:12px;padding:14px;font-size:12px}.output.show{display:block}.saved{display:grid;gap:8px}.savedrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;border:1px solid var(--line);border-radius:11px;background:#0b0f13}.savedrow b{display:block;font-size:12px}.savedrow small{display:block;color:var(--muted);font-size:10px}.savedrow .actions{margin:0}.foot{border-top:1px solid var(--line);padding-top:18px;margin-top:35px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:10px;color:#788390}.toast{display:none;position:fixed;right:18px;bottom:18px;max-width:calc(100vw - 36px);background:#1b222a;border:1px solid #45515e;border-radius:12px;padding:12px 15px;box-shadow:0 15px 40px #0008}.toast.show{display:block}@media(max-width:850px){.hero{grid-template-columns:1fr}.results{grid-template-columns:repeat(2,1fr)}}@media(max-width:620px){.wrap{padding:12px 12px 40px}.top{align-items:flex-start}.top-right{flex-direction:column}.hero{padding:26px 0 18px}h1{font-size:41px}.metrics{grid-template-columns:repeat(2,1fr);gap:8px}.metric{padding:11px}.metric strong{font-size:23px}.heading{align-items:flex-start;flex-direction:column;gap:5px}.panel{padding:13px}.grid-search{grid-template-columns:1fr}.grid-search .btn{width:100%}.results{grid-template-columns:1fr 1fr;gap:7px}.listing img,.ph{aspect-ratio:1}.listing-content{padding:9px}.listing-title{font-size:11px}.price{font-size:17px}.stats{grid-template-columns:1fr}.two{grid-template-columns:1fr}.formgrid,.checks{grid-template-columns:1fr}.result{align-items:flex-start;flex-direction:column}.savedrow{align-items:flex-start;flex-direction:column}.savedrow .actions{width:100%}.savedrow .btn{flex:1}}
 </style>
 </head>
-<body>
-<div class="app">
-<header class="glass head">
-  <div class="brand"><div class="logo">🐭</div><div><h1>Крипто<span>Мишка</span> 2.1</h1><p>ITstatti → контекст → перевірка → твій висновок</p></div></div>
-  <div class="badges"><span id="status" class="badge warn">Завантаження…</span><span id="liveClock" class="badge">--:--:--</span><span class="badge">NO AUTO-TRADE</span></div>
-</header>
-
-<section class="glass intro">
-  <div>
-    <h2>Не копіює. Перевіряє.</h2>
-    <p>Live-пости ITstatti, ретродропи, YouTube, повна база знань, Telegram-архів і зовнішній новинний радар. Старі навчальні матеріали — це контекст, а не активний сигнал. JEV Аналіз показує, що підтверджено кількома джерелами і за чим стежити далі.</p>
-  </div>
-  <div id="sources" class="sources"></div>
-</section>
-<div class="ruleBanner"><b>🐭 Правило Мишки:</b> знаходить → перевіряє → пояснює → ти підтверджуєш. Для будь-якої угоди або промо спочатку дивимось 4 речі: потрібна сума, максимальний можливий збиток, плече та reward/risk. Якщо хоча б одне не підтверджено — це не команда до дії.</div>
-
-<nav class="tabs">
-  <button class="tab active" data-mode="opportunities">🟢 Можливості</button>
-  <button class="tab" data-mode="portfolio">🔵 Портфель</button>
-  <button class="tab" data-mode="speculation">🟠 Спекуляції</button>
-  <button class="tab" data-mode="trading">🔴 Trading Lab</button>
-  <button class="tab" data-mode="news">🧠 JEV Аналіз</button>
-  <button class="tab" data-mode="knowledge">📚 База / Контекст</button>
-  <a href="./myshka-app.html" style="grid-column:1/-1;display:block;text-align:center;text-decoration:none;border:1px solid #337aaa;background:linear-gradient(115deg,#153864,#265b9f);color:#ffffff;border-radius:14px;padding:14px 10px;font-weight:900">🐭 Crypto Myshka App ↗</a>
-</nav>
-
-<div id="mainLayout" class="layout">
-  <section class="glass panel">
-    <div class="sectionHead"><h3 id="modeTitle">Можливості</h3><small id="count">0</small></div>
-    <div id="items" class="items"></div>
-  </section>
-  <aside class="side">
-    <section class="glass panel"><div class="sectionHead"><h3>Ринок</h3><small>актуально згадані активи</small></div><div id="market" class="metricGrid"></div></section>
-    <section class="glass panel"><div class="sectionHead"><h3>Журнал</h3><small>збережено локально</small></div><div id="journal" class="journal"></div></section>
-  </aside>
-</div>
-
-<input id="mouseAiToggle" type="checkbox" aria-hidden="true">
-<label for="mouseAiToggle" id="mouseAiBtn" class="mouseAiBtn" aria-label="Відкрити Миша AI"><span class="mouseIcon">🐭</span><span>Миша</span></label>
-<div id="mouseAiPanel" class="mouseAiPanel" aria-live="polite">
-  <div class="mouseAiHead">
-    <div class="mouseAiTitle"><span style="font-size:25px">🐭</span><div><b>Миша · Довідка</b><small>Відповіді за матеріалами сайту · без AI</small></div></div>
-    <div style="display:flex;align-items:center;gap:7px"><label for="mouseAiToggle" id="mouseAiClose" class="mouseAiClose" aria-label="Закрити">×</label></div>
-  </div>
-  <div id="mouseAiLog" class="mouseAiLog">
-    <div class="mouseMsg ai">Привіт 👋 Я Миша. Питай про BTC/ETH/OP, новини, ITstatti й ретродропи. Я шукаю відповіді в матеріалах сайту, без живого AI.</div>
-  </div>
-  <div class="mouseAiQuick">
-    <button data-q="Що нового?">Що нового?</button>
-    <button data-q="Що по BTC?">BTC</button>
-    <button data-q="Що по ITstatti?">ITstatti</button>
-    <button data-q="Які ризики зараз?">Ризики</button>
-    <button data-q="Чи варто це виконувати?">Виконувати?</button>
-  </div>
-  <div class="mouseAiComposer">
-    <input id="mouseAiInput" placeholder="Напиши питання..." autocomplete="off">
-    <button id="mouseAiSend">➤</button>
-  </div>
-</div>
-
-<div class="glass foot">КриптоМишка — дослідницький режим, не фінансова порада. Вбудована довідка працює за матеріалами сайту, без живого AI. Для окремого аналізу графіків відкрий Crypto Myshka App. Автоматичні угоди вимкнені.</div>
-</div>
-
+<body><main class="wrap">
+<header class="top"><div class="brand"><div class="logo">🐭</div><div>MYSHKA <span style="color:var(--lime)">ETSY AI</span><small>RESEARCH WORKSPACE</small></div></div><div class="top-right"><div id="serverStatus" class="status">Перевіряю сервер…</div><button class="btn" id="settings">⚙ API</button></div></header>
+<section class="hero"><div><div class="eyebrow">Research · Margin · Human review</div><h1>Знайди нішу.<br><span>Перевір цифри.</span></h1><p>Досліджуй активні оголошення Etsy, порівнюй ціни, оцінюй маржу й готуй AI-чернетки. MYSHKA не публікує оголошення — останнє слово залишається за тобою.</p></div><aside class="principle"><div class="eyebrow">Головний принцип</div><strong>AI assists.<br>You decide.</strong><small>Результати Etsy — зріз активних оголошень, не гарантія продажів або попиту.</small></aside></section>
+<section class="metrics"><div class="metric"><label>Збережено</label><strong id="savedCount">0</strong><small>у цьому браузері</small></div><div class="metric"><label>Останній запит</label><strong id="lastQuery">—</strong><small>пошуковий термін</small></div><div class="metric"><label>Медіанна ціна</label><strong id="medianMetric">—</strong><small>за останньою вибіркою</small></div><div class="metric"><label>Розрахована маржа</label><strong id="marginMetric">—</strong><small>за твоїми витратами</small></div></section>
+<section class="section" id="research"><div class="heading"><div><div class="n">01 / MARKET RESEARCH</div><h2>Дослідження ніші</h2><p>Пошук активних оголошень через Etsy Open API v3.</p></div><span class="tag">Без вигаданих продажів</span></div>
+<div class="panel"><form id="searchForm"><div class="grid-search"><div class="field"><label for="keywords">Ключові слова / товар</label><input class="input" id="keywords" required minlength="2" maxlength="100" placeholder="personalized dog collar"></div><div class="field"><label for="limit">Результати</label><select class="input" id="limit"><option value="24">24 оголошення</option><option value="48" selected>48 оголошень</option><option value="96">96 оголошень</option></select></div><button class="btn primary" id="searchBtn">⌕ Знайти нішу</button></div><p class="hint">Кількість оголошень і ціни залежать від Etsy API. Продажі й реальний попит не визначаються цим пошуком.</p></form><div class="alert" id="alert"></div><div class="stats" id="stats"><div class="stat"><small>Усього результатів</small><strong id="total">—</strong></div><div class="stat"><small>Середня ціна вибірки</small><strong id="average">—</strong></div><div class="stat"><small>Діапазон цін</small><strong id="range">—</strong></div></div><div class="results-top"><h3 id="resultTitle">Результати з'являться тут</h3><span id="resultMeta" class="subtle"></span></div><div id="results" class="results"><div class="empty"><b>MYSHKA готова до роботи</b>Введи нішу та запусти пошук.</div></div><div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" id="saveSearch" disabled>＋ Зберегти дослідження</button><button class="btn" id="csv" disabled>↓ Експорт CSV</button></div></div></section>
+<section class="section" id="profit"><div class="heading"><div><div class="n">02 / PROFIT CHECK</div><h2>Калькулятор маржі</h2><p>Заміни приклад на реальні витрати й актуальні комісії.</p></div><span class="tag">Оцінка, не гарантія</span></div>
+<div class="panel"><div class="formgrid"><div class="field"><label for="sell">Ціна продажу (USD)</label><input class="input" id="sell" type="number" min="0" step=".01" value="24"></div><div class="field"><label for="cost">Товар / виробництво (USD)</label><input class="input" id="cost" type="number" min="0" step=".01" value="6"></div><div class="field"><label for="ship">Доставка за одиницю (USD)</label><input class="input" id="ship" type="number" min="0" step=".01" value="4"></div><div class="field"><label for="fees">Усі комісії (%)</label><input class="input" id="fees" type="number" min="0" max="100" step=".1" value="10"></div><div class="field"><label for="other">Інші витрати (USD)</label><input class="input" id="other" type="number" min="0" step=".01" value="1"></div><div class="field"><label for="ads">Реклама за замовлення (USD)</label><input class="input" id="ads" type="number" min="0" step=".01" value="0"></div></div><div class="result"><div><div class="subtle">Орієнтовний прибуток на одиницю</div><strong id="profit">$—</strong><div class="subtle" id="profitDetail">Задай витрати, щоб перерахувати.</div></div><div><div class="subtle">Маржинальність</div><strong id="marginPercent">—</strong></div></div><p class="note">Комісії за замовчуванням — умовний приклад. Уточни актуальні Etsy fees, обробку платежу, податки, валютні витрати, повернення й рекламу для своєї країни.</p></div></section>
+<section class="section" id="draft"><div class="heading"><div><div class="n">03 / HUMAN-IN-THE-LOOP AI</div><h2>AI-чернетка оголошення</h2><p>AI готує текст, ти перевіряєш факти та публікуєш вручну.</p></div><span class="tag">Без автопублікації</span></div><div class="two"><div class="panel"><form id="draftForm" style="display:grid;gap:11px"><div class="field"><label for="draftTitle">Робоча назва</label><input class="input" id="draftTitle" required maxlength="160" placeholder="Personalized leather dog collar"></div><div class="field"><label for="facts">Підтверджені характеристики</label><textarea class="input" id="facts" required maxlength="3000" rows="5" placeholder="Матеріал, розміри, кольори, як створюється, що отримає покупець. Не додавай неперевірених фактів."></textarea></div><div class="field"><label for="productType">Тип товару</label><select class="input" id="productType"><option value="physical">Фізичний товар</option><option value="customized">Персоналізований / made-to-order</option><option value="ai_art">AI-assisted art / design</option><option value="digital_design">Цифровий дизайн / printable</option></select></div><label class="check"><input id="aiUsed" type="checkbox"><span><strong>Сам товар створено з використанням AI</strong><small>Додати прозору примітку для опису. AI лише для чернетки опису — це інше.</small></span></label><button class="btn primary" id="draftBtn">✦ Створити чернетку</button><p class="note">Цей помічник не генерує рецепти, шаблони чи функціональні інструкції, на які покладається покупець. Він не публікує оголошення.</p></form></div><div class="panel"><div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:12px"><b>Результат для перевірки</b><span class="tag" id="draftStatus">Очікує даних</span></div><pre class="output show" id="draftOutput">Заповни поля зліва. Для AI-чернеток необхідно підключити OPENAI_API_KEY у Vercel.</pre><button id="copyDraft" class="btn" disabled style="margin-top:10px">Копіювати текст</button><p class="note">Не використовуй жодне твердження без власної перевірки.</p></div></div></section>
+<section class="section" id="policy"><div class="heading"><div><div class="n">04 / ETSY TRUST CHECK</div><h2>Контрольний список перед публікацією</h2><p>Допоміжне нагадування за наданим відео Etsy про AI та фотографії.</p></div><span class="tag">Перевіряє людина</span></div><div class="panel"><div class="checks"><label class="check"><input class="policy" type="checkbox"><span><strong>Фото достовірне</strong><small>Для фізичного товару є справжнє незмінене фото на реальному фоні, якщо ця вимога застосовується.</small></span></label><label class="check"><input class="policy" type="checkbox"><span><strong>Редагування не вводить в оману</strong><small>Фото не приховують дефекти й не змінюють вигляд того, що отримає покупець.</small></span></label><label class="check"><input class="policy" type="checkbox"><span><strong>AI використання розкрито</strong><small>Якщо AI використано для створення самого товару, опис прозоро повідомляє про це.</small></span></label><label class="check"><input class="policy" type="checkbox"><span><strong>Контент і факти перевірені</strong><small>Назва, теги, опис, ціна, характеристики й права на матеріали перевірені.</small></span></label><label class="check"><input class="policy" type="checkbox"><span><strong>Результат реальний</strong><small>Персоналізація чи готовий результат показані правдиво, без симуляції неіснуючого товару.</small></span></label><label class="check"><input class="policy" type="checkbox"><span><strong>Ручне підтвердження</strong><small>Оголошення перевірене людиною; автоматичної публікації немає.</small></span></label></div><div class="result"><div><b id="policyText">Перевірки: 0 із 6</b><div class="subtle" id="policyHint">Позначай після власної перевірки.</div></div><span class="tag" id="policyBadge">Не завершено</span></div><p class="note">Список не замінює офіційні правила Etsy. У різних категорій різні вимоги; перевір їх перед публікацією.</p></div></section>
+<section class="section" id="saved"><div class="heading"><div><div class="n">05 / WORKSPACE</div><h2>Збережені дослідження</h2><p>Зберігаються локально в цьому браузері; можна експортувати для резервної копії.</p></div><div style="display:flex;gap:7px"><button class="btn" id="exportSaved">↓ JSON</button><button class="btn" id="clearSaved">Очистити</button></div></div><div class="panel"><div id="savedList" class="saved"><div class="empty"><b>Список поки порожній</b>Збережи результат пошуку.</div></div><p class="note">Синхронізація між пристроями поки не налаштована; не зберігай тут секрети чи API-ключі.</p></div></section>
+<footer class="foot"><span>MYSHKA ETSY AI · Research before action</span><span>AI drafts only · No automatic listing publication</span><a style="color:#aab7c5" href="https://www.etsy.com/legal/creativity/" target="_blank" rel="noreferrer">Etsy Creativity Standards ↗</a></footer>
+</main><div id="toast" class="toast" role="status"></div>
 <script>
-const FEED='crypto_myshka/data/feed.json?ts='+Date.now();
-const NEWS='crypto_myshka/data/news.json?ts='+Date.now();
-const modeNames={opportunities:'Можливості',portfolio:'Портфель',speculation:'Спекуляції',trading:'Trading Lab',news:'JEV Аналіз',knowledge:'База / Контекст'};
-let data={items:[],sources:{},market:{}},newsData={items:[]},mode='opportunities';
-const $=s=>document.querySelector(s);
-const esc=s=>String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function riskClass(n){return n<45?'low':n<70?'mid':'high'}
-function riskLabel(n){return n<45?'Низький ризик':n<70?'Середній ризик':'Високий ризик'}
-
-function executionGuard(x){
-  const txt=((x.title||'')+' '+(x.summary||'')+' '+((x.reasons||[]).join(' '))).toLowerCase();
-  const leveraged=/\b(cfd|perp|perpetual|futures?|ф'ючерс|фʼючерс|фючерс|опціон|options?|leverage|плеч|lot\b|марж)/i.test(txt);
-  const launchpool=/\blaunchpool\b|лаунчпул|\bpoolx\b/i.test(txt);
-  const directTrade=/\b(відкрити|угод|лонг|шорт|long|short|buy|sell|торгів)/i.test(txt);
-  const risky=Number(x.risk||65)>=70 || x.mode==='trading' || leveraged || directTrade;
-  let verdict='ПОТРІБНА ПЕРЕВІРКА', cls='hold';
-  if(leveraged || x.mode==='trading'){verdict='ТІЛЬКИ АНАЛІЗ',cls='stop'}
-  else if(!risky && Number(x.risk||65)<45){verdict='МОЖНА ПЕРЕВІРИТИ',cls='ok'}
-  const leverage=leveraged?'є / можливе — перевірити умови':'не виявлено у тексті';
-
-  if(launchpool){
-    return '<div class="guard">'+
-      '<div class="guardHead"><b>🐭 Launchpool-перевірка</b><span class="guardVerdict '+cls+'">'+verdict+'</span></div>'+
-      '<div class="guardGrid">'+
-        '<div class="guardCell"><small>Stablecoin-пул</small><span>USDT/USDC мають нижчий price risk, але лишається ризик платформи й умов</span></div>'+
-        '<div class="guardCell"><small>Токен-пули</small><span>BLKHION / MAG7XON / XAUT / GT та інші можуть падати в ціні під час стейкінгу</span></div>'+
-        '<div class="guardCell"><small>Плече</small><span>'+leverage+'</span></div>'+
-        '<div class="guardCell"><small>APR</small><span>річний і плаваючий; не дорівнює прибутку за весь період акції</span></div>'+
-      '</div>'+
-      '<div class="guardRule"><strong>Оцінюй кожен пул окремо.</strong> Низький ризик stablecoin-пулу не означає, що весь Launchpool автоматично низькоризиковий.</div>'+
-    '</div>';
-  }
-
-  return '<div class="guard">'+
-    '<div class="guardHead"><b>🐭 Перевірка перед дією</b><span class="guardVerdict '+cls+'">'+verdict+'</span></div>'+
-    '<div class="guardGrid">'+
-      '<div class="guardCell"><small>Потрібна сума</small><span>не підтверджено — дивись офіційні умови</span></div>'+
-      '<div class="guardCell"><small>Макс. збиток</small><span>не підтверджено — не вважати ризик «низьким»</span></div>'+
-      '<div class="guardCell"><small>Плече</small><span>'+leverage+'</span></div>'+
-      '<div class="guardCell"><small>Reward / Risk</small><span>не підтверджено; промо-пул ≠ твоя гарантована нагорода</span></div>'+
-    '</div>'+
-    '<div class="guardRule"><strong>Мишка не каже «роби».</strong> Якщо 4 поля не підтверджені — відкриваємо першоджерело й перевіряємо, а не виконуємо дію.</div>'+
-  '</div>';
-}
-
-function renderSources(){
-  const box=$('#sources'); box.innerHTML='';
-  const labels={telegram_main:'Telegram · live',telegram_airdrop:'Retrodrop · live',telegram_archive:'Telegram · архів',site:'База знань',youtube:'YouTube',jev_news:'JEV радар'};
-  Object.entries(data.sources||{}).forEach(([k,v])=>{
-    const d=document.createElement('div');d.className='source';
-    let state;
-    if(v.ok){
-      state='online · '+(v.count||0)+' матеріалів';
-      if(k==='telegram_archive' && v.complete===false) state+=' · архів доповнюється';
-    }else{
-      state=(k==='telegram_archive'?'архів запускається':'тимчасова помилка');
-    }
-    d.innerHTML='<div><b>'+esc(labels[k]||k)+'</b><br><small>'+esc(state)+'</small></div>';
-    box.appendChild(d);
-  });
-}
-
-function renderMarket(){
-  const box=$('#market'),m=data.market||{},prices=m.prices||m;box.innerHTML='';
-  const ids={BTC:'bitcoin',ETH:'ethereum',OP:'optimism',SOL:'solana',PENDLE:'pendle',ARB:'arbitrum',LDO:'lido-dao',ICP:'internet-computer',STG:'stargate-finance',TWT:'trust-wallet-token',ENS:'ethereum-name-service',LTC:'litecoin',XRP:'ripple',BNB:'binancecoin',DOGE:'dogecoin',ADA:'cardano',AVAX:'avalanche-2',LINK:'chainlink'};
-  const syms=m.symbols||['BTC','ETH'];
-  syms.forEach(label=>{
-    const x=prices[ids[label]];if(!x)return;
-    const ch=Number(x.usd_24h_change||0),d=document.createElement('div');d.className='metric';
-    d.innerHTML='<label>'+esc(label)+'</label><b>$'+Number(x.usd).toLocaleString('en-US')+'</b><small class="risk '+(ch>=0?'low':'high')+'">'+(ch>=0?'+':'')+ch.toFixed(2)+'% 24h</small>';
-    box.appendChild(d);
-  });
-  if(!box.children.length)box.innerHTML='<div class="empty">Ринкові дані ще не завантажені.</div>';
-}
-
-function currentItems(){
-  if(mode==='news')return newsData.items||[];
-  if(mode==='knowledge')return (data.items||[]).filter(x=>x.knowledge);
-  return (data.items||[]).filter(x=>x.mode===mode&&!x.knowledge);
-}
-
-function renderItems(){
-  $('#modeTitle').textContent=modeNames[mode];
-  const arr=currentItems();
-  if(mode==='news'){
-    const aiCount=arr.filter(x=>x.analysis_level==='llm'&&x.jev_ai&&!x.jev_ai._format_fallback).length;
-    const code=newsData.jev_status||'unknown';
-    const state=code==='complete'?'AI готовий':code==='ok'?'AI частково':code==='degraded'?'AI помилки':code==='not_configured'?'AI не налаштований':'AI ще не підтверджено';
-    $('#count').textContent=aiCount+'/'+arr.length+' перевірено AI · '+state;
-  }else{
-    $('#count').textContent=arr.length+(mode==='knowledge'?' матеріалів':' ідей');
-  }
-  const box=$('#items');box.innerHTML='';
-  if(!arr.length){box.innerHTML='<div class="empty">Тут поки немає матеріалів.</div>';return}
-  arr.slice(0,60).forEach(x=>{
-    const el=document.createElement('article');el.className='item';
-    const isNews=mode==='news';
-    const klass=isNews?(Number(x.impact||1)>=3?'high':Number(x.impact||1)>=2?'mid':'low'):riskClass(Number(x.risk||65));
-    const badge=isNews?(x.impact_label||'Контекст'):(x.knowledge?'Контекст':riskLabel(Number(x.risk||65)));
-    const who=isNews?((x.publishers||[]).join(' · ')||'JEV'):x.source;
-    const meta2=isNews?((x.assets||[]).join(', ')||'крипторинок'):(x.knowledge?'методологія':modeNames[x.mode]);
-    const rs=(x.reasons||[]).map(r=>'• '+esc(r)).join('<br>');
-    let extra='';
-    if(isNews){
-      const ai=x.jev_ai||null;
-      const cleanAi=ai && !ai._format_fallback && !ai._cross_source_fallback && x.analysis_level==='llm';
-      if(cleanAi){
-        extra='<div class="jevbox"><b>🧠 JEV AI</b><p>'+esc(ai.short_conclusion||ai.why_it_matters||'')+'</p>'+
-          '<b>Що сталося</b><p>'+esc(ai.what_happened||'')+'</p>'+
-          '<b>Чому це важливо</b><p>'+esc(ai.why_it_matters||'')+'</p>'+
-          '<b>Сценарії</b><p>↑ '+esc(ai.bull_case||'')+'<br>↓ '+esc(ai.bear_case||'')+'</p>'+
-          '<b>За чим стежити</b><p>'+esc(ai.watch_next||'')+'</p>'+
-          '<b>Впевненість: '+esc(ai.confidence||'—')+'</b></div>';
-      }else if(ai){
-        extra='<div class="jevbox"><b>🧠 JEV крос-перевірка</b><p>'+esc(ai.short_conclusion||x.jev_take||'')+'</p>'+
-          '<b>Що сталося</b><p>'+esc(ai.what_happened||x.summary||'')+'</p>'+
-          '<b>Чому це важливо</b><p>'+esc(ai.why_it_matters||x.jev_take||'')+'</p>'+
-          '<b>За чим стежити</b><p>'+esc(ai.watch_next||x.watch_for||'')+'</p>'+
-          '<b>Впевненість: '+esc(ai.confidence||x.confidence_label||'—')+'</b><p style="color:#7892ab">LLM ще може покращити цей висновок у наступному запуску.</p></div>';
-      }else{
-        extra='<div class="jevbox"><b>Крос-перевірка</b><p>'+esc(x.jev_take||'')+'</p>'+
-          '<b>Що перевірити далі</b><p>'+esc(x.watch_for||'')+'</p>'+
-          '<b>'+esc(x.confidence_label||'')+'</b></div>';
-      }
-    }
-    el.innerHTML='<div class="itemTop"><h4>'+esc(x.title)+'</h4><span class="risk '+klass+'">'+esc(badge)+'</span></div>'+
-      '<div class="meta"><span class="pill">'+esc(who)+'</span><span class="pill">'+esc(meta2)+'</span></div>'+
-      '<div class="summary">'+esc(x.summary)+'</div>'+extra+'<div class="reasons">'+rs+'</div>'+
-      ((x.mode==='opportunities'||x.mode==='trading'||x.mode==='speculation')?executionGuard(x):'')+
-      '<div class="actions"><a class="btn" target="_blank" rel="noopener" href="'+esc(x.url)+'">Першоджерело ↗</a><button class="btn save" data-id="'+esc(x.id)+'">＋ Журнал</button></div>';
-    box.appendChild(el);
-  });
-  box.querySelectorAll('.save').forEach(b=>b.onclick=()=>saveItem(b.dataset.id));
-}
-
-function getJournal(){try{return JSON.parse(localStorage.getItem('cryptoMyshkaJournal')||'[]')}catch{return[]}}
-function saveItem(id){
-  const item=(data.items||[]).find(x=>x.id===id)||(newsData.items||[]).find(x=>x.id===id);if(!item)return;
-  let j=getJournal();
-  if(!j.some(x=>x.id===id))j.unshift({id:item.id,title:item.title,url:item.url,mode:item.mode||'news',risk:item.risk,impact:item.impact,impact_label:item.impact_label,savedAt:new Date().toISOString()});
-  j=j.slice(0,30);localStorage.setItem('cryptoMyshkaJournal',JSON.stringify(j));renderJournal();
-}
-function renderJournal(){
-  const j=getJournal(),box=$('#journal');box.innerHTML='';
-  if(!j.length){box.innerHTML='<div class="empty">Ще нічого не збережено.</div>';return}
-  j.slice(0,10).forEach(x=>{const d=document.createElement('div');d.className='jrow';const txt=x.mode==='news'?(x.impact_label||'Новина'):riskLabel(Number(x.risk||65));d.innerHTML='<b>'+esc(x.title.slice(0,74))+'</b><br>'+esc(txt);d.onclick=()=>window.open(x.url,'_blank');box.appendChild(d)});
-}
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');mode=t.dataset.mode;renderItems()});
-
-function mouseAdd(role,text,links=[]){
-  const d=document.createElement('div');d.className='mouseMsg '+role;d.textContent=text;
-  if(links.length){
-    links.slice(0,3).forEach(x=>{
-      const a=document.createElement('a');a.href=x.url;a.target='_blank';a.rel='noopener';a.textContent='\n↗ '+(x.title||'Джерело').slice(0,70);d.appendChild(a);
-    });
-  }
-  $('#mouseAiLog').appendChild(d);$('#mouseAiLog').scrollTop=$('#mouseAiLog').scrollHeight;
-}
-function mouseTerms(q){
-  return q.toLowerCase().replace(/[^a-zа-яіїєґ0-9$\-\s]/gi,' ').split(/\s+/).filter(x=>x.length>2);
-}
-function mouseScore(x,terms){
-  const b=((x.title||'')+' '+(x.summary||'')+' '+((x.assets||[]).join(' '))+' '+((x.topics||[]).join(' '))).toLowerCase();
-  return terms.reduce((n,t)=>n+(b.includes(t)?1:0),0);
-}
-function mouseAnswer(q){
-  const low=q.toLowerCase(), terms=mouseTerms(q);
-  const prices=(data.market||{}).prices||{};
-  const idMap={
-    btc:'bitcoin',bitcoin:'bitcoin',
-    eth:'ethereum',ethereum:'ethereum',
-    op:'optimism',sol:'solana',pendle:'pendle',
-    ldo:'lido-dao',ens:'ethereum-name-service',icp:'internet-computer'
-  };
-
-  for(const [key,id] of Object.entries(idMap)){
-    if(low.includes(key) && prices[id]){
-      const x=prices[id];
-      const ch=Number(x.usd_24h_change||0);
-      const sym=key==='bitcoin'?'BTC':key==='ethereum'?'ETH':key.toUpperCase();
-      const rel=[...(newsData.items||[]),...(data.items||[])]
-        .filter(v=>mouseScore(v,[key,sym.toLowerCase()])>0)
-        .slice(0,3);
-      return {
-        text:sym+' зараз ≈ $'+Number(x.usd).toLocaleString('en-US')+
-          ' ('+(ch>=0?'+':'')+ch.toFixed(2)+'% за 24г).\n\n'+
-          'З одного руху ціни висновок не робимо — дивимось на контекст, обсяг і підтвердження.',
-        links:rel
-      };
-    }
-  }
-
-  if(low.includes('itstatti')||low.includes('ітстат')||low.includes('пост')){
-    const xs=(data.items||[]).filter(x=>x.source==='telegram_main').slice(0,3);
-    return {
-      text:xs.length
-        ?'Останні матеріали ITstatti вже в Криптомишці. Дивимось на них як на контекст, а не готову команду.'
-        :'Пости ITstatti ще не завантажились.',
-      links:xs
-    };
-  }
-
-  if(low.includes('ретро')||low.includes('airdrop')||low.includes('дроп')){
-    const xs=(data.items||[]).filter(x=>x.source==='telegram_airdrop').slice(0,3);
-    return {
-      text:xs.length
-        ?'Ось свіжі ретродроп/airdrop-матеріали. Перевіряй умови й офіційні посилання.'
-        :'Свіжих ретродропів поки не бачу.',
-      links:xs
-    };
-  }
-
-  if(low.includes('викон')||low.includes('варто')||low.includes('угод')||low.includes('робити')){
-    return {
-      text:'Я не даю команду «роби». Перед будь-якою угодою або промо перевір 4 речі: 1) скільки реально потрібно внести, 2) максимальний можливий збиток, 3) чи є плече, 4) чи очікувана винагорода виправдовує ризик і комісії. Якщо хоча б одне невідоме — моя відповідь: спочатку перевірити, не виконувати.',
-      links:[]
-    };
-  }
-
-  if(low.includes('ризик')){
-    const xs=(newsData.items||[]).filter(x=>Number(x.impact||0)>=3).slice(0,3);
-    return {
-      text:xs.length
-        ?'Зараз найбільше уваги варто дати подіям із високим впливом. Це не означає автоматично купувати або продавати — їх треба перевірити першими.'
-        :'Високоризикових подій у радарі зараз не бачу.',
-      links:xs
-    };
-  }
-
-  if(low.includes('нов')||low.includes('сьогодні')||low.includes('зараз')){
-    const xs=(newsData.items||[]).slice(0,3);
-    return {
-      text:xs.length
-        ?'Ось найсвіжіші події з JEV-радара. Насамперед дивись на ті, що підтверджені кількома джерелами.'
-        :'Радар ще оновлюється.',
-      links:xs
-    };
-  }
-
-  const pool=[...(newsData.items||[]),...(data.items||[])];
-  const ranked=pool
-    .map(x=>({x,s:mouseScore(x,terms)}))
-    .filter(o=>o.s>0)
-    .sort((a,b)=>b.s-a.s)
-    .slice(0,3)
-    .map(o=>o.x);
-
-  if(ranked.length){
-    const best=ranked[0],ai=best.jev_ai||{};
-    const takeaway=ai.short_conclusion||best.jev_take||best.summary||'';
-    return {
-      text:'Знайшла релевантний матеріал. '+
-        (takeaway||'Перевір першоджерело та реакцію ринку перед висновком.'),
-      links:ranked
-    };
-  }
-
-  return {
-    text:'Я не знайшла прямої згадки в даних Криптомишки. Спробуй коротше: «BTC», «ETH», «OP», «що нового», «ITstatti», «ретродропи» або назву конкретного проєкту.',
-    links:[]
-  };
-}
-
-function mouseSend(){
-  const input=$('#mouseAiInput');
-  const q=input.value.trim();
-  if(!q)return;
-  mouseAdd('user',q);
-  input.value='';
-  const a=mouseAnswer(q);
-  mouseAdd('ai','📚 Огляд матеріалів (НЕ живий AI):\n'+a.text,a.links);
-}
-
-const mouseSendBtn=$('#mouseAiSend');
-if(mouseSendBtn) mouseSendBtn.onclick=mouseSend;
-$('#mouseAiInput').addEventListener('keydown',e=>{
-  if(e.key==='Enter'){
-    e.preventDefault();
-    mouseSend();
-  }
-});
-document.querySelectorAll('.mouseAiQuick button').forEach(b=>{
-  b.onclick=()=>{
-    $('#mouseAiInput').value=b.dataset.q;
-    mouseSend();
-  };
-});
-
-async function refreshData(){
-  try{
-    const stamp=Date.now();
-    const [j,n]=await Promise.all([
-      fetch('crypto_myshka/data/feed.json?ts='+stamp,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(r.status);return r.json()}),
-      fetch('crypto_myshka/data/news.json?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():({items:[]}))
-    ]);
-    const changed=(j.generated_at!==data.generated_at)||(n.generated_at!==newsData.generated_at);
-    data=j;
-    newsData=n;
-    $('#status').textContent='FEED · оновлено '+(j.generated_at?new Date(j.generated_at).toLocaleString('uk-UA'):'очікує запуску');
-    $('#status').className='badge ok';
-    if(changed){
-      renderSources();
-      renderMarket();
-      renderItems();
-    }
-    renderJournal();
-  }catch(err){
-    console.error(err);
-    $('#status').textContent='FEED ще оновлюється';
-    $('#status').className='badge warn';
-  }
-}
-
-function updateLiveClock(){
-  const el=$('#liveClock');
-  if(!el)return;
-  el.textContent='🕒 '+new Date().toLocaleTimeString('uk-UA',{hour12:false});
-}
-updateLiveClock();
-setInterval(updateLiveClock,1000);
-
-refreshData();
-// GitHub Actions оновлює дані приблизно кожні 10 хв. Сторінка сама
-// перевіряє нову версію щохвилини, тому Ctrl+F5 більше не потрібен.
-setInterval(refreshData,60000);
-</script>
-<a href="./jev-copy-lab.html" style="position:fixed;left:12px;bottom:12px;z-index:9997;background:#163451;color:#fff;padding:10px 13px;border:1px solid #477aa4;border-radius:12px;text-decoration:none;font:700 12px system-ui">🐭 JEV Copy Lab · DEMO</a>
-</body>
-</html>
+(()=>{"use strict";
+const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s)),STORAGE="myshka_etsy_ideas_v1",API="myshka_etsy_api_base_v1";
+let base=(localStorage.getItem(API)||"").replace(/\/+$/,""),last=null,draft="";
+const money=(v,c="USD")=>v==null||!Number.isFinite(Number(v))?"—":(()=>{try{return new Intl.NumberFormat("en-US",{style:"currency",currency:c,maximumFractionDigits:2}).format(Number(v))}catch(e){return "$"+Number(v).toFixed(2)}})();
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(s){const e=$("#toast");e.textContent=s;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),3000)}
+function getSaved(){try{return JSON.parse(localStorage.getItem(STORAGE)||"[]")}catch(e){return []}}
+function saved(a){localStorage.setItem(STORAGE,JSON.stringify(a));renderSaved()}
+function api(path,opts){return fetch(base+path,Object.assign({headers:{"Content-Type":"application/json"}},opts||{})).then(async r=>{let d={};try{d=await r.json()}catch(e){}if(!r.ok)throw Error(d.error||"HTTP "+r.status);return d})}
+async function health(){if(location.hostname.endsWith("github.io")&&!base){$("#serverStatus").textContent="API не підключено";return}try{let d=await api("/api/health",{method:"GET",headers:{}});$("#serverStatus").textContent=d.etsyConfigured?"Сервер готовий": "Сервер є · потрібен Etsy key"}catch(e){$("#serverStatus").textContent="Сервер недоступний"}}
+function alertMsg(t){$("#alert").textContent=t;$("#alert").classList.add("show")}function clearAlert(){$("#alert").classList.remove("show")}
+function displaySearch(d,k){let items=d.listings||[];last={keywords:k,total:d.total_results,median:d.price_stats?.median??null,average:d.price_stats?.average??null,count:items.length,currency:d.currency||"USD",items};$("#stats").classList.add("show");$("#total").textContent=Number(d.total_results||0).toLocaleString();$("#average").textContent=money(last.average,last.currency);$("#range").textContent=d.price_stats?.min!=null&&d.price_stats?.max!=null?money(d.price_stats.min,last.currency)+" – "+money(d.price_stats.max,last.currency):"—";$("#lastQuery").textContent=k.length>13?k.slice(0,11)+"…":k;$("#medianMetric").textContent=money(last.median,last.currency);$("#resultTitle").textContent="Результати: "+k;$("#resultMeta").textContent=items.length+" у вибірці";$("#saveSearch").disabled=!items.length;$("#csv").disabled=!items.length;if(!items.length){$("#results").innerHTML='<div class="empty"><b>Немає результатів</b>Спробуй іншу фразу або перевір доступ до Etsy API.</div>';return}$("#results").innerHTML=items.map((x,i)=>{let image=x.image_url?'<img loading="lazy" src="'+esc(x.image_url)+'" alt="" onerror="this.style.display=\'none\'">':'<div class="ph">◇</div>';let meta=[x.shop_name,x.views!=null?Number(x.views).toLocaleString()+" views":null,x.favorites!=null?Number(x.favorites).toLocaleString()+" favorites":null].filter(Boolean).join(" · ");let url=x.url&&/^https:\/\/(www\.)?etsy\.com\//i.test(x.url)?x.url:"https://www.etsy.com/";return '<article class="listing">'+image+'<div class="listing-content"><div class="listing-title">'+esc(x.title)+'</div><div class="listing-meta">'+esc(meta||"Додаткові показники API не надано")+'</div><div class="price">'+esc(money(x.price,x.currency))+'</div><div class="actions"><a class="btn" target="_blank" rel="noreferrer" href="'+esc(url)+'">Переглянути ↗</a><button class="btn" data-one="'+i+'">Зберегти</button></div></div></article>'}).join("")}
+$("#results").addEventListener("click",e=>{let b=e.target.closest("[data-one]");if(b&&last)saveIdea(last.items[Number(b.dataset.one)],last.keywords)});
+$("#searchForm").addEventListener("submit",async e=>{e.preventDefault();clearAlert();let k=$("#keywords").value.trim();if(location.hostname.endsWith("github.io")&&!base){alertMsg("GitHub Pages не запускає серверні API. Натисни «API» та додай URL Vercel deployment, або відкрий Vercel-версію програми.");return}let b=$("#searchBtn");b.disabled=true;b.textContent="Шукаю…";$("#results").innerHTML='<div class="empty"><b>Шукаю оголошення</b>Очікую відповідь Etsy API…</div>';try{let d=await api("/api/etsy/search?keywords="+encodeURIComponent(k)+"&limit="+encodeURIComponent($("#limit").value),{method:"GET",headers:{}});displaySearch(d,k)}catch(err){$("#results").innerHTML='<div class="empty"><b>Пошук не завершився</b>'+esc(err.message)+'</div>';alertMsg(err.message+" Перевір Etsy keystring/shared secret у Vercel Environment Variables та чи схвалено доступ до API.")}finally{b.disabled=false;b.textContent="⌕ Знайти нішу";health()}});
+function saveIdea(item,k){const a=getSaved(),x={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),keywords:k,title:item?.title||k,url:item?.url||"",price:item?.price??null,currency:item?.currency||last?.currency||"USD",result_count:last?.total??null,median_price:last?.median??null,average_price:last?.average??null,created_at:new Date().toISOString()};if(a.some(z=>z.title===x.title&&z.keywords===x.keywords)){toast("Уже збережено");return}a.unshift(x);saved(a.slice(0,200));toast("Дослідження збережено в цьому браузері")}
+$("#saveSearch").addEventListener("click",()=>{if(last)saveIdea(null,last.keywords)});
+function file(name,text,type){let u=URL.createObjectURL(new Blob([text],{type:type||"application/json"})),a=document.createElement("a");a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+$("#csv").addEventListener("click",()=>{if(!last)return;let rows=[["title","price","currency","shop_name","views","favorites","url"],...last.items.map(x=>[x.title,x.price,x.currency,x.shop_name,x.views,x.favorites,x.url])];file("myshka-etsy-results.csv",rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n"),"text/csv;charset=utf-8")});
+function renderSaved(){let a=getSaved();$("#savedCount").textContent=a.length;$("#savedList").innerHTML=a.length?a.map(x=>'<div class="savedrow"><div><b>'+esc(x.title||x.keywords)+'</b><small>'+esc(x.keywords)+' · '+(x.result_count!=null?Number(x.result_count).toLocaleString()+" results · ":"")+(x.median_price!=null?"median "+esc(money(x.median_price,x.currency))+" · ":"")+esc(new Date(x.created_at).toLocaleDateString())+'</small></div><div class="actions">'+(x.url?'<a class="btn" target="_blank" rel="noreferrer" href="'+esc(x.url)+'">Відкрити ↗</a>':'')+'<button class="btn" data-load="'+esc(x.keywords)+'">Шукати знову</button><button class="btn" data-del="'+esc(x.id)+'">Видалити</button></div></div>').join(""):'<div class="empty"><b>Список поки порожній</b>Збережи результат пошуку.</div>'}
+$("#savedList").addEventListener("click",e=>{let l=e.target.closest("[data-load]"),d=e.target.closest("[data-del]");if(l){$("#keywords").value=l.dataset.load;$("#research").scrollIntoView({behavior:"smooth"});$("#searchForm").requestSubmit()}if(d)saved(getSaved().filter(x=>x.id!==d.dataset.del))});
+$("#exportSaved").addEventListener("click",()=>file("myshka-etsy-saved.json",JSON.stringify(getSaved(),null,2)));
+$("#clearSaved").addEventListener("click",()=>{if(confirm("Очистити збережені дослідження в цьому браузері?"))saved([])});
+function calc(){let p=+$("#sell").value||0,c=+$("#cost").value||0,s=+$("#ship").value||0,f=Math.max(0,Math.min(100,+$("#fees").value||0)),o=+$("#other").value||0,a=+$("#ads").value||0,fee=p*f/100,net=p-c-s-fee-o-a,margin=p?net/p*100:0;$("#profit").textContent=money(net);$("#profit").style.color=net>=0?"var(--lime)":"var(--red)";$("#marginPercent").textContent=p?margin.toFixed(1)+"%":"—";$("#profitDetail").textContent="Комісії: "+money(fee)+" · витрати всього: "+money(c+s+fee+o+a);$("#marginMetric").textContent=p?margin.toFixed(0)+"%":"—"}
+["#sell","#cost","#ship","#fees","#other","#ads"].forEach(s=>$(s).addEventListener("input",calc));
+$("#draftForm").addEventListener("submit",async e=>{e.preventDefault();if(location.hostname.endsWith("github.io")&&!base){$("#draftOutput").textContent="Серверне API не підключено. Додай URL Vercel deployment у налаштуваннях API.";return}let b=$("#draftBtn");b.disabled=true;b.textContent="Готую…";$("#draftStatus").textContent="Генерується";$("#draftOutput").classList.add("show");try{let d=await api("/api/ai/draft",{method:"POST",body:JSON.stringify({title:$("#draftTitle").value,facts:$("#facts").value,type:$("#productType").value,aiUsed:$("#aiUsed").checked})});draft=d.draft||"";$("#draftOutput").textContent=draft;$("#draftStatus").textContent="Перевір чернетку";$("#copyDraft").disabled=!draft;toast("Чернетка готова — перевір кожен факт")}catch(err){$("#draftOutput").textContent="Не вдалося створити чернетку: "+err.message+"\n\nПотрібен OPENAI_API_KEY у Vercel Environment Variables.";$("#draftStatus").textContent="Потрібне налаштування";$("#copyDraft").disabled=true}finally{b.disabled=false;b.textContent="✦ Створити чернетку";health()}});
+$("#copyDraft").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(draft);toast("Скопійовано")}catch(e){toast("Виділи й скопіюй текст вручну")}});
+function policy(){let n=$$(".policy").filter(x=>x.checked).length;$("#policyText").textContent="Перевірки: "+n+" із 6";$("#policyBadge").textContent=n===6?"Усі позначено":"Не завершено";$("#policyBadge").style.color=n===6?"var(--mint)":"var(--amber)";$("#policyHint").textContent=n===6?"Список заповнений людиною. Усе одно перевір актуальну політику Etsy.":"Познач пункти лише після власної перевірки"}
+$$(".policy").forEach(x=>x.addEventListener("change",policy));
+$("#settings").addEventListener("click",()=>{let n=prompt("Адреса Vercel deployment, наприклад https://myshka-etsy-ai.vercel.app. Порожнє поле скидає налаштування.",base);if(n===null)return;n=n.trim().replace(/\/+$/,"");if(n&&!/^https:\/\/[a-z0-9.-]+(?::\d+)?$/i.test(n)){toast("Вкажи повну https:// адресу без шляху.");return}base=n;if(n)localStorage.setItem(API,n);else localStorage.removeItem(API);health();toast(n?"Адресу API збережено":"Використовується поточний домен")});
+calc();renderSaved();policy();health();
+})();
+</script></body></html>
