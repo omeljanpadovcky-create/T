@@ -1,3 +1,5 @@
+import { timingSafeEqual } from "node:crypto";
+
 const json = (res, status, body) => {
   res.setHeader("Cache-Control", "no-store");
   res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -9,6 +11,23 @@ export default async function handler(req, res) {
     res.setHeader("Allow", "GET");
     return json(res, 405, { ok: false, error: "Method not allowed" });
   }
+  const requiredToken = process.env.MYSHKA_ACCESS_TOKEN || "";
+  if (!requiredToken) return json(res, 503, {
+    ok: false,
+    code: "WORKSPACE_ACCESS_NOT_CONFIGURED",
+    error: "Private workspace access is not configured yet. Set MYSHKA_ACCESS_TOKEN in Vercel."
+  });
+  const suppliedToken = String(req.headers["x-myshka-access"] || "");
+  const expectedBytes = Buffer.from(requiredToken, "utf8");
+  const suppliedBytes = Buffer.from(suppliedToken, "utf8");
+  if (expectedBytes.length !== suppliedBytes.length || !timingSafeEqual(expectedBytes, suppliedBytes)) {
+    return json(res, 401, {
+      ok: false,
+      code: "WORKSPACE_ACCESS_DENIED",
+      error: "Private workspace token is missing or incorrect. Enter the token in MYSHKA settings."
+    });
+  }
+
   const key = process.env.ETSY_API_KEY;
   if (!key) return json(res, 503, {
     ok: false,
