@@ -78,17 +78,36 @@ export default async function handler(req, res) {
         shopId: item.shop_id ?? null
       };
     });
-    const prices = items.map((i) => i.price).filter((v) => Number.isFinite(v) && v >= 0).sort((a,b) => a-b);
-    const favs = items.map((i) => i.favorites).filter((v) => Number.isFinite(v) && v >= 0);
-    const median = prices.length ? (prices.length % 2 ? prices[(prices.length - 1) / 2] : (prices[prices.length / 2 - 1] + prices[prices.length / 2]) / 2) : null;
+    const pricesByCurrency = new Map();
+    for (const item of items) {
+      if (!Number.isFinite(item.price) || item.price < 0) continue;
+      const currency = /^[A-Z]{3}$/.test(item.currency) ? item.currency : "UNK";
+      if (!pricesByCurrency.has(currency)) pricesByCurrency.set(currency, []);
+      pricesByCurrency.get(currency).push(item.price);
+    }
+    const medianOf = (values) => {
+      const sorted = [...values].sort((a, b) => a - b);
+      if (!sorted.length) return null;
+      const middle = Math.floor(sorted.length / 2);
+      return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
+    };
     const average = (values) => values.length ? values.reduce((sum, v) => sum + v, 0) / values.length : null;
+    const priceByCurrency = Array.from(pricesByCurrency.entries())
+      .map(([currency, values]) => ({
+        currency,
+        pricedListings: values.length,
+        medianPrice: medianOf(values),
+        averagePrice: average(values)
+      }))
+      .sort((a, b) => b.pricedListings - a.pricedListings || a.currency.localeCompare(b.currency));
+    const favs = items.map((i) => i.favorites).filter((v) => Number.isFinite(v) && v >= 0);
     return json(res, 200, {
       ok: true, keywords, fetchedAt: new Date().toISOString(),
       resultCount: Number.isFinite(Number(data.count)) ? Number(data.count) : items.length,
       sampleCount: items.length,
-      metrics: { averagePrice: average(prices), medianPrice: median, averageFavorites: average(favs), listingsWithFavorites: favs.length },
+      metrics: { priceByCurrency, averageFavorites: average(favs), listingsWithFavorites: favs.length },
       items,
-      caveat: "Active-listing results are a market snapshot, not verified sales, demand, profit, or conversion data."
+      caveat: "Active-listing results are a market snapshot, not verified sales, demand, profit, or conversion data. Prices are summarized separately by currency; favorites are not sales."
     });
   } catch (error) {
     return json(res, 502, { ok: false, code: "ETSY_CONNECTION_ERROR", error: "Could not reach Etsy right now. Check the deployment logs and retry." });
