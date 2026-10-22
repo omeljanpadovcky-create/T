@@ -18,6 +18,9 @@ Environment variables:
 - ETSY_API_KEY: approved Etsy API keystring and shared secret in the required keystring:shared_secret format. Store this as a sensitive/encrypted environment variable, never in browser code or Git.
 - OPENAI_API_KEY: optional key for AI draft generation; keep server-side.
 - OPENAI_MODEL: optional; defaults to gpt-4.1-mini.
+- MYSHKA_ACCESS_TOKEN: required to unlock AI drafting. Generate a long random secret and keep it private. Enter this same token into the app's private access-token field.
+
+Do not set OPENAI_API_KEY until MYSHKA_ACCESS_TOKEN is also configured. The AI endpoint checks the access token before making a paid provider request.
 
 The Etsy API app must be approved/active and permitted to search active marketplace listings. If Etsy returns 401/403, check approval, key format, and access level. Do not infer demand or sales volume from the number of active listings.
 
