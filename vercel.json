@@ -8,6 +8,9 @@
     "api/ai/draft.js": {
       "maxDuration": 30
     },
+    "api/ai/analyze.js": {
+      "maxDuration": 30
+    },
     "api/health.js": {
       "maxDuration": 10
     }
