@@ -61,3 +61,13 @@ MYSHKA більше не намагається "шукати біржі по і
 Повний цикл запускається кожні **15 секунд**. Для кожної підключеної біржі MYSHKA бере BUY і SELL P2P-пропозиції, переводить їх у єдиний формат, перебирає комбінації, віднімає модель витрат/буфер і ранжує маршрути за net spread та risk score.
 
 Щоб додати нову біржу, спочатку додається її `id` у `exchanges.json`, потім окремий adapter для її P2P market-data. Якщо adapter ще не підключений, біржа показується як OFF замість вигаданих котирувань.
+
+
+## MYSHKA ETSY AI
+
+A separate Etsy research and listing-draft workspace lives in `etsy-ai/`. It is intentionally isolated from the crypto tools above.
+
+- Cloud app: https://myshka-etsy-ai.vercel.app/
+- Source: https://github.com/omeljanpadovcky-create/T/tree/main/etsy-ai
+
+The app does not auto-publish Etsy listings. Live Etsy search and optional AI drafting require approved API credentials added as sensitive Vercel environment variables.
