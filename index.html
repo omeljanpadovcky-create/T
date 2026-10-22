@@ -78,6 +78,11 @@ main{min-width:0}.screen{display:none}.screen.active{display:block}.hero{display
         <div class="empty">Run a search to load current Etsy listing data. This screen will not show fabricated sample results.</div>
       </div>
       <div class="panel" style="margin-top:12px">
+        <div class="result-head"><div><h3>AI niche analyst</h3><p class="sub">Analyze the latest live sample for differentiation, risks, missing evidence and next steps. This is an AI assessment, not verified demand.</p></div><button id="analyzeNicheButton" class="btn primary">Analyze this niche ↗</button></div>
+        <div id="nicheAnalysisStatus" class="statusline warn">Run an Etsy search first, then analyze its current sample.</div>
+        <div id="nicheAnalysisResult" style="margin-top:12px"></div>
+      </div>
+      <div class="panel" style="margin-top:12px">
         <div class="result-head"><div><h3>Compare six pet-product niches</h3><p class="sub">Runs six small live searches in the selected buyer market. Metrics are comparison signals, not sales estimates.</p></div><button id="compareNichesButton" class="btn primary">Compare niches ↗</button></div>
         <div class="notice"><strong>What this compares:</strong> Etsy's reported active-listing count, the median price in the selected currency, and average favorites among a 20-listing sample. Favorites and listing counts do not prove demand or sales.</div>
         <div id="compareNichesStatus" class="statusline warn" style="margin-top:10px">Choose a buyer market above, then compare the pet-product starter set.</div>
@@ -286,6 +291,42 @@ $("searchButton").addEventListener("click",async()=>{
    $("searchError").style.display="block";$("searchError").textContent=e.message||"Search failed.";
    $("searchState").textContent="No fresh listing data loaded.";
  }finally{$("searchButton").disabled=false;$("searchButton").textContent="Search Etsy listings ↗";}
+});
+$("analyzeNicheButton").addEventListener("click",async()=>{
+ if(!currentSearch||!Array.isArray(currentSearch.items)||!currentSearch.items.length){
+  $("nicheAnalysisStatus").className="statusline warn";
+  $("nicheAnalysisStatus").textContent="Run a successful Etsy search first so the analyst can use real returned listings.";
+  return;
+ }
+ const button=$("analyzeNicheButton");
+ button.disabled=true;button.textContent="Analyzing…";
+ $("nicheAnalysisStatus").className="statusline warn";
+ $("nicheAnalysisStatus").textContent="Sending a compact summary of the current live sample for AI review…";
+ $("nicheAnalysisResult").innerHTML="";
+ try{
+  const sample=currentSearch.items.slice(0,30).map(i=>({
+   title:i.title,price:i.price,currency:i.currency,favorites:i.favorites,
+   listingType:i.listingType,tags:(i.tags||[]).slice(0,8),url:i.url
+  }));
+  const response=await fetch(apiBase+"/api/ai/analyze",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json","x-myshka-access":$("accessToken").value.trim()},body:JSON.stringify({
+   keywords:currentSearch.keywords,market:currentSearch.market,sampleCount:currentSearch.sampleCount,
+   resultCount:currentSearch.resultCount,metrics:currentSearch.metrics,listings:sample
+  })});
+  const data=await response.json().catch(()=>({ok:false,error:"The server returned an unreadable response."}));
+  if(!response.ok||!data.ok)throw new Error(data.error||"AI niche analysis failed.");
+  const a=data.analysis||{};
+  const list=(values)=>Array.isArray(values)&&values.length?'<ul>'+values.map(v=>'<li>'+escapeHtml(v)+'</li>').join("")+'</ul>':'<p class="fineprint">No reliable item returned.</p>';
+  const score=Number.isFinite(Number(a.score))?Math.max(0,Math.min(100,Number(a.score))):null;
+  $("nicheAnalysisResult").innerHTML=
+   '<div class="stats3"><div class="mini"><small>AI opportunity score</small><strong>'+ (score===null?"—":score+"/100") +'</strong><p>Heuristic assessment, not a sales forecast</p></div><div class="mini"><small>Recommendation</small><strong style="font-size:16px">'+escapeHtml(a.verdict||"Needs review")+'</strong><p>Based on the supplied listing sample</p></div><div class="mini"><small>Confidence</small><strong style="font-size:16px">'+escapeHtml(a.confidence||"Low")+'</strong><p>Limited by available public data</p></div></div>'+
+   '<div class="result-box"><h4>Opportunity summary</h4><p>'+escapeHtml(a.summary||"No summary returned.")+'</p><hr class="divider"><h4>Possible differentiation</h4>'+list(a.differentiation)+'<hr class="divider"><h4>Signals observed — not proof of demand</h4>'+list(a.signals)+'<hr class="divider"><h4>Risks and policy checks</h4>'+list(a.risks)+'<hr class="divider"><h4>Evidence still missing</h4>'+list(a.missingEvidence)+'<hr class="divider"><h4>Next steps</h4>'+list(a.nextSteps)+'</div>'+
+   '<p class="fineprint" style="margin-top:8px">This assessment uses only the submitted Etsy active-listing sample and seller-entered context. Etsy result counts, listing prices and favorites are not verified sales, conversion rates, demand, or profit. Confirm all claims and Etsy eligibility independently.</p>';
+  $("nicheAnalysisStatus").className="statusline";
+  $("nicheAnalysisStatus").textContent="Analysis complete · "+escapeHtml(currentSearch.market?.label||"Selected market")+" · based on "+number(currentSearch.sampleCount,0)+" returned active listings. No Etsy listing was created or published.";
+ }catch(e){
+  $("nicheAnalysisStatus").className="statusline error";
+  $("nicheAnalysisStatus").textContent=e.message||"AI niche analysis failed.";
+ }finally{button.disabled=false;button.textContent="Analyze this niche ↗";}
 });
 const comparisonNiches=[
  "personalized dog collar",
