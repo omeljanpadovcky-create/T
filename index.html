@@ -58,7 +58,7 @@ main{min-width:0}.screen{display:none}.screen.active{display:block}.hero{display
           <button data-go="draft"><b>✎ Prepare listing copy</b><small>AI draft if a provider key is configured.</small></button>
           <button data-go="review"><b>✓ Check policy readiness</b><small>Photos, transparency and human approval.</small></button>
         </div></div>
-        <div class="panel"><h3>Connection status</h3><p class="sub">The server reports configuration status only. It never returns secret keys.</p><div id="healthStatus" class="statusline warn">Checking server…</div><hr class="divider"><div class="notice"><strong>Important market-data note</strong><br>Active listing counts, prices and favorites are signals only. They do not prove sales, demand, conversion rate or profit. Treat every result as a lead to validate.</div></div>
+        <div class="panel"><h3>Connection status</h3><p class="sub">The server reports configuration status only. It never returns secret keys.</p><div id="healthStatus" class="statusline warn">Checking server…</div><div class="field" style="margin-top:13px"><label for="accessToken">Private workspace token</label><input id="accessToken" type="password" autocomplete="off" placeholder="Paste your Vercel MYSHKA_ACCESS_TOKEN"><span class="hint">Used only to authorize requests to this app. Stored in this browser tab; never enter your Etsy or AI provider API key here.</span></div><hr class="divider"><div class="notice"><strong>Important market-data note</strong><br>Active listing counts, prices and favorites are signals only. They do not prove sales, demand, conversion rate or profit. Treat every result as a lead to validate.</div></div>
       </div>
     </section>
 
@@ -114,7 +114,6 @@ main{min-width:0}.screen{display:none}.screen.active{display:block}.hero{display
           <div class="field full"><label for="productFacts">Actual product facts</label><textarea id="productFacts" maxlength="600" placeholder="What the product is, exact material, dimensions, included items, customization, and other facts you can verify."></textarea><span class="hint">Do not include claims you cannot substantiate.</span></div>
           <div class="field"><label for="materialsFacts">Materials / features</label><textarea id="materialsFacts" maxlength="400" placeholder="Only verified materials and features"></textarea></div>
           <div class="field"><label for="sellerRole">Your creative contribution</label><textarea id="sellerRole" maxlength="500" placeholder="What you designed, made, selected, customized or checked yourself."></textarea></div>
-          <div class="field full"><label for="accessToken">Private AI access token</label><input id="accessToken" type="password" autocomplete="off" placeholder="Owner-configured access token"><span class="hint">Required to protect the AI API from public use. Stored only for this browser tab; never add your provider API key here.</span></div>
         </div>
         <div class="row-actions"><button id="draftButton" class="btn primary">Generate draft with AI</button><span id="draftStatus" class="fineprint">Requires OPENAI_API_KEY in Vercel. Drafting is optional; publishing is disabled.</span></div>
         <div id="draftError" style="display:none;margin-top:12px" class="statusline error"></div>
@@ -237,7 +236,7 @@ $("searchButton").addEventListener("click",async()=>{
  $("searchButton").disabled=true;$("searchButton").textContent="Searching…";$("searchState").textContent="Requesting current data from Etsy…";
  try{
    const u=apiBase+"/api/etsy/search?keywords="+encodeURIComponent(keywords)+"&limit="+encodeURIComponent($("searchLimit").value);
-   const r=await fetch(u,{headers:{Accept:"application/json"},cache:"no-store"});
+   const r=await fetch(u,{headers:{Accept:"application/json","x-myshka-access":$("accessToken").value.trim()},cache:"no-store"});
    const data=await r.json();
    if(!r.ok||!data.ok) throw new Error(data.error||"Search failed.");
    currentSearch=data;renderSearch(data);
