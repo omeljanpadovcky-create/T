@@ -1,3 +1,20 @@
+function cors(req, res) {
+  const origin = req.headers.origin || "";
+  let sameHost = false;
+  try { sameHost = Boolean(origin) && new URL(origin).host === req.headers.host; } catch (_) {}
+  const allowed = origin === "https://omeljanpadovcky-create.github.io" || sameHost;
+  if (allowed) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  }
+  if (req.method === "OPTIONS") {
+    if (!allowed) { res.status(403).end(); return true; }
+    res.status(204).end(); return true;
+  }
+  return false;
+}
 function send(res, status, body) {
   res.status(status).setHeader("Content-Type", "application/json; charset=utf-8");
   res.setHeader("Cache-Control", "no-store");
@@ -25,6 +42,7 @@ function percentile(sorted, p) {
   return sorted[base + 1] === undefined ? sorted[base] : sorted[base] + rest * (sorted[base + 1] - sorted[base]);
 }
 export default async function handler(req, res) {
+  if (cors(req, res)) return;
   if (req.method !== "GET") { res.setHeader("Allow", "GET"); return send(res, 405, { ok: false, error: "Method not allowed" }); }
   const keywords = String(req.query?.keywords || "").trim().replace(/\s+/g, " ");
   const limit = Math.min(100, Math.max(1, parseInt(req.query?.limit || "48", 10) || 48));
