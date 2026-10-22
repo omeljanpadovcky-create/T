@@ -35,6 +35,9 @@ Saved niche ideas and drafts are stored in this browser's local storage and can 
 
 ## API routes
 
-- `GET /api/health`
-- `GET /api/etsy/search?keywords=personalized%20dog%20collar&limit=40`
-- `POST /api/ai/draft`
+- `GET /api/health` — safe configuration status; never returns secrets.
+- `GET /api/etsy/test` — protected live connection check using a fixed five-listing read-only Etsy query. Open the app, enter the same `MYSHKA_ACCESS_TOKEN` configured in Vercel, and select **Test Etsy API** in the Connection status panel.
+- `GET /api/etsy/search?keywords=personalized%20dog%20collar&limit=40` — protected active-listing search.
+- `POST /api/ai/draft` — protected AI drafting; output remains a draft for human review.
+
+The connection test requires both `MYSHKA_ACCESS_TOKEN` and `ETSY_API_KEY` to be set in Vercel. It confirms API access only; it does not measure demand or sales.
