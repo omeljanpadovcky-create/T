@@ -114,6 +114,7 @@ main{min-width:0}.screen{display:none}.screen.active{display:block}.hero{display
           <div class="field full"><label for="productFacts">Actual product facts</label><textarea id="productFacts" maxlength="600" placeholder="What the product is, exact material, dimensions, included items, customization, and other facts you can verify."></textarea><span class="hint">Do not include claims you cannot substantiate.</span></div>
           <div class="field"><label for="materialsFacts">Materials / features</label><textarea id="materialsFacts" maxlength="400" placeholder="Only verified materials and features"></textarea></div>
           <div class="field"><label for="sellerRole">Your creative contribution</label><textarea id="sellerRole" maxlength="500" placeholder="What you designed, made, selected, customized or checked yourself."></textarea></div>
+          <div class="field full"><label for="accessToken">Private AI access token</label><input id="accessToken" type="password" autocomplete="off" placeholder="Owner-configured access token"><span class="hint">Required to protect the AI API from public use. Stored only for this browser tab; never add your provider API key here.</span></div>
         </div>
         <div class="row-actions"><button id="draftButton" class="btn primary">Generate draft with AI</button><span id="draftStatus" class="fineprint">Requires OPENAI_API_KEY in Vercel. Drafting is optional; publishing is disabled.</span></div>
         <div id="draftError" style="display:none;margin-top:12px" class="statusline error"></div>
@@ -153,6 +154,7 @@ let currentProfit = null;
 let health = null;
 let reviewConfirmed = false;
 const apiBase = window.location.protocol === "file:" ? "" : "";
+try { $("accessToken").value = sessionStorage.getItem("myshka_ai_access_token") || ""; $("accessToken").addEventListener("input", () => sessionStorage.setItem("myshka_ai_access_token", $("accessToken").value)); } catch {}
 const readStore = () => {
   try { return JSON.parse(localStorage.getItem(STORE_KEY) || '{"ideas":[],"drafts":[]}'); }
   catch { return {ideas:[], drafts:[]}; }
@@ -182,7 +184,7 @@ async function getHealth(){
     $("aiBadge").className="chip "+(data.aiConfigured?"green":"gold");
     $("healthStatus").className="statusline "+(data.etsyConfigured?"":"warn");
     $("healthStatus").textContent="Server online · "+data.app+" v"+data.version+" · Etsy API: "+(data.etsyConfigured?"configured":"not configured")+" · AI: "+(data.aiConfigured?"configured":"not configured")+" · Auto-publishing: off.";
-    $("draftStatus").textContent=data.aiConfigured?"AI endpoint configured. Results are drafts only and require your review.":"AI drafting is not connected yet. Add OPENAI_API_KEY as a Vercel environment variable to enable it.";
+    $("draftStatus").textContent=data.aiConfigured?"AI endpoint configured. Results are drafts only and require your review.":"AI drafting needs OPENAI_API_KEY and MYSHKA_ACCESS_TOKEN in Vercel. Enter the private access token above; never enter the provider API key here.";
     if(!data.etsyConfigured) $("searchState").textContent="Live search requires an approved Etsy API key stored in Vercel.";
   }catch(e){
     $("etsyBadge").textContent="SERVER NOT CONNECTED";
@@ -292,7 +294,7 @@ $("draftButton").addEventListener("click",async()=>{
  if(!title||!product){$("draftError").style.display="block";$("draftError").textContent="Enter the working title and accurate product facts first.";return;}
  $("draftButton").disabled=true;$("draftButton").textContent="Generating…";$("draftStatus").textContent="Preparing a draft for your review.";
  try{
-  const r=await fetch(apiBase+"/api/ai/draft",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({title,product,materials:$("materialsFacts").value,sellerRole:$("sellerRole").value,itemType:$("itemType").value,aiUsed:$("aiUsed").value!=="no"})});
+  const r=await fetch(apiBase+"/api/ai/draft",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json","x-myshka-access":$("accessToken").value.trim()},body:JSON.stringify({title,product,materials:$("materialsFacts").value,sellerRole:$("sellerRole").value,itemType:$("itemType").value,aiUsed:$("aiUsed").value!=="no"})});
   const data=await r.json();if(!r.ok||!data.ok)throw new Error(data.error||"Draft failed.");
   lastDraft={createdAt:new Date().toISOString(),source:{title,product,materials:$("materialsFacts").value,itemType:$("itemType").value,aiUsed:$("aiUsed").value},draft:data.draft};
   renderDraft(lastDraft);$("draftStatus").textContent="Draft generated. Review every statement, assumption and disclosure suggestion.";
