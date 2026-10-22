@@ -39,7 +39,29 @@ export default async function handler(req, res) {
   if (keywords.length < 2) return json(res, 400, { ok: false, error: "Enter at least 2 characters to search." });
   const parsedLimit = Number.parseInt(req.query?.limit || "40", 10);
   const limit = Math.min(100, Math.max(10, Number.isFinite(parsedLimit) ? parsedLimit : 40));
-  const params = new URLSearchParams({ keywords, limit: String(limit), sort_on: "score", sort_order: "desc" });
+  const markets = {
+    US: { country: "US", currency: "USD", label: "United States" },
+    GB: { country: "GB", currency: "GBP", label: "United Kingdom" },
+    CA: { country: "CA", currency: "CAD", label: "Canada" },
+    AU: { country: "AU", currency: "AUD", label: "Australia" },
+    DE: { country: "DE", currency: "EUR", label: "Germany" },
+    FR: { country: "FR", currency: "EUR", label: "France" }
+  };
+  const marketCode = String(req.query?.market || "US").trim().toUpperCase();
+  const market = markets[marketCode];
+  if (!market) return json(res, 400, {
+    ok: false,
+    code: "UNSUPPORTED_MARKET",
+    error: "Choose one of the supported target markets in the MYSHKA search form."
+  });
+  const params = new URLSearchParams({
+    keywords,
+    limit: String(limit),
+    sort_on: "score",
+    sort_order: "desc",
+    buyer_country: market.country,
+    currency: market.currency
+  });
 
   try {
     const upstream = await fetch("https://openapi.etsy.com/v3/application/listings/active?" + params.toString(), {
@@ -102,12 +124,12 @@ export default async function handler(req, res) {
       .sort((a, b) => b.pricedListings - a.pricedListings || a.currency.localeCompare(b.currency));
     const favs = items.map((i) => i.favorites).filter((v) => Number.isFinite(v) && v >= 0);
     return json(res, 200, {
-      ok: true, keywords, fetchedAt: new Date().toISOString(),
+      ok: true, keywords, market: { code: marketCode, country: market.country, currency: market.currency, label: market.label }, fetchedAt: new Date().toISOString(),
       resultCount: Number.isFinite(Number(data.count)) ? Number(data.count) : items.length,
       sampleCount: items.length,
       metrics: { priceByCurrency, averageFavorites: average(favs), listingsWithFavorites: favs.length },
       items,
-      caveat: "Active-listing results are a market snapshot, not verified sales, demand, profit, or conversion data. Prices are summarized separately by currency; favorites are not sales."
+      caveat: "Results are filtered to listings that Etsy reports can ship to the selected buyer country. Prices are requested in the selected currency using Etsy conversion. This does not mean the seller is located in that country. Active-listing counts and favorites are not verified sales, demand, profit, or conversion data."
     });
   } catch (error) {
     return json(res, 502, { ok: false, code: "ETSY_CONNECTION_ERROR", error: "Could not reach Etsy right now. Check the deployment logs and retry." });
