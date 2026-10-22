@@ -1,420 +1,340 @@
 <!doctype html>
-<html lang="uk">
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#071018">
-<meta name="application-name" content="КриптоМишка 2.1">
-<title>КриптоМишка 2.1</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230d1b2a'/%3E%3Ccircle cx='20' cy='22' r='11' fill='%23f5a9b8'/%3E%3Ccircle cx='44' cy='22' r='11' fill='%23f5a9b8'/%3E%3Ccircle cx='20' cy='22' r='6.5' fill='%23d98a9c'/%3E%3Ccircle cx='44' cy='22' r='6.5' fill='%23d98a9c'/%3E%3Cellipse cx='32' cy='36' rx='18' ry='16' fill='%23d8dde7'/%3E%3Ccircle cx='26' cy='34' r='2.4' fill='%23111'/%3E%3Ccircle cx='38' cy='34' r='2.4' fill='%23111'/%3E%3Cellipse cx='32' cy='41' rx='3' ry='2.4' fill='%23e58aa0'/%3E%3Cpath d='M32 44c-3 3-6 4-9 4M32 44c3 3 6 4 9 4' stroke='%238b96a8' stroke-width='1.7' fill='none' stroke-linecap='round'/%3E%3Cpath d='M21 40H8M21 44H7M43 40h13M43 44h14' stroke='%238b96a8' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230d1b2a'/%3E%3Ccircle cx='20' cy='22' r='11' fill='%23f5a9b8'/%3E%3Ccircle cx='44' cy='22' r='11' fill='%23f5a9b8'/%3E%3Cellipse cx='32' cy='36' rx='18' ry='16' fill='%23d8dde7'/%3E%3Ccircle cx='26' cy='34' r='2.4' fill='%23111'/%3E%3Ccircle cx='38' cy='34' r='2.4' fill='%23111'/%3E%3Cellipse cx='32' cy='41' rx='3' ry='2.4' fill='%23e58aa0'/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08121d">
+<meta name="description" content="MYSHKA Etsy AI — marketplace research, profit estimates, honest listing drafts, and human policy review.">
+<title>MYSHKA Etsy AI</title>
 <style>
-:root{--bg:#050a10;--panel:#0b1520;--panel2:#0f1c2a;--line:#21364d;--txt:#eef5fb;--muted:#8da4ba;--g:#46e6a4;--y:#ffd166;--r:#ff7084;--b:#7fb4ff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 520px at 15% -10%,#17365c55,transparent 60%),linear-gradient(#07111a,#04070b);color:var(--txt);font:14px Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
-.app{max-width:1280px;margin:auto;padding:16px}.glass{background:linear-gradient(180deg,#0d1825f7,#08111bf7);border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 45px #0008}
-.head{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:16px}.brand{display:flex;gap:12px;align-items:center}.logo{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;font-size:30px;background:#142337;border:1px solid #355579}.brand h1{font-size:22px;margin:0}.brand h1 span{color:#ffd36c}.brand p{margin:4px 0 0;color:var(--muted);font-size:11px}.badges{display:flex;gap:7px;flex-wrap:wrap}.badge{border:1px solid #2b4669;background:#0c1a2a;color:#bdd1e6;border-radius:999px;padding:7px 10px;font-size:10px;font-weight:800}.badge.ok{color:var(--g);border-color:#247053;background:#082219}.badge.warn{color:var(--y);border-color:#695629;background:#241d0b}
-.intro{margin-top:12px;padding:18px;display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.intro h2{font-size:28px;margin:0 0 7px}.intro p{color:#a8bacb;line-height:1.6;margin:0}.sources{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.source{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:11px;border:1px solid #223c58;background:#091522;border-radius:13px}.source b{font-size:11px}.source small{color:var(--muted)}.source a{color:#a9ccff;text-decoration:none;font-size:10px;font-weight:800}
-.tabs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:12px}.tab{cursor:pointer;border:1px solid #294664;background:#0b1928;color:#b9cbe0;border-radius:14px;padding:12px 8px;font-weight:900}.tab.active{border-color:#4b79ad;background:#10243a;color:white;box-shadow:0 0 24px #4378b322}
-.layout{display:grid;grid-template-columns:1fr 330px;gap:12px;margin-top:12px}.panel{padding:14px}.sectionHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.sectionHead h3{margin:0}.sectionHead small{color:var(--muted)}
-.items{display:grid;gap:9px;margin-top:12px}.item{border:1px solid #213a55;background:linear-gradient(145deg,#0b1928,#08131f);border-radius:16px;padding:13px}.itemTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.item h4{margin:0;font-size:14px;line-height:1.35}.meta{margin-top:7px;display:flex;gap:6px;flex-wrap:wrap}.pill{padding:5px 7px;border-radius:999px;border:1px solid #294664;background:#0d2033;color:#b7cee6;font-size:9px;font-weight:800}.risk{font-weight:950;white-space:nowrap}.risk.low{color:var(--g)}.risk.mid{color:var(--y)}.risk.high{color:var(--r)}.summary{margin-top:9px;color:#a8bacb;font-size:11px;line-height:1.55}.jevbox{margin-top:10px;padding:11px;border:1px solid #305073;background:#0a1927;border-radius:12px}.jevbox b{color:#dbeaff}.jevbox p{margin:5px 0;color:#acc0d3;line-height:1.55;font-size:11px}.reasons{margin-top:8px;color:#7f97ae;font-size:10px;line-height:1.5}
-.guard{margin-top:10px;padding:11px;border:1px solid #33465a;background:#08121d;border-radius:12px}.guardHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.guardHead b{font-size:11px}.guardVerdict{font-size:9px;font-weight:950;padding:5px 7px;border-radius:999px;border:1px solid #36506a}.guardVerdict.ok{color:var(--g);border-color:#247053;background:#082219}.guardVerdict.hold{color:var(--y);border-color:#695629;background:#241d0b}.guardVerdict.stop{color:var(--r);border-color:#7d3440;background:#2a1015}.guardGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px}.guardCell{padding:8px;border:1px solid #20364a;background:#091725;border-radius:9px}.guardCell small{display:block;color:#7892ab;font-size:8px;text-transform:uppercase;letter-spacing:.04em}.guardCell span{display:block;margin-top:3px;color:#d4e0eb;font-size:10px;line-height:1.35}.guardRule{margin-top:8px;color:#91a8bc;font-size:9px;line-height:1.45}.guardRule strong{color:#fff}.ruleBanner{margin-top:12px;padding:12px 14px;border:1px solid #34516d;background:linear-gradient(135deg,#0d1f31,#0a1724);border-radius:14px;color:#a9bdd0;font-size:11px;line-height:1.5}.ruleBanner b{color:#fff}.actions{margin-top:10px;display:flex;gap:7px;flex-wrap:wrap}.btn{border:1px solid #315477;background:#10263e;color:#d7e8fa;border-radius:10px;padding:8px 10px;text-decoration:none;font-size:10px;font-weight:900;cursor:pointer}.btn.save{border-color:#2a745a;background:#0b281f;color:#7deabb}
-.mouseAiBtn{position:fixed;right:22px;bottom:22px;z-index:9999;pointer-events:auto;touch-action:manipulation;border:1px solid #3b6086;background:linear-gradient(145deg,#173652,#0b1b2a);color:#fff;border-radius:999px;padding:11px 15px;display:flex;align-items:center;gap:8px;font-weight:950;box-shadow:0 12px 35px #000a;cursor:pointer}.mouseAiBtn .mouseIcon{font-size:24px}.mouseAiPanel{position:fixed;right:22px;bottom:78px;z-index:9998;pointer-events:auto;width:min(390px,calc(100vw - 28px));height:500px;display:none;flex-direction:column;background:linear-gradient(180deg,#0c1926,#07111b);border:1px solid #2c4b68;border-radius:20px;box-shadow:0 24px 60px #000c;overflow:hidden}.mouseAiPanel.open{display:flex!important}#mouseAiToggle{position:fixed;opacity:0;pointer-events:none;width:1px;height:1px}#mouseAiToggle:checked + .mouseAiBtn + .mouseAiPanel{display:flex!important}.mouseAiHead{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;border-bottom:1px solid #21364d}.mouseAiTitle{display:flex;align-items:center;gap:9px}.mouseAiTitle b{font-size:14px}.mouseAiTitle small{display:block;color:#7892ab;font-size:9px;margin-top:2px}.mouseAiClose{border:0;background:transparent;color:#9ab1c7;font-size:19px;cursor:pointer}.mouseAiLog{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:9px}.mouseMsg{max-width:88%;padding:10px 11px;border-radius:13px;line-height:1.45;font-size:11px;white-space:pre-wrap}.mouseMsg.ai{align-self:flex-start;background:#0d2132;border:1px solid #294b68;color:#dceaf6}.mouseMsg.user{align-self:flex-end;background:#173d5d;border:1px solid #3b6f99;color:#fff}.mouseMsg a{color:#9ac8ff}.mouseAiQuick{display:flex;gap:6px;overflow:auto;padding:0 10px 9px}.mouseAiQuick button{white-space:nowrap;border:1px solid #294b68;background:#0c1c2b;color:#abc3d9;border-radius:999px;padding:7px 9px;font-size:9px;font-weight:800;cursor:pointer}.mouseAiComposer{display:grid;grid-template-columns:1fr auto;gap:7px;padding:10px;border-top:1px solid #21364d}.mouseAiComposer input{min-width:0;background:#06131f;color:#eef5fb;border:1px solid #294664;border-radius:12px;padding:11px;font:inherit;outline:none}.mouseAiComposer button{border:1px solid #3877a8;background:#123c5e;color:white;border-radius:12px;padding:0 14px;font-weight:900;cursor:pointer}.side{display:grid;gap:12px;align-content:start}.metricGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}.metric{padding:11px;border:1px solid #213a55;background:#091522;border-radius:13px}.metric label{display:block;color:#7892ab;font-size:9px;text-transform:uppercase}.metric b{display:block;margin-top:4px;font-size:17px}.journal{display:grid;gap:7px;margin-top:10px}.jrow{padding:9px;border:1px solid #213a55;background:#091522;border-radius:11px;font-size:10px;color:#b8c9d9;cursor:pointer}.empty{padding:28px 10px;color:#7e95aa;text-align:center}.foot{margin:12px 0;padding:11px 14px;color:#8399ad;font-size:10px;line-height:1.55}
-@media(max-width:980px){.tabs{grid-template-columns:repeat(3,1fr)}}@media(max-width:860px){.intro,.layout{grid-template-columns:1fr}.sources{grid-template-columns:1fr}.head{align-items:flex-start;flex-direction:column}}@media(max-width:560px){.tabs{grid-template-columns:repeat(2,1fr)}.mouseAiBtn{right:12px;bottom:12px}.mouseAiPanel{right:14px;bottom:70px;height:70vh}.mouseMsg{max-width:94%}}
-
-[hidden]{display:none!important}
-.btn:disabled{opacity:.55;cursor:not-allowed}
+:root{color-scheme:dark;--bg:#07111b;--panel:#0d1c2a;--panel2:#102337;--line:#233e56;--text:#edf5fc;--muted:#93a9bc;--green:#56e0a0;--yellow:#ffd479;--red:#ff8188;--blue:#8abaff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 600px at 0 -10%,#173e5a55,transparent 62%),linear-gradient(180deg,#07111b,#050a10);color:var(--text);font:14px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1440px;margin:0 auto;padding:18px}.top{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:10px 2px 20px}.brand{display:flex;gap:12px;align-items:center}.mark{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,#163b53,#123028);display:grid;place-items:center;font-size:27px;border:1px solid #2b6072}.brand h1{font-size:21px;letter-spacing:-.04em;margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:11px}.top-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.chip{border:1px solid #2e4d62;background:#0d1e2d;padding:7px 10px;border-radius:999px;font-size:10px;font-weight:850;letter-spacing:.03em;color:#bdd4e7}.chip.green{color:var(--green);border-color:#24674b;background:#08261c}.chip.gold{color:var(--yellow);border-color:#6b5427;background:#2a210e}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:15px}.sidebar{align-self:start;position:sticky;top:12px;background:#0b1825dd;border:1px solid var(--line);border-radius:18px;padding:10px}.side-label{font-size:9px;color:#6f8ca4;letter-spacing:.16em;font-weight:900;padding:12px 11px 6px;text-transform:uppercase}.nav{width:100%;display:flex;align-items:center;gap:10px;text-align:left;border:1px solid transparent;border-radius:11px;padding:11px;color:#a9bfd2;background:transparent;font-weight:750;margin:2px 0}.nav span{font-size:16px;width:21px;text-align:center}.nav.active{color:#fff;background:#142b3f;border-color:#2c5871;box-shadow:inset 3px 0 #57dda0}.sidebar-foot{border-top:1px solid #20374a;margin-top:12px;padding:12px 9px 4px;color:#7d95ab;font-size:10px;line-height:1.5}
+main{min-width:0}.screen{display:none}.screen.active{display:block}.hero{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;padding:24px;border:1px solid #28475d;border-radius:20px;background:linear-gradient(120deg,#102b3d,#0c1c2b 70%);margin-bottom:14px}.eyebrow{color:var(--green);font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:950}.hero h2{font-size:clamp(26px,4vw,39px);line-height:1.13;letter-spacing:-.045em;margin:7px 0 10px}.hero p{color:#afc2d2;max-width:650px;margin:0}.hero-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.btn{border:1px solid #365973;background:#142c40;color:#f1f7fc;border-radius:11px;padding:10px 14px;font-weight:800;min-height:42px}.btn:hover{filter:brightness(1.14)}.btn.primary{background:#4ad69a;border-color:#4ad69a;color:#062014}.btn.ghost{background:transparent;color:#b3c8da}.btn.danger{border-color:#76414a;background:#301922;color:#ffb2b7}.btn:disabled{opacity:.45;cursor:not-allowed}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}.metric{border:1px solid var(--line);border-radius:15px;background:linear-gradient(150deg,#102337,#0b1825);padding:15px;min-width:0}.metric small{display:block;color:#91a9bd;font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.08em}.metric strong{font-size:27px;letter-spacing:-.04em;display:block;margin:5px 0 0}.metric p{font-size:10px;color:#7893a9;margin:1px 0 0}.metric .ok{color:var(--green)}.metric .warn{color:var(--yellow)}
+.grid2{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:12px;margin-bottom:14px}.panel{border:1px solid var(--line);border-radius:17px;background:#0b1926e8;padding:18px;min-width:0}.panel h3{font-size:15px;margin:0 0 5px;letter-spacing:-.01em}.sub{font-size:11px;color:var(--muted);margin:0 0 14px}.quick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.quick button{padding:13px;background:#0d2232;border:1px solid #28465f;border-radius:13px;text-align:left;color:#fff}.quick b{display:block;font-size:12px}.quick small{display:block;color:#8ea9bf;font-size:10px;margin-top:4px}.notice{border:1px solid #6a5529;background:#261f12;border-radius:12px;padding:12px;color:#e7d8ae;font-size:11px}.notice strong{color:#ffe2a0}.statusline{font-size:11px;padding:11px 12px;border:1px solid #264a40;background:#0b241e;color:#a7efcc;border-radius:11px;overflow-wrap:anywhere}.statusline.warn{border-color:#70542b;background:#2a210f;color:#ffe0a0}.statusline.error{border-color:#703740;background:#2a1319;color:#ffc1c4}
+.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:flex;flex-direction:column;gap:5px;min-width:0}.field.full{grid-column:1/-1}.field label,.field .label{font-size:10px;font-weight:850;color:#a2bbcf;text-transform:uppercase;letter-spacing:.06em}.field input,.field textarea,.field select{width:100%;min-width:0;background:#071522;color:var(--text);border:1px solid #2b4961;border-radius:10px;padding:11px 12px;outline:none}.field input:focus,.field textarea:focus,.field select:focus{border-color:#60cfab;box-shadow:0 0 0 2px #60cfab20}.field textarea{min-height:95px;resize:vertical}.field .hint{font-size:10px;color:#738da2}.row-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:14px}
+.result-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}.result-head h3{margin:0}.stats3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}.mini{border:1px solid #223d53;background:#0b1a28;border-radius:11px;padding:12px;min-width:0}.mini small{display:block;color:#8fa9bd;font-size:9px;text-transform:uppercase;font-weight:850;letter-spacing:.06em}.mini strong{display:block;font-size:21px;word-break:break-word}.mini p{margin:3px 0 0;color:#7993a7;font-size:9px}
+.table-wrap{overflow:auto;border:1px solid #233e54;border-radius:12px}table{border-collapse:collapse;width:100%;min-width:620px;font-size:11px}th{text-align:left;color:#88a2b9;background:#0e2131;text-transform:uppercase;letter-spacing:.05em;font-size:9px}th,td{padding:10px;border-bottom:1px solid #1e3548;vertical-align:top}td{color:#d5e3ed}tr:last-child td{border-bottom:0}.link{color:#9fcbff;text-decoration:none;font-weight:800}.link:hover{text-decoration:underline}.tag{display:inline-block;background:#102b3b;border:1px solid #284a5c;color:#a9c8d8;border-radius:999px;padding:3px 6px;margin:2px 3px 0 0;font-size:9px}
+.saved-list{display:grid;gap:8px}.saved-item{border:1px solid #274359;background:#0d2030;border-radius:12px;padding:12px;display:flex;justify-content:space-between;gap:12px;align-items:center}.saved-item h4{margin:0 0 4px;font-size:12px}.saved-item p{color:#8fa7b9;margin:0;font-size:10px}.empty{border:1px dashed #2c4a60;border-radius:13px;padding:22px;text-align:center;color:#829eb2;font-size:12px}
+.checklist{display:grid;gap:9px}.check{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid #254258;background:#0b1c29;border-radius:12px}.check input{margin-top:4px;accent-color:#55dca0;width:16px;height:16px;flex:0 0 16px}.check b{display:block;font-size:11px}.check small{display:block;color:#91a9bb;font-size:10px;margin-top:2px}.result-box{border:1px solid #31536b;background:#0b2030;border-radius:13px;padding:15px;margin-top:14px}.result-box h4{margin:0 0 7px}.result-box pre{white-space:pre-wrap;word-break:break-word;color:#d8e9f5;font:12px/1.6 inherit;margin:0}.fineprint{color:#6f8aa1;font-size:10px;line-height:1.6}.divider{border:0;border-top:1px solid #1e3548;margin:16px 0}
+.footer{padding:18px 4px 6px;color:#68839a;font-size:10px;text-align:center}.switch-row{display:flex;flex-wrap:wrap;gap:8px}.pill-btn{border:1px solid #2b4961;background:#0a1c2a;color:#adbed0;border-radius:999px;padding:8px 11px;font-size:10px;font-weight:850}.pill-btn.active{color:#b5f7d5;border-color:#34795d;background:#0b291f}
+@media(max-width:1050px){.layout{grid-template-columns:180px minmax(0,1fr)}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{display:block}.hero-actions{justify-content:flex-start;margin-top:15px}}
+@media(max-width:760px){.app{padding:12px}.top{align-items:flex-start}.brand h1{font-size:18px}.layout{grid-template-columns:1fr}.sidebar{position:static;display:flex;overflow:auto;gap:4px;padding:6px}.side-label,.sidebar-foot{display:none}.nav{white-space:nowrap;width:auto;flex:0 0 auto;padding:9px 12px}.nav span{width:auto}.grid2{grid-template-columns:1fr}.top-right .chip{display:none}.hero{padding:19px}.quick{grid-template-columns:1fr 1fr}}
+@media(max-width:460px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.metric{padding:11px}.metric strong{font-size:22px}.panel{padding:13px}.field-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.stats3{grid-template-columns:1fr}.hero h2{font-size:28px}.saved-item{align-items:flex-start}.quick{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="app">
-<header class="glass head">
-  <div class="brand"><div class="logo">🐭</div><div><h1>Крипто<span>Мишка</span> 2.1</h1><p>ITstatti → контекст → перевірка → твій висновок</p></div></div>
-  <div class="badges"><span id="status" class="badge warn">Завантаження…</span><span id="liveClock" class="badge">--:--:--</span><span class="badge">NO AUTO-TRADE</span></div>
+<header class="top">
+  <div class="brand"><div class="mark">🐭</div><div><h1>MYSHKA <span style="color:var(--green)">ETSY AI</span></h1><p>Marketplace intelligence · Honest drafts · Human approval</p></div></div>
+  <div class="top-right"><span id="etsyBadge" class="chip gold">ETSY API CHECKING</span><span id="aiBadge" class="chip">AI DRAFTS CHECKING</span></div>
 </header>
-
-<section class="glass intro">
-  <div>
-    <h2>Не копіює. Перевіряє.</h2>
-    <p>Live-пости ITstatti, ретродропи, YouTube, повна база знань, Telegram-архів і зовнішній новинний радар. Старі навчальні матеріали — це контекст, а не активний сигнал. JEV Аналіз показує, що підтверджено кількома джерелами і за чим стежити далі.</p>
-  </div>
-  <div id="sources" class="sources"></div>
-</section>
-<div class="ruleBanner"><b>🐭 Правило Мишки:</b> знаходить → перевіряє → пояснює → ти підтверджуєш. Для будь-якої угоди або промо спочатку дивимось 4 речі: потрібна сума, максимальний можливий збиток, плече та reward/risk. Якщо хоча б одне не підтверджено — це не команда до дії.</div>
-
-<nav class="tabs">
-  <button class="tab active" data-mode="opportunities">🟢 Можливості</button>
-  <button class="tab" data-mode="portfolio">🔵 Портфель</button>
-  <button class="tab" data-mode="speculation">🟠 Спекуляції</button>
-  <button class="tab" data-mode="trading">🔴 Trading Lab</button>
-  <button class="tab" data-mode="news">🧠 JEV Аналіз</button>
-  <button class="tab" data-mode="knowledge">📚 База / Контекст</button>
-  <a href="./myshka-app.html" style="grid-column:1/-1;display:block;text-align:center;text-decoration:none;border:1px solid #337aaa;background:linear-gradient(115deg,#153864,#265b9f);color:#ffffff;border-radius:14px;padding:14px 10px;font-weight:900">🐭 Crypto Myshka App ↗</a>
-</nav>
-
-<div id="mainLayout" class="layout">
-  <section class="glass panel">
-    <div class="sectionHead"><h3 id="modeTitle">Можливості</h3><small id="count">0</small></div>
-    <div id="items" class="items"></div>
-  </section>
-  <aside class="side">
-    <section class="glass panel"><div class="sectionHead"><h3>Ринок</h3><small>актуально згадані активи</small></div><div id="market" class="metricGrid"></div></section>
-    <section class="glass panel"><div class="sectionHead"><h3>Журнал</h3><small>збережено локально</small></div><div id="journal" class="journal"></div></section>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="side-label">Workspace</div>
+    <button class="nav active" data-screen="home"><span>◈</span> Overview</button>
+    <button class="nav" data-screen="market"><span>⌕</span> Etsy research</button>
+    <button class="nav" data-screen="profit"><span>↗</span> Profit estimator</button>
+    <button class="nav" data-screen="draft"><span>✎</span> Listing draft</button>
+    <button class="nav" data-screen="review"><span>✓</span> Policy review</button>
+    <button class="nav" data-screen="saved"><span>▤</span> Saved ideas</button>
+    <div class="sidebar-foot">Research first. Verify every assumption. Never auto-publish listings.</div>
   </aside>
-</div>
+  <main>
+    <section class="screen active" id="screen-home">
+      <div class="hero"><div><div class="eyebrow">Human-led marketplace research</div><h2>Make better Etsy decisions<br>with MYSHKA.</h2><p>Research active listings, compare price signals, estimate your unit margin and prepare honest copy. MYSHKA assists your work — you stay in control of every listing.</p></div><div class="hero-actions"><button class="btn primary" data-go="market">Explore a niche ↗</button><button class="btn ghost" data-go="review">Review Etsy policy</button></div></div>
+      <div class="cards">
+        <div class="metric"><small>Saved niche ideas</small><strong id="countSaved">0</strong><p>Stored in this browser</p></div>
+        <div class="metric"><small>Positive estimated margin</small><strong id="countMargin" class="ok">—</strong><p>Based on editable assumptions</p></div>
+        <div class="metric"><small>Latest search sample</small><strong id="countSample">—</strong><p>Active listings returned</p></div>
+        <div class="metric"><small>Publish automation</small><strong class="warn">OFF</strong><p>Manual review required</p></div>
+      </div>
+      <div class="grid2">
+        <div class="panel"><h3>Start with a task</h3><p class="sub">Choose a workflow. No fake metrics or auto-publishing.</p><div class="quick">
+          <button data-go="market"><b>⌕ Search Etsy listings</b><small>See returned prices, favorites and listing links.</small></button>
+          <button data-go="profit"><b>↗ Estimate unit profit</b><small>Change costs and fee assumptions yourself.</small></button>
+          <button data-go="draft"><b>✎ Prepare listing copy</b><small>AI draft if a provider key is configured.</small></button>
+          <button data-go="review"><b>✓ Check policy readiness</b><small>Photos, transparency and human approval.</small></button>
+        </div></div>
+        <div class="panel"><h3>Connection status</h3><p class="sub">The server reports configuration status only. It never returns secret keys.</p><div id="healthStatus" class="statusline warn">Checking server…</div><hr class="divider"><div class="notice"><strong>Important market-data note</strong><br>Active listing counts, prices and favorites are signals only. They do not prove sales, demand, conversion rate or profit. Treat every result as a lead to validate.</div></div>
+      </div>
+    </section>
 
-<input id="mouseAiToggle" type="checkbox" aria-hidden="true">
-<label for="mouseAiToggle" id="mouseAiBtn" class="mouseAiBtn" aria-label="Відкрити Миша AI"><span class="mouseIcon">🐭</span><span>Миша</span></label>
-<div id="mouseAiPanel" class="mouseAiPanel" aria-live="polite">
-  <div class="mouseAiHead">
-    <div class="mouseAiTitle"><span style="font-size:25px">🐭</span><div><b>Миша · Довідка</b><small>Відповіді за матеріалами сайту · без AI</small></div></div>
-    <div style="display:flex;align-items:center;gap:7px"><label for="mouseAiToggle" id="mouseAiClose" class="mouseAiClose" aria-label="Закрити">×</label></div>
-  </div>
-  <div id="mouseAiLog" class="mouseAiLog">
-    <div class="mouseMsg ai">Привіт 👋 Я Миша. Питай про BTC/ETH/OP, новини, ITstatti й ретродропи. Я шукаю відповіді в матеріалах сайту, без живого AI.</div>
-  </div>
-  <div class="mouseAiQuick">
-    <button data-q="Що нового?">Що нового?</button>
-    <button data-q="Що по BTC?">BTC</button>
-    <button data-q="Що по ITstatti?">ITstatti</button>
-    <button data-q="Які ризики зараз?">Ризики</button>
-    <button data-q="Чи варто це виконувати?">Виконувати?</button>
-  </div>
-  <div class="mouseAiComposer">
-    <input id="mouseAiInput" placeholder="Напиши питання..." autocomplete="off">
-    <button id="mouseAiSend">➤</button>
-  </div>
-</div>
+    <section class="screen" id="screen-market">
+      <div class="hero"><div><div class="eyebrow">01 / Marketplace research</div><h2>Explore a product niche.</h2><p>Search the Etsy Open API for active listings. MYSHKA reports only data returned by Etsy and clearly labels what cannot be inferred.</p></div></div>
+      <div class="panel">
+        <div class="field-grid">
+          <div class="field full"><label for="keywords">Product or niche keywords</label><input id="keywords" maxlength="120" placeholder="personalized dog collar" value="personalized dog collar"><span class="hint">Use specific phrases; compare multiple searches separately.</span></div>
+          <div class="field"><label for="searchLimit">Listing sample size</label><select id="searchLimit"><option value="20">20 listings</option><option value="40" selected>40 listings</option><option value="60">60 listings</option><option value="100">100 listings</option></select></div>
+          <div class="field"><label for="nicheNote">Your research note</label><input id="nicheNote" maxlength="160" placeholder="e.g. personalization opportunity"></div>
+        </div>
+        <div class="row-actions"><button id="searchButton" class="btn primary">Search Etsy listings ↗</button><button id="saveSearchButton" class="btn">Save niche idea</button><span id="searchState" class="fineprint">Live Etsy search requires an approved API key in Vercel.</span></div>
+        <div id="searchError" style="display:none;margin-top:12px" class="statusline error"></div>
+      </div>
+      <div id="searchResults" class="panel" style="margin-top:12px">
+        <div class="empty">Run a search to load current Etsy listing data. This screen will not show fabricated sample results.</div>
+      </div>
+    </section>
 
-<div class="glass foot">КриптоМишка — дослідницький режим, не фінансова порада. Вбудована довідка працює за матеріалами сайту, без живого AI. Для окремого аналізу графіків відкрий Crypto Myshka App. Автоматичні угоди вимкнені.</div>
-</div>
+    <section class="screen" id="screen-profit">
+      <div class="hero"><div><div class="eyebrow">02 / Unit economics</div><h2>Estimate your margin.</h2><p>Every fee is editable because seller location, payment processing, ads and fulfillment change the real result.</p></div></div>
+      <div class="grid2">
+        <div class="panel"><h3>Order assumptions</h3><p class="sub">Enter the amount in the currency used for your selling price.</p>
+          <div class="field-grid">
+            <div class="field"><label for="salePrice">Selling price</label><input id="salePrice" type="number" min="0" step=".01" value="24"></div>
+            <div class="field"><label for="productCost">Product / production cost</label><input id="productCost" type="number" min="0" step=".01" value="6.5"></div>
+            <div class="field"><label for="shippingCost">Shipping paid by seller</label><input id="shippingCost" type="number" min="0" step=".01" value="4"></div>
+            <div class="field"><label for="packagingCost">Packaging / other unit cost</label><input id="packagingCost" type="number" min="0" step=".01" value="1"></div>
+            <div class="field"><label for="listingFee">Listing fee per sold unit</label><input id="listingFee" type="number" min="0" step=".01" value="0.20"></div>
+            <div class="field"><label for="transactionRate">Transaction fee (%)</label><input id="transactionRate" type="number" min="0" step=".1" value="6.5"></div>
+            <div class="field"><label for="paymentRate">Payment processing (%)</label><input id="paymentRate" type="number" min="0" step=".1" value="3"></div>
+            <div class="field"><label for="paymentFixed">Payment fixed fee</label><input id="paymentFixed" type="number" min="0" step=".01" value="0.25"></div>
+            <div class="field"><label for="adRate">Ads / other variable fees (%)</label><input id="adRate" type="number" min="0" step=".1" value="0"></div>
+            <div class="field"><label for="taxCost">Other order cost / tax reserve</label><input id="taxCost" type="number" min="0" step=".01" value="0"></div>
+          </div>
+          <p class="fineprint">Fee defaults are illustrative assumptions, not a statement of your actual Etsy fees. Confirm current fees and tax obligations for your shop and payment account.</p>
+        </div>
+        <div class="panel"><h3>Estimated result</h3><p class="sub">Updates as you edit the assumptions.</p>
+          <div class="stats3" style="grid-template-columns:1fr"><div class="mini"><small>Estimated net contribution / unit</small><strong id="netProfit">—</strong><p>Before unlisted overhead and income tax</p></div><div class="mini"><small>Estimated margin</small><strong id="marginPct">—</strong></div><div class="mini"><small>Break-even price</small><strong id="breakEven">—</strong><p>Approximate, using current percentage fees</p></div></div>
+          <div id="profitStatus" class="statusline">Adjust the inputs to calculate an estimate.</div>
+          <button id="saveProfitButton" class="btn" style="margin-top:12px">Save as niche note</button>
+        </div>
+      </div>
+    </section>
 
+    <section class="screen" id="screen-draft">
+      <div class="hero"><div><div class="eyebrow">03 / Listing copy assistant</div><h2>Draft honestly. Verify everything.</h2><p>Generate a working copy draft from facts you provide. The AI must not invent materials, product claims, sizes, handmade status, reviews, or performance promises.</p></div></div>
+      <div class="panel">
+        <div class="field-grid">
+          <div class="field"><label for="itemType">Item category</label><select id="itemType"><option value="physical">Physical item</option><option value="digital-art">Digital art / design</option><option value="print-on-demand">Print-on-demand item</option><option value="functional-guide">Pattern, recipe or instructions</option><option value="custom-made">Customized / made to order</option></select></div>
+          <div class="field"><label for="aiUsed">Was AI used to create the item?</label><select id="aiUsed"><option value="no">No</option><option value="yes">Yes</option><option value="editing">AI used only to edit images</option></select></div>
+          <div class="field full"><label for="draftTitle">Working title</label><input id="draftTitle" maxlength="180" placeholder="Personalized dog collar with custom name"></div>
+          <div class="field full"><label for="productFacts">Actual product facts</label><textarea id="productFacts" maxlength="600" placeholder="What the product is, exact material, dimensions, included items, customization, and other facts you can verify."></textarea><span class="hint">Do not include claims you cannot substantiate.</span></div>
+          <div class="field"><label for="materialsFacts">Materials / features</label><textarea id="materialsFacts" maxlength="400" placeholder="Only verified materials and features"></textarea></div>
+          <div class="field"><label for="sellerRole">Your creative contribution</label><textarea id="sellerRole" maxlength="500" placeholder="What you designed, made, selected, customized or checked yourself."></textarea></div>
+          <div class="field full"><label for="accessToken">Private AI access token</label><input id="accessToken" type="password" autocomplete="off" placeholder="Owner-configured access token"><span class="hint">Required to protect the AI API from public use. Stored only for this browser tab; never add your provider API key here.</span></div>
+        </div>
+        <div class="row-actions"><button id="draftButton" class="btn primary">Generate draft with AI</button><span id="draftStatus" class="fineprint">Requires OPENAI_API_KEY in Vercel. Drafting is optional; publishing is disabled.</span></div>
+        <div id="draftError" style="display:none;margin-top:12px" class="statusline error"></div>
+        <div id="draftResult" style="display:none" class="result-box"><h4>Draft output — review before use</h4><div id="draftContent"></div><div class="row-actions"><button id="copyDraftButton" class="btn">Copy draft text</button><button id="saveDraftButton" class="btn">Save draft locally</button></div></div>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-review">
+      <div class="hero"><div><div class="eyebrow">04 / Etsy policy gate</div><h2>Review before you publish.</h2><p>These checks reflect the policy summary supplied in this conversation. Requirements vary by item type, so consult Etsy's current official policy for the exact case.</p></div></div>
+      <div class="panel">
+        <div class="field"><label for="reviewType">Item type for this review</label><select id="reviewType"><option value="physical">Physical item</option><option value="digital">Digital download / digital art</option><option value="pod">Print-on-demand</option><option value="custom">Customized / made to order</option><option value="guide">Functional guide, pattern, recipe or instructions</option></select></div>
+        <hr class="divider">
+        <div id="policyChecks" class="checklist"></div>
+        <div class="row-actions"><button id="clearReviewButton" class="btn ghost">Reset checks</button><button id="completeReviewButton" class="btn primary">Confirm human review</button></div>
+        <div id="reviewOutcome" class="statusline warn" style="margin-top:12px">Review every applicable check before confirming.</div>
+        <p class="fineprint" style="margin-top:12px">This is a workflow checklist, not a guarantee of Etsy compliance. It does not publish anything, and checked items are stored only in this browser session's local storage.</p>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-saved">
+      <div class="hero"><div><div class="eyebrow">05 / Personal workspace</div><h2>Your saved research.</h2><p>Saved niche ideas and copy drafts stay in this browser. This initial version does not use cloud database persistence yet.</p></div></div>
+      <div class="panel"><div class="result-head"><div><h3>Saved niche ideas</h3><p class="sub">Stored locally on this device / browser.</p></div><button id="exportButton" class="btn">Export JSON</button></div><div id="savedIdeas" class="saved-list"></div><hr class="divider"><div class="result-head"><div><h3>Saved listing drafts</h3><p class="sub">Copy them out or use them as working notes.</p></div></div><div id="savedDrafts" class="saved-list"></div><div class="row-actions"><button id="clearSavedButton" class="btn danger">Clear local saved data</button></div></div>
+    </section>
+    <div class="footer">MYSHKA ETSY AI · Research support only · No auto-publishing · Verify Etsy's current seller policies before listing.</div>
+  </main>
+</div>
+</div>
 <script>
-const FEED='crypto_myshka/data/feed.json?ts='+Date.now();
-const NEWS='crypto_myshka/data/news.json?ts='+Date.now();
-const modeNames={opportunities:'Можливості',portfolio:'Портфель',speculation:'Спекуляції',trading:'Trading Lab',news:'JEV Аналіз',knowledge:'База / Контекст'};
-let data={items:[],sources:{},market:{}},newsData={items:[]},mode='opportunities';
-const $=s=>document.querySelector(s);
-const esc=s=>String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function riskClass(n){return n<45?'low':n<70?'mid':'high'}
-function riskLabel(n){return n<45?'Низький ризик':n<70?'Середній ризик':'Високий ризик'}
-
-function executionGuard(x){
-  const txt=((x.title||'')+' '+(x.summary||'')+' '+((x.reasons||[]).join(' '))).toLowerCase();
-  const leveraged=/\b(cfd|perp|perpetual|futures?|ф'ючерс|фʼючерс|фючерс|опціон|options?|leverage|плеч|lot\b|марж)/i.test(txt);
-  const launchpool=/\blaunchpool\b|лаунчпул|\bpoolx\b/i.test(txt);
-  const directTrade=/\b(відкрити|угод|лонг|шорт|long|short|buy|sell|торгів)/i.test(txt);
-  const risky=Number(x.risk||65)>=70 || x.mode==='trading' || leveraged || directTrade;
-  let verdict='ПОТРІБНА ПЕРЕВІРКА', cls='hold';
-  if(leveraged || x.mode==='trading'){verdict='ТІЛЬКИ АНАЛІЗ',cls='stop'}
-  else if(!risky && Number(x.risk||65)<45){verdict='МОЖНА ПЕРЕВІРИТИ',cls='ok'}
-  const leverage=leveraged?'є / можливе — перевірити умови':'не виявлено у тексті';
-
-  if(launchpool){
-    return '<div class="guard">'+
-      '<div class="guardHead"><b>🐭 Launchpool-перевірка</b><span class="guardVerdict '+cls+'">'+verdict+'</span></div>'+
-      '<div class="guardGrid">'+
-        '<div class="guardCell"><small>Stablecoin-пул</small><span>USDT/USDC мають нижчий price risk, але лишається ризик платформи й умов</span></div>'+
-        '<div class="guardCell"><small>Токен-пули</small><span>BLKHION / MAG7XON / XAUT / GT та інші можуть падати в ціні під час стейкінгу</span></div>'+
-        '<div class="guardCell"><small>Плече</small><span>'+leverage+'</span></div>'+
-        '<div class="guardCell"><small>APR</small><span>річний і плаваючий; не дорівнює прибутку за весь період акції</span></div>'+
-      '</div>'+
-      '<div class="guardRule"><strong>Оцінюй кожен пул окремо.</strong> Низький ризик stablecoin-пулу не означає, що весь Launchpool автоматично низькоризиковий.</div>'+
-    '</div>';
-  }
-
-  return '<div class="guard">'+
-    '<div class="guardHead"><b>🐭 Перевірка перед дією</b><span class="guardVerdict '+cls+'">'+verdict+'</span></div>'+
-    '<div class="guardGrid">'+
-      '<div class="guardCell"><small>Потрібна сума</small><span>не підтверджено — дивись офіційні умови</span></div>'+
-      '<div class="guardCell"><small>Макс. збиток</small><span>не підтверджено — не вважати ризик «низьким»</span></div>'+
-      '<div class="guardCell"><small>Плече</small><span>'+leverage+'</span></div>'+
-      '<div class="guardCell"><small>Reward / Risk</small><span>не підтверджено; промо-пул ≠ твоя гарантована нагорода</span></div>'+
-    '</div>'+
-    '<div class="guardRule"><strong>Мишка не каже «роби».</strong> Якщо 4 поля не підтверджені — відкриваємо першоджерело й перевіряємо, а не виконуємо дію.</div>'+
-  '</div>';
-}
-
-function renderSources(){
-  const box=$('#sources'); box.innerHTML='';
-  const labels={telegram_main:'Telegram · live',telegram_airdrop:'Retrodrop · live',telegram_archive:'Telegram · архів',site:'База знань',youtube:'YouTube',jev_news:'JEV радар'};
-  Object.entries(data.sources||{}).forEach(([k,v])=>{
-    const d=document.createElement('div');d.className='source';
-    let state;
-    if(v.ok){
-      state='online · '+(v.count||0)+' матеріалів';
-      if(k==='telegram_archive' && v.complete===false) state+=' · архів доповнюється';
-    }else{
-      state=(k==='telegram_archive'?'архів запускається':'тимчасова помилка');
-    }
-    d.innerHTML='<div><b>'+esc(labels[k]||k)+'</b><br><small>'+esc(state)+'</small></div>';
-    box.appendChild(d);
-  });
-}
-
-function renderMarket(){
-  const box=$('#market'),m=data.market||{},prices=m.prices||m;box.innerHTML='';
-  const ids={BTC:'bitcoin',ETH:'ethereum',OP:'optimism',SOL:'solana',PENDLE:'pendle',ARB:'arbitrum',LDO:'lido-dao',ICP:'internet-computer',STG:'stargate-finance',TWT:'trust-wallet-token',ENS:'ethereum-name-service',LTC:'litecoin',XRP:'ripple',BNB:'binancecoin',DOGE:'dogecoin',ADA:'cardano',AVAX:'avalanche-2',LINK:'chainlink'};
-  const syms=m.symbols||['BTC','ETH'];
-  syms.forEach(label=>{
-    const x=prices[ids[label]];if(!x)return;
-    const ch=Number(x.usd_24h_change||0),d=document.createElement('div');d.className='metric';
-    d.innerHTML='<label>'+esc(label)+'</label><b>$'+Number(x.usd).toLocaleString('en-US')+'</b><small class="risk '+(ch>=0?'low':'high')+'">'+(ch>=0?'+':'')+ch.toFixed(2)+'% 24h</small>';
-    box.appendChild(d);
-  });
-  if(!box.children.length)box.innerHTML='<div class="empty">Ринкові дані ще не завантажені.</div>';
-}
-
-function currentItems(){
-  if(mode==='news')return newsData.items||[];
-  if(mode==='knowledge')return (data.items||[]).filter(x=>x.knowledge);
-  return (data.items||[]).filter(x=>x.mode===mode&&!x.knowledge);
-}
-
-function renderItems(){
-  $('#modeTitle').textContent=modeNames[mode];
-  const arr=currentItems();
-  if(mode==='news'){
-    const aiCount=arr.filter(x=>x.analysis_level==='llm'&&x.jev_ai&&!x.jev_ai._format_fallback).length;
-    const code=newsData.jev_status||'unknown';
-    const state=code==='complete'?'AI готовий':code==='ok'?'AI частково':code==='degraded'?'AI помилки':code==='not_configured'?'AI не налаштований':'AI ще не підтверджено';
-    $('#count').textContent=aiCount+'/'+arr.length+' перевірено AI · '+state;
-  }else{
-    $('#count').textContent=arr.length+(mode==='knowledge'?' матеріалів':' ідей');
-  }
-  const box=$('#items');box.innerHTML='';
-  if(!arr.length){box.innerHTML='<div class="empty">Тут поки немає матеріалів.</div>';return}
-  arr.slice(0,60).forEach(x=>{
-    const el=document.createElement('article');el.className='item';
-    const isNews=mode==='news';
-    const klass=isNews?(Number(x.impact||1)>=3?'high':Number(x.impact||1)>=2?'mid':'low'):riskClass(Number(x.risk||65));
-    const badge=isNews?(x.impact_label||'Контекст'):(x.knowledge?'Контекст':riskLabel(Number(x.risk||65)));
-    const who=isNews?((x.publishers||[]).join(' · ')||'JEV'):x.source;
-    const meta2=isNews?((x.assets||[]).join(', ')||'крипторинок'):(x.knowledge?'методологія':modeNames[x.mode]);
-    const rs=(x.reasons||[]).map(r=>'• '+esc(r)).join('<br>');
-    let extra='';
-    if(isNews){
-      const ai=x.jev_ai||null;
-      const cleanAi=ai && !ai._format_fallback && !ai._cross_source_fallback && x.analysis_level==='llm';
-      if(cleanAi){
-        extra='<div class="jevbox"><b>🧠 JEV AI</b><p>'+esc(ai.short_conclusion||ai.why_it_matters||'')+'</p>'+
-          '<b>Що сталося</b><p>'+esc(ai.what_happened||'')+'</p>'+
-          '<b>Чому це важливо</b><p>'+esc(ai.why_it_matters||'')+'</p>'+
-          '<b>Сценарії</b><p>↑ '+esc(ai.bull_case||'')+'<br>↓ '+esc(ai.bear_case||'')+'</p>'+
-          '<b>За чим стежити</b><p>'+esc(ai.watch_next||'')+'</p>'+
-          '<b>Впевненість: '+esc(ai.confidence||'—')+'</b></div>';
-      }else if(ai){
-        extra='<div class="jevbox"><b>🧠 JEV крос-перевірка</b><p>'+esc(ai.short_conclusion||x.jev_take||'')+'</p>'+
-          '<b>Що сталося</b><p>'+esc(ai.what_happened||x.summary||'')+'</p>'+
-          '<b>Чому це важливо</b><p>'+esc(ai.why_it_matters||x.jev_take||'')+'</p>'+
-          '<b>За чим стежити</b><p>'+esc(ai.watch_next||x.watch_for||'')+'</p>'+
-          '<b>Впевненість: '+esc(ai.confidence||x.confidence_label||'—')+'</b><p style="color:#7892ab">LLM ще може покращити цей висновок у наступному запуску.</p></div>';
-      }else{
-        extra='<div class="jevbox"><b>Крос-перевірка</b><p>'+esc(x.jev_take||'')+'</p>'+
-          '<b>Що перевірити далі</b><p>'+esc(x.watch_for||'')+'</p>'+
-          '<b>'+esc(x.confidence_label||'')+'</b></div>';
-      }
-    }
-    el.innerHTML='<div class="itemTop"><h4>'+esc(x.title)+'</h4><span class="risk '+klass+'">'+esc(badge)+'</span></div>'+
-      '<div class="meta"><span class="pill">'+esc(who)+'</span><span class="pill">'+esc(meta2)+'</span></div>'+
-      '<div class="summary">'+esc(x.summary)+'</div>'+extra+'<div class="reasons">'+rs+'</div>'+
-      ((x.mode==='opportunities'||x.mode==='trading'||x.mode==='speculation')?executionGuard(x):'')+
-      '<div class="actions"><a class="btn" target="_blank" rel="noopener" href="'+esc(x.url)+'">Першоджерело ↗</a><button class="btn save" data-id="'+esc(x.id)+'">＋ Журнал</button></div>';
-    box.appendChild(el);
-  });
-  box.querySelectorAll('.save').forEach(b=>b.onclick=()=>saveItem(b.dataset.id));
-}
-
-function getJournal(){try{return JSON.parse(localStorage.getItem('cryptoMyshkaJournal')||'[]')}catch{return[]}}
-function saveItem(id){
-  const item=(data.items||[]).find(x=>x.id===id)||(newsData.items||[]).find(x=>x.id===id);if(!item)return;
-  let j=getJournal();
-  if(!j.some(x=>x.id===id))j.unshift({id:item.id,title:item.title,url:item.url,mode:item.mode||'news',risk:item.risk,impact:item.impact,impact_label:item.impact_label,savedAt:new Date().toISOString()});
-  j=j.slice(0,30);localStorage.setItem('cryptoMyshkaJournal',JSON.stringify(j));renderJournal();
-}
-function renderJournal(){
-  const j=getJournal(),box=$('#journal');box.innerHTML='';
-  if(!j.length){box.innerHTML='<div class="empty">Ще нічого не збережено.</div>';return}
-  j.slice(0,10).forEach(x=>{const d=document.createElement('div');d.className='jrow';const txt=x.mode==='news'?(x.impact_label||'Новина'):riskLabel(Number(x.risk||65));d.innerHTML='<b>'+esc(x.title.slice(0,74))+'</b><br>'+esc(txt);d.onclick=()=>window.open(x.url,'_blank');box.appendChild(d)});
-}
-document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');mode=t.dataset.mode;renderItems()});
-
-function mouseAdd(role,text,links=[]){
-  const d=document.createElement('div');d.className='mouseMsg '+role;d.textContent=text;
-  if(links.length){
-    links.slice(0,3).forEach(x=>{
-      const a=document.createElement('a');a.href=x.url;a.target='_blank';a.rel='noopener';a.textContent='\n↗ '+(x.title||'Джерело').slice(0,70);d.appendChild(a);
-    });
-  }
-  $('#mouseAiLog').appendChild(d);$('#mouseAiLog').scrollTop=$('#mouseAiLog').scrollHeight;
-}
-function mouseTerms(q){
-  return q.toLowerCase().replace(/[^a-zа-яіїєґ0-9$\-\s]/gi,' ').split(/\s+/).filter(x=>x.length>2);
-}
-function mouseScore(x,terms){
-  const b=((x.title||'')+' '+(x.summary||'')+' '+((x.assets||[]).join(' '))+' '+((x.topics||[]).join(' '))).toLowerCase();
-  return terms.reduce((n,t)=>n+(b.includes(t)?1:0),0);
-}
-function mouseAnswer(q){
-  const low=q.toLowerCase(), terms=mouseTerms(q);
-  const prices=(data.market||{}).prices||{};
-  const idMap={
-    btc:'bitcoin',bitcoin:'bitcoin',
-    eth:'ethereum',ethereum:'ethereum',
-    op:'optimism',sol:'solana',pendle:'pendle',
-    ldo:'lido-dao',ens:'ethereum-name-service',icp:'internet-computer'
-  };
-
-  for(const [key,id] of Object.entries(idMap)){
-    if(low.includes(key) && prices[id]){
-      const x=prices[id];
-      const ch=Number(x.usd_24h_change||0);
-      const sym=key==='bitcoin'?'BTC':key==='ethereum'?'ETH':key.toUpperCase();
-      const rel=[...(newsData.items||[]),...(data.items||[])]
-        .filter(v=>mouseScore(v,[key,sym.toLowerCase()])>0)
-        .slice(0,3);
-      return {
-        text:sym+' зараз ≈ $'+Number(x.usd).toLocaleString('en-US')+
-          ' ('+(ch>=0?'+':'')+ch.toFixed(2)+'% за 24г).\n\n'+
-          'З одного руху ціни висновок не робимо — дивимось на контекст, обсяг і підтвердження.',
-        links:rel
-      };
-    }
-  }
-
-  if(low.includes('itstatti')||low.includes('ітстат')||low.includes('пост')){
-    const xs=(data.items||[]).filter(x=>x.source==='telegram_main').slice(0,3);
-    return {
-      text:xs.length
-        ?'Останні матеріали ITstatti вже в Криптомишці. Дивимось на них як на контекст, а не готову команду.'
-        :'Пости ITstatti ще не завантажились.',
-      links:xs
-    };
-  }
-
-  if(low.includes('ретро')||low.includes('airdrop')||low.includes('дроп')){
-    const xs=(data.items||[]).filter(x=>x.source==='telegram_airdrop').slice(0,3);
-    return {
-      text:xs.length
-        ?'Ось свіжі ретродроп/airdrop-матеріали. Перевіряй умови й офіційні посилання.'
-        :'Свіжих ретродропів поки не бачу.',
-      links:xs
-    };
-  }
-
-  if(low.includes('викон')||low.includes('варто')||low.includes('угод')||low.includes('робити')){
-    return {
-      text:'Я не даю команду «роби». Перед будь-якою угодою або промо перевір 4 речі: 1) скільки реально потрібно внести, 2) максимальний можливий збиток, 3) чи є плече, 4) чи очікувана винагорода виправдовує ризик і комісії. Якщо хоча б одне невідоме — моя відповідь: спочатку перевірити, не виконувати.',
-      links:[]
-    };
-  }
-
-  if(low.includes('ризик')){
-    const xs=(newsData.items||[]).filter(x=>Number(x.impact||0)>=3).slice(0,3);
-    return {
-      text:xs.length
-        ?'Зараз найбільше уваги варто дати подіям із високим впливом. Це не означає автоматично купувати або продавати — їх треба перевірити першими.'
-        :'Високоризикових подій у радарі зараз не бачу.',
-      links:xs
-    };
-  }
-
-  if(low.includes('нов')||low.includes('сьогодні')||low.includes('зараз')){
-    const xs=(newsData.items||[]).slice(0,3);
-    return {
-      text:xs.length
-        ?'Ось найсвіжіші події з JEV-радара. Насамперед дивись на ті, що підтверджені кількома джерелами.'
-        :'Радар ще оновлюється.',
-      links:xs
-    };
-  }
-
-  const pool=[...(newsData.items||[]),...(data.items||[])];
-  const ranked=pool
-    .map(x=>({x,s:mouseScore(x,terms)}))
-    .filter(o=>o.s>0)
-    .sort((a,b)=>b.s-a.s)
-    .slice(0,3)
-    .map(o=>o.x);
-
-  if(ranked.length){
-    const best=ranked[0],ai=best.jev_ai||{};
-    const takeaway=ai.short_conclusion||best.jev_take||best.summary||'';
-    return {
-      text:'Знайшла релевантний матеріал. '+
-        (takeaway||'Перевір першоджерело та реакцію ринку перед висновком.'),
-      links:ranked
-    };
-  }
-
-  return {
-    text:'Я не знайшла прямої згадки в даних Криптомишки. Спробуй коротше: «BTC», «ETH», «OP», «що нового», «ITstatti», «ретродропи» або назву конкретного проєкту.',
-    links:[]
-  };
-}
-
-function mouseSend(){
-  const input=$('#mouseAiInput');
-  const q=input.value.trim();
-  if(!q)return;
-  mouseAdd('user',q);
-  input.value='';
-  const a=mouseAnswer(q);
-  mouseAdd('ai','📚 Огляд матеріалів (НЕ живий AI):\n'+a.text,a.links);
-}
-
-const mouseSendBtn=$('#mouseAiSend');
-if(mouseSendBtn) mouseSendBtn.onclick=mouseSend;
-$('#mouseAiInput').addEventListener('keydown',e=>{
-  if(e.key==='Enter'){
-    e.preventDefault();
-    mouseSend();
-  }
-});
-document.querySelectorAll('.mouseAiQuick button').forEach(b=>{
-  b.onclick=()=>{
-    $('#mouseAiInput').value=b.dataset.q;
-    mouseSend();
-  };
-});
-
-async function refreshData(){
+(function(){
+"use strict";
+if (window.location.hostname.endsWith("github.io")) { window.location.replace("https://myshka-etsy-ai.vercel.app/"); return; }
+const $ = (id) => document.getElementById(id);
+const STORE_KEY = "myshka_etsy_ai_v1";
+let currentSearch = null;
+let lastDraft = null;
+let currentProfit = null;
+let health = null;
+let reviewConfirmed = false;
+const apiBase = window.location.protocol === "file:" ? "" : "";
+try { $("accessToken").value = sessionStorage.getItem("myshka_ai_access_token") || ""; $("accessToken").addEventListener("input", () => sessionStorage.setItem("myshka_ai_access_token", $("accessToken").value)); } catch {}
+const readStore = () => {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '{"ideas":[],"drafts":[]}'); }
+  catch { return {ideas:[], drafts:[]}; }
+};
+const writeStore = (store) => { localStorage.setItem(STORE_KEY, JSON.stringify(store)); refreshSaved(); };
+const escapeHtml = (value) => String(value == null ? "" : value).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = (v, currency) => Number.isFinite(Number(v)) ? new Intl.NumberFormat("en-US",{style:"currency",currency:(currency||"USD"),maximumFractionDigits:2}).format(Number(v)) : "—";
+const number = (v, places=1) => Number.isFinite(Number(v)) ? Number(v).toLocaleString("en-US",{maximumFractionDigits:places}) : "—";
+const showScreen = (name) => {
+  document.querySelectorAll(".screen").forEach((el)=>el.classList.toggle("active",el.id==="screen-"+name));
+  document.querySelectorAll(".nav").forEach((el)=>el.classList.toggle("active",el.dataset.screen===name));
+  if(name==="saved") refreshSaved();
+  if(name==="review") renderPolicyChecks();
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+document.querySelectorAll("[data-screen]").forEach((el)=>el.addEventListener("click",()=>showScreen(el.dataset.screen)));
+document.querySelectorAll("[data-go]").forEach((el)=>el.addEventListener("click",()=>showScreen(el.dataset.go)));
+async function getHealth(){
   try{
-    const stamp=Date.now();
-    const [j,n]=await Promise.all([
-      fetch('crypto_myshka/data/feed.json?ts='+stamp,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(r.status);return r.json()}),
-      fetch('crypto_myshka/data/news.json?ts='+stamp,{cache:'no-store'}).then(r=>r.ok?r.json():({items:[]}))
-    ]);
-    const changed=(j.generated_at!==data.generated_at)||(n.generated_at!==newsData.generated_at);
-    data=j;
-    newsData=n;
-    $('#status').textContent='FEED · оновлено '+(j.generated_at?new Date(j.generated_at).toLocaleString('uk-UA'):'очікує запуску');
-    $('#status').className='badge ok';
-    if(changed){
-      renderSources();
-      renderMarket();
-      renderItems();
-    }
-    renderJournal();
-  }catch(err){
-    console.error(err);
-    $('#status').textContent='FEED ще оновлюється';
-    $('#status').className='badge warn';
+    const r=await fetch(apiBase+"/api/health",{cache:"no-store"});
+    const data=await r.json();
+    if(!r.ok || !data.ok) throw new Error("Health check failed");
+    health=data;
+    $("etsyBadge").textContent=data.etsyConfigured?"ETSY API CONNECTED":"ETSY API NEEDS KEY";
+    $("etsyBadge").className="chip "+(data.etsyConfigured?"green":"gold");
+    $("aiBadge").textContent=data.aiConfigured?"AI DRAFTS CONNECTED":"AI DRAFTS NEED KEY";
+    $("aiBadge").className="chip "+(data.aiConfigured?"green":"gold");
+    $("healthStatus").className="statusline "+(data.etsyConfigured?"":"warn");
+    $("healthStatus").textContent="Server online · "+data.app+" v"+data.version+" · Etsy API: "+(data.etsyConfigured?"configured":"not configured")+" · AI: "+(data.aiConfigured?"configured":"not configured")+" · Auto-publishing: off.";
+    $("draftStatus").textContent=data.aiConfigured?"AI endpoint configured. Results are drafts only and require your review.":"AI drafting needs OPENAI_API_KEY and MYSHKA_ACCESS_TOKEN in Vercel. Enter the private access token above; never enter the provider API key here.";
+    if(!data.etsyConfigured) $("searchState").textContent="Live search requires an approved Etsy API key stored in Vercel.";
+  }catch(e){
+    $("etsyBadge").textContent="SERVER NOT CONNECTED";
+    $("etsyBadge").className="chip gold";
+    $("aiBadge").textContent="AI STATUS UNKNOWN";
+    $("healthStatus").className="statusline warn";
+    $("healthStatus").textContent="The API server could not be reached from this page. Open the deployed Vercel app or configure its API base URL.";
   }
 }
-
-function updateLiveClock(){
-  const el=$('#liveClock');
-  if(!el)return;
-  el.textContent='🕒 '+new Date().toLocaleTimeString('uk-UA',{hour12:false});
+function val(id){const n=Number($(id).value);return Number.isFinite(n)?Math.max(0,n):0;}
+function calcProfit(){
+ const price=val("salePrice"),cost=val("productCost"),ship=val("shippingCost"),pack=val("packagingCost"),listing=val("listingFee"),tx=val("transactionRate")/100,pay=val("paymentRate")/100,fixed=val("paymentFixed"),ads=val("adRate")/100,tax=val("taxCost");
+ const totalFees=listing+price*tx+price*pay+fixed+price*ads;
+ const net=price-cost-ship-pack-totalFees-tax;
+ const rate=price>0?net/price*100:null;
+ const denom=1-tx-pay-ads;
+ const be=denom>0?(cost+ship+pack+listing+fixed+tax)/denom:null;
+ currentProfit={price,cost,ship,pack,listing,tx:tx*100,pay:pay*100,fixed,ads:ads*100,tax,totalFees,net,margin:rate,breakEven:be};
+ $("netProfit").textContent=money(net,"USD");
+ $("netProfit").style.color=net>=0?"var(--green)":"var(--red)";
+ $("marginPct").textContent=rate===null?"—":number(rate,1)+"%";
+ $("marginPct").style.color=rate!==null&&rate>=0?"var(--green)":"var(--red)";
+ $("breakEven").textContent=be===null?"—":money(be,"USD");
+ $("profitStatus").className="statusline "+(net>=0?"":"error");
+ $("profitStatus").textContent=net>=0?"Positive estimated contribution under these assumptions. This is not a guaranteed profit.":"Estimated loss under current assumptions. Reduce costs, revise price, or confirm fees before proceeding.";
+ $("countMargin").textContent=net>=0?"Positive":"Negative";
+ $("countMargin").className=net>=0?"ok":"warn";
 }
-updateLiveClock();
-setInterval(updateLiveClock,1000);
-
-refreshData();
-// GitHub Actions оновлює дані приблизно кожні 10 хв. Сторінка сама
-// перевіряє нову версію щохвилини, тому Ctrl+F5 більше не потрібен.
-setInterval(refreshData,60000);
+["salePrice","productCost","shippingCost","packagingCost","listingFee","transactionRate","paymentRate","paymentFixed","adRate","taxCost"].forEach(id=>$(id).addEventListener("input",calcProfit));
+function formatNiche(item){
+ const tags=(item.tags||[]).slice(0,5).map(t=>'<span class="tag">'+escapeHtml(t)+'</span>').join("");
+ const favorites=item.favorites==null?"—":number(item.favorites,0);
+ return '<tr><td><a class="link" href="'+escapeHtml(item.url||"#")+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(item.title)+'</a><div>'+tags+'</div></td><td>'+escapeHtml(item.price==null?"—":money(item.price,item.currency))+'</td><td>'+favorites+'</td><td>'+escapeHtml(item.listingType||"—")+'</td></tr>';
+}
+function renderSearch(data){
+ const m=data.metrics||{};
+ const cur=(data.items||[]).find(i=>i.currency)?.currency||"USD";
+ $("searchResults").innerHTML=
+ '<div class="result-head"><div><h3>Marketplace snapshot: '+escapeHtml(data.keywords)+'</h3><p class="sub">Retrieved '+escapeHtml(new Date(data.fetchedAt).toLocaleString())+' · '+number(data.sampleCount,0)+' returned listings</p></div><span class="chip green">LIVE API DATA</span></div>'+
+ '<div class="stats3"><div class="mini"><small>Count reported by Etsy</small><strong>'+number(data.resultCount,0)+'</strong><p>Endpoint result count, not demand</p></div><div class="mini"><small>Median listed price</small><strong>'+money(m.medianPrice,cur)+'</strong><p>Median of priced sample results</p></div><div class="mini"><small>Average favorites</small><strong>'+number(m.averageFavorites,1)+'</strong><p>Only returned listings with a numeric value</p></div></div>'+
+ '<div class="notice" style="margin-bottom:12px"><strong>Interpretation:</strong> '+escapeHtml(data.caveat||"Active listings are not sales data.")+'</div>'+
+ '<div class="table-wrap"><table><thead><tr><th>Listing</th><th>Price</th><th>Favorites</th><th>Type</th></tr></thead><tbody>'+(data.items||[]).map(formatNiche).join("")+'</tbody></table></div>';
+ $("countSample").textContent=number(data.sampleCount,0);
+ $("searchState").textContent="Last result is live Etsy API data.";
+}
+$("searchButton").addEventListener("click",async()=>{
+ const keywords=$("keywords").value.trim();
+ if(keywords.length<2){$("searchError").style.display="block";$("searchError").textContent="Enter at least 2 characters.";return;}
+ $("searchError").style.display="none";
+ $("searchButton").disabled=true;$("searchButton").textContent="Searching…";$("searchState").textContent="Requesting current data from Etsy…";
+ try{
+   const u=apiBase+"/api/etsy/search?keywords="+encodeURIComponent(keywords)+"&limit="+encodeURIComponent($("searchLimit").value);
+   const r=await fetch(u,{headers:{Accept:"application/json"},cache:"no-store"});
+   const data=await r.json();
+   if(!r.ok||!data.ok) throw new Error(data.error||"Search failed.");
+   currentSearch=data;renderSearch(data);
+ }catch(e){
+   $("searchError").style.display="block";$("searchError").textContent=e.message||"Search failed.";
+   $("searchState").textContent="No fresh listing data loaded.";
+ }finally{$("searchButton").disabled=false;$("searchButton").textContent="Search Etsy listings ↗";}
+});
+$("saveSearchButton").addEventListener("click",()=>{
+ const title=$("keywords").value.trim();
+ if(title.length<2){$("searchState").textContent="Enter a niche name first.";return;}
+ const store=readStore();
+ store.ideas.unshift({id:Date.now(),title,note:$("nicheNote").value.trim(),savedAt:new Date().toISOString(),source:currentSearch&&currentSearch.keywords===title?"Etsy search snapshot":"Manual idea",resultCount:currentSearch&&currentSearch.keywords===title?currentSearch.resultCount:null,medianPrice:currentSearch&&currentSearch.keywords===title?currentSearch.metrics.medianPrice:null});
+ writeStore(store);$("searchState").textContent="Saved locally in this browser.";
+});
+$("saveProfitButton").addEventListener("click",()=>{
+ const store=readStore();store.ideas.unshift({id:Date.now(),title:"Profit estimate: "+money(currentProfit?.price,"USD"),note:"Estimated contribution "+money(currentProfit?.net,"USD")+" · margin "+number(currentProfit?.margin,1)+"%. Values are editable assumptions.",savedAt:new Date().toISOString(),source:"Profit estimator"});writeStore(store);
+});
+function renderPolicyChecks(){
+ const type=$("reviewType").value;
+ const general=[
+ {id:"truth",title:"The listing accurately represents what the buyer will receive.",help:"No material differences, hidden flaws, damage, or misleading claims."},
+ {id:"human",title:"I reviewed all claims and the final listing myself.",help:"AI output is a draft. Correct, verify and approve it before publishing."},
+ {id:"disclosure",title:"AI use is disclosed in the listing description where required.",help:"Etsy says sellers must disclose when an item is created using AI."},
+ {id:"role",title:"My creative role is clear and described honestly.",help:"Do not present AI-generated work as handmade or entirely your own creation."}
+ ];
+ let checks=general.slice();
+ if(type==="physical"||type==="custom") checks.unshift({id:"realphoto",title:"At least one real, unedited photo of the actual item is included.",help:"Use a genuine photo against a real background where Etsy requires it."});
+ if(type==="digital") checks.unshift({id:"preview",title:"The images accurately preview the digital item buyers will receive.",help:"Representative AI imagery must not mislead about the actual digital content."});
+ if(type==="pod") checks.unshift({id:"partner",title:"Any production partner and mockup use meet Etsy requirements.",help:"Confirm the product and any mockup are represented accurately."});
+ if(type==="guide") checks.unshift(
+ {id:"ownwork",title:"The functional guide itself is my own work, not AI-generated.",help:"Applies to the buyer-facing instructions, pattern, recipe or other functional content."},
+ {id:"actualresult",title:"I included a real photo of a result made using these instructions.",help:"Do not use an AI-generated or simulated result as the only proof of the outcome."}
+ );
+ const old=readStore().reviewChecks||{};
+ $("policyChecks").innerHTML=checks.map(c=>'<label class="check"><input type="checkbox" data-check="'+c.id+'" '+(old[c.id]?"checked":"")+'><span><b>'+escapeHtml(c.title)+'</b><small>'+escapeHtml(c.help)+'</small></span></label>').join("");
+ document.querySelectorAll("[data-check]").forEach(ch=>ch.addEventListener("change",()=>{
+   const s=readStore();s.reviewChecks=s.reviewChecks||{};s.reviewChecks[ch.dataset.check]=ch.checked;localStorage.setItem(STORE_KEY,JSON.stringify(s));reviewConfirmed=false;
+   $("reviewOutcome").className="statusline warn";$("reviewOutcome").textContent="Checklist updated. Confirm only after reviewing all applicable items.";
+ }));
+ reviewConfirmed=false;$("reviewOutcome").className="statusline warn";$("reviewOutcome").textContent="Review every applicable check before confirming.";
+}
+$("reviewType").addEventListener("change",renderPolicyChecks);
+$("clearReviewButton").addEventListener("click",()=>{const s=readStore();s.reviewChecks={};localStorage.setItem(STORE_KEY,JSON.stringify(s));renderPolicyChecks();});
+$("completeReviewButton").addEventListener("click",()=>{
+ const checks=Array.from(document.querySelectorAll("[data-check]"));
+ const checked=checks.filter(c=>c.checked).length;
+ if(!checks.length||checked!==checks.length){$("reviewOutcome").className="statusline error";$("reviewOutcome").textContent="Not ready: "+checked+" of "+checks.length+" applicable checks confirmed. Complete your review first.";return;}
+ reviewConfirmed=true;$("reviewOutcome").className="statusline";$("reviewOutcome").textContent="Human review confirmed for this checklist only. Nothing has been published to Etsy.";
+});
+$("draftButton").addEventListener("click",async()=>{
+ const title=$("draftTitle").value.trim(),product=$("productFacts").value.trim();
+ $("draftError").style.display="none";
+ if(!title||!product){$("draftError").style.display="block";$("draftError").textContent="Enter the working title and accurate product facts first.";return;}
+ $("draftButton").disabled=true;$("draftButton").textContent="Generating…";$("draftStatus").textContent="Preparing a draft for your review.";
+ try{
+  const r=await fetch(apiBase+"/api/ai/draft",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json","x-myshka-access":$("accessToken").value.trim()},body:JSON.stringify({title,product,materials:$("materialsFacts").value,sellerRole:$("sellerRole").value,itemType:$("itemType").value,aiUsed:$("aiUsed").value!=="no"})});
+  const data=await r.json();if(!r.ok||!data.ok)throw new Error(data.error||"Draft failed.");
+  lastDraft={createdAt:new Date().toISOString(),source:{title,product,materials:$("materialsFacts").value,itemType:$("itemType").value,aiUsed:$("aiUsed").value},draft:data.draft};
+  renderDraft(lastDraft);$("draftStatus").textContent="Draft generated. Review every statement, assumption and disclosure suggestion.";
+ }catch(e){$("draftError").style.display="block";$("draftError").textContent=e.message||"AI draft failed.";$("draftStatus").textContent="No draft generated.";}
+ finally{$("draftButton").disabled=false;$("draftButton").textContent="Generate draft with AI";}
+});
+function renderDraft(item){
+ const d=item.draft||{};
+ const tags=Array.isArray(d.tags)?d.tags:[];
+ const assumptions=Array.isArray(d.assumptionsToCheck)?d.assumptionsToCheck:[];
+ $("draftContent").innerHTML='<div class="field" style="margin:10px 0"><span class="label">Title</span><div>'+escapeHtml(d.title||"")+'</div></div><div class="field" style="margin:10px 0"><span class="label">Description</span><div style="white-space:pre-wrap">'+escapeHtml(d.description||"")+'</div></div><div class="field" style="margin:10px 0"><span class="label">Tags</span><div>'+tags.map(t=>'<span class="tag">'+escapeHtml(t)+'</span>').join("")+'</div></div><div class="field" style="margin:10px 0"><span class="label">Assumptions to verify</span><ul>'+assumptions.map(a=>'<li>'+escapeHtml(a)+'</li>').join("")+'</ul></div><div class="field" style="margin:10px 0"><span class="label">Disclosure suggestion</span><div>'+escapeHtml(d.aiDisclosureSuggestion||"Review Etsy's disclosure requirements for this item.")+'</div></div>';
+ $("draftResult").style.display="block";
+}
+$("copyDraftButton").addEventListener("click",async()=>{
+ if(!lastDraft)return;
+ const d=lastDraft.draft||{},txt="TITLE\n"+(d.title||"")+"\n\nDESCRIPTION\n"+(d.description||"")+"\n\nTAGS\n"+((d.tags||[]).join(", "))+"\n\nASSUMPTIONS TO VERIFY\n"+((d.assumptionsToCheck||[]).join("\n"))+"\n\nAI DISCLOSURE\n"+(d.aiDisclosureSuggestion||"");
+ try{await navigator.clipboard.writeText(txt);$("draftStatus").textContent="Draft copied to clipboard.";}catch{$("draftStatus").textContent=txt;$("draftStatus").className="fineprint";}
+});
+$("saveDraftButton").addEventListener("click",()=>{
+ if(!lastDraft)return;const s=readStore();s.drafts.unshift({id:Date.now(),title:lastDraft.draft?.title||lastDraft.source.title,createdAt:lastDraft.createdAt,draft:lastDraft.draft});writeStore(s);$("draftStatus").textContent="Draft saved in this browser.";
+});
+function refreshSaved(){
+ const s=readStore();$("countSaved").textContent=number((s.ideas||[]).length,0);
+ const ideas=s.ideas||[];
+ $("savedIdeas").innerHTML=ideas.length?ideas.map(i=>'<div class="saved-item"><div><h4>'+escapeHtml(i.title)+'</h4><p>'+escapeHtml(i.note||i.source||"Saved idea")+' · '+escapeHtml(i.savedAt?new Date(i.savedAt).toLocaleDateString():"")+'</p></div><button class="btn ghost" data-delete-idea="'+i.id+'">Remove</button></div>').join(""):'<div class="empty">No saved ideas yet. Use Etsy research or the profit estimator to save one.</div>';
+ const drafts=s.drafts||[];
+ $("savedDrafts").innerHTML=drafts.length?drafts.map(d=>'<div class="saved-item"><div><h4>'+escapeHtml(d.title)+'</h4><p>'+escapeHtml(d.createdAt?new Date(d.createdAt).toLocaleString():"")+'</p></div><button class="btn ghost" data-open-draft="'+d.id+'">Open</button></div>').join(""):'<div class="empty">No saved listing drafts yet.</div>';
+ document.querySelectorAll("[data-delete-idea]").forEach(b=>b.addEventListener("click",()=>{const x=readStore();x.ideas=(x.ideas||[]).filter(i=>String(i.id)!==b.dataset.deleteIdea);writeStore(x);}));
+ document.querySelectorAll("[data-open-draft]").forEach(b=>b.addEventListener("click",()=>{const d=(readStore().drafts||[]).find(i=>String(i.id)===b.dataset.openDraft);if(d){lastDraft=d;renderDraft(d);showScreen("draft");}}));
+}
+$("exportButton").addEventListener("click",()=>{
+ const blob=new Blob([JSON.stringify(readStore(),null,2)],{type:"application/json"});
+ const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download="myshka-etsy-ai-backup.json";a.click();URL.revokeObjectURL(u);
+});
+$("clearSavedButton").addEventListener("click",()=>{
+ if(!confirm("Clear saved ideas, drafts and policy checklist from this browser? This cannot be undone."))return;
+ localStorage.removeItem(STORE_KEY);refreshSaved();renderPolicyChecks();
+});
+calcProfit();refreshSaved();renderPolicyChecks();getHealth();
+})();
 </script>
-<a href="./jev-copy-lab.html" style="position:fixed;left:12px;bottom:12px;z-index:9997;background:#163451;color:#fff;padding:10px 13px;border:1px solid #477aa4;border-radius:12px;text-decoration:none;font:700 12px system-ui">🐭 JEV Copy Lab · DEMO</a>
 </body>
 </html>

@@ -1,21 +1,15 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
   "functions": {
-    "api/jev-chat.js": {
+    "api/etsy/search.js": {
+      "maxDuration": 20
+    },
+    "api/ai/draft.js": {
       "maxDuration": 30
     },
-    "api/chart-analysis.js": {
-      "maxDuration": 40
-    },
-    "api/pocket-vision.js": {
-      "maxDuration": 40
+    "api/health.js": {
+      "maxDuration": 10
     }
-  },
-  "framework": null,
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "https://omeljanpadovcky-create.github.io/T/myshka-app.html",
-      "permanent": false
-    }
-  ]
+  }
 }

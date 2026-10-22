@@ -1,73 +1,40 @@
-# MYSHKA P2P RADAR
+# MYSHKA ETSY AI
 
-Цей репозиторій тепер сфокусований на P2P-радарі: скан → розрахунок спреду → risk score → Telegram alert. Гроші та ордери він сам не відправляє.
+MYSHKA is a research workspace for Etsy sellers. It searches public active listings through Etsy Open API v3, summarizes the available data, estimates unit margin from seller-entered assumptions, drafts listing copy with AI, and provides a human review checklist.
 
-## Запуск
+**It does not create, edit, renew, or publish Etsy listings.** Active listings, prices and favorites are not evidence of sales volume, verified demand, conversion rate or profit.
 
-1. Відкрий `p2p_radar/.env` і встав Telegram:
-   - `TELEGRAM_BOT_TOKEN`
-   - `TELEGRAM_CHAT_ID`
-2. Двічі натисни `START_P2P_RADAR.bat`.
-3. Якщо хочеш, щоб радар стартував сам після входу у Windows — один раз запусти `INSTALL_P2P_AUTOSTART.bat`.
+## Vercel setup
 
-Якщо `p2p_radar/.env` ще немає, перший запуск створить його з `.env.example`. Старий кореневий `.env` теж читається.
+The app now lives at the repository root. Use the Vercel project named `myshka-etsy-ai` (or import this repo with Root Directory set to the repository root) and deploy `main`.
 
-## Що приходить у Telegram
+Set these as Vercel Environment Variables for Production and Preview as appropriate, then redeploy:
 
-Коли є маршрут, що проходить фільтри:
-- де купити USDT;
-- де продати USDT;
-- BUY / SELL ціни;
-- gross spread;
-- estimated net % і приблизний результат у UAH;
-- risk score;
-- кнопки BUY / SELL;
-- кнопка **«Я перевірив маршрут»**;
-- кнопка **«Цикл завершено»**;
-- pause / status.
+- `ETSY_API_KEY`: the full Etsy API value in `keystring:shared_secret` format.
+- `MYSHKA_ACCESS_TOKEN`: a long random private token that gates AI drafting. Enter the same token into the app's **Private AI access token** field. Do not share it.
+- `OPENAI_API_KEY`: optional; enables AI listing draft generation. Keep it server-side only.
+- `OPENAI_MODEL`: optional; defaults to `gpt-4.1-mini`.
 
-Після **5 підтверджених перевірок маршруту за день** MYSHKA показує warning. Це внутрішній лічильник безпеки, а не банківський ліміт.
+Do not set `OPENAI_API_KEY` until `MYSHKA_ACCESS_TOKEN` is configured. The AI endpoint checks the access token before making a paid provider request. Never put API keys in Git or browser code.
 
-## Telegram-команди
+Etsy's API requires the `x-api-key` header formatted as `keystring:shared_secret`. The Etsy app must be active/approved and allowed to search marketplace listings. See [Etsy API authentication](https://developer.etsy.com/documentation/essentials/authentication/).
 
-- `/p2p_status`
-- `/p2p_pause`
-- `/p2p_resume`
-- `/p2p_done`
+## Safety and policy
 
-## Bybit
+- Search results describe active marketplace listings, not verified sales or demand.
+- Profit estimates use seller-entered assumptions; verify current platform fees and every real cost.
+- AI outputs are drafts. A person must verify all product claims, tags, imagery, authorship and category-specific restrictions.
+- The application has no Etsy listing-publishing endpoint.
+- Disclose AI use in the item description where Etsy requires it. Keep images accurate, including any required genuine, unedited product photo.
+- Functional guides, patterns, recipes and instructions that buyers rely on must be the seller's own work, not AI-generated.
+- Review [Etsy Creativity Standards](https://www.etsy.com/legal/creativity/) and current listing image requirements before publishing.
 
-Binance працює через read-only P2P feed. Bybit P2P API підключається, якщо у `.env` є `BYBIT_API_KEY` і `BYBIT_API_SECRET` та акаунт має потрібний P2P API access. Якщо Bybit недоступний, радар все одно може рахувати внутрішні Binance P2P маршрути.
+## Saved data
 
-## Сторінка
+Saved niche ideas and drafts are stored in this browser's local storage and can be exported. Cross-device database sync is not configured. Never save secrets in research notes.
 
-GitHub Pages dashboard:
-https://omeljanpadovcky-create.github.io/T/
+## API routes
 
-На сторінці BUY / SELL посилання теж мають денний лічильник: на 5-те відкриття з'являється warning.
-
-Деталі: `p2p_radar/README.md`.
-
-
-## Список бірж
-
-MYSHKA більше не намагається "шукати біржі по інтернету". Вона проходить тільки явний список у `p2p_radar/exchanges.json`.
-
-Поточний список:
-- Binance
-- Bybit
-- OKX
-
-Повний цикл запускається кожні **15 секунд**. Для кожної підключеної біржі MYSHKA бере BUY і SELL P2P-пропозиції, переводить їх у єдиний формат, перебирає комбінації, віднімає модель витрат/буфер і ранжує маршрути за net spread та risk score.
-
-Щоб додати нову біржу, спочатку додається її `id` у `exchanges.json`, потім окремий adapter для її P2P market-data. Якщо adapter ще не підключений, біржа показується як OFF замість вигаданих котирувань.
-
-
-## MYSHKA ETSY AI
-
-A separate Etsy research and listing-draft workspace lives in `etsy-ai/`. It is intentionally isolated from the crypto tools above.
-
-- Cloud app: https://myshka-etsy-ai.vercel.app/
-- Source: https://github.com/omeljanpadovcky-create/T/tree/main/etsy-ai
-
-The app does not auto-publish Etsy listings. Live Etsy search and optional AI drafting require approved API credentials added as sensitive Vercel environment variables.
+- `GET /api/health`
+- `GET /api/etsy/search?keywords=personalized%20dog%20collar&limit=40`
+- `POST /api/ai/draft`
