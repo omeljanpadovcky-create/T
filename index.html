@@ -250,10 +250,13 @@ function formatNiche(item){
 }
 function renderSearch(data){
  const m=data.metrics||{};
- const cur=(data.items||[]).find(i=>i.currency)?.currency||"USD";
+ const priceGroups=Array.isArray(m.priceByCurrency)?m.priceByCurrency:[];
+ const priceSummary=priceGroups.length
+  ?priceGroups.map(p=>'<div><strong style="font-size:14px">'+money(p.medianPrice,p.currency)+'</strong> <span style="font-size:10px;color:var(--muted)">'+escapeHtml(p.currency)+' · '+number(p.pricedListings,0)+' listings</span></div>').join("")
+  :'<strong>—</strong>';
  $("searchResults").innerHTML=
  '<div class="result-head"><div><h3>Marketplace snapshot: '+escapeHtml(data.keywords)+'</h3><p class="sub">Retrieved '+escapeHtml(new Date(data.fetchedAt).toLocaleString())+' · '+number(data.sampleCount,0)+' returned listings</p></div><span class="chip green">LIVE API DATA</span></div>'+
- '<div class="stats3"><div class="mini"><small>Count reported by Etsy</small><strong>'+number(data.resultCount,0)+'</strong><p>Endpoint result count, not demand</p></div><div class="mini"><small>Median listed price</small><strong>'+money(m.medianPrice,cur)+'</strong><p>Median of priced sample results</p></div><div class="mini"><small>Average favorites</small><strong>'+number(m.averageFavorites,1)+'</strong><p>Only returned listings with a numeric value</p></div></div>'+
+ '<div class="stats3"><div class="mini"><small>Count reported by Etsy</small><strong>'+number(data.resultCount,0)+'</strong><p>Endpoint result count, not demand</p></div><div class="mini"><small>Median listed price by currency</small><div style="margin-top:5px;line-height:1.7">'+priceSummary+'</div><p>Each currency is calculated separately</p></div><div class="mini"><small>Average favorites</small><strong>'+number(m.averageFavorites,1)+'</strong><p>Only returned listings with a numeric value</p></div></div>'+
  '<div class="notice" style="margin-bottom:12px"><strong>Interpretation:</strong> '+escapeHtml(data.caveat||"Active listings are not sales data.")+'</div>'+
  '<div class="table-wrap"><table><thead><tr><th>Listing</th><th>Price</th><th>Favorites</th><th>Type</th></tr></thead><tbody>'+(data.items||[]).map(formatNiche).join("")+'</tbody></table></div>';
  $("countSample").textContent=number(data.sampleCount,0);
@@ -279,7 +282,7 @@ $("saveSearchButton").addEventListener("click",()=>{
  const title=$("keywords").value.trim();
  if(title.length<2){$("searchState").textContent="Enter a niche name first.";return;}
  const store=readStore();
- store.ideas.unshift({id:Date.now(),title,note:$("nicheNote").value.trim(),savedAt:new Date().toISOString(),source:currentSearch&&currentSearch.keywords===title?"Etsy search snapshot":"Manual idea",resultCount:currentSearch&&currentSearch.keywords===title?currentSearch.resultCount:null,medianPrice:currentSearch&&currentSearch.keywords===title?currentSearch.metrics.medianPrice:null});
+ store.ideas.unshift({id:Date.now(),title,note:$("nicheNote").value.trim(),savedAt:new Date().toISOString(),source:currentSearch&&currentSearch.keywords===title?"Etsy search snapshot":"Manual idea",resultCount:currentSearch&&currentSearch.keywords===title?currentSearch.resultCount:null,priceByCurrency:currentSearch&&currentSearch.keywords===title?currentSearch.metrics.priceByCurrency:null});
  writeStore(store);$("searchState").textContent="Saved locally in this browser.";
 });
 $("saveProfitButton").addEventListener("click",()=>{
