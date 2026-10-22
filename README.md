@@ -1,63 +1,36 @@
-# MYSHKA P2P RADAR
+# MYSHKA ETSY AI
 
-Цей репозиторій тепер сфокусований на P2P-радарі: скан → розрахунок спреду → risk score → Telegram alert. Гроші та ордери він сам не відправляє.
+A seller-facing research workspace for Etsy. It searches public active listings through Etsy Open API v3, summarizes prices in the returned sample, estimates per-item margin from seller-entered costs, and optionally drafts listing copy through OpenAI.
 
-## Запуск
+**No listing creation or automatic publishing is implemented.** Search results are active listings, not evidence of sales or proof of demand. Saved research currently lives in this browser's local storage and can be exported.
 
-1. Відкрий `p2p_radar/.env` і встав Telegram:
-   - `TELEGRAM_BOT_TOKEN`
-   - `TELEGRAM_CHAT_ID`
-2. Двічі натисни `START_P2P_RADAR.bat`.
-3. Якщо хочеш, щоб радар стартував сам після входу у Windows — один раз запусти `INSTALL_P2P_AUTOSTART.bat`.
+## Vercel setup
 
-Якщо `p2p_radar/.env` ще немає, перший запуск створить його з `.env.example`. Старий кореневий `.env` теж читається.
+Import the repository from GitHub into Vercel with the repository root as the project Root Directory. Set these as server-side Environment Variables, then redeploy:
 
-## Що приходить у Telegram
+- `ETSY_API_KEY`: Etsy keystring, or the combined `keystring:shared_secret`.
+- `ETSY_SHARED_SECRET`: required only when `ETSY_API_KEY` contains only the keystring.
+- `OPENAI_API_KEY`: optional; enables AI draft generation.
+- `OPENAI_MODEL`: optional; defaults to `gpt-4o-mini`.
 
-Коли є маршрут, що проходить фільтри:
-- де купити USDT;
-- де продати USDT;
-- BUY / SELL ціни;
-- gross spread;
-- estimated net % і приблизний результат у UAH;
-- risk score;
-- кнопки BUY / SELL;
-- кнопка **«Я перевірив маршрут»**;
-- кнопка **«Цикл завершено»**;
-- pause / status.
+The Etsy API requires the `x-api-key` request header in `keystring:shared_secret` format. Credentials are read only by serverless functions and are never sent to the browser. Etsy access depends on the app's approval/access level. See [Etsy API authentication](https://developer.etsy.com/documentation/essentials/authentication/).
 
-Після **5 підтверджених перевірок маршруту за день** MYSHKA показує warning. Це внутрішній лічильник безпеки, а не банківський ліміт.
+## GitHub Pages
 
-## Telegram-команди
+GitHub Pages can render the static interface but cannot run the `/api` endpoints. Use the Vercel URL directly, or click **API** and configure the Vercel deployment URL in the GitHub Pages copy.
 
-- `/p2p_status`
-- `/p2p_pause`
-- `/p2p_resume`
-- `/p2p_done`
+## Guardrails
 
-## Bybit
+- The app does not publish, edit, or create Etsy listings.
+- Marketplace metrics are not fabricated. Missing fields are shown as unavailable.
+- Margin is an estimate based on costs and fee percentage entered by the seller.
+- AI-generated copy is a draft and must be reviewed by a person.
+- AI prompts are instructed not to invent product claims or generate functional guides, recipes, craft patterns, or instructions buyers rely on.
+- For AI-created items, sellers should accurately disclose AI use in the listing description as required by Etsy's current rules.
+- Verify category-specific requirements before using a draft.
 
-Binance працює через read-only P2P feed. Bybit P2P API підключається, якщо у `.env` є `BYBIT_API_KEY` і `BYBIT_API_SECRET` та акаунт має потрібний P2P API access. Якщо Bybit недоступний, радар все одно може рахувати внутрішні Binance P2P маршрути.
+## Local saves
 
-## Сторінка
+Ideas are saved to this browser's `localStorage`. Export JSON to back them up. Cross-device database sync is not configured yet; never place a database service key in browser code.
 
-GitHub Pages dashboard:
-https://omeljanpadovcky-create.github.io/T/
-
-На сторінці BUY / SELL посилання теж мають денний лічильник: на 5-те відкриття з'являється warning.
-
-Деталі: `p2p_radar/README.md`.
-
-
-## Список бірж
-
-MYSHKA більше не намагається "шукати біржі по інтернету". Вона проходить тільки явний список у `p2p_radar/exchanges.json`.
-
-Поточний список:
-- Binance
-- Bybit
-- OKX
-
-Повний цикл запускається кожні **15 секунд**. Для кожної підключеної біржі MYSHKA бере BUY і SELL P2P-пропозиції, переводить їх у єдиний формат, перебирає комбінації, віднімає модель витрат/буфер і ранжує маршрути за net spread та risk score.
-
-Щоб додати нову біржу, спочатку додається її `id` у `exchanges.json`, потім окремий adapter для її P2P market-data. Якщо adapter ще не підключений, біржа показується як OFF замість вигаданих котирувань.
+Environment example: `.env.example`. Do not commit actual secrets.
