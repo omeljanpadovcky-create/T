@@ -11,11 +11,11 @@ The app now lives at the repository root. Use the Vercel project named `myshka-e
 Set these as Vercel Environment Variables for Production and Preview as appropriate, then redeploy:
 
 - `ETSY_API_KEY`: the full Etsy API value in `keystring:shared_secret` format.
-- `MYSHKA_ACCESS_TOKEN`: a long random private token that gates AI drafting. Enter the same token into the app's **Private AI access token** field. Do not share it.
+- `MYSHKA_ACCESS_TOKEN`: a long random private token that gates both Etsy search and AI drafting. Enter the same token into the app's **Private AI access token** field. Do not share it.
 - `OPENAI_API_KEY`: optional; enables AI listing draft generation. Keep it server-side only.
 - `OPENAI_MODEL`: optional; defaults to `gpt-4.1-mini`.
 
-Do not set `OPENAI_API_KEY` until `MYSHKA_ACCESS_TOKEN` is configured. The AI endpoint checks the access token before making a paid provider request. Never put API keys in Git or browser code.
+Do not set `OPENAI_API_KEY` until `MYSHKA_ACCESS_TOKEN` is configured. Both Etsy search and the AI endpoint check the access token before any external API request. Never put API keys in Git or browser code.
 
 Etsy's API requires the `x-api-key` header formatted as `keystring:shared_secret`. The Etsy app must be active/approved and allowed to search marketplace listings. See [Etsy API authentication](https://developer.etsy.com/documentation/essentials/authentication/).
 
