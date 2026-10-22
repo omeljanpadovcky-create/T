@@ -10,7 +10,9 @@ export default async function handler(req, res) {
     app: "MYSHKA ETSY AI",
     version: "0.1.0",
     etsyConfigured: Boolean(process.env.ETSY_API_KEY),
-    aiConfigured: Boolean(process.env.OPENAI_API_KEY),
+    aiConfigured: Boolean(process.env.OPENAI_API_KEY && process.env.MYSHKA_ACCESS_TOKEN),
+    aiProviderConfigured: Boolean(process.env.OPENAI_API_KEY),
+    aiAccessConfigured: Boolean(process.env.MYSHKA_ACCESS_TOKEN),
     listingPublishing: false,
     mode: "research-and-human-review"
   });
