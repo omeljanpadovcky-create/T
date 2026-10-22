@@ -186,11 +186,11 @@ async function getHealth(){
     health=data;
     $("etsyBadge").textContent=data.etsyConfigured?"ETSY API CONNECTED":"ETSY API NEEDS KEY";
     $("etsyBadge").className="chip "+(data.etsyConfigured?"green":"gold");
-    $("aiBadge").textContent=data.aiConfigured?"AI DRAFTS CONNECTED":"AI DRAFTS NEED KEY";
+    $("aiBadge").textContent=data.aiConfigured?"AI KEY CONFIGURED":"AI DRAFTS NEED KEY";
     $("aiBadge").className="chip "+(data.aiConfigured?"green":"gold");
     $("healthStatus").className="statusline "+(data.etsyConfigured?"":"warn");
     $("healthStatus").textContent="Server online · "+data.app+" v"+data.version+" · Etsy API: "+(data.etsyConfigured?"configured":"not configured")+" · AI: "+(data.aiConfigured?"configured":"not configured")+" · Auto-publishing: off.";
-    $("draftStatus").textContent=data.aiConfigured?"AI endpoint configured. Results are drafts only and require your review.":"AI drafting needs OPENAI_API_KEY and MYSHKA_ACCESS_TOKEN in Vercel. Enter the private access token above; never enter the provider API key here.";
+    $("draftStatus").textContent=data.aiConfigured?"An API key is present; OpenAI access is verified when you generate a draft. Drafts require your review.":"AI drafting needs OPENAI_API_KEY and MYSHKA_ACCESS_TOKEN in Vercel. Enter the private access token above; never enter the provider API key here."
     if(!data.etsyConfigured) $("searchState").textContent="Live search requires an approved Etsy API key stored in Vercel.";
   }catch(e){
     $("etsyBadge").textContent="SERVER NOT CONNECTED";
