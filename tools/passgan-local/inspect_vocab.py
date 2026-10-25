@@ -31,6 +31,13 @@ def main():
     print("First 80 inverse-map entries (repr):")
     for index, value in enumerate(inv_charmap[:80]):
         print("  {0}: {1}".format(index, repr(value)))
+    unusual = []
+    for index, value in enumerate(inv_charmap):
+        if isinstance(value, str) and any(ord(ch) > 127 or ord(ch) < 32 or ord(ch) == 127 for ch in value):
+            unusual.append((index, value))
+    print("Non-ASCII/control vocabulary entries:", len(unusual))
+    for index, value in unusual[:100]:
+        print("  {0}: {1}".format(index, repr(value)))
 
     with open(args.samples, "rb") as handle:
         raw = handle.read()
