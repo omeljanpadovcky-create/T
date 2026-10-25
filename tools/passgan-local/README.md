@@ -30,7 +30,11 @@ The script looks for pretrained/checkpoints/195000.ckpt.meta in the cloned sourc
 If that folder is not present, copy your existing pretrained directory into tools\passgan-local\PassGAN\pretrained, then rerun the script. The checkpoint's .meta, .index, and .data-00000-of-00001 files are required.
 
 ## Output
-A successful smoke test writes generated_test.txt into the local tools\passgan-local\PassGAN folder. It is intentionally small; generated files and model assets are excluded from Git.
+A successful setup smoke test writes generated_test.txt into the local tools\passgan-local\PassGAN folder. To generate a larger local sample file after setup, run:
+
+    .\tools\passgan-local\run.ps1
+
+The runner generates 1,024 samples and saves them to tools\passgan-local\PassGAN\generated_samples.txt, then prints the first 10 lines. Generated files and model assets are excluded from Git. These samples are for authorized local password-strength research only; do not use them to attempt access to anyone else's accounts.
 
 ## Troubleshooting
 - Docker daemon not running: start Docker Desktop, wait until it reports running, and rerun.
