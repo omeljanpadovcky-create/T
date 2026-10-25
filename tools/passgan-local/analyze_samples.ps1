@@ -1,8 +1,8 @@
-$ErrorActionPreference = "Stop"
-
 param(
     [string]$Path = (Join-Path $PSScriptRoot "PassGAN\generated_samples.txt")
 )
+
+$ErrorActionPreference = "Stop"
 
 if (-not (Test-Path -LiteralPath $Path)) {
     throw "Sample file not found: $Path"
@@ -20,18 +20,18 @@ $lengths = @($lines | ForEach-Object { $_.Length } | Sort-Object)
 Write-Host ""
 Write-Host "PassGAN sample report" -ForegroundColor Cyan
 Write-Host "---------------------"
-Write-Host ("File:             {0}" -f (Resolve-Path -LiteralPath $Path))
-Write-Host ("Bytes:            {0}" -f $bytes.Length)
-Write-Host ("Non-ASCII bytes:  {0}" -f $nonAsciiBytes)
-Write-Host ("Non-empty lines:  {0}" -f $lines.Count)
-Write-Host ("Unique lines:     {0}" -f $uniqueLines.Count)
-Write-Host ("Duplicate lines:  {0}" -f ($lines.Count - $uniqueLines.Count))
-Write-Host ("Non-ASCII lines:  {0}" -f $nonAsciiLines.Count)
+Write-Host ("File:               {0}" -f (Resolve-Path -LiteralPath $Path))
+Write-Host ("Bytes:              {0}" -f $bytes.Length)
+Write-Host ("Non-ASCII bytes:    {0}" -f $nonAsciiBytes)
+Write-Host ("Non-empty lines:    {0}" -f $lines.Count)
+Write-Host ("Unique lines:       {0}" -f $uniqueLines.Count)
+Write-Host ("Duplicate lines:    {0}" -f ($lines.Count - $uniqueLines.Count))
+Write-Host ("Non-ASCII lines:    {0}" -f $nonAsciiLines.Count)
 Write-Host ("Control-char lines: {0}" -f $controlLines.Count)
 
 if ($lines.Count -gt 0) {
-    Write-Host ("Shortest line:    {0} chars" -f $lengths[0])
-    Write-Host ("Longest line:     {0} chars" -f $lengths[-1])
+    Write-Host ("Shortest line:      {0} chars" -f $lengths[0])
+    Write-Host ("Longest line:       {0} chars" -f $lengths[-1])
 }
 
 if ($nonAsciiLines.Count -gt 0) {
