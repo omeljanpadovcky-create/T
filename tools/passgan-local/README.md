@@ -15,7 +15,7 @@ The legacy TensorFlow 1.4.1 stack is old and intended only for this isolated exp
 ## Run on Windows
 1. Download this repository's `feature/passgan-local-lab` branch as ZIP and extract it, or check out the branch with Git.
 2. Open PowerShell in the extracted repository root.
-3. Run these commands:
+3. Run:
 
     Set-ExecutionPolicy -Scope Process Bypass
     .\tools\passgan-local\setup.ps1
@@ -23,7 +23,7 @@ The legacy TensorFlow 1.4.1 stack is old and intended only for this isolated exp
 The setup script clones the upstream PassGAN source into this folder, builds the legacy container, converts Python 2 syntax in the local clone, applies a CPU layout compatibility patch, and runs a 64-sample smoke test. The cloned source folder is ignored by Git and is not committed.
 
 ## Checkpoint note
-The script looks for `pretrained/checkpoints/195000.ckpt.meta` in the cloned source. If missing, it attempts to copy the pretrained folder from your existing local copy at:
+The script looks for `pretrained/checkpoints/195000.ckpt.meta` in the cloned source. If missing, it attempts to copy the pretrained folder from:
 
 `%USERPROFILE%\Downloads\PassGAN\PassGAN-master\pretrained`
 
@@ -42,13 +42,14 @@ To inspect an existing output without generating again:
 
     .\tools\passgan-local\analyze_samples.ps1
 
-Or pass a specific file:
+The PowerShell report includes file size, non-ASCII bytes and lines, duplicates, line lengths, and control-character checks.
 
-    .\tools\passgan-local\analyze_samples.ps1 -Path "C:\path\to\samples.txt"
+### Inspect the character vocabulary
+To check whether unusual characters are part of the model vocabulary and inspect the file's actual UTF-8 decoding, first download `inspect_vocab.py` into `tools\passgan-local`, then run from that directory:
 
-The report includes file size, non-ASCII byte and line counts, duplicates, line lengths, and control-character checks. Non-ASCII output is a diagnostic signal, not proof of corruption; check the model vocabulary and encoding before changing the generated file.
+    docker run --rm -v "${PWD}\PassGAN:/app" -v "${PWD}:/tools" passgan-legacy python /tools/inspect_vocab.py --input-dir /app/pretrained --samples /app/generated_samples.txt
 
-Generated files and model assets are excluded from Git. These samples are for authorized local password-strength research only; do not use them to attempt access to anyone else's accounts.
+The report prints vocabulary entries using Python `repr`, checks UTF-8 decoding, and shows control-character examples. Non-ASCII characters may be part of the model vocabulary; they are not automatically evidence of corruption. Avoid re-encoding or replacing characters until the vocabulary and raw bytes have been checked.
 
 ## Troubleshooting
 - Docker daemon not running: start Docker Desktop, wait until it reports running, and rerun.
@@ -56,7 +57,7 @@ Generated files and model assets are excluded from Git. These samples are for au
 - Checkpoint missing: follow the checkpoint note above.
 - TensorFlow version warning: the old TensorFlow wheel may emit a compile/runtime Python-version warning. The warning alone is not fatal; check the final exit status and output count.
 - CPU convolution error: rerun the setup script to apply the patch to the isolated clone. It does not alter the original PassGAN folder in Downloads.
-- Unexpected characters in output: run `analyze_samples.ps1` first. Do not blindly replace characters or re-encode the file until the model's character map and actual bytes have been checked.
+- Unexpected characters in output: run both diagnostic scripts before changing encoding.
 
 ## Scope
 This is an experimental compatibility wrapper, not a maintained or secure production service. TensorFlow 1.4.1 is end-of-life; run it only in the disposable Docker container and do not mount unrelated project directories or secrets.
