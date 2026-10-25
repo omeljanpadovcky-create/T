@@ -41,3 +41,8 @@ Saved niche ideas and drafts are stored in this browser's local storage and can 
 - `POST /api/ai/draft` — protected AI drafting; output remains a draft for human review.
 
 The connection test requires both `MYSHKA_ACCESS_TOKEN` and `ETSY_API_KEY` to be set in Vercel. It confirms API access only; it does not measure demand or sales.
+
+
+## Optional local PassGAN experiment
+
+This repository also has an isolated, local-only compatibility wrapper for the legacy PassGAN password-generation research code. It is kept under [tools/passgan-local](tools/passgan-local/README.md), is not imported by the Etsy app, and is not part of the Vercel deployment. It uses an old CPU-only TensorFlow container and requires the upstream source and pretrained checkpoint files locally. Use only for authorized password-strength research on systems you own or have permission to test.
