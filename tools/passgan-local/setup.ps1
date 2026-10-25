@@ -27,7 +27,9 @@ if (-not (Test-Path $checkpointMeta)) {
     $localPretrained = Join-Path $env:USERPROFILE "Downloads\PassGAN\PassGAN-master\pretrained"
     if (Test-Path $localPretrained) {
         Write-Host "Copying the existing pretrained model into the isolated checkout..."
-        Copy-Item $localPretrained (Join-Path $passgan "pretrained") -Recurse -Force
+        $targetPretrained = Join-Path $passgan "pretrained"
+        New-Item -ItemType Directory -Force -Path $targetPretrained | Out-Null
+        Copy-Item -Path (Join-Path $localPretrained "*") -Destination $targetPretrained -Recurse -Force
     }
 }
 
