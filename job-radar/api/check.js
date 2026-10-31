@@ -31,6 +31,26 @@ const SOURCES = [
     }))
   },
   {
+    name: "Remotive Blender",
+    url: "https://remotive.com/api/remote-jobs?search=blender",
+    parse: (json) => (json.jobs || []).map(j => ({
+      id: "remotive:" + j.id, title: j.title, company: j.company_name,
+      url: j.url, description: j.description || "", tags: j.tags || [],
+      location: j.candidate_required_location || "Remote",
+      salary: j.salary || "", type: j.job_type || "", source: "Remotive"
+    }))
+  },
+  {
+    name: "Remotive Game Art",
+    url: "https://remotive.com/api/remote-jobs?search=game%20artist",
+    parse: (json) => (json.jobs || []).map(j => ({
+      id: "remotive:" + j.id, title: j.title, company: j.company_name,
+      url: j.url, description: j.description || "", tags: j.tags || [],
+      location: j.candidate_required_location || "Remote",
+      salary: j.salary || "", type: j.job_type || "", source: "Remotive"
+    }))
+  },
+  {
     name: "RemoteOK",
     url: "https://remoteok.com/api",
     parse: (json) => (Array.isArray(json) ? json.slice(1) : []).map(j => ({
