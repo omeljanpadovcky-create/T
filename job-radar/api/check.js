@@ -85,6 +85,8 @@ function scoreJob(job) {
   const searchable = title + " " + tags + " " + body.slice(0, 5000);
   if (!title || !job.url) return 0;
   if (NEGATIVE.some(word => title.includes(word) || searchable.includes(word))) return 0;
+  if (/senior|lead|principal|director|head of/.test(title)) return 0;
+  if (/english.{0,50}(b2|c1|c2|fluent|native|advanced)/i.test(searchable)) return 0;
   const salary = String(job.salary || "").toLowerCase();
   const hourly = salary.match(/(?:\\$|usd\\s*)(\\d+(?:\\.\\d+)?)\\s*(?:\\/|per\\s+)?(?:hour|hr)\\b/);
   if (hourly && Number(hourly[1]) < 5) return 0;
