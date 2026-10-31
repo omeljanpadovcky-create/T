@@ -1,0 +1,11 @@
+{
+  "name": "myshka-job-radar",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "vercel dev"
+  }
+}
