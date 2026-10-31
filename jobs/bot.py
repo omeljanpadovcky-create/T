@@ -1,7 +1,7 @@
+import hashlib
 import json
 import os
 import re
-import hashlib
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -10,12 +10,12 @@ import requests
 ROOT = Path(__file__).resolve().parent
 CONFIG = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
 SEEN_PATH = ROOT / "seen.json"
-HEADERS = {"User-Agent": "MYSHKA-JOBS/0.1 (+https://github.com/omeljanpadovcky-create/T)"}
+HEADERS = {"User-Agent": "MYSHKA-JOBS/0.1"}
 TIMEOUT = 20
 
 
 def norm(value):
-    return re.sub(r"\\s+", " ", str(value or "")).strip().lower()
+    return re.sub(r"\s+", " ", str(value or "")).strip().lower()
 
 
 def fetch_json(url):
@@ -30,37 +30,38 @@ def fetch_json(url):
 
 def collect_jobs():
     jobs = []
-
-    data = fetch_json("https://www.arbeitnow.com/api/job-board-api")
-    if isinstance(data, dict):
-        for item in data.get("data", []):
-            jobs.append({
-                "title": item.get("title"), "company": item.get("company_name"),
-                "location": item.get("location"), "url": item.get("url"),
-                "description": item.get("description"), "tags": item.get("tags", []),
-                "source": "Arbeitnow", "remote": item.get("remote", False)
-            })
-
-    data = fetch_json("https://remoteok.com/api")
-    if isinstance(data, list):
-        for item in data:
-            if isinstance(item, dict) and item.get("position"):
+    sources = [
+        ("Arbeitnow", "https://www.arbeitnow.com/api/job-board-api"),
+        ("RemoteOK", "https://remoteok.com/api"),
+        ("Remotive", "https://remotive.com/api/remote-jobs?search=3d"),
+    ]
+    for source, url in sources:
+        data = fetch_json(url)
+        if source == "Arbeitnow" and isinstance(data, dict):
+            for item in data.get("data", []):
                 jobs.append({
-                    "title": item.get("position"), "company": item.get("company"),
-                    "location": item.get("location") or "Remote",
-                    "url": item.get("url"), "description": item.get("description"),
-                    "tags": item.get("tags", []), "source": "RemoteOK", "remote": True
+                    "title": item.get("title"), "company": item.get("company_name"),
+                    "location": item.get("location"), "url": item.get("url"),
+                    "description": item.get("description"), "tags": item.get("tags", []),
+                    "source": source, "remote": item.get("remote", False)
                 })
-
-    data = fetch_json("https://remotive.com/api/remote-jobs?search=3d")
-    if isinstance(data, dict):
-        for item in data.get("jobs", []):
-            jobs.append({
-                "title": item.get("title"), "company": item.get("company_name"),
-                "location": item.get("candidate_required_location") or "Remote",
-                "url": item.get("url"), "description": item.get("description"),
-                "tags": [item.get("category", "")], "source": "Remotive", "remote": True
-            })
+        elif source == "RemoteOK" and isinstance(data, list):
+            for item in data:
+                if isinstance(item, dict) and item.get("position"):
+                    jobs.append({
+                        "title": item.get("position"), "company": item.get("company"),
+                        "location": item.get("location") or "Remote", "url": item.get("url"),
+                        "description": item.get("description"), "tags": item.get("tags", []),
+                        "source": source, "remote": True
+                    })
+        elif source == "Remotive" and isinstance(data, dict):
+            for item in data.get("jobs", []):
+                jobs.append({
+                    "title": item.get("title"), "company": item.get("company_name"),
+                    "location": item.get("candidate_required_location") or "Remote",
+                    "url": item.get("url"), "description": item.get("description"),
+                    "tags": [item.get("category", "")], "source": source, "remote": True
+                })
     return jobs
 
 
@@ -94,8 +95,7 @@ def score_job(job):
         score += 8
     if "remote" in location or job.get("remote"):
         score += 5
-    score = min(score, 100)
-    return score, ", ".join(matched[:5]) or "Relevant 3D role; verify requirements"
+    return min(score, 100), ", ".join(matched[:5]) or "Relevant 3D role; verify requirements"
 
 
 def job_id(job):
@@ -103,17 +103,16 @@ def job_id(job):
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
-def send_telegram(text):
+def send_telegram(message):
     token = os.environ["TELEGRAM_BOT_TOKEN"]
     chat_id = os.environ["TELEGRAM_CHAT_ID"]
     response = requests.post(
         f"https://api.telegram.org/bot{token}/sendMessage",
-        json={"chat_id": chat_id, "text": text, "disable_web_page_preview": True},
+        json={"chat_id": chat_id, "text": message, "disable_web_page_preview": True},
         timeout=TIMEOUT
     )
     response.raise_for_status()
-    payload = response.json()
-    if not payload.get("ok"):
+    if not response.json().get("ok"):
         raise RuntimeError("Telegram API rejected the message")
 
 
@@ -127,22 +126,24 @@ def main():
         if score >= CONFIG["minimum_score"] and key not in seen:
             matches.append((score, reason, key, job))
 
-    matches.sort(key=lambda x: x[0], reverse=True)
+    matches.sort(key=lambda item: item[0], reverse=True)
+    sent = 0
     for score, reason, key, job in matches[:CONFIG["max_results_per_run"]]:
         message = (
-            f"🐭 MYSHKA JOBS — {score}/100\\n"
-            f"{job.get('title')}\\n"
-            f"🏢 {job.get('company') or 'Company not specified'}\\n"
-            f"🌍 {job.get('location') or 'Remote'}\\n"
-            f"🔎 {reason}\\n"
-            f"📌 Source: {job.get('source')}\\n"
+            f"🐭 MYSHKA JOBS — {score}/100\n"
+            f"{job.get('title')}\n"
+            f"🏢 {job.get('company') or 'Company not specified'}\n"
+            f"🌍 {job.get('location') or 'Remote'}\n"
+            f"🔎 {reason}\n"
+            f"📌 Source: {job.get('source')}\n"
             f"{job.get('url')}"
         )
         send_telegram(message)
         seen.add(key)
+        sent += 1
 
-    SEEN_PATH.write_text(json.dumps(sorted(seen), ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
-    print(f"Scanned {len(jobs)} listings; sent {min(len(matches), CONFIG['max_results_per_run'])} new matches.")
+    SEEN_PATH.write_text(json.dumps(sorted(seen), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"Scanned {len(jobs)} listings; sent {sent} new matches.")
 
 
 if __name__ == "__main__":
