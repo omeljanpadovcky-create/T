@@ -1,0 +1,46 @@
+{
+  "target_titles": [
+    "3D Artist",
+    "3D Modeler",
+    "3D Modeller",
+    "Prop Artist",
+    "3D Prop Artist",
+    "Environment Artist",
+    "Junior Environment Artist",
+    "Game Artist",
+    "Roblox 3D Artist",
+    "3D Generalist"
+  ],
+  "exclude_terms": [
+    "senior",
+    "lead",
+    "principal",
+    "director",
+    "manager",
+    "head of",
+    "unpaid",
+    "internship"
+  ],
+  "skills": [
+    "blender",
+    "3d modeling",
+    "3d modelling",
+    "hard surface",
+    "props",
+    "environment art",
+    "game art",
+    "roblox",
+    "substance painter"
+  ],
+  "allowed_locations": [
+    "worldwide",
+    "anywhere",
+    "remote",
+    "europe",
+    "ukraine",
+    "european union",
+    "emea"
+  ],
+  "minimum_score": 45,
+  "max_results_per_run": 12
+}
