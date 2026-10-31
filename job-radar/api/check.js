@@ -64,7 +64,10 @@ function scoreJob(job) {
   const tags = (job.tags || []).join(" ").toLowerCase();
   const searchable = title + " " + tags + " " + body.slice(0, 5000);
   if (!title || !job.url) return 0;
-  if (NEGATIVE.some(word => title.includes(word))) return 0;
+  if (NEGATIVE.some(word => title.includes(word) || searchable.includes(word))) return 0;
+  const salary = String(job.salary || "").toLowerCase();
+  const hourly = salary.match(/(?:\\$|usd\\s*)(\\d+(?:\\.\\d+)?)\\s*(?:\\/|per\\s+)?(?:hour|hr)\\b/);
+  if (hourly && Number(hourly[1]) < 5) return 0;
 
   const remoteText = (job.location + " " + body.slice(0, 1200)).toLowerCase();
   const isRemote = /remote|anywhere|worldwide|work from home|distributed/.test(remoteText);
