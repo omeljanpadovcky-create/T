@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MYSHKA JOB RADAR</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#090b14;color:#eef1ff;font:16px/1.6 system-ui,Arial,sans-serif}
+    main{max-width:850px;margin:0 auto;padding:48px 22px}.tag{color:#8ea1ff;font-weight:700;letter-spacing:.14em;font-size:12px}
+    h1{font-size:clamp(34px,7vw,58px);line-height:1.04;margin:12px 0}p{color:#b8bfd7}
+    .panel{background:#12182a;border:1px solid #293252;border-radius:18px;padding:22px;margin:20px 0}
+    li{margin:8px 0;color:#dce2ff}a{color:#aabaff}.pill{display:inline-block;padding:5px 10px;border-radius:99px;background:#202b4a;color:#b9c8ff;font-size:13px}
+    code{color:#c4d1ff;background:#1b2340;padding:2px 5px;border-radius:5px}
+  </style>
+</head>
+<body><main>
+  <div class="tag">PERSONAL CAREER SCANNER · V1.0</div>
+  <h1>🐭 MYSHKA<br>JOB RADAR</h1>
+  <p>Персональний пошук віддалених вакансій із доставкою найкращих збігів у Telegram.</p>
+  <span class="pill">3D Character Artist</span> <span class="pill">Blender Artist</span> <span class="pill">Game Assets</span> <span class="pill">Junior 3D</span>
+  <section class="panel">
+    <h2>Як працює</h2>
+    <ol>
+      <li>Щодня перевіряє Remotive, RemoteOK та Arbeitnow.</li>
+      <li>Відбирає remote-вакансії за 3D/Blender/Game Art навичками.</li>
+      <li>Відсіює нерелевантні AI-annotation, unpaid та sales ролі.</li>
+      <li>Ранжує збіги й надсилає до 8 найкращих у Telegram.</li>
+    </ol>
+  </section>
+  <section class="panel">
+    <h2>Статус системи</h2>
+    <p id="status">Перевіряю конфігурацію…</p>
+    <p><a href="/api/health">Відкрити технічний статус API</a></p>
+  </section>
+  <section class="panel">
+    <h2>Профіль пошуку</h2>
+    <p>Локація: віддалено, Україна / Європа / Worldwide. Рівень: Junior та Middle. Інструменти: Blender, Photoshop, Figma, Canva. Англійська: A2. Портфоліо: близько 15 робіт.</p>
+    <p>Система не подає заявки автоматично — вона надсилає посилання, щоб ти сам перевірив умови та подався.</p>
+  </section>
+</main>
+<script>
+fetch('/api/health').then(r=>r.json()).then(d=>{
+ const c=d.configured;
+ document.getElementById('status').textContent =
+   'API працює. Telegram: '+(c.telegram?'підключений':'потрібне налаштування')+
+   '. Захист Cron: '+(c.cronProtection?'увімкнений':'потрібне налаштування')+
+   '. Антидублікати: '+(c.deduplication?'увімкнені':'потрібне налаштування');
+}).catch(()=>document.getElementById('status').textContent='API ще не налаштований або не розгорнутий.');
+</script></body></html>
