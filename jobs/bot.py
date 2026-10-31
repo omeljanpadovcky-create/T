@@ -10,7 +10,7 @@ import requests
 ROOT = Path(__file__).resolve().parent
 CONFIG = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
 SEEN_PATH = ROOT / "seen.json"
-HEADERS = {"User-Agent": "MYSHKA-JOBS/0.2"}
+HEADERS = {"User-Agent": "MYSHKA-JOBS/0.3"}
 TIMEOUT = 20
 
 
@@ -50,7 +50,7 @@ def collect_jobs():
                 if isinstance(item, dict) and item.get("position"):
                     jobs.append({
                         "title": item.get("position"), "company": item.get("company"),
-                        "location": item.get("location") or "Remote", "url": item.get("url"),
+                        "location": item.get("location") or "Remote — country restrictions not specified", "url": item.get("url"),
                         "description": item.get("description"), "tags": item.get("tags", []),
                         "source": source, "remote": True
                     })
@@ -58,11 +58,43 @@ def collect_jobs():
             for item in data.get("jobs", []):
                 jobs.append({
                     "title": item.get("title"), "company": item.get("company_name"),
-                    "location": item.get("candidate_required_location") or "Remote",
+                    "location": item.get("candidate_required_location") or "Remote — country restrictions not specified",
                     "url": item.get("url"), "description": item.get("description"),
                     "tags": [item.get("category", "")], "source": source, "remote": True
                 })
-    return jobs
+    # Additional remote boards: Jobicy and Himalayas.
+    for tag in ["3d", "design", "game-development"]:
+        data = fetch_json(f"https://jobicy.com/api/v2/remote-jobs?count=50&tag={tag}")
+        if isinstance(data, dict):
+            for item in data.get("jobs", []):
+                jobs.append({
+                    "title": item.get("jobTitle"), "company": item.get("companyName"),
+                    "location": item.get("jobGeo") or "Remote — country restrictions not specified",
+                    "url": item.get("url"), "description": item.get("jobDescription"),
+                    "tags": [item.get("jobIndustry", ""), item.get("jobLevel", ""), tag],
+                    "source": "Jobicy", "remote": True
+                })
+
+    data = fetch_json("https://himalayas.app/jobs/api?limit=100")
+    if isinstance(data, dict):
+        for item in data.get("jobs", []):
+            restrictions = item.get("locationRestrictions") or item.get("location") or []
+            if isinstance(restrictions, list):
+                location = ", ".join(str(x) for x in restrictions) or "Remote — country restrictions not specified"
+            else:
+                location = str(restrictions) or "Remote — country restrictions not specified"
+            jobs.append({
+                "title": item.get("title"), "company": item.get("companyName") or item.get("company"),
+                "location": location, "url": item.get("applicationLink") or item.get("url"),
+                "description": item.get("description"), "tags": item.get("categories", []),
+                "source": "Himalayas", "remote": True
+            })
+
+    # Remove duplicates returned by multiple sources.
+    unique = {}
+    for job in jobs:
+        unique[job_id(job)] = job
+    return list(unique.values())
 
 
 def score_job(job):
@@ -130,14 +162,19 @@ def main():
     matches.sort(key=lambda item: item[0], reverse=True)
     sent = 0
     for score, reason, key, job in matches[:CONFIG["max_results_per_run"]]:
+        location = job.get("location") or "Remote"
+        eligibility_note = ""
+        if "not specified" in norm(location):
+            eligibility_note = "⚠️ Країни найму не вказані — перевір, чи приймають кандидатів з України.\n"
         message = (
             f"🐭 MYSHKA JOBS — {score}/100\n"
-            f"{job.get('title')}\n"
+            f"💼 {job.get('title')}\n"
             f"🏢 {job.get('company') or 'Company not specified'}\n"
-            f"🌍 {job.get('location') or 'Remote'}\n"
+            f"🌍 {location}\n"
+            f"{eligibility_note}"
             f"🔎 {reason}\n"
-            f"📌 Source: {job.get('source')}\n"
-            f"{job.get('url')}"
+            f"📌 Джерело: {job.get('source')}\n"
+            f"🔗 {job.get('url')}"
         )
         send_telegram(message)
         seen.add(key)
