@@ -97,12 +97,23 @@ def collect_jobs():
     return list(unique.values())
 
 
+def as_text(value):
+    """Convert inconsistent API fields (strings, lists, dicts, None) safely to text."""
+    if value is None:
+        return ""
+    if isinstance(value, dict):
+        return " ".join(as_text(v) for v in value.values())
+    if isinstance(value, (list, tuple, set)):
+        return " ".join(as_text(v) for v in value)
+    return str(value)
+
+
 def score_job(job):
-    title = norm(job.get("title"))
-    location = norm(job.get("location"))
+    title = norm(as_text(job.get("title")))
+    location = norm(as_text(job.get("location")))
     text = norm(" ".join([
-        job.get("title", ""), job.get("description", ""),
-        " ".join(job.get("tags") or []), job.get("location", "")
+        as_text(job.get("title")), as_text(job.get("description")),
+        as_text(job.get("tags")), as_text(job.get("location"))
     ]))
     if not title or not job.get("url"):
         return 0, "Missing title or link"
