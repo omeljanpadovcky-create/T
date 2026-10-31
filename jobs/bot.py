@@ -10,12 +10,12 @@ import requests
 ROOT = Path(__file__).resolve().parent
 CONFIG = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
 SEEN_PATH = ROOT / "seen.json"
-HEADERS = {"User-Agent": "MYSHKA-JOBS/0.1"}
+HEADERS = {"User-Agent": "MYSHKA-JOBS/0.2"}
 TIMEOUT = 20
 
 
 def norm(value):
-    return re.sub(r"\s+", " ", str(value or "")).strip().lower()
+    return re.sub(r"\\s+", " ", str(value or "")).strip().lower()
 
 
 def fetch_json(url):
@@ -112,8 +112,9 @@ def send_telegram(message):
         timeout=TIMEOUT
     )
     response.raise_for_status()
-    if not response.json().get("ok"):
-        raise RuntimeError("Telegram API rejected the message")
+    payload = response.json()
+    if not payload.get("ok"):
+        raise RuntimeError(f"Telegram API rejected the message: {payload}")
 
 
 def main():
@@ -130,19 +131,27 @@ def main():
     sent = 0
     for score, reason, key, job in matches[:CONFIG["max_results_per_run"]]:
         message = (
-            f"🐭 MYSHKA JOBS — {score}/100\n"
-            f"{job.get('title')}\n"
-            f"🏢 {job.get('company') or 'Company not specified'}\n"
-            f"🌍 {job.get('location') or 'Remote'}\n"
-            f"🔎 {reason}\n"
-            f"📌 Source: {job.get('source')}\n"
+            f"🐭 MYSHKA JOBS — {score}/100\\n"
+            f"{job.get('title')}\\n"
+            f"🏢 {job.get('company') or 'Company not specified'}\\n"
+            f"🌍 {job.get('location') or 'Remote'}\\n"
+            f"🔎 {reason}\\n"
+            f"📌 Source: {job.get('source')}\\n"
             f"{job.get('url')}"
         )
         send_telegram(message)
         seen.add(key)
         sent += 1
 
-    SEEN_PATH.write_text(json.dumps(sorted(seen), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if os.getenv("MYSHKA_NOTIFY_EMPTY", "").lower() == "true" and sent == 0:
+        send_telegram(
+            "🐭 MYSHKA JOBS підключений до Telegram!\\n"
+            f"Перевірка завершена: переглянуто {len(jobs)} оголошень.\\n"
+            "Нових вакансій за твоїми фільтрами цього разу не знайдено. "
+            "Наступні перевірки надсилатимуть нові збіги автоматично."
+        )
+
+    SEEN_PATH.write_text(json.dumps(sorted(seen), ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
     print(f"Scanned {len(jobs)} listings; sent {sent} new matches.")
 
 
