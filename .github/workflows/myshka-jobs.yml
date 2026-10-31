@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "17 */2 * * *"
   workflow_dispatch:
+  push:
+    paths:
+      - "jobs/bot.py"
+      - "jobs/config.json"
+      - ".github/workflows/myshka-jobs.yml"
 
 permissions:
   contents: write
@@ -22,6 +27,7 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          MYSHKA_NOTIFY_EMPTY: ${{ github.event_name == 'push' }}
         run: python jobs/bot.py
       - name: Save sent-job history
         run: |
