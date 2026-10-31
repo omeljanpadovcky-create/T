@@ -1,15 +1,23 @@
 {
   "target_titles": [
     "3D Artist",
+    "Junior 3D Artist",
     "3D Modeler",
     "3D Modeller",
+    "Blender Artist",
+    "3D Content Creator",
+    "Game Artist",
+    "Game Art Artist",
     "Prop Artist",
     "3D Prop Artist",
     "Environment Artist",
     "Junior Environment Artist",
-    "Game Artist",
+    "3D Asset Artist",
+    "Low Poly Artist",
     "Roblox 3D Artist",
-    "3D Generalist"
+    "Minecraft 3D Artist",
+    "3D Generalist",
+    "3D Character Artist"
   ],
   "exclude_terms": [
     "senior",
@@ -19,17 +27,22 @@
     "manager",
     "head of",
     "unpaid",
-    "internship"
+    "volunteer"
   ],
   "skills": [
     "blender",
     "3d modeling",
     "3d modelling",
+    "low poly",
+    "game-ready",
+    "game ready",
+    "uv mapping",
     "hard surface",
     "props",
     "environment art",
     "game art",
     "roblox",
+    "minecraft",
     "substance painter"
   ],
   "allowed_locations": [
@@ -42,5 +55,5 @@
     "emea"
   ],
   "minimum_score": 45,
-  "max_results_per_run": 12
+  "max_results_per_run": 15
 }
