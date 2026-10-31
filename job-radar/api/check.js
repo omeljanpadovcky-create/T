@@ -163,6 +163,7 @@ async function sendTelegram(jobs) {
     lines.push("");
   }
   if (jobs.length > top.length) lines.push("Ще " + (jobs.length - top.length) + " знайдено, показую найкращі 8.");
+  lines.push("", '🎨 <a href="https://www.artstation.com/jobs/all?work_remotely=true">ArtStation: актуальні віддалені вакансії</a>');
   lines.push("", "Фокус: 3D Character Artist · Blender · Game Assets · Junior 3D Artist.");
   const text = lines.join("\n");
 
@@ -218,7 +219,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    if (fresh.length) await sendTelegram(fresh);
+    await sendTelegram(fresh);
     return res.status(200).json({
       ok: true, scanned: all.length, matched: ranked.length, sent: fresh.length,
       sources: sourceResults.filter(r => r.status === "fulfilled").length,
