@@ -143,8 +143,8 @@ function scoreJob(job) {
   const tags = (job.tags || []).map(plainText).join(" ").toLowerCase();
   const level = String(job.level || "").toLowerCase();
   if (!title || !job.url) return 0;
-  if (/\\b2d\\b/i.test(title) && !/\\b3d\\b/i.test(title)) return 0;
-  if (/\\bbim\\b/i.test(title)) return 0;
+  if (/\b2d\b/i.test(title) && !/\b3d\b/i.test(title)) return 0;
+  if (/\bbim\b/i.test(title)) return 0;
 
   if (TITLE_EXCLUDES.some(word => title.includes(word) || tags.includes(word))) return 0;
   if (/senior|lead|principal|director|manager|executive/.test(level)) return 0;
