@@ -1,27 +1,25 @@
-const SEARCH_TERMS = [
-  "3d artist", "blender artist", "3d character artist", "character artist",
-  "game asset artist", "3d modeler", "3d modeller", "3d generalist",
-  "environment artist", "prop artist", "hard surface artist"
-];
-
 const POSITIVE = [
-  ["3d character", 12], ["character artist", 11], ["blender", 9],
-  ["game asset", 10], ["3d artist", 9], ["3d model", 8],
-  ["3d modeler", 9], ["3d modeller", 9], ["environment artist", 8],
-  ["prop artist", 8], ["hard surface", 7], ["maya", 4],
-  ["zbrush", 5], ["substance painter", 5], ["game art", 6],
-  ["unreal engine", 4], ["unity", 3], ["remote", 2]
+  ["3d character artist", 16], ["character artist", 13], ["blender artist", 13],
+  ["game asset artist", 14], ["game asset", 12], ["3d artist", 12],
+  ["3d modeler", 12], ["3d modeller", 12], ["3d model", 10],
+  ["3d generalist", 10], ["environment artist", 11], ["prop artist", 11],
+  ["hard surface", 10], ["game artist", 9], ["game art", 8],
+  ["texture artist", 8], ["3d sculptor", 8], ["sculptor", 6],
+  ["blender", 7], ["zbrush", 4], ["substance painter", 4],
+  ["maya", 3], ["unreal engine", 3], ["unity", 2]
 ];
 
-const NEGATIVE = [
-  "ai trainer", "ai data annotator", "data annotation", "prompt engineer",
-  "llm evaluator", "machine learning engineer", "sales", "account executive",
-  "customer support", "commission only", "unpaid", "volunteer", "internship unpaid"
+const TITLE_EXCLUDES = [
+  "ai trainer", "ai data annotator", "data annotation", "data annotator",
+  "prompt engineer", "llm evaluator", "machine learning engineer",
+  "sales", "account executive", "customer support", "support specialist",
+  "customer success", "recruiter", "business development",
+  "senior", "lead", "principal", "director", "head of"
 ];
 
 const SOURCES = [
   {
-    name: "Remotive",
+    name: "Remotive · 3D",
     url: "https://remotive.com/api/remote-jobs?search=3d%20artist",
     parse: (json) => (json.jobs || []).map(j => ({
       id: "remotive:" + j.id, title: j.title, company: j.company_name,
@@ -31,7 +29,7 @@ const SOURCES = [
     }))
   },
   {
-    name: "Remotive Blender",
+    name: "Remotive · Blender",
     url: "https://remotive.com/api/remote-jobs?search=blender",
     parse: (json) => (json.jobs || []).map(j => ({
       id: "remotive:" + j.id, title: j.title, company: j.company_name,
@@ -41,7 +39,7 @@ const SOURCES = [
     }))
   },
   {
-    name: "Remotive Game Art",
+    name: "Remotive · Game Art",
     url: "https://remotive.com/api/remote-jobs?search=game%20artist",
     parse: (json) => (json.jobs || []).map(j => ({
       id: "remotive:" + j.id, title: j.title, company: j.company_name,
@@ -74,36 +72,54 @@ const SOURCES = [
 ];
 
 function plainText(value) {
-  return String(value || "").replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
+  return String(value || "").replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/gi, " ").replace(/&amp;/gi, "&")
+    .replace(/&#39;|&apos;/gi, "'").replace(/&quot;/gi, '"')
+    .replace(/\\s+/g, " ").trim();
+}
+
+function englishRequirementTooHigh(text) {
+  const patterns = [
+    /\\b(?:english|spoken english)\\s*(?:level|proficiency)?\\s*[:\\-]?\\s*(?:b2\\+?|c1|c2|fluent|native|advanced|upper[- ]intermediate)\\b/i,
+    /\\b(?:b2\\+?|c1|c2)\\s+(?:level\\s+)?english\\b/i,
+    /\\b(?:fluent|native|advanced|upper[- ]intermediate)\\s+(?:in\\s+)?english\\b/i,
+    /\\benglish\\s+(?:is\\s+)?(?:fluent|native|advanced|upper[- ]intermediate)\\b/i,
+    /\\b(?:full professional|professional working|near-native)\\s+proficiency\\b/i
+  ];
+  return patterns.some(pattern => pattern.test(text));
+}
+
+function salaryBelowFive(salaryValue) {
+  const salary = String(salaryValue || "");
+  const match = salary.match(/(?:\\$|usd\\s*)(\\d+(?:\\.\\d+)?)(?:\\s*[-–]\\s*(?:\\$|usd\\s*)?\\d+(?:\\.\\d+)?)?\\s*(?:\\/\\s*(?:h|hr|hour)|per\\s+(?:h|hr|hour)|hourly)\\b/i);
+  return Boolean(match && Number(match[1]) < 5);
 }
 
 function scoreJob(job) {
   const title = plainText(job.title).toLowerCase();
   const body = plainText(job.description).toLowerCase();
-  const tags = (job.tags || []).join(" ").toLowerCase();
-  const searchable = title + " " + tags + " " + body.slice(0, 5000);
+  const tags = (job.tags || []).map(plainText).join(" ").toLowerCase();
   if (!title || !job.url) return 0;
-  if (NEGATIVE.some(word => title.includes(word) || searchable.includes(word))) return 0;
-  if (/senior|lead|principal|director|head of/.test(title)) return 0;
-  if (/english.{0,50}(b2|c1|c2|fluent|native|advanced)/i.test(searchable)) return 0;
-  const salary = String(job.salary || "").toLowerCase();
-  const hourly = salary.match(/(?:\\$|usd\\s*)(\\d+(?:\\.\\d+)?)\\s*(?:\\/|per\\s+)?(?:hour|hr)\\b/);
-  if (hourly && Number(hourly[1]) < 5) return 0;
 
-  const remoteText = (job.location + " " + body.slice(0, 1200)).toLowerCase();
-  const isRemote = /remote|anywhere|worldwide|work from home|distributed/.test(remoteText);
-  if (!isRemote) return 0;
+  if (TITLE_EXCLUDES.some(word => title.includes(word) || tags.includes(word))) return 0;
+  const searchable = title + " " + tags + " " + body.slice(0, 7000);
+  if (/\\b(?:unpaid|volunteer|commission[- ]only|no salary|equity only)\\b/i.test(searchable)) return 0;
+  if (englishRequirementTooHigh(searchable)) return 0;
+  if (salaryBelowFive(job.salary)) return 0;
+
+  const remoteText = (String(job.location || "") + " " + body.slice(0, 1800)).toLowerCase();
+  if (!/remote|anywhere|worldwide|work from home|distributed|europe|emea|ukraine/.test(remoteText)) return 0;
+  if (/\\b(?:us|usa|united states|canada|australia)\\s+only\\b|only\\s+(?:us|usa|united states|canada|australia)\\s+(?:based|residents|candidates)/i.test(remoteText)) return 0;
 
   let score = 0;
   for (const [word, points] of POSITIVE) {
-    if (searchable.includes(word)) score += points;
+    if (title.includes(word)) score += points;
+    else if (tags.includes(word)) score += Math.round(points * 0.65);
+    else if (body.slice(0, 7000).includes(word)) score += Math.round(points * 0.25);
   }
-  if (score < 7) return 0;
-  if (/junior|entry.level|associate|mid.level/.test(title)) score += 3;
-  if (/senior|lead|principal|director|head of/.test(title)) score -= 4;
-  if (/ukraine|europe|emea|worldwide|anywhere/.test(remoteText)) score += 2;
-  return Math.max(0, Math.min(100, score));
+  if (/(junior|entry[- ]level|associate|mid[- ]level)/i.test(title)) score += 4;
+  if (/(ukraine|europe|emea|worldwide|anywhere)/i.test(remoteText)) score += 2;
+  return score >= 8 ? Math.min(100, score) : 0;
 }
 
 function escapeHtml(value) {
@@ -117,7 +133,7 @@ async function fetchJson(url) {
   try {
     const response = await fetch(url, {
       signal: controller.signal,
-      headers: { "User-Agent": "MyshkaJobRadar/1.0 (personal job alert bot)", "Accept": "application/json" }
+      headers: { "User-Agent": "MyshkaJobRadar/1.1 (personal job alert bot)", "Accept": "application/json" }
     });
     if (!response.ok) throw new Error("HTTP " + response.status);
     return await response.json();
@@ -126,24 +142,50 @@ async function fetchJson(url) {
   }
 }
 
-async function isNew(id) {
-  const base = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!base || !token) return true;
+function canonicalId(job) {
   try {
-    const key = encodeURIComponent("myshka-job-radar:" + id);
-    const response = await fetch(base.replace(/\/$/, "") + "/set/" + key + "/1/EX/2592000/NX", {
-      method: "POST", headers: { Authorization: "Bearer " + token }
-    });
-    const result = await response.json();
-    return result.result === "OK";
-  } catch (error) {
-    console.error("Deduplication store error:", error.message);
-    return true;
+    const url = new URL(job.url);
+    return (url.hostname + url.pathname).replace(/\\/$/, "").toLowerCase();
+  } catch {
+    return String(job.id || job.url);
   }
 }
 
-async function sendTelegram(jobs) {
+async function wasAlreadySent(job) {
+  const base = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!base || !token) return false;
+  try {
+    const key = encodeURIComponent("myshka-job-radar:" + canonicalId(job));
+    const response = await fetch(base.replace(/\\/$/, "") + "/exists/" + key, {
+      headers: { Authorization: "Bearer " + token }
+    });
+    if (!response.ok) throw new Error("Redis HTTP " + response.status);
+    const result = await response.json();
+    return Number(result.result) > 0;
+  } catch (error) {
+    console.error("Deduplication lookup failed:", error.message);
+    return false;
+  }
+}
+
+async function markAsSent(jobs) {
+  const base = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!base || !token) return false;
+  for (const job of jobs) {
+    const key = encodeURIComponent("myshka-job-radar:" + canonicalId(job));
+    const response = await fetch(base.replace(/\\/$/, "") + "/set/" + key + "/1/EX/2592000", {
+      method: "POST", headers: { Authorization: "Bearer " + token }
+    });
+    if (!response.ok) throw new Error("Redis write failed: HTTP " + response.status);
+    const result = await response.json();
+    if (result.error) throw new Error(result.error);
+  }
+  return true;
+}
+
+async function sendTelegram(jobs, meta) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
   if (!token || !chatId) throw new Error("Telegram is not configured");
@@ -151,7 +193,10 @@ async function sendTelegram(jobs) {
   const top = jobs.slice(0, 8);
   const lines = [
     "🐭 <b>MYSHKA JOB RADAR</b>",
-    "Знайшов " + jobs.length + " нових вакансій, що відповідають твоєму профілю:",
+    top.length
+      ? "Знайшов " + top.length + " нових вакансій під твій профіль:"
+      : "Сьогодні нових релевантних вакансій не знайшов.",
+    "Перевірено джерел: " + meta.sourcesOk + "/5",
     ""
   ];
   for (let i = 0; i < top.length; i++) {
@@ -164,15 +209,21 @@ async function sendTelegram(jobs) {
     lines.push('<a href="' + escapeHtml(j.url) + '">Відкрити вакансію</a>');
     lines.push("");
   }
-  if (jobs.length > top.length) lines.push("Ще " + (jobs.length - top.length) + " знайдено, показую найкращі 8.");
-  lines.push("", '🎨 <a href="https://www.artstation.com/jobs/all?work_remotely=true">ArtStation: актуальні віддалені вакансії</a>');
-  lines.push("", "Фокус: 3D Character Artist · Blender · Game Assets · Junior 3D Artist.");
-  const text = lines.join("\n");
+  if (meta.sourceErrors.length) {
+    lines.push("⚠️ Частина джерел тимчасово недоступна: " +
+      meta.sourceErrors.map(x => escapeHtml(x.source)).join(", "));
+    lines.push("");
+  }
+  lines.push("Фільтри: 3D/Blender/Game Art · Remote · Junior/Middle · English A2.");
+  lines.push("", '🎨 <a href="https://www.artstation.com/jobs/all?work_remotely=true">ArtStation: remote-вакансії</a>');
 
   const response = await fetch("https://api.telegram.org/bot" + token + "/sendMessage", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML", disable_web_page_preview: true })
+    body: JSON.stringify({
+      chat_id: chatId, text: lines.join("\\n"), parse_mode: "HTML",
+      disable_web_page_preview: true
+    })
   });
   const result = await response.json();
   if (!response.ok || !result.ok) throw new Error("Telegram API error: " + (result.description || response.status));
@@ -185,18 +236,16 @@ export default async function handler(req, res) {
   }
   const secret = process.env.CRON_SECRET;
   const auth = req.headers.authorization || "";
-  if (secret && auth !== "Bearer " + secret) {
-    return res.status(401).json({ ok: false, error: "Unauthorized" });
-  }
+  if (!secret) return res.status(503).json({ ok: false, error: "CRON_SECRET is not configured." });
+  if (auth !== "Bearer " + secret) return res.status(401).json({ ok: false, error: "Unauthorized" });
   if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
-    return res.status(503).json({ ok: false, error: "Add TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID in Vercel Environment Variables." });
+    return res.status(503).json({ ok: false, error: "Telegram is not configured." });
   }
 
   const sourceResults = await Promise.allSettled(SOURCES.map(async source => {
     const data = await fetchJson(source.url);
     return source.parse(data);
   }));
-
   const all = [];
   const sourceErrors = [];
   sourceResults.forEach((result, index) => {
@@ -204,11 +253,16 @@ export default async function handler(req, res) {
     else sourceErrors.push({ source: SOURCES[index].name, error: result.reason?.message || "Fetch failed" });
   });
 
+  const sourcesOk = sourceResults.filter(result => result.status === "fulfilled").length;
+  if (sourcesOk === 0) {
+    return res.status(502).json({ ok: false, error: "All job sources failed. Telegram alert was not sent.", sourceErrors });
+  }
+
   const unique = new Map();
   for (const job of all) {
     const score = scoreJob(job);
     if (!score) continue;
-    const key = job.url;
+    const key = canonicalId(job);
     const old = unique.get(key);
     if (!old || score > old.score) unique.set(key, { ...job, score });
   }
@@ -216,20 +270,27 @@ export default async function handler(req, res) {
   const ranked = [...unique.values()].sort((a, b) => b.score - a.score);
   const fresh = [];
   for (const job of ranked) {
-    if (fresh.length >= 20) break;
-    if (await isNew(job.id)) fresh.push(job);
+    if (fresh.length >= 8) break;
+    if (!(await wasAlreadySent(job))) fresh.push(job);
   }
 
   try {
-    await sendTelegram(fresh);
+    await sendTelegram(fresh, { sourcesOk, sourceErrors });
+    let deduplication = false;
+    try {
+      deduplication = await markAsSent(fresh);
+    } catch (error) {
+      console.error("Could not save sent job IDs:", error.message);
+    }
     return res.status(200).json({
       ok: true, scanned: all.length, matched: ranked.length, sent: fresh.length,
-      sources: sourceResults.filter(r => r.status === "fulfilled").length,
-      sourceErrors,
-      note: process.env.UPSTASH_REDIS_REST_URL ? "Persistent duplicate filtering enabled." : "Set Upstash Redis variables to prevent repeats across daily runs."
+      sourcesOk, sourceErrors, deduplication,
+      note: deduplication
+        ? "Persistent duplicate filtering active for 30 days."
+        : "Redis is not connected; cross-run duplicate filtering is not active."
     });
   } catch (error) {
-    console.error(error);
+    console.error("Job Radar run failed:", error.message);
     return res.status(500).json({ ok: false, error: error.message, scanned: all.length, matched: ranked.length });
   }
 }
