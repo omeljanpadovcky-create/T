@@ -5,7 +5,8 @@ const POSITIVE = [
   ["3d generalist", 10], ["environment artist", 11], ["prop artist", 11],
   ["hard surface", 10], ["game artist", 9], ["game art", 8],
   ["texture artist", 8], ["3d sculptor", 8], ["sculptor", 6],
-  ["blender", 7], ["zbrush", 4], ["substance painter", 4],
+  ["3d animator", 9], ["3d layout", 10], ["3d visual", 10], ["blender specialist", 9],
+  ["blender", 9], ["zbrush", 4], ["substance painter", 4],
   ["maya", 3], ["unreal engine", 3], ["unity", 2]
 ];
 
@@ -68,7 +69,32 @@ const SOURCES = [
       location: j.location || "Remote",
       salary: j.salary || "", type: j.job_types || "", source: "Arbeitnow"
     }))
-  }
+  },
+  ...["blender", "3d artist", "character artist", "game artist", "environment artist", "3d modeler", "prop artist"].map(query => ({
+    name: "Himalayas · " + query,
+    url: "https://himalayas.app/jobs/api/search?q=" + encodeURIComponent(query) + "&sort=recent",
+    parse: (json) => (json.jobs || []).map(j => ({
+      id: "himalayas:" + (j.guid || j.applicationLink || j.title),
+      guid: j.guid || "",
+      title: j.title,
+      company: j.companyName,
+      url: j.applicationLink || "",
+      description: j.description || j.excerpt || "",
+      tags: [...(j.categories || []), ...(j.parentCategories || [])],
+      location: (j.locationRestrictions || []).length
+        ? "Remote · " + j.locationRestrictions.join(", ")
+        : "Remote · Worldwide",
+      locationRestrictions: j.locationRestrictions || [],
+      salary: [j.minSalary, j.maxSalary].filter(v => v !== null && v !== undefined).join("–") +
+        (j.currency ? " " + j.currency : "") + (j.salaryPeriod ? "/" + j.salaryPeriod : ""),
+      salaryMin: j.minSalary,
+      salaryPeriod: j.salaryPeriod || "",
+      currency: j.currency || "",
+      level: Array.isArray(j.seniority) ? j.seniority.join(" ") : (j.seniority || ""),
+      type: j.employmentType || "",
+      source: "Himalayas"
+    }))
+  }))
 ];
 
 function plainText(value) {
@@ -95,17 +121,37 @@ function salaryBelowFive(salaryValue) {
   return Boolean(match && Number(match[1]) < 5);
 }
 
+function isAllowedLocation(job) {
+  if (job.source !== "Himalayas") return true;
+  const restrictions = job.locationRestrictions || [];
+  if (!restrictions.length) return true;
+  const allowed = new Set([
+    "ukraine", "europe", "european union", "emea", "united kingdom", "turkey", "türkiye",
+    "poland", "germany", "france", "spain", "italy", "netherlands", "belgium",
+    "czechia", "czech republic", "slovakia", "romania", "bulgaria", "hungary",
+    "austria", "sweden", "norway", "denmark", "finland", "estonia", "latvia",
+    "lithuania", "croatia", "slovenia", "serbia", "portugal", "ireland",
+    "switzerland", "greece", "cyprus", "iceland", "luxembourg", "moldova"
+  ]);
+  return restrictions.some(value => allowed.has(String(value).toLowerCase()));
+}
+
 function scoreJob(job) {
   const title = plainText(job.title).toLowerCase();
   const body = plainText(job.description).toLowerCase();
   const tags = (job.tags || []).map(plainText).join(" ").toLowerCase();
+  const level = String(job.level || "").toLowerCase();
   if (!title || !job.url) return 0;
 
   if (TITLE_EXCLUDES.some(word => title.includes(word) || tags.includes(word))) return 0;
+  if (/senior|lead|principal|director|manager|executive/.test(level)) return 0;
+  if (!isAllowedLocation(job)) return 0;
   const searchable = title + " " + tags + " " + body.slice(0, 7000);
   if (/\b(?:unpaid|volunteer|commission[- ]only|no salary|equity only)\b/i.test(searchable)) return 0;
   if (englishRequirementTooHigh(searchable)) return 0;
   if (salaryBelowFive(job.salary)) return 0;
+  if (job.salaryPeriod === "hourly" && String(job.currency).toUpperCase() === "USD" &&
+      typeof job.salaryMin === "number" && job.salaryMin < 5) return 0;
 
   const remoteText = (String(job.location || "") + " " + body.slice(0, 1800)).toLowerCase();
   if (!/remote|anywhere|worldwide|work from home|distributed|europe|emea|ukraine/.test(remoteText)) return 0;
@@ -196,7 +242,7 @@ async function sendTelegram(jobs, meta) {
     top.length
       ? "Знайшов " + top.length + " нових вакансій під твій профіль:"
       : "Сьогодні нових релевантних вакансій не знайшов.",
-    "Перевірено джерел: " + meta.sourcesOk + "/5",
+    "Перевірено джерел: " + meta.sourcesOk + "/" + SOURCES.length,
     ""
   ];
   for (let i = 0; i < top.length; i++) {
@@ -284,7 +330,7 @@ export default async function handler(req, res) {
     }
     return res.status(200).json({
       ok: true, scanned: all.length, matched: ranked.length, sent: fresh.length,
-      sourcesOk, sourceErrors, deduplication,
+      sourcesOk, totalSources: SOURCES.length, sourceErrors, deduplication,
       note: deduplication
         ? "Persistent duplicate filtering active for 30 days."
         : "Redis is not connected; cross-run duplicate filtering is not active."
