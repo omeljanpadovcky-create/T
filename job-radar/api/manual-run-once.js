@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   if (req.method !== "GET") return res.status(405).json({ ok: false });
-  if (!process.env.MANUAL_RUN_KEY || req.query.key !== process.env.MANUAL_RUN_KEY) return res.status(401).json({ ok: false });
+  if (!process.env.MANUAL_RUN_KEY || req.headers["x-manual-run-key"] !== process.env.MANUAL_RUN_KEY) return res.status(401).json({ ok: false });
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
   if (!token || !chatId) return res.status(503).json({ ok: false, error: "Telegram settings missing" });
