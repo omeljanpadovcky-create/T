@@ -29,7 +29,7 @@ Recommended for persistent duplicate filtering:
 - `UPSTASH_REDIS_REST_URL`
 - `UPSTASH_REDIS_REST_TOKEN`
 
-The Redis variables are optional, but without them duplicate filtering cannot persist between serverless runs.
+The Redis variables are optional, but without them duplicate filtering cannot persist between serverless runs. With Redis connected, successfully sent listings are remembered for 30 days.
 
 ## Telegram setup
 1. Open Telegram and message [@BotFather](https://t.me/BotFather).
@@ -39,7 +39,7 @@ The Redis variables are optional, but without them duplicate filtering cannot pe
 5. Add the token and chat ID as Vercel environment variables.
 
 ## Schedule and test
-- Vercel Hobby schedule: daily at 07:00 UTC (09:00 in Kyiv during winter time).
+- Vercel Hobby schedule: daily at 07:00 UTC (09:00 Kyiv in winter / 10:00 in summer; Hobby may start at any time within that UTC hour).
 - Manual test: send a GET or POST request to `/api/check` with header `Authorization: Bearer YOUR_CRON_SECRET`.
 - Status: `/api/health`.
 
