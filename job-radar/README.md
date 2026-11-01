@@ -11,6 +11,7 @@ Personal Telegram job-alert bot. It scans remote job APIs, scores 3D/Blender/Gam
 - Excludes AI data annotation/trainer roles, sales, unpaid work and unrelated support roles
 
 ## Sources
+- Himalayas Remote Jobs API (keyword searches for Blender, 3D Artist, Character Artist, Game Artist, Environment Artist, 3D Modeler and Prop Artist)
 - Remotive public API
 - RemoteOK public API
 - Arbeitnow public API
