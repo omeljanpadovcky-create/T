@@ -75,23 +75,23 @@ function plainText(value) {
   return String(value || "").replace(/<[^>]*>/g, " ")
     .replace(/&nbsp;/gi, " ").replace(/&amp;/gi, "&")
     .replace(/&#39;|&apos;/gi, "'").replace(/&quot;/gi, '"')
-    .replace(/\\s+/g, " ").trim();
+    .replace(/\s+/g, " ").trim();
 }
 
 function englishRequirementTooHigh(text) {
   const patterns = [
-    /\\b(?:english|spoken english)\\s*(?:level|proficiency)?\\s*[:\\-]?\\s*(?:b2\\+?|c1|c2|fluent|native|advanced|upper[- ]intermediate)\\b/i,
-    /\\b(?:b2\\+?|c1|c2)\\s+(?:level\\s+)?english\\b/i,
-    /\\b(?:fluent|native|advanced|upper[- ]intermediate)\\s+(?:in\\s+)?english\\b/i,
-    /\\benglish\\s+(?:is\\s+)?(?:fluent|native|advanced|upper[- ]intermediate)\\b/i,
-    /\\b(?:full professional|professional working|near-native)\\s+proficiency\\b/i
+    /\b(?:english|spoken english)\s*(?:level|proficiency)?\s*[:\-]?\s*(?:b2\+?|c1|c2|fluent|native|advanced|upper[- ]intermediate)\b/i,
+    /\b(?:b2\+?|c1|c2)\s+(?:level\s+)?english\b/i,
+    /\b(?:fluent|native|advanced|upper[- ]intermediate)\s+(?:in\s+)?english\b/i,
+    /\benglish\s+(?:is\s+)?(?:fluent|native|advanced|upper[- ]intermediate)\b/i,
+    /\b(?:full professional|professional working|near-native)\s+proficiency\b/i
   ];
   return patterns.some(pattern => pattern.test(text));
 }
 
 function salaryBelowFive(salaryValue) {
   const salary = String(salaryValue || "");
-  const match = salary.match(/(?:\\$|usd\\s*)(\\d+(?:\\.\\d+)?)(?:\\s*[-–]\\s*(?:\\$|usd\\s*)?\\d+(?:\\.\\d+)?)?\\s*(?:\\/\\s*(?:h|hr|hour)|per\\s+(?:h|hr|hour)|hourly)\\b/i);
+  const match = salary.match(/(?:\$|usd\s*)(\d+(?:\.\d+)?)(?:\s*[-–]\s*(?:\$|usd\s*)?\d+(?:\.\d+)?)?\s*(?:\/\s*(?:h|hr|hour)|per\s+(?:h|hr|hour)|hourly)\b/i);
   return Boolean(match && Number(match[1]) < 5);
 }
 
@@ -103,13 +103,13 @@ function scoreJob(job) {
 
   if (TITLE_EXCLUDES.some(word => title.includes(word) || tags.includes(word))) return 0;
   const searchable = title + " " + tags + " " + body.slice(0, 7000);
-  if (/\\b(?:unpaid|volunteer|commission[- ]only|no salary|equity only)\\b/i.test(searchable)) return 0;
+  if (/\b(?:unpaid|volunteer|commission[- ]only|no salary|equity only)\b/i.test(searchable)) return 0;
   if (englishRequirementTooHigh(searchable)) return 0;
   if (salaryBelowFive(job.salary)) return 0;
 
   const remoteText = (String(job.location || "") + " " + body.slice(0, 1800)).toLowerCase();
   if (!/remote|anywhere|worldwide|work from home|distributed|europe|emea|ukraine/.test(remoteText)) return 0;
-  if (/\\b(?:us|usa|united states|canada|australia)\\s+only\\b|only\\s+(?:us|usa|united states|canada|australia)\\s+(?:based|residents|candidates)/i.test(remoteText)) return 0;
+  if (/\b(?:us|usa|united states|canada|australia)\s+only\b|only\s+(?:us|usa|united states|canada|australia)\s+(?:based|residents|candidates)/i.test(remoteText)) return 0;
 
   let score = 0;
   for (const [word, points] of POSITIVE) {
@@ -145,7 +145,7 @@ async function fetchJson(url) {
 function canonicalId(job) {
   try {
     const url = new URL(job.url);
-    return (url.hostname + url.pathname).replace(/\\/$/, "").toLowerCase();
+    return (url.hostname + url.pathname).replace(/\/$/, "").toLowerCase();
   } catch {
     return String(job.id || job.url);
   }
@@ -157,7 +157,7 @@ async function wasAlreadySent(job) {
   if (!base || !token) return false;
   try {
     const key = encodeURIComponent("myshka-job-radar:" + canonicalId(job));
-    const response = await fetch(base.replace(/\\/$/, "") + "/exists/" + key, {
+    const response = await fetch(base.replace(/\/$/, "") + "/exists/" + key, {
       headers: { Authorization: "Bearer " + token }
     });
     if (!response.ok) throw new Error("Redis HTTP " + response.status);
@@ -175,7 +175,7 @@ async function markAsSent(jobs) {
   if (!base || !token) return false;
   for (const job of jobs) {
     const key = encodeURIComponent("myshka-job-radar:" + canonicalId(job));
-    const response = await fetch(base.replace(/\\/$/, "") + "/set/" + key + "/1/EX/2592000", {
+    const response = await fetch(base.replace(/\/$/, "") + "/set/" + key + "/1/EX/2592000", {
       method: "POST", headers: { Authorization: "Bearer " + token }
     });
     if (!response.ok) throw new Error("Redis write failed: HTTP " + response.status);
@@ -221,7 +221,7 @@ async function sendTelegram(jobs, meta) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      chat_id: chatId, text: lines.join("\\n"), parse_mode: "HTML",
+      chat_id: chatId, text: lines.join("\n"), parse_mode: "HTML",
       disable_web_page_preview: true
     })
   });
