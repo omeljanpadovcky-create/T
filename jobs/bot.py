@@ -17,7 +17,7 @@ TIMEOUT = 25
 
 
 def norm(value):
-    return re.sub(r"\\s+", " ", str(value or "")).strip().lower()
+    return re.sub(r"\s+", " ", str(value or "")).strip().lower()
 
 
 def as_text(value):
@@ -115,9 +115,13 @@ def score_job(job):
     title_hits = [term for term in CONFIG["target_titles"] if norm(term) in title]
     if not title_hits and not any(x in title for x in ["3d", "roblox", "prop artist", "environment artist"]):
         return 0, "Not a target role"
-    if re.search(r"\\b(unpaid|volunteer|commission[- ]only|no salary|equity only)\\b", searchable):
+    if re.search(r"\b(unpaid|volunteer|commission[- ]only|no salary|equity only)\b", searchable):
         return 0, "Unpaid or volunteer role"
-    if re.search(r"\\b(usa|united states|canada|australia)\\s+only\\b|only\\s+(usa|united states|canada|australia)", location):
+    if re.search(r"\b(usa|united states|canada|australia)\s+only\b|only\s+(usa|united states|canada|australia)", location):
+        return 0, "Outside target geography"
+    if re.search(r"\b(english|spoken english)\s*(level|proficiency)?\s*[:\-]?\s*(b2|c1|c2|fluent|native|advanced|upper[- ]intermediate)\b|\b(b2|c1|c2)\s+english\b", searchable):
+        return 0, "English requirement above A2/B1"
+    if re.search(r"\b(usa|united states|canada|australia)\s+only\b|only\s+(usa|united states|canada|australia)", location):
         return 0, "Outside target geography"
 
     location_ok = any(norm(term) in location for term in CONFIG["allowed_locations"])
@@ -153,7 +157,7 @@ def load_json(path, default):
 
 
 def save_json(path, value):
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def send_telegram(message, reply_markup=None):
@@ -201,12 +205,12 @@ def main():
         url = html.escape(as_text(job.get("url")), quote=True)
         eligibility_note = ""
         if "not specified" in norm(location):
-            eligibility_note = "\\n⚠️ <i>Країна найму не вказана — перевір, чи приймають кандидатів з України.</i>"
+            eligibility_note = "\n⚠️ <i>Країна найму не вказана — перевір, чи приймають кандидатів з України.</i>"
         message = (
-            f"🐭 <b>ТРЕЙДМИШКА · {score}/100</b>\\n"
-            f"💼 <b>{title}</b>\\n🏢 {company}\\n🌍 {location}"
-            f"{eligibility_note}\\n🔎 {html.escape(reason)}\\n"
-            f"📌 {source}\\n🟡 <b>Статус: Нова</b>"
+            f"🐭 <b>ТРЕЙДМИШКА · {score}/100</b>\n"
+            f"💼 <b>{title}</b>\n🏢 {company}\n🌍 {location}"
+            f"{eligibility_note}\n🔎 {html.escape(reason)}\n"
+            f"📌 {source}\n🟡 <b>Статус: Нова</b>"
         )
         keyboard = {
             "inline_keyboard": [
@@ -237,8 +241,8 @@ def main():
 
     if os.getenv("MYSHKA_NOTIFY_EMPTY", "").lower() == "true" and sent == 0:
         send_telegram(
-            "🐭 <b>ТРЕЙДМИШКА активна!</b>\\n"
-            f"Перевірено оголошень: <b>{len(jobs)}</b>.\\n"
+            "🐭 <b>ТРЕЙДМИШКА активна!</b>\n"
+            f"Перевірено оголошень: <b>{len(jobs)}</b>.\n"
             "Нових збігів за поточними фільтрами немає. Наступна перевірка відбудеться автоматично."
         )
     print(f"Scanned {len(jobs)} listings; sent {sent} new matches; saved {len(applications)} application records.")
