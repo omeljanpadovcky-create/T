@@ -6,6 +6,7 @@ const POSITIVE = [
   ["hard surface", 10], ["game artist", 9], ["game art", 8],
   ["texture artist", 8], ["3d sculptor", 8], ["sculptor", 6],
   ["3d animator", 9], ["3d layout", 10], ["3d visual", 10], ["blender specialist", 9],
+  ["illustrator", 10], ["illustration", 9], ["concept artist", 12], ["cover artist", 11], ["book cover", 9], ["2d artist", 7],
   ["blender", 9], ["zbrush", 4], ["substance painter", 4],
   ["maya", 3], ["unreal engine", 3], ["unity", 2]
 ];
@@ -50,6 +51,26 @@ const SOURCES = [
     }))
   },
   {
+    name: "Remotive · Illustration",
+    url: "https://remotive.com/api/remote-jobs?search=illustration",
+    parse: (json) => (json.jobs || []).map(j => ({
+      id: "remotive:" + j.id, title: j.title, company: j.company_name,
+      url: j.url, description: j.description || "", tags: j.tags || [],
+      location: j.candidate_required_location || "Remote",
+      salary: j.salary || "", type: j.job_type || "", source: "Remotive"
+    }))
+  },
+  {
+    name: "Remotive · Concept Art",
+    url: "https://remotive.com/api/remote-jobs?search=concept%20artist",
+    parse: (json) => (json.jobs || []).map(j => ({
+      id: "remotive:" + j.id, title: j.title, company: j.company_name,
+      url: j.url, description: j.description || "", tags: j.tags || [],
+      location: j.candidate_required_location || "Remote",
+      salary: j.salary || "", type: j.job_type || "", source: "Remotive"
+    }))
+  },
+  {
     name: "RemoteOK",
     url: "https://remoteok.com/api",
     parse: (json) => (Array.isArray(json) ? json.slice(1) : []).map(j => ({
@@ -70,7 +91,7 @@ const SOURCES = [
       salary: j.salary || "", type: j.job_types || "", source: "Arbeitnow"
     }))
   },
-  ...["blender", "3d artist", "character artist", "game artist", "environment artist", "3d modeler", "prop artist"].map(query => ({
+  ...["blender", "3d artist", "character artist", "game artist", "environment artist", "3d modeler", "prop artist", "illustration", "concept artist", "cover artist"].map(query => ({
     name: "Himalayas · " + query,
     url: "https://himalayas.app/jobs/api/search?q=" + encodeURIComponent(query) + "&sort=recent",
     parse: (json) => (json.jobs || []).map(j => ({
@@ -147,7 +168,7 @@ function scoreJob(job) {
   if (/\bbim\b/i.test(title)) return 0;
 
   if (TITLE_EXCLUDES.some(word => title.includes(word) || tags.includes(word))) return 0;
-  if (/senior|lead|principal|director|manager|executive/.test(level)) return 0;
+  if (/director|executive/.test(level)) return 0;
   if (!isAllowedLocation(job)) return 0;
   const searchable = title + " " + tags + " " + body.slice(0, 7000);
   if (/\b(?:unpaid|volunteer|commission[- ]only|no salary|equity only)\b/i.test(searchable)) return 0;
@@ -239,7 +260,7 @@ async function sendTelegram(jobs, meta) {
   const chatId = process.env.TELEGRAM_CHAT_ID;
   if (!token || !chatId) throw new Error("Telegram is not configured");
 
-  const top = jobs.slice(0, 8);
+  const top = jobs.slice(0, 10);
   const lines = [
     "🐭 <b>MYSHKA JOB RADAR</b>",
     top.length
@@ -263,7 +284,7 @@ async function sendTelegram(jobs, meta) {
       meta.sourceErrors.map(x => escapeHtml(x.source)).join(", "));
     lines.push("");
   }
-  lines.push("Фільтри: 3D/Blender/Game Art · Remote · Junior/Middle · English A2.");
+  lines.push("Фільтри: 3D/Blender · Game Art · Illustration · Remote · English A2.");
   lines.push("", '🎨 <a href="https://www.artstation.com/jobs/all?work_remotely=true">ArtStation: remote-вакансії</a>');
 
   const response = await fetch("https://api.telegram.org/bot" + token + "/sendMessage", {
@@ -319,7 +340,7 @@ export default async function handler(req, res) {
   const ranked = [...unique.values()].sort((a, b) => b.score - a.score);
   const fresh = [];
   for (const job of ranked) {
-    if (fresh.length >= 8) break;
+    if (fresh.length >= 10) break;
     if (!(await wasAlreadySent(job))) fresh.push(job);
   }
 
