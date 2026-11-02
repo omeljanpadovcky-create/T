@@ -27,6 +27,8 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: pip install -r jobs/requirements.txt
+      - name: Run filter regression tests
+        run: python -m unittest discover -s jobs -p 'test_*.py' -v
       - name: Search and notify
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
