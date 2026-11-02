@@ -178,7 +178,8 @@ def send_telegram(message, reply_markup=None):
     return result["result"]
 
 
-# Main daily scan: new matches become Telegram cards with persistent review actions.\ndef main():
+# Main daily scan: new matches become Telegram cards with persistent review actions.
+def main():
     if not os.environ.get("TELEGRAM_BOT_TOKEN") or not os.environ.get("TELEGRAM_CHAT_ID"):
         raise RuntimeError("Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID GitHub Secret.")
 
