@@ -8,6 +8,7 @@ import requests
 ROOT = Path(__file__).resolve().parent
 APPLICATIONS_PATH = ROOT / "applications.json"
 OFFSET_PATH = ROOT / "update_offset.json"
+EDITING_PATH = ROOT / "editing.json"
 TIMEOUT = 20
 
 
@@ -88,7 +89,7 @@ def cover_letter(job):
     )
 
 
-def handle_callback(update, applications, allowed_chat):
+def handle_callback(update, applications, allowed_chat, editing):
     query = update.get("callback_query") or {}
     message = query.get("message") or {}
     chat_id = str((message.get("chat") or {}).get("id", ""))
@@ -113,8 +114,9 @@ def handle_callback(update, applications, allowed_chat):
             [{"text": "🔗 Відкрити вакансію", "url": job["url"]}],
             [
                 {"text": "✉️ Чернетка листа", "callback_data": f"letter|{short_id}"},
-                {"text": "📨 Позначити поданою", "callback_data": f"applied|{short_id}"}
+                {"text": "✏️ Редагувати лист", "callback_data": f"edit|{short_id}"}
             ],
+            [{"text": "📨 Позначити поданою", "callback_data": f"applied|{short_id}"}],
             [{"text": "⏭ Пропустити", "callback_data": f"skip|{short_id}"}]
         ]}
         api("editMessageText", {
@@ -135,10 +137,17 @@ def handle_callback(update, applications, allowed_chat):
         answer_callback(query.get("id"), "Готую чернетку")
         text = "✉️ <b>ЧЕРНЕТКА СУПРОВІДНОГО ЛИСТА</b>\n"
         text += f"Вакансія: <b>{safe(job.get('title'))}</b> · {safe(job.get('company'))}\n\n"
-        text += f"<pre>{safe(cover_letter(job))}</pre>\n"
+        text += f"<pre>{safe(job.get('custom_cover_letter') or cover_letter(job))}</pre>\n"
         text += "Перевір текст і додай посилання на портфоліо перед відправленням."
         api("sendMessage", {"chat_id": chat_id, "text": text, "parse_mode": "HTML", "disable_web_page_preview": True})
         job["letter_created"] = True
+    elif action == "edit":
+        editing["job_id"] = short_id
+        answer_callback(query.get("id"), "Надішли свій текст листа в чат")
+        api("sendMessage", {
+            "chat_id": chat_id,
+            "text": "✏️ Надішли нову версію супровідного листа одним повідомленням. Я збережу її для цієї вакансії. Для скасування напиши /cancel."
+        })
     elif action == "applied":
         job["status"] = "applied"
         answer_callback(query.get("id"), "Статус оновлено: подано")
@@ -153,6 +162,34 @@ def handle_callback(update, applications, allowed_chat):
     return True
 
 
+def handle_message(update, applications, allowed_chat, editing):
+    message = update.get("message") or {}
+    chat_id = str((message.get("chat") or {}).get("id", ""))
+    if chat_id != str(allowed_chat) or not editing.get("job_id"):
+        return False
+    text = str(message.get("text") or "").strip()
+    if not text:
+        return False
+    if text.lower() == "/cancel":
+        editing.clear()
+        api("sendMessage", {"chat_id": chat_id, "text": "Редагування скасовано."})
+        return True
+    short_id = editing.get("job_id")
+    job = applications.get(short_id)
+    if not job:
+        editing.clear()
+        api("sendMessage", {"chat_id": chat_id, "text": "Не знайшов вакансію для цього листа. Почни редагування ще раз із картки вакансії."})
+        return True
+    job["custom_cover_letter"] = text[:3500]
+    job["letter_created"] = True
+    editing.clear()
+    api("sendMessage", {
+        "chat_id": chat_id,
+        "text": f"✅ Твій лист для «{job.get('title', 'вакансії')}» збережено. Натисни «Чернетка листа», щоб переглянути його."
+    })
+    return True
+
+
 def main():
     token = os.environ.get("TELEGRAM_BOT_TOKEN")
     chat_id = os.environ.get("TELEGRAM_CHAT_ID")
@@ -160,10 +197,11 @@ def main():
         raise RuntimeError("Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID GitHub Secret.")
 
     applications = load_json(APPLICATIONS_PATH, {})
+    editing = load_json(EDITING_PATH, {})
     offset = int(load_json(OFFSET_PATH, 0))
     response = requests.get(
         f"https://api.telegram.org/bot{token}/getUpdates",
-        params={"offset": offset, "timeout": 0, "allowed_updates": '["callback_query"]'},
+        params={"offset": offset, "timeout": 0, "allowed_updates": '["callback_query","message"]'},
         timeout=TIMEOUT
     )
     response.raise_for_status()
@@ -175,9 +213,13 @@ def main():
     processed = 0
     for update in updates:
         try:
-            handle_callback(update, applications, chat_id)
+            if update.get("callback_query"):
+                handle_callback(update, applications, chat_id, editing)
+            elif update.get("message"):
+                handle_message(update, applications, chat_id, editing)
             offset = max(offset, int(update.get("update_id", 0)) + 1)
             save_json(APPLICATIONS_PATH, applications)
+            save_json(EDITING_PATH, editing)
             save_json(OFFSET_PATH, offset)
             processed += 1
         except Exception as exc:
