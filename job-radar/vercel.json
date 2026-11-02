@@ -1,8 +1,3 @@
 {
-  "crons": [
-    {
-      "path": "/api/check",
-      "schedule": "0 7 * * *"
-    }
-  ]
+  "version": 2
 }
