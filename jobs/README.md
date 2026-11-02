@@ -9,7 +9,7 @@ Telegram job assistant for paid remote opportunities matching the user's creativ
 - Filters unpaid/volunteer work, clearly restricted US/Canada/Australia-only roles, and explicit English B2+ requirements.
 - Sends up to 10 new matches to Telegram, ranked by fit.
 - Adds Telegram inline buttons: Open vacancy, Confirm, Skip, Draft cover letter, Edit cover letter, Mark as applied.
-- Stores application statuses in `jobs/applications.json` and deduplication history in `jobs/seen.json`.
+- Stores job cards in `jobs/applications.json`, application statuses in `jobs/statuses.json`, and deduplication history in `jobs/seen.json`.
 - A separate GitHub Actions workflow polls Telegram callback buttons every 5 minutes and updates the stored status.
 
 ## Telegram actions
