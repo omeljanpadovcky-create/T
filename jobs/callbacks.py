@@ -131,7 +131,7 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
         answer_callback(query.get("id"), "Вакансію пропущено")
         api("editMessageText", {
             "chat_id": chat_id, "message_id": message.get("message_id"),
-            "text": job_message(job), "parse_mode": "HTML",
+            "text": job_message(job, state), "parse_mode": "HTML",
             "reply_markup": {"inline_keyboard": []},
             "disable_web_page_preview": True
         })
@@ -155,7 +155,7 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
         answer_callback(query.get("id"), "Статус оновлено: подано")
         api("editMessageText", {
             "chat_id": chat_id, "message_id": message.get("message_id"),
-            "text": job_message(job), "parse_mode": "HTML",
+            "text": job_message(job, state), "parse_mode": "HTML",
             "disable_web_page_preview": True
         })
     else:
