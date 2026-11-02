@@ -11,11 +11,12 @@
 - `job-radar/vercel.json` — розклад серверного запуску.
 
 ## Профіль пошуку
-Remote з України; 3D/Blender/Game Art та ілюстрація; trainee/junior/middle, freelance, contract, part-time та full-time. Враховувати реальні вимоги вакансії. До 10 релевантних чернеток на день — не заповнювати ліміт випадковими оголошеннями.
+Remote з України; 3D/Blender/Game Art та ілюстрація; trainee/junior/middle, freelance, contract, part-time та full-time. Враховувати реальні вимоги вакансії. До 10 релевантних сповіщень на день — не заповнювати ліміт випадковими оголошеннями.
 
 ## Архітектура
 - GitHub Pages — статична вебпанель.
-- Vercel (Root Directory: `job-radar`) — серверні API та cron.
+- GitHub Actions — щоденний пошук о 07:00 UTC.
+- Vercel (Root Directory: `job-radar`) — додаткові API та діагностика; cron вимкнений, щоб не було подвійних сповіщень.
 - Telegram Bot API — сповіщення.
 - Vercel Environment Variables — секрети.
 - Upstash Redis — рекомендоване постійне сховище дедуплікації.
