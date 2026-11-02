@@ -1,7 +1,7 @@
 name: ТРЕЙДМИШКА — щоденний пошук вакансій
 
 concurrency:
-  group: trade-myshka-job-radar
+  group: trade-myshka-all-workflows
   cancel-in-progress: false
 
 on:
