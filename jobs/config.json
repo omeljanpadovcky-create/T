@@ -20,7 +20,13 @@
     "3D Character Artist",
     "3D Designer",
     "3D Visualization Artist",
-    "3D Product Artist"
+    "3D Product Artist",
+    "Illustrator",
+    "Illustration Artist",
+    "Concept Artist",
+    "Book Cover Artist",
+    "Cover Illustrator",
+    "2D Artist"
   ],
   "exclude_terms": [
     "senior",
@@ -46,7 +52,13 @@
     "game art",
     "roblox",
     "minecraft",
-    "substance painter"
+    "substance painter",
+    "illustration",
+    "concept art",
+    "book cover",
+    "cover design",
+    "character design",
+    "photoshop"
   ],
   "allowed_locations": [
     "worldwide",
@@ -58,5 +70,5 @@
     "emea"
   ],
   "minimum_score": 34,
-  "max_results_per_run": 15
+  "max_results_per_run": 10
 }
