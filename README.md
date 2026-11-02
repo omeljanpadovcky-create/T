@@ -1,34 +1,36 @@
-# PASSGAN Local Lab
+# ТрейдМишка — Personal Job Radar
 
-**PassGAN is the primary project in this repository.** The root page is a research dashboard for the local generator. The real model is not hosted on Vercel: it uses a legacy TensorFlow container and runs on the user's Windows machine.
+Основний проєкт репозиторію — персональна система пошуку віддаленої оплачуваної роботи у 3D, Blender, Game Art та ілюстрації.
 
-## What is included
-- Root dashboard for local-run instructions, importing generated output, filtering lines and exporting a TXT file.
-- Isolated compatibility scripts in `tools/passgan-local`.
-- Diagnostics for count, duplicates, line lengths, encoding and control characters.
-- No login automation, credential testing, or email-to-password lookup. The optional email field is only a local dataset label and is not sent anywhere.
+## Структура
+- `index.html` — головна сторінка GitHub Pages.
+- `job-radar/` — вебпанель та серверні API для пошуку вакансій і Telegram.
+- `job-radar/api/check.js` — збір, оцінка, фільтрація та надсилання вакансій.
+- `job-radar/api/health.js` — технічний статус конфігурації.
+- `job-radar/api/telegram-setup.js` — Telegram setup.
+- `job-radar/vercel.json` — розклад серверного запуску.
 
-## Run on Windows
-From the repository root in PowerShell:
+## Профіль пошуку
+Remote з України; 3D/Blender/Game Art та ілюстрація; trainee/junior/middle, freelance, contract, part-time та full-time. Враховувати реальні вимоги вакансії. До 10 релевантних чернеток на день — не заповнювати ліміт випадковими оголошеннями.
 
-```powershell
-Set-ExecutionPolicy -Scope Process Bypass
-.\tools\passgan-local\setup.ps1
-.\tools\passgan-local\run.ps1
-```
+## Архітектура
+- GitHub Pages — статична вебпанель.
+- Vercel (Root Directory: `job-radar`) — серверні API та cron.
+- Telegram Bot API — сповіщення.
+- Vercel Environment Variables — секрети.
+- Upstash Redis — рекомендоване постійне сховище дедуплікації.
 
-The setup needs Git for Windows, Docker Desktop in Linux-container mode, and the pretrained checkpoint files. If your checkpoint already exists at `%USERPROFILE%\Downloads\PassGAN\PassGAN-master\pretrained`, the setup script attempts to copy it. Otherwise, put the required pretrained files into `tools\passgan-local\PassGAN\pretrained`. Required checkpoint files include `195000.ckpt.meta`, `195000.ckpt.index`, and the matching data shard.
+## Налаштування Vercel
+Встановити Root Directory = `job-radar`, Framework Preset = Other. Додати змінні:
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_CHAT_ID`
+- `CRON_SECRET`
+- `UPSTASH_REDIS_REST_URL` та `UPSTASH_REDIS_REST_TOKEN` (рекомендовано)
 
-Generated output:
-`tools\passgan-local\PassGAN\generated_samples.txt`
+Після додавання змінних зробити Redeploy. Перевірити `/api/health`, потім вручну запустити `/api/check` із заголовком `Authorization: Bearer <CRON_SECRET>`.
 
-Open the dashboard at the deployed static site or open `index.html` locally, then choose that output file to filter and export it. The web page does not pretend to run PassGAN in the browser.
+## Безпека та межі
+Система готує вакансії та матеріали для ручної перевірки. Вона не відправляє заявки без явного підтвердження, не обходить CAPTCHA та не імітує авторизацію. Доступність джерел вакансій може змінюватися.
 
-## Safety and limitations
-Use generated samples only for authorized password-strength research on systems and data you own or have explicit permission to test. A generated string is a guess, not proof of an account password. This project does not attempt sign-ins or test guesses against Gmail or other services.
-
-The upstream PassGAN code and TensorFlow 1.4.1 are legacy research software. Keep the container isolated, do not expose it as a web service, and do not mount unrelated files or secrets into it.
-
-## Project links
-- [PassGAN local engine](tools/passgan-local/README.md)
-- [Upstream PassGAN research repository](https://github.com/brannondorsey/PassGAN)
+## GitHub Pages
+Settings → Pages → Deploy from a branch → `main` → `/ (root)`.
