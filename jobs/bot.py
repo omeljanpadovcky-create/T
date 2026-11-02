@@ -221,8 +221,9 @@ def main():
                 ],
                 [
                     {"text": "✉️ Чернетка листа", "callback_data": f"letter|{short_id}"},
-                    {"text": "📨 Позначити поданою", "callback_data": f"applied|{short_id}"}
-                ]
+                    {"text": "✏️ Редагувати лист", "callback_data": f"edit|{short_id}"}
+                ],
+                [{"text": "📨 Позначити поданою", "callback_data": f"applied|{short_id}"}]
             ]
         }
         telegram_message = send_telegram(message, keyboard)
