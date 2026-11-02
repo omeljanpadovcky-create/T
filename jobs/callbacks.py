@@ -39,6 +39,16 @@ def safe(value):
     return html.escape(str(value or ""))
 
 
+def answer_callback(query_id, text):
+    if not query_id:
+        return
+    try:
+        api("answerCallbackQuery", {"callback_query_id": query_id, "text": text})
+    except requests.RequestException as exc:
+        # Telegram expires callback query IDs after a short time. The action itself can still be processed.
+        print(f"Could not show callback toast (possibly expired): {exc}")
+
+
 def job_message(job):
     status = {
         "new": "Нова", "confirmed": "Підтверджена",
@@ -83,22 +93,22 @@ def handle_callback(update, applications, allowed_chat):
     message = query.get("message") or {}
     chat_id = str((message.get("chat") or {}).get("id", ""))
     if chat_id != str(allowed_chat):
-        api("answerCallbackQuery", {"callback_query_id": query.get("id"), "text": "Немає доступу"})
+        answer_callback(query.get("id"), "Немає доступу")
         return False
 
     parts = str(query.get("data") or "").split("|", 1)
     if len(parts) != 2:
-        api("answerCallbackQuery", {"callback_query_id": query.get("id"), "text": "Невідома дія"})
+        answer_callback(query.get("id"), "Невідома дія")
         return False
     action, short_id = parts
     job = applications.get(short_id)
     if not job:
-        api("answerCallbackQuery", {"callback_query_id": query.get("id"), "text": "Вакансію не знайдено"})
+        answer_callback(query.get("id"), "Вакансію не знайдено")
         return False
 
     if action == "confirm":
         job["status"] = "confirmed"
-        api("answerCallbackQuery", {"callback_query_id": query.get("id"), "text": "Вакансію підтверджено"})
+        answer_callback(query.get("id"), "Вакансію підтверджено")
         keyboard = {"inline_keyboard": [
             [{"text": "🔗 Відкрити вакансію", "url": job["url"]}],
             [
@@ -114,7 +124,7 @@ def handle_callback(update, applications, allowed_chat):
         })
     elif action == "skip":
         job["status"] = "skipped"
-        api("answerCallbackQuery", {"callback_query_id": query.get("id"), "text": "Вакансію пропущено"})
+        answer_callback(query.get("id"), "Вакансію пропущено")
         api("editMessageText", {
             "chat_id": chat_id, "message_id": message.get("message_id"),
             "text": job_message(job), "parse_mode": "HTML",
@@ -122,7 +132,7 @@ def handle_callback(update, applications, allowed_chat):
             "disable_web_page_preview": True
         })
     elif action == "letter":
-        api("answerCallbackQuery", {"callback_query_id": query.get("id"), "text": "Готую чернетку"})
+        answer_callback(query.get("id"), "Готую чернетку")
         text = "✉️ <b>ЧЕРНЕТКА СУПРОВІДНОГО ЛИСТА</b>\n"
         text += f"Вакансія: <b>{safe(job.get('title'))}</b> · {safe(job.get('company'))}\n\n"
         text += f"<pre>{safe(cover_letter(job))}</pre>\n"
@@ -131,7 +141,7 @@ def handle_callback(update, applications, allowed_chat):
         job["letter_created"] = True
     elif action == "applied":
         job["status"] = "applied"
-        api("answerCallbackQuery", {"callback_query_id": query.get("id"), "text": "Статус оновлено: подано"})
+        answer_callback(query.get("id"), "Статус оновлено: подано")
         api("editMessageText", {
             "chat_id": chat_id, "message_id": message.get("message_id"),
             "text": job_message(job), "parse_mode": "HTML",
