@@ -19,7 +19,7 @@ def load_json(path, default):
 
 
 def save_json(path, value):
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def api(method, payload):
@@ -45,11 +45,11 @@ def job_message(job):
         "skipped": "Пропущена", "applied": "Подана"
     }.get(job.get("status"), job.get("status", "Нова"))
     return (
-        f"🐭 <b>ТРЕЙДМИШКА · {int(job.get('score') or 0)}/100</b>\\n"
-        f"💼 <b>{safe(job.get('title'))}</b>\\n"
-        f"🏢 {safe(job.get('company') or 'Компанія не вказана')}\\n"
-        f"🌍 {safe(job.get('location') or 'Remote')}\\n"
-        f"📌 {safe(job.get('source'))}\\n"
+        f"🐭 <b>ТРЕЙДМИШКА · {int(job.get('score') or 0)}/100</b>\n"
+        f"💼 <b>{safe(job.get('title'))}</b>\n"
+        f"🏢 {safe(job.get('company') or 'Компанія не вказана')}\n"
+        f"🌍 {safe(job.get('location') or 'Remote')}\n"
+        f"📌 {safe(job.get('source'))}\n"
         f"🟢 <b>Статус: {status}</b>"
     )
 
@@ -65,15 +65,15 @@ def cover_letter(job):
             skills.append(skill)
     skill_line = ", ".join(skills[:4]) if skills else "Blender and visual design"
     return (
-        f"Hello {company} team,\\n\\n"
+        f"Hello {company} team,\n\n"
         f"I would like to apply for the {title} position. "
         "I am a designer from Ukraine with practical experience in visual design and creative projects. "
-        f"My work includes {skill_line}. I use Blender and design tools to create clear, detailed visuals.\\n\\n"
+        f"My work includes {skill_line}. I use Blender and design tools to create clear, detailed visuals.\n\n"
         "I am motivated to learn, follow feedback and improve my work. "
-        "I would be happy to show you my portfolio and discuss how I can help your team.\\n\\n"
-        "Thank you for your time.\\n"
-        "Best regards,\\n"
-        "Omelyan Padovsky\\n"
+        "I would be happy to show you my portfolio and discuss how I can help your team.\n\n"
+        "Thank you for your time.\n"
+        "Best regards,\n"
+        "Omelyan Padovsky\n"
         "[Portfolio link]"
     )
 
@@ -118,13 +118,14 @@ def handle_callback(update, applications, allowed_chat):
         api("editMessageText", {
             "chat_id": chat_id, "message_id": message.get("message_id"),
             "text": job_message(job), "parse_mode": "HTML",
+            "reply_markup": {"inline_keyboard": []},
             "disable_web_page_preview": True
         })
     elif action == "letter":
         api("answerCallbackQuery", {"callback_query_id": query.get("id"), "text": "Готую чернетку"})
-        text = "✉️ <b>ЧЕРНЕТКА СУПРОВІДНОГО ЛИСТА</b>\\n"
-        text += f"Вакансія: <b>{safe(job.get('title'))}</b> · {safe(job.get('company'))}\\n\\n"
-        text += f"<pre>{safe(cover_letter(job))}</pre>\\n"
+        text = "✉️ <b>ЧЕРНЕТКА СУПРОВІДНОГО ЛИСТА</b>\n"
+        text += f"Вакансія: <b>{safe(job.get('title'))}</b> · {safe(job.get('company'))}\n\n"
+        text += f"<pre>{safe(cover_letter(job))}</pre>\n"
         text += "Перевір текст і додай посилання на портфоліо перед відправленням."
         api("sendMessage", {"chat_id": chat_id, "text": text, "parse_mode": "HTML", "disable_web_page_preview": True})
         job["letter_created"] = True
