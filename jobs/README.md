@@ -5,7 +5,7 @@ Telegram job assistant for paid remote opportunities matching the user's creativ
 ## What it does
 - Searches daily via GitHub Actions at 07:00 UTC.
 - Sources: Arbeitnow, RemoteOK, Remotive (3D, Blender, Game Artist, Illustration, Concept Artist queries), and Himalayas.
-- Targets 3D Artist, Blender Artist, 3D Modeler, Character Artist, Game Artist, Environment / Prop Artist, Illustrator, Concept Artist, Book Cover Artist and Cover Illustrator.
+- Targets 3D Artist, Blender Artist, 3D Modeler, Character Artist, Game Artist, Environment / Prop Artist, Illustrator, Concept Artist, Book Cover Artist, Cover Illustrator, Graphic Designer, Visual Designer, Digital Designer, UI/UX Designer and Web Designer.
 - Filters unpaid/volunteer work, clearly restricted US/Canada/Australia-only roles, and explicit English B2+ requirements.
 - Sends up to 10 new matches to Telegram, ranked by fit.
 - Adds Telegram inline buttons: Open vacancy, Confirm, Skip, Draft cover letter, Edit cover letter, Mark as applied.
