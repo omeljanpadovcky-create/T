@@ -26,7 +26,16 @@
     "Concept Artist",
     "Book Cover Artist",
     "Cover Illustrator",
-    "2D Artist"
+    "2D Artist",
+    "Graphic Designer",
+    "Visual Designer",
+    "Digital Designer",
+    "UI Designer",
+    "UI/UX Designer",
+    "UX/UI Designer",
+    "Web Designer",
+    "Product Designer",
+    "2D Illustrator"
   ],
   "exclude_terms": [
     "director",
@@ -55,7 +64,16 @@
     "book cover",
     "cover design",
     "character design",
-    "photoshop"
+    "photoshop",
+    "figma",
+    "ui/ux",
+    "ui design",
+    "web design",
+    "visual design",
+    "graphic design",
+    "canva",
+    "adobe illustrator",
+    "adobe photoshop"
   ],
   "allowed_locations": [
     "worldwide",
