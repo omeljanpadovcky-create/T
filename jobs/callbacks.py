@@ -72,7 +72,9 @@ def cover_letter(job):
     description = (job.get("description") or "").lower()
     skills = []
     for skill in ["Blender", "3D modeling", "low-poly modeling", "game assets",
-                  "Photoshop", "illustration", "character design", "environment art"]:
+                  "Photoshop", "Illustrator", "Figma", "video editing", "graphic design",
+                  "visual design", "Shopify", "email design", "illustration",
+                  "character design", "environment art"]:
         if skill.lower() in description:
             skills.append(skill)
     skill_line = ", ".join(skills[:4]) if skills else "Blender and visual design"
