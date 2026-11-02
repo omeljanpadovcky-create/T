@@ -117,8 +117,6 @@ def score_job(job):
         return 0, "Not a target role"
     if re.search(r"\b(unpaid|volunteer|commission[- ]only|no salary|equity only)\b", searchable):
         return 0, "Unpaid or volunteer role"
-    if re.search(r"\b(usa|united states|canada|australia)\s+only\b|only\s+(usa|united states|canada|australia)", location):
-        return 0, "Outside target geography"
     if re.search(r"\b(english|spoken english)\s*(level|proficiency)?\s*[:\-]?\s*(b2|c1|c2|fluent|native|advanced|upper[- ]intermediate)\b|\b(b2|c1|c2)\s+english\b", searchable):
         return 0, "English requirement above A2/B1"
     if re.search(r"\b(usa|united states|canada|australia)\s+only\b|only\s+(usa|united states|canada|australia)", location):
@@ -188,8 +186,14 @@ def main():
     applications = load_json(APPLICATIONS_PATH, {})
     jobs = collect_jobs()
     matches = []
+    rejection_counts = {}
+    eligible_count = 0
     for job in jobs:
         score, reason = score_job(job)
+        if score:
+            eligible_count += 1
+        else:
+            rejection_counts[reason] = rejection_counts.get(reason, 0) + 1
         key = job_id(job)
         if score >= CONFIG["minimum_score"] and key not in seen:
             matches.append((score, reason, key, job))
@@ -246,7 +250,8 @@ def main():
             f"Перевірено оголошень: <b>{len(jobs)}</b>.\n"
             "Нових збігів за поточними фільтрами немає. Наступна перевірка відбудеться автоматично."
         )
-    print(f"Scanned {len(jobs)} listings; sent {sent} new matches; saved {len(applications)} application records.")
+    print(f"Scanned {len(jobs)} listings; eligible {eligible_count}; sent {sent} new matches; saved {len(applications)} application records.")
+    print("Top rejection reasons: " + json.dumps(dict(sorted(rejection_counts.items(), key=lambda item: item[1], reverse=True)[:8]), ensure_ascii=False))
 
 
 if __name__ == "__main__":
