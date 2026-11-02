@@ -21,29 +21,21 @@
   <section class="panel">
     <h2>Як працює</h2>
     <ol>
-      <li>Щодня перевіряє Himalayas за 7 запитами для 3D/Blender/Game Art, а також Remotive, RemoteOK та Arbeitnow.</li>
-      <li>Відбирає remote-вакансії за 3D/Blender/Game Art навичками.</li>
-      <li>Відсіює Senior/Lead, AI annotation, sales, unpaid, неєвропейські обмеження та вимоги English B2+.</li>
-      <li>Ранжує збіги, прибирає дублікати (за наявності Redis) й надсилає до 10 нових у Telegram.</li>
+      <li>Щодня GitHub Actions перевіряє Arbeitnow, RemoteOK, Remotive та Himalayas.</li>
+      <li>Шукає 3D/Blender, Game Art, Illustration, Concept Art, Book Cover та графічний/UI-дизайн.</li>
+      <li>Відсіює неоплачувані ролі, явні обмеження країн та вакансії з вимогою English B2+.</li>
+      <li>Надсилає до 10 нових збігів у Telegram із кнопками підтвердження, пропуску, чернетки й редагування листа та статусу подачі.</li>
     </ol>
   </section>
   <section class="panel">
     <h2>Статус системи</h2>
-    <p id="status">Перевіряю конфігурацію…</p>
-    <p><a href="/api/health">Відкрити технічний статус API</a></p>
+    <p>Основний пошук і Telegram працюють через GitHub Actions. Кнопки Telegram обробляються автоматично кожні 5 хвилин.</p>
+    <p><a href="https://github.com/omeljanpadovcky-create/T/actions">Перевірити запуски та журнал роботи</a></p>
   </section>
   <section class="panel">
     <h2>Профіль пошуку</h2>
     <p>Локація: віддалено, Україна / Європа / Worldwide. Рівень: Trainee, Junior та Middle. Інструменти: Blender, Photoshop, Figma, Canva. Англійська: A2. Портфоліо: близько 15 робіт. Відсікаємо вимоги B2+.</p>
-    <p>Система надсилає посилання для ручної перевірки. Подання заявки — лише після твого рішення.</p>
+    <p>У кожній картці є кнопки: відкрити вакансію, підтвердити, пропустити, створити або відредагувати супровідний лист, позначити заявку поданою. Реальні заявки надсилаються лише вручну після твого рішення.</p>
   </section>
 </main>
-<script>
-fetch('/api/health').then(r=>r.json()).then(d=>{
- const c=d.configured;
- document.getElementById('status').textContent =
-   'API працює. Telegram: '+(c.telegram?'підключений':'потрібне налаштування')+
-   '. Захист Cron: '+(c.cronProtection?'увімкнений':'потрібне налаштування')+
-   '. Антидублікати: '+(c.deduplication?'увімкнені':'потрібне налаштування');
-}).catch(()=>document.getElementById('status').textContent='API ще не налаштований або не розгорнутий.');
-</script></body></html>
+</body></html>
