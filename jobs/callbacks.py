@@ -7,6 +7,7 @@ import requests
 
 ROOT = Path(__file__).resolve().parent
 APPLICATIONS_PATH = ROOT / "applications.json"
+STATUSES_PATH = ROOT / "statuses.json"
 OFFSET_PATH = ROOT / "update_offset.json"
 EDITING_PATH = ROOT / "editing.json"
 TIMEOUT = 20
@@ -50,11 +51,11 @@ def answer_callback(query_id, text):
         print(f"Could not show callback toast (possibly expired): {exc}")
 
 
-def job_message(job):
+def job_message(job, state):
     status = {
         "new": "Нова", "confirmed": "Підтверджена",
         "skipped": "Пропущена", "applied": "Подана"
-    }.get(job.get("status"), job.get("status", "Нова"))
+    }.get(state.get("status", "new"), state.get("status", "Нова"))
     return (
         f"🐭 <b>ТРЕЙДМИШКА · {int(job.get('score') or 0)}/100</b>\n"
         f"💼 <b>{safe(job.get('title'))}</b>\n"
@@ -89,7 +90,7 @@ def cover_letter(job):
     )
 
 
-def handle_callback(update, applications, allowed_chat, editing):
+def handle_callback(update, applications, statuses, allowed_chat, editing):
     query = update.get("callback_query") or {}
     message = query.get("message") or {}
     chat_id = str((message.get("chat") or {}).get("id", ""))
@@ -106,9 +107,10 @@ def handle_callback(update, applications, allowed_chat, editing):
     if not job:
         answer_callback(query.get("id"), "Вакансію не знайдено")
         return False
+    state = statuses.setdefault(short_id, {"status": "new"})
 
     if action == "confirm":
-        job["status"] = "confirmed"
+        state["status"] = "confirmed"
         answer_callback(query.get("id"), "Вакансію підтверджено")
         keyboard = {"inline_keyboard": [
             [{"text": "🔗 Відкрити вакансію", "url": job["url"]}],
@@ -121,11 +123,11 @@ def handle_callback(update, applications, allowed_chat, editing):
         ]}
         api("editMessageText", {
             "chat_id": chat_id, "message_id": message.get("message_id"),
-            "text": job_message(job), "parse_mode": "HTML", "reply_markup": keyboard,
+            "text": job_message(job, state), "parse_mode": "HTML", "reply_markup": keyboard,
             "disable_web_page_preview": True
         })
     elif action == "skip":
-        job["status"] = "skipped"
+        state["status"] = "skipped"
         answer_callback(query.get("id"), "Вакансію пропущено")
         api("editMessageText", {
             "chat_id": chat_id, "message_id": message.get("message_id"),
@@ -137,10 +139,10 @@ def handle_callback(update, applications, allowed_chat, editing):
         answer_callback(query.get("id"), "Готую чернетку")
         text = "✉️ <b>ЧЕРНЕТКА СУПРОВІДНОГО ЛИСТА</b>\n"
         text += f"Вакансія: <b>{safe(job.get('title'))}</b> · {safe(job.get('company'))}\n\n"
-        text += f"<pre>{safe(job.get('custom_cover_letter') or cover_letter(job))}</pre>\n"
+        text += f"<pre>{safe(state.get('custom_cover_letter') or cover_letter(job))}</pre>\n"
         text += "Перевір текст і додай посилання на портфоліо перед відправленням."
         api("sendMessage", {"chat_id": chat_id, "text": text, "parse_mode": "HTML", "disable_web_page_preview": True})
-        job["letter_created"] = True
+        state["letter_created"] = True
     elif action == "edit":
         editing["job_id"] = short_id
         answer_callback(query.get("id"), "Надішли свій текст листа в чат")
@@ -149,7 +151,7 @@ def handle_callback(update, applications, allowed_chat, editing):
             "text": "✏️ Надішли нову версію супровідного листа одним повідомленням. Я збережу її для цієї вакансії. Для скасування напиши /cancel."
         })
     elif action == "applied":
-        job["status"] = "applied"
+        state["status"] = "applied"
         answer_callback(query.get("id"), "Статус оновлено: подано")
         api("editMessageText", {
             "chat_id": chat_id, "message_id": message.get("message_id"),
@@ -162,7 +164,7 @@ def handle_callback(update, applications, allowed_chat, editing):
     return True
 
 
-def handle_message(update, applications, allowed_chat, editing):
+def handle_message(update, applications, statuses, allowed_chat, editing):
     message = update.get("message") or {}
     chat_id = str((message.get("chat") or {}).get("id", ""))
     if chat_id != str(allowed_chat) or not editing.get("job_id"):
@@ -180,8 +182,9 @@ def handle_message(update, applications, allowed_chat, editing):
         editing.clear()
         api("sendMessage", {"chat_id": chat_id, "text": "Не знайшов вакансію для цього листа. Почни редагування ще раз із картки вакансії."})
         return True
-    job["custom_cover_letter"] = text[:3500]
-    job["letter_created"] = True
+    state = statuses.setdefault(short_id, {"status": "new"})
+    state["custom_cover_letter"] = text[:3500]
+    state["letter_created"] = True
     editing.clear()
     api("sendMessage", {
         "chat_id": chat_id,
@@ -197,6 +200,7 @@ def main():
         raise RuntimeError("Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID GitHub Secret.")
 
     applications = load_json(APPLICATIONS_PATH, {})
+    statuses = load_json(STATUSES_PATH, {})
     editing = load_json(EDITING_PATH, {})
     offset = int(load_json(OFFSET_PATH, 0))
     response = requests.get(
@@ -214,11 +218,11 @@ def main():
     for update in updates:
         try:
             if update.get("callback_query"):
-                handle_callback(update, applications, chat_id, editing)
+                handle_callback(update, applications, statuses, chat_id, editing)
             elif update.get("message"):
-                handle_message(update, applications, chat_id, editing)
+                handle_message(update, applications, statuses, chat_id, editing)
             offset = max(offset, int(update.get("update_id", 0)) + 1)
-            save_json(APPLICATIONS_PATH, applications)
+            save_json(STATUSES_PATH, statuses)
             save_json(EDITING_PATH, editing)
             save_json(OFFSET_PATH, offset)
             processed += 1
