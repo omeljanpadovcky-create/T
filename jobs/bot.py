@@ -10,7 +10,7 @@ import requests
 ROOT = Path(__file__).resolve().parent
 CONFIG = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
 SEEN_PATH = ROOT / "seen.json"
-HEADERS = {"User-Agent": "MYSHKA-JOBS/0.3"}
+HEADERS = {"User-Agent": "TradeMyshka-JobRadar/1.0"}
 TIMEOUT = 20
 
 
@@ -178,7 +178,7 @@ def main():
         if "not specified" in norm(location):
             eligibility_note = "⚠️ Країни найму не вказані — перевір, чи приймають кандидатів з України.\n"
         message = (
-            f"🐭 MYSHKA JOBS — {score}/100\n"
+            f"🐭 ТРЕЙДМИШКА — {score}/100\n"
             f"💼 {job.get('title')}\n"
             f"🏢 {job.get('company') or 'Company not specified'}\n"
             f"🌍 {location}\n"
@@ -193,7 +193,7 @@ def main():
 
     if os.getenv("MYSHKA_NOTIFY_EMPTY", "").lower() == "true" and sent == 0:
         send_telegram(
-            "🐭 MYSHKA JOBS підключений до Telegram!\n"
+            "🐭 ТРЕЙДМИШКА підключена до Telegram!\n"
             f"Перевірка завершена: переглянуто {len(jobs)} оголошень.\n"
             "Нових вакансій за твоїми фільтрами цього разу не знайдено. "
             "Наступні перевірки надсилатимуть нові збіги автоматично."
