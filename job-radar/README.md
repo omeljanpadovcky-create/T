@@ -1,17 +1,17 @@
-# MYSHKA JOB RADAR
+# ТРЕЙДМИШКА — Job Radar
 
-Personal Telegram job-alert bot. It scans remote job APIs, scores 3D/Blender/Game Art roles, and sends the best matches to Telegram.
+API-пошук вакансій для ТрейдМишки. Основний щоденний запуск виконує GitHub Actions; цей Vercel API залишається додатковим endpoint для ручної перевірки та діагностики.
 
 ## Target profile
 - Remote: Ukraine, Europe, worldwide
-- Roles: 3D Character Artist, Blender Artist, Game Asset Artist, Junior 3D Artist, 3D Modeler, Environment Artist, Prop Artist
+- Roles: 3D Character Artist, Blender Artist, Game Asset Artist, 3D Modeler, Environment / Prop Artist, Illustrator, Concept Artist, Cover Illustrator
 - Skills: Blender, Photoshop, Figma, Canva
 - English: A2
 - Portfolio: approximately 15 projects
 - Excludes AI data annotation/trainer roles, sales, unpaid work and unrelated support roles
 
 ## Sources
-- Himalayas Remote Jobs API (keyword searches for Blender, 3D Artist, Character Artist, Game Artist, Environment Artist, 3D Modeler and Prop Artist)
+- Himalayas Remote Jobs API (Blender, 3D, Character, Game, Environment, Prop, Illustration, Concept and Cover Artist keywords)
 - Remotive public API
 - RemoteOK public API
 - Arbeitnow public API
@@ -40,7 +40,7 @@ The Redis variables are optional, but without them duplicate filtering cannot pe
 5. Add the token and chat ID as Vercel environment variables.
 
 ## Schedule and test
-- Vercel Hobby schedule: daily at 07:00 UTC (09:00 Kyiv in winter / 10:00 in summer; Hobby may start at any time within that UTC hour).
+- Daily scheduler: GitHub Actions at 07:00 UTC (09:00 Kyiv in winter / 10:00 in summer). Vercel cron is disabled to avoid duplicate daily alerts.
 - Manual test: send a GET or POST request to `/api/check` with header `Authorization: Bearer YOUR_CRON_SECRET`.
 - Status: `/api/health`.
 
