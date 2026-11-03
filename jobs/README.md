@@ -1,38 +1,43 @@
-# ТРЕЙДМИШКА — Job Radar
+# MYSHKA JOB RADAR — applications with your approval
 
-Telegram job assistant for paid remote opportunities matching the user's creative profile.
+## Existing search
+- Daily search through GitHub Actions.
+- Sources: Arbeitnow, RemoteOK, Remotive and Himalayas.
+- Up to 10 new matches per run.
+- Telegram callbacks are polled every 5 minutes.
 
-## What it does
-- Searches daily via GitHub Actions at 07:00 UTC.
-- Sources: Arbeitnow, RemoteOK, Remotive (3D, Blender, Game Artist, Illustration, Concept Artist queries), and Himalayas.
-- Targets 3D Artist, Blender Artist, 3D Modeler, Character Artist, Game Artist, Environment / Prop Artist, Illustrator, Concept Artist, Book Cover Artist, Cover Illustrator, Graphic Designer, Visual Designer, Digital Designer, UI/UX Designer and Web Designer.
-- Filters unpaid/volunteer work, clearly restricted US/Canada/Australia-only roles, and explicit English B2+ requirements.
-- Sends up to 10 new matches to Telegram, ranked by fit.
-- Adds Telegram inline buttons: Open vacancy, Confirm, Skip, Draft cover letter, Edit cover letter, Mark as applied.
-- Stores job cards in `jobs/applications.json`, application statuses in `jobs/statuses.json`, and deduplication history in `jobs/seen.json`.
-- A separate GitHub Actions workflow polls Telegram callback buttons every 5 minutes and updates the stored status.
+## Application preparation flow
+1. **Відібрати вакансію** marks a job as selected; it does not submit anything.
+2. **Підготувати повну заявку** creates an editable package in the Telegram conversation:
+   - cover letter;
+   - email subject and body;
+   - short introduction;
+   - suggested answers for common form questions;
+   - salary wording based on the listing, or a request for the employer's range if salary is missing;
+   - destination URL, extracted employer email (only if present in the listing), and field-by-field instructions.
+3. Review the text and edit the cover letter if needed.
+4. **ПІДТВЕРДЖУЮ ПАКЕТ** records your approval for that version.
+5. Open the employer page and submit manually. Then press **Я ВЖЕ ВІДПРАВИВ ЗАЯВКУ** to update the tracker.
 
-## Telegram actions
-- **Confirm** marks the vacancy as confirmed for review.
-- **Skip** marks it as skipped and removes the buttons.
-- **Draft cover letter** sends an English draft based on the role and available job description. Review it and insert the portfolio link before sending.
-- **Edit cover letter** lets you send your own revised text in Telegram; the bot saves it against that vacancy.
-- **Mark as applied** updates the status to applied.
-- Applications are never submitted automatically.
+## Important safety and privacy rules
+- This version does not automatically submit forms or send emails. It prepares the material and guides you to the employer's destination. Email/ATS submission integrations can be added later.
+- A vacancy is never marked submitted just because it was selected or approved. The final status is recorded only after you explicitly confirm that you submitted it.
+- Generated application text is sent to your private Telegram chat and is not written to the public repository.
+- jobs/statuses.json stores workflow state only, not cover letters or answers.
+- Do not add private contact details, portfolio URLs, CV links, or salary preferences to tracked JSON files. Configure them as GitHub Actions repository secrets instead.
 
-## Required GitHub Secrets
-Repository Settings → Secrets and variables → Actions:
-- `TELEGRAM_BOT_TOKEN` — token from BotFather.
-- `TELEGRAM_CHAT_ID` — your private chat ID. Open the bot and send `/start` before using it.
+## Optional candidate profile secrets
+Repository → Settings → Secrets and variables → Actions:
+- MYSHKA_CANDIDATE_NAME
+- MYSHKA_PORTFOLIO_URL
+- MYSHKA_CV_URL
+- MYSHKA_CONTACT_EMAIL
+- MYSHKA_SALARY_EXPECTATION
 
-Do not put secrets in source files or commit them.
+The non-sensitive defaults in jobs/profile.json describe the candidate's current design practice, A2 English level, approximate portfolio size and toolset. Update them only if they remain accurate.
 
-## Workflows
-- `.github/workflows/myshka-jobs.yml`: daily vacancy search.
-- `.github/workflows/myshka-callbacks.yml`: checks Telegram button callbacks every 5 minutes.
-- Both workflows share one concurrency group to prevent state-file push conflicts.
+## Required existing secrets
+- TELEGRAM_BOT_TOKEN
+- TELEGRAM_CHAT_ID
 
-## Notes
-- Callback processing can take up to 5 minutes because it uses GitHub Actions polling.
-- Salary, country eligibility and application requirements must be checked on the employer's page. Some public sources omit these details.
-- The cover-letter text is a draft, not an automatically submitted application.
+Never commit secret values or send them in chat.
