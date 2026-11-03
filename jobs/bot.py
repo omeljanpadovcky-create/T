@@ -203,7 +203,7 @@ def send_telegram(message, reply_markup=None):
             error = {"description": response.text[:500]}
         description = error.get("description") or str(error)
         raise RuntimeError(
-            f"Telegram sendMessage failed (HTTP {response.status}): {description}. "
+            f"Telegram sendMessage failed (HTTP {response.status_code}): {description}. "
             "Check that the bot is not blocked and TELEGRAM_CHAT_ID is the private chat ID."
         )
     result = response.json()
