@@ -34,7 +34,7 @@ class ApplicationGeneratorTests(unittest.TestCase):
         package = generate_application(self.job, self.profile)
         self.assertIn("Junior 3D Artist", package["cover_letter"])
         self.assertIn("Blender", package["cover_letter"])
-        self.assertIn("Omelyan Padovsky", package["short_intro"])
+        self.assertIn("Test Candidate", package["short_intro"])
         self.assertEqual(package["portfolio"]["url"], "")
         self.assertTrue(package["checks"]["portfolio_url_missing"])
         self.assertIn("[ADD YOUR PORTFOLIO LINK", package["cover_letter"])
