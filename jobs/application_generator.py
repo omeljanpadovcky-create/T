@@ -104,6 +104,14 @@ def generate_application(job, profile):
         if portfolio_links else
         "Missing: add a general or role-specific portfolio URL before sending."
     )
+    if portfolio_links and not portfolio_url:
+        selected_links_text = "\\n".join(
+            f"{item['label']}: {item['url']}" for item in portfolio_links
+        )
+        cover_letter = cover_letter.replace(
+            "[ADD YOUR PORTFOLIO LINK BEFORE SENDING]", selected_links_text
+        )
+        email_body = email_body.replace("[ADD YOUR PORTFOLIO LINK]", selected_links_text)
     cv_state = f"Configured: {cv_url}" if cv_url else "No CV link configured."
     requirements = []
     for phrase in ["English", "portfolio", "resume", "CV", "Blender", "Figma",
@@ -163,7 +171,7 @@ def generate_application(job, profile):
             "will_submit_automatically": False
         },
         "checks": {
-            "portfolio_url_missing": not bool(portfolio_url),
+            "portfolio_url_missing": not bool(portfolio_links),
             "cv_url_missing": not bool(cv_url),
             "contact_email_missing": not bool(email),
             "salary_expectation_missing": not bool(profile.get("salary_expectation")),
