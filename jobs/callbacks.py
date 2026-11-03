@@ -118,16 +118,24 @@ def approved_keyboard(short_id, job):
 
 
 def send_package(chat_id, short_id, job, package):
-    text = render_application_text(package)
-    text = re.sub(r"</?b>", "", text)
-    if len(text) > 3900:
-        text = text[:3850] + "\n\n[Пакет скорочено для Telegram. Повні поля збережені в application package.]"
-    api("sendMessage", {
-        "chat_id": chat_id,
-        "text": text,
-        "reply_markup": package_keyboard(short_id, job),
-        "disable_web_page_preview": True
-    })
+    text = re.sub(r"</?b>", "", render_application_text(package))
+    chunks = []
+    while len(text) > 3800:
+        cut = text.rfind("\n", 0, 3800)
+        if cut < 1000:
+            cut = 3800
+        chunks.append(text[:cut])
+        text = text[cut:].lstrip()
+    chunks.append(text)
+    for index, chunk in enumerate(chunks):
+        payload = {
+            "chat_id": chat_id,
+            "text": chunk,
+            "disable_web_page_preview": True
+        }
+        if index == len(chunks) - 1:
+            payload["reply_markup"] = package_keyboard(short_id, job)
+        api("sendMessage", payload)
 
 
 def handle_callback(update, applications, statuses, allowed_chat, editing):
