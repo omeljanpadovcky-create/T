@@ -255,14 +255,10 @@ def main():
             "inline_keyboard": [
                 [{"text": "🔗 Відкрити вакансію", "url": as_text(job.get("url"))}],
                 [
-                    {"text": "✅ Підтвердити", "callback_data": f"confirm|{short_id}"},
+                    {"text": "✅ Відібрати вакансію", "callback_data": f"confirm|{short_id}"},
                     {"text": "⏭ Пропустити", "callback_data": f"skip|{short_id}"}
                 ],
-                [
-                    {"text": "✉️ Чернетка листа", "callback_data": f"letter|{short_id}"},
-                    {"text": "✏️ Редагувати лист", "callback_data": f"edit|{short_id}"}
-                ],
-                [{"text": "📨 Позначити поданою", "callback_data": f"applied|{short_id}"}]
+                [{"text": "🧾 Підготувати повну заявку", "callback_data": f"prepare|{short_id}"}]
             ]
         }
         telegram_message = send_telegram(message, keyboard)
