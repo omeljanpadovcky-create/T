@@ -267,8 +267,7 @@ def main():
             "company": as_text(job.get("company")), "location": as_text(job.get("location")),
             "url": as_text(job.get("url")), "description": as_text(job.get("description"))[:12000],
             "source": as_text(job.get("source")), "score": score, "reason": reason,
-            "status": "new", "message_id": telegram_message.get("message_id"),
-            "chat_id": telegram_message.get("chat", {}).get("id")
+            "status": "new", "message_id": telegram_message.get("message_id")
         }
         seen.add(key)
         save_json(APPLICATIONS_PATH, applications)
