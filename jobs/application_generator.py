@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 
 def clean(value):
     text = html.unescape(re.sub(r"<[^>]+>", " ", str(value or "")))
-    return re.sub(r"\\s+", " ", text).strip()
+    return re.sub(r"\s+", " ", text).strip()
 
 
 def matched_skills(job, profile):
@@ -75,7 +75,7 @@ def generate_application(job, profile):
     )
 
     application_email = ""
-    email_match = re.search(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}", description, re.I)
+    email_match = re.search(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}", description, re.I)
     if email_match:
         application_email = email_match.group(0)
 
@@ -188,4 +188,4 @@ def render_application_text(package):
         "",
         "⚠️ Перевір усі тексти. Це чернетки, не відправлена заявка."
     ]
-    return "\\n".join(lines)
+    return "\n".join(lines)
