@@ -196,7 +196,16 @@ def send_telegram(message, reply_markup=None):
         f"https://api.telegram.org/bot{token}/sendMessage",
         json=payload, timeout=TIMEOUT
     )
-    response.raise_for_status()
+    if not response.ok:
+        try:
+            error = response.json()
+        except ValueError:
+            error = {"description": response.text[:500]}
+        description = error.get("description") or str(error)
+        raise RuntimeError(
+            f"Telegram sendMessage failed (HTTP {response.status}): {description}. "
+            "Check that the bot is not blocked and TELEGRAM_CHAT_ID is the private chat ID."
+        )
     result = response.json()
     if not result.get("ok"):
         raise RuntimeError("Telegram API rejected sendMessage: " + str(result))
