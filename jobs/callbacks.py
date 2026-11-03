@@ -64,6 +64,10 @@ def load_profile():
     env_fields = {
         "name": "MYSHKA_CANDIDATE_NAME",
         "portfolio_url": "MYSHKA_PORTFOLIO_URL",
+        "portfolio_3d_url": "MYSHKA_PORTFOLIO_3D_URL",
+        "portfolio_game_art_url": "MYSHKA_PORTFOLIO_GAME_ART_URL",
+        "portfolio_design_url": "MYSHKA_PORTFOLIO_DESIGN_URL",
+        "portfolio_illustration_url": "MYSHKA_PORTFOLIO_ILLUSTRATION_URL",
         "cv_url": "MYSHKA_CV_URL",
         "contact_email": "MYSHKA_CONTACT_EMAIL",
         "salary_expectation": "MYSHKA_SALARY_EXPECTATION"
