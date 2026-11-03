@@ -25,6 +25,7 @@ def generate_application(job, profile):
     skills = matched_skills(job, profile)
     skills_text = ", ".join(skills[:4]) if skills else "visual design and creative work"
     name = profile.get("name", "Candidate")
+    practice_years = profile.get("design_practice_years", "several")
     portfolio_url = (profile.get("portfolio_url") or "").strip()
     cv_url = (profile.get("cv_url") or "").strip()
     email = (profile.get("contact_email") or "").strip()
@@ -35,7 +36,7 @@ def generate_application(job, profile):
     cover_letter = (
         f"Hello {company} team,\n\n"
         f"I am applying for the {title} position. I am a designer based in Ukraine "
-        f"with around {profile.get('design_practice_years', 'several years')} of design practice. "
+        f"with around {practice_years} years of design practice. "
         f"My creative work includes {skills_text}. I enjoy turning ideas into clear, "
         "thoughtful visuals and improving my work through feedback.\n\n"
         f"I would be glad to discuss how my skills could support {company}'s team. "
@@ -63,7 +64,7 @@ def generate_application(job, profile):
 
     intro = (
         f"My name is {name}. I am a designer from Ukraine with around "
-        f"{profile.get('design_practice_years', 'several years')} of design practice. "
+        f"{practice_years} years of design practice. "
         f"My work includes {skills_text}. I am looking for a remote opportunity "
         "where I can contribute, learn and grow."
     )
