@@ -6,10 +6,10 @@ from application_generator import generate_application, render_application_text,
 class ApplicationGeneratorTests(unittest.TestCase):
     def setUp(self):
         self.profile = {
-            "name": "Omelyan Padovsky",
+            "name": "Test Candidate",
             "location": "Ukraine",
             "english_level": "A2",
-            "design_practice_years": "around 5 years of design practice",
+            "design_practice_years": "5",
             "portfolio_items_approx": 15,
             "portfolio_url": "",
             "cv_url": "",
