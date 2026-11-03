@@ -39,6 +39,14 @@ class ApplicationGeneratorTests(unittest.TestCase):
         self.assertTrue(package["checks"]["portfolio_url_missing"])
         self.assertIn("[ADD YOUR PORTFOLIO LINK", package["cover_letter"])
 
+    def test_role_specific_portfolio_is_selected_for_matching_vacancy(self):
+        profile = dict(self.profile)
+        profile["portfolio_3d_url"] = "https://portfolio.example/3d"
+        package = generate_application(self.job, profile)
+        self.assertEqual(package["portfolio"]["links"][0]["url"], "https://portfolio.example/3d")
+        self.assertFalse(package["checks"]["portfolio_url_missing"])
+        self.assertIn("https://portfolio.example/3d", package["cover_letter"])
+
     def test_email_is_extracted_only_from_job_description(self):
         package = generate_application(self.job, self.profile)
         self.assertEqual(package["email"]["to"], "jobs@example.com")
