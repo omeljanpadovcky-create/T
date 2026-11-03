@@ -5,6 +5,7 @@ on:
     - cron: "*/5 * * * *"
   workflow_dispatch:
   push:
+    branches: [main]
     paths:
       - "jobs/callbacks.py"
       - "jobs/editing.json"
@@ -20,6 +21,7 @@ permissions:
 
 jobs:
   callbacks:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
