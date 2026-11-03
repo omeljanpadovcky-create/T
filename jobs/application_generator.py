@@ -91,7 +91,7 @@ def generate_application(job, profile):
     portfolio_options = [
         ("3D / Blender", profile.get("portfolio_3d_url"), ["3d", "blender", "model", "character", "environment", "prop artist"]),
         ("Game Art", profile.get("portfolio_game_art_url"), ["game art", "game artist", "game asset", "unity", "unreal"]),
-        ("Graphic / UI design", profile.get("portfolio_design_url"), ["graphic", "visual design", "ui", "ux", "web design"]),
+        ("Graphic / UI design", profile.get("portfolio_design_url"), ["graphic", "visual design", "ui/ux", "web design"]),
         ("Illustration", profile.get("portfolio_illustration_url"), ["illustration", "illustrator", "concept art", "book cover"])
     ]
     for label, url, keywords in portfolio_options:
