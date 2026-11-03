@@ -59,6 +59,22 @@ def answer_callback(query_id, text):
         print(f"Could not show callback toast (possibly expired): {exc}")
 
 
+def load_profile():
+    profile = load_json(PROFILE_PATH, {})
+    env_fields = {
+        "name": "MYSHKA_CANDIDATE_NAME",
+        "portfolio_url": "MYSHKA_PORTFOLIO_URL",
+        "cv_url": "MYSHKA_CV_URL",
+        "contact_email": "MYSHKA_CONTACT_EMAIL",
+        "salary_expectation": "MYSHKA_SALARY_EXPECTATION"
+    }
+    for field, env_name in env_fields.items():
+        value = os.environ.get(env_name, "").strip()
+        if value:
+            profile[field] = value
+    return profile
+
+
 def status_label(status):
     return {
         "new": "Нова",
@@ -152,12 +168,10 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
         })
 
     elif action == "prepare":
-        profile = load_json(PROFILE_PATH, {})
-        package = state.get("application_package") or generate_application(job, profile)
-        if state.get("application_package"):
-            package["revision"] = int(package.get("revision", 1))
-            package["status"] = "awaiting_approval"
-        state["application_package"] = package
+        package = generate_application(job, load_profile())
+        revision = int(state.get("package_revision", 0)) + 1
+        package["revision"] = revision
+        state["package_revision"] = revision
         state["status"] = "awaiting_approval"
         state["prepared_at"] = now_iso()
         state.pop("approved_at", None)
@@ -166,29 +180,18 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
             "chat_id": chat_id, "message_id": message.get("message_id"),
             "text": job_message(job, state),
             "reply_markup": {"inline_keyboard": [
-                [{"text": "🔗 Відкрити вакансію", "url": job["url"]}],
-                [{"text": "🧾 Переглянути пакет нижче", "callback_data": f"review|{short_id}"}]
+                [{"text": "🔗 Відкрити вакансію", "url": job["url"]}]
             ]},
             "disable_web_page_preview": True
         })
         send_package(chat_id, short_id, job, package)
 
-    elif action == "review":
-        package = state.get("application_package")
-        if not package:
-            answer_callback(query.get("id"), "Спочатку підготуй пакет")
-            return False
-        answer_callback(query.get("id"), "Надсилаю пакет ще раз")
-        send_package(chat_id, short_id, job, package)
-
     elif action == "approve":
-        package = state.get("application_package")
-        if not package or state.get("status") != "awaiting_approval":
+        if not state.get("package_revision") or state.get("status") != "awaiting_approval":
             answer_callback(query.get("id"), "Спочатку підготуй і перевір пакет")
             return False
         state["status"] = "approved"
         state["approved_at"] = now_iso()
-        package["status"] = "approved"
         answer_callback(query.get("id"), "Пакет підтверджено. Тепер відкрий сторінку та подай заявку.")
         api("sendMessage", {
             "chat_id": chat_id,
@@ -216,15 +219,11 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
 
     elif action == "letter":
         answer_callback(query.get("id"), "Чернетка листа")
-        profile = load_json(PROFILE_PATH, {})
-        package = state.get("application_package") or generate_application(job, profile)
+        package = generate_application(job, load_profile())
         text = "COVER LETTER\n\n" + package["cover_letter"]
         api("sendMessage", {"chat_id": chat_id, "text": text, "disable_web_page_preview": True})
-        state["application_package"] = package
 
     elif action == "edit":
-        if not state.get("application_package"):
-            state["application_package"] = generate_application(job, load_json(PROFILE_PATH, {}))
         editing["job_id"] = short_id
         editing["field"] = "cover_letter"
         answer_callback(query.get("id"), "Надішли новий текст Cover Letter")
@@ -279,11 +278,10 @@ def handle_message(update, applications, statuses, allowed_chat, editing):
         return True
 
     state = statuses.setdefault(short_id, {"status": "new"})
-    package = state.get("application_package") or generate_application(job, load_json(PROFILE_PATH, {}))
+    package = generate_application(job, load_profile())
     package["cover_letter"] = text[:3500]
-    package["revision"] = int(package.get("revision", 1)) + 1
-    package["status"] = "awaiting_approval"
-    state["application_package"] = package
+    package["revision"] = int(state.get("package_revision", 0)) + 1
+    state["package_revision"] = package["revision"]
     state["status"] = "awaiting_approval"
     state["edited_at"] = now_iso()
     state.pop("approved_at", None)
