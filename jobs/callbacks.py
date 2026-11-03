@@ -1,15 +1,20 @@
 import html
 import json
 import os
+import re
+from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+
+from application_generator import generate_application, render_application_text
 
 ROOT = Path(__file__).resolve().parent
 APPLICATIONS_PATH = ROOT / "applications.json"
 STATUSES_PATH = ROOT / "statuses.json"
 OFFSET_PATH = ROOT / "update_offset.json"
 EDITING_PATH = ROOT / "editing.json"
+PROFILE_PATH = ROOT / "profile.json"
 TIMEOUT = 20
 
 
@@ -41,55 +46,100 @@ def safe(value):
     return html.escape(str(value or ""))
 
 
+def now_iso():
+    return datetime.now(timezone.utc).isoformat()
+
+
 def answer_callback(query_id, text):
     if not query_id:
         return
     try:
         api("answerCallbackQuery", {"callback_query_id": query_id, "text": text})
     except requests.RequestException as exc:
-        # Telegram expires callback query IDs after a short time. The action itself can still be processed.
         print(f"Could not show callback toast (possibly expired): {exc}")
 
 
+def load_profile():
+    profile = load_json(PROFILE_PATH, {})
+    env_fields = {
+        "name": "MYSHKA_CANDIDATE_NAME",
+        "portfolio_url": "MYSHKA_PORTFOLIO_URL",
+        "portfolio_3d_url": "MYSHKA_PORTFOLIO_3D_URL",
+        "portfolio_game_art_url": "MYSHKA_PORTFOLIO_GAME_ART_URL",
+        "portfolio_design_url": "MYSHKA_PORTFOLIO_DESIGN_URL",
+        "portfolio_illustration_url": "MYSHKA_PORTFOLIO_ILLUSTRATION_URL",
+        "cv_url": "MYSHKA_CV_URL",
+        "contact_email": "MYSHKA_CONTACT_EMAIL",
+        "salary_expectation": "MYSHKA_SALARY_EXPECTATION"
+    }
+    for field, env_name in env_fields.items():
+        value = os.environ.get(env_name, "").strip()
+        if value:
+            profile[field] = value
+    return profile
+
+
+def status_label(status):
+    return {
+        "new": "Нова",
+        "selected": "Відібрана",
+        "awaiting_approval": "Пакет очікує твого підтвердження",
+        "approved": "Пакет підтверджено — очікує ручної подачі",
+        "submitted_user_confirmed": "Ти підтвердив, що заявку відправлено",
+        "skipped": "Пропущена"
+    }.get(status, status or "Нова")
+
+
 def job_message(job, state):
-    status = {
-        "new": "Нова", "confirmed": "Підтверджена",
-        "skipped": "Пропущена", "applied": "Подана"
-    }.get(state.get("status", "new"), state.get("status", "Нова"))
     return (
-        f"🐭 <b>ТРЕЙДМИШКА · {int(job.get('score') or 0)}/100</b>\n"
-        f"💼 <b>{safe(job.get('title'))}</b>\n"
+        f"🐭 ТРЕЙДМИШКА · {int(job.get('score') or 0)}/100\n"
+        f"💼 {safe(job.get('title'))}\n"
         f"🏢 {safe(job.get('company') or 'Компанія не вказана')}\n"
         f"🌍 {safe(job.get('location') or 'Remote')}\n"
         f"📌 {safe(job.get('source'))}\n"
-        f"🟢 <b>Статус: {status}</b>"
+        f"📍 Статус: {safe(status_label(state.get('status', 'new')))}"
     )
 
 
-def cover_letter(job):
-    title = job.get("title") or "the role"
-    company = job.get("company") or "your team"
-    description = (job.get("description") or "").lower()
-    skills = []
-    for skill in ["Blender", "3D modeling", "low-poly modeling", "game assets",
-                  "Photoshop", "Illustrator", "Figma", "video editing", "graphic design",
-                  "visual design", "Shopify", "email design", "illustration",
-                  "character design", "environment art"]:
-        if skill.lower() in description:
-            skills.append(skill)
-    skill_line = ", ".join(skills[:4]) if skills else "Blender and visual design"
-    return (
-        f"Hello {company} team,\n\n"
-        f"I would like to apply for the {title} position. "
-        "I am a designer from Ukraine with practical experience in visual design and creative projects. "
-        f"My work includes {skill_line}. I use Blender and design tools to create clear, detailed visuals.\n\n"
-        "I am motivated to learn, follow feedback and improve my work. "
-        "I would be happy to show you my portfolio and discuss how I can help your team.\n\n"
-        "Thank you for your time.\n"
-        "Best regards,\n"
-        "Omelyan Padovsky\n"
-        "[Portfolio link]"
-    )
+def package_keyboard(short_id, job):
+    rows = []
+    if job.get("url"):
+        rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
+    rows.extend([
+        [{"text": "✅ ПІДТВЕРДЖУЮ ПАКЕТ", "callback_data": f"approve|{short_id}"}],
+        [{"text": "✏️ Редагувати Cover Letter", "callback_data": f"edit|{short_id}"}],
+        [{"text": "⏭ Пропустити вакансію", "callback_data": f"skip|{short_id}"}]
+    ])
+    return {"inline_keyboard": rows}
+
+
+def approved_keyboard(short_id, job):
+    rows = []
+    if job.get("url"):
+        rows.append([{"text": "🌐 Відкрити форму роботодавця", "url": job["url"]}])
+    rows.append([{"text": "📨 Я ВЖЕ ВІДПРАВИВ ЗАЯВКУ", "callback_data": f"applied|{short_id}"}])
+    return {"inline_keyboard": rows}
+
+
+def send_package(chat_id, short_id, job, package):
+    text = re.sub(r"</?b>", "", render_application_text(package))
+    chunks = []
+    while len(text) > 3800:
+        cut = text.rfind("\n", 0, 3800)
+        if cut < 1000:
+            cut = 3800
+        chunks.append(text[:cut])
+        text = text[cut:].lstrip()
+    chunks.append(text)
+    for index, chunk in enumerate(chunks):
+        payload = {
+            "chat_id": chat_id,
+            "text": chunk,
+            "disable_web_page_preview": True
+        }
+        if index == len(chunks) - 1:
+            payload["reply_markup"] = package_keyboard(short_id, job)
+        api("sendMessage", payload)
 
 
 def handle_callback(update, applications, statuses, allowed_chat, editing):
@@ -109,60 +159,112 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
     if not job:
         answer_callback(query.get("id"), "Вакансію не знайдено")
         return False
+
     state = statuses.setdefault(short_id, {"status": "new"})
 
     if action == "confirm":
-        state["status"] = "confirmed"
-        answer_callback(query.get("id"), "Вакансію підтверджено")
+        if state.get("status") in ("skipped", "submitted_user_confirmed"):
+            answer_callback(query.get("id"), "Цю вакансію вже закрито")
+            return False
+        state["status"] = "selected"
+        answer_callback(query.get("id"), "Вакансію відібрано. Готую пакет наступним кроком.")
         keyboard = {"inline_keyboard": [
             [{"text": "🔗 Відкрити вакансію", "url": job["url"]}],
-            [
-                {"text": "✉️ Чернетка листа", "callback_data": f"letter|{short_id}"},
-                {"text": "✏️ Редагувати лист", "callback_data": f"edit|{short_id}"}
-            ],
-            [{"text": "📨 Позначити поданою", "callback_data": f"applied|{short_id}"}],
+            [{"text": "🧾 ПІДГОТУВАТИ ПОВНУ ЗАЯВКУ", "callback_data": f"prepare|{short_id}"}],
             [{"text": "⏭ Пропустити", "callback_data": f"skip|{short_id}"}]
         ]}
         api("editMessageText", {
             "chat_id": chat_id, "message_id": message.get("message_id"),
-            "text": job_message(job, state), "parse_mode": "HTML", "reply_markup": keyboard,
+            "text": job_message(job, state), "reply_markup": keyboard,
             "disable_web_page_preview": True
         })
+
+    elif action == "prepare":
+        package = generate_application(job, load_profile())
+        revision = int(state.get("package_revision", 0)) + 1
+        package["revision"] = revision
+        state["package_revision"] = revision
+        state["status"] = "awaiting_approval"
+        state["prepared_at"] = now_iso()
+        state.pop("approved_at", None)
+        answer_callback(query.get("id"), "Пакет готовий. Перевір його перед підтвердженням.")
+        api("editMessageText", {
+            "chat_id": chat_id, "message_id": message.get("message_id"),
+            "text": job_message(job, state),
+            "reply_markup": {"inline_keyboard": [
+                [{"text": "🔗 Відкрити вакансію", "url": job["url"]}]
+            ]},
+            "disable_web_page_preview": True
+        })
+        send_package(chat_id, short_id, job, package)
+
+    elif action == "approve":
+        if not state.get("package_revision") or state.get("status") != "awaiting_approval":
+            answer_callback(query.get("id"), "Спочатку підготуй і перевір пакет")
+            return False
+        state["status"] = "approved"
+        state["approved_at"] = now_iso()
+        answer_callback(query.get("id"), "Пакет підтверджено. Тепер відкрий сторінку та подай заявку.")
+        api("sendMessage", {
+            "chat_id": chat_id,
+            "text": (
+                "✅ ПАКЕТ ПІДТВЕРДЖЕНО\n\n"
+                f"{job.get('title', 'Вакансія')} · {job.get('company', 'Компанія')}\n\n"
+                "Тепер відкрий сторінку роботодавця, перенеси перевірені тексти у відповідні поля "
+                "та самостійно натисни Submit/Send. Я не надсилаю заявку без окремої інтеграції "
+                "з поштою або ATS. Після реального відправлення натисни кнопку нижче."
+            ),
+            "reply_markup": approved_keyboard(short_id, job),
+            "disable_web_page_preview": True
+        })
+
     elif action == "skip":
         state["status"] = "skipped"
+        state["skipped_at"] = now_iso()
         answer_callback(query.get("id"), "Вакансію пропущено")
         api("editMessageText", {
             "chat_id": chat_id, "message_id": message.get("message_id"),
-            "text": job_message(job, state), "parse_mode": "HTML",
+            "text": job_message(job, state),
             "reply_markup": {"inline_keyboard": []},
             "disable_web_page_preview": True
         })
+
     elif action == "letter":
-        answer_callback(query.get("id"), "Готую чернетку")
-        text = "✉️ <b>ЧЕРНЕТКА СУПРОВІДНОГО ЛИСТА</b>\n"
-        text += f"Вакансія: <b>{safe(job.get('title'))}</b> · {safe(job.get('company'))}\n\n"
-        text += f"<pre>{safe(state.get('custom_cover_letter') or cover_letter(job))}</pre>\n"
-        text += "Перевір текст і додай посилання на портфоліо перед відправленням."
-        api("sendMessage", {"chat_id": chat_id, "text": text, "parse_mode": "HTML", "disable_web_page_preview": True})
-        state["letter_created"] = True
+        answer_callback(query.get("id"), "Чернетка листа")
+        package = generate_application(job, load_profile())
+        text = "COVER LETTER\n\n" + package["cover_letter"]
+        api("sendMessage", {"chat_id": chat_id, "text": text, "disable_web_page_preview": True})
+
     elif action == "edit":
         editing["job_id"] = short_id
-        answer_callback(query.get("id"), "Надішли свій текст листа в чат")
+        editing["field"] = "cover_letter"
+        answer_callback(query.get("id"), "Надішли новий текст Cover Letter")
         api("sendMessage", {
             "chat_id": chat_id,
-            "text": "✏️ Надішли нову версію супровідного листа одним повідомленням. Я збережу її для цієї вакансії. Для скасування напиши /cancel."
+            "text": (
+                "✏️ Надішли нову версію Cover Letter одним повідомленням. "
+                "Після редагування попереднє підтвердження буде скасовано. "
+                "Для скасування напиши /cancel."
+            )
         })
+
     elif action == "applied":
-        state["status"] = "applied"
-        answer_callback(query.get("id"), "Статус оновлено: подано")
-        api("editMessageText", {
-            "chat_id": chat_id, "message_id": message.get("message_id"),
-            "text": job_message(job, state), "parse_mode": "HTML",
-            "reply_markup": {"inline_keyboard": []},
-            "disable_web_page_preview": True
+        if state.get("status") != "approved":
+            answer_callback(query.get("id"), "Спочатку потрібно підтвердити пакет")
+            return False
+        state["status"] = "submitted_user_confirmed"
+        state["submitted_at"] = now_iso()
+        answer_callback(query.get("id"), "Статус оновлено: ти підтвердив подачу")
+        api("sendMessage", {
+            "chat_id": chat_id,
+            "text": (
+                "📨 Заявку позначено як відправлену за твоїм підтвердженням. "
+                "Це не автоматична перевірка відповіді роботодавця."
+            )
         })
+
     else:
-        api("answerCallbackQuery", {"callback_query_id": query.get("id"), "text": "Невідома дія"})
+        answer_callback(query.get("id"), "Невідома дія")
         return False
     return True
 
@@ -179,20 +281,31 @@ def handle_message(update, applications, statuses, allowed_chat, editing):
         editing.clear()
         api("sendMessage", {"chat_id": chat_id, "text": "Редагування скасовано."})
         return True
+
     short_id = editing.get("job_id")
     job = applications.get(short_id)
     if not job:
         editing.clear()
-        api("sendMessage", {"chat_id": chat_id, "text": "Не знайшов вакансію для цього листа. Почни редагування ще раз із картки вакансії."})
+        api("sendMessage", {"chat_id": chat_id, "text": "Не знайшов вакансію для цього листа."})
         return True
+
     state = statuses.setdefault(short_id, {"status": "new"})
-    state["custom_cover_letter"] = text[:3500]
-    state["letter_created"] = True
+    package = generate_application(job, load_profile())
+    package["cover_letter"] = text[:3500]
+    package["revision"] = int(state.get("package_revision", 0)) + 1
+    state["package_revision"] = package["revision"]
+    state["status"] = "awaiting_approval"
+    state["edited_at"] = now_iso()
+    state.pop("approved_at", None)
     editing.clear()
     api("sendMessage", {
         "chat_id": chat_id,
-        "text": f"✅ Твій лист для «{job.get('title', 'вакансії')}» збережено. Натисни «Чернетка листа», щоб переглянути його."
+        "text": (
+            f"✅ Cover Letter для «{job.get('title', 'вакансії')}» оновлено. "
+            f"Версія {package['revision']}. Попереднє підтвердження скасовано."
+        )
     })
+    send_package(chat_id, short_id, job, package)
     return True
 
 
@@ -233,7 +346,7 @@ def main():
             print(f"Callback {update.get('update_id')} failed: {exc}")
             raise
     print(f"Telegram callback poll complete: {len(updates)} updates received, {processed} processed.")
-    
+
 
 if __name__ == "__main__":
     main()

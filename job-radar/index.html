@@ -11,6 +11,11 @@
     .panel{background:#12182a;border:1px solid #293252;border-radius:18px;padding:22px;margin:20px 0}
     li{margin:8px 0;color:#dce2ff}a{color:#aabaff}.pill{display:inline-block;padding:5px 10px;border-radius:99px;background:#202b4a;color:#b9c8ff;font-size:13px}
     code{color:#c4d1ff;background:#1b2340;padding:2px 5px;border-radius:5px}
+    .jobs{display:grid;gap:12px}.job{background:#0d1324;border:1px solid #293252;border-radius:12px;padding:15px}
+    .job h3{margin:0 0 5px;font-size:17px}.job p{margin:4px 0;font-size:14px}
+    .status{display:inline-block;padding:3px 9px;border-radius:99px;background:#202b4a;color:#c5d0ff;font-size:12px}
+    .job a{display:inline-block;margin-top:8px}.muted{color:#8892b3;font-size:13px}
+    .stats{display:flex;flex-wrap:wrap;gap:8px}.stat{background:#0d1324;border:1px solid #293252;border-radius:10px;padding:9px 12px;font-size:13px}
   </style>
 </head>
 <body><main>
@@ -37,5 +42,82 @@
     <p>Локація: віддалено, Україна / Європа / Worldwide. Рівень: Trainee, Junior та Middle. Інструменти: Blender, Photoshop, Figma, Canva. Англійська: A2. Портфоліо: близько 15 робіт. Відсікаємо вимоги B2+.</p>
     <p>У кожній картці є кнопки: відкрити вакансію, підтвердити, пропустити, створити або відредагувати супровідний лист, позначити заявку поданою. Реальні заявки надсилаються лише вручну після твого рішення.</p>
   </section>
+  <section class="panel">
+    <h2>Трекер заявок</h2>
+    <p>Тут відображаються вакансії та поточні статуси з Telegram. Тексти листів і приватні відповіді не публікуються на цьому сайті.</p>
+    <div id="job-stats" class="stats"><span class="muted">Завантажую статистику…</span></div>
+    <div id="job-list" class="jobs" style="margin-top:14px"></div>
+    <p id="job-error" class="muted" aria-live="polite"></p>
+  </section>
+  <section class="panel">
+    <h2>Подача тільки після твого рішення</h2>
+    <ol>
+      <li>Відібрати вакансію в Telegram.</li>
+      <li>Підготувати пакет: Cover Letter, email, коротке представлення, відповіді та інструкції.</li>
+      <li>Перевірити й за потреби відредагувати текст.</li>
+      <li>Підтвердити пакет окремою кнопкою.</li>
+      <li>Самостійно відправити заявку на сторінці роботодавця й позначити її поданою.</li>
+    </ol>
+    <p>Автоматичне надсилання email або заповнення зовнішніх ATS-форм у цій версії не виконується.</p>
+  </section>
+  <script>
+    (async function () {
+      const list = document.getElementById("job-list");
+      const stats = document.getElementById("job-stats");
+      const error = document.getElementById("job-error");
+      const labels = {
+        new: "Нова",
+        selected: "Відібрана",
+        awaiting_approval: "Очікує підтвердження",
+        approved: "Пакет підтверджено",
+        submitted_user_confirmed: "Відправлено за твоїм підтвердженням",
+        skipped: "Пропущена"
+      };
+      try {
+        const response = await fetch("/api/applications");
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || "API unavailable");
+        stats.replaceChildren();
+        const entries = [["Усього", data.total], ...Object.entries(data.counts || {}).map(([key, value]) => [labels[key] || key, value])];
+        for (const [label, value] of entries) {
+          const item = document.createElement("span");
+          item.className = "stat";
+          item.textContent = label + ": " + value;
+          stats.appendChild(item);
+        }
+        list.replaceChildren();
+        if (!data.items.length) {
+          list.textContent = "Поки що вакансій немає. Дочекайся наступного пошуку.";
+          return;
+        }
+        for (const job of data.items) {
+          const card = document.createElement("article");
+          card.className = "job";
+          const title = document.createElement("h3");
+          title.textContent = job.title;
+          const meta = document.createElement("p");
+          meta.textContent = (job.company || "Компанія не вказана") + " · " + (job.location || "Remote") + " · " + (job.source || "");
+          const status = document.createElement("span");
+          status.className = "status";
+          status.textContent = labels[job.status] || job.status;
+          const score = document.createElement("p");
+          score.textContent = "Відповідність: " + job.score + "/100";
+          card.append(title, meta, status, score);
+          if (job.url) {
+            const link = document.createElement("a");
+            link.href = job.url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.textContent = "Відкрити вакансію ↗";
+            card.appendChild(link);
+          }
+          list.appendChild(card);
+        }
+      } catch (err) {
+        error.textContent = "Не вдалося завантажити трекер. Перевір API або GitHub Actions.";
+        list.textContent = "";
+      }
+    })();
+  </script>
 </main>
 </body></html>

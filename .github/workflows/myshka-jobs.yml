@@ -9,6 +9,7 @@ on:
     - cron: "0 7 * * *"
   workflow_dispatch:
   push:
+    branches: [main]
     paths:
       - "jobs/bot.py"
       - "jobs/config.json"

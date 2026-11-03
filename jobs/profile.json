@@ -1,0 +1,16 @@
+{
+  "english_level": "A2",
+  "design_practice_years": "5",
+  "portfolio_items_approx": 15,
+  "skills": [
+    "Blender",
+    "Photoshop",
+    "Illustrator",
+    "Figma",
+    "Canva",
+    "UI/UX design",
+    "graphic design",
+    "Shopify"
+  ],
+  "notes": "Public non-sensitive profile defaults only. Candidate name, portfolio URL, CV URL, email and salary preference must be configured as GitHub Actions secrets. Never store generated application text here."
+}
