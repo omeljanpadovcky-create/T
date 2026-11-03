@@ -24,7 +24,7 @@ def generate_application(job, profile):
     description = clean(job.get("description"))
     skills = matched_skills(job, profile)
     skills_text = ", ".join(skills[:4]) if skills else "visual design and creative work"
-    name = profile.get("name", "Candidate")
+    name = profile.get("name") or "[YOUR NAME]"
     practice_years = profile.get("design_practice_years", "several")
     portfolio_url = (profile.get("portfolio_url") or "").strip()
     cv_url = (profile.get("cv_url") or "").strip()
@@ -86,9 +86,23 @@ def generate_application(job, profile):
     if email_match:
         application_email = email_match.group(0)
 
+    role_text = (title + " " + description).lower()
+    portfolio_links = []
+    portfolio_options = [
+        ("3D / Blender", profile.get("portfolio_3d_url"), ["3d", "blender", "model", "character", "environment", "prop artist"]),
+        ("Game Art", profile.get("portfolio_game_art_url"), ["game art", "game artist", "game asset", "unity", "unreal"]),
+        ("Graphic / UI design", profile.get("portfolio_design_url"), ["graphic", "visual design", "ui", "ux", "web design"]),
+        ("Illustration", profile.get("portfolio_illustration_url"), ["illustration", "illustrator", "concept art", "book cover"])
+    ]
+    for label, url, keywords in portfolio_options:
+        if url and any(word in role_text for word in keywords):
+            portfolio_links.append({"label": label, "url": url})
+    if portfolio_url and not any(item["url"] == portfolio_url for item in portfolio_links):
+        portfolio_links.append({"label": "Main portfolio", "url": portfolio_url})
     portfolio_state = (
-        f"Configured: {portfolio_url}" if portfolio_url
-        else "Missing: add your portfolio URL before sending."
+        "Selected: " + ", ".join(item["label"] for item in portfolio_links)
+        if portfolio_links else
+        "Missing: add a general or role-specific portfolio URL before sending."
     )
     cv_state = f"Configured: {cv_url}" if cv_url else "No CV link configured."
     requirements = []
@@ -129,6 +143,7 @@ def generate_application(job, profile):
         },
         "portfolio": {
             "url": portfolio_url,
+            "links": portfolio_links,
             "status": portfolio_state,
             "approximate_items": profile.get("portfolio_items_approx"),
             "cv_url": cv_url,
@@ -189,6 +204,7 @@ def render_application_text(package):
         "",
         "<b>5. ПОРТФОЛІО / CV</b>",
         portfolio["status"],
+        *[f"{item['label']}: {item['url']}" for item in portfolio.get("links", [])],
         f"Approximate portfolio items: {portfolio.get('approximate_items') or 'not specified'}",
         portfolio["cv_status"],
         "",
