@@ -29,6 +29,7 @@ def generate_application(job, profile):
     cv_url = (profile.get("cv_url") or "").strip()
     email = (profile.get("contact_email") or "").strip()
     salary = (job.get("salary") or "").strip()
+    salary_expectation = (profile.get("salary_expectation") or "").strip()
     job_url = (job.get("url") or "").strip()
 
     cover_letter = (
@@ -67,11 +68,16 @@ def generate_application(job, profile):
         "where I can contribute, learn and grow."
     )
     salary_answer = (
-        f"The listing shows {salary}. I would be happy to discuss compensation "
-        "based on the responsibilities and expected workload."
-        if salary else
-        "My salary expectation is open for discussion. Could you share the budgeted range "
-        "for this role and the expected workload?"
+        f"My salary expectation is {salary_expectation}. I am open to discussing the final rate "
+        "based on the responsibilities and workload."
+        if salary_expectation else
+        (
+            f"The listing shows {salary}. I would be happy to discuss compensation "
+            "based on the responsibilities and expected workload."
+            if salary else
+            "My salary expectation is open for discussion. Could you share the budgeted range "
+            "for this role and the expected workload?"
+        )
     )
 
     application_email = ""
@@ -103,6 +109,7 @@ def generate_application(job, profile):
         "cover_letter": cover_letter,
         "email": {
             "to": application_email,
+            "candidate_contact": email,
             "subject": email_subject,
             "body": email_body,
             "note": "Recipient is extracted only if an email address appears in the vacancy description."
@@ -165,6 +172,7 @@ def render_application_text(package):
         "",
         "<b>2. EMAIL</b>",
         f"To: {email['to'] or 'Не знайдено в описі вакансії'}",
+        f"Your contact: {email.get('candidate_contact') or 'Додай свою контактну пошту, якщо роботодавець просить'}",
         f"Subject: {email['subject']}",
         email["body"],
         "",
@@ -180,6 +188,7 @@ def render_application_text(package):
         "",
         "<b>5. ПОРТФОЛІО / CV</b>",
         portfolio["status"],
+        f"Approximate portfolio items: {portfolio.get('approximate_items') or 'not specified'}",
         portfolio["cv_status"],
         "",
         "<b>6. КУДИ ПОДАВАТИ</b>",
