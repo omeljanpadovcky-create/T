@@ -105,7 +105,7 @@ def generate_application(job, profile):
         "Missing: add a general or role-specific portfolio URL before sending."
     )
     if portfolio_links and not portfolio_url:
-        selected_links_text = "\\n".join(
+        selected_links_text = "\n".join(
             f"{item['label']}: {item['url']}" for item in portfolio_links
         )
         cover_letter = cover_letter.replace(
