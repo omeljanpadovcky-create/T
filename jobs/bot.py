@@ -270,16 +270,16 @@ def application_review_keyboard(short_id, job):
 
 def send_application_package(job, package, short_id):
     summary = (
-        f"🐭 <b>MYSHKA · {int(job.get('score') or 0)}/100</b>\\n"
-        f"💼 <b>{html.escape(as_text(job.get('title')) or 'Vacancy')}</b>\\n"
-        f"🏢 {html.escape(as_text(job.get('company')) or 'Company not specified')}\\n"
-        f"🌍 {html.escape(as_text(job.get('location')) or 'Remote')}\\n\\n"
+        f"🐭 <b>MYSHKA · {int(job.get('score') or 0)}/100</b>\n"
+        f"💼 <b>{html.escape(as_text(job.get('title')) or 'Vacancy')}</b>\n"
+        f"🏢 {html.escape(as_text(job.get('company')) or 'Company not specified')}\n"
+        f"🌍 {html.escape(as_text(job.get('location')) or 'Remote')}\n\n"
     )
     plain_text = re.sub(r"</?b>", "", render_application_text(package))
     content = summary + html.escape(plain_text, quote=False)
     chunks = []
     while len(content) > 3600:
-        cut = content.rfind("\\n", 0, 3600)
+        cut = content.rfind("\n", 0, 3600)
         if cut < 1000:
             cut = 3600
         chunks.append(content[:cut])
@@ -375,12 +375,6 @@ def main():
         eligibility_note = ""
         if "not specified" in norm(location):
             eligibility_note = "\n⚠️ <i>Країна найму не вказана — перевір, чи приймають кандидатів з України.</i>"
-        message = (
-            f"🐭 <b>ТРЕЙДМИШКА · {score}/100</b>\n"
-            f"💼 <b>{title}</b>\n🏢 {company}\n🌍 {location}"
-            f"{eligibility_note}\n🔎 {html.escape(reason)}\n"
-            f"📌 {source}\n🟡 <b>Статус: Нова</b>"
-        )
         package = generate_application(job, load_profile())
         package["revision"] = 1
         stored_job = {
