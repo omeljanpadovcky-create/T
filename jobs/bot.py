@@ -8,6 +8,8 @@ from urllib.parse import parse_qs, urlparse
 
 import requests
 
+from application_generator import generate_application, render_application_text
+
 ROOT = Path(__file__).resolve().parent
 CONFIG = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
 SEEN_PATH = ROOT / "seen.json"
@@ -230,6 +232,68 @@ def send_telegram(message, reply_markup=None):
     return result["result"]
 
 
+def load_profile():
+    profile_path = ROOT / "profile.json"
+    try:
+        profile = json.loads(profile_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        profile = {}
+    env_fields = {
+        "name": "MYSHKA_CANDIDATE_NAME",
+        "portfolio_url": "MYSHKA_PORTFOLIO_URL",
+        "portfolio_3d_url": "MYSHKA_PORTFOLIO_3D_URL",
+        "portfolio_game_art_url": "MYSHKA_PORTFOLIO_GAME_ART_URL",
+        "portfolio_design_url": "MYSHKA_PORTFOLIO_DESIGN_URL",
+        "portfolio_illustration_url": "MYSHKA_PORTFOLIO_ILLUSTRATION_URL",
+        "cv_url": "MYSHKA_CV_URL",
+        "contact_email": "MYSHKA_CONTACT_EMAIL",
+        "salary_expectation": "MYSHKA_SALARY_EXPECTATION"
+    }
+    for field, env_name in env_fields.items():
+        value = os.environ.get(env_name, "").strip()
+        if value:
+            profile[field] = value
+    return profile
+
+
+def application_review_keyboard(short_id, job):
+    rows = []
+    if job.get("url"):
+        rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
+    rows.extend([
+        [{"text": "✅ ПІДТВЕРДЖУЮ ПАКЕТ", "callback_data": f"approve|{short_id}"}],
+        [{"text": "✏️ Редагувати Cover Letter", "callback_data": f"edit|{short_id}"}],
+        [{"text": "⏭ Пропустити вакансію", "callback_data": f"skip|{short_id}"}]
+    ])
+    return {"inline_keyboard": rows}
+
+
+def send_application_package(job, package, short_id):
+    summary = (
+        f"🐭 <b>MYSHKA · {int(job.get('score') or 0)}/100</b>\\n"
+        f"💼 <b>{html.escape(as_text(job.get('title')) or 'Vacancy')}</b>\\n"
+        f"🏢 {html.escape(as_text(job.get('company')) or 'Company not specified')}\\n"
+        f"🌍 {html.escape(as_text(job.get('location')) or 'Remote')}\\n\\n"
+    )
+    plain_text = re.sub(r"</?b>", "", render_application_text(package))
+    content = summary + html.escape(plain_text, quote=False)
+    chunks = []
+    while len(content) > 3600:
+        cut = content.rfind("\\n", 0, 3600)
+        if cut < 1000:
+            cut = 3600
+        chunks.append(content[:cut])
+        content = content[cut:].lstrip()
+    chunks.append(content)
+    result = None
+    for index, chunk in enumerate(chunks):
+        result = send_telegram(
+            chunk,
+            application_review_keyboard(short_id, job) if index == len(chunks) - 1 else None
+        )
+    return result
+
+
 def build_daily_report(scanned, eligible, new_matches, sent, source_health, rejection_counts):
     totals = {}
     failures = []
@@ -317,24 +381,18 @@ def main():
             f"{eligibility_note}\n🔎 {html.escape(reason)}\n"
             f"📌 {source}\n🟡 <b>Статус: Нова</b>"
         )
-        keyboard = {
-            "inline_keyboard": [
-                [{"text": "🔗 Відкрити вакансію", "url": as_text(job.get("url"))}],
-                [
-                    {"text": "✅ Відібрати вакансію", "callback_data": f"confirm|{short_id}"},
-                    {"text": "⏭ Пропустити", "callback_data": f"skip|{short_id}"}
-                ],
-                [{"text": "🧾 Підготувати повну заявку", "callback_data": f"prepare|{short_id}"}]
-            ]
-        }
-        telegram_message = send_telegram(message, keyboard)
-        applications[short_id] = {
+        package = generate_application(job, load_profile())
+        package["revision"] = 1
+        stored_job = {
             "id": short_id, "title": as_text(job.get("title")),
             "company": as_text(job.get("company")), "location": as_text(job.get("location")),
             "url": as_text(job.get("url")), "description": as_text(job.get("description"))[:12000],
             "source": as_text(job.get("source")), "score": score, "reason": reason,
-            "status": "new", "message_id": telegram_message.get("message_id")
+            "status": "awaiting_approval", "package_revision": 1
         }
+        telegram_message = send_application_package(stored_job, package, short_id)
+        stored_job["message_id"] = telegram_message.get("message_id") if telegram_message else None
+        applications[short_id] = stored_job
         seen.add(key)
         save_json(APPLICATIONS_PATH, applications)
         save_json(SEEN_PATH, sorted(seen))
