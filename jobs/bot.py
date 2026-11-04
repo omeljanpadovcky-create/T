@@ -367,14 +367,6 @@ def main():
     sent = 0
     for score, reason, key, job in matches[:CONFIG["max_results_per_run"]]:
         short_id = key[:16]
-        title = html.escape(as_text(job.get("title")) or "Vacancy")
-        company = html.escape(as_text(job.get("company")) or "Company not specified")
-        location = html.escape(as_text(job.get("location")) or "Remote")
-        source = html.escape(as_text(job.get("source")))
-        url = html.escape(as_text(job.get("url")), quote=True)
-        eligibility_note = ""
-        if "not specified" in norm(location):
-            eligibility_note = "\n⚠️ <i>Країна найму не вказана — перевір, чи приймають кандидатів з України.</i>"
         package = generate_application(job, load_profile())
         package["revision"] = 1
         stored_job = {
