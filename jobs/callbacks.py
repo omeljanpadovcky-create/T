@@ -161,6 +161,19 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
         return False
 
     state = statuses.setdefault(short_id, {"status": "new"})
+    current_status = state.get("status", "new")
+    allowed_statuses = {
+        "confirm": {"new", "selected"},
+        "prepare": {"new", "selected"},
+        "skip": {"new", "selected", "awaiting_approval"},
+        "edit": {"awaiting_approval"},
+        "approve": {"awaiting_approval"},
+        "applied": {"approved"},
+        "letter": {"new", "selected", "awaiting_approval", "approved"}
+    }
+    if action in allowed_statuses and current_status not in allowed_statuses[action]:
+        answer_callback(query.get("id"), "Ця дія недоступна для поточного статусу")
+        return False
 
     if action == "confirm":
         if state.get("status") in ("skipped", "submitted_user_confirmed"):
