@@ -91,7 +91,9 @@ class ApplicationGeneratorTests(unittest.TestCase):
 
 
     def test_missing_candidate_details_are_visible_in_the_package(self):
-        package = generate_application(self.job, self.profile)
+        profile = dict(self.profile)
+        profile.pop("name", None)
+        package = generate_application(self.job, profile)
         rendered = render_application_text(package)
         self.assertTrue(package["checks"]["name_missing"])
         self.assertIn("Не вказано повне ім'я кандидата", rendered)
