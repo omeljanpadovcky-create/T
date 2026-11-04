@@ -1,6 +1,9 @@
 import unittest
 
-from bot import build_daily_report, score_job
+from unittest.mock import patch
+
+from application_generator import generate_application
+from bot import application_review_keyboard, build_daily_report, score_job, send_application_package
 
 
 def sample_job(**overrides):
@@ -73,6 +76,43 @@ class JobFilterTests(unittest.TestCase):
             rejection_counts={}
         )
         self.assertIn("не вдалося отримати дані з жодного джерела", report)
+
+
+    def test_new_vacancy_review_keyboard_requires_explicit_package_approval(self):
+        keyboard = application_review_keyboard(
+            "abc123",
+            {"url": "https://example.com/job"}
+        )
+        callbacks = [
+            button.get("callback_data")
+            for row in keyboard["inline_keyboard"]
+            for button in row
+        ]
+        self.assertIn("approve|abc123", callbacks)
+        self.assertIn("edit|abc123", callbacks)
+        self.assertIn("skip|abc123", callbacks)
+        self.assertNotIn("applied|abc123", callbacks)
+
+    def test_automatic_package_sender_attaches_review_keyboard(self):
+        job = sample_job()
+        package = generate_application(job, {
+            "name": "Test Candidate",
+            "skills": ["Blender"],
+            "portfolio_url": "https://portfolio.example"
+        })
+        sent = {"message_id": 77}
+        with patch("bot.send_telegram", return_value=sent) as send:
+            result = send_application_package(job, package, "abc123")
+        self.assertEqual(result["message_id"], 77)
+        self.assertEqual(send.call_count, 1)
+        payload = send.call_args.args[0]
+        keyboard = send.call_args.args[1]
+        self.assertIn("COVER LETTER", payload)
+        self.assertIn("approve|abc123", [
+            button.get("callback_data")
+            for row in keyboard["inline_keyboard"]
+            for button in row
+        ])
 
 
 if __name__ == "__main__":
