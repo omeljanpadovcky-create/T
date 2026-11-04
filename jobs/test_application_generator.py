@@ -90,5 +90,14 @@ class ApplicationGeneratorTests(unittest.TestCase):
         self.assertIn("No CV link configured", package["portfolio"]["cv_status"])
 
 
+    def test_missing_candidate_details_are_visible_in_the_package(self):
+        package = generate_application(self.job, self.profile)
+        rendered = render_application_text(package)
+        self.assertTrue(package["checks"]["name_missing"])
+        self.assertIn("Не вказано повне ім'я кандидата", rendered)
+        self.assertIn("Не налаштовано посилання на CV", rendered)
+        self.assertIn("Не вказано контактну пошту", rendered)
+
+
 if __name__ == "__main__":
     unittest.main()
