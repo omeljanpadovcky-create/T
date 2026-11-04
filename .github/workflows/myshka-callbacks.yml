@@ -8,8 +8,6 @@ on:
     branches: [main]
     paths:
       - "jobs/callbacks.py"
-      - "jobs/editing.json"
-      - "jobs/statuses.json"
       - ".github/workflows/myshka-callbacks.yml"
 
 concurrency:
