@@ -1,6 +1,6 @@
 import unittest
 
-from bot import score_job
+from bot import build_daily_report, score_job
 
 
 def sample_job(**overrides):
@@ -45,6 +45,34 @@ class JobFilterTests(unittest.TestCase):
         score, reason = score_job(sample_job(description="Unpaid volunteer position."))
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Unpaid or volunteer role")
+
+
+    def test_daily_report_includes_counts_and_source_health(self):
+        report = build_daily_report(
+            scanned=120,
+            eligible=8,
+            new_matches=4,
+            sent=4,
+            source_health=[
+                {"host": "remotive.com", "ok": True},
+                {"host": "remotive.com", "ok": False, "source": "remotive.com · blender"},
+                {"host": "remoteok.com", "ok": True},
+            ],
+            rejection_counts={"Not a target role": 70}
+        )
+        self.assertIn("Перевірено вакансій: <b>120</b>", report)
+        self.assertIn("Підійшли фільтрам: <b>8</b>", report)
+        self.assertIn("remotive.com: 1/2", report)
+        self.assertIn("Не відповіли", report)
+        self.assertIn("Not a target role", report)
+
+    def test_daily_report_warns_when_every_source_is_down(self):
+        report = build_daily_report(
+            scanned=0, eligible=0, new_matches=0, sent=0,
+            source_health=[{"host": "remoteok.com", "ok": False}],
+            rejection_counts={}
+        )
+        self.assertIn("не вдалося отримати дані з жодного джерела", report)
 
 
 if __name__ == "__main__":
