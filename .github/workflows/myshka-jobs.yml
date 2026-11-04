@@ -12,6 +12,8 @@ on:
     branches: [main]
     paths:
       - "jobs/bot.py"
+      - "jobs/application_generator.py"
+      - "jobs/profile.json"
       - "jobs/config.json"
       - ".github/workflows/myshka-jobs.yml"
 
