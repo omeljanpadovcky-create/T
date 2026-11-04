@@ -50,5 +50,34 @@ class CallbackStateTransitionTests(unittest.TestCase):
         api.assert_called_once()
 
 
+    def test_auto_prepared_package_can_be_approved_without_prior_callback_state(self):
+        applications = {
+            "abc123": {
+                "id": "abc123",
+                "title": "Junior 3D Artist",
+                "company": "Studio",
+                "status": "awaiting_approval",
+                "package_revision": 1,
+                "url": "https://example.com/job"
+            }
+        }
+        statuses = {}
+        update = {
+            "callback_query": {
+                "id": None,
+                "data": "approve|abc123",
+                "message": {"chat": {"id": 12345}, "message_id": 10}
+            }
+        }
+        with patch("callbacks.api") as api:
+            result = handle_callback(
+                update, applications, statuses, self.allowed_chat, self.editing
+            )
+        self.assertTrue(result)
+        self.assertEqual(statuses["abc123"]["status"], "approved")
+        self.assertEqual(statuses["abc123"]["package_revision"], 1)
+        api.assert_called_once()
+
+
 if __name__ == "__main__":
     unittest.main()
