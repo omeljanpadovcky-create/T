@@ -12,5 +12,8 @@
     "graphic design",
     "Shopify"
   ],
-  "notes": "Public non-sensitive profile defaults only. Candidate name, portfolio URL, CV URL, email and salary preference must be configured as GitHub Actions secrets. Never store generated application text here."
+  "notes": "Public profile defaults. ArtStation portfolio is public. Candidate name, CV URL, email and salary preference must be configured as GitHub Actions secrets. Never store generated application text here.",
+  "portfolio_url": "https://www.artstation.com/omelyan_padovsky",
+  "portfolio_3d_url": "https://www.artstation.com/omelyan_padovsky",
+  "portfolio_game_art_url": "https://www.artstation.com/omelyan_padovsky"
 }
