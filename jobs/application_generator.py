@@ -171,6 +171,7 @@ def generate_application(job, profile):
             "will_submit_automatically": False
         },
         "checks": {
+            "name_missing": not bool(profile.get("name")),
             "portfolio_url_missing": not bool(portfolio_links),
             "cv_url_missing": not bool(cv_url),
             "contact_email_missing": not bool(email),
@@ -186,6 +187,21 @@ def render_application_text(package):
     email = package["email"]
     answers = package["answers"]
     portfolio = package["portfolio"]
+    checks = package.get("checks", {})
+    profile_gaps = []
+    if checks.get("name_missing"):
+        profile_gaps.append("Не вказано повне ім'я кандидата.")
+    if checks.get("cv_url_missing"):
+        profile_gaps.append("Не налаштовано посилання на CV.")
+    if checks.get("contact_email_missing"):
+        profile_gaps.append("Не вказано контактну пошту.")
+    if checks.get("salary_expectation_missing"):
+        profile_gaps.append("Не задано бажану оплату.")
+    if checks.get("country_eligibility_needs_verification"):
+        profile_gaps.append("Потрібно перевірити, чи наймають кандидатів з України.")
+    if checks.get("claims_must_be_reviewed"):
+        profile_gaps.append("Перевір твердження про досвід та навички.")
+
     lines = [
         "🧾 <b>ПАКЕТ ЗАЯВКИ · MYSHKA</b>",
         f"<b>{job['title']}</b> · {job['company']}",
@@ -216,7 +232,10 @@ def render_application_text(package):
         f"Approximate portfolio items: {portfolio.get('approximate_items') or 'not specified'}",
         portfolio["cv_status"],
         "",
-        "<b>6. КУДИ ПОДАВАТИ</b>",
+        "<b>6. ПЕРЕВІРКА ПРОФІЛЮ</b>",
+        *([f"⚠️ {item}" for item in profile_gaps] or ["✅ Базові дані профілю налаштовані."]),
+        "",
+        "<b>7. КУДИ ПОДАВАТИ</b>",
         job["url"] or "Посилання відсутнє — потрібна ручна перевірка.",
         *[f"• {step}" for step in package["submission"]["instructions"]],
         "",
