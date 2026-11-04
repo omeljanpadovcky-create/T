@@ -4,7 +4,7 @@ import json
 import os
 import re
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 import requests
 
@@ -14,6 +14,7 @@ SEEN_PATH = ROOT / "seen.json"
 APPLICATIONS_PATH = ROOT / "applications.json"
 HEADERS = {"User-Agent": "TradeMyshka-JobRadar/2.0", "Accept": "application/json"}
 TIMEOUT = 25
+SOURCE_HEALTH = []
 
 
 def norm(value):
@@ -34,9 +35,26 @@ def fetch_json(url):
     try:
         response = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
         response.raise_for_status()
-        return response.json()
+        data = response.json()
+        parsed = urlparse(url)
+        query = parse_qs(parsed.query)
+        label = parsed.netloc
+        if query.get("search"):
+            label += " · " + query["search"][0]
+        elif query.get("q"):
+            label += " · " + query["q"][0]
+        SOURCE_HEALTH.append({"source": label, "host": parsed.netloc, "ok": True})
+        return data
     except (requests.RequestException, ValueError) as exc:
-        print(f"Source unavailable: {urlparse(url).netloc}: {exc}")
+        parsed = urlparse(url)
+        query = parse_qs(parsed.query)
+        label = parsed.netloc
+        if query.get("search"):
+            label += " · " + query["search"][0]
+        elif query.get("q"):
+            label += " · " + query["q"][0]
+        SOURCE_HEALTH.append({"source": label, "host": parsed.netloc, "ok": False})
+        print(f"Source unavailable: {parsed.netloc}: {exc}")
         return None
 
 
@@ -212,11 +230,59 @@ def send_telegram(message, reply_markup=None):
     return result["result"]
 
 
+def build_daily_report(scanned, eligible, new_matches, sent, source_health, rejection_counts):
+    totals = {}
+    failures = []
+    for check in source_health:
+        host = check.get("host") or check.get("source") or "Unknown"
+        totals.setdefault(host, {"ok": 0, "total": 0})
+        totals[host]["total"] += 1
+        if check.get("ok"):
+            totals[host]["ok"] += 1
+        else:
+            failures.append(check.get("source") or host)
+
+    source_line = " · ".join(
+        f"{host}: {counts['ok']}/{counts['total']}"
+        for host, counts in sorted(totals.items())
+    ) or "Джерела не повернули статус"
+    top_rejections = sorted(
+        rejection_counts.items(), key=lambda item: item[1], reverse=True
+    )[:3]
+    lines = [
+        "🐭 <b>Мишка · щоденний звіт</b>",
+        f"🔎 Перевірено вакансій: <b>{scanned}</b>",
+        f"🎯 Підійшли фільтрам: <b>{eligible}</b>",
+        f"🆕 Нових відповідних: <b>{new_matches}</b>",
+        f"📨 Надіслано карток: <b>{sent}</b>",
+        f"📦 Залишилося в черзі через ліміт: <b>{max(0, new_matches - sent)}</b>",
+        "",
+        "<b>Стан джерел:</b>",
+        html.escape(source_line)
+    ]
+    if failures:
+        lines.extend(["", "⚠️ <b>Не відповіли:</b> " + html.escape(", ".join(failures))])
+    if top_rejections:
+        lines.extend([
+            "",
+            "<b>Основні причини відсіву:</b>",
+            *[f"• {html.escape(reason)} — {count}" for reason, count in top_rejections]
+        ])
+    if not source_health or all(not item.get("ok") for item in source_health):
+        lines.extend(["", "🚨 <b>Увага:</b> не вдалося отримати дані з жодного джерела."])
+    elif failures:
+        lines.extend(["", "ℹ️ Пошук завершився частково: перевірка продовжиться за розкладом."])
+    else:
+        lines.extend(["", "✅ Усі джерела відповіли."])
+    return "\n".join(lines)
+
+
 # Main daily scan: new matches become Telegram cards with persistent review actions.
 def main():
     if not os.environ.get("TELEGRAM_BOT_TOKEN") or not os.environ.get("TELEGRAM_CHAT_ID"):
         raise RuntimeError("Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID GitHub Secret.")
 
+    SOURCE_HEALTH.clear()
     seen = set(load_json(SEEN_PATH, []))
     applications = load_json(APPLICATIONS_PATH, {})
     jobs = collect_jobs()
@@ -274,12 +340,14 @@ def main():
         save_json(SEEN_PATH, sorted(seen))
         sent += 1
 
-    if os.getenv("MYSHKA_NOTIFY_EMPTY", "").lower() == "true" and sent == 0:
-        send_telegram(
-            "🐭 <b>ТРЕЙДМИШКА активна!</b>\n"
-            f"Перевірено оголошень: <b>{len(jobs)}</b>.\n"
-            "Нових збігів за поточними фільтрами немає. Наступна перевірка відбудеться автоматично."
-        )
+    send_telegram(build_daily_report(
+        scanned=len(jobs),
+        eligible=eligible_count,
+        new_matches=len(matches),
+        sent=sent,
+        source_health=SOURCE_HEALTH,
+        rejection_counts=rejection_counts
+    ))
     print(f"Scanned {len(jobs)} listings; eligible {eligible_count}; sent {sent} new matches; saved {len(applications)} application records.")
     print("Top rejection reasons: " + json.dumps(dict(sorted(rejection_counts.items(), key=lambda item: item[1], reverse=True)[:8]), ensure_ascii=False))
 
