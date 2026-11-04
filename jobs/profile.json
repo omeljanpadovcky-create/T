@@ -8,12 +8,19 @@
     "Illustrator",
     "Figma",
     "Canva",
+    "Gigapixel AI",
     "UI/UX design",
     "graphic design",
-    "Shopify"
+    "Shopify",
+    "Liquid",
+    "CSS",
+    "3D modeling",
+    "digital art",
+    "visual composition"
   ],
-  "notes": "Public profile defaults. ArtStation portfolio is public. Candidate name, CV URL, email and salary preference must be configured as GitHub Actions secrets. Never store generated application text here.",
+  "notes": "Candidate name and core creative/web skills aligned with the existing CV in the user's Library. Public ArtStation portfolio is configured. The CV file itself is not published or exposed; configure MYSHKA_CV_URL only if the candidate chooses a shareable employer-facing link. Contact email and salary preference remain unset until provided.",
   "portfolio_url": "https://www.artstation.com/omelyan_padovsky",
   "portfolio_3d_url": "https://www.artstation.com/omelyan_padovsky",
-  "portfolio_game_art_url": "https://www.artstation.com/omelyan_padovsky"
+  "portfolio_game_art_url": "https://www.artstation.com/omelyan_padovsky",
+  "name": "OMELYAN PADOVSKYI"
 }
