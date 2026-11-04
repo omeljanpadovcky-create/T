@@ -160,7 +160,10 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
         answer_callback(query.get("id"), "Вакансію не знайдено")
         return False
 
-    state = statuses.setdefault(short_id, {"status": "new"})
+    state = statuses.setdefault(short_id, {
+        "status": job.get("status", "new"),
+        "package_revision": int(job.get("package_revision", 0) or 0)
+    })
     current_status = state.get("status", "new")
     allowed_statuses = {
         "confirm": {"new", "selected"},

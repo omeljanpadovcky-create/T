@@ -71,5 +71,24 @@ class ApplicationGeneratorTests(unittest.TestCase):
         self.assertIn("ВІДПРАВЛЕНА ЗАЯВКА", text.upper())
 
 
+    def test_role_specific_game_portfolio_is_selected(self):
+        profile = dict(self.profile)
+        profile["portfolio_game_art_url"] = "https://portfolio.example/game"
+        job = dict(self.job)
+        job["title"] = "Game Artist"
+        job["description"] = "Create game art assets for Unity."
+        package = generate_application(job, profile)
+        self.assertIn(
+            {"label": "Game Art", "url": "https://portfolio.example/game"},
+            package["portfolio"]["links"]
+        )
+
+    def test_cv_missing_is_reported_without_inventing_a_link(self):
+        package = generate_application(self.job, self.profile)
+        self.assertTrue(package["checks"]["cv_url_missing"])
+        self.assertEqual(package["portfolio"]["cv_url"], "")
+        self.assertIn("No CV link configured", package["portfolio"]["cv_status"])
+
+
 if __name__ == "__main__":
     unittest.main()
