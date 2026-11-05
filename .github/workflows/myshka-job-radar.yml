@@ -2,9 +2,8 @@ name: MYSHKA JOB RADAR
 
 on:
   schedule:
-    # Ukraine winter time: 09:00 and 16:00 (UTC+2).
-    # During daylight saving time these run at 10:00 and 17:00 local.
-    - cron: "0 7,14 * * *"
+    # Check once per hour; Python applies Europe/Kyiv timezone (DST-safe).
+    - cron: "0 * * * *"
     # Telegram inline-button and message polling.
     - cron: "*/5 * * * *"
   workflow_dispatch:
@@ -45,7 +44,7 @@ jobs:
       - name: Run scheduled vacancy scan
         if: >-
           (github.event_name == 'schedule' &&
-          (github.event.schedule == '0 7,14 * * *')) ||
+          (github.event.schedule == '0 * * * *')) ||
           (github.event_name == 'workflow_dispatch' && inputs.run_scan)
         working-directory: jobs
         env:
@@ -60,7 +59,8 @@ jobs:
           MYSHKA_CV_URL: ${{ secrets.MYSHKA_CV_URL }}
           MYSHKA_CONTACT_EMAIL: ${{ secrets.MYSHKA_CONTACT_EMAIL }}
           MYSHKA_SALARY_EXPECTATION: ${{ secrets.MYSHKA_SALARY_EXPECTATION }}
-        run: python bot.py
+          MYSHKA_FORCE_SCAN: ${{ inputs.run_scan }}
+        run: python run_scheduled_scan.py
 
       - name: Process Telegram buttons and messages
         working-directory: jobs
