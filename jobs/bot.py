@@ -121,20 +121,6 @@ def collect_jobs():
     return list(unique.values())
 
 
-def english_requirement_too_high(text):
-    patterns = [
-        r"\b(?:english|spoken english)\s*(?:level|proficiency)?\s*[:\-]?\s*(?:b2\+?|c1|c2|fluent|native|advanced|upper[- ]intermediate)\b",
-        r"\b(?:b2\+?|c1|c2)\s+(?:level\s+)?english\b",
-        r"\b(?:fluent|native|advanced|upper[- ]intermediate|professional|business[- ]level)\s+(?:in\s+)?english\b",
-        r"\benglish\s+(?:is\s+)?(?:fluent|native|advanced|professional|business[- ]level)\b",
-        r"\bstrong\s+(?:written\s+and\s+spoken|written|spoken|verbal)\s+english\b",
-        r"\bexcellent\s+(?:written\s+and\s+spoken\s+)?english\b",
-        r"\bnear[- ]native\s+(?:level\s+)?english\b",
-        r"\bfull professional\s+proficiency\b"
-    ]
-    return any(re.search(pattern, text, re.IGNORECASE) for pattern in patterns)
-
-
 def outside_target_geography(text):
     patterns = [
         r"\b(?:usa|u\.s\.|united states|canada|australia)\s+only\b",
