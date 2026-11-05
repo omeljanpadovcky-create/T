@@ -137,7 +137,7 @@ def send_package(chat_id, short_id, job, package):
     text = re.sub(r"</?b>", "", render_application_text(package))
     chunks = []
     while len(text) > 3800:
-        cut = text.rfind("\\n", 0, 3800)
+        cut = text.rfind("\n", 0, 3800)
         if cut < 1000:
             cut = 3800
         chunks.append(text[:cut])
