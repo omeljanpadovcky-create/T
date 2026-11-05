@@ -51,8 +51,7 @@ class CallbackStateTransitionTests(unittest.TestCase):
         self.assertEqual(statuses["abc123"]["status"], "awaiting_approval")
         self.assertEqual(statuses["abc123"]["package_revision"], 1)
         methods = [call.args[0] for call in api.call_args_list]
-        self.assertIn("editMessageText", methods)
-        self.assertIn("sendMessage", methods)
+        self.assertEqual(methods, ["sendMessage"])
         final_payload = api.call_args_list[-1].args[1]
         keyboard = final_payload["reply_markup"]["inline_keyboard"]
         callback_values = {
