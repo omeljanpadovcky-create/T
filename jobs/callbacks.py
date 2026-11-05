@@ -106,9 +106,8 @@ def package_keyboard(short_id, job):
     if job.get("url"):
         rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
     rows.extend([
-        [{"text": "✅ ПІДТВЕРДЖУЮ ПАКЕТ", "callback_data": f"approve|{short_id}"}],
-        [{"text": "✏️ Редагувати Cover Letter", "callback_data": f"edit|{short_id}"}],
-        [{"text": "⏭ Пропустити вакансію", "callback_data": f"skip|{short_id}"}]
+        [{"text": "❌ НЕ ПІДХОДИТЬ", "callback_data": f"skip|{short_id}"}],
+        [{"text": "✅ ПІДТВЕРДИТИ ПАКЕТ", "callback_data": f"approve|{short_id}"}]
     ])
     return {"inline_keyboard": rows}
 
