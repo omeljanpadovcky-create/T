@@ -39,6 +39,29 @@ class CallbackStateTransitionTests(unittest.TestCase):
             for row in keyboard for button in row
         ))
 
+    def test_prepare_generates_package_and_adds_approval_controls(self):
+        self.applications["abc123"].update({
+            "url": "https://example.com/job",
+            "company": "Example Studio",
+            "location": "Remote",
+            "description": "Figma UI/UX design"
+        })
+        result, statuses, api = self.callback("prepare", "selected")
+        self.assertTrue(result)
+        self.assertEqual(statuses["abc123"]["status"], "awaiting_approval")
+        self.assertEqual(statuses["abc123"]["package_revision"], 1)
+        methods = [call.args[0] for call in api.call_args_list]
+        self.assertIn("editMessageText", methods)
+        self.assertIn("sendMessage", methods)
+        final_payload = api.call_args_list[-1].args[1]
+        keyboard = final_payload["reply_markup"]["inline_keyboard"]
+        callback_values = {
+            button.get("callback_data")
+            for row in keyboard for button in row
+        }
+        self.assertIn("approve|abc123", callback_values)
+        self.assertIn("edit|abc123", callback_values)
+
     def test_skipped_job_cannot_be_selected_again(self):
         result, statuses, api = self.callback("confirm", "skipped")
         self.assertFalse(result)
