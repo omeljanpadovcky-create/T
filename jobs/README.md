@@ -4,6 +4,10 @@
 - Daily search through GitHub Actions.
 - Sources: Arbeitnow, RemoteOK, Remotive and Himalayas.
 - Up to 10 new matches per run.
+- No English-level filter: English requirements never automatically exclude a vacancy.
+- No experience-level filter: internship, entry-level, junior, mid-level and senior roles can be considered.
+- Candidate profile includes a two-year IT Step internship, represented as internship experience rather than paid employment.
+- Search targets include 3D / Blender / Game Art, illustration, graphic and UI/UX design, Shopify / E-commerce, product listings, digital marketing and content roles.
 - Telegram callbacks are polled every 5 minutes.
 
 ## Application preparation flow
@@ -38,7 +42,7 @@ Repository → Settings → Secrets and variables → Actions:
 - MYSHKA_CONTACT_EMAIL
 - MYSHKA_SALARY_EXPECTATION
 
-The non-sensitive defaults in jobs/profile.json describe the candidate's current design practice, A2 English level, approximate portfolio size and toolset. Update them only if they remain accurate.
+The non-sensitive defaults in jobs/profile.json describe the candidate's design practice, two-year IT Step internship, English level, approximate portfolio size and toolset. English level is retained for truthful application answers only; it is not a vacancy filter.
 
 ## Required existing secrets
 - TELEGRAM_BOT_TOKEN
