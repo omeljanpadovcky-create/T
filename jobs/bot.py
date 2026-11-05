@@ -255,13 +255,42 @@ def application_review_keyboard(short_id, job):
     return {"inline_keyboard": rows}
 
 
+def build_ukrainian_conclusion(job, score, reason=""):
+    score = int(score or 0)
+    if score >= 80:
+        verdict = "Сильний збіг із твоїм профілем: варто уважно розглянути вакансію."
+    elif score >= 60:
+        verdict = "Є потенційний збіг: перевір основні вимоги та обсяг обов’язків."
+    else:
+        verdict = "Збіг частковий: перед рішенням особливо уважно перевір вимоги."
+
+    description = norm(as_text(job.get("description")))
+    english = ""
+    if re.search(r"\b(c1|c2|native|fluent|near[- ]native)\b", description):
+        english = " Вимога до англійської може бути вищою за твій поточний рівень A2 — це потрібно уточнити."
+    elif re.search(r"\b(b2|upper[- ]intermediate|advanced)\b", description):
+        english = " У вакансії згадується англійська B2/Advanced; з рівнем A2 це може бути складно."
+    elif re.search(r"\b(b1|intermediate)\b", description):
+        english = " У вакансії згадується B1/Intermediate; твій A2 може бути нижчим за вимогу."
+    elif re.search(r"\b(a2|elementary|basic english)\b", description):
+        english = " Згаданий рівень англійської A2/Basic — це ближче до твого поточного рівня."
+    else:
+        english = " Рівень англійської не вдалося чітко визначити з опису — перевір його перед подачею."
+
+    match_detail = str(reason or "").strip()
+    if match_detail and match_detail != "Relevant creative role; verify requirements":
+        return verdict + english + " Збіг за навичками: " + match_detail + "."
+    return verdict + english
+
+
 def send_job_card(job, short_id):
     message = (
         f"🐭 <b>MYSHKA · {int(job.get('score') or 0)}/100</b>\n"
         f"💼 <b>{html.escape(as_text(job.get('title')) or 'Вакансія')}</b>\n"
         f"🏢 {html.escape(as_text(job.get('company')) or 'Компанію не вказано')}\n"
         f"🌍 {html.escape(as_text(job.get('location')) or 'Remote')}\n"
-        f"📌 Джерело: {html.escape(as_text(job.get('source')) or 'не вказано')}\n\n"
+        f"📌 Джерело: {html.escape(as_text(job.get('source')) or 'не вказано')}\n"
+        f"🧠 <b>Висновок Мишки:</b> {html.escape(as_text(job.get('conclusion_uk')) or build_ukrainian_conclusion(job, job.get('score'), job.get('reason')))}\n\n"
         "Спочатку відкрий вакансію та переглянь умови. Потім обери, чи підходить вона."
     )
     return send_telegram(message, application_review_keyboard(short_id, job))
@@ -345,7 +374,8 @@ def main():
             "company": as_text(job.get("company")), "location": as_text(job.get("location")),
             "url": as_text(job.get("url")), "description": as_text(job.get("description"))[:12000],
             "source": as_text(job.get("source")), "score": score, "reason": reason,
-            "status": "new", "package_revision": 0
+            "status": "new", "package_revision": 0,
+            "conclusion_uk": build_ukrainian_conclusion(job, score, reason)
         }
         telegram_message = send_job_card(stored_job, short_id)
         stored_job["message_id"] = telegram_message.get("message_id") if telegram_message else None
