@@ -35,7 +35,10 @@ def api(method, payload):
         f"https://api.telegram.org/bot{token}/{method}",
         json=payload, timeout=TIMEOUT
     )
-    response.raise_for_status()
+    if not response.ok:
+        raise RuntimeError(
+            f"Telegram {method} HTTP {response.status}: {response.text[:1000]}"
+        )
     data = response.json()
     if not data.get("ok"):
         raise RuntimeError(f"Telegram {method} failed: {data}")
@@ -239,14 +242,9 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
             state["status"] = "awaiting_approval"
             state["prepared_at"] = now_iso()
             state.pop("approved_at", None)
-            api("editMessageText", {
-                "chat_id": chat_id, "message_id": message.get("message_id"),
-                "text": job_message(job, state),
-                "reply_markup": {"inline_keyboard": [
-                    [{"text": "🔗 Відкрити вакансію", "url": job["url"]}]
-                ]},
-                "disable_web_page_preview": True
-            })
+            # Do not edit the old vacancy card here: it may have been
+            # replaced/deleted or become non-editable. Deliver the package
+            # as a fresh Telegram message so one stale message cannot block it.
             send_package(chat_id, short_id, job, package)
         except Exception as exc:
             print(f"Application package generation/delivery failed for {short_id}: {type(exc).__name__}: {exc}")
