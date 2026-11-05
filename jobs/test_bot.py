@@ -34,6 +34,25 @@ class JobFilterTests(unittest.TestCase):
         score, reason = score_job(sample_job(description="Fluent English and excellent written communication required."))
         self.assertGreater(score, 0, reason)
 
+    def test_accepts_senior_experience_requirements(self):
+        score, reason = score_job(sample_job(
+            title="Senior 3D Artist",
+            description="Requires 7+ years of professional experience with Blender."
+        ))
+        self.assertGreater(score, 0, reason)
+
+    def test_application_draft_mentions_it_step_internship_truthfully(self):
+        package = generate_application(sample_job(), {
+            "name": "Test Candidate",
+            "skills": ["Blender"],
+            "internship_experience": [{
+                "organization": "IT Step",
+                "duration": "two-year",
+                "type": "internship"
+            }]
+        })
+        self.assertIn("two-year internship at IT Step", package["cover_letter"])
+
     def test_rejects_us_only_even_when_source_says_remote(self):
         score, reason = score_job(sample_job(
             location="Remote",
