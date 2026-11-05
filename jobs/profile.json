@@ -18,9 +18,10 @@
     "digital art",
     "visual composition"
   ],
-  "notes": "Candidate name and core creative/web skills aligned with the existing CV in the user's Library. Public ArtStation portfolio is configured. The CV file itself is not published or exposed; configure MYSHKA_CV_URL only if the candidate chooses a shareable employer-facing link. Contact email and salary preference remain unset until provided.",
+  "notes": "Candidate profile aligned with the CV. Public employer-facing CV page: https://omelyan-padovsky-cv.vercel.app. Public ArtStation portfolio is configured. English level A2; contact email and salary preference remain unset as repository secrets.",
   "portfolio_url": "https://www.artstation.com/omelyan_padovsky",
   "portfolio_3d_url": "https://www.artstation.com/omelyan_padovsky",
   "portfolio_game_art_url": "https://www.artstation.com/omelyan_padovsky",
-  "name": "OMELYAN PADOVSKYI"
+  "name": "OMELYAN PADOVSKYI",
+  "cv_url": "https://omelyan-padovsky-cv.vercel.app"
 }
