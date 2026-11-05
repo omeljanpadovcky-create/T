@@ -172,7 +172,7 @@ function scoreJob(job) {
   if (!isAllowedLocation(job)) return 0;
   const searchable = title + " " + tags + " " + body.slice(0, 7000);
   if (/\b(?:unpaid|volunteer|commission[- ]only|no salary|equity only)\b/i.test(searchable)) return 0;
-  if (englishRequirementTooHigh(searchable)) return 0;
+  // Do not auto-reject roles based on English level; report requirements for user review.
   if (salaryBelowFive(job.salary)) return 0;
   if (job.salaryPeriod === "hourly" && String(job.currency).toUpperCase() === "USD" &&
       typeof job.salaryMin === "number" && job.salaryMin < 5) return 0;
