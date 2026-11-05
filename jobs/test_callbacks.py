@@ -61,6 +61,31 @@ class CallbackStateTransitionTests(unittest.TestCase):
         self.assertIn("approve|abc123", callback_values)
         self.assertIn("edit|abc123", callback_values)
 
+    def test_failed_package_delivery_keeps_vacancy_retryable(self):
+        self.applications["abc123"].update({
+            "url": "https://example.com/job",
+            "company": "Example Studio",
+            "location": "Remote"
+        })
+        statuses = {"abc123": {"status": "selected", "package_revision": 1}}
+        update = {
+            "callback_query": {
+                "id": None,
+                "data": "prepare|abc123",
+                "message": {"chat": {"id": 12345}, "message_id": 10}
+            }
+        }
+        with patch("callbacks.api") as api, patch(
+            "callbacks.send_package", side_effect=RuntimeError("delivery failed")
+        ):
+            result = handle_callback(
+                update, self.applications, statuses, self.allowed_chat, self.editing
+            )
+        self.assertTrue(result)
+        self.assertEqual(statuses["abc123"]["status"], "selected")
+        self.assertNotIn("prepared_at", statuses["abc123"])
+        self.assertTrue(any(call.args[0] == "sendMessage" for call in api.call_args_list))
+
     def test_skipped_job_cannot_be_selected_again(self):
         result, statuses, api = self.callback("confirm", "skipped")
         self.assertFalse(result)
