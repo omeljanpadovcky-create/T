@@ -1,8 +1,10 @@
 import hashlib
+import json
 import html
 import json
 import os
 import re
+from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
@@ -58,6 +60,179 @@ def fetch_json(url):
         SOURCE_HEALTH.append({"source": label, "host": parsed.netloc, "ok": False})
         print(f"Source unavailable: {parsed.netloc}: {exc}")
         return None
+
+
+
+class VacancyLinkParser(HTMLParser):
+    """Extract public vacancy links from DOU and Djinni search result pages."""
+
+    def __init__(self, source):
+        super().__init__(convert_charrefs=True)
+        self.source = source
+        self.current = None
+        self.links = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag != "a":
+            return
+        attrs = dict(attrs)
+        href = attrs.get("href", "")
+        classes = attrs.get("class", "").lower()
+        if self.source == "DOU":
+            is_job = "/vacancies/" in href and href.rstrip("/") != "https://jobs.dou.ua/vacancies"
+        else:
+            is_job = re.search(r"/jobs/[^/?#]+", href) is not None
+        if is_job and not self.current:
+            self.current = {"url": href, "title": ""}
+
+    def handle_data(self, data):
+        if self.current is not None:
+            self.current["title"] += data
+
+    def handle_endtag(self, tag):
+        if tag == "a" and self.current is not None:
+            item = self.current
+            self.current = None
+            item["title"] = re.sub(r"\s+", " ", item["title"]).strip()
+            if item["title"] and len(item["title"]) > 2:
+                self.links.append(item)
+
+
+class PageTextParser(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.parts = []
+        self.in_script = False
+        self.in_style = False
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "script":
+            self.in_script = True
+        elif tag == "style":
+            self.in_style = True
+
+    def handle_endtag(self, tag):
+        if tag == "script":
+            self.in_script = False
+        elif tag == "style":
+            self.in_style = False
+
+    def handle_data(self, data):
+        if not self.in_script and not self.in_style:
+            value = re.sub(r"\s+", " ", data).strip()
+            if value:
+                self.parts.append(value)
+
+
+def absolute_job_url(base, href):
+    from urllib.parse import urljoin
+    return urljoin(base, href)
+
+
+def fetch_html(url):
+    try:
+        response = requests.get(url, headers={
+            "User-Agent": "Mozilla/5.0 (compatible; MYSHKA-JOB-RADAR/1.0)",
+            "Accept": "text/html,application/xhtml+xml"
+        }, timeout=TIMEOUT)
+        response.raise_for_status()
+        parsed = urlparse(url)
+        SOURCE_HEALTH.append({"source": parsed.netloc, "host": parsed.netloc, "ok": True})
+        return response.text
+    except requests.RequestException as exc:
+        parsed = urlparse(url)
+        SOURCE_HEALTH.append({"source": parsed.netloc, "host": parsed.netloc, "ok": False})
+        print(f"Source unavailable: {parsed.netloc}: {exc}")
+        return None
+
+
+def extract_job_details(url, source, fallback_title):
+    page = fetch_html(url)
+    if not page:
+        return None
+    text_parser = PageTextParser()
+    try:
+        text_parser.feed(page)
+    except Exception:
+        pass
+    page_text = " ".join(text_parser.parts)
+
+    structured = {}
+    for match in re.finditer(
+        r'<script[^>]*type=["\\']application/ld\\+json["\\'][^>]*>(.*?)</script>',
+        page, re.IGNORECASE | re.DOTALL
+    ):
+        try:
+            payload = json.loads(html.unescape(match.group(1)))
+        except (ValueError, TypeError):
+            continue
+        candidates = payload if isinstance(payload, list) else [payload]
+        for candidate in candidates:
+            if isinstance(candidate, dict) and candidate.get("@type") in ("JobPosting", ["JobPosting"]):
+                structured = candidate
+                break
+        if structured:
+            break
+
+    title = as_text(structured.get("title")) or fallback_title
+    company = structured.get("hiringOrganization") or {}
+    if isinstance(company, dict):
+        company = company.get("name", "")
+    location = structured.get("jobLocation") or structured.get("jobLocationType") or ""
+    description = as_text(structured.get("description")) or page_text
+    remote_text = norm(" ".join([as_text(location), description, page_text[:12000]]))
+    remote = bool(re.search(
+        r"\\b(remote|remotely|work from home|distributed|anywhere|віддален|дистанційн)\\b",
+        remote_text
+    ))
+    if str(structured.get("jobLocationType", "")).upper() == "TELECOMMUTE":
+        remote = True
+    if not location:
+        location = "Remote" if remote else "Location not confirmed"
+    salary = structured.get("baseSalary") or {}
+    if isinstance(salary, dict):
+        salary_value = as_text(salary.get("value"))
+        salary_currency = as_text(salary.get("currency"))
+        if salary_value:
+            description += f" Salary: {salary_currency} {salary_value}"
+    return {
+        "title": title, "company": as_text(company), "location": as_text(location),
+        "url": url, "description": description[:16000], "tags": [],
+        "source": source, "remote": remote
+    }
+
+
+def collect_community_jobs(source, search_terms, base_url, parameter):
+    jobs = []
+    seen_urls = set()
+    for term in search_terms:
+        query = requests.utils.quote(term)
+        search_url = f"{base_url}?{parameter}={query}"
+        page = fetch_html(search_url)
+        if not page:
+            continue
+        parser = VacancyLinkParser(source)
+        try:
+            parser.feed(page)
+        except Exception as exc:
+            print(f"{source} listing parse warning: {exc}")
+            continue
+        for item in parser.links:
+            url = absolute_job_url(base_url, item["url"])
+            if url in seen_urls:
+                continue
+            seen_urls.add(url)
+            # Avoid spending requests on unrelated listings; title must be in the target family.
+            title = item["title"]
+            title_norm = norm(title)
+            if not any(norm(target) in title_norm for target in CONFIG["target_titles"]) and not any(
+                term in title_norm for term in ("3d", "blender", "illustrat", "shopify", "e-commerce", "ecommerce", "ui/ux")
+            ):
+                continue
+            details = extract_job_details(url, source, title)
+            if details:
+                jobs.append(details)
+    return jobs
 
 
 def collect_jobs():
@@ -117,6 +292,22 @@ def collect_jobs():
                 "description": item.get("description"), "tags": item.get("categories", []),
                 "source": "Himalayas", "remote": True
             })
+
+    # Ukrainian job boards: search relevant role families and inspect each matching public listing.
+    dou_terms = [
+        "3D Artist", "Blender", "Graphic Designer", "UI UX Designer",
+        "Shopify", "E-commerce", "Digital Marketing", "Content Manager"
+    ]
+    djinni_terms = [
+        "3D Artist", "Blender", "Graphic Designer", "UI UX Designer",
+        "Shopify", "E-commerce", "Digital Marketing", "Content Manager"
+    ]
+    jobs.extend(collect_community_jobs(
+        "DOU", dou_terms, "https://jobs.dou.ua/vacancies/", "search"
+    ))
+    jobs.extend(collect_community_jobs(
+        "Djinni", djinni_terms, "https://djinni.co/jobs/", "keywords"
+    ))
 
     unique = {}
     for job in jobs:
