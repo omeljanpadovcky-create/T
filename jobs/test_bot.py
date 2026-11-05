@@ -140,5 +140,15 @@ class JobFilterTests(unittest.TestCase):
         self.assertIn("skip|abc123", callbacks)
 
 
+    def test_extracts_dou_and_djinni_public_vacancy_links(self):
+        from bot import VacancyLinkParser
+        dou = VacancyLinkParser("DOU")
+        dou.feed('<a class="vt" href="/vacancies/12345/">Junior UI/UX Designer</a>')
+        self.assertEqual(dou.links[0]["title"], "Junior UI/UX Designer")
+        djinni = VacancyLinkParser("Djinni")
+        djinni.feed('<a href="/jobs/123456-shopify-assistant/">Shopify Assistant</a>')
+        self.assertEqual(djinni.links[0]["title"], "Shopify Assistant")
+
+
 if __name__ == "__main__":
     unittest.main()
