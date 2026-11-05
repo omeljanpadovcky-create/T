@@ -159,7 +159,7 @@ def extract_job_details(url, source, fallback_title):
 
     structured = {}
     for match in re.finditer(
-        r'<script[^>]*type=["\\']application/ld\\+json["\\'][^>]*>(.*?)</script>',
+        r"""<script[^>]*type=["']application/ld\\+json["'][^>]*>(.*?)</script>""",
         page, re.IGNORECASE | re.DOTALL
     ):
         try:
