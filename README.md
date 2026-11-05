@@ -15,7 +15,7 @@ Remote з України; 3D/Blender/Game Art та ілюстрація; trainee
 
 ## Архітектура
 - GitHub Pages — статична вебпанель.
-- GitHub Actions (`.github/workflows/myshka-job-radar.yml`) — пошук о 07:00 та 14:00 UTC; у зимовий час це 09:00 та 16:00 у Києві, у літній — 10:00 та 17:00.
+- GitHub Actions (`.github/workflows/myshka-job-radar.yml`) — погодинний запуск-перевірка; `jobs/run_scheduled_scan.py` запускає пошук рівно о 09:00 та 16:00 за `Europe/Kyiv`, автоматично враховуючи перехід на літній/зимовий час.
 - Той самий workflow опитує Telegram кожні 5 хвилин для обробки кнопок та редагування Cover Letter. Стан вакансій, offset і редагування зберігаються у `jobs/*.json` комітами GitHub Actions.
 - Vercel (Root Directory: `job-radar`) — додаткові API та діагностика; cron вимкнений, щоб не було подвійних сповіщень.
 - Telegram Bot API — сповіщення.
