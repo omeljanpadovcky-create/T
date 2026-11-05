@@ -4,8 +4,10 @@ The GitHub Actions workflows provide the daily job search and Telegram callback 
 
 ## Profile
 - Remote work: Ukraine, Europe and worldwide where explicitly eligible.
-- Roles: 3D / Blender / Game Art / Illustration / Concept Art / Book Cover.
-- English: avoid explicit B2+ requirements.
+- Roles: 3D / Blender / Game Art / Illustration / Concept Art / Book Cover / Shopify / E-commerce / UI/UX / Graphic Design / Digital Marketing / Product Listing / Content.
+- English: no level-based filtering; requirements do not automatically exclude a vacancy.
+- Experience: any level, including internship through senior.
+- Candidate profile: two-year IT Step internship, represented accurately as internship experience.
 - Up to 10 new matches per run.
 
 ## Telegram workflow
