@@ -314,7 +314,7 @@ def build_daily_report(scanned, eligible, new_matches, sent, source_health, reje
     return "\n".join(lines)
 
 
-# Main daily scan: new matches become Telegram cards with persistent review actions.
+# Main daily scan: new matches become reviewable Telegram cards with persistent yes/no actions.
 def main():
     if not os.environ.get("TELEGRAM_BOT_TOKEN") or not os.environ.get("TELEGRAM_CHAT_ID"):
         raise RuntimeError("Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID GitHub Secret.")
