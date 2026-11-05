@@ -81,6 +81,8 @@ class VacancyLinkParser(HTMLParser):
             is_job = "/vacancies/" in href and href.rstrip("/") != "https://jobs.dou.ua/vacancies"
         else:
             is_job = re.search(r"/jobs/[^/?#]+", href) is not None
+            if self.source == "ArtStation":
+                is_job = is_job and "/jobs/all" not in href
         if is_job and not self.current:
             self.current = {"url": href, "title": ""}
 
@@ -201,6 +203,37 @@ def extract_job_details(url, source, fallback_title):
     }
 
 
+def collect_artstation_jobs():
+    """Collect relevant public vacancies from the ArtStation Jobs board."""
+    page = fetch_html("https://www.artstation.com/jobs/all")
+    if not page:
+        return []
+    parser = VacancyLinkParser("ArtStation")
+    try:
+        parser.feed(page)
+    except Exception as exc:
+        print(f"ArtStation listing parse warning: {exc}")
+        return []
+    jobs = []
+    seen_urls = set()
+    for item in parser.links:
+        url = absolute_job_url("https://www.artstation.com/jobs/all", item["url"])
+        if url in seen_urls:
+            continue
+        seen_urls.add(url)
+        title = item["title"]
+        title_norm = norm(title)
+        if not any(norm(target) in title_norm for target in CONFIG["target_titles"]) and not any(
+            term in title_norm for term in ("3d", "blender", "illustrat", "concept artist", "environment artist", "prop artist", "game artist")
+        ):
+            continue
+        details = extract_job_details(url, "ArtStation", title)
+        if details:
+            jobs.append(details)
+    print(f"ArtStation: parsed {len(parser.links)} links; inspected {len(jobs)} relevant listings")
+    return jobs
+
+
 def collect_community_jobs(source, search_terms, base_url, parameter):
     jobs = []
     seen_urls = set()
@@ -307,6 +340,7 @@ def collect_jobs():
     jobs.extend(collect_community_jobs(
         "Djinni", djinni_terms, "https://djinni.co/jobs/", "keywords"
     ))
+    jobs.extend(collect_artstation_jobs())
 
     unique = {}
     for job in jobs:
