@@ -247,6 +247,10 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
             # as a fresh Telegram message so one stale message cannot block it.
             send_package(chat_id, short_id, job, package)
         except Exception as exc:
+            # Leave the vacancy retryable if the package could not be delivered.
+            state["status"] = "selected"
+            state.pop("prepared_at", None)
+            state.pop("approved_at", None)
             print(f"Application package generation/delivery failed for {short_id}: {type(exc).__name__}: {exc}")
             api("sendMessage", {
                 "chat_id": chat_id,
