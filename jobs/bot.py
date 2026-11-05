@@ -158,7 +158,7 @@ def extract_job_details(url, source, fallback_title):
 
     structured = {}
     for match in re.finditer(
-        r"""<script[^>]*type=["']application/ld\\+json["'][^>]*>(.*?)</script>""",
+        r"""<script[^>]*type=["']application/ld\+json["'][^>]*>(.*?)</script>""",
         page, re.IGNORECASE | re.DOTALL
     ):
         try:
@@ -181,7 +181,7 @@ def extract_job_details(url, source, fallback_title):
     description = as_text(structured.get("description")) or page_text
     remote_text = norm(" ".join([as_text(location), description, page_text[:12000]]))
     remote = bool(re.search(
-        r"\\b(remote|remotely|work from home|distributed|anywhere|віддален|дистанційн)\\b",
+        r"\b(remote|remotely|work from home|distributed|anywhere|віддален|дистанційн)\b",
         remote_text
     ))
     if str(structured.get("jobLocationType", "")).upper() == "TELECOMMUTE":
