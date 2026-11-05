@@ -121,11 +121,23 @@ def approved_keyboard(short_id, job):
     return {"inline_keyboard": rows}
 
 
+def approval_keyboard(short_id, job):
+    rows = []
+    if job.get("url"):
+        rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
+    rows.extend([
+        [{"text": "✏️ ВІДРЕДАГУВАТИ COVER LETTER", "callback_data": f"edit|{short_id}"}],
+        [{"text": "✅ ПІДТВЕРДИТИ ПАКЕТ", "callback_data": f"approve|{short_id}"}],
+        [{"text": "❌ ВІДМОВИТИСЯ ВІД ВАКАНСІЇ", "callback_data": f"skip|{short_id}"}]
+    ])
+    return {"inline_keyboard": rows}
+
+
 def send_package(chat_id, short_id, job, package):
     text = re.sub(r"</?b>", "", render_application_text(package))
     chunks = []
     while len(text) > 3800:
-        cut = text.rfind("\n", 0, 3800)
+        cut = text.rfind("\\n", 0, 3800)
         if cut < 1000:
             cut = 3800
         chunks.append(text[:cut])
@@ -138,7 +150,7 @@ def send_package(chat_id, short_id, job, package):
             "disable_web_page_preview": True
         }
         if index == len(chunks) - 1:
-            payload["reply_markup"] = package_keyboard(short_id, job)
+            payload["reply_markup"] = approval_keyboard(short_id, job)
         api("sendMessage", payload)
 
 
@@ -216,23 +228,37 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
         })
 
     elif action == "prepare":
-        package = generate_application(job, load_profile())
-        revision = int(state.get("package_revision", 0)) + 1
-        package["revision"] = revision
-        state["package_revision"] = revision
-        state["status"] = "awaiting_approval"
-        state["prepared_at"] = now_iso()
-        state.pop("approved_at", None)
-        answer_callback(query.get("id"), "Пакет готовий. Перевір його перед підтвердженням.")
-        api("editMessageText", {
-            "chat_id": chat_id, "message_id": message.get("message_id"),
-            "text": job_message(job, state),
-            "reply_markup": {"inline_keyboard": [
-                [{"text": "🔗 Відкрити вакансію", "url": job["url"]}]
-            ]},
-            "disable_web_page_preview": True
-        })
-        send_package(chat_id, short_id, job, package)
+        # Acknowledge immediately so Telegram does not show a dead button
+        # while the application pack is being generated and delivered.
+        answer_callback(query.get("id"), "Отримав запит. Готую пакет заявки…")
+        try:
+            package = generate_application(job, load_profile())
+            revision = int(state.get("package_revision", 0)) + 1
+            package["revision"] = revision
+            state["package_revision"] = revision
+            state["status"] = "awaiting_approval"
+            state["prepared_at"] = now_iso()
+            state.pop("approved_at", None)
+            api("editMessageText", {
+                "chat_id": chat_id, "message_id": message.get("message_id"),
+                "text": job_message(job, state),
+                "reply_markup": {"inline_keyboard": [
+                    [{"text": "🔗 Відкрити вакансію", "url": job["url"]}]
+                ]},
+                "disable_web_page_preview": True
+            })
+            send_package(chat_id, short_id, job, package)
+        except Exception as exc:
+            print(f"Application package generation/delivery failed for {short_id}: {type(exc).__name__}: {exc}")
+            api("sendMessage", {
+                "chat_id": chat_id,
+                "text": (
+                    "⚠️ Не вдалося завершити підготовку пакета заявки. "
+                    "Запит отримано, але пакет не відправлено. "
+                    "Спробуй ще раз пізніше або відкрий вакансію вручну."
+                ),
+                "disable_web_page_preview": True
+            })
 
     elif action == "approve":
         if not state.get("package_revision") or state.get("status") != "awaiting_approval":
