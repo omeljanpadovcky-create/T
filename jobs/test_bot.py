@@ -105,8 +105,8 @@ class JobFilterTests(unittest.TestCase):
             for row in keyboard["inline_keyboard"]
             for button in row
         ]
-        self.assertIn("approve|abc123", callbacks)
-        self.assertNotIn("edit|abc123", callbacks)
+        self.assertIn("confirm|abc123", callbacks)
+        self.assertNotIn("approve|abc123", callbacks)
         self.assertIn("skip|abc123", callbacks)
         self.assertNotIn("applied|abc123", callbacks)
 
@@ -125,7 +125,7 @@ class JobFilterTests(unittest.TestCase):
         payload = send.call_args.args[0]
         keyboard = send.call_args.args[1]
         self.assertIn("COVER LETTER", payload)
-        self.assertIn("approve|abc123", [
+        self.assertIn("confirm|abc123", [
             button.get("callback_data")
             for row in keyboard["inline_keyboard"]
             for button in row
