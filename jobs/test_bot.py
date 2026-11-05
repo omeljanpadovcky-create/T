@@ -106,7 +106,7 @@ class JobFilterTests(unittest.TestCase):
             for button in row
         ]
         self.assertIn("approve|abc123", callbacks)
-        self.assertIn("edit|abc123", callbacks)
+        self.assertNotIn("edit|abc123", callbacks)
         self.assertIn("skip|abc123", callbacks)
         self.assertNotIn("applied|abc123", callbacks)
 
