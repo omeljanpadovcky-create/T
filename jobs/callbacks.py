@@ -355,10 +355,35 @@ def main():
     statuses = load_json(STATUSES_PATH, {})
     editing = load_json(EDITING_PATH, {})
     offset = int(load_json(OFFSET_PATH, 0))
+
+    # This bot is operated through long polling in GitHub Actions. A leftover
+    # webhook would prevent getUpdates from receiving callback queries.
+    webhook_response = requests.get(
+        f"https://api.telegram.org/bot{token}/getWebhookInfo",
+        timeout=TIMEOUT
+    )
+    webhook_response.raise_for_status()
+    webhook_payload = webhook_response.json()
+    if not webhook_payload.get("ok"):
+        raise RuntimeError("Telegram getWebhookInfo failed: " + str(webhook_payload))
+    webhook_info = webhook_payload.get("result", {})
+    print(
+        "Telegram webhook status: "
+        f"configured={bool(webhook_info.get('url'))}, "
+        f"pending={int(webhook_info.get('pending_update_count', 0) or 0)}"
+    )
+    if webhook_info.get("url"):
+        api("deleteWebhook", {"drop_pending_updates": False})
+        print("Removed the leftover webhook; pending Telegram updates were preserved.")
+
     response = requests.get(
         f"https://api.telegram.org/bot{token}/getUpdates",
-        params={"offset": offset, "timeout": 0, "allowed_updates": '["callback_query","message"]'},
-        timeout=TIMEOUT
+        params={
+            "offset": offset,
+            "timeout": 20,
+            "allowed_updates": json.dumps(["callback_query", "message"])
+        },
+        timeout=TIMEOUT + 5
     )
     response.raise_for_status()
     payload = response.json()
