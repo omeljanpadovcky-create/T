@@ -15,7 +15,8 @@ Remote з України; 3D/Blender/Game Art та ілюстрація; trainee
 
 ## Архітектура
 - GitHub Pages — статична вебпанель.
-- GitHub Actions — щоденний пошук о 07:00 UTC.
+- GitHub Actions (`.github/workflows/myshka-job-radar.yml`) — пошук о 07:00 та 14:00 UTC; у зимовий час це 09:00 та 16:00 у Києві, у літній — 10:00 та 17:00.
+- Той самий workflow опитує Telegram кожні 5 хвилин для обробки кнопок та редагування Cover Letter. Стан вакансій, offset і редагування зберігаються у `jobs/*.json` комітами GitHub Actions.
 - Vercel (Root Directory: `job-radar`) — додаткові API та діагностика; cron вимкнений, щоб не було подвійних сповіщень.
 - Telegram Bot API — сповіщення.
 - Vercel Environment Variables — секрети.
@@ -28,7 +29,7 @@ Remote з України; 3D/Blender/Game Art та ілюстрація; trainee
 - `CRON_SECRET`
 - `UPSTASH_REDIS_REST_URL` та `UPSTASH_REDIS_REST_TOKEN` (рекомендовано)
 
-Після додавання змінних зробити Redeploy. Перевірити `/api/health`, потім вручну запустити `/api/check` із заголовком `Authorization: Bearer <CRON_SECRET>`.
+Після додавання змінних запусти workflow `MYSHKA JOB RADAR` вручну через GitHub Actions або дочекайся розкладу. Перевір, що в репозиторії → Settings → Actions → General дозволені workflow та запис у репозиторій. Переконайся, що додані GitHub Secrets `TELEGRAM_BOT_TOKEN` і `TELEGRAM_CHAT_ID`.
 
 ## Безпека та межі
 Система готує вакансії та матеріали для ручної перевірки. Вона не відправляє заявки без явного підтвердження, не обходить CAPTCHA та не імітує авторизацію. Доступність джерел вакансій може змінюватися.
