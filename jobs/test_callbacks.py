@@ -25,6 +25,20 @@ class CallbackStateTransitionTests(unittest.TestCase):
                                      self.allowed_chat, self.editing)
         return result, statuses, api
 
+    def test_confirm_selects_job_and_offers_application_preparation(self):
+        self.applications["abc123"]["url"] = "https://example.com/job"
+        result, statuses, api = self.callback("confirm", "new")
+        self.assertTrue(result)
+        self.assertEqual(statuses["abc123"]["status"], "selected")
+        api.assert_called_once()
+        args, kwargs = api.call_args
+        self.assertEqual(args[0], "editMessageText")
+        keyboard = args[1]["reply_markup"]["inline_keyboard"]
+        self.assertTrue(any(
+            button.get("callback_data") == "prepare|abc123"
+            for row in keyboard for button in row
+        ))
+
     def test_skipped_job_cannot_be_selected_again(self):
         result, statuses, api = self.callback("confirm", "skipped")
         self.assertFalse(result)
