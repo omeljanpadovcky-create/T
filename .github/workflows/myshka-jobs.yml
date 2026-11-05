@@ -1,4 +1,4 @@
-name: ТРЕЙДМИШКА — щоденний пошук вакансій
+name: ТРЕЙДМИШКА — пошук вакансій двічі на день
 
 concurrency:
   group: trade-myshka-all-workflows
@@ -6,7 +6,7 @@ concurrency:
 
 on:
   schedule:
-    - cron: "0 7 * * *"
+    - cron: "0 7,14 * * *"
   workflow_dispatch:
   push:
     branches: [main]
