@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import patch
 
 from application_generator import generate_application
-from bot import application_review_keyboard, build_daily_report, score_job, send_job_card
+from bot import application_review_keyboard, build_daily_report, build_ukrainian_conclusion, score_job, send_job_card
 
 
 def sample_job(**overrides):
@@ -66,6 +66,17 @@ class JobFilterTests(unittest.TestCase):
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Unpaid or volunteer role")
 
+
+    def test_ukrainian_conclusion_mentions_a2_risk_for_b2_job(self):
+        conclusion = build_ukrainian_conclusion(
+            sample_job(description="English B2 required."),
+            75,
+            "Blender, 3D modeling"
+        )
+        self.assertIn("Висновок", "Висновок Мишки")
+        self.assertIn("B2", conclusion)
+        self.assertIn("A2", conclusion)
+        self.assertIn("Збіг за навичками", conclusion)
 
     def test_daily_report_includes_counts_and_source_health(self):
         report = build_daily_report(
