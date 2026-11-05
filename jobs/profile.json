@@ -18,10 +18,18 @@
     "digital art",
     "visual composition"
   ],
-  "notes": "Candidate profile aligned with the CV. Public employer-facing CV page: https://omelyan-padovsky-cv.vercel.app. Public ArtStation portfolio is configured. English level A2; contact email and salary preference remain unset as repository secrets.",
+  "notes": "Candidate profile aligned with the CV. Public employer-facing CV page: https://omelyan-padovsky-cv.vercel.app. Public ArtStation portfolio is configured. English level A2; contact email and salary preference remain unset as repository secrets. Candidate also completed a two-year internship at IT Step; represent this accurately as internship experience, not paid employment.",
   "portfolio_url": "https://www.artstation.com/omelyan_padovsky",
   "portfolio_3d_url": "https://www.artstation.com/omelyan_padovsky",
   "portfolio_game_art_url": "https://www.artstation.com/omelyan_padovsky",
   "name": "OMELYAN PADOVSKYI",
-  "cv_url": "https://omelyan-padovsky-cv.vercel.app"
+  "cv_url": "https://omelyan-padovsky-cv.vercel.app",
+  "internship_experience": [
+    {
+      "organization": "IT Step",
+      "duration": "2 years",
+      "type": "internship",
+      "note": "Internship experience; not represented as two years of paid professional employment."
+    }
+  ]
 }
