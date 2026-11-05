@@ -107,7 +107,7 @@ def package_keyboard(short_id, job):
         rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
     rows.extend([
         [{"text": "❌ НЕ ПІДХОДИТЬ", "callback_data": f"skip|{short_id}"}],
-        [{"text": "✅ ПІДТВЕРДИТИ ПАКЕТ", "callback_data": f"approve|{short_id}"}]
+        [{"text": "✅ ПІДХОДИТЬ", "callback_data": f"confirm|{short_id}"}]
     ])
     return {"inline_keyboard": rows}
 
@@ -154,6 +154,26 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
         answer_callback(query.get("id"), "Невідома дія")
         return False
     action, short_id = parts
+    if action == "review" and short_id == "pending":
+        pending = []
+        for item_id, item in applications.items():
+            state = statuses.get(item_id, {})
+            status = state.get("status", item.get("status", "new"))
+            if status in {"new", "selected"} and item.get("url"):
+                pending.append((item_id, item, state))
+        answer_callback(query.get("id"), f"Знайдено вакансій: {len(pending)}")
+        if not pending:
+            api("sendMessage", {"chat_id": chat_id, "text": "🐭 Немає вакансій, які очікують перегляду."})
+            return True
+        for item_id, item, state in pending[:20]:
+            api("sendMessage", {
+                "chat_id": chat_id,
+                "text": job_message(item, state),
+                "reply_markup": package_keyboard(item_id, item),
+                "disable_web_page_preview": True
+            })
+        return True
+
     job = applications.get(short_id)
     if not job:
         answer_callback(query.get("id"), "Вакансію не знайдено")
