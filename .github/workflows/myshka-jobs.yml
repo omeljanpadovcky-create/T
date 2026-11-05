@@ -1,7 +1,7 @@
 name: ТРЕЙДМИШКА — пошук вакансій двічі на день
 
 concurrency:
-  group: trade-myshka-all-workflows
+  group: trade-myshka-job-search
   cancel-in-progress: false
 
 on:
