@@ -11,7 +11,7 @@ on:
       - ".github/workflows/myshka-callbacks.yml"
 
 concurrency:
-  group: trade-myshka-all-workflows
+  group: trade-myshka-telegram-callbacks
   cancel-in-progress: false
 
 permissions:
