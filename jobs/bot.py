@@ -250,35 +250,21 @@ def application_review_keyboard(short_id, job):
         rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
     rows.extend([
         [{"text": "❌ НЕ ПІДХОДИТЬ", "callback_data": f"skip|{short_id}"}],
-        [{"text": "✅ ПІДТВЕРДИТИ ПАКЕТ", "callback_data": f"approve|{short_id}"}]
+        [{"text": "✅ ПІДХОДИТЬ", "callback_data": f"confirm|{short_id}"}]
     ])
     return {"inline_keyboard": rows}
 
 
-def send_application_package(job, package, short_id):
-    summary = (
+def send_job_card(job, short_id):
+    message = (
         f"🐭 <b>MYSHKA · {int(job.get('score') or 0)}/100</b>\n"
-        f"💼 <b>{html.escape(as_text(job.get('title')) or 'Vacancy')}</b>\n"
-        f"🏢 {html.escape(as_text(job.get('company')) or 'Company not specified')}\n"
-        f"🌍 {html.escape(as_text(job.get('location')) or 'Remote')}\n\n"
+        f"💼 <b>{html.escape(as_text(job.get('title')) or 'Вакансія')}</b>\n"
+        f"🏢 {html.escape(as_text(job.get('company')) or 'Компанію не вказано')}\n"
+        f"🌍 {html.escape(as_text(job.get('location')) or 'Remote')}\n"
+        f"📌 Джерело: {html.escape(as_text(job.get('source')) or 'не вказано')}\n\n"
+        "Спочатку відкрий вакансію та переглянь умови. Потім обери, чи підходить вона."
     )
-    plain_text = re.sub(r"</?b>", "", render_application_text(package))
-    content = summary + html.escape(plain_text, quote=False)
-    chunks = []
-    while len(content) > 3600:
-        cut = content.rfind("\n", 0, 3600)
-        if cut < 1000:
-            cut = 3600
-        chunks.append(content[:cut])
-        content = content[cut:].lstrip()
-    chunks.append(content)
-    result = None
-    for index, chunk in enumerate(chunks):
-        result = send_telegram(
-            chunk,
-            application_review_keyboard(short_id, job) if index == len(chunks) - 1 else None
-        )
-    return result
+    return send_telegram(message, application_review_keyboard(short_id, job))
 
 
 def build_daily_report(scanned, eligible, new_matches, sent, source_health, rejection_counts):
@@ -354,16 +340,14 @@ def main():
     sent = 0
     for score, reason, key, job in matches[:CONFIG["max_results_per_run"]]:
         short_id = key[:16]
-        package = generate_application(job, load_profile())
-        package["revision"] = 1
         stored_job = {
             "id": short_id, "title": as_text(job.get("title")),
             "company": as_text(job.get("company")), "location": as_text(job.get("location")),
             "url": as_text(job.get("url")), "description": as_text(job.get("description"))[:12000],
             "source": as_text(job.get("source")), "score": score, "reason": reason,
-            "status": "awaiting_approval", "package_revision": 1
+            "status": "new", "package_revision": 0
         }
-        telegram_message = send_application_package(stored_job, package, short_id)
+        telegram_message = send_job_card(stored_job, short_id)
         stored_job["message_id"] = telegram_message.get("message_id") if telegram_message else None
         applications[short_id] = stored_job
         seen.add(key)
@@ -371,14 +355,20 @@ def main():
         save_json(SEEN_PATH, sorted(seen))
         sent += 1
 
-    send_telegram(build_daily_report(
-        scanned=len(jobs),
-        eligible=eligible_count,
-        new_matches=len(matches),
-        sent=sent,
-        source_health=SOURCE_HEALTH,
-        rejection_counts=rejection_counts
-    ))
+    send_telegram(
+        build_daily_report(
+            scanned=len(jobs),
+            eligible=eligible_count,
+            new_matches=len(matches),
+            sent=sent,
+            source_health=SOURCE_HEALTH,
+            rejection_counts=rejection_counts
+        ),
+        {"inline_keyboard": [[{
+            "text": "👀 ПЕРЕГЛЯНУТИ ВАКАНСІЇ",
+            "callback_data": "review|pending"
+        }]]}
+    )
     print(f"Scanned {len(jobs)} listings; eligible {eligible_count}; sent {sent} new matches; saved {len(applications)} application records.")
     print("Top rejection reasons: " + json.dumps(dict(sorted(rejection_counts.items(), key=lambda item: item[1], reverse=True)[:8]), ensure_ascii=False))
 
