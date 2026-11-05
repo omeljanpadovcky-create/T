@@ -224,11 +224,28 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
             [{"text": "🧾 ПІДГОТУВАТИ ПОВНУ ЗАЯВКУ", "callback_data": f"prepare|{short_id}"}],
             [{"text": "⏭ Пропустити", "callback_data": f"skip|{short_id}"}]
         ]}
-        api("editMessageText", {
-            "chat_id": chat_id, "message_id": message.get("message_id"),
-            "text": job_message(job, state), "reply_markup": keyboard,
+        card_payload = {
+            "chat_id": chat_id,
+            "message_id": message.get("message_id"),
+            "text": job_message(job, state),
+            "reply_markup": keyboard,
             "disable_web_page_preview": True
-        })
+        }
+        try:
+            api("editMessageText", card_payload)
+        except requests.RequestException as exc:
+            # Telegram may reject editing an old, already changed or inaccessible
+            # message. Do not fail the update and replay the same callback forever.
+            print(
+                f"Could not edit vacancy card for {short_id}; sending a fresh card: "
+                f"{type(exc).__name__}: {exc}"
+            )
+            api("sendMessage", {
+                "chat_id": chat_id,
+                "text": job_message(job, state),
+                "reply_markup": keyboard,
+                "disable_web_page_preview": True
+            })
 
     elif action == "prepare":
         # Acknowledge immediately so Telegram does not show a dead button
@@ -247,20 +264,29 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
             # as a fresh Telegram message so one stale message cannot block it.
             send_package(chat_id, short_id, job, package)
         except Exception as exc:
-            # Leave the vacancy retryable if the package could not be delivered.
+            # Keep the job retryable. Log the actual failure for diagnostics.
             state["status"] = "selected"
             state.pop("prepared_at", None)
             state.pop("approved_at", None)
-            print(f"Application package generation/delivery failed for {short_id}: {type(exc).__name__}: {exc}")
-            api("sendMessage", {
-                "chat_id": chat_id,
-                "text": (
-                    "⚠️ Не вдалося завершити підготовку пакета заявки. "
-                    "Запит отримано, але пакет не відправлено. "
-                    "Спробуй ще раз пізніше або відкрий вакансію вручну."
-                ),
-                "disable_web_page_preview": True
-            })
+            print(
+                f"Application package generation/delivery failed for {short_id}: "
+                f"{type(exc).__name__}: {exc}"
+            )
+            try:
+                api("sendMessage", {
+                    "chat_id": chat_id,
+                    "text": (
+                        "⚠️ Пакет не вдалося доставити. Вакансію залишив у статусі "
+                        "«Підходить». Натисни «ПІДГОТУВАТИ ПОВНУ ЗАЯВКУ» ще раз. "
+                        "Заявку роботодавцю не надсилали."
+                    ),
+                    "disable_web_page_preview": True
+                })
+            except requests.RequestException as notify_exc:
+                print(
+                    f"Could not send package failure notice for {short_id}: "
+                    f"{type(notify_exc).__name__}: {notify_exc}"
+                )
 
     elif action == "approve":
         if not state.get("package_revision") or state.get("status") != "awaiting_approval":
