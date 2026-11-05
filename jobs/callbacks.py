@@ -100,7 +100,7 @@ def job_message(job, state):
         f"🏢 {safe(job.get('company') or 'Компанія не вказана')}\n"
         f"🌍 {safe(job.get('location') or 'Remote')}\n"
         f"📌 {safe(job.get('source'))}\n"
-        f"📍 Статус: {safe(status_label(state.get('status', 'new')))}\\n"
+        f"📍 Статус: {safe(status_label(state.get('status', 'new')))}\n"
         f"🧠 Висновок Мишки: {safe(job.get('conclusion_uk') or 'Переглянь опис, вимоги до досвіду та англійської. Остаточне рішення — після перевірки сторінки роботодавця.')}"
     )
 
