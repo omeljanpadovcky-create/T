@@ -4,7 +4,8 @@
     "package_revision": 0
   },
   "a0ee0147bc39504e": {
-    "status": "selected",
-    "package_revision": 0
+    "status": "awaiting_approval",
+    "package_revision": 1,
+    "prepared_at": "2026-11-05T15:31:28.830378+00:00"
   }
 }
