@@ -1,7 +1,6 @@
 import hashlib
 import json
 import html
-import json
 import os
 import re
 from html.parser import HTMLParser
