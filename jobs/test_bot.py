@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import patch
 
 from application_generator import generate_application
-from bot import application_review_keyboard, build_daily_report, score_job, send_application_package
+from bot import application_review_keyboard, build_daily_report, score_job, send_job_card
 
 
 def sample_job(**overrides):
@@ -110,26 +110,23 @@ class JobFilterTests(unittest.TestCase):
         self.assertIn("skip|abc123", callbacks)
         self.assertNotIn("applied|abc123", callbacks)
 
-    def test_automatic_package_sender_attaches_review_keyboard(self):
+    def test_vacancy_card_attaches_yes_no_review_keyboard(self):
         job = sample_job()
-        package = generate_application(job, {
-            "name": "Test Candidate",
-            "skills": ["Blender"],
-            "portfolio_url": "https://portfolio.example"
-        })
         sent = {"message_id": 77}
         with patch("bot.send_telegram", return_value=sent) as send:
-            result = send_application_package(job, package, "abc123")
+            result = send_job_card(job, "abc123")
         self.assertEqual(result["message_id"], 77)
         self.assertEqual(send.call_count, 1)
         payload = send.call_args.args[0]
         keyboard = send.call_args.args[1]
-        self.assertIn("COVER LETTER", payload)
-        self.assertIn("confirm|abc123", [
+        self.assertIn("Junior 3D Artist", payload)
+        callbacks = [
             button.get("callback_data")
             for row in keyboard["inline_keyboard"]
             for button in row
-        ])
+        ]
+        self.assertIn("confirm|abc123", callbacks)
+        self.assertIn("skip|abc123", callbacks)
 
 
 if __name__ == "__main__":
