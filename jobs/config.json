@@ -35,11 +35,25 @@
     "UX/UI Designer",
     "Web Designer",
     "Product Designer",
-    "2D Illustrator"
+    "2D Illustrator",
+    "Shopify Assistant",
+    "Shopify Specialist",
+    "E-commerce Assistant",
+    "Ecommerce Assistant",
+    "E-commerce Specialist",
+    "Ecommerce Specialist",
+    "Product Listing Specialist",
+    "Product Listing Assistant",
+    "Digital Marketing Assistant",
+    "Digital Marketing Specialist",
+    "Marketing Assistant",
+    "Content Manager",
+    "Content Specialist",
+    "Content Assistant",
+    "Web Content Specialist"
   ],
   "exclude_terms": [
     "director",
-    "manager",
     "head of",
     "unpaid",
     "volunteer"
@@ -73,7 +87,17 @@
     "graphic design",
     "canva",
     "adobe illustrator",
-    "adobe photoshop"
+    "adobe photoshop",
+    "shopify",
+    "e-commerce",
+    "ecommerce",
+    "product listing",
+    "digital marketing",
+    "content management",
+    "content creation",
+    "seo",
+    "product descriptions",
+    "online store"
   ],
   "allowed_locations": [
     "worldwide",
