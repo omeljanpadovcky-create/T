@@ -162,8 +162,6 @@ def score_job(job):
         return 0, "Not a target role"
     if re.search(r"\b(unpaid|volunteer|commission[- ]only|no salary|equity only)\b", searchable):
         return 0, "Unpaid or volunteer role"
-    if english_requirement_too_high(searchable):
-        return 0, "English requirement above A2/B1"
     if outside_target_geography(searchable):
         return 0, "Outside target geography"
 
