@@ -86,8 +86,12 @@ def collect_jobs():
                         "tags": item.get("tags", []), "source": source, "remote": True
                     })
 
-    # Search Remotive separately for the target creative disciplines.
-    for query in ["3d", "blender", "game artist", "illustration", "concept artist"]:
+    # Search Remotive across the full target role set, not only 3D and illustration.
+    for query in [
+        "3d", "blender", "game artist", "illustration", "concept artist",
+        "shopify", "ecommerce", "e-commerce", "ui ux", "graphic design",
+        "digital marketing", "product listing", "content manager"
+    ]:
         data = fetch_json("https://remotive.com/api/remote-jobs?search=" + requests.utils.quote(query))
         if isinstance(data, dict):
             for item in data.get("jobs", []):
