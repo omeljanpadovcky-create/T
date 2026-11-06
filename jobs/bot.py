@@ -477,7 +477,6 @@ def application_review_keyboard(short_id, job):
     if job.get("url"):
         rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
     rows.extend([
-        [{"text": "💬 ОБГОВОРИТИ ВАКАНСІЮ", "callback_data": f"discuss|{short_id}"}],
         [{"text": "❌ НЕ ПІДХОДИТЬ", "callback_data": f"skip|{short_id}"}],
         [{"text": "✅ ПІДХОДИТЬ", "callback_data": f"confirm|{short_id}"}]
     ])
@@ -563,7 +562,7 @@ def send_job_card(job, short_id):
         f"📌 Джерело: {html.escape(as_text(job.get('source')) or 'не вказано')}\n"
         f"🧠 <b>Висновок Мишки:</b> {html.escape(as_text(job.get('conclusion_uk')) or build_ukrainian_conclusion(job, job.get('score'), job.get('reason')))}\n"
         f"🔬 <b>Аналіз:</b> {html.escape(as_text(job.get('analysis_uk')) or analyze_job_uk(job))}\n\n"
-        "Пакет заявки (Cover Letter, email/текст для форми, відповіді, CV та портфоліо) підготую після натискання «ПІДХОДИТЬ». Нічого не надсилатиму без твого окремого підтвердження."
+        "Я сама підготую персональний відгук, email/текст для форми та відповіді після натискання «ПІДХОДИТЬ». Ти перевіриш і підтвердиш пакет. Без твого окремого підтвердження нічого роботодавцю не надсилається."
     )
     return send_telegram(message, application_review_keyboard(short_id, job))
 
