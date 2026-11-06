@@ -650,6 +650,10 @@ def application_review_keyboard(short_id, job):
     rows = []
     if job.get("url"):
         rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
+    rows.append([
+        {"text": "✅ Підходить — підготувати відгук", "callback_data": f"confirm|{short_id}"},
+        {"text": "❌ Не підходить", "callback_data": f"skip|{short_id}"}
+    ])
     return {"inline_keyboard": rows}
 
 
