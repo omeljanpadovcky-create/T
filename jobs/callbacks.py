@@ -101,8 +101,8 @@ def job_message(job, state):
         f"🌍 {safe(job.get('location') or 'Remote')}\n"
         f"📌 {safe(job.get('source'))}\n"
         f"📍 Статус: {safe(status_label(state.get('status', 'new')))}\n"
-        f"🧠 Висновок Мишки: {safe(job.get('conclusion_uk') or 'Переглянь опис, вимоги до досвіду та англійської. Остаточне рішення — після перевірки сторінки роботодавця.')}"
-    )
+        f"🧠 Висновок Мишки: {safe(job.get('conclusion_uk') or 'Переглянь опис, вимоги до досвіду та англійської. Остаточне рішення — після перевірки сторінки роботодавця.')}\n"
+        f"🔬 Аналіз: {safe(job.get('analysis_uk') or 'Потрібно перевірити вимоги та спосіб подачі.')}"    )
 
 
 def package_keyboard(short_id, job):
@@ -175,7 +175,7 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
         for item_id, item in applications.items():
             state = statuses.get(item_id, {})
             status = state.get("status", item.get("status", "new"))
-            if status in {"new", "selected"} and item.get("url"):
+            if status in {"new", "selected"} and item.get("url") and int(item.get("score") or 0) >= 50:
                 pending.append((item_id, item, state))
         answer_callback(query.get("id"), f"Знайдено вакансій: {len(pending)}")
         if not pending:
