@@ -217,33 +217,34 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
         if state.get("status") in ("skipped", "submitted_user_confirmed"):
             answer_callback(query.get("id"), "Цю вакансію вже закрито")
             return False
-        state["status"] = "selected"
-        answer_callback(query.get("id"), "Вакансію відібрано. Готую пакет наступним кроком.")
-        keyboard = {"inline_keyboard": [
-            [{"text": "🔗 Відкрити вакансію", "url": job["url"]}],
-            [{"text": "🧾 МИШКА ГОТУЄ ВІДГУК", "callback_data": f"prepare|{short_id}"}],
-            [{"text": "⏭ Пропустити", "callback_data": f"skip|{short_id}"}]
-        ]}
-        card_payload = {
-            "chat_id": chat_id,
-            "message_id": message.get("message_id"),
-            "text": job_message(job, state),
-            "reply_markup": keyboard,
-            "disable_web_page_preview": True
-        }
+        # One tap on «ПІДХОДИТЬ» must immediately generate and show the
+        # complete Ukrainian application draft in Telegram. Sending it to
+        # the employer still requires the separate approval button below.
+        answer_callback(query.get("id"), "Підходить! Мишка готує текст відгуку…")
         try:
-            api("editMessageText", card_payload)
-        except requests.RequestException as exc:
-            # Telegram may reject editing an old, already changed or inaccessible
-            # message. Do not fail the update and replay the same callback forever.
+            package = generate_application(job, load_profile())
+            revision = int(state.get("package_revision", 0)) + 1
+            package["revision"] = revision
+            state["package_revision"] = revision
+            state["status"] = "awaiting_approval"
+            state["prepared_at"] = now_iso()
+            state.pop("approved_at", None)
+            send_package(chat_id, short_id, job, package)
+        except Exception as exc:
+            state["status"] = "selected"
+            state.pop("prepared_at", None)
+            state.pop("approved_at", None)
             print(
-                f"Could not edit vacancy card for {short_id}; sending a fresh card: "
+                f"Application package generation/delivery failed for {short_id}: "
                 f"{type(exc).__name__}: {exc}"
             )
             api("sendMessage", {
                 "chat_id": chat_id,
-                "text": job_message(job, state),
-                "reply_markup": keyboard,
+                "text": (
+                    "⚠️ Не вдалося підготувати текст відгуку. Вакансія залишилася "
+                    "відібраною — натисни «ПІДХОДИТЬ» ще раз. "
+                    "Роботодавцю нічого не надсилали."
+                ),
                 "disable_web_page_preview": True
             })
 
