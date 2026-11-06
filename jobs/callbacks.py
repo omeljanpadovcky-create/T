@@ -37,7 +37,7 @@ def api(method, payload):
     )
     if not response.ok:
         raise RuntimeError(
-            f"Telegram {method} HTTP {response.status}: {response.text[:1000]}"
+            f"Telegram {method} HTTP {response.status_code}: {response.text[:1000]}"
         )
     data = response.json()
     if not data.get("ok"):
