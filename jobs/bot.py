@@ -477,6 +477,7 @@ def application_review_keyboard(short_id, job):
     if job.get("url"):
         rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
     rows.extend([
+        [{"text": "💬 ОБГОВОРИТИ ВАКАНСІЮ", "callback_data": f"discuss|{short_id}"}],
         [{"text": "❌ НЕ ПІДХОДИТЬ", "callback_data": f"skip|{short_id}"}],
         [{"text": "✅ ПІДХОДИТЬ", "callback_data": f"confirm|{short_id}"}]
     ])
