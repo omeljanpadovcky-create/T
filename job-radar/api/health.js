@@ -5,7 +5,7 @@ export default function handler(req, res) {
     version: "1.4.0",
     configured: {
       telegram: Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID),
-      deduplication: Boolean(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN),
+      deduplication: true,
       cronProtection: Boolean(process.env.CRON_SECRET)
     },
     applicationFlow: {
@@ -14,7 +14,9 @@ export default function handler(req, res) {
       externalEmailOrAtsSubmission: false,
       privateDraftsStoredInPublicRepository: false
     },
-    schedule: "GitHub Actions daily at 07:00 UTC (09:00 Kyiv in winter, 10:00 in summer)",
-    profile: "Remote 3D / Blender / Game Art / Illustration · Europe/Worldwide · English A2 · up to 10 daily matches · Himalayas + Remotive + RemoteOK + Arbeitnow"
+    schedule: "09:00 and 16:00 Europe/Kyiv (DST-aware hourly GitHub Actions runner)",
+    delivery: "Telegram vacancy cards and daily report",
+    duplicateProtection: "Persistent jobs/seen.json state committed by GitHub Actions",
+    profile: "Remote 3D / Blender / Game Art / characters / props / environment art · all experience levels · English is not an exclusion filter · ArtStation, Robota.ua, Work.ua, DOU, Djinni, Remotive, RemoteOK, Himalayas, We Work Remotely"
   });
 }
