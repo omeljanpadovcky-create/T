@@ -1,14 +1,10 @@
 name: ТРЕЙДМИШКА — Telegram actions
 
+# Telegram polling is owned by myshka-job-radar.yml only.
+# Keeping this workflow manual-only prevents two independent getUpdates
+# consumers from racing over the same Telegram update offset.
 on:
-  schedule:
-    - cron: "*/5 * * * *"
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "jobs/callbacks.py"
-      - ".github/workflows/myshka-callbacks.yml"
 
 concurrency:
   group: trade-myshka-telegram-callbacks
