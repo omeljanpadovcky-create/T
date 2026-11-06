@@ -394,7 +394,11 @@ def score_job(job):
         score += 8
     if "remote" in location or job.get("remote"):
         score += 5
-    return min(score, 100), ", ".join(matched[:5]) or "Relevant creative role; verify requirements"
+    score = min(score, 100)
+    minimum_score = int(CONFIG.get("minimum_score", 50))
+    if score < minimum_score:
+        return 0, f"Below {minimum_score}/100 ({score}/100)"
+    return score, ", ".join(matched[:5]) or "Relevant creative role; verify requirements"
 
 
 def job_id(job):
@@ -507,6 +511,48 @@ def build_ukrainian_conclusion(job, score, reason=""):
     return verdict + english
 
 
+def analyze_job_uk(job, profile=None):
+    """Create a concise, evidence-based Ukrainian fit and application analysis."""
+    profile = profile or load_profile()
+    description = as_text(job.get("description"))
+    searchable = norm(description)
+    profile_skills = profile.get("skills", [])
+    matched = [
+        skill for skill in profile_skills
+        if norm(skill) and norm(skill) in norm(" ".join([
+            as_text(job.get("title")), description, as_text(job.get("tags"))
+        ]))
+    ]
+    english_match = re.search(
+        r"\\b(a1|a2|b1|b2|c1|c2|basic|elementary|intermediate|upper[- ]intermediate|advanced|fluent|native)\\b",
+        searchable
+    )
+    english = english_match.group(1).upper() if english_match else "не вказано"
+    experience = re.search(
+        r"(?:at least|minimum of|\\b)(\\d+)\\+?\\s+years?\\s+(?:of\\s+)?(?:professional\\s+)?experience",
+        searchable
+    )
+    experience_note = (
+        f"У вимогах згадано {experience.group(1)}+ р. досвіду — перевір, чи приймають практику/стажування."
+        if experience else "Жорстку вимогу до років досвіду з опису не визначено."
+    )
+    recipient = re.search(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}", description, re.I)
+    apply_method = (
+        f"Є email для подачі: {recipient.group(0)}."
+        if recipient else "Email у тексті не знайдено — готуватиму пакет для форми на сайті."
+    )
+    skills_note = (
+        "Збіг навичок: " + ", ".join(matched[:6]) + "."
+        if matched else "Прямого збігу навичок у тексті мало — потрібна ручна перевірка."
+    )
+    english_note = (
+        f"Англійська у вакансії: {english}; твій рівень A2 — перевіримо сумісність, але автоматично не відсікаємо."
+        if english != "не вказано" else
+        "Рівень англійської не вказано чітко — уточнити перед подачею."
+    )
+    return " ".join([skills_note, english_note, experience_note, apply_method])
+
+
 def send_job_card(job, short_id):
     message = (
         f"🐭 <b>MYSHKA · {int(job.get('score') or 0)}/100</b>\n"
@@ -514,8 +560,9 @@ def send_job_card(job, short_id):
         f"🏢 {html.escape(as_text(job.get('company')) or 'Компанію не вказано')}\n"
         f"🌍 {html.escape(as_text(job.get('location')) or 'Remote')}\n"
         f"📌 Джерело: {html.escape(as_text(job.get('source')) or 'не вказано')}\n"
-        f"🧠 <b>Висновок Мишки:</b> {html.escape(as_text(job.get('conclusion_uk')) or build_ukrainian_conclusion(job, job.get('score'), job.get('reason')))}\n\n"
-        "Спочатку відкрий вакансію та переглянь умови. Потім обери, чи підходить вона."
+        f"🧠 <b>Висновок Мишки:</b> {html.escape(as_text(job.get('conclusion_uk')) or build_ukrainian_conclusion(job, job.get('score'), job.get('reason')))}\n"
+        f"🔬 <b>Аналіз:</b> {html.escape(as_text(job.get('analysis_uk')) or analyze_job_uk(job))}\n\n"
+        "Пакет заявки (Cover Letter, email/текст для форми, відповіді, CV та портфоліо) підготую після натискання «ПІДХОДИТЬ». Нічого не надсилатиму без твого окремого підтвердження."
     )
     return send_telegram(message, application_review_keyboard(short_id, job))
 
@@ -581,7 +628,7 @@ def main():
     eligible_count = 0
     for job in jobs:
         score, reason = score_job(job)
-        if score:
+        if score >= int(CONFIG.get("minimum_score", 50)):
             eligible_count += 1
         else:
             rejection_counts[reason] = rejection_counts.get(reason, 0) + 1
@@ -599,7 +646,8 @@ def main():
             "url": as_text(job.get("url")), "description": as_text(job.get("description"))[:12000],
             "source": as_text(job.get("source")), "score": score, "reason": reason,
             "status": "new", "package_revision": 0,
-            "conclusion_uk": build_ukrainian_conclusion(job, score, reason)
+            "conclusion_uk": build_ukrainian_conclusion(job, score, reason),
+            "analysis_uk": analyze_job_uk(job)
         }
         telegram_message = send_job_card(stored_job, short_id)
         stored_job["message_id"] = telegram_message.get("message_id") if telegram_message else None
