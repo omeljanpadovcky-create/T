@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import patch
 
 from application_generator import generate_application
-from bot import application_review_keyboard, build_daily_report, build_ukrainian_conclusion, score_job, send_job_card
+from bot import analyze_job_uk, application_review_keyboard, build_daily_report, build_ukrainian_conclusion, score_job, send_job_card
 
 
 def sample_job(**overrides):
@@ -25,6 +25,25 @@ class JobFilterTests(unittest.TestCase):
     def test_accepts_remote_role_with_a2_english(self):
         score, reason = score_job(sample_job())
         self.assertGreater(score, 0, reason)
+
+    def test_rejects_relevant_but_low_score_vacancy(self):
+        score, reason = score_job(sample_job(
+            title="3D Artist",
+            description="Create 3D assets.",
+            tags=[],
+            location="Remote",
+            remote=True
+        ))
+        self.assertEqual(score, 0)
+        self.assertIn("Below 50/100", reason)
+
+    def test_analyzes_skills_english_and_application_email(self):
+        analysis = analyze_job_uk(sample_job(
+            description="Blender and Photoshop required. English B2. Send CV to jobs@example.com."
+        ), {"skills": ["Blender", "Photoshop"], "english_level": "A2"})
+        self.assertIn("Blender", analysis)
+        self.assertIn("B2", analysis)
+        self.assertIn("jobs@example.com", analysis)
 
     def test_accepts_explicit_b2_requirement(self):
         score, reason = score_job(sample_job(description="English level B2 required."))
