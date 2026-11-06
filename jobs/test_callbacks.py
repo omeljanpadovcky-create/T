@@ -25,19 +25,33 @@ class CallbackStateTransitionTests(unittest.TestCase):
                                      self.allowed_chat, self.editing)
         return result, statuses, api
 
-    def test_confirm_selects_job_and_offers_application_preparation(self):
-        self.applications["abc123"]["url"] = "https://example.com/job"
-        result, statuses, api = self.callback("confirm", "new")
+    def test_confirm_immediately_generates_and_delivers_application_draft(self):
+        self.applications["abc123"].update({
+            "url": "https://example.com/job",
+            "company": "Example Studio",
+            "description": "Create Blender game assets."
+        })
+        package = {
+            "cover_letter": "Hello, I am applying for this 3D Artist role.",
+            "revision": 1
+        }
+        with patch("callbacks.generate_application", return_value=package) as generate, patch(
+            "callbacks.load_profile", return_value={"name": "Test Candidate"}
+        ), patch("callbacks.send_package") as send:
+            result, statuses, api = self.callback("confirm", "new")
         self.assertTrue(result)
-        self.assertEqual(statuses["abc123"]["status"], "selected")
-        api.assert_called_once()
-        args, kwargs = api.call_args
-        self.assertEqual(args[0], "editMessageText")
-        keyboard = args[1]["reply_markup"]["inline_keyboard"]
-        self.assertTrue(any(
-            button.get("callback_data") == "prepare|abc123"
-            for row in keyboard for button in row
-        ))
+        self.assertEqual(statuses["abc123"]["status"], "awaiting_approval")
+        self.assertEqual(statuses["abc123"]["package_revision"], 1)
+        generate.assert_called_once_with(
+            self.applications["abc123"], {"name": "Test Candidate"}
+        )
+        send.assert_called_once_with(
+            "12345", "abc123", self.applications["abc123"], package
+        )
+        # The only Telegram API call is the callback acknowledgement; no
+        # application is sent to the employer by this action.
+        self.assertEqual(api.call_count, 1)
+        self.assertEqual(api.call_args.args[0], "answerCallbackQuery")
 
     def test_prepare_generates_package_and_adds_approval_controls(self):
         self.applications["abc123"].update({
