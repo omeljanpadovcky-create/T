@@ -268,6 +268,10 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
         answer_callback(query.get("id"), "Отримав запит. Готую пакет заявки…")
         try:
             package = generate_application(job, load_profile())
+            package["candidate_notes"] = [
+                item.get("text", "") for item in state.get("discussion_notes", [])
+                if item.get("text")
+            ]
             revision = int(state.get("package_revision", 0)) + 1
             package["revision"] = revision
             state["package_revision"] = revision
