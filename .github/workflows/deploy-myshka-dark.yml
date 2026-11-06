@@ -1,0 +1,39 @@
+name: Deploy MYSHKA DARK to GitHub Pages
+on:
+  push:
+    branches: [main]
+    paths:
+      - "myshka-dark-site/**"
+      - ".github/workflows/deploy-myshka-dark.yml"
+      - "index.html"
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: "pages-myshka-dark"
+  cancel-in-progress: true
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Prepare site
+        run: |
+          mkdir -p _site/myshka-dark
+          cp index.html _site/index.html
+          cp -R myshka-dark-site/. _site/myshka-dark/
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
