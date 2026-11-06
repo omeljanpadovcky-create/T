@@ -117,10 +117,6 @@ def package_keyboard(short_id, job):
     rows = []
     if job.get("url"):
         rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
-    rows.extend([
-        [{"text": "❌ НЕ ПІДХОДИТЬ", "callback_data": f"skip|{short_id}"}],
-        [{"text": "✅ ПІДХОДИТЬ", "callback_data": f"confirm|{short_id}"}]
-    ])
     return {"inline_keyboard": rows}
 
 
