@@ -180,6 +180,36 @@ class JobFilterTests(unittest.TestCase):
         parser.feed('<a href="/company123/vacancy456/">3D Artist</a>')
         self.assertEqual(parser.links[0]["title"], "3D Artist")
 
+    def test_extracts_ziprecruiter_public_vacancy_links(self):
+        from bot import VacancyLinkParser
+        parser = VacancyLinkParser("ZipRecruiter")
+        parser.feed('<a href="/jobs/junior-3d-artist">Junior 3D Artist</a>')
+        parser.feed('<a href="/c/example-studio/Jobs/3d-artist/-in-Remote">3D Artist</a>')
+        self.assertEqual(len(parser.links), 2)
+        self.assertEqual(parser.links[0]["title"], "Junior 3D Artist")
+
+    def test_ziprecruiter_collector_searches_remote_and_marks_source(self):
+        from bot import collect_ziprecruiter_jobs
+        listing = '<a href="/jobs/junior-3d-artist">Junior 3D Artist</a>'
+        details = {
+            "title": "Junior 3D Artist",
+            "company": "Studio",
+            "location": "Remote — verify country restrictions",
+            "url": "https://www.ziprecruiter.com/jobs/junior-3d-artist",
+            "description": "Blender game assets",
+            "tags": [],
+            "source": "ZipRecruiter",
+            "remote": True
+        }
+        with patch("bot.fetch_html", return_value=listing) as fetch, patch(
+            "bot.extract_job_details", return_value=details
+        ):
+            jobs = collect_ziprecruiter_jobs()
+        self.assertTrue(jobs)
+        self.assertEqual(jobs[0]["source"], "ZipRecruiter")
+        self.assertTrue(jobs[0]["remote"])
+        self.assertIn("location=Remote", fetch.call_args_list[0].args[0])
+
 
 if __name__ == "__main__":
     unittest.main()
