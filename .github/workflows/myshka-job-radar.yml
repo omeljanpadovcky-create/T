@@ -1,6 +1,10 @@
 name: MYSHKA JOB RADAR
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/myshka-job-radar.yml"
   schedule:
     # Check once per hour; Python applies Europe/Kyiv timezone (DST-safe).
     - cron: "0 * * * *"
@@ -59,7 +63,8 @@ jobs:
         if: >-
           (github.event_name == 'schedule' &&
           (github.event.schedule == '0 * * * *')) ||
-          (github.event_name == 'workflow_dispatch' && inputs.run_scan)
+          (github.event_name == 'workflow_dispatch' && inputs.run_scan) ||
+          github.event_name == 'push'
         working-directory: jobs
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -73,7 +78,7 @@ jobs:
           MYSHKA_CV_URL: ${{ secrets.MYSHKA_CV_URL }}
           MYSHKA_CONTACT_EMAIL: ${{ secrets.MYSHKA_CONTACT_EMAIL }}
           MYSHKA_SALARY_EXPECTATION: ${{ secrets.MYSHKA_SALARY_EXPECTATION }}
-          MYSHKA_FORCE_SCAN: ${{ inputs.run_scan }}
+          MYSHKA_FORCE_SCAN: ${{ github.event_name == 'push' || inputs.run_scan }}
         run: python run_scheduled_scan.py
 
       - name: Process Telegram buttons and messages
