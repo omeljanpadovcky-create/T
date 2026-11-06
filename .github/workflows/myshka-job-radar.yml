@@ -84,8 +84,7 @@ jobs:
         if: >-
           (github.event_name == 'schedule' &&
           (github.event.schedule == '0 * * * *')) ||
-          (github.event_name == 'workflow_dispatch' && inputs.run_scan) ||
-          github.event_name == 'push'
+          (github.event_name == 'workflow_dispatch' && inputs.run_scan)
         working-directory: jobs
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -99,7 +98,7 @@ jobs:
           MYSHKA_CV_URL: ${{ secrets.MYSHKA_CV_URL }}
           MYSHKA_CONTACT_EMAIL: ${{ secrets.MYSHKA_CONTACT_EMAIL }}
           MYSHKA_SALARY_EXPECTATION: ${{ secrets.MYSHKA_SALARY_EXPECTATION }}
-          MYSHKA_FORCE_SCAN: ${{ github.event_name == 'push' || inputs.run_scan }}
+          MYSHKA_FORCE_SCAN: ${{ github.event_name == 'workflow_dispatch' && inputs.run_scan }}
         run: python run_scheduled_scan.py
 
       - name: Process Telegram buttons and messages
