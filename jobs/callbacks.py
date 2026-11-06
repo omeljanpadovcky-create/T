@@ -179,13 +179,13 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
         for item_id, item in applications.items():
             state = statuses.get(item_id, {})
             status = state.get("status", item.get("status", "new"))
-            if status in {"new", "selected"} and item.get("url") and int(item.get("score") or 0) >= 50:
+            if status in {"new", "selected"} and item.get("url"):
                 pending.append((item_id, item, state))
         answer_callback(query.get("id"), f"Знайдено вакансій: {len(pending)}")
         if not pending:
             api("sendMessage", {"chat_id": chat_id, "text": "🐭 Немає вакансій, які очікують перегляду."})
             return True
-        for item_id, item, state in pending[:20]:
+        for item_id, item, state in pending:
             api("sendMessage", {
                 "chat_id": chat_id,
                 "text": job_message(item, state),

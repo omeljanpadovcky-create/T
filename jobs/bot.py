@@ -650,6 +650,10 @@ def application_review_keyboard(short_id, job):
     rows = []
     if job.get("url"):
         rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
+    rows.append([
+        {"text": "✅ Підходить — підготувати відгук", "callback_data": f"confirm|{short_id}"},
+        {"text": "❌ Не підходить", "callback_data": f"skip|{short_id}"}
+    ])
     return {"inline_keyboard": rows}
 
 
@@ -807,12 +811,13 @@ def main():
         else:
             rejection_counts[reason] = rejection_counts.get(reason, 0) + 1
         key = job_id(job)
-        if score >= CONFIG["minimum_score"] and key not in seen:
+        # Score is informational only. Deliver every listing with a title and URL.
+        if as_text(job.get("title")).strip() and as_text(job.get("url")).strip() and key not in seen:
             matches.append((score, reason, key, job))
 
     matches.sort(key=lambda item: item[0], reverse=True)
     sent = 0
-    for score, reason, key, job in matches[:CONFIG["max_results_per_run"]]:
+    for score, reason, key, job in matches:
         short_id = key[:16]
         stored_job = {
             "id": short_id, "title": as_text(job.get("title")),
