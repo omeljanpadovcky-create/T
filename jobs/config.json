@@ -84,6 +84,6 @@
     "european union",
     "emea"
   ],
-  "minimum_score": 50,
-  "max_results_per_run": 10
+  "minimum_score": 0,
+  "max_results_per_run": null
 }
