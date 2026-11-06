@@ -79,6 +79,10 @@ class VacancyLinkParser(HTMLParser):
         classes = attrs.get("class", "").lower()
         if self.source == "DOU":
             is_job = "/vacancies/" in href and href.rstrip("/") != "https://jobs.dou.ua/vacancies"
+        elif self.source == "Work.ua":
+            is_job = re.search(r"/jobs/\\d+", href) is not None
+        elif self.source == "Robota.ua":
+            is_job = re.search(r"/company\\d+/vacancy\\d+", href) is not None
         else:
             is_job = re.search(r"/jobs/[^/?#]+", href) is not None
             if self.source == "ArtStation":
@@ -267,6 +271,73 @@ def collect_community_jobs(source, search_terms, base_url, parameter):
     return jobs
 
 
+def collect_path_search_jobs(source, search_terms, url_builder, max_links_per_search=30):
+    """Collect public job links from Ukrainian job-board search pages."""
+    jobs = []
+    seen_urls = set()
+    for term in search_terms:
+        search_url = url_builder(term)
+        page = fetch_html(search_url)
+        if not page:
+            continue
+        parser = VacancyLinkParser(source)
+        try:
+            parser.feed(page)
+        except Exception as exc:
+            print(f"{source} listing parse warning: {exc}")
+            continue
+        inspected = 0
+        for item in parser.links:
+            url = absolute_job_url(search_url, item["url"])
+            if url in seen_urls:
+                continue
+            seen_urls.add(url)
+            title = item["title"]
+            title_norm = norm(title)
+            if not any(norm(target) in title_norm for target in CONFIG["target_titles"]) and not any(
+                term in title_norm for term in (
+                    "3d", "blender", "illustrat", "shopify", "e-commerce",
+                    "ecommerce", "ui/ux", "content", "marketing", "designer"
+                )
+            ):
+                continue
+            details = extract_job_details(url, source, title)
+            if details:
+                jobs.append(details)
+                inspected += 1
+            if inspected >= max_links_per_search:
+                break
+    print(f"{source}: collected {len(jobs)} relevant public listings")
+    return jobs
+
+
+def collect_rss_jobs(url, source):
+    """Read a public RSS job feed and preserve its original application links."""
+    import xml.etree.ElementTree as ET
+
+    page = fetch_html(url)
+    if not page:
+        return []
+    jobs = []
+    try:
+        root = ET.fromstring(page)
+    except ET.ParseError as exc:
+        print(f"{source} RSS parse warning: {exc}")
+        return jobs
+    for item in root.findall(".//item"):
+        title = item.findtext("title", "")
+        link = item.findtext("link", "")
+        description = item.findtext("description", "")
+        if title and link:
+            jobs.append({
+                "title": title, "company": "", "location": "Remote — verify country restrictions",
+                "url": link, "description": description, "tags": [],
+                "source": source, "remote": True
+            })
+    print(f"{source}: parsed {len(jobs)} RSS entries")
+    return jobs
+
+
 def collect_jobs():
     jobs = []
     sources = [
@@ -325,6 +396,11 @@ def collect_jobs():
                 "source": "Himalayas", "remote": True
             })
 
+    # Public RSS source for additional international remote opportunities.
+    jobs.extend(collect_rss_jobs(
+        "https://weworkremotely.com/remote-jobs.rss", "We Work Remotely"
+    ))
+
     # Ukrainian job boards: search relevant role families and inspect each matching public listing.
     dou_terms = [
         "3D Artist", "Blender", "Graphic Designer", "UI UX Designer",
@@ -339,6 +415,23 @@ def collect_jobs():
     ))
     jobs.extend(collect_community_jobs(
         "Djinni", djinni_terms, "https://djinni.co/jobs/", "keywords"
+    ))
+
+    ukrainian_terms = [
+        "3D Artist", "Blender", "Graphic Designer", "UI UX Designer",
+        "Shopify", "E-commerce", "Digital Marketing", "Content Manager",
+        "Illustrator", "Web Designer"
+    ]
+    jobs.extend(collect_path_search_jobs(
+        "Work.ua",
+        ukrainian_terms,
+        lambda term: "https://www.work.ua/jobs/?search=" + requests.utils.quote(term)
+    ))
+    jobs.extend(collect_path_search_jobs(
+        "Robota.ua",
+        ukrainian_terms,
+        lambda term: "https://robota.ua/zapros/" +
+        requests.utils.quote(term.lower().replace(" ", "-"), safe="-") + "/ukraine"
     ))
     jobs.extend(collect_artstation_jobs())
 
