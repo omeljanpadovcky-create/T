@@ -110,6 +110,7 @@ def package_keyboard(short_id, job):
     if job.get("url"):
         rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
     rows.extend([
+        [{"text": "💬 ОБГОВОРИТИ ВАКАНСІЮ", "callback_data": f"discuss|{short_id}"}],
         [{"text": "❌ НЕ ПІДХОДИТЬ", "callback_data": f"skip|{short_id}"}],
         [{"text": "✅ ПІДХОДИТЬ", "callback_data": f"confirm|{short_id}"}]
     ])
@@ -207,13 +208,27 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
         "edit": {"awaiting_approval"},
         "approve": {"awaiting_approval"},
         "applied": {"approved"},
-        "letter": {"new", "selected", "awaiting_approval", "approved"}
+        "letter": {"new", "selected", "awaiting_approval", "approved"},
+        "discuss": {"new", "selected", "awaiting_approval", "approved"}
     }
     if action in allowed_statuses and current_status not in allowed_statuses[action]:
         answer_callback(query.get("id"), "Ця дія недоступна для поточного статусу")
         return False
 
-    if action == "confirm":
+    if action == "discuss":
+        editing.clear()
+        editing.update({"job_id": short_id, "mode": "discussion"})
+        answer_callback(query.get("id"), "Можеш написати коментар або запитання")
+        api("sendMessage", {
+            "chat_id": chat_id,
+            "text": (
+                f"💬 Обговорюємо вакансію «{job.get('title', 'Без назви')}».\\n\\n"
+                "Напиши, що хочеш з’ясувати: відповідність твоїм навичкам, англійська, досвід, зарплата, портфоліо або ризики.\\n"
+                "Можеш просто залишити коментар — я прикріплю його до вакансії. Для скасування напиши /cancel."
+            )
+        })
+
+    elif action == "confirm":
         if state.get("status") in ("skipped", "submitted_user_confirmed"):
             answer_callback(query.get("id"), "Цю вакансію вже закрито")
             return False
@@ -376,10 +391,20 @@ def handle_message(update, applications, statuses, allowed_chat, editing):
     job = applications.get(short_id)
     if not job:
         editing.clear()
-        api("sendMessage", {"chat_id": chat_id, "text": "Не знайшов вакансію для цього листа."})
+        api("sendMessage", {"chat_id": chat_id, "text": "Не знайшов вакансію для цього повідомлення."})
         return True
 
     state = statuses.setdefault(short_id, {"status": "new"})
+    if editing.get("mode") == "discussion":
+        state.setdefault("discussion_notes", []).append({"text": text[:2000], "created_at": now_iso()})
+        editing.clear()
+        api("sendMessage", {
+            "chat_id": chat_id,
+            "text": f"📝 Коментар збережено до вакансії «{job.get('title', 'Без назви')}». Він буде доданий до контексту заявки.",
+            "reply_markup": package_keyboard(short_id, job)
+        })
+        return True
+
     package = generate_application(job, load_profile())
     package["cover_letter"] = text[:3500]
     package["revision"] = int(state.get("package_revision", 0)) + 1
