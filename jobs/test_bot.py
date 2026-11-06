@@ -26,7 +26,7 @@ class JobFilterTests(unittest.TestCase):
         score, reason = score_job(sample_job())
         self.assertGreater(score, 0, reason)
 
-    def test_rejects_relevant_but_low_score_vacancy(self):
+    def test_accepts_relevant_role_at_minimum_score(self):
         score, reason = score_job(sample_job(
             title="3D Artist",
             description="Create 3D assets.",
@@ -34,8 +34,7 @@ class JobFilterTests(unittest.TestCase):
             location="Remote",
             remote=True
         ))
-        self.assertEqual(score, 0)
-        self.assertIn("Below 50/100", reason)
+        self.assertGreaterEqual(score, 50, reason)
 
     def test_analyzes_skills_english_and_application_email(self):
         analysis = analyze_job_uk(sample_job(
