@@ -236,6 +236,7 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
         answer_callback(query.get("id"), "Вакансію відібрано. Готую пакет наступним кроком.")
         keyboard = {"inline_keyboard": [
             [{"text": "🔗 Відкрити вакансію", "url": job["url"]}],
+            [{"text": "💬 ОБГОВОРИТИ ВАКАНСІЮ", "callback_data": f"discuss|{short_id}"}],
             [{"text": "🧾 ПІДГОТУВАТИ ПОВНУ ЗАЯВКУ", "callback_data": f"prepare|{short_id}"}],
             [{"text": "⏭ Пропустити", "callback_data": f"skip|{short_id}"}]
         ]}
