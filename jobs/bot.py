@@ -262,7 +262,7 @@ def collect_community_jobs(source, search_terms, base_url, parameter):
             title = item["title"]
             title_norm = norm(title)
             if not any(norm(target) in title_norm for target in CONFIG["target_titles"]) and not any(
-                term in title_norm for term in ("3d", "blender", "illustrat", "shopify", "e-commerce", "ecommerce", "ui/ux")
+                term in title_norm for term in ("3d", "blender", "game art", "game asset", "character artist", "environment artist", "prop artist", "illustrat", "concept artist")
             ):
                 continue
             details = extract_job_details(url, source, title)
@@ -296,8 +296,8 @@ def collect_path_search_jobs(source, search_terms, url_builder, max_links_per_se
             title_norm = norm(title)
             if not any(norm(target) in title_norm for target in CONFIG["target_titles"]) and not any(
                 term in title_norm for term in (
-                    "3d", "blender", "illustrat", "shopify", "e-commerce",
-                    "ecommerce", "ui/ux", "content", "marketing", "designer"
+                    "3d", "blender", "game art", "game asset", "character artist",
+                    "environment artist", "prop artist", "illustrat", "concept artist"
                 )
             ):
                 continue
