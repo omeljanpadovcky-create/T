@@ -3,6 +3,7 @@ import json
 import html
 import os
 import re
+import time
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
@@ -18,6 +19,9 @@ APPLICATIONS_PATH = ROOT / "applications.json"
 HEADERS = {"User-Agent": "TradeMyshka-JobRadar/2.0", "Accept": "application/json"}
 TIMEOUT = 25
 SOURCE_HEALTH = []
+_LAST_TELEGRAM_SEND = 0.0
+TELEGRAM_MAX_RETRIES = 6
+TELEGRAM_MIN_INTERVAL = 1.1
 
 
 def norm(value):
@@ -594,6 +598,7 @@ def save_json(path, value):
 
 
 def send_telegram(message, reply_markup=None):
+    global _LAST_TELEGRAM_SEND
     token = os.environ["TELEGRAM_BOT_TOKEN"]
     chat_id = os.environ["TELEGRAM_CHAT_ID"]
     payload = {
@@ -602,24 +607,38 @@ def send_telegram(message, reply_markup=None):
     }
     if reply_markup:
         payload["reply_markup"] = reply_markup
-    response = requests.post(
-        f"https://api.telegram.org/bot{token}/sendMessage",
-        json=payload, timeout=TIMEOUT
-    )
-    if not response.ok:
+
+    for attempt in range(TELEGRAM_MAX_RETRIES):
+        elapsed = time.monotonic() - _LAST_TELEGRAM_SEND
+        if _LAST_TELEGRAM_SEND and elapsed < TELEGRAM_MIN_INTERVAL:
+            time.sleep(TELEGRAM_MIN_INTERVAL - elapsed)
+        response = requests.post(
+            f"https://api.telegram.org/bot{token}/sendMessage",
+            json=payload, timeout=TIMEOUT
+        )
+        _LAST_TELEGRAM_SEND = time.monotonic()
         try:
-            error = response.json()
+            result = response.json()
         except ValueError:
-            error = {"description": response.text[:500]}
-        description = error.get("description") or str(error)
+            result = {"description": response.text[:500]}
+
+        if response.ok and result.get("ok"):
+            return result["result"]
+
+        description = result.get("description") or str(result)
+        retry_after = (result.get("parameters") or {}).get("retry_after")
+        if response.status_code == 429 and retry_after is not None and attempt < TELEGRAM_MAX_RETRIES - 1:
+            wait_seconds = max(1, min(int(retry_after), 300))
+            print(f"Telegram rate limit reached; retrying after {wait_seconds}s (attempt {attempt + 1}/{TELEGRAM_MAX_RETRIES}).")
+            time.sleep(wait_seconds + 1)
+            continue
+
         raise RuntimeError(
             f"Telegram sendMessage failed (HTTP {response.status_code}): {description}. "
             "Check that the bot is not blocked and TELEGRAM_CHAT_ID is the private chat ID."
         )
-    result = response.json()
-    if not result.get("ok"):
-        raise RuntimeError("Telegram API rejected sendMessage: " + str(result))
-    return result["result"]
+
+    raise RuntimeError("Telegram sendMessage failed after rate-limit retries.")
 
 
 def load_profile():
@@ -806,12 +825,13 @@ def main():
     eligible_count = 0
     for job in jobs:
         score, reason = score_job(job)
-        if score >= int(CONFIG.get("minimum_score", 50)):
-            eligible_count += 1
-        else:
+        minimum_score = int(CONFIG.get("minimum_score", 50))
+        if score < minimum_score:
             rejection_counts[reason] = rejection_counts.get(reason, 0) + 1
+            continue
+        eligible_count += 1
         key = job_id(job)
-        # Score is informational only. Deliver every listing with a title and URL.
+        # Only send new, structurally valid vacancies scoring at least the configured threshold.
         if as_text(job.get("title")).strip() and as_text(job.get("url")).strip() and key not in seen:
             matches.append((score, reason, key, job))
 
