@@ -48,10 +48,9 @@ class CallbackStateTransitionTests(unittest.TestCase):
         send.assert_called_once_with(
             "12345", "abc123", self.applications["abc123"], package
         )
-        # The only Telegram API call is the callback acknowledgement; no
-        # application is sent to the employer by this action.
-        self.assertEqual(api.call_count, 1)
-        self.assertEqual(api.call_args.args[0], "answerCallbackQuery")
+        # No employer submission or unrelated Telegram API action is made
+        # in this mocked callback (query id is absent in this unit test).
+        api.assert_not_called()
 
     def test_prepare_generates_package_and_adds_approval_controls(self):
         self.applications["abc123"].update({
