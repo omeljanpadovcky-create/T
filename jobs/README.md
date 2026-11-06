@@ -2,7 +2,9 @@
 
 ## Existing search
 - Daily search through GitHub Actions.
-- Sources: Arbeitnow, RemoteOK, Remotive and Himalayas.
+- Sources: Work.ua, Robota.ua, DOU, Djinni, ArtStation, Arbeitnow, RemoteOK, Remotive, Himalayas and We Work Remotely (RSS).
+- Work.ua and Robota.ua are searched through public result pages; if a site changes its markup or blocks automated access, that source is marked unavailable rather than bypassing access controls.
+- We Work Remotely is read through its public RSS feed and original listing links are preserved.
 - Up to 10 new matches per run.
 - No English-level filter: English requirements never automatically exclude a vacancy.
 - No experience-level filter: internship, entry-level, junior, mid-level and senior roles can be considered.
