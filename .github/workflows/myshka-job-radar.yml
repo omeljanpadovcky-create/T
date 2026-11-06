@@ -41,6 +41,20 @@ jobs:
       - name: Install dependencies
         run: python -m pip install -r jobs/requirements.txt
 
+      - name: Validate required Telegram secrets
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          missing=()
+          [[ -n "$TELEGRAM_BOT_TOKEN" ]] || missing+=("TELEGRAM_BOT_TOKEN")
+          [[ -n "$TELEGRAM_CHAT_ID" ]] || missing+=("TELEGRAM_CHAT_ID")
+          if (( ${#missing[@]} )); then
+            echo "::error::Missing GitHub Actions secrets: ${missing[*]}"
+            exit 1
+          fi
+          echo "Required Telegram secrets are present (values are not displayed)."
+
       - name: Run scheduled vacancy scan
         if: >-
           (github.event_name == 'schedule' &&
