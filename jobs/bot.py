@@ -83,6 +83,11 @@ class VacancyLinkParser(HTMLParser):
             is_job = re.search(r"/jobs/\d+", href) is not None
         elif self.source == "Robota.ua":
             is_job = re.search(r"/company\d+/vacancy\d+", href) is not None
+        elif self.source == "ZipRecruiter":
+            is_job = (
+                re.search(r"/jobs/[^/?#]+", href) is not None
+                or re.search(r"/c/[^/]+/jobs?/", href, re.IGNORECASE) is not None
+            )
         else:
             is_job = re.search(r"/jobs/[^/?#]+", href) is not None
             if self.source == "ArtStation":
@@ -235,6 +240,82 @@ def collect_artstation_jobs():
         if details:
             jobs.append(details)
     print(f"ArtStation: parsed {len(parser.links)} links; inspected {len(jobs)} relevant listings")
+    return jobs
+
+
+def collect_ziprecruiter_jobs():
+    """Collect public remote vacancies from ZipRecruiter's public search pages.
+
+    ZipRecruiter does not expose its partner API without credentials, so this uses
+    the public HTML search pages. If the site blocks automated requests, the
+    source-health report will show the failure and the rest of the radar continues.
+    """
+    search_terms = [
+        "3D Artist", "Blender", "Game Artist", "Game Asset Artist",
+        "Character Artist", "Environment Artist", "Prop Artist",
+        "3D Modeler", "Concept Artist", "Low Poly Artist"
+    ]
+    jobs = []
+    seen_urls = set()
+    base_url = "https://www.ziprecruiter.com/jobs-search"
+    for term in search_terms:
+        search_url = (
+            base_url + "?search=" + requests.utils.quote(term)
+            + "&location=Remote"
+        )
+        page = fetch_html(search_url)
+        if not page:
+            continue
+        if "cf-chl-" in page or "just a moment" in page.lower():
+            parsed = urlparse(search_url)
+            SOURCE_HEALTH.append({
+                "source": "ZipRecruiter · Cloudflare challenge",
+                "host": parsed.netloc,
+                "ok": False
+            })
+            print("ZipRecruiter search is protected by a browser challenge; skipping this query.")
+            continue
+        parser = VacancyLinkParser("ZipRecruiter")
+        try:
+            parser.feed(page)
+        except Exception as exc:
+            print(f"ZipRecruiter listing parse warning: {exc}")
+            continue
+        for item in parser.links:
+            url = absolute_job_url(base_url, item["url"])
+            if url in seen_urls:
+                continue
+            seen_urls.add(url)
+            title = item["title"]
+            title_norm = norm(title)
+            if not any(norm(target) in title_norm for target in CONFIG["target_titles"]) and not any(
+                term in title_norm for term in (
+                    "3d", "blender", "game art", "game asset", "character artist",
+                    "environment artist", "prop artist", "illustrat", "concept artist"
+                )
+            ):
+                continue
+            details = extract_job_details(url, "ZipRecruiter", title)
+            if details:
+                details["source"] = "ZipRecruiter"
+                if not details.get("location") or details.get("location") == "Location not confirmed":
+                    details["location"] = "Remote — verify country restrictions"
+                # The search itself is explicitly scoped to Remote; country eligibility
+                # is still checked from the full posting text by score_job().
+                details["remote"] = True
+                jobs.append(details)
+            else:
+                jobs.append({
+                    "title": title,
+                    "company": "",
+                    "location": "Remote — verify country restrictions",
+                    "url": url,
+                    "description": "",
+                    "tags": [],
+                    "source": "ZipRecruiter",
+                    "remote": True
+                })
+    print(f"ZipRecruiter: collected {len(jobs)} public remote listings")
     return jobs
 
 
@@ -432,6 +513,7 @@ def collect_jobs():
         lambda term: "https://robota.ua/zapros/" +
         requests.utils.quote(term.lower().replace(" ", "-"), safe="-") + "/ukraine"
     ))
+    jobs.extend(collect_ziprecruiter_jobs())
     jobs.extend(collect_artstation_jobs())
 
     unique = {}
