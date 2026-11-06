@@ -364,11 +364,10 @@ def collect_jobs():
                         "tags": item.get("tags", []), "source": source, "remote": True
                     })
 
-    # Search Remotive across the full target role set, not only 3D and illustration.
+    # Search only the agreed 3D / Game Art / character / illustration role families.
     for query in [
-        "3d", "blender", "game artist", "illustration", "concept artist",
-        "shopify", "ecommerce", "e-commerce", "ui ux", "graphic design",
-        "digital marketing", "product listing", "content manager"
+        "3d", "blender", "game artist", "game asset", "character artist",
+        "environment artist", "prop artist", "3d modeler", "illustration", "concept artist"
     ]:
         data = fetch_json("https://remotive.com/api/remote-jobs?search=" + requests.utils.quote(query))
         if isinstance(data, dict):
@@ -403,12 +402,12 @@ def collect_jobs():
 
     # Ukrainian job boards: search relevant role families and inspect each matching public listing.
     dou_terms = [
-        "3D Artist", "Blender", "Graphic Designer", "UI UX Designer",
-        "Shopify", "E-commerce", "Digital Marketing", "Content Manager"
+        "3D Artist", "Blender", "Game Artist", "Character Artist",
+        "Environment Artist", "Prop Artist", "3D Modeler", "Concept Artist"
     ]
     djinni_terms = [
-        "3D Artist", "Blender", "Graphic Designer", "UI UX Designer",
-        "Shopify", "E-commerce", "Digital Marketing", "Content Manager"
+        "3D Artist", "Blender", "Game Artist", "Character Artist",
+        "Environment Artist", "Prop Artist", "3D Modeler", "Concept Artist"
     ]
     jobs.extend(collect_community_jobs(
         "DOU", dou_terms, "https://jobs.dou.ua/vacancies/", "search"
@@ -418,9 +417,9 @@ def collect_jobs():
     ))
 
     ukrainian_terms = [
-        "3D Artist", "Blender", "Graphic Designer", "UI UX Designer",
-        "Shopify", "E-commerce", "Digital Marketing", "Content Manager",
-        "Illustrator", "Web Designer"
+        "3D Artist", "Blender", "Game Artist", "Character Artist",
+        "Environment Artist", "Prop Artist", "3D Modeler", "Concept Artist",
+        "Illustrator"
     ]
     jobs.extend(collect_path_search_jobs(
         "Work.ua",
@@ -587,16 +586,12 @@ def build_ukrainian_conclusion(job, score, reason=""):
 
     description = norm(as_text(job.get("description")))
     english = ""
-    if re.search(r"\b(c1|c2|native|fluent|near[- ]native)\b", description):
-        english = " Вимога до англійської може бути вищою за твій поточний рівень A2 — це потрібно уточнити."
-    elif re.search(r"\b(b2|upper[- ]intermediate|advanced)\b", description):
-        english = " У вакансії згадується англійська B2/Advanced; з рівнем A2 це може бути складно."
-    elif re.search(r"\b(b1|intermediate)\b", description):
-        english = " У вакансії згадується B1/Intermediate; твій A2 може бути нижчим за вимогу."
-    elif re.search(r"\b(a2|elementary|basic english)\b", description):
-        english = " Згаданий рівень англійської A2/Basic — це ближче до твого поточного рівня."
-    else:
-        english = " Рівень англійської не вдалося чітко визначити з опису — перевір його перед подачею."
+    english_match = re.search(r"\b(a1|a2|b1|b2|c1|c2|basic|elementary|intermediate|upper[- ]intermediate|advanced|fluent|native)\b", description)
+    english = (
+        f" У вакансії згадується англійська ({english_match.group(1).upper()}); це лише інформація для твого рішення, не причина автоматичного відсіву."
+        if english_match else
+        " Вимогу до англійської потрібно перевірити вручну; вона не впливає на автоматичний відбір."
+    )
 
     match_detail = str(reason or "").strip()
     if match_detail and match_detail != "Relevant creative role; verify requirements":
@@ -639,9 +634,9 @@ def analyze_job_uk(job, profile=None):
         if matched else "Прямого збігу навичок у тексті мало — потрібна ручна перевірка."
     )
     english_note = (
-        f"Англійська у вакансії: {english}; твій рівень A2 — перевіримо сумісність, але автоматично не відсікаємо."
+        f"Англійська у вакансії: {english}. Це інформація для твого рішення, не фільтр."
         if english != "не вказано" else
-        "Рівень англійської не вказано чітко — уточнити перед подачею."
+        "Рівень англійської не вказано; це не впливає на відбір."
     )
     return " ".join([skills_note, english_note, experience_note, apply_method])
 
