@@ -8,7 +8,7 @@ from bot import main
 kyiv_now = datetime.now(ZoneInfo("Europe/Kyiv"))
 force = os.environ.get("MYSHKA_FORCE_SCAN", "").lower() == "true"
 
-if force or (kyiv_now.minute < 20 and kyiv_now.hour in {9, 16}):
+if force or (kyiv_now.hour in {9, 16}):
     print(f"Starting MYSHKA scan at {kyiv_now.isoformat()}")
     main()
 else:
