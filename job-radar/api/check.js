@@ -16,7 +16,7 @@ const TITLE_EXCLUDES = [
   "prompt engineer", "llm evaluator", "machine learning engineer",
   "sales", "account executive", "customer support", "support specialist",
   "customer success", "recruiter", "business development",
-  "senior", "lead", "principal", "director", "head of"
+  "director", "head of"
 ];
 
 const SOURCES = [
