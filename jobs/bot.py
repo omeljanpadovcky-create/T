@@ -669,8 +669,16 @@ def build_ukrainian_conclusion(job, score, reason=""):
     description = norm(as_text(job.get("description")))
     english = ""
     english_match = re.search(r"\b(a1|a2|b1|b2|c1|c2|basic|elementary|intermediate|upper[- ]intermediate|advanced|fluent|native)\b", description)
+    candidate_english = str(load_profile().get("english_level") or "").upper()
     english = (
-        f" У вакансії згадується англійська ({english_match.group(1).upper()}); це лише інформація для твого рішення, не причина автоматичного відсіву."
+        (
+            f" У вакансії згадується англійська ({english_match.group(1).upper()}); "
+            + (
+                f"у твоєму профілі зазначено {candidate_english}, тому вимогу варто перевірити вручну; "
+                if candidate_english and candidate_english != english_match.group(1).upper() else ""
+            )
+            + "це лише інформація для твого рішення, не причина автоматичного відсіву."
+        )
         if english_match else
         " Вимогу до англійської потрібно перевірити вручну; вона не впливає на автоматичний відбір."
     )
