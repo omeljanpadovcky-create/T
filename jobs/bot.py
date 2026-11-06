@@ -80,9 +80,9 @@ class VacancyLinkParser(HTMLParser):
         if self.source == "DOU":
             is_job = "/vacancies/" in href and href.rstrip("/") != "https://jobs.dou.ua/vacancies"
         elif self.source == "Work.ua":
-            is_job = re.search(r"/jobs/\\d+", href) is not None
+            is_job = re.search(r"/jobs/\d+", href) is not None
         elif self.source == "Robota.ua":
-            is_job = re.search(r"/company\\d+/vacancy\\d+", href) is not None
+            is_job = re.search(r"/company\d+/vacancy\d+", href) is not None
         else:
             is_job = re.search(r"/jobs/[^/?#]+", href) is not None
             if self.source == "ArtStation":
