@@ -448,7 +448,7 @@ def collect_jobs():
     # Search only the agreed 3D / Game Art / character / illustration role families.
     for query in [
         "3d", "blender", "game artist", "game asset", "character artist",
-        "environment artist", "prop artist", "3d modeler", "illustration", "concept artist"
+        "environment artist", "prop artist", "technical artist", "3d modeler", "illustration", "concept artist"
     ]:
         data = fetch_json("https://remotive.com/api/remote-jobs?search=" + requests.utils.quote(query))
         if isinstance(data, dict):
@@ -484,7 +484,7 @@ def collect_jobs():
     # Ukrainian job boards: search relevant role families and inspect each matching public listing.
     dou_terms = [
         "3D Artist", "Blender", "Game Artist", "Character Artist",
-        "Environment Artist", "Prop Artist", "3D Modeler", "Concept Artist"
+        "Environment Artist", "Prop Artist", "Technical Artist", "3D Modeler", "Concept Artist"
     ]
     djinni_terms = [
         "3D Artist", "Blender", "Game Artist", "Character Artist",
@@ -499,7 +499,7 @@ def collect_jobs():
 
     ukrainian_terms = [
         "3D Artist", "Blender", "Game Artist", "Character Artist",
-        "Environment Artist", "Prop Artist", "3D Modeler", "Concept Artist",
+        "Environment Artist", "Prop Artist", "Technical Artist", "3D Modeler", "Concept Artist",
         "Illustrator"
     ]
     jobs.extend(collect_path_search_jobs(
