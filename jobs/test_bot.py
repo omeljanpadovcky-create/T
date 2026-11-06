@@ -168,6 +168,18 @@ class JobFilterTests(unittest.TestCase):
         djinni.feed('<a href="/jobs/123456-shopify-assistant/">Shopify Assistant</a>')
         self.assertEqual(djinni.links[0]["title"], "Shopify Assistant")
 
+    def test_extracts_workua_public_vacancy_links(self):
+        from bot import VacancyLinkParser
+        parser = VacancyLinkParser("Work.ua")
+        parser.feed('<a href="/jobs/123456/">Junior Graphic Designer</a>')
+        self.assertEqual(parser.links[0]["url"], "/jobs/123456/")
+
+    def test_extracts_robotaua_public_vacancy_links(self):
+        from bot import VacancyLinkParser
+        parser = VacancyLinkParser("Robota.ua")
+        parser.feed('<a href="/company123/vacancy456/">3D Artist</a>')
+        self.assertEqual(parser.links[0]["title"], "3D Artist")
+
 
 if __name__ == "__main__":
     unittest.main()
