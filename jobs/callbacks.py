@@ -60,6 +60,14 @@ def answer_callback(query_id, text):
         api("answerCallbackQuery", {"callback_query_id": query_id, "text": text})
     except requests.RequestException as exc:
         print(f"Could not show callback toast (possibly expired): {exc}")
+    except RuntimeError as exc:
+        # Telegram returns HTTP 400 when a button callback has expired.
+        # The underlying action can still be handled; a stale toast must not
+        # crash the entire polling workflow or block later button presses.
+        if "answerCallbackQuery HTTP 400" in str(exc):
+            print(f"Callback toast expired; continuing safely: {exc}")
+        else:
+            raise
 
 
 def load_profile():
@@ -192,8 +200,9 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
 
     job = applications.get(short_id)
     if not job:
-        answer_callback(query.get("id"), "Вакансію не знайдено")
-        return False
+        answer_callback(query.get("id"), "Ця картка застаріла. Відкрий актуальні вакансії.")
+        print(f"Ignoring stale Telegram button for missing vacancy id={short_id}")
+        return True
 
     state = statuses.setdefault(short_id, {
         "status": job.get("status", "new"),
