@@ -31,6 +31,10 @@ class JobRadarFilterTests(unittest.TestCase):
         score, _ = score_job(self.job("Junior Game Asset Artist", "Blender, low poly, UV mapping"))
         self.assertGreaterEqual(score, 50)
 
+    def test_technical_artist_role_is_accepted(self):
+        score, _ = score_job(self.job("Junior Technical Artist", "Blender and Unreal Engine"))
+        self.assertGreaterEqual(score, 50)
+
     def test_ui_ux_role_is_outside_current_scope(self):
         score, reason = score_job(self.job("UI/UX Designer", "Figma and web design"))
         self.assertEqual(score, 0)
