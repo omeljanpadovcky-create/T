@@ -488,7 +488,7 @@ def collect_jobs():
     ]
     djinni_terms = [
         "3D Artist", "Blender", "Game Artist", "Character Artist",
-        "Environment Artist", "Prop Artist", "3D Modeler", "Concept Artist"
+        "Environment Artist", "Prop Artist", "Technical Artist", "3D Modeler", "Concept Artist"
     ]
     jobs.extend(collect_community_jobs(
         "DOU", dou_terms, "https://jobs.dou.ua/vacancies/", "search"
