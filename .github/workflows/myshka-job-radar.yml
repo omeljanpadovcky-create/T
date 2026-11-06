@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/myshka-job-radar.yml"
+      - "jobs/**"
   schedule:
     # Check once per hour; Python applies Europe/Kyiv timezone (DST-safe).
     - cron: "0 * * * *"
@@ -44,6 +45,10 @@ jobs:
 
       - name: Install dependencies
         run: python -m pip install -r jobs/requirements.txt
+
+      - name: Run MYSHKA tests
+        working-directory: jobs
+        run: python -m unittest discover -s . -p 'test_*.py'
 
       - name: Validate required Telegram secrets
         env:
