@@ -524,19 +524,19 @@ def analyze_job_uk(job, profile=None):
         ]))
     ]
     english_match = re.search(
-        r"\\b(a1|a2|b1|b2|c1|c2|basic|elementary|intermediate|upper[- ]intermediate|advanced|fluent|native)\\b",
+        r"\b(a1|a2|b1|b2|c1|c2|basic|elementary|intermediate|upper[- ]intermediate|advanced|fluent|native)\b",
         searchable
     )
     english = english_match.group(1).upper() if english_match else "не вказано"
     experience = re.search(
-        r"(?:at least|minimum of|\\b)(\\d+)\\+?\\s+years?\\s+(?:of\\s+)?(?:professional\\s+)?experience",
+        r"(?:at least|minimum of|\b)(\d+)\+?\s+years?\s+(?:of\s+)?(?:professional\s+)?experience",
         searchable
     )
     experience_note = (
         f"У вимогах згадано {experience.group(1)}+ р. досвіду — перевір, чи приймають практику/стажування."
         if experience else "Жорстку вимогу до років досвіду з опису не визначено."
     )
-    recipient = re.search(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}", description, re.I)
+    recipient = re.search(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}", description, re.I)
     apply_method = (
         f"Є email для подачі: {recipient.group(0)}."
         if recipient else "Email у тексті не знайдено — готуватиму пакет для форми на сайті."
