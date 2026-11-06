@@ -431,16 +431,23 @@ def main():
         api("deleteWebhook", {"drop_pending_updates": False})
         print("Removed the leftover webhook; pending Telegram updates were preserved.")
 
-    response = requests.get(
-        f"https://api.telegram.org/bot{token}/getUpdates",
-        params={
-            "offset": offset,
-            "timeout": 20,
-            "allowed_updates": json.dumps(["callback_query", "message"])
-        },
-        timeout=TIMEOUT + 5
-    )
-    response.raise_for_status()
+    try:
+        response = requests.get(
+            f"https://api.telegram.org/bot{token}/getUpdates",
+            params={
+                "offset": offset,
+                "timeout": 20,
+                "allowed_updates": json.dumps(["callback_query", "message"])
+            },
+            timeout=TIMEOUT + 5
+        )
+        response.raise_for_status()
+    except requests.RequestException as exc:
+        # GitHub-hosted runners can occasionally lose the TLS connection to
+        # Telegram. Keep the saved offset unchanged so the next scheduled run
+        # can safely retry instead of failing the entire radar workflow.
+        print(f"Temporary Telegram polling network error; will retry next run: {type(exc).__name__}: {exc}")
+        return
     payload = response.json()
     if not payload.get("ok"):
         raise RuntimeError("Telegram getUpdates failed: " + str(payload))
