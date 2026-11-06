@@ -1,57 +1,16 @@
-name: MYSHKA JOB RADAR — пошук вакансій тричі на день
+name: MYSHKA JOB RADAR — legacy workflow (manual only)
 
-concurrency:
-  group: trade-myshka-job-search
-  cancel-in-progress: false
-
+# Automatic scanning and Telegram delivery are handled only by myshka-job-radar.yml.
+# This legacy workflow is manual-only to prevent duplicate scans and Telegram flood limits.
 on:
-  schedule:
-    - cron: "0 7,14,20 * * *"
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "jobs/bot.py"
-      - "jobs/application_generator.py"
-      - "jobs/profile.json"
-      - "jobs/config.json"
-      - ".github/workflows/myshka-jobs.yml"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  search:
+  legacy-disabled:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install dependencies
-        run: pip install -r jobs/requirements.txt
-      - name: Run filter regression tests
-        run: python -m unittest discover -s jobs -p 'test_*.py' -v
-      - name: Search and notify
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          MYSHKA_CANDIDATE_NAME: ${{ secrets.MYSHKA_CANDIDATE_NAME }}
-          MYSHKA_PORTFOLIO_URL: ${{ secrets.MYSHKA_PORTFOLIO_URL }}
-          MYSHKA_PORTFOLIO_3D_URL: ${{ secrets.MYSHKA_PORTFOLIO_3D_URL }}
-          MYSHKA_PORTFOLIO_GAME_ART_URL: ${{ secrets.MYSHKA_PORTFOLIO_GAME_ART_URL }}
-          MYSHKA_PORTFOLIO_DESIGN_URL: ${{ secrets.MYSHKA_PORTFOLIO_DESIGN_URL }}
-          MYSHKA_PORTFOLIO_ILLUSTRATION_URL: ${{ secrets.MYSHKA_PORTFOLIO_ILLUSTRATION_URL }}
-          MYSHKA_CV_URL: ${{ secrets.MYSHKA_CV_URL }}
-          MYSHKA_CONTACT_EMAIL: ${{ secrets.MYSHKA_CONTACT_EMAIL }}
-          MYSHKA_SALARY_EXPECTATION: ${{ secrets.MYSHKA_SALARY_EXPECTATION }}
-          MYSHKA_NOTIFY_EMPTY: ${{ github.event_name == 'push' }}
-        run: python jobs/bot.py
-      - name: Save sent-job history
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add jobs/seen.json jobs/applications.json
-          git diff --cached --quiet || git commit -m "Update MYSHKA JOBS sent history"
-          git pull --rebase origin main
-          git push
+      - name: Explain disabled legacy workflow
+        run: echo "This legacy workflow is disabled. Use MYSHKA JOB RADAR."
