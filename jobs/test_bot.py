@@ -212,3 +212,38 @@ class JobFilterTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TelegramDeliveryTests(unittest.TestCase):
+    def test_retries_telegram_429_using_retry_after(self):
+        from bot import send_telegram
+        limited = type("Response", (), {
+            "ok": False, "status_code": 429,
+            "json": lambda self: {"ok": False, "description": "Too Many Requests",
+                                  "parameters": {"retry_after": 3}}
+        })()
+        success = type("Response", (), {
+            "ok": True, "status_code": 200,
+            "json": lambda self: {"ok": True, "result": {"message_id": 123}}
+        })()
+        with patch.dict("os.environ", {"TELEGRAM_BOT_TOKEN": "token", "TELEGRAM_CHAT_ID": "chat"}), \
+             patch("bot.requests.post", side_effect=[limited, success]) as post, \
+             patch("bot.time.sleep") as sleep, \
+             patch("bot.time.monotonic", side_effect=[10.0, 11.0, 15.0]):
+            result = send_telegram("test")
+        self.assertEqual(result["message_id"], 123)
+        self.assertEqual(post.call_count, 2)
+        sleep.assert_any_call(4)
+
+    def test_does_not_retry_non_rate_limit_errors(self):
+        from bot import send_telegram
+        failed = type("Response", (), {
+            "ok": False, "status_code": 400,
+            "json": lambda self: {"ok": False, "description": "Bad Request"}
+        })()
+        with patch.dict("os.environ", {"TELEGRAM_BOT_TOKEN": "token", "TELEGRAM_CHAT_ID": "chat"}), \
+             patch("bot.requests.post", return_value=failed) as post, \
+             patch("bot.time.sleep"):
+            with self.assertRaisesRegex(RuntimeError, "HTTP 400"):
+                send_telegram("test")
+        self.assertEqual(post.call_count, 1)
