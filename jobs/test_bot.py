@@ -229,7 +229,7 @@ class TelegramDeliveryTests(unittest.TestCase):
         with patch.dict("os.environ", {"TELEGRAM_BOT_TOKEN": "token", "TELEGRAM_CHAT_ID": "chat"}), \
              patch("bot.requests.post", side_effect=[limited, success]) as post, \
              patch("bot.time.sleep") as sleep, \
-             patch("bot.time.monotonic", side_effect=[10.0, 11.0, 15.0]):
+             patch("bot.time.monotonic", side_effect=[10.0, 11.0, 15.0, 16.0]):
             result = send_telegram("test")
         self.assertEqual(result["message_id"], 123)
         self.assertEqual(post.call_count, 2)
