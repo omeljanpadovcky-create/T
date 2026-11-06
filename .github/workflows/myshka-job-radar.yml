@@ -82,6 +82,7 @@ jobs:
 
       - name: Run scheduled vacancy scan
         if: >-
+          (github.event_name == 'push') ||
           (github.event_name == 'schedule' &&
           (github.event.schedule == '0 * * * *')) ||
           (github.event_name == 'workflow_dispatch' && inputs.run_scan)
