@@ -11,11 +11,11 @@
 - `job-radar/vercel.json` — розклад серверного запуску.
 
 ## Профіль пошуку
-Remote з України; 3D/Blender/Game Art, персонажі, props, environment art та суміжна ілюстрація; усі рівні досвіду, freelance, contract, part-time та full-time. Англійська не є фільтром. Джерела: ArtStation, Robota.ua, Work.ua, DOU, Djinni, Remotive, RemoteOK, Himalayas, We Work Remotely. До 10 релевантних сповіщень на день — не заповнювати ліміт випадковими оголошеннями.
+Remote з України; 3D/Blender/Game Art, персонажі, props, environment art та суміжна ілюстрація; усі рівні досвіду, freelance, contract, part-time та full-time. Англійська не є фільтром. Джерела: ArtStation, LinkedIn (публічний пошук), Robota.ua, Work.ua, DOU, Djinni, Remotive, RemoteOK, Himalayas, We Work Remotely, ZipRecruiter та налаштовані публічні Telegram-канали. До 10 релевантних сповіщень на день — не заповнювати ліміт випадковими оголошеннями.
 
 ## Архітектура
 - GitHub Pages — статична вебпанель.
-- GitHub Actions (`.github/workflows/myshka-job-radar.yml`) — погодинний запуск-перевірка; `jobs/run_scheduled_scan.py` запускає пошук рівно о 09:00 та 16:00 за `Europe/Kyiv`, автоматично враховуючи перехід на літній/зимовий час.
+- GitHub Actions (`.github/workflows/myshka-job-radar.yml`) — перевірка кожні 15 хвилин; `jobs/run_scheduled_scan.py` запускає пошук кожні 15 хвилин для швидких сповіщень.
 - Той самий workflow опитує Telegram кожні 5 хвилин для обробки кнопок та редагування Cover Letter. Стан вакансій, offset і редагування зберігаються у `jobs/*.json` комітами GitHub Actions.
 - Vercel (Root Directory: `job-radar`) — додаткові API та діагностика; cron вимкнений, щоб не було подвійних сповіщень.
 - Telegram Bot API — сповіщення.
