@@ -1,0 +1,75 @@
+{
+  "candidate_confirmed_accounts": [
+    "LinkedIn",
+    "ArtStation",
+    "Djinni",
+    "Upwork",
+    "Fiverr",
+    "Work.ua",
+    "Robota.ua"
+  ],
+  "minimum_vacancy_score": 60,
+  "platforms": [
+    {
+      "name": "ArtStation",
+      "purpose": "Creative jobs and portfolio",
+      "vacancy_discovery": "public_listing",
+      "collector_implemented": true,
+      "authentication": "not_connected",
+      "notes": "Public listing collector exists; access may be blocked or rate-limited. Account confirmation does not grant authenticated access."
+    },
+    {
+      "name": "Djinni",
+      "purpose": "Vacancy discovery",
+      "vacancy_discovery": "public_listing",
+      "collector_implemented": true,
+      "authentication": "not_connected",
+      "notes": "Public search-page collector exists; it does not use the candidate's account session."
+    },
+    {
+      "name": "Work.ua",
+      "purpose": "Vacancy discovery",
+      "vacancy_discovery": "public_listing",
+      "collector_implemented": true,
+      "authentication": "not_connected",
+      "notes": "Public search-page collector exists; availability depends on site access and markup."
+    },
+    {
+      "name": "Robota.ua",
+      "purpose": "Vacancy discovery",
+      "vacancy_discovery": "public_listing",
+      "collector_implemented": true,
+      "authentication": "not_connected",
+      "notes": "Public search-page collector exists; availability depends on site access and markup."
+    },
+    {
+      "name": "LinkedIn",
+      "purpose": "Vacancy discovery and applications",
+      "vacancy_discovery": "official_api_or_user_authorized_access",
+      "collector_implemented": false,
+      "authentication": "not_connected",
+      "notes": "No authenticated integration is configured. Do not scrape behind login, bypass anti-bot controls, or submit applications automatically."
+    },
+    {
+      "name": "Upwork",
+      "purpose": "Freelance projects and proposals",
+      "vacancy_discovery": "official_api_or_user_authorized_access",
+      "collector_implemented": false,
+      "authentication": "not_connected",
+      "notes": "No authenticated integration is configured. Proposal submission must remain user-approved."
+    },
+    {
+      "name": "Fiverr",
+      "purpose": "Freelance service marketplace",
+      "vacancy_discovery": "not_a_standard_job_board",
+      "collector_implemented": false,
+      "authentication": "not_connected",
+      "notes": "Track buyer inquiries and opportunities separately from job vacancies; no account connection is configured."
+    }
+  ],
+  "application_policy": {
+    "generate_drafts": true,
+    "submit_without_user_confirmation": false,
+    "minimum_score_enforced": true
+  }
+}

@@ -435,6 +435,108 @@ def collect_rss_jobs(url, source):
     return jobs
 
 
+def collect_jobicy_jobs():
+    """Collect recent remote jobs from Jobicy's public, unauthenticated API."""
+    jobs = []
+    data = fetch_json("https://jobicy.com/api/jobs?count=100&geo=anywhere")
+    items = data.get("jobs", []) if isinstance(data, dict) else []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        title = item.get("title") or item.get("jobTitle") or ""
+        url = item.get("url") or item.get("jobUrl") or ""
+        if not title or not url:
+            continue
+        location = (
+            item.get("jobGeo") or item.get("geo") or item.get("location")
+            or "Remote — country restrictions not specified"
+        )
+        description = (
+            item.get("jobDescription") or item.get("jobExcerpt")
+            or item.get("description") or ""
+        )
+        jobs.append({
+            "title": title,
+            "company": item.get("companyName") or item.get("company") or "",
+            "location": location,
+            "url": url,
+            "description": description,
+            "tags": item.get("jobIndustry") or item.get("jobType") or [],
+            "source": "Jobicy",
+            "remote": True,
+            "posted_at": item.get("pubDate") or item.get("publishedAt") or "",
+        })
+    print(f"Jobicy: collected {len(jobs)} recent public remote listings")
+    return jobs
+
+
+def collect_working_nomads_jobs():
+    """Collect public remote listings from Working Nomads' exposed JSON feed."""
+    data = fetch_json("https://www.workingnomads.com/api/exposed_jobs/")
+    if isinstance(data, dict):
+        items = data.get("jobs") or data.get("data") or data.get("results") or []
+    elif isinstance(data, list):
+        items = data
+    else:
+        items = []
+    jobs = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        title = item.get("title") or item.get("name") or ""
+        url = item.get("url") or item.get("link") or item.get("job_url") or ""
+        if not title or not url:
+            continue
+        jobs.append({
+            "title": title,
+            "company": item.get("company_name") or item.get("company") or "",
+            "location": item.get("location") or item.get("region") or "Remote — country restrictions not specified",
+            "url": url,
+            "description": item.get("description") or item.get("excerpt") or "",
+            "tags": item.get("category") or item.get("tags") or [],
+            "source": "Working Nomads",
+            "remote": True,
+            "posted_at": item.get("pub_date") or item.get("published") or item.get("date") or "",
+        })
+    print(f"Working Nomads: collected {len(jobs)} public remote listings")
+    return jobs
+
+
+def collect_workingames_jobs():
+    """Collect game-development vacancies from WorkinGames' Ukraine listings."""
+    search_url = "https://workingames.com/jobs/locations/ukraine"
+    page = fetch_html(search_url)
+    if not page:
+        return []
+    parser = VacancyLinkParser("WorkinGames")
+    try:
+        parser.feed(page)
+    except Exception as exc:
+        print(f"WorkinGames listing parse warning: {exc}")
+        return []
+    jobs = []
+    seen = set()
+    for item in parser.links:
+        url = absolute_job_url(search_url, item["url"])
+        if url in seen:
+            continue
+        seen.add(url)
+        title = item["title"]
+        title_norm = norm(title)
+        if not any(norm(target) in title_norm for target in CONFIG["target_titles"]) and not any(
+            term in title_norm for term in (
+                "3d", "blender", "game artist", "concept artist", "illustrat",
+                "character artist", "environment artist", "technical artist"
+            )
+        ):
+            continue
+        details = extract_job_details(url, "WorkinGames", title)
+        if details:
+            jobs.append(details)
+    print(f"WorkinGames: collected {len(jobs)} relevant game-development listings")
+    return jobs
+
+
 def collect_jobs():
     jobs = []
     sources = [
@@ -532,8 +634,7 @@ def collect_jobs():
         lambda term: "https://robota.ua/zapros/" +
         requests.utils.quote(term.lower().replace(" ", "-"), safe="-") + "/ukraine"
     ))
-    jobs.extend(collect_ziprecruiter_jobs())
-    jobs.extend(collect_artstation_jobs())
+    # Additional broad remote feed plus a game-development-specific source.\n    jobs.extend(collect_jobicy_jobs())\n    jobs.extend(collect_working_nomads_jobs())\n    jobs.extend(collect_workingames_jobs())\n    jobs.extend(collect_ziprecruiter_jobs())\n    jobs.extend(collect_artstation_jobs())
 
     unique = {}
     for job in jobs:
