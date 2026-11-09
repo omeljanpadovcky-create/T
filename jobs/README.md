@@ -10,6 +10,13 @@
 - New matches are ranked by title and skill relevance. The bot sends new matches only; already-seen listings are not resent.
 - Candidate profile includes a two-year IT Step internship, accurately described as internship experience rather than paid employment.
 
+## Telegram vacancy sources
+- Public channel previews are scanned from `t.me/s`: @ingamejob, @ingamejob_art, @young_gamedev, @devjobs, @gamedev_and_tech_vacancy and @devzonegd.
+- The collector reads the latest public posts only; it does not join private groups, scrape private chats, or bypass Telegram restrictions.
+- Telegram posts are treated as vacancy leads and pass through the same relevance, unpaid-role, remote-work, Ukraine/Europe eligibility, deduplication and user-approval checks as other sources.
+- Generic "Remote" posts without Ukraine, Europe/EU/EMEA, worldwide or equivalent eligibility wording are excluded.
+- Some channels publish digest posts or posts without direct employer links. In those cases the original Telegram post is preserved as the source link for manual review.
+
 ## Application preparation flow
 1. Review the vacancy card and open the original employer listing.
 2. Choose **Підходить — підготувати відгук** to generate an editable application package.
