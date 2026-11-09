@@ -41,7 +41,8 @@ export default async function handler(req, res) {
         selected: 2,
         new: 3,
         submitted_user_confirmed: 4,
-        skipped: 5
+        saved: 5,
+        skipped: 6
       };
       return (order[a.status] ?? 9) - (order[b.status] ?? 9) || b.score - a.score;
     });

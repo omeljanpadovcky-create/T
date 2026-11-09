@@ -2,7 +2,7 @@ import unittest
 
 from unittest.mock import patch
 
-from callbacks import handle_callback
+from callbacks import handle_callback, package_keyboard, vacancy_keyboard
 
 
 class CallbackStateTransitionTests(unittest.TestCase):
@@ -24,6 +24,46 @@ class CallbackStateTransitionTests(unittest.TestCase):
             result = handle_callback(update, self.applications, statuses,
                                      self.allowed_chat, self.editing)
         return result, statuses, api
+
+    def test_vacancy_card_exposes_primary_actions(self):
+        keyboard = vacancy_keyboard("abc123", {"url": "https://example.com/job"})
+        callback_values = {
+            button.get("callback_data")
+            for row in keyboard["inline_keyboard"] for button in row
+            if "callback_data" in button
+        }
+        self.assertEqual(
+            callback_values,
+            {"prepare|abc123", "letter|abc123", "save|abc123", "skip|abc123", "status|abc123"}
+        )
+        self.assertTrue(any(
+            button.get("url") == "https://example.com/job"
+            for row in keyboard["inline_keyboard"] for button in row
+        ))
+
+    def test_pending_review_card_keeps_all_primary_actions(self):
+        keyboard = package_keyboard("abc123", {"url": "https://example.com/job"})
+        callback_values = {
+            button.get("callback_data")
+            for row in keyboard["inline_keyboard"] for button in row
+            if "callback_data" in button
+        }
+        self.assertEqual(callback_values, {
+            "prepare|abc123", "letter|abc123", "save|abc123",
+            "skip|abc123", "status|abc123"
+        })
+
+    def test_save_action_persists_saved_status(self):
+        result, statuses, api = self.callback("save", "new")
+        self.assertTrue(result)
+        self.assertEqual(statuses["abc123"]["status"], "saved")
+        api.assert_called_once()
+
+    def test_status_action_reports_current_status(self):
+        result, statuses, api = self.callback("status", "new")
+        self.assertTrue(result)
+        self.assertEqual(statuses["abc123"]["status"], "new")
+        self.assertTrue(any("Поточний статус" in str(call.args[1]) for call in api.call_args_list))
 
     def test_confirm_immediately_generates_and_delivers_application_draft(self):
         self.applications["abc123"].update({

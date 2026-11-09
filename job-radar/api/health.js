@@ -14,9 +14,10 @@ export default function handler(req, res) {
       externalEmailOrAtsSubmission: false,
       privateDraftsStoredInPublicRepository: false
     },
-    schedule: "09:00 and 16:00 Europe/Kyiv (DST-aware hourly GitHub Actions runner)",
+    schedule: "Telegram polling every 5 minutes; vacancy scans every 15 minutes via GitHub Actions",
     delivery: "Telegram vacancy cards and daily report",
     duplicateProtection: "Persistent jobs/seen.json state committed by GitHub Actions",
-    profile: "Remote 3D / Blender / Game Art / characters / props / environment art · all experience levels · English is not an exclusion filter · ArtStation, Robota.ua, Work.ua, DOU, Djinni, Remotive, RemoteOK, Himalayas, We Work Remotely"
+    minimumScore: 80,
+    profile: "Remote 3D / Blender / Game Art / characters / props / environment art / illustration · all experience levels · English is not an exclusion filter · Ukraine / Europe / EMEA / worldwide where eligible"
   });
 }

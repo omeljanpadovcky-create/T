@@ -128,7 +128,8 @@ def status_label(status):
         "awaiting_approval": "Пакет очікує твого підтвердження",
         "approved": "Пакет підтверджено — очікує ручної подачі",
         "submitted_user_confirmed": "Ти підтвердив, що заявку відправлено",
-        "skipped": "Пропущена"
+        "skipped": "Пропущена",
+        "saved": "Збережена на потім"
     }.get(status, status or "Нова")
 
 
@@ -144,11 +145,26 @@ def job_message(job, state):
         f"🔬 Аналіз: {safe(job.get('analysis_uk') or 'Потрібно перевірити вимоги та спосіб подачі.')}"    )
 
 
-def package_keyboard(short_id, job):
+def vacancy_keyboard(short_id, job):
+    """Primary vacancy-card actions; later package messages expose approval/submission actions."""
     rows = []
     if job.get("url"):
         rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
+    rows.extend([
+        [{"text": "📝 Підготувати заявку", "callback_data": f"prepare|{short_id}"}],
+        [{"text": "✉️ Cover Letter", "callback_data": f"letter|{short_id}"}],
+        [
+            {"text": "💾 На потім", "callback_data": f"save|{short_id}"},
+            {"text": "⏭ Пропустити", "callback_data": f"skip|{short_id}"}
+        ],
+        [{"text": "📊 Статус", "callback_data": f"status|{short_id}"}]
+    ])
     return {"inline_keyboard": rows}
+
+
+def package_keyboard(short_id, job):
+    """Keep refreshed pending-review cards fully actionable, like first-delivery cards."""
+    return vacancy_keyboard(short_id, job)
 
 
 def approved_keyboard(short_id, job):
@@ -238,12 +254,14 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
     current_status = state.get("status", "new")
     allowed_statuses = {
         "confirm": {"new", "selected"},
-        "prepare": {"new", "selected"},
-        "skip": {"new", "selected", "awaiting_approval"},
+        "prepare": {"new", "selected", "saved"},
+        "skip": {"new", "selected", "awaiting_approval", "saved"},
+        "save": {"new", "selected"},
+        "status": {"new", "selected", "awaiting_approval", "approved", "submitted_user_confirmed", "skipped", "saved"},
         "edit": {"awaiting_approval"},
         "approve": {"awaiting_approval"},
         "applied": {"approved"},
-        "letter": {"new", "selected", "awaiting_approval", "approved"}
+        "letter": {"new", "selected", "awaiting_approval", "approved", "saved"}
     }
     if action in allowed_statuses and current_status not in allowed_statuses[action]:
         answer_callback(query.get("id"), "Ця дія недоступна для поточного статусу")
@@ -324,6 +342,22 @@ def handle_callback(update, applications, statuses, allowed_chat, editing):
                     f"Could not send package failure notice for {short_id}: "
                     f"{type(notify_exc).__name__}: {notify_exc}"
                 )
+
+    elif action == "save":
+        state["status"] = "saved"
+        state["saved_at"] = now_iso()
+        answer_callback(query.get("id"), "Збережено на потім")
+        api("sendMessage", {
+            "chat_id": chat_id,
+            "text": f"💾 Збережено: {safe(job.get('title') or 'Вакансія')}"
+        })
+
+    elif action == "status":
+        answer_callback(query.get("id"), status_label(current_status))
+        api("sendMessage", {
+            "chat_id": chat_id,
+            "text": f"📊 Статус вакансії\n{safe(job.get('title') or 'Вакансія')}\nПоточний статус: {safe(status_label(current_status))}"
+        })
 
     elif action == "approve":
         if not state.get("package_revision") or state.get("status") != "awaiting_approval":

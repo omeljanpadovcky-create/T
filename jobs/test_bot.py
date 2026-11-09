@@ -79,6 +79,23 @@ class JobFilterTests(unittest.TestCase):
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Outside target geography")
 
+    def test_accepts_remote_illustration_role_with_photoshop_and_europe_eligibility(self):
+        score, reason = score_job(sample_job(
+            title="Junior Illustration and Book Cover Artist",
+            description="Create book covers and photobashing artwork in Adobe Photoshop. Remote across Europe.",
+            tags=["Illustration", "Photoshop"],
+            location="Remote · Europe"
+        ))
+        self.assertGreaterEqual(score, 80, reason)
+
+    def test_rejects_generic_graphic_designer_without_target_art_evidence(self):
+        score, reason = score_job(sample_job(
+            title="Graphic Designer",
+            description="Create social media banners and marketing layouts in Photoshop."
+        ))
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Not a target 3D, Game Art or visual-art role")
+
     def test_rejects_unpaid_roles(self):
         score, reason = score_job(sample_job(description="Unpaid volunteer position."))
         self.assertEqual(score, 0)
@@ -86,17 +103,27 @@ class JobFilterTests(unittest.TestCase):
 
 
 class VacancyCardTests(unittest.TestCase):
-    def test_card_is_plain_message_without_buttons(self):
-        with patch("bot.send_telegram", return_value={"message_id": 77}) as send:
-            result = send_job_card(sample_job(), "abc123")
-        self.assertEqual(result["message_id"], 77)
-        self.assertEqual(send.call_count, 1)
-        message = send.call_args.args[0]
-        self.assertIn("Junior 3D Artist", message)
-        self.assertIn("Оплата:", message)
-        self.assertIn("Не вказано", message)
-        self.assertNotIn("reply_markup", send.call_args.kwargs)
-        self.assertEqual(len(send.call_args.args), 1)
+    def test_card_includes_working_inline_actions(self):
+        job = {
+            "id": "abc123", "title": "Junior 3D Artist", "company": "Example Studio",
+            "location": "Remote · Worldwide", "url": "https://example.com/jobs/junior-3d-artist",
+            "description": "Blender and game-ready assets", "source": "Test", "score": 90,
+            "reason": "3D Artist"
+        }
+        with patch("bot.summarize_vacancy_description", return_value="Summary"), patch(
+            "bot.send_telegram"
+        ) as send:
+            result = send_job_card(job, "abc123")
+        self.assertEqual(result, send.return_value)
+        keyboard = send.call_args.kwargs["reply_markup"]["inline_keyboard"]
+        callbacks = {
+            button["callback_data"]
+            for row in keyboard for button in row if "callback_data" in button
+        }
+        self.assertEqual(callbacks, {
+            "prepare|abc123", "letter|abc123", "save|abc123",
+            "skip|abc123", "status|abc123"
+        })
 
     def test_salary_uses_only_advertised_value(self):
         self.assertEqual(vacancy_salary(sample_job()), "Не вказано")

@@ -26,16 +26,16 @@
   <section class="panel">
     <h2>Як працює</h2>
     <ol>
-      <li>GitHub Actions запускає пошук двічі на день: о 09:00 та 16:00 за Києвом.</li>
-      <li>Перевіряє ArtStation, Robota.ua, Work.ua, DOU, Djinni, Remotive, RemoteOK, Himalayas та We Work Remotely.</li>
+      <li>GitHub Actions перевіряє Telegram-кнопки кожні 5 хвилин, а нові вакансії шукає кожні 15 хвилин.</li>
+      <li>Перевіряє ArtStation Jobs, Robota.ua, Work.ua, DOU, Djinni, Remotive, RemoteOK, Himalayas, We Work Remotely, Arbeitnow та інші доступні публічні джерела.</li>
       <li>Шукає 3D/Blender, Game Art, персонажів, пропси, environment art, 3D assets та ілюстрацію.</li>
       <li>Англійська не є фільтром. Відсіюються неоплачувані ролі та явні географічні обмеження.</li>
-      <li>Надсилає до 10 нових вакансій із кнопками ✅ / ❌ та підготовкою персонального тексту відгуку.</li>
+      <li>Надсилає нові вакансії з оцінкою від 80/100 та кнопками для підготовки заявки, Cover Letter, збереження, пропуску й перегляду статусу.</li>
     </ol>
   </section>
   <section class="panel">
     <h2>Статус системи</h2>
-    <p>Основний пошук і Telegram працюють через GitHub Actions. Кнопки Telegram обробляються автоматично кожні 5 хвилин.</p>
+    <p>Пошук вакансій працює через GitHub Actions кожні 15 хвилин. Telegram-кнопки обробляються кожні 5 хвилин одним polling-процесом.</p>
     <p><a href="https://github.com/omeljanpadovcky-create/T/actions">Перевірити запуски та журнал роботи</a></p>
   </section>
   <section class="panel">
@@ -72,7 +72,8 @@
         awaiting_approval: "Очікує підтвердження",
         approved: "Пакет підтверджено",
         submitted_user_confirmed: "Відправлено за твоїм підтвердженням",
-        skipped: "Пропущена"
+        skipped: "Пропущена",
+        saved: "Збережена на потім"
       };
       try {
         const response = await fetch("/api/applications");

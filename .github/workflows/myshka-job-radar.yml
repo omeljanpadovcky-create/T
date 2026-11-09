@@ -8,6 +8,7 @@ on:
       - "jobs/**"
   schedule:
     - cron: "*/15 * * * *"
+    - cron: "5,10,20,25,35,40,50,55 * * * *"
   workflow_dispatch:
     inputs:
       run_scan:
@@ -25,6 +26,8 @@ concurrency:
 
 jobs:
   radar:
+    # Persisted state commits must not trigger another vacancy scan.
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -72,6 +75,17 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           APINEX_API_KEY: ${{ secrets.APINEX_API_KEY }}
           APINEX_MODEL: free/deepseek-v4.1-flash
+          MYSHKA_CANDIDATE_NAME: ${{ secrets.MYSHKA_CANDIDATE_NAME }}
+          MYSHKA_CONTACT_EMAIL: ${{ secrets.MYSHKA_CONTACT_EMAIL }}
+          MYSHKA_PHONE: ${{ secrets.MYSHKA_PHONE }}
+          MYSHKA_CV_URL: ${{ secrets.MYSHKA_CV_URL }}
+          MYSHKA_PORTFOLIO_URL: ${{ secrets.MYSHKA_PORTFOLIO_URL }}
+          MYSHKA_PORTFOLIO_3D_URL: ${{ secrets.MYSHKA_PORTFOLIO_3D_URL }}
+          MYSHKA_PORTFOLIO_GAME_ART_URL: ${{ secrets.MYSHKA_PORTFOLIO_GAME_ART_URL }}
+          MYSHKA_PORTFOLIO_DESIGN_URL: ${{ secrets.MYSHKA_PORTFOLIO_DESIGN_URL }}
+          MYSHKA_PORTFOLIO_ILLUSTRATION_URL: ${{ secrets.MYSHKA_PORTFOLIO_ILLUSTRATION_URL }}
+          MYSHKA_SALARY_EXPECTATION: ${{ secrets.MYSHKA_SALARY_EXPECTATION }}
+          RUN_VACANCY_SCAN: ${{ github.event_name != 'schedule' || github.event.schedule == '*/15 * * * *' }}
         run: python run_scheduled_scan.py
 
       - name: Save deduplication state
@@ -79,8 +93,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add jobs/seen.json
+          git add jobs/seen.json jobs/applications.json jobs/statuses.json jobs/update_offset.json jobs/editing.json
           if ! git diff --cached --quiet; then
             git commit -m "chore: persist MYSHKA vacancy deduplication state"
-            git push
+            git push || { git pull --rebase origin main && git push; }
           fi

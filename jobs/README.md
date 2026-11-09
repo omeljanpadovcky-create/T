@@ -1,14 +1,15 @@
 # MYSHKA JOB RADAR — applications with your approval
 
 ## Search and filtering
-- A fresh vacancy scan runs hourly through GitHub Actions; Telegram buttons and messages are polled every 5 minutes.
+- Telegram buttons are polled every 5 minutes through the same GitHub Actions workflow; vacancy scans run every 15 minutes. This keeps a single Telegram `getUpdates` consumer while separating callback responsiveness from vacancy discovery. Temporary callback errors do not prevent a scheduled vacancy scan from running.
+- Minimum vacancy score: **80/100**. Scores below 80 are rejected; 80–89 are accepted matches and 90–100 are highest-priority matches.
 - Sources currently integrated: Arbeitnow, RemoteOK, Remotive, Himalayas, We Work Remotely RSS, DOU, Djinni, Work.ua, Robota.ua, ZipRecruiter and ArtStation Jobs.
 - Some HTML sources may return 403 or change their markup. The bot records source failures and continues with available feeds; it does not bypass access controls.
 - Target roles: 3D / Blender / modeling, Game Art / game assets, character / environment / prop art, concept art, illustration, book covers, Photobashing and Matte Painting.
 - English level and seniority are not automatic rejection filters. The listing's actual requirements are shown for manual review.
 - Country-specific locations and explicit country-only requirements are rejected unless the posting clearly allows Ukraine or a broader region. Generic Remote listings still require a manual eligibility check.
 - New matches are ranked by title and skill relevance. The bot sends new matches only; already-seen listings are not resent.
-- Candidate profile includes a two-year IT Step internship, accurately described as internship experience rather than paid employment.
+- Candidate completed Photoshop design training at IT Step in 2021. This is listed as training, not internship or paid employment.
 
 ## Telegram vacancy sources
 - Public channel previews are scanned from `t.me/s`: @ingamejob, @ingamejob_art, @young_gamedev, @devjobs, @gamedev_and_tech_vacancy and @devzonegd.

@@ -1,6 +1,6 @@
 # ТРЕЙДМИШКА — Job Radar
 
-The GitHub Actions workflow runs a fresh vacancy scan hourly and polls Telegram buttons every 5 minutes.
+The GitHub Actions workflow polls Telegram buttons every 5 minutes and scans for new vacancies every 15 minutes. The minimum vacancy score is 80/100.
 
 ## Search profile
 - Remote work: Ukraine, Europe and worldwide where the listing clearly permits it.
@@ -10,7 +10,7 @@ The GitHub Actions workflow runs a fresh vacancy scan hourly and polls Telegram 
 - Some public sources can return 403 or change their markup. The radar records failures and continues with sources that respond.
 
 ## Telegram workflow
-Each vacancy card contains an original listing link and actions to select or skip it. Selecting a vacancy generates an editable application package. The user reviews and approves the package, then submits manually on the employer's website. The bot never submits an application automatically.
+Each vacancy card contains the original listing link and actions to prepare an application, generate a cover letter, save for later, skip, or view status. Selecting a vacancy generates an editable application package. The user reviews and approves the package, then submits manually on the employer's website. The bot never submits an application automatically.
 
 ## Deployment
 GitHub Actions is the primary scheduler and Telegram callback processor. The Vercel API is optional and is not required for vacancy scans or Telegram buttons.
