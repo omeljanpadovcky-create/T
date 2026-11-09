@@ -91,6 +91,8 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          APINEX_API_KEY: ${{ secrets.APINEX_API_KEY }}
+          APINEX_MODEL: free/deepseek-v4.1-flash
           MYSHKA_CANDIDATE_NAME: ${{ secrets.MYSHKA_CANDIDATE_NAME }}
           MYSHKA_PORTFOLIO_URL: ${{ secrets.MYSHKA_PORTFOLIO_URL }}
           MYSHKA_PORTFOLIO_3D_URL: ${{ secrets.MYSHKA_PORTFOLIO_3D_URL }}
