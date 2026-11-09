@@ -600,12 +600,12 @@ def score_job(job):
         r"\b(ukraine|україн[а-яіїєґ]*|europe|european union|eu|emea|worldwide|anywhere|global)\b",
         searchable, re.I
     ))
+    if country_limited_location(location):
+        return 0, "Country-specific location; Ukraine eligibility not confirmed"
     if not remote_ok:
         return 0, "Remote work not confirmed"
     if not scope_ok:
         return 0, "Remote geography does not confirm Ukraine eligibility"
-    if country_limited_location(location):
-        return 0, "Country-specific location; Ukraine eligibility not confirmed"
 
     target_patterns = (
         r"\b3d\b", r"\bblender\b", r"game.?asset", r"game.?artist",
