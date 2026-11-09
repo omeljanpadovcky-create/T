@@ -10,6 +10,8 @@ from urllib.parse import parse_qs, urlparse
 
 import requests
 
+from telegram_sources import collect_telegram_channel_jobs
+
 from application_generator import generate_application, render_application_text
 
 ROOT = Path(__file__).resolve().parent
@@ -534,6 +536,9 @@ def collect_jobs():
     ))
     jobs.extend(collect_ziprecruiter_jobs())
     jobs.extend(collect_artstation_jobs())
+    # Public Telegram channel posts are vacancy leads; the normal scoring,
+    # paid-role, Ukraine eligibility, deduplication and approval flow still applies.
+    jobs.extend(collect_telegram_channel_jobs(SOURCE_HEALTH))
 
     unique = {}
     for job in jobs:
