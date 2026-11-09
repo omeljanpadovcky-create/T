@@ -6,6 +6,7 @@ on:
       - "**"
     paths:
       - "jobs/**"
+      - "job-radar/**"
       - ".github/workflows/application-tests.yml"
       - ".github/workflows/myshka-job-radar.yml"
       - ".github/workflows/myshka-callbacks.yml"
@@ -33,3 +34,5 @@ jobs:
         run: python -m compileall -q jobs
       - name: Run unit tests
         run: python -m unittest discover -s jobs -p 'test_*.py' -v
+      - name: Validate dashboard API JavaScript
+        run: node --check job-radar/api/applications.js && node --check job-radar/api/check.js && node --check job-radar/api/health.js && node --check job-radar/api/telegram-setup.js
