@@ -163,10 +163,8 @@ def vacancy_keyboard(short_id, job):
 
 
 def package_keyboard(short_id, job):
-    rows = []
-    if job.get("url"):
-        rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
-    return {"inline_keyboard": rows}
+    """Keep refreshed pending-review cards fully actionable, like first-delivery cards."""
+    return vacancy_keyboard(short_id, job)
 
 
 def approved_keyboard(short_id, job):
