@@ -34,7 +34,15 @@
     "Cover Illustrator",
     "Technical Artist",
     "Junior Technical Artist",
-    "3D Technical Artist"
+    "3D Technical Artist",
+    "Photobash Artist",
+    "Photobashing Artist",
+    "Matte Painter",
+    "Digital Matte Painter",
+    "Book Cover Designer",
+    "Cover Artist",
+    "Key Art Artist",
+    "Splash Artist"
   ],
   "exclude_terms": [
     "director",
@@ -73,7 +81,15 @@
     "book cover",
     "photoshop",
     "technical art",
-    "technical artist"
+    "technical artist",
+    "photobashing",
+    "photobash",
+    "matte painting",
+    "digital matte painting",
+    "book cover design",
+    "key art",
+    "splash art",
+    "digital painting"
   ],
   "allowed_locations": [
     "worldwide",
