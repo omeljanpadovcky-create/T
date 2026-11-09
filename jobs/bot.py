@@ -619,11 +619,8 @@ def score_job(job):
     if "remote" in location or job.get("remote"):
         score += 5
     score = min(score, 100)
-    minimum_score = int(CONFIG.get("minimum_score", 50))
-    if is_telegram_lead:
-        # Do not hide potentially relevant Telegram vacancies due to a sparse
-        # description or missing geography/salary; send as review leads.
-        minimum_score = min(minimum_score, 25)
+    # One strict threshold applies to every source, including Telegram.
+    minimum_score = max(80, int(CONFIG.get("minimum_score", 80)))
     if score < minimum_score:
         return 0, f"Below {minimum_score}/100 ({score}/100)"
     reason = ", ".join(matched[:5]) or "Relevant creative role; verify requirements"
@@ -879,7 +876,7 @@ def main():
     eligible_count = 0
     for job in jobs:
         score, reason = score_job(job)
-        minimum_score = int(CONFIG.get("minimum_score", 50))
+        minimum_score = max(80, int(CONFIG.get("minimum_score", 80)))
         if score < minimum_score:
             rejection_counts[reason] = rejection_counts.get(reason, 0) + 1
             continue
