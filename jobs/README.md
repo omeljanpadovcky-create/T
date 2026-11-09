@@ -2,8 +2,8 @@
 
 ## Search and filtering
 - A fresh vacancy scan runs hourly through GitHub Actions; Telegram buttons and messages are polled every 5 minutes.
-- Sources currently integrated: Arbeitnow, RemoteOK, Remotive, Himalayas, We Work Remotely RSS, DOU, Djinni, Work.ua, Robota.ua, ZipRecruiter and ArtStation Jobs.
-- Some HTML sources may return 403 or change their markup. The bot records source failures and continues with available feeds; it does not bypass access controls.
+- Sources currently integrated: Arbeitnow, RemoteOK, Remotive, Himalayas, We Work Remotely RSS, DOU, Djinni, Work.ua, Robota.ua, ZipRecruiter and ArtStation Jobs. The four platform-specific public collectors are ArtStation, Djinni, Work.ua and Robota.ua; public access can fail independently.
+- Some HTML sources may return 403 or change their markup. The bot records source failures and continues with available feeds; it does not bypass access controls. LinkedIn and Upwork are confirmed as candidate accounts but are not authenticated vacancy integrations. Fiverr is a freelance-service marketplace rather than a conventional job board; inquiries should be tracked separately.
 - Target roles: 3D / Blender / modeling, Game Art / game assets, character / environment / prop art, concept art, illustration, book covers, Photobashing and Matte Painting.
 - English level and seniority are not automatic rejection filters. The listing's actual requirements are shown for manual review.
 - Country-specific locations and explicit country-only requirements are rejected unless the posting clearly allows Ukraine or a broader region. Generic Remote listings still require a manual eligibility check.
@@ -27,9 +27,9 @@
 ## Candidate profile secrets
 Repository → Settings → Secrets and variables → Actions:
 - Required: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`
-- Recommended: `MYSHKA_CONTACT_EMAIL`, `MYSHKA_PHONE`, `MYSHKA_CV_URL`
+- Recommended: `MYSHKA_CONTACT_EMAIL`, `MYSHKA_PHONE`, `MYSHKA_CV_URL` (set only to a verified, publicly accessible CV URL)
 - Optional: `MYSHKA_CANDIDATE_NAME`, `MYSHKA_PORTFOLIO_URL`, `MYSHKA_PORTFOLIO_3D_URL`, `MYSHKA_PORTFOLIO_GAME_ART_URL`, `MYSHKA_PORTFOLIO_DESIGN_URL`, `MYSHKA_PORTFOLIO_ILLUSTRATION_URL`, `MYSHKA_SALARY_EXPECTATION`
 
-Non-sensitive defaults in `jobs/profile.json` include the candidate's name, ArtStation portfolio, CV page, English level and skills. Contact email and salary preference remain unset unless supplied as secrets.
+Non-sensitive defaults in `jobs/profile.json` include the candidate's name, ArtStation portfolio, English level and skills. The previous CV URL was unverified and has been removed; set `MYSHKA_CV_URL` only after confirming the correct CV link. Contact email, phone, CV URL and salary preference remain unset unless supplied as repository secrets. The account/source capability matrix is maintained in `jobs/platforms.json`.
 
 Never commit secret values or send them in chat.
