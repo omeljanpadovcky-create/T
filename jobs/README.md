@@ -1,7 +1,7 @@
 # MYSHKA JOB RADAR — applications with your approval
 
 ## Search and filtering
-- A fresh vacancy scan runs every 15 minutes through GitHub Actions (`*/15 * * * *`). Each scheduled run polls Telegram buttons first, then runs the vacancy scan; temporary callback errors do not prevent the scan from running.
+- Telegram buttons are polled every 5 minutes through the same GitHub Actions workflow; vacancy scans run every 15 minutes. This keeps a single Telegram `getUpdates` consumer while separating callback responsiveness from vacancy discovery. Temporary callback errors do not prevent a scheduled vacancy scan from running.
 - Minimum vacancy score: **80/100**. Scores below 80 are rejected; 80–89 are accepted matches and 90–100 are highest-priority matches.
 - Sources currently integrated: Arbeitnow, RemoteOK, Remotive, Himalayas, We Work Remotely RSS, DOU, Djinni, Work.ua, Robota.ua, ZipRecruiter and ArtStation Jobs.
 - Some HTML sources may return 403 or change their markup. The bot records source failures and continues with available feeds; it does not bypass access controls.
