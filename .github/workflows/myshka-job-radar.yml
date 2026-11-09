@@ -25,6 +25,8 @@ concurrency:
 
 jobs:
   radar:
+    # Persisted state commits must not trigger another vacancy scan.
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
