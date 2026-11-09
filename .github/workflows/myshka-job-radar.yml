@@ -77,6 +77,7 @@ jobs:
           MYSHKA_PORTFOLIO_ILLUSTRATION_URL: ${{ secrets.MYSHKA_PORTFOLIO_ILLUSTRATION_URL }}
           MYSHKA_CV_URL: ${{ secrets.MYSHKA_CV_URL }}
           MYSHKA_CONTACT_EMAIL: ${{ secrets.MYSHKA_CONTACT_EMAIL }}
+          MYSHKA_PHONE: ${{ secrets.MYSHKA_PHONE }}
           MYSHKA_SALARY_EXPECTATION: ${{ secrets.MYSHKA_SALARY_EXPECTATION }}
         run: python callbacks.py
 
