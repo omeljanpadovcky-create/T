@@ -16,7 +16,7 @@
   "portfolio_url": "https://www.artstation.com/omelyan_padovsky",
   "portfolio_3d_url": "https://www.artstation.com/omelyan_padovsky",
   "portfolio_game_art_url": "https://www.artstation.com/omelyan_padovsky",
-  "name": "OMELYAN PADOVSKYI",
+  "name": "OMELYAN PADOVSKY",
   "cv_url": "https://omelyan-padovsky-cv.vercel.app",
   "internship_experience": [
     {
@@ -25,5 +25,6 @@
       "type": "internship",
       "note": "Internship experience; not represented as two years of paid professional employment."
     }
-  ]
+  ],
+  "location": "Lviv, Ukraine"
 }

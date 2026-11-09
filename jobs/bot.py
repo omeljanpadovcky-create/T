@@ -599,7 +599,7 @@ def score_job(job):
     if not location_ok:
         return 0, "Location not confirmed as remote or worldwide"
 
-    score = 40 if title_hits else 25
+    score = 45 if title_hits else 25
     matched = []
     for skill in CONFIG["skills"]:
         if norm(skill) in searchable:
@@ -693,6 +693,7 @@ def load_profile():
         "portfolio_illustration_url": "MYSHKA_PORTFOLIO_ILLUSTRATION_URL",
         "cv_url": "MYSHKA_CV_URL",
         "contact_email": "MYSHKA_CONTACT_EMAIL",
+        "contact_phone": "MYSHKA_PHONE",
         "salary_expectation": "MYSHKA_SALARY_EXPECTATION"
     }
     for field, env_name in env_fields.items():

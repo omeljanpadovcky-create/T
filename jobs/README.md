@@ -27,7 +27,7 @@
 ## Candidate profile secrets
 Repository → Settings → Secrets and variables → Actions:
 - Required: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`
-- Recommended: `MYSHKA_CONTACT_EMAIL`, `MYSHKA_CV_URL`
+- Recommended: `MYSHKA_CONTACT_EMAIL`, `MYSHKA_PHONE`, `MYSHKA_CV_URL`
 - Optional: `MYSHKA_CANDIDATE_NAME`, `MYSHKA_PORTFOLIO_URL`, `MYSHKA_PORTFOLIO_3D_URL`, `MYSHKA_PORTFOLIO_GAME_ART_URL`, `MYSHKA_PORTFOLIO_DESIGN_URL`, `MYSHKA_PORTFOLIO_ILLUSTRATION_URL`, `MYSHKA_SALARY_EXPECTATION`
 
 Non-sensitive defaults in `jobs/profile.json` include the candidate's name, ArtStation portfolio, CV page, English level and skills. Contact email and salary preference remain unset unless supplied as secrets.
