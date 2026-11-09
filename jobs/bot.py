@@ -629,6 +629,10 @@ def country_limited_location(location):
     return has_country and not has_global_scope
 
 
+def meets_minimum_score(score):
+    return int(score) >= int(CONFIG.get("minimum_score", 60))
+
+
 def score_job(job):
     """Score only evidence-backed 3D/GameDev roles for a Ukraine-based remote candidate."""
     title = norm(as_text(job.get("title")))
@@ -696,8 +700,8 @@ def score_job(job):
     paid_points = 10  # Unpaid/volunteer/commission-only roles were rejected above.
 
     score = min(100, title_points + skill_points + game_points + remote_points + geography_points + paid_points)
-    minimum_score = max(80, int(CONFIG.get("minimum_score", 80)))
-    if score < minimum_score:
+    minimum_score = int(CONFIG.get("minimum_score", 60))
+    if not meets_minimum_score(score):
         return 0, f"Below {minimum_score}/100 ({score}/100)"
 
     reason_parts = ["3D/GameDev title"]
@@ -1087,8 +1091,8 @@ def main():
     eligible_count = 0
     for job in jobs:
         score, reason = score_job(job)
-        minimum_score = max(80, int(CONFIG.get("minimum_score", 80)))
-        if score < minimum_score:
+        minimum_score = int(CONFIG.get("minimum_score", 60))
+        if not meets_minimum_score(score):
             rejection_counts[reason] = rejection_counts.get(reason, 0) + 1
             continue
         eligible_count += 1
