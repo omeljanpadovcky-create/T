@@ -2,7 +2,7 @@ import unittest
 
 from unittest.mock import patch
 
-from callbacks import handle_callback, vacancy_keyboard
+from callbacks import handle_callback, package_keyboard, vacancy_keyboard
 
 
 class CallbackStateTransitionTests(unittest.TestCase):
@@ -40,6 +40,18 @@ class CallbackStateTransitionTests(unittest.TestCase):
             button.get("url") == "https://example.com/job"
             for row in keyboard["inline_keyboard"] for button in row
         ))
+
+    def test_pending_review_card_keeps_all_primary_actions(self):
+        keyboard = package_keyboard("abc123", {"url": "https://example.com/job"})
+        callback_values = {
+            button.get("callback_data")
+            for row in keyboard["inline_keyboard"] for button in row
+            if "callback_data" in button
+        }
+        self.assertEqual(callback_values, {
+            "prepare|abc123", "letter|abc123", "save|abc123",
+            "skip|abc123", "status|abc123"
+        })
 
     def test_save_action_persists_saved_status(self):
         result, statuses, api = self.callback("save", "new")
