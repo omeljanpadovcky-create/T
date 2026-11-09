@@ -1,53 +1,35 @@
 # MYSHKA JOB RADAR — applications with your approval
 
-## Existing search
-- Daily search through GitHub Actions.
-- Sources: Work.ua, Robota.ua, DOU, Djinni, ArtStation, Arbeitnow, RemoteOK, Remotive, Himalayas and We Work Remotely (RSS).
-- Work.ua and Robota.ua are searched through public result pages; if a site changes its markup or blocks automated access, that source is marked unavailable rather than bypassing access controls.
-- We Work Remotely is read through its public RSS feed and original listing links are preserved.
-- Up to 10 new matches per run.
-- No English-level filter: English requirements never automatically exclude a vacancy.
-- No experience-level filter: internship, entry-level, junior, mid-level and senior roles can be considered.
-- Candidate profile includes a two-year IT Step internship, represented as internship experience rather than paid employment.
-- Search targets include 3D / Blender / Game Art, illustration, graphic and UI/UX design, Shopify / E-commerce, product listings, digital marketing and content roles.
-- Telegram callbacks are polled every 5 minutes.
+## Search and filtering
+- A fresh vacancy scan runs hourly through GitHub Actions; Telegram buttons and messages are polled every 5 minutes.
+- Sources currently integrated: Arbeitnow, RemoteOK, Remotive, Himalayas, We Work Remotely RSS, DOU, Djinni, Work.ua, Robota.ua, ZipRecruiter and ArtStation Jobs.
+- Some HTML sources may return 403 or change their markup. The bot records source failures and continues with available feeds; it does not bypass access controls.
+- Target roles: 3D / Blender / modeling, Game Art / game assets, character / environment / prop art, concept art, illustration, book covers, Photobashing and Matte Painting.
+- English level and seniority are not automatic rejection filters. The listing's actual requirements are shown for manual review.
+- Country-specific locations and explicit country-only requirements are rejected unless the posting clearly allows Ukraine or a broader region. Generic Remote listings still require a manual eligibility check.
+- New matches are ranked by title and skill relevance. The bot sends new matches only; already-seen listings are not resent.
+- Candidate profile includes a two-year IT Step internship, accurately described as internship experience rather than paid employment.
 
 ## Application preparation flow
-1. **Відібрати вакансію** marks a job as selected; it does not submit anything.
-2. **Підготувати повну заявку** creates an editable package in the Telegram conversation:
-   - cover letter;
-   - email subject and body;
-   - short introduction;
-   - suggested answers for common form questions;
-   - salary wording based on the listing, or a request for the employer's range if salary is missing;
-   - destination URL, extracted employer email (only if present in the listing), and field-by-field instructions.
-3. Review the text and edit the cover letter if needed.
-4. **ПІДТВЕРДЖУЮ ПАКЕТ** records your approval for that version.
-5. Open the employer page and submit manually. Then press **Я ВЖЕ ВІДПРАВИВ ЗАЯВКУ** to update the tracker.
+1. Review the vacancy card and open the original employer listing.
+2. Choose **Підходить — підготувати відгук** to generate an editable application package.
+3. Review the cover letter, email, short introduction, suggested form answers, CV and portfolio links.
+4. Edit the cover letter if needed.
+5. Press **ПІДТВЕРДИТИ ПАКЕТ** only after reviewing the text.
+6. Open the employer page and submit manually. Then press **Я ВЖЕ ВІДПРАВИВ ЗАЯВКУ** to update the tracker.
 
-## Important safety and privacy rules
-- This version does not automatically submit forms or send emails. It prepares the material and guides you to the employer's destination. Email/ATS submission integrations can be added later.
-- A vacancy is never marked submitted just because it was selected or approved. The final status is recorded only after you explicitly confirm that you submitted it.
-- Generated application text is sent to your private Telegram chat and is not written to the public repository.
-- jobs/statuses.json stores workflow state only, not cover letters or answers.
-- Do not add private contact details, portfolio URLs, CV links, or salary preferences to tracked JSON files. Configure them as GitHub Actions repository secrets instead.
+## Safety and privacy
+- The bot prepares application material but does not submit forms or send emails to employers.
+- A vacancy is marked submitted only after the user explicitly confirms it.
+- Generated application text is sent to the private Telegram chat, not stored in the public repository.
+- Do not commit private contact details, CV links, or salary preferences to tracked JSON files. Configure them as GitHub Actions repository secrets.
 
-## Optional candidate profile secrets
+## Candidate profile secrets
 Repository → Settings → Secrets and variables → Actions:
-- MYSHKA_CANDIDATE_NAME
-- MYSHKA_PORTFOLIO_URL
-- MYSHKA_PORTFOLIO_3D_URL
-- MYSHKA_PORTFOLIO_GAME_ART_URL
-- MYSHKA_PORTFOLIO_DESIGN_URL
-- MYSHKA_PORTFOLIO_ILLUSTRATION_URL
-- MYSHKA_CV_URL
-- MYSHKA_CONTACT_EMAIL
-- MYSHKA_SALARY_EXPECTATION
+- Required: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`
+- Recommended: `MYSHKA_CONTACT_EMAIL`, `MYSHKA_CV_URL`
+- Optional: `MYSHKA_CANDIDATE_NAME`, `MYSHKA_PORTFOLIO_URL`, `MYSHKA_PORTFOLIO_3D_URL`, `MYSHKA_PORTFOLIO_GAME_ART_URL`, `MYSHKA_PORTFOLIO_DESIGN_URL`, `MYSHKA_PORTFOLIO_ILLUSTRATION_URL`, `MYSHKA_SALARY_EXPECTATION`
 
-The non-sensitive defaults in jobs/profile.json describe the candidate's design practice, two-year IT Step internship, English level, approximate portfolio size and toolset. English level is retained for truthful application answers only; it is not a vacancy filter.
-
-## Required existing secrets
-- TELEGRAM_BOT_TOKEN
-- TELEGRAM_CHAT_ID
+Non-sensitive defaults in `jobs/profile.json` include the candidate's name, ArtStation portfolio, CV page, English level and skills. Contact email and salary preference remain unset unless supplied as secrets.
 
 Never commit secret values or send them in chat.
