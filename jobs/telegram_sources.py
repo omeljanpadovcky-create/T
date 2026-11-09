@@ -25,8 +25,8 @@ REMOTE_RE = re.compile(
     r"віддален|дистанційн|удаленн|удалённ)\b", re.I
 )
 EXPLICITLY_EXCLUDED_SCOPE_RE = re.compile(
-    r"\\b(?:us|u\\.s\\.?|usa|united states|canada|australia)\\s+only\\b|"
-    r"\\bonly\\s+(?:in\\s+)?(?:us|u\\.s\\.?|usa|united states|canada|australia)\\b", re.I
+    r"\b(?:us|u\\.s\\.?|usa|united states|canada|australia)\\s+only\\b|"
+    r"\bonly\\s+(?:in\\s+)?(?:us|u\\.s\\.?|usa|united states|canada|australia)\\b", re.I
 )
 UKRAINE_SCOPE_RE = re.compile(
     r"\b(ukraine|україн[а-яіїєґ]*|europe|european union|\beu\b|emea|"
@@ -39,7 +39,7 @@ TARGET_RE = re.compile(
     re.I,
 )
 ROLE_RE = re.compile(
-    r"\\b(artist|animator|illustrator|modeler|modeller|sculptor|"
+    r"\b(artist|animator|illustrator|modeler|modeller|sculptor|"
     r"3d generalist|3d artist|2d artist|character artist|environment artist|"
     r"prop artist|technical artist|concept artist)\\b", re.I
 )
