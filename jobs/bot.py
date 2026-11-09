@@ -794,17 +794,6 @@ def load_profile():
     return profile
 
 
-def application_review_keyboard(short_id, job):
-    rows = []
-    if job.get("url"):
-        rows.append([{"text": "🔗 Відкрити вакансію", "url": job["url"]}])
-    rows.append([
-        {"text": "✅ Підходить — підготувати відгук", "callback_data": f"confirm|{short_id}"},
-        {"text": "❌ Не підходить", "callback_data": f"skip|{short_id}"}
-    ])
-    return {"inline_keyboard": rows}
-
-
 def build_ukrainian_conclusion(job, score, reason=""):
     score = int(score or 0)
     if score >= 80:
@@ -890,7 +879,7 @@ def send_job_card(job, short_id):
         f"🔬 <b>Аналіз:</b> {html.escape(as_text(job.get('analysis_uk')) or analyze_job_uk(job))}\n\n"
         "Переглянь опис вакансії, вимоги та умови подачі за посиланням."
     )
-    return send_telegram(message, application_review_keyboard(short_id, job))
+    return send_telegram(message)
 
 
 def build_daily_report(scanned, eligible, new_matches, sent, source_health, rejection_counts):
