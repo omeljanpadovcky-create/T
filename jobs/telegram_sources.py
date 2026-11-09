@@ -151,14 +151,13 @@ def normalize_telegram_post(post, username):
     if EXPLICITLY_EXCLUDED_SCOPE_RE.search(text):
         return None
     scope_match = UKRAINE_SCOPE_RE.search(text)
+    if not scope_match:
+        return None
 
     title = _title_from_text(text)
     post_url = _post_url(post, username)
     url = _job_url(post, post_url)
-    location = (
-        "Remote — Ukraine/Europe eligibility stated"
-        if scope_match else "Remote — hiring geography not stated (verify)"
-    )
+    location = "Remote — Ukraine/Europe eligibility stated"
     company_match = re.search(r"(?:company|компанія|студія)\s*[:—-]\s*([^\n|]{2,100})", text, re.I)
     company = company_match.group(1).strip() if company_match else ""
 
@@ -168,8 +167,8 @@ def normalize_telegram_post(post, username):
         "location": location,
         "url": url,
         "description": text[:12000],
-        "tags": ["Telegram", "GameDev", "3D"] + ([] if scope_match else ["Geography unconfirmed"]),
-        "relevance": "review" if not scope_match else "candidate",
+        "tags": ["Telegram", "GameDev", "3D"],
+        "relevance": "candidate",
         "source": f"Telegram @{username}",
         "remote": True,
         "source_post_url": post_url,
