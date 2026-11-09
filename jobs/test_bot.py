@@ -3,6 +3,8 @@ from unittest.mock import patch
 
 from bot import (
     VacancyLinkParser,
+    job_identity_keys,
+    normalize_job_url,
     score_job,
     send_job_card,
     summarize_vacancy_description,
@@ -24,6 +26,32 @@ def sample_job(**overrides):
     job.update(overrides)
     return job
 
+
+
+class VacancyDeduplicationTests(unittest.TestCase):
+    def test_normalizes_tracking_parameters_and_trailing_slash(self):
+        self.assertEqual(
+            normalize_job_url("https://www.example.com/jobs/123/?utm_source=linkedin#apply"),
+            "https://example.com/jobs/123"
+        )
+
+    def test_same_title_and_company_deduplicates_across_different_urls(self):
+        first = sample_job(url="https://site-a.com/job/1")
+        second = sample_job(url="https://site-b.com/jobs/999")
+        self.assertTrue(job_identity_keys(first) & job_identity_keys(second))
+
+    def test_different_company_is_not_collapsed_by_title_company_key(self):
+        first = sample_job(company="Studio A")
+        second = sample_job(company="Studio B")
+        first_keys = job_identity_keys(first)
+        second_keys = job_identity_keys(second)
+        self.assertNotIn(
+            next(k for k in first_keys if k not in {
+                __import__("hashlib").sha256(first["url"].encode("utf-8")).hexdigest(),
+                __import__("hashlib").sha256(("url:" + normalize_job_url(first["url"])).encode("utf-8")).hexdigest()
+            }),
+            second_keys
+        )
 
 class JobFilterTests(unittest.TestCase):
     def test_accepts_remote_role_with_a2_english(self):
