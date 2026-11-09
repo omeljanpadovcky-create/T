@@ -19,7 +19,7 @@ class JobRadarFilterTests(unittest.TestCase):
     def test_3d_artist_is_accepted_even_when_english_is_c1(self):
         job = self.job("3D Artist", "Blender, game-ready assets. English C1 required.")
         score, _ = score_job(job)
-        self.assertGreaterEqual(score, 50)
+        self.assertGreaterEqual(score, 60)
         conclusion = build_ukrainian_conclusion(job, score, "blender")
         self.assertIn("не причина автоматичного відсіву", conclusion)
 
@@ -56,6 +56,10 @@ class JobRadarFilterTests(unittest.TestCase):
         ))
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Outside target geography")
+
+    def test_minimum_score_is_sixty(self):
+        from bot import CONFIG
+        self.assertEqual(CONFIG.get("minimum_score"), 60)
 
     def test_ui_ux_role_is_outside_current_scope(self):
         score, reason = score_job(self.job("UI/UX Designer", "Figma and web design"))
