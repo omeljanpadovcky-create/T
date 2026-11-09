@@ -7,10 +7,7 @@ on:
       - ".github/workflows/myshka-job-radar.yml"
       - "jobs/**"
   schedule:
-    # Scan every 15 minutes for near-real-time vacancy alerts.
     - cron: "*/15 * * * *"
-    # Telegram inline-button and message polling.
-    - cron: "*/5 * * * *"
   workflow_dispatch:
     inputs:
       run_scan:
@@ -64,28 +61,10 @@ jobs:
           fi
           echo "Required Telegram secrets are present (values are not displayed)."
 
-      - name: Process pending Telegram actions before scan
-        working-directory: jobs
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          MYSHKA_CANDIDATE_NAME: ${{ secrets.MYSHKA_CANDIDATE_NAME }}
-          MYSHKA_PORTFOLIO_URL: ${{ secrets.MYSHKA_PORTFOLIO_URL }}
-          MYSHKA_PORTFOLIO_3D_URL: ${{ secrets.MYSHKA_PORTFOLIO_3D_URL }}
-          MYSHKA_PORTFOLIO_GAME_ART_URL: ${{ secrets.MYSHKA_PORTFOLIO_GAME_ART_URL }}
-          MYSHKA_PORTFOLIO_DESIGN_URL: ${{ secrets.MYSHKA_PORTFOLIO_DESIGN_URL }}
-          MYSHKA_PORTFOLIO_ILLUSTRATION_URL: ${{ secrets.MYSHKA_PORTFOLIO_ILLUSTRATION_URL }}
-          MYSHKA_CV_URL: ${{ secrets.MYSHKA_CV_URL }}
-          MYSHKA_CONTACT_EMAIL: ${{ secrets.MYSHKA_CONTACT_EMAIL }}
-          MYSHKA_PHONE: ${{ secrets.MYSHKA_PHONE }}
-          MYSHKA_SALARY_EXPECTATION: ${{ secrets.MYSHKA_SALARY_EXPECTATION }}
-        run: python callbacks.py
-
-      - name: Run scheduled vacancy scan
+      - name: Run vacancy scan
         if: >-
           (github.event_name == 'push') ||
-          (github.event_name == 'schedule' &&
-          (github.event.schedule == '*/15 * * * *')) ||
+          (github.event_name == 'schedule') ||
           (github.event_name == 'workflow_dispatch' && inputs.run_scan)
         working-directory: jobs
         env:
@@ -93,43 +72,15 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           APINEX_API_KEY: ${{ secrets.APINEX_API_KEY }}
           APINEX_MODEL: free/deepseek-v4.1-flash
-          MYSHKA_CANDIDATE_NAME: ${{ secrets.MYSHKA_CANDIDATE_NAME }}
-          MYSHKA_PORTFOLIO_URL: ${{ secrets.MYSHKA_PORTFOLIO_URL }}
-          MYSHKA_PORTFOLIO_3D_URL: ${{ secrets.MYSHKA_PORTFOLIO_3D_URL }}
-          MYSHKA_PORTFOLIO_GAME_ART_URL: ${{ secrets.MYSHKA_PORTFOLIO_GAME_ART_URL }}
-          MYSHKA_PORTFOLIO_DESIGN_URL: ${{ secrets.MYSHKA_PORTFOLIO_DESIGN_URL }}
-          MYSHKA_PORTFOLIO_ILLUSTRATION_URL: ${{ secrets.MYSHKA_PORTFOLIO_ILLUSTRATION_URL }}
-          MYSHKA_CV_URL: ${{ secrets.MYSHKA_CV_URL }}
-          MYSHKA_CONTACT_EMAIL: ${{ secrets.MYSHKA_CONTACT_EMAIL }}
-          MYSHKA_PHONE: ${{ secrets.MYSHKA_PHONE }}
-          MYSHKA_SALARY_EXPECTATION: ${{ secrets.MYSHKA_SALARY_EXPECTATION }}
-          MYSHKA_FORCE_SCAN: ${{ github.event_name == 'workflow_dispatch' && inputs.run_scan }}
         run: python run_scheduled_scan.py
 
-      - name: Process Telegram buttons and messages
-        working-directory: jobs
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          MYSHKA_CANDIDATE_NAME: ${{ secrets.MYSHKA_CANDIDATE_NAME }}
-          MYSHKA_PORTFOLIO_URL: ${{ secrets.MYSHKA_PORTFOLIO_URL }}
-          MYSHKA_PORTFOLIO_3D_URL: ${{ secrets.MYSHKA_PORTFOLIO_3D_URL }}
-          MYSHKA_PORTFOLIO_GAME_ART_URL: ${{ secrets.MYSHKA_PORTFOLIO_GAME_ART_URL }}
-          MYSHKA_PORTFOLIO_DESIGN_URL: ${{ secrets.MYSHKA_PORTFOLIO_DESIGN_URL }}
-          MYSHKA_PORTFOLIO_ILLUSTRATION_URL: ${{ secrets.MYSHKA_PORTFOLIO_ILLUSTRATION_URL }}
-          MYSHKA_CV_URL: ${{ secrets.MYSHKA_CV_URL }}
-          MYSHKA_CONTACT_EMAIL: ${{ secrets.MYSHKA_CONTACT_EMAIL }}
-          MYSHKA_PHONE: ${{ secrets.MYSHKA_PHONE }}
-          MYSHKA_SALARY_EXPECTATION: ${{ secrets.MYSHKA_SALARY_EXPECTATION }}
-        run: python callbacks.py
-
-      - name: Save bot state
+      - name: Save deduplication state
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add jobs/seen.json jobs/applications.json jobs/statuses.json jobs/update_offset.json jobs/editing.json
+          git add jobs/seen.json
           if ! git diff --cached --quiet; then
-            git commit -m "chore: persist MYSHKA Job Radar state"
+            git commit -m "chore: persist MYSHKA vacancy deduplication state"
             git push
           fi
