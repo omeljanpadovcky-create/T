@@ -25,7 +25,7 @@ class JobRadarFilterTests(unittest.TestCase):
 
     def test_senior_3d_artist_is_not_rejected_by_seniority(self):
         score, _ = score_job(self.job("Senior 3D Artist", "Blender, 3D modeling and game-ready assets"))
-        self.assertGreaterEqual(score, 60)
+        self.assertGreaterEqual(score, 80)
 
     def test_game_asset_role_is_accepted(self):
         score, _ = score_job(self.job("Junior Game Asset Artist", "Blender, low poly, UV mapping and game-ready assets"))
@@ -35,12 +35,11 @@ class JobRadarFilterTests(unittest.TestCase):
         score, _ = score_job(self.job("Junior Technical Artist", "Blender, Unreal Engine and 3D modeling"))
         self.assertGreaterEqual(score, 60)
 
-    def test_photobashing_only_role_is_outside_current_3d_scope(self):
+    def test_photobashing_role_is_accepted_as_visual_art(self):
         score, reason = score_job(self.job(
             "Photobashing Artist", "Photoshop, photobashing and digital painting"
         ))
-        self.assertEqual(score, 0)
-        self.assertEqual(reason, "Not a 3D/GameDev target role")
+        self.assertGreaterEqual(score, 80, reason)
 
 
     def test_remote_role_based_in_lviv_is_eligible(self):
@@ -75,7 +74,7 @@ class JobRadarFilterTests(unittest.TestCase):
     def test_ui_ux_role_is_outside_current_scope(self):
         score, reason = score_job(self.job("UI/UX Designer", "Figma and web design"))
         self.assertEqual(score, 0)
-        self.assertEqual(reason, "Not a 3D/GameDev target role")
+        self.assertEqual(reason, "Not a target 3D, Game Art or visual-art role")
 
     def test_unpaid_role_is_rejected(self):
         score, reason = score_job(self.job("3D Artist", "Unpaid volunteer opportunity"))
