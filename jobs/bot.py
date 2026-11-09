@@ -105,6 +105,8 @@ class VacancyLinkParser(HTMLParser):
                 re.search(r"/jobs/[^/?#]+", href) is not None
                 or re.search(r"/c/[^/]+/jobs?/", href, re.IGNORECASE) is not None
             )
+        elif self.source == "LinkedIn":
+            is_job = "/jobs/view/" in href
         else:
             is_job = re.search(r"/jobs/[^/?#]+", href) is not None
             if self.source == "ArtStation":
@@ -259,6 +261,54 @@ def collect_artstation_jobs():
     print(f"ArtStation: parsed {len(parser.links)} links; inspected {len(jobs)} relevant listings")
     return jobs
 
+
+
+def collect_linkedin_jobs():
+    """Collect public LinkedIn job-search results without logging in or bypassing access controls."""
+    search_terms = [
+        "3D Artist", "Blender Artist", "3D Character Artist",
+        "Game Asset Artist", "Environment Artist", "3D Modeler"
+    ]
+    jobs = []
+    seen_urls = set()
+    base_url = "https://www.linkedin.com/jobs/search/"
+    for term in search_terms:
+        search_url = base_url + "?keywords=" + requests.utils.quote(term) + "&location=Ukraine&f_WT=2"
+        page = fetch_html(search_url)
+        if not page:
+            continue
+        if "authwall" in page.lower() or "sign in" in page[:5000].lower():
+            SOURCE_HEALTH.append({
+                "source": "LinkedIn · public search requires sign-in",
+                "host": "www.linkedin.com",
+                "ok": False
+            })
+            continue
+        parser = VacancyLinkParser("LinkedIn")
+        try:
+            parser.feed(page)
+        except Exception as exc:
+            print(f"LinkedIn listing parse warning: {exc}")
+            continue
+        for item in parser.links:
+            url = absolute_job_url(base_url, item["url"])
+            if url in seen_urls:
+                continue
+            seen_urls.add(url)
+            title = item["title"]
+            title_norm = norm(title)
+            if not any(norm(target) in title_norm for target in CONFIG["target_titles"]) and not any(
+                term in title_norm for term in (
+                    "3d", "blender", "game artist", "game asset",
+                    "character artist", "environment artist", "prop artist"
+                )
+            ):
+                continue
+            details = extract_job_details(url, "LinkedIn", title)
+            if details:
+                jobs.append(details)
+    print(f"LinkedIn: collected {len(jobs)} public listings")
+    return jobs
 
 def collect_ziprecruiter_jobs():
     """Collect public remote vacancies from ZipRecruiter's public search pages.
@@ -536,6 +586,8 @@ def collect_jobs():
     ))
     jobs.extend(collect_ziprecruiter_jobs())
     jobs.extend(collect_artstation_jobs())
+    # LinkedIn public job search; no login or private-data access.
+    jobs.extend(collect_linkedin_jobs())
     # Public Telegram channel posts are vacancy leads; the normal scoring,
     # paid-role, Ukraine eligibility, deduplication and approval flow still applies.
     jobs.extend(collect_telegram_channel_jobs(SOURCE_HEALTH))
@@ -933,20 +985,9 @@ def main():
         save_json(SEEN_PATH, sorted(seen))
         sent += 1
 
-    send_telegram(
-        build_daily_report(
-            scanned=len(jobs),
-            eligible=eligible_count,
-            new_matches=len(matches),
-            sent=sent,
-            source_health=SOURCE_HEALTH,
-            rejection_counts=rejection_counts
-        ),
-        {"inline_keyboard": [[{
-            "text": "👀 ПЕРЕГЛЯНУТИ ВАКАНСІЇ",
-            "callback_data": "review|pending"
-        }]]}
-    )
+    # Keep Telegram quiet between alerts. Warn only if every source failed.
+    if not SOURCE_HEALTH or all(not item.get("ok") for item in SOURCE_HEALTH):
+        send_telegram("⚠️ <b>MYSHKA JOB RADAR</b>\nНе вдалося отримати дані з жодного джерела. Перевірка повториться за розкладом.")
     print(f"Scanned {len(jobs)} listings; eligible {eligible_count}; sent {sent} new matches; saved {len(applications)} application records.")
     print("Top rejection reasons: " + json.dumps(dict(sorted(rejection_counts.items(), key=lambda item: item[1], reverse=True)[:8]), ensure_ascii=False))
 
