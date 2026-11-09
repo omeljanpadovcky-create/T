@@ -1,7 +1,8 @@
 # MYSHKA JOB RADAR — applications with your approval
 
 ## Search and filtering
-- A fresh vacancy scan runs hourly through GitHub Actions; Telegram buttons and messages are polled every 5 minutes.
+- A fresh vacancy scan runs every 15 minutes through GitHub Actions (`*/15 * * * *`). Each scheduled run polls Telegram buttons first, then runs the vacancy scan; temporary callback errors do not prevent the scan from running.
+- Minimum vacancy score: **80/100**. Scores below 80 are rejected; 80–89 are accepted matches and 90–100 are highest-priority matches.
 - Sources currently integrated: Arbeitnow, RemoteOK, Remotive, Himalayas, We Work Remotely RSS, DOU, Djinni, Work.ua, Robota.ua, ZipRecruiter and ArtStation Jobs.
 - Some HTML sources may return 403 or change their markup. The bot records source failures and continues with available feeds; it does not bypass access controls.
 - Target roles: 3D / Blender / modeling, Game Art / game assets, character / environment / prop art, concept art, illustration, book covers, Photobashing and Matte Painting.
