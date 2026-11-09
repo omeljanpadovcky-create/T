@@ -26,8 +26,10 @@ concurrency:
 
 jobs:
   radar:
-    # Persisted state commits must not trigger another vacancy scan.
-    if: github.actor != 'github-actions[bot]'
+    # Always allow scheduled ticks to poll Telegram, even if GitHub attributes
+    # the schedule actor to github-actions[bot]. Ignore only bot-authored push
+    # events created by the state-persistence step.
+    if: github.event_name == 'schedule' || github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
