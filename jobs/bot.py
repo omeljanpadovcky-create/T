@@ -277,7 +277,7 @@ def collect_linkedin_jobs():
         page = fetch_html(search_url)
         if not page:
             continue
-        if "authwall" in page.lower() or "sign in" in page[:5000].lower():
+        if "authwall" in page.lower() or "checkpoint/challenge" in page.lower():
             SOURCE_HEALTH.append({
                 "source": "LinkedIn · public search requires sign-in",
                 "host": "www.linkedin.com",
