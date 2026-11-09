@@ -693,6 +693,7 @@ def load_profile():
         "portfolio_illustration_url": "MYSHKA_PORTFOLIO_ILLUSTRATION_URL",
         "cv_url": "MYSHKA_CV_URL",
         "contact_email": "MYSHKA_CONTACT_EMAIL",
+        "contact_phone": "MYSHKA_PHONE",
         "salary_expectation": "MYSHKA_SALARY_EXPECTATION"
     }
     for field, env_name in env_fields.items():
