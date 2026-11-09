@@ -588,16 +588,16 @@ def score_job(job):
         return 0, "Missing title or link"
     if any(norm(term) in title for term in CONFIG["exclude_terms"]):
         return 0, "Excluded role"
-    if re.search(r"\\b(unpaid|volunteer|commission[- ]only|no salary|equity only)\\b|без\\s+оплат|волонтерств|неоплачув", searchable, re.I):
+    if re.search(r"\b(unpaid|volunteer|commission[- ]only|no salary|equity only)\b|без\s+оплат|волонтерств|неоплачув", searchable, re.I):
         return 0, "Unpaid or volunteer role"
     if outside_target_geography(searchable):
         return 0, "Outside target geography"
 
     # A generic 'Remote' label is not enough: the employer must state a region
     # that includes Ukraine (Ukraine, Europe/EMEA, EU, worldwide, or anywhere).
-    remote_ok = bool(re.search(r"\\b(remote|remotely|work from home|distributed|віддален|дистанційн)\\b", searchable, re.I))
+    remote_ok = bool(re.search(r"\b(remote|remotely|work from home|distributed|віддален|дистанційн)\b", searchable, re.I))
     scope_ok = bool(re.search(
-        r"\\b(ukraine|україн[а-яіїєґ]*|europe|european union|eu|emea|worldwide|anywhere|global)\\b",
+        r"\b(ukraine|україн[а-яіїєґ]*|europe|european union|eu|emea|worldwide|anywhere|global)\b",
         searchable, re.I
     ))
     if not remote_ok:
@@ -608,7 +608,7 @@ def score_job(job):
         return 0, "Country-specific location; Ukraine eligibility not confirmed"
 
     target_patterns = (
-        r"\\b3d\\b", r"\\bblender\\b", r"game.?asset", r"game.?artist",
+        r"\b3d\b", r"\bblender\b", r"game.?asset", r"game.?artist",
         r"character artist", r"environment artist", r"prop artist",
         r"technical artist", r"3d model(?:er|ler)", r"hard.?surface artist",
         r"texture artist", r"3d generalist", r"3d sculptor", r"weapons artist"
@@ -618,9 +618,9 @@ def score_job(job):
 
     title_points = 35
     skill_groups = {
-        "3D software": (r"\\bblender\\b", r"\\bmaya\\b", r"3ds\\s*max", r"zbrush", r"cinema\\s*4d"),
+        "3D software": (r"\bblender\b", r"\bmaya\b", r"3ds\s*max", r"zbrush", r"cinema\s*4d"),
         "modeling": (r"3d model", r"modeling", r"modelling", r"sculpt", r"hard.?surface", r"low.?poly"),
-        "asset workflow": (r"uv\\s*(?:mapping|unwrap)", r"textur", r"substance painter", r"game.?ready", r"pbr"),
+        "asset workflow": (r"uv\s*(?:mapping|unwrap)", r"textur", r"substance painter", r"game.?ready", r"pbr"),
     }
     skill_points = 0
     matched_groups = []
@@ -638,7 +638,7 @@ def score_job(job):
     game_points = 15 if game_context else 0
     remote_points = 10
     geography_points = 10 if re.search(
-        r"\\b(ukraine|україн[а-яіїєґ]*|worldwide|anywhere|global)\\b", searchable, re.I
+        r"\b(ukraine|україн[а-яіїєґ]*|worldwide|anywhere|global)\b", searchable, re.I
     ) else 8  # Europe/EMEA/EU explicitly includes the user's location.
     paid_points = 10  # Unpaid/volunteer/commission-only roles were rejected above.
 
