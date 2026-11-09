@@ -1,5 +1,8 @@
-"""Run a fresh MYSHKA vacancy scan on every scheduled hourly workflow tick."""
-from bot import main
+"""Poll Telegram actions, then run the scheduled vacancy scan.""" 
+from callbacks import main as poll_telegram_callbacks
+from bot import main as run_vacancy_scan
 
-print("Starting scheduled MYSHKA scan.")
-main()
+print("Starting scheduled MYSHKA run: Telegram callbacks first.")
+poll_telegram_callbacks()
+print("Starting scheduled MYSHKA vacancy scan.")
+run_vacancy_scan()
