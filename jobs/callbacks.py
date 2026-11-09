@@ -84,7 +84,7 @@ def now_iso():
 
 
 def answer_callback(query_id, text):
-    if not query_id:
+    if os.environ.get("MYSHKA_SKIP_CALLBACK_ACK") == "1" or not query_id:
         return
     try:
         api("answerCallbackQuery", {"callback_query_id": query_id, "text": text})
