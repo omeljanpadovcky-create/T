@@ -86,17 +86,27 @@ class JobFilterTests(unittest.TestCase):
 
 
 class VacancyCardTests(unittest.TestCase):
-    def test_card_is_plain_message_without_buttons(self):
-        with patch("bot.send_telegram", return_value={"message_id": 77}) as send:
-            result = send_job_card(sample_job(), "abc123")
-        self.assertEqual(result["message_id"], 77)
-        self.assertEqual(send.call_count, 1)
-        message = send.call_args.args[0]
-        self.assertIn("Junior 3D Artist", message)
-        self.assertIn("Оплата:", message)
-        self.assertIn("Не вказано", message)
-        self.assertNotIn("reply_markup", send.call_args.kwargs)
-        self.assertEqual(len(send.call_args.args), 1)
+    def test_card_includes_working_inline_actions(self):
+        job = {
+            "id": "abc123", "title": "Junior 3D Artist", "company": "Example Studio",
+            "location": "Remote · Worldwide", "url": "https://example.com/jobs/junior-3d-artist",
+            "description": "Blender and game-ready assets", "source": "Test", "score": 90,
+            "reason": "3D Artist"
+        }
+        with patch("bot.summarize_vacancy_description", return_value="Summary"), patch(
+            "bot.send_telegram"
+        ) as send:
+            result = send_job_card(job, "abc123")
+        self.assertEqual(result, send.return_value)
+        keyboard = send.call_args.kwargs["reply_markup"]["inline_keyboard"]
+        callbacks = {
+            button["callback_data"]
+            for row in keyboard for button in row if "callback_data" in button
+        }
+        self.assertEqual(callbacks, {
+            "prepare|abc123", "letter|abc123", "save|abc123",
+            "skip|abc123", "status|abc123"
+        })
 
     def test_salary_uses_only_advertised_value(self):
         self.assertEqual(vacancy_salary(sample_job()), "Не вказано")
