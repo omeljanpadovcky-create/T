@@ -34,6 +34,11 @@ TARGET_RE = re.compile(
     r"vfx|animator|мат худож|3d.?худож|3d.?модел|геймдев|ігров.*худож)",
     re.I,
 )
+ROLE_RE = re.compile(
+    r"\\b(artist|animator|illustrator|modeler|modeller|sculptor|"
+    r"3d generalist|3d artist|2d artist|character artist|environment artist|"
+    r"prop artist|technical artist|concept artist)\\b", re.I
+)
 UNPAID_RE = re.compile(
     r"\b(unpaid|volunteer|commission[- ]only|no salary|equity only)\b|"
     r"без\s+оплат|волонтерств|неоплачув", re.I
@@ -133,20 +138,23 @@ def normalize_telegram_post(post, username):
     if UNPAID_RE.search(text):
         return None
 
+    # Keep uncertain geography as a lead for manual review. Exclude only
+    # clearly incompatible country restrictions; a "Remote" post may omit
+    # its hiring region, especially in short Telegram vacancy announcements.
     remote_match = REMOTE_RE.search(text)
     if not remote_match:
         return None
-
-    # Strictly require Ukraine or a region that includes Ukraine. A generic
-    # "Remote" label alone is not enough for this user's search.
-    scope_match = UKRAINE_SCOPE_RE.search(text)
-    if not scope_match:
+    if EXPLICITLY_EXCLUDED_SCOPE_RE.search(text):
         return None
+    scope_match = UKRAINE_SCOPE_RE.search(text)
 
     title = _title_from_text(text)
     post_url = _post_url(post, username)
     url = _job_url(post, post_url)
-    location = "Remote — Ukraine/Europe eligibility stated"
+    location = (
+        "Remote — Ukraine/Europe eligibility stated"
+        if scope_match else "Remote — hiring geography not stated (verify)"
+    )
     company_match = re.search(r"(?:company|компанія|студія)\s*[:—-]\s*([^\n|]{2,100})", text, re.I)
     company = company_match.group(1).strip() if company_match else ""
 
@@ -156,7 +164,8 @@ def normalize_telegram_post(post, username):
         "location": location,
         "url": url,
         "description": text[:12000],
-        "tags": ["Telegram", "GameDev", "3D"],
+        "tags": ["Telegram", "GameDev", "3D"] + ([] if scope_match else ["Geography unconfirmed"]),
+        "relevance": "review" if not scope_match else "candidate",
         "source": f"Telegram @{username}",
         "remote": True,
         "source_post_url": post_url,
