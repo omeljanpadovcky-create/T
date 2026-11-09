@@ -33,7 +33,7 @@ class JobFilterTests(unittest.TestCase):
             tags=[]
         ))
         self.assertEqual(score, 0)
-        self.assertIn("Below 60/100", reason)
+        self.assertIn("Below 80/100", reason)
 
     def test_analyzes_skills_english_and_application_email(self):
         analysis = analyze_job_uk(sample_job(
@@ -44,17 +44,17 @@ class JobFilterTests(unittest.TestCase):
         self.assertIn("jobs@example.com", analysis)
 
     def test_accepts_explicit_b2_requirement(self):
-        score, reason = score_job(sample_job(description="English level B2 required."))
+        score, reason = score_job(sample_job(description="English level B2 required. Blender game assets."))
         self.assertGreater(score, 0, reason)
 
     def test_accepts_fluent_english_requirement(self):
-        score, reason = score_job(sample_job(description="Fluent English and excellent written communication required."))
+        score, reason = score_job(sample_job(description="Fluent English and excellent written communication required. Blender game assets."))
         self.assertGreater(score, 0, reason)
 
     def test_accepts_senior_experience_requirements(self):
         score, reason = score_job(sample_job(
             title="Senior 3D Artist",
-            description="Requires 7+ years of professional experience with Blender."
+            description="Requires 7+ years of professional experience with Blender, 3D modeling and game-ready assets."
         ))
         self.assertGreater(score, 0, reason)
 
