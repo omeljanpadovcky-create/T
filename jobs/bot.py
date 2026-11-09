@@ -597,7 +597,7 @@ def score_job(job):
     # that includes Ukraine (Ukraine, Europe/EMEA, EU, worldwide, or anywhere).
     remote_ok = bool(re.search(r"\b(remote|remotely|work from home|distributed|віддален|дистанційн)\b", searchable, re.I))
     scope_ok = bool(re.search(
-        r"\b(ukraine|україн[а-яіїєґ]*|europe|european union|eu|emea|worldwide|anywhere|global)\b",
+        r"\b(ukraine|україн[а-яіїєґ]*|lviv|kyiv|dnipro|odesa|kharkiv|vinnytsia|europe|european union|eu|emea|worldwide|anywhere|global)\b",
         searchable, re.I
     ))
     if country_limited_location(location):
@@ -638,7 +638,7 @@ def score_job(job):
     game_points = 15 if game_context else 0
     remote_points = 10
     geography_points = 10 if re.search(
-        r"\b(ukraine|україн[а-яіїєґ]*|worldwide|anywhere|global)\b", searchable, re.I
+        r"\b(ukraine|україн[а-яіїєґ]*|lviv|kyiv|dnipro|odesa|kharkiv|vinnytsia|worldwide|anywhere|global)\b", searchable, re.I
     ) else 8  # Europe/EMEA/EU explicitly includes the user's location.
     paid_points = 10  # Unpaid/volunteer/commission-only roles were rejected above.
 
