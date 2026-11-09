@@ -708,9 +708,50 @@ def score_job(job):
     return score, ", ".join(reason_parts)
 
 
+def normalize_job_url(value):
+    """Normalize tracking/query variants so one vacancy has one stable URL identity."""
+    from urllib.parse import urlunparse, urlencode
+
+    raw = str(value or "").strip()
+    if not raw:
+        return ""
+    parsed = urlparse(raw if "://" in raw else "https://" + raw)
+    host = (parsed.hostname or "").lower()
+    if host.startswith("www."):
+        host = host[4:]
+    path = re.sub(r"/+", "/", parsed.path or "/").rstrip("/") or "/"
+    # Drop fragments and all query parameters: tracking parameters and source-specific
+    # query strings must not make the same vacancy look new.
+    return urlunparse((parsed.scheme.lower() or "https", host, path, "", "", ""))
+
+
+def job_identity_keys(job):
+    """Return compatible legacy and stronger fingerprints for vacancy deduplication."""
+    keys = set()
+    raw_url = str(job.get("url") or "").strip()
+    normalized_url = normalize_job_url(raw_url)
+    if raw_url:
+        # Keep compatibility with hashes already stored by older radar versions.
+        keys.add(hashlib.sha256(raw_url.encode("utf-8")).hexdigest())
+    if normalized_url:
+        keys.add(hashlib.sha256(("url:" + normalized_url).encode("utf-8")).hexdigest())
+
+    title = norm(job.get("title"))
+    company = norm(job.get("company"))
+    if title and company:
+        # Ignore punctuation/spacing differences in title and company.
+        title = re.sub(r"[^a-z0-9а-яіїєґ]+", " ", title).strip()
+        company = re.sub(r"[^a-z0-9а-яіїєґ]+", " ", company).strip()
+        if title and company:
+            identity = f"title-company:{title}|{company}"
+            keys.add(hashlib.sha256(identity.encode("utf-8")).hexdigest())
+    return keys
+
+
 def job_id(job):
-    raw = job.get("url") or (str(job.get("title")) + str(job.get("company")))
-    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+    """Stable primary ID; legacy URL-only behavior retained for old stored references."""
+    keys = job_identity_keys(job)
+    return sorted(keys)[0] if keys else hashlib.sha256(b"").hexdigest()
 
 
 def load_json(path, default):
@@ -1051,14 +1092,25 @@ def main():
             rejection_counts[reason] = rejection_counts.get(reason, 0) + 1
             continue
         eligible_count += 1
-        key = job_id(job)
-        # Only send new, structurally valid vacancies scoring at least the configured threshold.
-        if as_text(job.get("title")).strip() and as_text(job.get("url")).strip() and key not in seen:
-            matches.append((score, reason, key, job))
+        identity_keys = job_identity_keys(job)
+        # Deduplicate by normalized URL AND by exact normalized title + company.
+        # This also catches reposts mirrored across different job boards.
+        if (
+            as_text(job.get("title")).strip()
+            and as_text(job.get("url")).strip()
+            and identity_keys
+            and not (identity_keys & seen)
+        ):
+            primary_key = hashlib.sha256(
+                ("myshka:" + "|".join(sorted(identity_keys))).encode("utf-8")
+            ).hexdigest()
+            matches.append((score, reason, primary_key, identity_keys, job))
+            # Prevent duplicates within the same scan before Telegram delivery.
+            seen.update(identity_keys)
 
     matches.sort(key=lambda item: item[0], reverse=True)
     sent = 0
-    for score, reason, key, job in matches:
+    for score, reason, key, identity_keys, job in matches:
         short_id = key[:16]
         stored_job = {
             "id": short_id, "title": as_text(job.get("title")),
@@ -1072,7 +1124,7 @@ def main():
         telegram_message = send_job_card(stored_job, short_id)
         stored_job["message_id"] = telegram_message.get("message_id") if telegram_message else None
         applications[short_id] = stored_job
-        seen.add(key)
+        seen.update(identity_keys)
         save_json(APPLICATIONS_PATH, applications)
         save_json(SEEN_PATH, sorted(seen))
         sent += 1
