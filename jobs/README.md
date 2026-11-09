@@ -2,7 +2,7 @@
 
 ## Search and filtering
 - A fresh vacancy scan runs hourly through GitHub Actions; Telegram buttons and messages are polled every 5 minutes.
-- Sources currently integrated: Arbeitnow, RemoteOK, Remotive, Himalayas, We Work Remotely RSS, DOU, Djinni, Work.ua, Robota.ua, ZipRecruiter and ArtStation Jobs. The four platform-specific public collectors are ArtStation, Djinni, Work.ua and Robota.ua; public access can fail independently.
+- Sources currently integrated: Arbeitnow, RemoteOK, Remotive, Himalayas, We Work Remotely RSS, Jobicy public API, Working Nomads public JSON feed, WorkinGames Ukraine listings, DOU, Djinni, Work.ua, Robota.ua, ZipRecruiter and ArtStation Jobs. The public collectors include ArtStation, Djinni, Work.ua, Robota.ua and WorkinGames; API/RSS feeds include Jobicy and Working Nomads. Public access and page structures can fail independently. Jobicy's public API exposes recent remote listings; Working Nomads is consumed as a public JSON feed; WorkinGames is currently scoped to its Ukraine game-jobs listing.
 - Some HTML sources may return 403 or change their markup. The bot records source failures and continues with available feeds; it does not bypass access controls. LinkedIn and Upwork are confirmed as candidate accounts but are not authenticated vacancy integrations. Fiverr is a freelance-service marketplace rather than a conventional job board; inquiries should be tracked separately.
 - Target roles: 3D / Blender / modeling, Game Art / game assets, character / environment / prop art, concept art, illustration, book covers, Photobashing and Matte Painting.
 - English level and seniority are not automatic rejection filters. The listing's actual requirements are shown for manual review.
