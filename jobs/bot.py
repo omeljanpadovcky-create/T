@@ -20,7 +20,7 @@ HEADERS = {"User-Agent": "TradeMyshka-JobRadar/2.0", "Accept": "application/json
 TIMEOUT = 25
 SOURCE_HEALTH = []
 COUNTRY_LOCATION_TERMS = (
-    "united states", "usa", "u.s.", "canada", "australia", "germany",
+    "united states", "usa", "us", "u.s.", "canada", "australia", "germany",
     "france", "united kingdom", "uk", "ireland", "netherlands", "poland",
     "india", "singapore", "japan", "spain", "italy", "sweden", "norway",
     "denmark", "finland", "portugal", "switzerland", "austria", "belgium",
@@ -544,19 +544,19 @@ def collect_jobs():
 
 def outside_target_geography(text):
     countries = (
-        r"(?:the united states|united states|u\\.s\\.a?\\.?|usa|canada|australia|"
+        r"(?:the united states|united states|u\.s\.a?\.?|usa|us|canada|australia|"
         r"germany|france|united kingdom|uk|ireland|netherlands|poland|india|"
         r"singapore|japan|spain|italy|sweden|norway|denmark|finland|portugal|"
         r"switzerland|austria|belgium|czech republic|romania|brazil|mexico|"
         r"new zealand)"
     )
     patterns = [
-        r"\\b(?:usa|u\\.s\\.|united states|canada|australia)\\s+only\\b",
-        r"\\bonly\\s+(?:in\\s+)?(?:usa|u\\.s\\.|united states|canada|australia)\\b",
-        rf"\\b(?:must|need to|required to|expected to)\\s+be\\s+(?:located|based|resident)\\s+in\\s+(?:the\\s+)?{countries}\\b",
-        rf"\\b(?:only\\s+)?(?:candidates|applicants|residents)\\s+(?:must\\s+be\\s+)?(?:located|based|resident)\\s+in\\s+(?:the\\s+)?{countries}\\b",
-        rf"\\b(?:remote|work from home)\\s+(?:role|position|job)?\\s*(?:for|in|within)\\s+(?:the\\s+)?{countries}\\s+only\\b",
-        rf"\\b(?:work authorization|right to work)\\s+(?:in|for)\\s+(?:the\\s+)?{countries}\\b"
+        r"\b(?:usa|u\.s\.|united states|canada|australia)\s+only\b",
+        r"\bonly\s+(?:in\s+)?(?:usa|u\.s\.|united states|canada|australia)\b",
+        rf"\b(?:must|need to|required to|expected to)\s+be\s+(?:located|based|resident)\s+in\s+(?:the\s+)?{countries}\b",
+        rf"\b(?:only\s+)?(?:candidates|applicants|residents)\s+(?:must\s+be\s+)?(?:located|based|resident)\s+in\s+(?:the\s+)?{countries}\b",
+        rf"\b(?:remote|work from home)\s+(?:role|position|job)?\s*(?:for|in|within)\s+(?:the\s+)?{countries}\s+only\b",
+        rf"\b(?:work authorization|right to work)\s+(?:in|for)\s+(?:the\s+)?{countries}\b"
     ]
     return any(re.search(pattern, text, re.IGNORECASE) for pattern in patterns)
 
@@ -564,7 +564,7 @@ def outside_target_geography(text):
 def country_limited_location(location):
     value = norm(location)
     has_country = any(
-        re.search(r"\\b" + re.escape(country) + r"\\b", value)
+        re.search(r"\b" + re.escape(country) + r"\b", value)
         for country in COUNTRY_LOCATION_TERMS
     )
     has_global_scope = any(term in value for term in GLOBAL_LOCATION_TERMS)
