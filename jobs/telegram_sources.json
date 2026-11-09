@@ -1,0 +1,10 @@
+{
+  "channels": [
+    "ingamejob_art",
+    "young_gamedev",
+    "devjobs",
+    "gamedev_and_tech_vacancy",
+    "devzonegd"
+  ],
+  "note": "Public Telegram channels. The scraper reads only t.me/s previews; add channels only after verifying their public vacancy content."
+}
