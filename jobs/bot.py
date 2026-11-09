@@ -577,56 +577,82 @@ def country_limited_location(location):
 
 
 def score_job(job):
+    """Score only evidence-backed 3D/GameDev roles for a Ukraine-based remote candidate."""
     title = norm(as_text(job.get("title")))
     location = norm(as_text(job.get("location")))
-    searchable = norm(" ".join([
-        as_text(job.get("title")), as_text(job.get("description")),
-        as_text(job.get("tags")), as_text(job.get("location"))
-    ]))
+    description = norm(as_text(job.get("description")))
+    tags = norm(as_text(job.get("tags")))
+    searchable = " ".join([title, description, tags, location])
+
     if not title or not job.get("url"):
         return 0, "Missing title or link"
     if any(norm(term) in title for term in CONFIG["exclude_terms"]):
         return 0, "Excluded role"
-    title_hits = [term for term in CONFIG["target_titles"] if norm(term) in title]
-    if not title_hits and not any(x in title for x in ["3d", "roblox", "prop artist", "environment artist"]):
-        return 0, "Not a target role"
-    if re.search(r"\b(unpaid|volunteer|commission[- ]only|no salary|equity only)\b", searchable):
+    if re.search(r"\\b(unpaid|volunteer|commission[- ]only|no salary|equity only)\\b|без\\s+оплат|волонтерств|неоплачув", searchable, re.I):
         return 0, "Unpaid or volunteer role"
     if outside_target_geography(searchable):
         return 0, "Outside target geography"
 
-    is_telegram_lead = norm(job.get("source")).startswith("telegram ")
+    # A generic 'Remote' label is not enough: the employer must state a region
+    # that includes Ukraine (Ukraine, Europe/EMEA, EU, worldwide, or anywhere).
+    remote_ok = bool(re.search(r"\\b(remote|remotely|work from home|distributed|віддален|дистанційн)\\b", searchable, re.I))
+    scope_ok = bool(re.search(
+        r"\\b(ukraine|україн[а-яіїєґ]*|europe|european union|eu|emea|worldwide|anywhere|global)\\b",
+        searchable, re.I
+    ))
+    if not remote_ok:
+        return 0, "Remote work not confirmed"
+    if not scope_ok:
+        return 0, "Remote geography does not confirm Ukraine eligibility"
     if country_limited_location(location):
         return 0, "Country-specific location; Ukraine eligibility not confirmed"
 
-    location_ok = any(norm(term) in location for term in CONFIG["allowed_locations"])
-    # Telegram announcements are often short and omit the hiring region.
-    # Preserve those leads for manual review, but label the geography clearly.
-    location_ok = location_ok or bool(job.get("remote") and not location)
-    if not location_ok and not is_telegram_lead:
-        return 0, "Location not confirmed as remote or worldwide"
+    target_patterns = (
+        r"\\b3d\\b", r"\\bblender\\b", r"game.?asset", r"game.?artist",
+        r"character artist", r"environment artist", r"prop artist",
+        r"technical artist", r"3d model(?:er|ler)", r"hard.?surface artist",
+        r"texture artist", r"3d generalist", r"3d sculptor", r"weapons artist"
+    )
+    if not any(re.search(pattern, title, re.I) for pattern in target_patterns):
+        return 0, "Not a 3D/GameDev target role"
 
-    score = 45 if title_hits else 25
-    if is_telegram_lead and not location_ok:
-        score += 5
-    matched = []
-    for skill in CONFIG["skills"]:
-        if norm(skill) in searchable:
-            score += 7
-            matched.append(skill)
-    if "junior" in title or "entry level" in title or "trainee" in title:
-        score += 8
-    if "remote" in location or job.get("remote"):
-        score += 5
-    score = min(score, 100)
-    # One strict threshold applies to every source, including Telegram.
+    title_points = 35
+    skill_groups = {
+        "3D software": (r"\\bblender\\b", r"\\bmaya\\b", r"3ds\\s*max", r"zbrush", r"cinema\\s*4d"),
+        "modeling": (r"3d model", r"modeling", r"modelling", r"sculpt", r"hard.?surface", r"low.?poly"),
+        "asset workflow": (r"uv\\s*(?:mapping|unwrap)", r"textur", r"substance painter", r"game.?ready", r"pbr"),
+    }
+    skill_points = 0
+    matched_groups = []
+    for group, patterns in skill_groups.items():
+        if any(re.search(pattern, searchable, re.I) for pattern in patterns):
+            skill_points += 10
+            matched_groups.append(group)
+    skill_points = min(skill_points, 30)
+
+    game_context = bool(re.search(
+        r"game.?dev|game.?asset|game.?art|unreal|unity|game.?ready|real.?time|"
+        r"ігров|геймдев|игров",
+        searchable, re.I
+    ))
+    game_points = 15 if game_context else 0
+    remote_points = 10
+    geography_points = 10 if re.search(
+        r"\\b(ukraine|україн[а-яіїєґ]*|worldwide|anywhere|global)\\b", searchable, re.I
+    ) else 8  # Europe/EMEA/EU explicitly includes the user's location.
+    paid_points = 10  # Unpaid/volunteer/commission-only roles were rejected above.
+
+    score = min(100, title_points + skill_points + game_points + remote_points + geography_points + paid_points)
     minimum_score = max(80, int(CONFIG.get("minimum_score", 80)))
     if score < minimum_score:
         return 0, f"Below {minimum_score}/100 ({score}/100)"
-    reason = ", ".join(matched[:5]) or "Relevant creative role; verify requirements"
-    if is_telegram_lead and not location_ok:
-        reason += "; Telegram lead — verify hiring geography and compensation"
-    return score, reason
+
+    reason_parts = ["3D/GameDev title"]
+    reason_parts.extend(matched_groups)
+    if game_context:
+        reason_parts.append("game-development context")
+    reason_parts.extend(["remote", "Ukraine-eligible region", "paid status not marked unpaid"])
+    return score, ", ".join(reason_parts)
 
 
 def job_id(job):
