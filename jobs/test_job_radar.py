@@ -68,9 +68,9 @@ class JobRadarFilterTests(unittest.TestCase):
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Outside target geography")
 
-    def test_minimum_score_is_eighty(self):
+    def test_minimum_score_is_sixty(self):
         from bot import CONFIG
-        self.assertEqual(CONFIG.get("minimum_score"), 80)
+        self.assertEqual(CONFIG.get("minimum_score"), 60)
 
     def test_ui_ux_role_is_outside_current_scope(self):
         score, reason = score_job(self.job("UI/UX Designer", "Figma and web design"))
@@ -81,6 +81,11 @@ class JobRadarFilterTests(unittest.TestCase):
         score, reason = score_job(self.job("3D Artist", "Unpaid volunteer opportunity"))
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Unpaid or volunteer role")
+
+    def test_minimum_score_threshold_accepts_60_and_rejects_59(self):
+        from bot import meets_minimum_score
+        self.assertTrue(meets_minimum_score(60))
+        self.assertFalse(meets_minimum_score(59))
 
 
 if __name__ == "__main__":
