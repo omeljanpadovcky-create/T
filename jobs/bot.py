@@ -595,16 +595,20 @@ def score_job(job):
     if outside_target_geography(searchable):
         return 0, "Outside target geography"
 
+    is_telegram_lead = norm(job.get("source")).startswith("telegram ")
     if country_limited_location(location):
         return 0, "Country-specific location; Ukraine eligibility not confirmed"
 
     location_ok = any(norm(term) in location for term in CONFIG["allowed_locations"])
-    # A generic remote=True flag is not proof that applicants in Ukraine are eligible.
+    # Telegram announcements are often short and omit the hiring region.
+    # Preserve those leads for manual review, but label the geography clearly.
     location_ok = location_ok or bool(job.get("remote") and not location)
-    if not location_ok:
+    if not location_ok and not is_telegram_lead:
         return 0, "Location not confirmed as remote or worldwide"
 
     score = 45 if title_hits else 25
+    if is_telegram_lead and not location_ok:
+        score += 5
     matched = []
     for skill in CONFIG["skills"]:
         if norm(skill) in searchable:
@@ -616,9 +620,16 @@ def score_job(job):
         score += 5
     score = min(score, 100)
     minimum_score = int(CONFIG.get("minimum_score", 50))
+    if is_telegram_lead:
+        # Do not hide potentially relevant Telegram vacancies due to a sparse
+        # description or missing geography/salary; send as review leads.
+        minimum_score = min(minimum_score, 25)
     if score < minimum_score:
         return 0, f"Below {minimum_score}/100 ({score}/100)"
-    return score, ", ".join(matched[:5]) or "Relevant creative role; verify requirements"
+    reason = ", ".join(matched[:5]) or "Relevant creative role; verify requirements"
+    if is_telegram_lead and not location_ok:
+        reason += "; Telegram lead — verify hiring geography and compensation"
+    return score, reason
 
 
 def job_id(job):
