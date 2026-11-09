@@ -9,7 +9,6 @@ class ApplicationGeneratorTests(unittest.TestCase):
             "name": "Test Candidate",
             "location": "Ukraine",
             "english_level": "A2",
-            "design_practice_years": "5",
             "portfolio_items_approx": 15,
             "portfolio_url": "",
             "cv_url": "",
@@ -56,6 +55,20 @@ class ApplicationGeneratorTests(unittest.TestCase):
         job["salary"] = ""
         package = generate_application(job, self.profile)
         self.assertIn("share the budgeted range", package["answers"]["salary_expectation"])
+
+    def test_training_is_described_as_training_not_internship_or_paid_work(self):
+        profile = dict(self.profile)
+        profile["training"] = [{
+            "organization": "IT Step",
+            "program": "Photoshop design",
+            "year": "2021",
+            "type": "completed training"
+        }]
+        package = generate_application(self.job, profile)
+        combined = package["cover_letter"] + " " + package["short_intro"]
+        self.assertIn("Photoshop design at IT Step (2021)", combined)
+        self.assertNotIn("internship", combined.lower())
+        self.assertNotIn("years of design practice", combined.lower())
 
     def test_generator_never_submits_application(self):
         package = generate_application(self.job, self.profile)
