@@ -42,6 +42,16 @@ class JobRadarFilterTests(unittest.TestCase):
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Not a 3D/GameDev target role")
 
+
+    def test_remote_role_based_in_lviv_is_eligible(self):
+        job = self.job(
+            "Junior Technical Artist",
+            "Blender, Unity, game assets and 3D modeling",
+            location="Lviv · Remote"
+        )
+        score, reason = score_job(job)
+        self.assertGreaterEqual(score, 80, reason)
+
     def test_country_specific_remote_location_is_rejected(self):
         score, reason = score_job(self.job(
             "3D Artist", "Blender and game-ready assets", location="Germany"
