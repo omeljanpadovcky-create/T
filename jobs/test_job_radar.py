@@ -82,6 +82,11 @@ class JobRadarFilterTests(unittest.TestCase):
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Unpaid or volunteer role")
 
+    def test_minimum_score_threshold_accepts_60_and_rejects_59(self):
+        from bot import meets_minimum_score
+        self.assertTrue(meets_minimum_score(60))
+        self.assertFalse(meets_minimum_score(59))
+
 
 if __name__ == "__main__":
     unittest.main()
