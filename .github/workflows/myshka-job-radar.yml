@@ -7,8 +7,8 @@ on:
       - ".github/workflows/myshka-job-radar.yml"
       - "jobs/**"
   schedule:
-    # Check once per hour; Python applies Europe/Kyiv timezone (DST-safe).
-    - cron: "0 * * * *"
+    # Scan every 15 minutes for near-real-time vacancy alerts.
+    - cron: "*/15 * * * *"
     # Telegram inline-button and message polling.
     - cron: "*/5 * * * *"
   workflow_dispatch:
@@ -29,7 +29,7 @@ concurrency:
 jobs:
   radar:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -85,7 +85,7 @@ jobs:
         if: >-
           (github.event_name == 'push') ||
           (github.event_name == 'schedule' &&
-          (github.event.schedule == '0 * * * *')) ||
+          (github.event.schedule == '*/15 * * * *')) ||
           (github.event_name == 'workflow_dispatch' && inputs.run_scan)
         working-directory: jobs
         env:
