@@ -9,7 +9,7 @@
 - English level and seniority are not automatic rejection filters. The listing's actual requirements are shown for manual review.
 - Country-specific locations and explicit country-only requirements are rejected unless the posting clearly allows Ukraine or a broader region. Generic Remote listings still require a manual eligibility check.
 - New matches are ranked by title and skill relevance. The bot sends new matches only; already-seen listings are not resent.
-- Candidate profile includes a two-year IT Step internship, accurately described as internship experience rather than paid employment.
+- Candidate completed Photoshop design training at IT Step in 2021. This is listed as training, not internship or paid employment.
 
 ## Telegram vacancy sources
 - Public channel previews are scanned from `t.me/s`: @ingamejob, @ingamejob_art, @young_gamedev, @devjobs, @gamedev_and_tech_vacancy and @devzonegd.
