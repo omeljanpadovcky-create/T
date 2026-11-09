@@ -38,6 +38,14 @@ UNPAID_RE = re.compile(
     r"\b(unpaid|volunteer|commission[- ]only|no salary|equity only)\b|"
     r"без\s+оплат|волонтерств|неоплачув", re.I
 )
+ROLE_TITLE_RE = re.compile(
+    r"\b(?:(?:junior|trainee|middle|mid|senior|lead|principal)\s+)?"
+    r"(?:(?:3d|2d|blender)\s+)?"
+    r"(?:(?:character|environment|prop|game(?:\s+asset)?|technical|concept|level|"
+    r"vehicle|hard.surface|texture|vfx|pixel|motion)\s+)?"
+    r"(?:artist|animator|illustrator|modeler|modeller|generalist|sculptor)\b",
+    re.I,
+)
 URL_RE = re.compile(r"https?://[^\s<>\])}]+", re.I)
 
 
@@ -84,6 +92,13 @@ class TelegramPostParser(HTMLParser):
 
 
 def _title_from_text(text):
+    # Telegram posts may be digests; extract a role phrase, not the channel heading.
+    match = ROLE_TITLE_RE.search(text)
+    if match:
+        prefix = text[max(0, match.start() - 28):match.start()]
+        level = re.search(r"(junior|trainee|middle|mid|senior|lead|principal)\s*$", prefix, re.I)
+        title = ((level.group(1) + " ") if level else "") + match.group(0)
+        return re.sub(r"\s+", " ", title).strip()[:180]
     lines = [re.sub(r"\s+", " ", x).strip(" •—-\t") for x in text.splitlines()]
     lines = [x for x in lines if x and not re.fullmatch(r"(views?|переглядів?|\d+[кk]?)", x, re.I)]
     for line in lines[:12]:
@@ -93,7 +108,6 @@ def _title_from_text(text):
         if len(line) >= 5 and not line.startswith("#") and len(line) <= 180:
             return line[:180]
     return (text[:180] or "Telegram vacancy").strip()
-
 
 def _post_url(post, username):
     value = post.get("post", "")
