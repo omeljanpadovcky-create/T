@@ -195,5 +195,10 @@
     "status": "skipped",
     "skipped_at": "2026-11-06T10:33:03.225Z",
     "reason": "Scope updated: 3D / Game Art only"
+  },
+  "c34f834c7e57a332": {
+    "status": "awaiting_approval",
+    "package_revision": 1,
+    "prepared_at": "2026-11-09T21:30:07.870287+00:00"
   }
 }
