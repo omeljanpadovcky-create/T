@@ -24,6 +24,10 @@ REMOTE_RE = re.compile(
     r"\b(remote|remotely|work from home|distributed|worldwide|anywhere|"
     r"віддален|дистанційн|удаленн|удалённ)\b", re.I
 )
+EXPLICITLY_EXCLUDED_SCOPE_RE = re.compile(
+    r"\\b(?:us|u\\.s\\.?|usa|united states|canada|australia)\\s+only\\b|"
+    r"\\bonly\\s+(?:in\\s+)?(?:us|u\\.s\\.?|usa|united states|canada|australia)\\b", re.I
+)
 UKRAINE_SCOPE_RE = re.compile(
     r"\b(ukraine|україн[а-яіїєґ]*|europe|european union|\beu\b|emea|"
     r"worldwide|anywhere|global)\b", re.I
