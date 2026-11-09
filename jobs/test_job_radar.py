@@ -65,7 +65,7 @@ class JobRadarFilterTests(unittest.TestCase):
     def test_ui_ux_role_is_outside_current_scope(self):
         score, reason = score_job(self.job("UI/UX Designer", "Figma and web design"))
         self.assertEqual(score, 0)
-        self.assertEqual(reason, "Not a target role")
+        self.assertEqual(reason, "Not a 3D/GameDev target role")
 
     def test_unpaid_role_is_rejected(self):
         score, reason = score_job(self.job("3D Artist", "Unpaid volunteer opportunity"))
