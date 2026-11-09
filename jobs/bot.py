@@ -893,13 +893,51 @@ def vacancy_salary(job):
 
 
 def summarize_vacancy_description(raw_description):
-    """Create a grounded two-sentence summary from the employer's description."""
+    """Use APInex AI for a grounded two-sentence summary; fall back locally."""
     text = html.unescape(re.sub(r"<[^>]+>", " ", as_text(raw_description)))
     text = re.sub(r"\s+", " ", text).strip()
     if not text:
         return "Роботодавець не надав опису вакансії. Деталі умов і вимог уточнюйте за посиланням."
 
-    # Split on sentence endings and common list separators, keeping source wording intact.
+    api_key = os.getenv("APINEX_API_KEY", "").strip()
+    if api_key:
+        try:
+            response = requests.post(
+                "https://api.apinex.bond/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": os.getenv("APINEX_MODEL", "free/deepseek-v4.1-flash"),
+                    "temperature": 0.1,
+                    "max_tokens": 180,
+                    "messages": [
+                        {
+                            "role": "system",
+                            "content": (
+                                "Summarize a job vacancy in exactly two concise sentences, "
+                                "in Ukrainian. Preserve all important employer-provided facts: "
+                                "responsibilities, requirements, skills, experience, work format, "
+                                "schedule, contract and benefits. Do not invent or infer facts. "
+                                "If a detail is absent, omit it. Output only the two sentences."
+                            ),
+                        },
+                        {"role": "user", "content": text[:12000]},
+                    ],
+                },
+                timeout=25,
+            )
+            response.raise_for_status()
+            data = response.json()
+            summary = data["choices"][0]["message"]["content"].strip()
+            summary = re.sub(r"\s+", " ", summary)
+            if summary and len(re.findall(r"[.!?](?:\s|$)", summary)) >= 2:
+                return summary
+        except (requests.RequestException, ValueError, KeyError, IndexError, TypeError) as exc:
+            print(f"APInex summary unavailable; using local fallback: {exc}")
+
+    # Local fallback: select two useful source sentences without inventing facts.
     parts = re.split(r"(?<=[.!?])\s+|\s*[•▪●]\s*|\s+[-–—]\s+", text)
     sentences = [re.sub(r"^[-*\s]+", "", p).strip(" ;,") for p in parts]
     sentences = [p for p in sentences if len(p) > 18]
