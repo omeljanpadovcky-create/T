@@ -892,11 +892,48 @@ def vacancy_salary(job):
     return "Не вказано"
 
 
+def summarize_vacancy_description(raw_description):
+    """Create a grounded two-sentence summary from the employer's description."""
+    text = html.unescape(re.sub(r"<[^>]+>", " ", as_text(raw_description)))
+    text = re.sub(r"\\s+", " ", text).strip()
+    if not text:
+        return "Роботодавець не надав опису вакансії. Деталі умов і вимог уточнюйте за посиланням."
+
+    # Split on sentence endings and common list separators, keeping source wording intact.
+    parts = re.split(r"(?<=[.!?])\\s+|\\s*[•▪●]\\s*|\\s+[-–—]\\s+", text)
+    sentences = [re.sub(r"^[-*\\s]+", "", p).strip(" ;,") for p in parts]
+    sentences = [p for p in sentences if len(p) > 18]
+    if not sentences:
+        sentences = [text]
+
+    keywords = {
+        "responsibilities": ("responsib", " задач", "обов'яз", "обов’яз", "створ", "розроб", "build", "create", "work on", "you will"),
+        "requirements": ("require", "вимог", "must", "кандидат", "досвід", "experience", "skills", "навич", "знан"),
+        "conditions": ("remote", "віддал", "графік", "schedule", "contract", "full-time", "part-time", "умов", "benefit", "оплач"),
+        "compensation": ("salary", "зарплат", "оплат", "usd", "eur", "uah", "$", "€", "£"),
+    }
+
+    def score(sentence):
+        lower = sentence.lower()
+        coverage = sum(any(term in lower for term in terms) for terms in keywords.values())
+        return coverage * 100 + min(len(sentence), 500) / 100
+
+    if len(sentences) == 1:
+        first = sentences[0].rstrip(".!?")
+        return first + ". Детальні вимоги та умови — за посиланням."
+
+    chosen = sorted(sorted(enumerate(sentences), key=lambda item: score(item[1]), reverse=True)[:2])
+    result = []
+    for _, sentence in chosen:
+        sentence = sentence.strip()
+        if sentence[-1:] not in ".!?":
+            sentence += "."
+        result.append(sentence)
+    return " ".join(result)
+
+
 def send_job_card(job, short_id):
-    description = html.unescape(re.sub(r"<[^>]+>", " ", as_text(job.get("description"))))
-    description = re.sub(r"\s+", " ", description).strip()
-    if len(description) > 360:
-        description = description[:357].rsplit(" ", 1)[0] + "..."
+    description = summarize_vacancy_description(job.get("description"))
     message = (
         f"🐭 <b>MYSHKA · {int(job.get('score') or 0)}/100</b>\n"
         f"💼 <b>{html.escape(as_text(job.get('title')) or 'Вакансія')}</b>\n"
