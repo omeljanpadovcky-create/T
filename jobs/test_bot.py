@@ -26,15 +26,12 @@ class JobFilterTests(unittest.TestCase):
         score, reason = score_job(sample_job())
         self.assertGreater(score, 0, reason)
 
-    def test_accepts_relevant_role_at_minimum_score(self):
-        score, reason = score_job(sample_job(
-            title="3D Artist",
-            description="Create 3D assets.",
-            tags=[],
-            location="Remote",
-            remote=True
+    def test_relevant_role_below_sixty_is_not_sent(self):
+        score, reason = score_job(self.job(
+            "3D Artist", "Blender, texturing and game assets"
         ))
-        self.assertGreaterEqual(score, 50, reason)
+        self.assertEqual(score, 0)
+        self.assertIn("Below 60/100", reason)
 
     def test_analyzes_skills_english_and_application_email(self):
         analysis = analyze_job_uk(sample_job(
