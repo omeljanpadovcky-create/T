@@ -1,6 +1,6 @@
 import unittest
 
-from bot import build_ukrainian_conclusion, score_job
+from bot import (\n    build_ukrainian_conclusion, score_job, collect_jobicy_jobs, collect_working_nomads_jobs\n)
 
 
 class JobRadarFilterTests(unittest.TestCase):
@@ -65,6 +65,41 @@ class JobRadarFilterTests(unittest.TestCase):
         score, reason = score_job(self.job("UI/UX Designer", "Figma and web design"))
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Not a target role")
+
+
+    def test_jobicy_public_api_records_are_normalized(self):
+        from unittest.mock import patch
+        payload = {"jobs": [{
+            "title": "3D Artist",
+            "companyName": "Example Studio",
+            "jobGeo": "Anywhere",
+            "jobDescription": "Blender and game assets",
+            "url": "https://jobicy.com/jobs/123",
+            "pubDate": "2026-11-08"
+        }]}
+        with patch("bot.fetch_json", return_value=payload):
+            jobs = collect_jobicy_jobs()
+        self.assertEqual(len(jobs), 1)
+        self.assertEqual(jobs[0]["source"], "Jobicy")
+        self.assertEqual(jobs[0]["company"], "Example Studio")
+        self.assertTrue(jobs[0]["remote"])
+        self.assertEqual(jobs[0]["url"], "https://jobicy.com/jobs/123")
+
+    def test_working_nomads_public_feed_records_are_normalized(self):
+        from unittest.mock import patch
+        payload = [{
+            "title": "Illustrator",
+            "company_name": "Creative Studio",
+            "location": "Europe",
+            "url": "https://workingnomads.com/jobs/123",
+            "description": "Illustration and Photoshop"
+        }]
+        with patch("bot.fetch_json", return_value=payload):
+            jobs = collect_working_nomads_jobs()
+        self.assertEqual(len(jobs), 1)
+        self.assertEqual(jobs[0]["source"], "Working Nomads")
+        self.assertEqual(jobs[0]["location"], "Europe")
+        self.assertTrue(jobs[0]["remote"])
 
     def test_unpaid_role_is_rejected(self):
         score, reason = score_job(self.job("3D Artist", "Unpaid volunteer opportunity"))
