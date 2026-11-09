@@ -25,15 +25,14 @@ def generate_application(job, profile):
     skills = matched_skills(job, profile)
     skills_text = ", ".join(skills[:4]) if skills else "visual design and creative work"
     name = profile.get("name") or "[YOUR NAME]"
-    practice_years = profile.get("design_practice_years", "several")
-    internships = profile.get("internship_experience", [])
-    internship_lines = [
-        f"{item.get('duration', 'Internship')} internship at {item.get('organization', 'an organization')}"
-        for item in internships if item.get("organization")
+    training = profile.get("training", [])
+    training_lines = [
+        f"{item.get('program', 'training')} at {item.get('organization', 'an institution')} ({item.get('year', 'year not specified')})"
+        for item in training if item.get("organization") and item.get("program")
     ]
-    internship_sentence = (
-        " I also completed " + " and ".join(internship_lines) + "."
-        if internship_lines else ""
+    training_sentence = (
+        " I also completed " + " and ".join(training_lines) + "."
+        if training_lines else ""
     )
     portfolio_url = (profile.get("portfolio_url") or "").strip()
     cv_url = (profile.get("cv_url") or "").strip()
@@ -45,11 +44,10 @@ def generate_application(job, profile):
 
     cover_letter = (
         f"Hello {company} team,\n\n"
-        f"I am applying for the {title} position. I am a designer based in Ukraine "
-        f"with around {practice_years} years of design practice. "
+        f"I am applying for the {title} position. I am a designer based in Ukraine. "
         f"My creative work includes {skills_text}. I enjoy turning ideas into clear, "
         "thoughtful visuals and improving my work through feedback."
-        f"{internship_sentence}\n\n"
+        f"{training_sentence}\n\n"
         f"I would be glad to discuss how my skills could support {company}'s team. "
         "Thank you for considering my application.\n\n"
         f"Best regards,\n{name}"
@@ -82,10 +80,9 @@ def generate_application(job, profile):
         email_body += f"\nCV: {cv_url}"
 
     intro = (
-        f"My name is {name}. I am a designer from Ukraine with around "
-        f"{practice_years} years of design practice. "
+        f"My name is {name}. I am a designer from Ukraine. "
         f"My work includes {skills_text}."
-        f"{internship_sentence} I am looking for a remote opportunity "
+        f"{training_sentence} I am looking for a remote opportunity "
         "where I can contribute, learn and grow."
     )
     if email:
