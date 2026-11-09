@@ -895,13 +895,13 @@ def vacancy_salary(job):
 def summarize_vacancy_description(raw_description):
     """Create a grounded two-sentence summary from the employer's description."""
     text = html.unescape(re.sub(r"<[^>]+>", " ", as_text(raw_description)))
-    text = re.sub(r"\\s+", " ", text).strip()
+    text = re.sub(r"\s+", " ", text).strip()
     if not text:
         return "Роботодавець не надав опису вакансії. Деталі умов і вимог уточнюйте за посиланням."
 
     # Split on sentence endings and common list separators, keeping source wording intact.
-    parts = re.split(r"(?<=[.!?])\\s+|\\s*[•▪●]\\s*|\\s+[-–—]\\s+", text)
-    sentences = [re.sub(r"^[-*\\s]+", "", p).strip(" ;,") for p in parts]
+    parts = re.split(r"(?<=[.!?])\s+|\s*[•▪●]\s*|\s+[-–—]\s+", text)
+    sentences = [re.sub(r"^[-*\s]+", "", p).strip(" ;,") for p in parts]
     sentences = [p for p in sentences if len(p) > 18]
     if not sentences:
         sentences = [text]
