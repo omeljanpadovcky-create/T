@@ -599,7 +599,7 @@ def score_job(job):
     if not location_ok:
         return 0, "Location not confirmed as remote or worldwide"
 
-    score = 40 if title_hits else 25
+    score = 45 if title_hits else 25
     matched = []
     for skill in CONFIG["skills"]:
         if norm(skill) in searchable:
