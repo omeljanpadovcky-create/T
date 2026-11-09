@@ -1,6 +1,8 @@
 import unittest
 
-from bot import (\n    build_ukrainian_conclusion, score_job, collect_jobicy_jobs, collect_working_nomads_jobs\n)
+from bot import (
+    build_ukrainian_conclusion, score_job, collect_jobicy_jobs, collect_working_nomads_jobs
+)
 
 
 class JobRadarFilterTests(unittest.TestCase):
