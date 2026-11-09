@@ -35,5 +35,5 @@ jobs:
         run: python -m compileall -q jobs
       - name: Run unit tests
         run: python -m unittest discover -s jobs -p 'test_*.py' -v
-      - name: Validate dashboard API JavaScript
-        run: node --check job-radar/api/applications.js && node --check job-radar/api/check.js && node --check job-radar/api/health.js && node --check job-radar/api/telegram-setup.js
+      - name: Validate dashboard and Telegram webhook JavaScript
+        run: node --check job-radar/api/applications.js && node --check job-radar/api/check.js && node --check job-radar/api/health.js && node --check job-radar/api/telegram-setup.js && node --check job-radar/api/telegram-webhook.js && node --check job-radar/api/telegram-webhook-setup.js
