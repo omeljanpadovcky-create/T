@@ -30,6 +30,7 @@ class CallbackStateTransitionTests(unittest.TestCase):
         callback_values = {
             button.get("callback_data")
             for row in keyboard["inline_keyboard"] for button in row
+            if "callback_data" in button
         }
         self.assertEqual(
             callback_values,
