@@ -27,8 +27,10 @@ class JobFilterTests(unittest.TestCase):
         self.assertGreater(score, 0, reason)
 
     def test_relevant_role_below_sixty_is_not_sent(self):
-        score, reason = score_job(self.job(
-            "3D Artist", "Blender, texturing and game assets"
+        score, reason = score_job(sample_job(
+            title="3D Artist",
+            description="A creative role with no matching skills listed.",
+            tags=[]
         ))
         self.assertEqual(score, 0)
         self.assertIn("Below 60/100", reason)
