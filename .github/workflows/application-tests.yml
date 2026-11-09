@@ -13,6 +13,8 @@ on:
     paths:
       - "jobs/**"
       - ".github/workflows/application-tests.yml"
+      - ".github/workflows/myshka-job-radar.yml"
+      - ".github/workflows/myshka-callbacks.yml"
 
 permissions:
   contents: read
