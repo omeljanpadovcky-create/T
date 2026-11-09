@@ -25,21 +25,21 @@ class JobRadarFilterTests(unittest.TestCase):
 
     def test_senior_3d_artist_is_not_rejected_by_seniority(self):
         score, _ = score_job(self.job("Senior 3D Artist", "Blender and 3D modeling"))
-        self.assertGreaterEqual(score, 50)
+        self.assertGreaterEqual(score, 60)
 
     def test_game_asset_role_is_accepted(self):
         score, _ = score_job(self.job("Junior Game Asset Artist", "Blender, low poly, UV mapping"))
-        self.assertGreaterEqual(score, 50)
+        self.assertGreaterEqual(score, 60)
 
     def test_technical_artist_role_is_accepted(self):
         score, _ = score_job(self.job("Junior Technical Artist", "Blender and Unreal Engine"))
-        self.assertGreaterEqual(score, 50)
+        self.assertGreaterEqual(score, 60)
 
     def test_photobashing_artist_is_accepted(self):
         score, _ = score_job(self.job(
             "Photobashing Artist", "Photoshop, photobashing and digital painting"
         ))
-        self.assertGreaterEqual(score, 50)
+        self.assertGreaterEqual(score, 60)
 
     def test_country_specific_remote_location_is_rejected(self):
         score, reason = score_job(self.job(
