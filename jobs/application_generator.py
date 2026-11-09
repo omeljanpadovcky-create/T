@@ -38,6 +38,7 @@ def generate_application(job, profile):
     portfolio_url = (profile.get("portfolio_url") or "").strip()
     cv_url = (profile.get("cv_url") or "").strip()
     email = (profile.get("contact_email") or "").strip()
+    phone = (profile.get("contact_phone") or "").strip()
     salary = (job.get("salary") or "").strip()
     salary_expectation = (profile.get("salary_expectation") or "").strip()
     job_url = (job.get("url") or "").strip()
@@ -53,6 +54,10 @@ def generate_application(job, profile):
         "Thank you for considering my application.\n\n"
         f"Best regards,\n{name}"
     )
+    if email:
+        cover_letter += f"\nEmail: {email}"
+    if phone:
+        cover_letter += f"\nPhone: {phone}"
     if portfolio_url:
         cover_letter += f"\nPortfolio: {portfolio_url}"
     else:
@@ -65,6 +70,10 @@ def generate_application(job, profile):
         "I have attached my application details and would be happy to discuss the role.\n\n"
         f"Best regards,\n{name}"
     )
+    if email:
+        email_body += f"\nEmail: {email}"
+    if phone:
+        email_body += f"\nPhone: {phone}"
     if portfolio_url:
         email_body += f"\nPortfolio: {portfolio_url}"
     else:
@@ -79,6 +88,10 @@ def generate_application(job, profile):
         f"{internship_sentence} I am looking for a remote opportunity "
         "where I can contribute, learn and grow."
     )
+    if email:
+        intro += f"\nEmail: {email}"
+    if phone:
+        intro += f"\nPhone: {phone}"
     salary_answer = (
         f"My salary expectation is {salary_expectation}. I am open to discussing the final rate "
         "based on the responsibilities and workload."
@@ -186,6 +199,7 @@ def generate_application(job, profile):
             "portfolio_url_missing": not bool(portfolio_links),
             "cv_url_missing": not bool(cv_url),
             "contact_email_missing": not bool(email),
+            "contact_phone_missing": not bool(phone),
             "salary_expectation_missing": not bool(profile.get("salary_expectation")),
             "country_eligibility_needs_verification": True,
             "claims_must_be_reviewed": True
@@ -206,6 +220,8 @@ def render_application_text(package):
         profile_gaps.append("Не налаштовано посилання на CV.")
     if checks.get("contact_email_missing"):
         profile_gaps.append("Не вказано контактну пошту.")
+    if checks.get("contact_phone_missing"):
+        profile_gaps.append("Не вказано номер телефону.")
     if checks.get("salary_expectation_missing"):
         profile_gaps.append("Не задано бажану оплату.")
     if checks.get("country_eligibility_needs_verification"):
