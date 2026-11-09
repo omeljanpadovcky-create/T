@@ -696,7 +696,7 @@ def score_job(job):
     paid_points = 10  # Unpaid/volunteer/commission-only roles were rejected above.
 
     score = min(100, title_points + skill_points + game_points + remote_points + geography_points + paid_points)
-    minimum_score = max(80, int(CONFIG.get("minimum_score", 80)))
+    minimum_score = int(CONFIG.get("minimum_score", 80))
     if score < minimum_score:
         return 0, f"Below {minimum_score}/100 ({score}/100)"
 
@@ -1012,6 +1012,7 @@ def summarize_vacancy_description(raw_description):
 
 
 def send_job_card(job, short_id):
+    from callbacks import vacancy_keyboard
     description = summarize_vacancy_description(job.get("description"))
     message = (
         f"🐭 <b>MYSHKA · {int(job.get('score') or 0)}/100</b>\n"
@@ -1023,7 +1024,7 @@ def send_job_card(job, short_id):
         f"📝 {html.escape(description or 'Короткий опис не надано')}\n\n"
         f"🔗 <a href=\"{html.escape(as_text(job.get('url')), quote=True)}\">Відкрити вакансію</a>"
     )
-    return send_telegram(message)
+    return send_telegram(message, reply_markup=vacancy_keyboard(short_id, job))
 
 
 def build_daily_report(scanned, eligible, new_matches, sent, source_health, rejection_counts):
