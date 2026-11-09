@@ -2,6 +2,7 @@ import html
 import json
 import os
 import re
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -16,6 +17,9 @@ OFFSET_PATH = ROOT / "update_offset.json"
 EDITING_PATH = ROOT / "editing.json"
 PROFILE_PATH = ROOT / "profile.json"
 TIMEOUT = 20
+TELEGRAM_SEND_INTERVAL = 1.1
+TELEGRAM_MAX_RETRIES = 6
+_LAST_TELEGRAM_SEND = 0.0
 
 
 def load_json(path, default):
@@ -30,20 +34,46 @@ def save_json(path, value):
 
 
 def api(method, payload):
+    global _LAST_TELEGRAM_SEND
     token = os.environ["TELEGRAM_BOT_TOKEN"]
-    response = requests.post(
-        f"https://api.telegram.org/bot{token}/{method}",
-        json=payload, timeout=TIMEOUT
-    )
-    if not response.ok:
-        raise RuntimeError(
-            f"Telegram {method} HTTP {response.status_code}: {response.text[:1000]}"
-        )
-    data = response.json()
-    if not data.get("ok"):
-        raise RuntimeError(f"Telegram {method} failed: {data}")
-    return data.get("result")
 
+    for attempt in range(TELEGRAM_MAX_RETRIES):
+        if method == "sendMessage" and _LAST_TELEGRAM_SEND:
+            elapsed = time.monotonic() - _LAST_TELEGRAM_SEND
+            if elapsed < TELEGRAM_SEND_INTERVAL:
+                time.sleep(TELEGRAM_SEND_INTERVAL - elapsed)
+
+        response = requests.post(
+            f"https://api.telegram.org/bot{token}/{method}",
+            json=payload, timeout=TIMEOUT
+        )
+        if method == "sendMessage":
+            _LAST_TELEGRAM_SEND = time.monotonic()
+
+        try:
+            data = response.json()
+        except ValueError:
+            data = {"description": response.text[:1000]}
+
+        if response.ok and data.get("ok"):
+            return data.get("result")
+
+        description = data.get("description") or str(data)
+        retry_after = (data.get("parameters") or {}).get("retry_after")
+        if response.status_code == 429 and attempt < TELEGRAM_MAX_RETRIES - 1:
+            wait_seconds = max(1, min(int(retry_after or (2 ** attempt)), 300))
+            print(
+                f"Telegram rate limit on {method}; retrying after "
+                f"{wait_seconds}s (attempt {attempt + 1}/{TELEGRAM_MAX_RETRIES})."
+            )
+            time.sleep(wait_seconds + 0.2)
+            continue
+
+        raise RuntimeError(
+            f"Telegram {method} HTTP {response.status_code}: {description}"
+        )
+
+    raise RuntimeError(f"Telegram {method} failed after rate-limit retries.")
 
 def safe(value):
     return html.escape(str(value or ""))

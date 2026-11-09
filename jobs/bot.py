@@ -19,6 +19,17 @@ APPLICATIONS_PATH = ROOT / "applications.json"
 HEADERS = {"User-Agent": "TradeMyshka-JobRadar/2.0", "Accept": "application/json"}
 TIMEOUT = 25
 SOURCE_HEALTH = []
+COUNTRY_LOCATION_TERMS = (
+    "united states", "usa", "us", "u.s.", "canada", "australia", "germany",
+    "france", "united kingdom", "uk", "ireland", "netherlands", "poland",
+    "india", "singapore", "japan", "spain", "italy", "sweden", "norway",
+    "denmark", "finland", "portugal", "switzerland", "austria", "belgium",
+    "czech republic", "romania", "brazil", "mexico", "new zealand"
+)
+GLOBAL_LOCATION_TERMS = (
+    "worldwide", "anywhere", "global", "europe", "european union",
+    "emea", "ukraine"
+)
 _LAST_TELEGRAM_SEND = 0.0
 TELEGRAM_MAX_RETRIES = 6
 TELEGRAM_MIN_INTERVAL = 1.1
@@ -237,7 +248,7 @@ def collect_artstation_jobs():
         title = item["title"]
         title_norm = norm(title)
         if not any(norm(target) in title_norm for target in CONFIG["target_titles"]) and not any(
-            term in title_norm for term in ("3d", "blender", "illustrat", "concept artist", "environment artist", "prop artist", "game artist")
+            term in title_norm for term in ("3d", "blender", "illustrat", "concept artist", "environment artist", "prop artist", "game artist", "photobash", "matte painter", "book cover", "key art", "splash art")
         ):
             continue
         details = extract_job_details(url, "ArtStation", title)
@@ -257,7 +268,8 @@ def collect_ziprecruiter_jobs():
     search_terms = [
         "3D Artist", "Blender", "Game Artist", "Game Asset Artist",
         "Character Artist", "Environment Artist", "Prop Artist",
-        "3D Modeler", "Concept Artist", "Low Poly Artist"
+        "3D Modeler", "Concept Artist", "Low Poly Artist",
+        "Photobashing", "Matte Painter", "Book Cover", "Key Art", "Splash Art"
     ]
     jobs = []
     seen_urls = set()
@@ -452,7 +464,9 @@ def collect_jobs():
     # Search only the agreed 3D / Game Art / character / illustration role families.
     for query in [
         "3d", "blender", "game artist", "game asset", "character artist",
-        "environment artist", "prop artist", "technical artist", "3d modeler", "illustration", "concept artist"
+        "environment artist", "prop artist", "technical artist", "3d modeler",
+        "illustration", "concept artist", "photobashing", "matte painter",
+        "book cover", "key art", "splash art"
     ]:
         data = fetch_json("https://remotive.com/api/remote-jobs?search=" + requests.utils.quote(query))
         if isinstance(data, dict):
@@ -488,7 +502,8 @@ def collect_jobs():
     # Ukrainian job boards: search relevant role families and inspect each matching public listing.
     dou_terms = [
         "3D Artist", "Blender", "Game Artist", "Character Artist",
-        "Environment Artist", "Prop Artist", "Technical Artist", "3D Modeler", "Concept Artist"
+        "Environment Artist", "Prop Artist", "Technical Artist", "3D Modeler", "Concept Artist",
+        "Photobashing", "Matte Painter", "Book Cover", "Key Art", "Splash Art"
     ]
     djinni_terms = [
         "3D Artist", "Blender", "Game Artist", "Character Artist",
@@ -504,7 +519,7 @@ def collect_jobs():
     ukrainian_terms = [
         "3D Artist", "Blender", "Game Artist", "Character Artist",
         "Environment Artist", "Prop Artist", "Technical Artist", "3D Modeler", "Concept Artist",
-        "Illustrator"
+        "Illustrator", "Photobashing", "Matte Painter", "Book Cover", "Key Art", "Splash Art"
     ]
     jobs.extend(collect_path_search_jobs(
         "Work.ua",
@@ -528,14 +543,32 @@ def collect_jobs():
 
 
 def outside_target_geography(text):
+    countries = (
+        r"(?:the united states|united states|u\.s\.a?\.?|usa|us|canada|australia|"
+        r"germany|france|united kingdom|uk|ireland|netherlands|poland|india|"
+        r"singapore|japan|spain|italy|sweden|norway|denmark|finland|portugal|"
+        r"switzerland|austria|belgium|czech republic|romania|brazil|mexico|"
+        r"new zealand)"
+    )
     patterns = [
         r"\b(?:usa|u\.s\.|united states|canada|australia)\s+only\b",
         r"\bonly\s+(?:in\s+)?(?:usa|u\.s\.|united states|canada|australia)\b",
-        r"\b(?:must|need to|required to)\s+be\s+(?:located|based|resident)\s+in\s+(?:the\s+)?(?:usa|u\.s\.|united states|canada|australia)\b",
-        r"\b(?:candidates|applicants|residents)\s+must\s+be\s+(?:located|based|resident)\s+in\s+(?:the\s+)?(?:usa|u\.s\.|united states|canada|australia)\b",
-        r"\b(?:us|u\.s\.|canada|australia)\s+(?:based|resident)\s+(?:candidates|applicants)\s+only\b"
+        rf"\b(?:must|need to|required to|expected to)\s+be\s+(?:located|based|resident)\s+in\s+(?:the\s+)?{countries}\b",
+        rf"\b(?:only\s+)?(?:candidates|applicants|residents)\s+(?:must\s+be\s+)?(?:located|based|resident)\s+in\s+(?:the\s+)?{countries}\b",
+        rf"\b(?:remote|work from home)\s+(?:role|position|job)?\s*(?:for|in|within)\s+(?:the\s+)?{countries}\s+only\b",
+        rf"\b(?:work authorization|right to work)\s+(?:in|for)\s+(?:the\s+)?{countries}\b"
     ]
     return any(re.search(pattern, text, re.IGNORECASE) for pattern in patterns)
+
+
+def country_limited_location(location):
+    value = norm(location)
+    has_country = any(
+        re.search(r"\b" + re.escape(country) + r"\b", value)
+        for country in COUNTRY_LOCATION_TERMS
+    )
+    has_global_scope = any(term in value for term in GLOBAL_LOCATION_TERMS)
+    return has_country and not has_global_scope
 
 
 def score_job(job):
@@ -557,10 +590,14 @@ def score_job(job):
     if outside_target_geography(searchable):
         return 0, "Outside target geography"
 
+    if country_limited_location(location):
+        return 0, "Country-specific location; Ukraine eligibility not confirmed"
+
     location_ok = any(norm(term) in location for term in CONFIG["allowed_locations"])
-    location_ok = location_ok or bool(job.get("remote"))
+    # A generic remote=True flag is not proof that applicants in Ukraine are eligible.
+    location_ok = location_ok or bool(job.get("remote") and not location)
     if not location_ok:
-        return 0, "Location not confirmed as remote"
+        return 0, "Location not confirmed as remote or worldwide"
 
     score = 40 if title_hits else 25
     matched = []

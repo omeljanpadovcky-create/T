@@ -35,6 +35,28 @@ class JobRadarFilterTests(unittest.TestCase):
         score, _ = score_job(self.job("Junior Technical Artist", "Blender and Unreal Engine"))
         self.assertGreaterEqual(score, 50)
 
+    def test_photobashing_artist_is_accepted(self):
+        score, _ = score_job(self.job(
+            "Photobashing Artist", "Photoshop, photobashing and digital painting"
+        ))
+        self.assertGreaterEqual(score, 50)
+
+    def test_country_specific_remote_location_is_rejected(self):
+        score, reason = score_job(self.job(
+            "3D Artist", "Blender and game-ready assets", location="Germany"
+        ))
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Country-specific location; Ukraine eligibility not confirmed")
+
+    def test_country_specific_requirement_in_description_is_rejected(self):
+        score, reason = score_job(self.job(
+            "3D Artist",
+            "Blender. Candidates must be based in Germany.",
+            location="Remote · Worldwide"
+        ))
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Outside target geography")
+
     def test_ui_ux_role_is_outside_current_scope(self):
         score, reason = score_job(self.job("UI/UX Designer", "Figma and web design"))
         self.assertEqual(score, 0)
