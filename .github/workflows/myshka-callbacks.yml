@@ -1,13 +1,11 @@
-name: ТРЕЙДМИШКА — Telegram actions
+name: ТРЕЙДМИШКА — Telegram webhook actions
 
-# Telegram polling is owned by myshka-job-radar.yml only.
-# Keeping this workflow manual-only prevents two independent getUpdates
-# consumers from racing over the same Telegram update offset.
 on:
-  workflow_dispatch:
+  repository_dispatch:
+    types: [telegram_update]
 
 concurrency:
-  group: trade-myshka-telegram-callbacks
+  group: myshka-job-radar
   cancel-in-progress: false
 
 permissions:
@@ -15,16 +13,22 @@ permissions:
 
 jobs:
   callbacks:
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'repository_dispatch' && github.event.action == 'telegram_update'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install dependencies
         run: pip install -r jobs/requirements.txt
-      - name: Process Telegram buttons
+      - name: Process Telegram update
+        working-directory: jobs
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -36,23 +40,17 @@ jobs:
           MYSHKA_PORTFOLIO_ILLUSTRATION_URL: ${{ secrets.MYSHKA_PORTFOLIO_ILLUSTRATION_URL }}
           MYSHKA_CV_URL: ${{ secrets.MYSHKA_CV_URL }}
           MYSHKA_CONTACT_EMAIL: ${{ secrets.MYSHKA_CONTACT_EMAIL }}
+          MYSHKA_PHONE: ${{ secrets.MYSHKA_PHONE }}
           MYSHKA_SALARY_EXPECTATION: ${{ secrets.MYSHKA_SALARY_EXPECTATION }}
-        run: python jobs/callbacks.py
-      - name: Save application statuses
+          MYSHKA_TELEGRAM_UPDATE_JSON: ${{ toJson(github.event.client_payload.update) }}
+          MYSHKA_SKIP_CALLBACK_ACK: "1"
+        run: python process_telegram_update.py
+      - name: Persist Telegram action state
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add jobs/statuses.json jobs/update_offset.json jobs/editing.json
-          git diff --cached --quiet || git commit -m "Update TradeMyshka application statuses"
-          # Retry if another workflow updates main between fetch and push.
-          for attempt in 1 2 3 4 5; do
-            git fetch origin main
-            git rebase origin/main
-            if git push origin HEAD:main; then
-              exit 0
-            fi
-            echo "Push conflict on attempt $attempt; retrying after refreshing main."
-            sleep 2
-          done
-          echo "Could not persist Telegram callback state after 5 attempts."
-          exit 1
+          git add jobs/statuses.json jobs/editing.json jobs/processed_telegram_updates.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: persist MYSHKA Telegram webhook action state"
+            git push origin HEAD:main
+          fi
