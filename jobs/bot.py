@@ -877,35 +877,35 @@ def vacancy_salary(job):
             return value[:120]
     description = as_text(job.get("description"))
     patterns = (
-        r"(?i)(?:salary|compensation|pay|rate|зарплат[аи]?|оплат[аи]?)\\s*[:：-]?\\s*"
-        r"(?:(?:USD|EUR|GBP|UAH|\\$|€|£)\\s*)?\\d[\\d,.]*(?:\\s*[-–—to]+\\s*"
-        r"(?:USD|EUR|GBP|UAH|\\$|€|£)?\\s*\\d[\\d,.]*)?"
-        r"(?:\\s*(?:USD|EUR|GBP|UAH|\\$|€|£|per\\s+(?:hour|month|year)|/\\s*(?:hr|hour|mo|month|yr|year)))?",
-        r"(?i)(?:USD|EUR|GBP|UAH|\\$|€|£)\\s*\\d[\\d,.]*(?:\\s*[-–—]\\s*"
-        r"(?:USD|EUR|GBP|UAH|\\$|€|£)?\\s*\\d[\\d,.]*)?"
-        r"(?:\\s*(?:per\\s+(?:hour|month|year)|/\\s*(?:hr|hour|mo|month|yr|year)))?"
+        r"(?i)(?:salary|compensation|pay|rate|зарплат[аи]?|оплат[аи]?)\s*[:：-]?\s*"
+        r"(?:(?:USD|EUR|GBP|UAH|\$|€|£)\s*)?\d[\d,.]*(?:\s*[-–—to]+\s*"
+        r"(?:USD|EUR|GBP|UAH|\$|€|£)?\s*\d[\d,.]*)?"
+        r"(?:\s*(?:USD|EUR|GBP|UAH|\$|€|£|per\s+(?:hour|month|year)|/\s*(?:hr|hour|mo|month|yr|year)))?",
+        r"(?i)(?:USD|EUR|GBP|UAH|\$|€|£)\s*\d[\d,.]*(?:\s*[-–—]\s*"
+        r"(?:USD|EUR|GBP|UAH|\$|€|£)?\s*\d[\d,.]*)?"
+        r"(?:\s*(?:per\s+(?:hour|month|year)|/\s*(?:hr|hour|mo|month|yr|year)))?"
     )
     for pattern in patterns:
         match = re.search(pattern, description)
         if match:
-            return re.sub(r"\\s+", " ", match.group(0)).strip()[:120]
+            return re.sub(r"\s+", " ", match.group(0)).strip()[:120]
     return "Не вказано"
 
 
 def send_job_card(job, short_id):
     description = html.unescape(re.sub(r"<[^>]+>", " ", as_text(job.get("description"))))
-    description = re.sub(r"\\s+", " ", description).strip()
+    description = re.sub(r"\s+", " ", description).strip()
     if len(description) > 360:
         description = description[:357].rsplit(" ", 1)[0] + "..."
     message = (
-        f"🐭 <b>MYSHKA · {int(job.get('score') or 0)}/100</b>\\n"
-        f"💼 <b>{html.escape(as_text(job.get('title')) or 'Вакансія')}</b>\\n"
-        f"🏢 {html.escape(as_text(job.get('company')) or 'Компанію не вказано')}\\n"
-        f"🌍 {html.escape(as_text(job.get('location')) or 'Remote')}\\n"
-        f"💰 Оплата: <b>{html.escape(vacancy_salary(job))}</b>\\n"
-        f"📌 Джерело: {html.escape(as_text(job.get('source')) or 'не вказано')}\\n"
-        f"📝 {html.escape(description or 'Короткий опис не надано')}\\n\\n"
-        f"🔗 <a href=\\"{html.escape(as_text(job.get('url')), quote=True)}\\">Відкрити вакансію</a>"
+        f"🐭 <b>MYSHKA · {int(job.get('score') or 0)}/100</b>\n"
+        f"💼 <b>{html.escape(as_text(job.get('title')) or 'Вакансія')}</b>\n"
+        f"🏢 {html.escape(as_text(job.get('company')) or 'Компанію не вказано')}\n"
+        f"🌍 {html.escape(as_text(job.get('location')) or 'Remote')}\n"
+        f"💰 Оплата: <b>{html.escape(vacancy_salary(job))}</b>\n"
+        f"📌 Джерело: {html.escape(as_text(job.get('source')) or 'не вказано')}\n"
+        f"📝 {html.escape(description or 'Короткий опис не надано')}\n\n"
+        f"🔗 <a href=\"{html.escape(as_text(job.get('url')), quote=True)}\">Відкрити вакансію</a>"
     )
     return send_telegram(message)
 
