@@ -111,6 +111,26 @@ class JobFilterTests(unittest.TestCase):
 
 
 class VacancyCardTests(unittest.TestCase):
+    def test_sender_blocks_zero_score_unrelated_role(self):
+        job = {
+            "score": 0, "title": "Director, Global Licensed Merchandise",
+            "company": "Sony Interactive Entertainment", "location": "London",
+            "url": "https://example.com/jobs/123",
+            "description": "Licensed merchandise business leadership.", "source": "Arbeitnow",
+        }
+        with self.assertRaisesRegex(ValueError, "score 0/100"):
+            send_job_card(job, "test")
+
+    def test_sender_blocks_score_80_or_less(self):
+        job = {
+            "score": 80, "title": "3D Artist", "company": "Studio",
+            "location": "Remote Worldwide", "url": "https://example.com/job",
+            "description": "3D game assets", "source": "Test",
+        }
+        with self.assertRaisesRegex(ValueError, "not above 80"):
+            send_job_card(job, "test")
+
+
     def test_card_sends_simple_vacancy_alert_without_buttons(self):
         job = {
             "id": "abc123", "title": "Junior 3D Artist", "company": "Example Studio",
