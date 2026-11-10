@@ -991,6 +991,9 @@ def summarize_vacancy_description(raw_description):
 def send_job_card(job, short_id):
     """Send a plain vacancy card with no buttons or application actions."""
     description = summarize_vacancy_description(job.get("description"))
+    # Telegram limits messages to 4096 characters; keep cards safely below that limit.
+    if len(description) > 900:
+        description = description[:897].rsplit(" ", 1)[0] + "..."
     message = (
         f"🐭 <b>MYSHKA · {int(job.get('score') or 0)}/100</b>\n"
         f"💼 <b>{html.escape(as_text(job.get('title')) or 'Вакансія')}</b>\n"
