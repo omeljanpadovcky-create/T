@@ -1098,7 +1098,10 @@ def main():
         raise RuntimeError("Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID GitHub Secret.")
 
     SOURCE_HEALTH.clear()
+    # Persist only confirmed Telegram deliveries. Keep a separate in-run set
+    # so duplicate sources are collapsed without marking unsent jobs as seen.
     seen = set(load_json(SEEN_PATH, []))
+    scan_seen = set(seen)
     applications = load_json(APPLICATIONS_PATH, {})
     jobs = collect_jobs()
     matches = []
@@ -1118,14 +1121,15 @@ def main():
             as_text(job.get("title")).strip()
             and as_text(job.get("url")).strip()
             and identity_keys
-            and not (identity_keys & seen)
+            and not (identity_keys & scan_seen)
         ):
             primary_key = hashlib.sha256(
                 ("myshka:" + "|".join(sorted(identity_keys))).encode("utf-8")
             ).hexdigest()
             matches.append((score, reason, primary_key, identity_keys, job))
-            # Prevent duplicates within the same scan before Telegram delivery.
-            seen.update(identity_keys)
+            # Prevent duplicate listings within this scan, without persisting
+            # them until Telegram confirms the corresponding message.
+            scan_seen.update(identity_keys)
 
     matches.sort(key=lambda item: item[0], reverse=True)
     sent = 0
@@ -1140,8 +1144,15 @@ def main():
             "conclusion_uk": build_ukrainian_conclusion(job, score, reason),
             "analysis_uk": analyze_job_uk(job)
         }
+        # send_telegram raises on HTTP/API errors; never mark this vacancy
+        # as delivered unless Telegram returned a confirmed message object.
         telegram_message = send_job_card(stored_job, short_id)
-        stored_job["message_id"] = telegram_message.get("message_id") if telegram_message else None
+        if not telegram_message or not telegram_message.get("message_id"):
+            raise RuntimeError(
+                f"Telegram did not confirm delivery for vacancy {short_id}; "
+                "the vacancy remains unseen and will be retried on the next scan."
+            )
+        stored_job["message_id"] = telegram_message["message_id"]
         applications[short_id] = stored_job
         seen.update(identity_keys)
         save_json(APPLICATIONS_PATH, applications)
