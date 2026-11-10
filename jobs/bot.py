@@ -990,7 +990,7 @@ def summarize_vacancy_description(raw_description):
 
 
 def send_job_card(job, short_id):
-    """Send a plain vacancy card with no buttons or application actions."""
+    """Send a vacancy card with working Telegram review actions."""
     description = summarize_vacancy_description(job.get("description"))
     # Telegram limits messages to 4096 characters; keep cards safely below that limit.
     if len(description) > 900:
@@ -1006,7 +1006,16 @@ def send_job_card(job, short_id):
         + f"📝 {html.escape(description or 'Короткий опис не надано')}\n\n"
         f"🔗 <a href=\"{html.escape(as_text(job.get('url')), quote=True)}\">Відкрити вакансію</a>"
     )
-    return send_telegram(message)
+    reply_markup = {"inline_keyboard": [
+        [{"text": "✅ Підготувати заявку", "callback_data": f"prepare|{short_id}"}],
+        [{"text": "✉️ Cover Letter", "callback_data": f"letter|{short_id}"}],
+        [
+            {"text": "💾 На потім", "callback_data": f"save|{short_id}"},
+            {"text": "❌ Пропустити", "callback_data": f"skip|{short_id}"}
+        ],
+        [{"text": "📊 Статус", "callback_data": f"status|{short_id}"}]
+    ]}
+    return send_telegram(message, reply_markup=reply_markup)
 def build_daily_report(scanned, eligible, new_matches, sent, source_health, rejection_counts):
     totals = {}
     failures = []

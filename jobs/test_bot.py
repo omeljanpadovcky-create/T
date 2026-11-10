@@ -104,7 +104,7 @@ class JobFilterTests(unittest.TestCase):
 
 
 class VacancyCardTests(unittest.TestCase):
-    def test_card_sends_plain_vacancy_without_buttons(self):
+    def test_card_sends_vacancy_with_review_buttons(self):
         job = {
             "id": "abc123", "title": "Junior 3D Artist", "company": "Example Studio",
             "location": "Remote · Worldwide", "url": "https://example.com/jobs/junior-3d-artist",
@@ -120,7 +120,10 @@ class VacancyCardTests(unittest.TestCase):
         self.assertEqual(len(send.call_args.args), 1)
         self.assertIn("Junior 3D Artist", send.call_args.args[0])
         self.assertIn("Відкрити вакансію", send.call_args.args[0])
-        self.assertNotIn("reply_markup", send.call_args.kwargs)
+        keyboard = send.call_args.kwargs["reply_markup"]["inline_keyboard"]
+        callback_data = [button.get("callback_data") for row in keyboard for button in row]
+        self.assertIn("prepare|abc123", callback_data)
+        self.assertIn("skip|abc123", callback_data)
 
     def test_salary_uses_only_advertised_value(self):
         self.assertEqual(vacancy_salary(sample_job()), "Не вказано")
