@@ -1032,7 +1032,7 @@ def summarize_vacancy_description(raw_description):
 
 
 def send_job_card(job, short_id):
-    from callbacks import vacancy_keyboard
+    """Send a plain vacancy card with no buttons or application actions."""
     description = summarize_vacancy_description(job.get("description"))
     message = (
         f"🐭 <b>MYSHKA · {int(job.get('score') or 0)}/100</b>\n"
@@ -1044,9 +1044,7 @@ def send_job_card(job, short_id):
         f"📝 {html.escape(description or 'Короткий опис не надано')}\n\n"
         f"🔗 <a href=\"{html.escape(as_text(job.get('url')), quote=True)}\">Відкрити вакансію</a>"
     )
-    return send_telegram(message, reply_markup=vacancy_keyboard(short_id, job))
-
-
+    return send_telegram(message)
 def build_daily_report(scanned, eligible, new_matches, sent, source_health, rejection_counts):
     totals = {}
     failures = []
