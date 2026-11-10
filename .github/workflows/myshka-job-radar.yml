@@ -7,7 +7,7 @@ on:
       - ".github/workflows/myshka-job-radar.yml"
       - "jobs/**"
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "*/5 * * * *"
   workflow_dispatch:
     inputs:
       run_scan:
