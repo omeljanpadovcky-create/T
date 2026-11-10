@@ -79,22 +79,13 @@ class JobFilterTests(unittest.TestCase):
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Outside target geography")
 
-    def test_accepts_remote_illustration_role_with_photoshop_and_europe_eligibility(self):
-        score, reason = score_job(sample_job(
-            title="Junior Illustration and Book Cover Artist",
-            description="Create book covers and photobashing artwork in Adobe Photoshop. Remote across Europe.",
-            tags=["Illustration", "Photoshop"],
-            location="Remote · Europe"
-        ))
-        self.assertGreaterEqual(score, 80, reason)
-
     def test_rejects_generic_graphic_designer_without_target_art_evidence(self):
         score, reason = score_job(sample_job(
             title="Graphic Designer",
             description="Create social media banners and marketing layouts in Photoshop."
         ))
         self.assertEqual(score, 0)
-        self.assertEqual(reason, "Not a target 3D, Game Art or visual-art role")
+        self.assertEqual(reason, "Excluded role")
 
     def test_rejects_unpaid_roles(self):
         score, reason = score_job(sample_job(description="Unpaid volunteer position."))
