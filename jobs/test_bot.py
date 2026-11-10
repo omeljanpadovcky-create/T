@@ -19,7 +19,7 @@ def sample_job(**overrides):
         "company": "Studio",
         "location": "Remote — Worldwide",
         "url": "https://example.com/jobs/junior-3d-artist",
-        "description": "Create Blender game assets. English A2/B1 is acceptable.",
+        "description": ("Create Blender game assets and production-ready 3D models for a multiplayer game. " * 3) + "English A2/B1 is acceptable.",
         "tags": ["Blender", "3D modeling"],
         "source": "Test",
         "remote": True,
@@ -55,6 +55,21 @@ class VacancyDeduplicationTests(unittest.TestCase):
         )
 
 class JobFilterTests(unittest.TestCase):
+    def test_rejects_thin_vacancy_even_when_title_matches(self):
+        score, reason = score_job(sample_job(description="3D work"))
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Insufficient vacancy details")
+
+    def test_rejects_unknown_employer(self):
+        score, reason = score_job(sample_job(company=""))
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Employer not identified")
+
+    def test_rejects_unconfirmed_remote_and_country_eligibility(self):
+        score, reason = score_job(sample_job(location="On-site, New York"))
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Remote work not confirmed")
+
     def test_accepts_remote_role_with_a2_english(self):
         score, reason = score_job(sample_job())
         self.assertGreaterEqual(score, 80, reason)
@@ -88,10 +103,10 @@ class JobFilterTests(unittest.TestCase):
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Excluded role")
 
-    def test_keeps_unpaid_roles_with_warning_for_manual_review(self):
-        score, reason = score_job(sample_job(description="Unpaid volunteer position."))
-        self.assertGreater(score, 0)
-        self.assertIn("unpaid/volunteer", reason)
+    def test_rejects_unpaid_roles(self):
+        score, reason = score_job(sample_job(description=("Unpaid volunteer position. " * 12)))
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Unpaid or volunteer role")
 
     def test_keeps_lower_scoring_target_role_with_relevance_warning(self):
         score, reason = score_job(sample_job(
