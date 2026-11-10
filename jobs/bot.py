@@ -646,7 +646,7 @@ def score_job(job):
     remote_ok = bool(re.search(r'\b(remote|remotely|work from home|distributed|віддален|дистанційн)\b', searchable, re.I))
     scope_ok = bool(re.search(r'\b(ukraine|україн[а-яіїєґ]*|lviv|kyiv|dnipro|odesa|kharkiv|vinnytsia|europe|european union|eu|emea|worldwide|anywhere|global)\b', searchable, re.I))
     if country_limited_location(location):
-        return 0, "Country-specific location; not confirmed eligible for Ukraine"
+        return 0, "Country-specific location; Ukraine eligibility not confirmed"
 
     target_patterns = (r'\b3d\b', r'\bblender\b', r'game.?asset', r'game.?artist', r'character artist', r'environment artist', r'prop artist', r'technical artist', r'3d model(?:er|ler)', r'hard.?surface artist', r'texture artist', r'3d generalist', r'3d sculptor', r'weapons artist')
     if not any(re.search(pattern, title, re.I) for pattern in target_patterns):
