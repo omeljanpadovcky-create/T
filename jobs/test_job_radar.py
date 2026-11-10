@@ -44,21 +44,21 @@ class JobRadarFilterTests(unittest.TestCase):
         score, reason = score_job(job)
         self.assertGreaterEqual(score, 80, reason)
 
-    def test_country_specific_remote_location_is_rejected(self):
+    def test_country_specific_remote_location_is_kept_for_manual_review(self):
         score, reason = score_job(self.job(
             "3D Artist", "Blender and game-ready assets", location="Germany"
         ))
-        self.assertEqual(score, 0)
-        self.assertEqual(reason, "Country-specific location; Ukraine eligibility not confirmed")
+        self.assertGreater(score, 0)
+        self.assertIn("verify manually", reason)
 
-    def test_country_specific_requirement_in_description_is_rejected(self):
+    def test_country_specific_requirement_in_description_is_kept_for_manual_review(self):
         score, reason = score_job(self.job(
             "3D Artist",
             "Blender. Candidates must be based in Germany.",
             location="Remote · Worldwide"
         ))
-        self.assertEqual(score, 0)
-        self.assertEqual(reason, "Outside target geography")
+        self.assertGreater(score, 0)
+        self.assertIn("verify manually", reason)
 
     def test_minimum_score_is_eighty(self):
         from bot import CONFIG
@@ -69,10 +69,10 @@ class JobRadarFilterTests(unittest.TestCase):
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Excluded role")
 
-    def test_unpaid_role_is_rejected(self):
+    def test_unpaid_role_is_kept_with_manual_review_warning(self):
         score, reason = score_job(self.job("3D Artist", "Unpaid volunteer opportunity"))
-        self.assertEqual(score, 0)
-        self.assertEqual(reason, "Unpaid or volunteer role")
+        self.assertGreater(score, 0)
+        self.assertIn("unpaid/volunteer", reason)
 
 
 if __name__ == "__main__":
