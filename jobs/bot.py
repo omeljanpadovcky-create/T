@@ -514,12 +514,10 @@ def collect_jobs():
                         "tags": item.get("tags", []), "source": source, "remote": True
                     })
 
-    # Search only the agreed 3D / Game Art / character / illustration role families.
+    # Search the agreed 3D / Game Art / Blender role families only.
     for query in [
         "3d", "blender", "game artist", "game asset", "character artist",
-        "environment artist", "prop artist", "technical artist", "3d modeler",
-        "illustration", "concept artist", "photobashing", "matte painter",
-        "book cover", "key art", "splash art"
+        "environment artist", "prop artist", "technical artist", "3d modeler", "hard surface"
     ]:
         data = fetch_json("https://remotive.com/api/remote-jobs?search=" + requests.utils.quote(query))
         if isinstance(data, dict):
@@ -555,12 +553,11 @@ def collect_jobs():
     # Ukrainian job boards: search relevant role families and inspect each matching public listing.
     dou_terms = [
         "3D Artist", "Blender", "Game Artist", "Character Artist",
-        "Environment Artist", "Prop Artist", "Technical Artist", "3D Modeler", "Concept Artist",
-        "Photobashing", "Matte Painter", "Book Cover", "Key Art", "Splash Art"
+        "Environment Artist", "Prop Artist", "Technical Artist", "3D Modeler", "Hard Surface Artist"
     ]
     djinni_terms = [
         "3D Artist", "Blender", "Game Artist", "Character Artist",
-        "Environment Artist", "Prop Artist", "Technical Artist", "3D Modeler", "Concept Artist"
+        "Environment Artist", "Prop Artist", "Technical Artist", "3D Modeler", "Hard Surface Artist"
     ]
     jobs.extend(collect_community_jobs(
         "DOU", dou_terms, "https://jobs.dou.ua/vacancies/", "search"
@@ -572,7 +569,7 @@ def collect_jobs():
     ukrainian_terms = [
         "3D Artist", "Blender", "Game Artist", "Character Artist",
         "Environment Artist", "Prop Artist", "Technical Artist", "3D Modeler", "Concept Artist",
-        "Illustrator", "Photobashing", "Matte Painter", "Book Cover", "Key Art", "Splash Art"
+        "Hard Surface Artist"
     ]
     jobs.extend(collect_path_search_jobs(
         "Work.ua",
@@ -664,10 +661,7 @@ def score_job(job):
         r"\b3d\b", r"\bblender\b", r"game.?asset", r"game.?artist",
         r"character artist", r"environment artist", r"prop artist",
         r"technical artist", r"3d model(?:er|ler)", r"hard.?surface artist",
-        r"texture artist", r"3d generalist", r"3d sculptor", r"weapons artist",
-        r"concept artist", r"\billustrator\b", r"\billustration\b",
-        r"book cover", r"cover artist", r"matte painter", r"photobash",
-        r"2d artist", r"key art", r"visual development artist"
+        r"texture artist", r"3d generalist", r"3d sculptor", r"weapons artist"
     )
     if not any(re.search(pattern, title, re.I) for pattern in target_patterns):
         return 0, "Not a target 3D, Game Art or visual-art role"
@@ -677,14 +671,6 @@ def score_job(job):
         "3D software": (r"\bblender\b", r"\bmaya\b", r"3ds\s*max", r"zbrush", r"cinema\s*4d"),
         "modeling": (r"3d model", r"modeling", r"modelling", r"sculpt", r"hard.?surface", r"low.?poly"),
         "asset workflow": (r"uv\s*(?:mapping|unwrap)", r"textur", r"substance painter", r"game.?ready", r"pbr"),
-        "2D / illustration tools": (
-            r"photoshop", r"adobe illustrator", r"\bprocreate\b", r"clip studio",
-            r"\bkrita\b", r"affinity photo", r"digital painting", r"digital illustration"
-        ),
-        "concept / cover workflow": (
-            r"concept art", r"book cover", r"cover illustration", r"photobash",
-            r"matte painting", r"key art", r"visual development"
-        ),
     }
     skill_points = 0
     matched_groups = []
@@ -700,30 +686,22 @@ def score_job(job):
         searchable, re.I
     ))
     game_points = 15 if game_context else 0
-    visual_art_context = bool(re.search(
-        r"illustrat|concept art|book cover|cover art|photobash|matte painting|"
-        r"digital art|digital painting|key art|visual development|2d artist",
-        searchable, re.I
-    ))
-    visual_art_points = 15 if visual_art_context and not game_context else 0
     remote_points = 10
     geography_points = 10 if re.search(
         r"\b(ukraine|україн[а-яіїєґ]*|lviv|kyiv|dnipro|odesa|kharkiv|vinnytsia|worldwide|anywhere|global)\b", searchable, re.I
     ) else 8  # Europe/EMEA/EU explicitly includes the user's location.
     paid_points = 10  # Unpaid/volunteer/commission-only roles were rejected above.
 
-    score = min(100, title_points + skill_points + game_points + visual_art_points + remote_points + geography_points + paid_points)
+    score = min(100, title_points + skill_points + game_points + remote_points + geography_points + paid_points)
     minimum_score = int(CONFIG.get("minimum_score", 80))
     if score < minimum_score:
         return 0, f"Below {minimum_score}/100 ({score}/100)"
 
-    role_label = "3D/GameDev title" if game_context or re.search(r"\b3d\b|blender|game.?art|game.?asset", title, re.I) else "Visual-art title"
+    role_label = "3D/GameDev title"
     reason_parts = [role_label]
     reason_parts.extend(matched_groups)
     if game_context:
         reason_parts.append("game-development context")
-    elif visual_art_points:
-        reason_parts.append("illustration/concept-art context")
     reason_parts.extend(["remote", "Ukraine-eligible region", "paid status not marked unpaid"])
     return score, ", ".join(reason_parts)
 
