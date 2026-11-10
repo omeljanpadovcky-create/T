@@ -1100,9 +1100,15 @@ def main():
     SOURCE_HEALTH.clear()
     # Persist only confirmed Telegram deliveries. Keep a separate in-run set
     # so duplicate sources are collapsed without marking unsent jobs as seen.
-    seen = set(load_json(SEEN_PATH, []))
-    scan_seen = set(seen)
     applications = load_json(APPLICATIONS_PATH, {})
+    # Rebuild the deduplication index only from vacancies whose Telegram
+    # delivery was confirmed (message_id). Older button-era code could mark
+    # a vacancy as seen before delivery, silently suppressing it forever.
+    seen = set()
+    for delivered_job in applications.values():
+        if isinstance(delivered_job, dict) and delivered_job.get("message_id"):
+            seen.update(job_identity_keys(delivered_job))
+    scan_seen = set(seen)
     jobs = collect_jobs()
     matches = []
     rejection_counts = {}
