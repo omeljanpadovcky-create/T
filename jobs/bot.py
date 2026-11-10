@@ -687,8 +687,9 @@ def score_job(job):
     return score, ", ".join(reason_parts)
 
 def is_delivery_qualified(score):
-    """Only send vacancies scoring strictly above 80/100."""
-    return int(score or 0) > 80
+    """Only send vacancies scoring from 80 through 100."""
+    value = int(score or 0)
+    return 80 <= value <= 100
 
 
 def normalize_job_url(value):
@@ -995,18 +996,10 @@ def summarize_vacancy_description(raw_description):
 
 
 def send_job_card(job, short_id):
-    """Send a simple vacancy alert; refuse any low-score or non-target role."""
+    """Send a vacancy alert only when its score is between 80 and 100."""
     score = int(job.get("score") or 0)
-    title = as_text(job.get("title")).strip()
-    target_title = (
-        r'\b3d\b|\bblender\b|game.?asset|game.?artist|character artist|'
-        r'environment artist|prop artist|technical artist|3d model(?:er|ler)|'
-        r'hard.?surface artist|texture artist|3d generalist|3d sculptor|weapons artist'
-    )
-    if score <= 80:
-        raise ValueError(f"Blocked Telegram delivery: score {score}/100 is not above 80.")
-    if not re.search(target_title, title, re.I):
-        raise ValueError(f"Blocked Telegram delivery: non-target role title: {title!r}.")
+    if not 80 <= score <= 100:
+        raise ValueError(f"Blocked Telegram delivery: score {score}/100 is outside 80–100.")
     description = summarize_vacancy_description(job.get("description"))
     if len(description) > 900:
         description = description[:897].rsplit(" ", 1)[0] + "..."
@@ -1091,8 +1084,8 @@ def main():
     eligible_count = 0
     for job in jobs:
         score, reason = score_job(job)
-        # Strict delivery rule: only vacancies scoring above 80/100 are sent.
-        # Lower-scoring leads are silently discarded from Telegram delivery.
+        # Delivery rule: only vacancies scoring from 80 through 100 are sent.
+        # All other scores are discarded from Telegram delivery.
         if not is_delivery_qualified(score):
             rejection_counts[reason] = rejection_counts.get(reason, 0) + 1
             continue
