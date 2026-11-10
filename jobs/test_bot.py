@@ -76,21 +76,21 @@ class JobFilterTests(unittest.TestCase):
 
     def test_english_requirement_does_not_exclude_role(self):
         score, reason = score_job(sample_job(
-            description="Fluent English required. Create Blender game assets."
+            description=("Fluent English required. Create Blender game assets for a multiplayer title. " * 4)
         ))
         self.assertGreaterEqual(score, 80, reason)
 
     def test_accepts_senior_experience_requirements(self):
         score, reason = score_job(sample_job(
             title="Senior 3D Artist",
-            description="Requires 7+ years of professional experience with Blender, 3D modeling and game-ready assets."
+            description=("Requires 7+ years of professional experience with Blender, 3D modeling and game-ready assets. " * 3)
         ))
         self.assertGreaterEqual(score, 80, reason)
 
     def test_keeps_us_only_lead_for_manual_review(self):
         score, reason = score_job(sample_job(
             location="Remote",
-            description="Remote role. Candidates must be located in the United States."
+            description=("Remote role. Candidates must be located in the United States. " * 4)
         ))
         self.assertGreater(score, 0)
         self.assertIn("verify manually", reason)
@@ -111,8 +111,9 @@ class JobFilterTests(unittest.TestCase):
     def test_keeps_lower_scoring_target_role_with_relevance_warning(self):
         score, reason = score_job(sample_job(
             title="3D Artist",
-            location="Unknown",
-            description="Simple 3D work."
+            location="Remote — Worldwide",
+            description=("Create general 3D visuals for varied projects. " * 6),
+            tags=[]
         ))
         self.assertGreater(score, 0)
         self.assertLess(score, 80)
