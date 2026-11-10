@@ -1159,7 +1159,7 @@ def main():
     # Keep Telegram quiet between alerts. Warn only if every source failed.
     if not SOURCE_HEALTH or all(not item.get("ok") for item in SOURCE_HEALTH):
         send_telegram("⚠️ <b>MYSHKA JOB RADAR</b>\nНе вдалося отримати дані з жодного джерела. Перевірка повториться за розкладом.")
-    print(f"Scanned {len(jobs)} listings; eligible {eligible_count}; sent {sent} new matches; saved {len(applications)} application records.")
+    print(f"Scanned {len(jobs)} listings; retained {eligible_count} target-role listings (including lower-fit/uncertain cases); sent {sent} new matches; saved {len(applications)} application records.")
     print("Top rejection reasons: " + json.dumps(dict(sorted(rejection_counts.items(), key=lambda item: item[1], reverse=True)[:8]), ensure_ascii=False))
 
 
