@@ -7,6 +7,7 @@ from bot import (
     normalize_job_url,
     score_job,
     send_job_card,
+    is_delivery_qualified,
     summarize_vacancy_description,
     vacancy_salary,
 )
@@ -103,8 +104,14 @@ class JobFilterTests(unittest.TestCase):
         self.assertIn("lower relevance", reason)
 
 
+    def test_delivery_threshold_is_strictly_above_80(self):
+        self.assertFalse(is_delivery_qualified(80))
+        self.assertFalse(is_delivery_qualified(79))
+        self.assertTrue(is_delivery_qualified(81))
+
+
 class VacancyCardTests(unittest.TestCase):
-    def test_card_sends_vacancy_with_review_buttons(self):
+    def test_card_sends_simple_vacancy_alert_without_buttons(self):
         job = {
             "id": "abc123", "title": "Junior 3D Artist", "company": "Example Studio",
             "location": "Remote · Worldwide", "url": "https://example.com/jobs/junior-3d-artist",
@@ -120,10 +127,7 @@ class VacancyCardTests(unittest.TestCase):
         self.assertEqual(len(send.call_args.args), 1)
         self.assertIn("Junior 3D Artist", send.call_args.args[0])
         self.assertIn("Відкрити вакансію", send.call_args.args[0])
-        keyboard = send.call_args.kwargs["reply_markup"]["inline_keyboard"]
-        callback_data = [button.get("callback_data") for row in keyboard for button in row]
-        self.assertIn("prepare|abc123", callback_data)
-        self.assertIn("skip|abc123", callback_data)
+        self.assertNotIn("reply_markup", send.call_args.kwargs)
 
     def test_salary_uses_only_advertised_value(self):
         self.assertEqual(vacancy_salary(sample_job()), "Не вказано")
