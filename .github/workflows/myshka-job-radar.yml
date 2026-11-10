@@ -8,7 +8,6 @@ on:
       - "jobs/**"
   schedule:
     - cron: "*/15 * * * *"
-    - cron: "5,10,20,25,35,40,50,55 * * * *"
   workflow_dispatch:
     inputs:
       run_scan:
@@ -87,7 +86,6 @@ jobs:
           MYSHKA_PORTFOLIO_DESIGN_URL: ${{ secrets.MYSHKA_PORTFOLIO_DESIGN_URL }}
           MYSHKA_PORTFOLIO_ILLUSTRATION_URL: ${{ secrets.MYSHKA_PORTFOLIO_ILLUSTRATION_URL }}
           MYSHKA_SALARY_EXPECTATION: ${{ secrets.MYSHKA_SALARY_EXPECTATION }}
-          RUN_VACANCY_SCAN: ${{ github.event_name != 'schedule' || github.event.schedule == '*/15 * * * *' }}
         run: python run_scheduled_scan.py
 
       - name: Save deduplication state
