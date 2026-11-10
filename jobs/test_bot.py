@@ -71,13 +71,13 @@ class JobFilterTests(unittest.TestCase):
         ))
         self.assertGreaterEqual(score, 80, reason)
 
-    def test_rejects_us_only_even_when_source_says_remote(self):
+    def test_keeps_us_only_lead_for_manual_review(self):
         score, reason = score_job(sample_job(
             location="Remote",
             description="Remote role. Candidates must be located in the United States."
         ))
-        self.assertEqual(score, 0)
-        self.assertEqual(reason, "Outside target geography")
+        self.assertGreater(score, 0)
+        self.assertIn("verify manually", reason)
 
     def test_rejects_generic_graphic_designer_without_target_art_evidence(self):
         score, reason = score_job(sample_job(
@@ -87,10 +87,20 @@ class JobFilterTests(unittest.TestCase):
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Excluded role")
 
-    def test_rejects_unpaid_roles(self):
+    def test_keeps_unpaid_roles_with_warning_for_manual_review(self):
         score, reason = score_job(sample_job(description="Unpaid volunteer position."))
-        self.assertEqual(score, 0)
-        self.assertEqual(reason, "Unpaid or volunteer role")
+        self.assertGreater(score, 0)
+        self.assertIn("unpaid/volunteer", reason)
+
+    def test_keeps_lower_scoring_target_role_with_relevance_warning(self):
+        score, reason = score_job(sample_job(
+            title="3D Artist",
+            location="Unknown",
+            description="Simple 3D work."
+        ))
+        self.assertGreater(score, 0)
+        self.assertLess(score, 80)
+        self.assertIn("lower relevance", reason)
 
 
 class VacancyCardTests(unittest.TestCase):
