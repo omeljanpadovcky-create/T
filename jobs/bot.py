@@ -627,50 +627,36 @@ def country_limited_location(location):
 
 
 def score_job(job):
-    """Score only evidence-backed 3D/GameDev roles for a Ukraine-based remote candidate."""
-    title = norm(as_text(job.get("title")))
-    location = norm(as_text(job.get("location")))
-    description = norm(as_text(job.get("description")))
-    tags = norm(as_text(job.get("tags")))
+    """Score 3D/Game Art vacancies; uncertain remote/geography is labelled for manual verification."""
+    title = norm(as_text(job.get('title')))
+    location = norm(as_text(job.get('location')))
+    description = norm(as_text(job.get('description')))
+    tags = norm(as_text(job.get('tags')))
     searchable = " ".join([title, description, tags, location])
 
-    if not title or not job.get("url"):
+    if not title or not job.get('url'):
         return 0, "Missing title or link"
-    if any(norm(term) in title for term in CONFIG["exclude_terms"]):
+    if any(norm(term) in title for term in CONFIG['exclude_terms']):
         return 0, "Excluded role"
-    if re.search(r"\b(unpaid|volunteer|commission[- ]only|no salary|equity only)\b|без\s+оплат|волонтерств|неоплачув", searchable, re.I):
+    if re.search(r'\b(unpaid|volunteer|commission[- ]only|no salary|equity only)\b|без\s+оплат|волонтерств|неоплачув', searchable, re.I):
         return 0, "Unpaid or volunteer role"
     if outside_target_geography(searchable):
         return 0, "Outside target geography"
 
-    # A generic 'Remote' label is not enough: the employer must state a region
-    # that includes Ukraine (Ukraine, Europe/EMEA, EU, worldwide, or anywhere).
-    remote_ok = bool(re.search(r"\b(remote|remotely|work from home|distributed|віддален|дистанційн)\b", searchable, re.I))
-    scope_ok = bool(re.search(
-        r"\b(ukraine|україн[а-яіїєґ]*|lviv|kyiv|dnipro|odesa|kharkiv|vinnytsia|europe|european union|eu|emea|worldwide|anywhere|global)\b",
-        searchable, re.I
-    ))
+    remote_ok = bool(re.search(r'\b(remote|remotely|work from home|distributed|віддален|дистанційн)\b', searchable, re.I))
+    scope_ok = bool(re.search(r'\b(ukraine|україн[а-яіїєґ]*|lviv|kyiv|dnipro|odesa|kharkiv|vinnytsia|europe|european union|eu|emea|worldwide|anywhere|global)\b', searchable, re.I))
     if country_limited_location(location):
-        return 0, "Country-specific location; Ukraine eligibility not confirmed"
-    if not remote_ok:
-        return 0, "Remote work not confirmed"
-    if not scope_ok:
-        return 0, "Remote geography does not confirm Ukraine eligibility"
+        return 0, "Country-specific location; not confirmed eligible for Ukraine"
 
-    target_patterns = (
-        r"\b3d\b", r"\bblender\b", r"game.?asset", r"game.?artist",
-        r"character artist", r"environment artist", r"prop artist",
-        r"technical artist", r"3d model(?:er|ler)", r"hard.?surface artist",
-        r"texture artist", r"3d generalist", r"3d sculptor", r"weapons artist"
-    )
+    target_patterns = (r'\b3d\b', r'\bblender\b', r'game.?asset', r'game.?artist', r'character artist', r'environment artist', r'prop artist', r'technical artist', r'3d model(?:er|ler)', r'hard.?surface artist', r'texture artist', r'3d generalist', r'3d sculptor', r'weapons artist')
     if not any(re.search(pattern, title, re.I) for pattern in target_patterns):
-        return 0, "Not a target 3D, Game Art or visual-art role"
+        return 0, "Not a target 3D or Game Art role"
 
     title_points = 35
     skill_groups = {
-        "3D software": (r"\bblender\b", r"\bmaya\b", r"3ds\s*max", r"zbrush", r"cinema\s*4d"),
-        "modeling": (r"3d model", r"modeling", r"modelling", r"sculpt", r"hard.?surface", r"low.?poly"),
-        "asset workflow": (r"uv\s*(?:mapping|unwrap)", r"textur", r"substance painter", r"game.?ready", r"pbr"),
+        '3D software': (r'\bblender\b', r'\bmaya\b', r'3ds\s*max', r'zbrush', r'cinema\s*4d'),
+        'modeling': (r'3d model', r'modeling', r'modelling', r'sculpt', r'hard.?surface', r'low.?poly'),
+        'asset workflow': (r'uv\s*(?:mapping|unwrap)', r'textur', r'substance painter', r'game.?ready', r'pbr'),
     }
     skill_points = 0
     matched_groups = []
@@ -680,31 +666,24 @@ def score_job(job):
             matched_groups.append(group)
     skill_points = min(skill_points, 30)
 
-    game_context = bool(re.search(
-        r"game.?dev|game.?asset|game.?art|unreal|unity|game.?ready|real.?time|"
-        r"ігров|геймдев|игров",
-        searchable, re.I
-    ))
+    game_context = bool(re.search(r'game.?dev|game.?asset|game.?art|unreal|unity|game.?ready|real.?time|ігров|геймдев|игров', searchable, re.I))
     game_points = 15 if game_context else 0
-    remote_points = 10
-    geography_points = 10 if re.search(
-        r"\b(ukraine|україн[а-яіїєґ]*|lviv|kyiv|dnipro|odesa|kharkiv|vinnytsia|worldwide|anywhere|global)\b", searchable, re.I
-    ) else 8  # Europe/EMEA/EU explicitly includes the user's location.
-    paid_points = 10  # Unpaid/volunteer/commission-only roles were rejected above.
-
+    remote_points = 10 if remote_ok else 0
+    geography_points = 10 if re.search(r'\b(ukraine|україн[а-яіїєґ]*|lviv|kyiv|dnipro|odesa|kharkiv|vinnytsia|worldwide|anywhere|global)\b', searchable, re.I) else (8 if scope_ok else 5)
+    paid_points = 10
     score = min(100, title_points + skill_points + game_points + remote_points + geography_points + paid_points)
-    minimum_score = int(CONFIG.get("minimum_score", 80))
+    minimum_score = max(80, int(CONFIG.get('minimum_score', 80)))
     if score < minimum_score:
         return 0, f"Below {minimum_score}/100 ({score}/100)"
 
-    role_label = "3D/GameDev title"
-    reason_parts = [role_label]
+    reason_parts = ['3D/Game Art role']
     reason_parts.extend(matched_groups)
     if game_context:
-        reason_parts.append("game-development context")
-    reason_parts.extend(["remote", "Ukraine-eligible region", "paid status not marked unpaid"])
+        reason_parts.append('game-development context')
+    reason_parts.append('remote confirmed' if remote_ok else '⚠️ remote format needs verification')
+    reason_parts.append('Ukraine-eligible geography stated' if scope_ok else '⚠️ country eligibility needs verification')
+    reason_parts.append('paid status not marked unpaid')
     return score, ", ".join(reason_parts)
-
 
 def normalize_job_url(value):
     """Normalize tracking/query variants so one vacancy has one stable URL identity."""
