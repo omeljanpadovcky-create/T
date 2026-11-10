@@ -87,13 +87,13 @@ class JobFilterTests(unittest.TestCase):
         ))
         self.assertGreaterEqual(score, 80, reason)
 
-    def test_keeps_us_only_lead_for_manual_review(self):
+    def test_rejects_us_only_lead(self):
         score, reason = score_job(sample_job(
-            location="Remote",
+            location="Remote — Worldwide",
             description=("Remote role. Candidates must be located in the United States. " * 4)
         ))
-        self.assertGreater(score, 0)
-        self.assertIn("verify manually", reason)
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Ukraine eligibility not confirmed")
 
     def test_rejects_generic_graphic_designer_without_target_art_evidence(self):
         score, reason = score_job(sample_job(
