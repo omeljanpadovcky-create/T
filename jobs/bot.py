@@ -715,7 +715,7 @@ def score_job(job):
     score = min(100, title_points + skill_points + game_points + visual_art_points + remote_points + geography_points + paid_points)
     minimum_score = int(CONFIG.get("minimum_score", 80))
     if score < minimum_score:
-        return 0, f"Below {minimum_score}/100 ({score}/100)"
+        return score, f"Below preferred threshold {minimum_score}/100 ({score}/100)"
 
     role_label = "3D/GameDev title" if game_context or re.search(r"\b3d\b|blender|game.?art|game.?asset", title, re.I) else "Visual-art title"
     reason_parts = [role_label]
@@ -1108,8 +1108,14 @@ def main():
     eligible_count = 0
     for job in jobs:
         score, reason = score_job(job)
-        minimum_score = max(80, int(CONFIG.get("minimum_score", 80)))
-        if score < minimum_score:
+        # Keep every discovered vacancy in the agreed role families.
+        # The score and reason label show fit/uncertainty; remote eligibility,
+        # salary and geography are warnings, not silent deletion filters.
+        if reason in {
+            "Missing title or link",
+            "Excluded role",
+            "Not a target 3D, Game Art or visual-art role",
+        }:
             rejection_counts[reason] = rejection_counts.get(reason, 0) + 1
             continue
         eligible_count += 1
