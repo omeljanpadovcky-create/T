@@ -71,7 +71,7 @@ class JobFilterTests(unittest.TestCase):
         ))
         self.assertGreaterEqual(score, 80, reason)
 
-    def_keeps_us_only_lead_for_manual_review(self):
+    def test_keeps_us_only_lead_for_manual_review(self):
         score, reason = score_job(sample_job(
             location="Remote",
             description="Remote role. Candidates must be located in the United States."
