@@ -64,6 +64,15 @@ class JobFilterTests(unittest.TestCase):
         ))
         self.assertGreaterEqual(score, 80, reason)
 
+    def test_lower_scoring_target_role_is_retained_with_its_score(self):
+        score, reason = score_job(sample_job(
+            description="Remote role. Worldwide applicants may apply.",
+            tags=[]
+        ))
+        self.assertGreater(score, 0, reason)
+        self.assertLess(score, 80)
+        self.assertIn("preferred threshold", reason)
+
     def test_accepts_senior_experience_requirements(self):
         score, reason = score_job(sample_job(
             title="Senior 3D Artist",
