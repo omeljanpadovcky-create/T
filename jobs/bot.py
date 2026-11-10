@@ -999,7 +999,7 @@ def send_job_card(job, short_id):
         f"💰 Оплата: <b>{html.escape(vacancy_salary(job))}</b>\n"
         f"📌 Джерело: {html.escape(as_text(job.get('source')) or 'не вказано')}\n"
         + (f"⚠️ Перевірити вручну: {html.escape(as_text(job.get('reason')))}\n" if "⚠️" in as_text(job.get("reason")) else "")
-        f"📝 {html.escape(description or 'Короткий опис не надано')}\n\n"
+        + f"📝 {html.escape(description or 'Короткий опис не надано')}\n\n"
         f"🔗 <a href=\"{html.escape(as_text(job.get('url')), quote=True)}\">Відкрити вакансію</a>"
     )
     return send_telegram(message)
