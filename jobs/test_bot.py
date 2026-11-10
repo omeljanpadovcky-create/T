@@ -95,8 +95,8 @@ class JobFilterTests(unittest.TestCase):
     def test_keeps_lower_scoring_target_role_with_relevance_warning(self):
         score, reason = score_job(sample_job(
             title="3D Artist",
-            location="Remote",
-            description="Create 3D assets."
+            location="Unknown",
+            description="Simple 3D work."
         ))
         self.assertGreater(score, 0)
         self.assertLess(score, 80)
