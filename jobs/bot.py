@@ -995,7 +995,18 @@ def summarize_vacancy_description(raw_description):
 
 
 def send_job_card(job, short_id):
-    """Send a simple vacancy alert; no application workflow or buttons."""
+    """Send a simple vacancy alert; refuse any low-score or non-target role."""
+    score = int(job.get("score") or 0)
+    title = as_text(job.get("title")).strip()
+    target_title = (
+        r'\b3d\b|\bblender\b|game.?asset|game.?artist|character artist|'
+        r'environment artist|prop artist|technical artist|3d model(?:er|ler)|'
+        r'hard.?surface artist|texture artist|3d generalist|3d sculptor|weapons artist'
+    )
+    if score <= 80:
+        raise ValueError(f"Blocked Telegram delivery: score {score}/100 is not above 80.")
+    if not re.search(target_title, title, re.I):
+        raise ValueError(f"Blocked Telegram delivery: non-target role title: {title!r}.")
     description = summarize_vacancy_description(job.get("description"))
     if len(description) > 900:
         description = description[:897].rsplit(" ", 1)[0] + "..."
