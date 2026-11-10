@@ -638,15 +638,12 @@ def score_job(job):
         return 0, "Missing title or link"
     if any(norm(term) in title for term in CONFIG['exclude_terms']):
         return 0, "Excluded role"
-    if re.search(r'\b(unpaid|volunteer|commission[- ]only|no salary|equity only)\b|без\s+оплат|волонтерств|неоплачув', searchable, re.I):
-        return 0, "Unpaid or volunteer role"
-    if outside_target_geography(searchable):
-        return 0, "Outside target geography"
+    unpaid = bool(re.search(r'\b(unpaid|volunteer|commission[- ]only|no salary|equity only)\b|без\s+оплат|волонтерств|неоплачув', searchable, re.I))
+    outside_geo = outside_target_geography(searchable)
+    country_limited = country_limited_location(location)
 
     remote_ok = bool(re.search(r'\b(remote|remotely|work from home|distributed|віддален|дистанційн)\b', searchable, re.I))
     scope_ok = bool(re.search(r'\b(ukraine|україн[а-яіїєґ]*|lviv|kyiv|dnipro|odesa|kharkiv|vinnytsia|europe|european union|eu|emea|worldwide|anywhere|global)\b', searchable, re.I))
-    if country_limited_location(location):
-        return 0, "Country-specific location; Ukraine eligibility not confirmed"
 
     target_patterns = (r'\b3d\b', r'\bblender\b', r'game.?asset', r'game.?artist', r'character artist', r'environment artist', r'prop artist', r'technical artist', r'3d model(?:er|ler)', r'hard.?surface artist', r'texture artist', r'3d generalist', r'3d sculptor', r'weapons artist')
     if not any(re.search(pattern, title, re.I) for pattern in target_patterns):
@@ -670,19 +667,23 @@ def score_job(job):
     game_points = 15 if game_context else 0
     remote_points = 10 if remote_ok else 0
     geography_points = 10 if re.search(r'\b(ukraine|україн[а-яіїєґ]*|lviv|kyiv|dnipro|odesa|kharkiv|vinnytsia|worldwide|anywhere|global)\b', searchable, re.I) else (8 if scope_ok else 5)
-    paid_points = 10
+    if outside_geo or country_limited:
+        geography_points = 0
+    paid_points = 0 if unpaid else 10
     score = min(100, title_points + skill_points + game_points + remote_points + geography_points + paid_points)
-    minimum_score = max(80, int(CONFIG.get('minimum_score', 80)))
-    if score < minimum_score:
-        return 0, f"Below {minimum_score}/100 ({score}/100)"
 
     reason_parts = ['3D/Game Art role']
     reason_parts.extend(matched_groups)
     if game_context:
         reason_parts.append('game-development context')
     reason_parts.append('remote confirmed' if remote_ok else '⚠️ remote format needs verification')
-    reason_parts.append('Ukraine-eligible geography stated' if scope_ok else '⚠️ country eligibility needs verification')
-    reason_parts.append('paid status not marked unpaid')
+    if outside_geo or country_limited:
+        reason_parts.append('⚠️ location may exclude Ukraine; verify manually')
+    else:
+        reason_parts.append('Ukraine-eligible geography stated' if scope_ok else '⚠️ country eligibility needs verification')
+    reason_parts.append('⚠️ unpaid/volunteer terms detected' if unpaid else 'paid status not marked unpaid')
+    if score < 80:
+        reason_parts.append(f'⚠️ lower relevance; manual review ({score}/100)')
     return score, ", ".join(reason_parts)
 
 def normalize_job_url(value):
@@ -1076,10 +1077,9 @@ def main():
     eligible_count = 0
     for job in jobs:
         score, reason = score_job(job)
-        minimum_score = max(80, int(CONFIG.get("minimum_score", 80)))
-        if score < minimum_score:
-            rejection_counts[reason] = rejection_counts.get(reason, 0) + 1
-            continue
+        # Send every discovered vacancy in the target 3D/Game Art role family.
+        # Score and warning labels help the user review weaker/uncertain leads;
+        # they must not silently suppress a vacancy.
         eligible_count += 1
         identity_keys = job_identity_keys(job)
         # Deduplicate by normalized URL AND by exact normalized title + company.
