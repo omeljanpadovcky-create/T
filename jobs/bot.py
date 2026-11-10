@@ -686,6 +686,11 @@ def score_job(job):
         reason_parts.append(f'⚠️ lower relevance; manual review ({score}/100)')
     return score, ", ".join(reason_parts)
 
+def is_delivery_qualified(score):
+    """Only send vacancies scoring strictly above 80/100."""
+    return int(score or 0) > 80
+
+
 def normalize_job_url(value):
     """Normalize tracking/query variants so one vacancy has one stable URL identity."""
     from urllib.parse import urlunparse, urlencode
@@ -990,9 +995,8 @@ def summarize_vacancy_description(raw_description):
 
 
 def send_job_card(job, short_id):
-    """Send a vacancy card with working Telegram review actions."""
+    """Send a simple vacancy alert; no application workflow or buttons."""
     description = summarize_vacancy_description(job.get("description"))
-    # Telegram limits messages to 4096 characters; keep cards safely below that limit.
     if len(description) > 900:
         description = description[:897].rsplit(" ", 1)[0] + "..."
     message = (
@@ -1002,20 +1006,10 @@ def send_job_card(job, short_id):
         f"🌍 {html.escape(as_text(job.get('location')) or 'Remote')}\n"
         f"💰 Оплата: <b>{html.escape(vacancy_salary(job))}</b>\n"
         f"📌 Джерело: {html.escape(as_text(job.get('source')) or 'не вказано')}\n"
-        + (f"⚠️ Перевірити вручну: {html.escape(as_text(job.get('reason')))}\n" if "⚠️" in as_text(job.get("reason")) else "")
-        + f"📝 {html.escape(description or 'Короткий опис не надано')}\n\n"
+        f"📝 {html.escape(description or 'Короткий опис не надано')}\n\n"
         f"🔗 <a href=\"{html.escape(as_text(job.get('url')), quote=True)}\">Відкрити вакансію</a>"
     )
-    reply_markup = {"inline_keyboard": [
-        [{"text": "✅ Підготувати заявку", "callback_data": f"prepare|{short_id}"}],
-        [{"text": "✉️ Cover Letter", "callback_data": f"letter|{short_id}"}],
-        [
-            {"text": "💾 На потім", "callback_data": f"save|{short_id}"},
-            {"text": "❌ Пропустити", "callback_data": f"skip|{short_id}"}
-        ],
-        [{"text": "📊 Статус", "callback_data": f"status|{short_id}"}]
-    ]}
-    return send_telegram(message, reply_markup=reply_markup)
+    return send_telegram(message)
 def build_daily_report(scanned, eligible, new_matches, sent, source_health, rejection_counts):
     totals = {}
     failures = []
@@ -1086,9 +1080,11 @@ def main():
     eligible_count = 0
     for job in jobs:
         score, reason = score_job(job)
-        # Send every discovered vacancy in the target 3D/Game Art role family.
-        # Score and warning labels help the user review weaker/uncertain leads;
-        # they must not silently suppress a vacancy.
+        # Strict delivery rule: only vacancies scoring above 80/100 are sent.
+        # Lower-scoring leads are silently discarded from Telegram delivery.
+        if not is_delivery_qualified(score):
+            rejection_counts[reason] = rejection_counts.get(reason, 0) + 1
+            continue
         eligible_count += 1
         identity_keys = job_identity_keys(job)
         # Deduplicate by normalized URL AND by exact normalized title + company.
