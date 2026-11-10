@@ -5,7 +5,14 @@
     "young_gamedev",
     "devjobs",
     "gamedev_and_tech_vacancy",
-    "devzonegd"
+    "devzonegd",
+    "artisthh",
+    "artistsvacancies",
+    "art_job_digital",
+    "Gamedevjobs",
+    "unityjobs_pub",
+    "Game_Dev_jobs",
+    "OpenDigitalJobs"
   ],
   "note": "Public Telegram channels. The scraper reads only t.me/s previews; add channels only after verifying their public vacancy content."
 }
