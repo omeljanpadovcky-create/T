@@ -36,23 +36,15 @@ class VacancyDeduplicationTests(unittest.TestCase):
             "https://example.com/jobs/123"
         )
 
-    def test_same_title_and_company_deduplicates_across_different_urls(self):
+    def test_same_title_and_company_with_different_urls_are_distinct_vacancies(self):
         first = sample_job(url="https://site-a.com/job/1")
         second = sample_job(url="https://site-b.com/jobs/999")
-        self.assertTrue(job_identity_keys(first) & job_identity_keys(second))
+        self.assertFalse(job_identity_keys(first) & job_identity_keys(second))
 
-    def test_different_company_is_not_collapsed_by_title_company_key(self):
-        first = sample_job(company="Studio A")
-        second = sample_job(company="Studio B")
-        first_keys = job_identity_keys(first)
-        second_keys = job_identity_keys(second)
-        self.assertNotIn(
-            next(k for k in first_keys if k not in {
-                __import__("hashlib").sha256(first["url"].encode("utf-8")).hexdigest(),
-                __import__("hashlib").sha256(("url:" + normalize_job_url(first["url"])).encode("utf-8")).hexdigest()
-            }),
-            second_keys
-        )
+    def test_same_canonical_url_deduplicates_tracking_variants(self):
+        first = sample_job(url="https://www.example.com/jobs/123?utm_source=one")
+        second = sample_job(url="https://example.com/jobs/123/?utm_source=two#apply")
+        self.assertTrue(job_identity_keys(first) & job_identity_keys(second))
 
 class JobFilterTests(unittest.TestCase):
     def test_accepts_remote_role_with_a2_english(self):
