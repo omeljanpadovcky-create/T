@@ -19,7 +19,7 @@ def sample_job(**overrides):
         "company": "Studio",
         "location": "Remote — Worldwide",
         "url": "https://example.com/jobs/junior-3d-artist",
-        "description": "Create Blender game assets. English A2/B1 is acceptable.",
+        "description": ("Create Blender game assets and production-ready 3D models for a multiplayer game. " * 3) + "English A2/B1 is acceptable.",
         "tags": ["Blender", "3D modeling"],
         "source": "Test",
         "remote": True,
@@ -55,30 +55,45 @@ class VacancyDeduplicationTests(unittest.TestCase):
         )
 
 class JobFilterTests(unittest.TestCase):
+    def test_rejects_thin_vacancy_even_when_title_matches(self):
+        score, reason = score_job(sample_job(description="3D work"))
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Insufficient vacancy details")
+
+    def test_rejects_unknown_employer(self):
+        score, reason = score_job(sample_job(company=""))
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Employer not identified")
+
+    def test_rejects_unconfirmed_remote_and_country_eligibility(self):
+        score, reason = score_job(sample_job(location="On-site, New York"))
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Remote work not confirmed")
+
     def test_accepts_remote_role_with_a2_english(self):
         score, reason = score_job(sample_job())
         self.assertGreaterEqual(score, 80, reason)
 
     def test_english_requirement_does_not_exclude_role(self):
         score, reason = score_job(sample_job(
-            description="Fluent English required. Create Blender game assets."
+            description=("Fluent English required. Create Blender game assets for a multiplayer title. " * 4)
         ))
         self.assertGreaterEqual(score, 80, reason)
 
     def test_accepts_senior_experience_requirements(self):
         score, reason = score_job(sample_job(
             title="Senior 3D Artist",
-            description="Requires 7+ years of professional experience with Blender, 3D modeling and game-ready assets."
+            description=("Requires 7+ years of professional experience with Blender, 3D modeling and game-ready assets. " * 3)
         ))
         self.assertGreaterEqual(score, 80, reason)
 
-    def test_keeps_us_only_lead_for_manual_review(self):
+    def test_rejects_us_only_lead(self):
         score, reason = score_job(sample_job(
-            location="Remote",
-            description="Remote role. Candidates must be located in the United States."
+            location="Remote — Worldwide",
+            description=("Remote role. Candidates must be located in the United States. " * 4)
         ))
-        self.assertGreater(score, 0)
-        self.assertIn("verify manually", reason)
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Ukraine eligibility not confirmed")
 
     def test_rejects_generic_graphic_designer_without_target_art_evidence(self):
         score, reason = score_job(sample_job(
@@ -88,16 +103,17 @@ class JobFilterTests(unittest.TestCase):
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Excluded role")
 
-    def test_keeps_unpaid_roles_with_warning_for_manual_review(self):
-        score, reason = score_job(sample_job(description="Unpaid volunteer position."))
-        self.assertGreater(score, 0)
-        self.assertIn("unpaid/volunteer", reason)
+    def test_rejects_unpaid_roles(self):
+        score, reason = score_job(sample_job(description=("Unpaid volunteer position. " * 12)))
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Unpaid or volunteer role")
 
     def test_keeps_lower_scoring_target_role_with_relevance_warning(self):
         score, reason = score_job(sample_job(
             title="3D Artist",
-            location="Unknown",
-            description="Simple 3D work."
+            location="Remote — Worldwide",
+            description=("Create general 3D visuals for varied projects. " * 6),
+            tags=[]
         ))
         self.assertGreater(score, 0)
         self.assertLess(score, 80)
