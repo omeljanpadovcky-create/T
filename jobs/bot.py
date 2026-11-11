@@ -687,9 +687,9 @@ def score_job(job):
     return score, ", ".join(reason_parts)
 
 def is_delivery_qualified(score):
-    """Send every identified target-role vacancy; score is a relevance label, not a delivery gate."""
+    """Only send vacancies scoring from 80 through 100."""
     value = int(score or 0)
-    return 1 <= value <= 100
+    return 80 <= value <= 100
 
 
 def normalize_job_url(value):
@@ -996,10 +996,10 @@ def summarize_vacancy_description(raw_description):
 
 
 def send_job_card(job, short_id):
-    """Send every identified target-role vacancy; score is shown as a relevance label."""
+    """Send a vacancy alert only when its score is between 80 and 100."""
     score = int(job.get("score") or 0)
-    if not 1 <= score <= 100:
-        raise ValueError(f"Blocked Telegram delivery: vacancy is not a scored target-role match ({score}/100).")
+    if not 80 <= score <= 100:
+        raise ValueError(f"Blocked Telegram delivery: score {score}/100 is outside 80–100.")
     description = summarize_vacancy_description(job.get("description"))
     if len(description) > 900:
         description = description[:897].rsplit(" ", 1)[0] + "..."
@@ -1084,8 +1084,8 @@ def main():
     eligible_count = 0
     for job in jobs:
         score, reason = score_job(job)
-        # Send every identified target-role vacancy. The score is a relevance label,
-        # not a delivery threshold; score 0 remains excluded when the role is outside scope.
+        # Delivery rule: only vacancies scoring from 80 through 100 are sent.
+        # All other scores are excluded from Telegram delivery.
         if not is_delivery_qualified(score):
             rejection_counts[reason] = rejection_counts.get(reason, 0) + 1
             continue
