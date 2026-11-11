@@ -104,27 +104,22 @@ class JobFilterTests(unittest.TestCase):
         self.assertIn("lower relevance", reason)
 
 
-    def test_all_scored_target_roles_are_delivery_qualified(self):
-        self.assertFalse(is_delivery_qualified(0))
-        self.assertTrue(is_delivery_qualified(1))
-        self.assertTrue(is_delivery_qualified(79))
+    def test_delivery_threshold_accepts_scores_from_80_to_100(self):
+        self.assertFalse(is_delivery_qualified(79))
         self.assertTrue(is_delivery_qualified(80))
         self.assertTrue(is_delivery_qualified(100))
         self.assertFalse(is_delivery_qualified(101))
 
 
 class VacancyCardTests(unittest.TestCase):
-    def test_sender_allows_lower_relevance_score(self):
+    def test_sender_blocks_score_below_80(self):
         job = {
             "score": 79, "title": "3D Artist", "company": "Studio",
             "location": "Remote Worldwide", "url": "https://example.com/job",
             "description": "3D game assets", "source": "Test",
         }
-        with patch("bot.summarize_vacancy_description", return_value="Summary"), patch(
-            "bot.send_telegram"
-        ) as send:
+        with self.assertRaisesRegex(ValueError, "outside 80–100"):
             send_job_card(job, "test")
-        self.assertEqual(send.call_count, 1)
 
     def test_sender_allows_score_80_and_100(self):
         for score in (80, 100):
