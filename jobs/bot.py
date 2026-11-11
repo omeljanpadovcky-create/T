@@ -710,25 +710,20 @@ def normalize_job_url(value):
 
 
 def job_identity_keys(job):
-    """Return compatible legacy and stronger fingerprints for vacancy deduplication."""
+    """Deduplicate by canonical vacancy URL, not title/company alone.
+
+    A company can publish several distinct openings with the same title.
+    The old title+company fingerprint incorrectly hid new vacancies forever.
+    URL normalization still collapses tracking parameters and trailing slashes.
+    """
     keys = set()
     raw_url = str(job.get("url") or "").strip()
     normalized_url = normalize_job_url(raw_url)
     if raw_url:
-        # Keep compatibility with hashes already stored by older radar versions.
+        # Preserve legacy URL hashes so already delivered links stay deduplicated.
         keys.add(hashlib.sha256(raw_url.encode("utf-8")).hexdigest())
     if normalized_url:
         keys.add(hashlib.sha256(("url:" + normalized_url).encode("utf-8")).hexdigest())
-
-    title = norm(job.get("title"))
-    company = norm(job.get("company"))
-    if title and company:
-        # Ignore punctuation/spacing differences in title and company.
-        title = re.sub(r"[^a-z0-9а-яіїєґ]+", " ", title).strip()
-        company = re.sub(r"[^a-z0-9а-яіїєґ]+", " ", company).strip()
-        if title and company:
-            identity = f"title-company:{title}|{company}"
-            keys.add(hashlib.sha256(identity.encode("utf-8")).hexdigest())
     return keys
 
 
