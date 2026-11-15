@@ -17,28 +17,28 @@ class JobRadarFilterTests(unittest.TestCase):
         }
 
     def test_3d_artist_is_accepted_even_when_english_is_c1(self):
-        job = self.job("3D Artist", "Blender, game-ready assets, UV mapping. English C1 required.")
+        job = self.job("3D Artist", ("Blender, game-ready assets, UV mapping. English C1 required. " * 4))
         score, _ = score_job(job)
         self.assertGreaterEqual(score, 80)
         conclusion = build_ukrainian_conclusion(job, score, "blender")
         self.assertIn("не причина автоматичного відсіву", conclusion)
 
     def test_senior_3d_artist_is_not_rejected_by_seniority(self):
-        score, _ = score_job(self.job("Senior 3D Artist", "Blender, 3D modeling and game-ready assets"))
+        score, _ = score_job(self.job("Senior 3D Artist", ("Blender, 3D modeling and game-ready assets. " * 5)))
         self.assertGreaterEqual(score, 80)
 
     def test_game_asset_role_is_accepted(self):
-        score, _ = score_job(self.job("Junior Game Asset Artist", "Blender, low poly, UV mapping and game-ready assets"))
+        score, _ = score_job(self.job("Junior Game Asset Artist", ("Blender, low poly, UV mapping and game-ready assets. " * 5)))
         self.assertGreaterEqual(score, 80)
 
     def test_technical_artist_role_is_accepted(self):
-        score, _ = score_job(self.job("Junior Technical Artist", "Blender, Unreal Engine and 3D modeling"))
+        score, _ = score_job(self.job("Junior Technical Artist", ("Blender, Unreal Engine and 3D modeling for realtime projects. " * 4)))
         self.assertGreaterEqual(score, 60)
 
     def test_remote_role_based_in_lviv_is_eligible(self):
         job = self.job(
             "Junior Technical Artist",
-            "Blender, Unity, game assets and 3D modeling",
+            ("Blender, Unity, game assets and 3D modeling for production. " * 4),
             location="Lviv · Remote"
         )
         score, reason = score_job(job)
@@ -51,14 +51,14 @@ class JobRadarFilterTests(unittest.TestCase):
         self.assertGreater(score, 0)
         self.assertIn("verify manually", reason)
 
-    def test_country_specific_requirement_in_description_is_kept_for_manual_review(self):
+    def test_country_specific_requirement_in_description_is_rejected(self):
         score, reason = score_job(self.job(
             "3D Artist",
-            "Blender. Candidates must be based in Germany.",
+            ("Blender game-ready assets. Candidates must be based in Germany. " * 4),
             location="Remote · Worldwide"
         ))
-        self.assertGreater(score, 0)
-        self.assertIn("verify manually", reason)
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Ukraine eligibility not confirmed")
 
     def test_minimum_score_is_eighty(self):
         from bot import CONFIG
@@ -69,10 +69,10 @@ class JobRadarFilterTests(unittest.TestCase):
         self.assertEqual(score, 0)
         self.assertEqual(reason, "Excluded role")
 
-    def test_unpaid_role_is_kept_with_manual_review_warning(self):
-        score, reason = score_job(self.job("3D Artist", "Unpaid volunteer opportunity"))
-        self.assertGreater(score, 0)
-        self.assertIn("unpaid/volunteer", reason)
+    def test_unpaid_role_is_rejected(self):
+        score, reason = score_job(self.job("3D Artist", ("Unpaid volunteer opportunity. " * 8)))
+        self.assertEqual(score, 0)
+        self.assertEqual(reason, "Unpaid or volunteer role")
 
 
 if __name__ == "__main__":
