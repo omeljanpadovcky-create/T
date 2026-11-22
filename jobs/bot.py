@@ -649,6 +649,17 @@ def score_job(job):
     if not any(re.search(pattern, title, re.I) for pattern in target_patterns):
         return 0, "Not a target 3D or Game Art role"
 
+    # Hard quality gates: a title match alone is not a real vacancy.
+    if len(description.strip()) < 180:
+        return 0, "Insufficient vacancy details"
+    if not as_text(job.get("company")).strip():
+        return 0, "Employer not identified"
+    if not remote_ok:
+        return 0, "Remote work not confirmed"
+    if not scope_ok or outside_geo or country_limited:
+        return 0, "Ukraine eligibility not confirmed"
+    if unpaid:
+        return 0, "Unpaid or volunteer role"
     title_points = 35
     skill_groups = {
         '3D software': (r'\bblender\b', r'\bmaya\b', r'3ds\s*max', r'zbrush', r'cinema\s*4d'),
@@ -669,7 +680,8 @@ def score_job(job):
     geography_points = 10 if re.search(r'\b(ukraine|україн[а-яіїєґ]*|lviv|kyiv|dnipro|odesa|kharkiv|vinnytsia|worldwide|anywhere|global)\b', searchable, re.I) else (8 if scope_ok else 5)
     if outside_geo or country_limited:
         geography_points = 0
-    paid_points = 0 if unpaid else 10
+    paid_evidence = bool(job.get("salary")) or bool(re.search(r"\b(paid|salary|compensation|hourly rate|monthly pay|зарплат|оплачуван)\b", searchable, re.I))
+    paid_points = 10 if paid_evidence else 0
     score = min(100, title_points + skill_points + game_points + remote_points + geography_points + paid_points)
 
     reason_parts = ['3D/Game Art role']
